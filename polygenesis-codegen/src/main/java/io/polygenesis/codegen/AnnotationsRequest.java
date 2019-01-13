@@ -1,6 +1,6 @@
 /*-
  * ==========================LICENSE_START=================================
- * PolyGenesis System
+ * PolyGenesis Platform
  * ========================================================================
  * Copyright (C) 2015 - 2019 OREGOR LTD
  * ========================================================================
@@ -20,6 +20,7 @@
 
 package io.polygenesis.codegen;
 
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
@@ -36,6 +37,12 @@ public class AnnotationsRequest {
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
+
+  /** Instantiates a new Annotations request. */
+  public AnnotationsRequest() {
+    setInterfacesIncluded(new LinkedHashSet<>());
+    setInterfacesExcluded(new LinkedHashSet<>());
+  }
 
   // ===============================================================================================
   // GETTERS

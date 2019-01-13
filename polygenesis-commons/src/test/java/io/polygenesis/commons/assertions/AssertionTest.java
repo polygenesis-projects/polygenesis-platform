@@ -1,6 +1,6 @@
 /*-
  * ==========================LICENSE_START=================================
- * PolyGenesis System
+ * PolyGenesis Platform
  * ========================================================================
  * Copyright (C) 2015 - 2019 OREGOR LTD
  * ========================================================================
@@ -34,8 +34,7 @@ public class AssertionTest {
     Constructor<Assertion> constructor = Assertion.class.getDeclaredConstructor();
     constructor.setAccessible(true);
 
-    assertThatThrownBy(() -> constructor.newInstance())
-        .isInstanceOf(InvocationTargetException.class);
+    assertThatThrownBy(constructor::newInstance).isInstanceOf(InvocationTargetException.class);
   }
 
   // ===============================================================================================

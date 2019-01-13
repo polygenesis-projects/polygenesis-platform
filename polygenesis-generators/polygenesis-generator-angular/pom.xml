@@ -11,5 +11,26 @@
 
   <artifactId>polygenesis-generator-angular</artifactId>
 
+  <dependencies>
+    <!--FREEMARKER-->
+    <dependency>
+      <groupId>org.freemarker</groupId>
+      <artifactId>freemarker</artifactId>
+    </dependency>
+
+    <!--POLYGENESIS MODELS-->
+    <dependency>
+      <groupId>io.polygenesis.models</groupId>
+      <artifactId>polygenesis-model-state</artifactId>
+    </dependency>
+
+    <!--TEST-->
+    <dependency>
+      <groupId>io.polygenesis</groupId>
+      <artifactId>polygenesis-commons-test</artifactId>
+      <scope>test</scope>
+      <type>test-jar</type>
+    </dependency>
+  </dependencies>
 
 </project>

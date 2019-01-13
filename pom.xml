@@ -8,6 +8,7 @@
     <module>polygenesis-annotations</module>
     <module>polygenesis-codegen</module>
     <module>polygenesis-commons</module>
+    <module>polygenesis-commons-test</module>
     <module>polygenesis-core</module>
     <module>polygenesis-deducers</module>
     <module>polygenesis-generators</module>
@@ -106,6 +107,9 @@
     <!--GUAVA-->
     <guava.version>26.0-jre</guava.version>
 
+    <!--FREEMARKER-->
+    <freemarker.version>2.3.28</freemarker.version>
+
     <!--INFLECTOR-->
     <evo-inflector.version>1.2.2</evo-inflector.version>
 
@@ -142,6 +146,13 @@
         <groupId>com.google.guava</groupId>
         <artifactId>guava</artifactId>
         <version>${guava.version}</version>
+      </dependency>
+
+      <!--FREEMARKER-->
+      <dependency>
+        <groupId>org.freemarker</groupId>
+        <artifactId>freemarker</artifactId>
+        <version>${freemarker.version}</version>
       </dependency>
 
       <!--INFLECTOR-->
@@ -181,12 +192,42 @@
         <artifactId>polygenesis-commons</artifactId>
         <version>${project.version}</version>
       </dependency>
+
+      <!--POLYGENESIS COMMONS TEST-->
       <dependency>
         <groupId>io.polygenesis</groupId>
-        <artifactId>polygenesis-commons</artifactId>
+        <artifactId>polygenesis-commons-test</artifactId>
         <version>${project.version}</version>
         <scope>test</scope>
         <type>test-jar</type>
+      </dependency>
+
+      <!--POLYGENESIS CORE-->
+      <dependency>
+        <groupId>io.polygenesis</groupId>
+        <artifactId>polygenesis-core</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+
+      <!--POLYGENESIS MODELS-->
+      <dependency>
+        <groupId>io.polygenesis.models</groupId>
+        <artifactId>polygenesis-model-state</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+
+      <!--POLYGENESIS DEDUCERS-->
+      <dependency>
+        <groupId>io.polygenesis.deducers</groupId>
+        <artifactId>polygenesis-deducer-state</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+
+      <!--POLYGENESIS GENERATORS-->
+      <dependency>
+        <groupId>io.polygenesis.generators</groupId>
+        <artifactId>polygenesis-generator-angular</artifactId>
+        <version>${project.version}</version>
       </dependency>
 
     </dependencies>
@@ -221,7 +262,7 @@
           <version>${license-maven-plugin.version}</version>
           <configuration>
             <licenseName>apache_v2</licenseName>
-            <projectName>PolyGenesis System</projectName>
+            <projectName>PolyGenesis Platform</projectName>
             <addJavaLicenseAfterPackage>false</addJavaLicenseAfterPackage>
             <emptyLineAfterHeader>true</emptyLineAfterHeader>
             <failOnMissingHeader>true</failOnMissingHeader>
