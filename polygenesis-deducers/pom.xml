@@ -14,7 +14,7 @@
   <packaging>pom</packaging>
 
   <modules>
-    <module>polygenesis-deducer-state</module>
+    <module>polygenesis-deducer-reactive-state</module>
   </modules>
 
 </project>

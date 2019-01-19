@@ -24,8 +24,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import io.polygenesis.core.Deducer;
 import io.polygenesis.core.Generator;
-import io.polygenesis.generators.angular.PolyGenesisAngularGeneratorService;
-import io.polygenesis.models.state.StateServiceRegistry;
+import io.polygenesis.generators.angular.PolyGenesisAngularGeneratorFactory;
+import io.polygenesis.models.reactivestate.ReactiveStateRegistry;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
@@ -48,11 +48,13 @@ public class GenesisTest {
     Genesis genesis = new Genesis();
 
     //    Set<ModelRepository> modelRepositories;
-    Set<Deducer> deducers = new LinkedHashSet<>(Arrays.asList(StateServiceRegistry.stateDeducer()));
+    Set<Deducer> deducers =
+        new LinkedHashSet<>(Arrays.asList(ReactiveStateRegistry.getReactiveStateDeducer()));
+
     Set<Generator> generators =
         new LinkedHashSet<>(
             Arrays.asList(
-                PolyGenesisAngularGeneratorService.newInstance(
+                PolyGenesisAngularGeneratorFactory.newInstance(
                     Paths.get("tmp/polygenesis-angular-generator"))));
 
     genesis.generate(genesisRequest, deducers, generators);
@@ -71,10 +73,11 @@ public class GenesisTest {
     Genesis genesis = new Genesis();
 
     Set<Deducer> deducers = new LinkedHashSet<>();
+
     Set<Generator> generators =
         new LinkedHashSet<>(
             Arrays.asList(
-                PolyGenesisAngularGeneratorService.newInstance(
+                PolyGenesisAngularGeneratorFactory.newInstance(
                     Paths.get("tmp/polygenesis-angular-generator"))));
 
     assertThatThrownBy(() -> genesis.generate(genesisRequest, deducers, generators))
