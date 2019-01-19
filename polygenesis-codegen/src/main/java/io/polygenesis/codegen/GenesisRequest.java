@@ -1,6 +1,6 @@
 /*-
  * ==========================LICENSE_START=================================
- * PolyGenesis System
+ * PolyGenesis Platform
  * ========================================================================
  * Copyright (C) 2015 - 2019 OREGOR LTD
  * ========================================================================
@@ -21,7 +21,7 @@
 package io.polygenesis.codegen;
 
 /**
- * The type Abstract genesis request.
+ * The type Genesis Request.
  *
  * @author Christos Tsakostas
  */

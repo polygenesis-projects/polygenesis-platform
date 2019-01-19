@@ -1,6 +1,6 @@
 /*-
  * ==========================LICENSE_START=================================
- * PolyGenesis System
+ * PolyGenesis Platform
  * ========================================================================
  * Copyright (C) 2015 - 2019 OREGOR LTD
  * ========================================================================
@@ -26,8 +26,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotation declaring that the field is automatically populated by the server. An example of such
- * a case is a field indicating the date-time an API Request took place.
+ * Annotation declaring that a field should be ignored for the code generation process. An example
+ * of such a case is a field indicating the date-time an API Request took place, which is
+ * automatically populated by the server.
  *
  * @author Christos Tsakostas
  */

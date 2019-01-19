@@ -1,6 +1,6 @@
 /*-
  * ==========================LICENSE_START=================================
- * PolyGenesis System
+ * PolyGenesis Platform
  * ========================================================================
  * Copyright (C) 2015 - 2019 OREGOR LTD
  * ========================================================================
@@ -20,6 +20,17 @@
 
 package io.polygenesis.codegen;
 
+import io.polygenesis.commons.assertions.Assertion;
+import io.polygenesis.core.CoreRegistry;
+import io.polygenesis.core.Deducer;
+import io.polygenesis.core.Generator;
+import io.polygenesis.core.ModelRepository;
+import io.polygenesis.core.ThingRepository;
+import io.polygenesis.core.deducer.InclusionOrExclusionType;
+import io.polygenesis.core.deducer.ThingDeducerRequest;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 /**
  * The entry point to code generation.
  *
@@ -27,12 +38,93 @@ package io.polygenesis.codegen;
  */
 public class Genesis {
 
+  // ===============================================================================================
+  // FUNCTIONALITY
+  // ===============================================================================================
+
   /**
    * Generate.
    *
    * @param genesisRequest the genesis request
+   * @param deducers the deducers
+   * @param generators the generators
    */
-  public void generate(GenesisRequest genesisRequest) {
-    throw new UnsupportedOperationException();
+  public void generate(
+      GenesisRequest genesisRequest, Set<Deducer> deducers, Set<Generator> generators) {
+    Assertion.isNotNull(deducers, "Deducers is required");
+    Assertion.isNotNull(generators, "Generators is required");
+
+    ThingRepository thingRepository;
+    if (genesisRequest.getAnnotationsRequest() != null) {
+      thingRepository =
+          CoreRegistry.getThingDeducer()
+              .deduce(makeThingDeducerRequest(genesisRequest.getAnnotationsRequest()));
+    } else {
+      // TODO
+      thingRepository = null;
+    }
+
+    generate(thingRepository, deducers, generators);
+  }
+
+  /**
+   * Generate.
+   *
+   * @param thingRepository the thing repository
+   * @param deducers the deducers
+   * @param generators the generators
+   */
+  public void generate(
+      ThingRepository thingRepository, Set<Deducer> deducers, Set<Generator> generators) {
+    generate(deduceModelRepositories(thingRepository, deducers), generators);
+  }
+
+  /**
+   * Generate.
+   *
+   * @param modelRepositories the model repositories
+   * @param generators the generators
+   */
+  public void generate(Set<ModelRepository> modelRepositories, Set<Generator> generators) {
+    generators.forEach(generator -> generator.generate(modelRepositories));
+  }
+
+  /**
+   * Deduce model repositories set.
+   *
+   * @param thingRepository the thing repository
+   * @param deducers the deducers
+   * @return the set
+   */
+  public Set<ModelRepository> deduceModelRepositories(
+      ThingRepository thingRepository, Set<Deducer> deducers) {
+    Set<ModelRepository> modelRepositories = new LinkedHashSet<>();
+    deducers.forEach(deducer -> modelRepositories.add(deducer.deduce(thingRepository)));
+    return modelRepositories;
+  }
+
+  // ===============================================================================================
+  // PRIVATE
+  // ===============================================================================================
+  private ThingDeducerRequest makeThingDeducerRequest(AnnotationsRequest annotationsRequest) {
+    if (!annotationsRequest.getInterfacesIncluded().isEmpty()
+        && !annotationsRequest.getInterfacesExcluded().isEmpty()) {
+      throw new IllegalArgumentException(
+          "Either Included or Excluded interfaces can be defined, but not both");
+    }
+
+    if (!annotationsRequest.getInterfacesIncluded().isEmpty()) {
+      return new ThingDeducerRequest(
+          annotationsRequest.getPackagesToScan(),
+          annotationsRequest.getInterfacesIncluded(),
+          InclusionOrExclusionType.INCLUDE);
+    } else if (!annotationsRequest.getInterfacesExcluded().isEmpty()) {
+      return new ThingDeducerRequest(
+          annotationsRequest.getPackagesToScan(),
+          annotationsRequest.getInterfacesExcluded(),
+          InclusionOrExclusionType.EXCLUDE);
+    } else {
+      return new ThingDeducerRequest(annotationsRequest.getPackagesToScan());
+    }
   }
 }

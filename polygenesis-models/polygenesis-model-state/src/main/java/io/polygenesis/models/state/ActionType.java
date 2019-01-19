@@ -1,6 +1,6 @@
 /*-
  * ==========================LICENSE_START=================================
- * PolyGenesis System
+ * PolyGenesis Platform
  * ========================================================================
  * Copyright (C) 2015 - 2019 OREGOR LTD
  * ========================================================================
@@ -18,49 +18,17 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.annotations.core;
-
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+package io.polygenesis.models.state;
 
 /**
- * Annotation for API methods.
+ * Denotes the State Management Action Type.
  *
  * @author Christos Tsakostas
  */
-@Target({ElementType.METHOD})
-@Retention(RetentionPolicy.RUNTIME)
-public @interface GGoal {
+public enum ActionType {
+  SUBMIT,
+  RESET,
 
-  /**
-   * Name.
-   *
-   * @return the string
-   */
-  String name() default "";
-
-  /**
-   * The goal type of a method. e.g. create, collection, etc.
-   *
-   * <p>Struggle to use one of the values provided at {@link GGoalStandardType}.
-   *
-   * @return the string
-   */
-  String goal();
-
-  /**
-   * Thing name.
-   *
-   * @return the string
-   */
-  String thingName();
-
-  /**
-   * Thing type.
-   *
-   * @return the string
-   */
-  String thingType() default "ANY";
+  ON_SUCCESS,
+  ON_FAILURE
 }

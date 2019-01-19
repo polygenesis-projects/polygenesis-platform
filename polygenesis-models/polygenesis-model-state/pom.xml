@@ -11,5 +11,19 @@
 
   <artifactId>polygenesis-model-state</artifactId>
 
+  <dependencies>
+    <dependency>
+      <groupId>io.polygenesis</groupId>
+      <artifactId>polygenesis-core</artifactId>
+    </dependency>
+
+    <!--TEST-->
+    <dependency>
+      <groupId>io.polygenesis</groupId>
+      <artifactId>polygenesis-commons-test</artifactId>
+      <scope>test</scope>
+      <type>test-jar</type>
+    </dependency>
+  </dependencies>
 
 </project>
