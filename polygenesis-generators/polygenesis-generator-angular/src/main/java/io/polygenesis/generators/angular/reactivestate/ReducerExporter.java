@@ -57,7 +57,7 @@ public class ReducerExporter {
         Paths.get(
             generationPath.toString(),
             PATH_NGRX,
-            TextConverter.toLowerHyphen(store.getFeature().getText()),
+            TextConverter.toLowerHyphen(store.getFeatureName().getText()),
             PATH_REDUCERS);
     PathService.ensurePath(reducersPath);
 
@@ -79,6 +79,6 @@ public class ReducerExporter {
    * @return the string
    */
   private String makeReducersFileName(Store store) {
-    return TextConverter.toLowerHyphen(store.getFeature().getText()) + POSTFIX_REDUCERS_TS;
+    return TextConverter.toLowerHyphen(store.getFeatureName().getText()) + POSTFIX_REDUCERS_TS;
   }
 }

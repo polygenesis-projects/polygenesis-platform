@@ -57,7 +57,7 @@ public class ModelExporter {
         Paths.get(
             generationPath.toString(),
             PATH_NGRX,
-            TextConverter.toLowerHyphen(store.getFeature().getText()),
+            TextConverter.toLowerHyphen(store.getFeatureName().getText()),
             PATH_MODELS);
     PathService.ensurePath(effectsPath);
 
@@ -79,6 +79,6 @@ public class ModelExporter {
    * @return the string
    */
   private String makeModelFileName(Store store) {
-    return TextConverter.toLowerHyphen(store.getFeature().getText()) + POSTFIX_MODEL_TS;
+    return TextConverter.toLowerHyphen(store.getFeatureName().getText()) + POSTFIX_MODEL_TS;
   }
 }

@@ -28,6 +28,8 @@ import io.polygenesis.generators.angular.reactivestate.ModuleExporter;
 import io.polygenesis.generators.angular.reactivestate.ReducerExporter;
 import io.polygenesis.generators.angular.reactivestate.ServiceExporter;
 import io.polygenesis.generators.angular.reactivestate.StoreExporter;
+import io.polygenesis.generators.angular.ui.UiExporter;
+import io.polygenesis.generators.angular.ui.UiModuleExporter;
 import java.nio.file.Path;
 
 /**
@@ -41,6 +43,7 @@ public class PolyGenesisAngularGeneratorFactory {
   // SINGLETONS / STATIC
   // ===============================================================================================
   private static final StoreExporter storeExporter;
+  private static final UiExporter uiExporter;
 
   static {
     ActionExporter actionExporter = new ActionExporter();
@@ -60,6 +63,10 @@ public class PolyGenesisAngularGeneratorFactory {
             serviceExporter,
             modelExporter,
             moduleExporter);
+
+    UiModuleExporter uiModuleExporter = new UiModuleExporter();
+
+    uiExporter = new UiExporter(uiModuleExporter);
   }
 
   /**
@@ -69,6 +76,6 @@ public class PolyGenesisAngularGeneratorFactory {
    * @return the poly genesis angular generator
    */
   public static PolyGenesisAngularGenerator newInstance(Path generationPath) {
-    return new PolyGenesisAngularGenerator(generationPath, storeExporter);
+    return new PolyGenesisAngularGenerator(generationPath, storeExporter, uiExporter);
   }
 }

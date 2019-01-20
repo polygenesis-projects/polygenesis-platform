@@ -57,7 +57,7 @@ public class IndexReducerExporter {
         Paths.get(
             generationPath.toString(),
             PATH_NGRX,
-            TextConverter.toLowerHyphen(store.getFeature().getText()),
+            TextConverter.toLowerHyphen(store.getFeatureName().getText()),
             PATH_INDEX_REDUCER);
     PathService.ensurePath(reducersPath);
 

@@ -29,15 +29,15 @@ import io.polygenesis.core.Thing;
  */
 public class StoreDeducer {
 
-  private FeatureDeducer featureDeducer;
+  private FeatureNameDeducer featureNameDeducer;
   private ActionDeducer actionDeducer;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
-  public StoreDeducer(FeatureDeducer featureDeducer, ActionDeducer actionDeducer) {
-    this.featureDeducer = featureDeducer;
+  public StoreDeducer(FeatureNameDeducer featureNameDeducer, ActionDeducer actionDeducer) {
+    this.featureNameDeducer = featureNameDeducer;
     this.actionDeducer = actionDeducer;
   }
 
@@ -46,12 +46,12 @@ public class StoreDeducer {
   // ===============================================================================================
 
   /**
-   * Deduce store for thing store.
+   * Deduce {@link Store} from {@link Thing}.
    *
    * @param thing the thing
    * @return the store
    */
-  public Store deduceStoreForThing(Thing thing) {
-    return new Store(featureDeducer.from(thing), actionDeducer.deduce(thing));
+  public Store deduceStoreFromThing(Thing thing) {
+    return new Store(featureNameDeducer.from(thing), actionDeducer.deduce(thing));
   }
 }

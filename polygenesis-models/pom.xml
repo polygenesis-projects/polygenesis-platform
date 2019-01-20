@@ -15,7 +15,7 @@
 
   <modules>
     <module>polygenesis-model-reactive-state</module>
+    <module>polygenesis-model-ui</module>
   </modules>
-
 
 </project>

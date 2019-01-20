@@ -18,31 +18,25 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.models.reactivestate;
+package io.polygenesis.models.ui.element;
 
-import static org.assertj.core.api.Assertions.assertThat;
+/**
+ * The type Input element business type.
+ *
+ * @author Christos Tsakostas
+ */
+public class ElementBusinessType {
 
-import io.polygenesis.commons.test.AbstractEqualityTest;
-import org.junit.Test;
-
-/** @author Christos Tsakostas */
-public class FeatureTest extends AbstractEqualityTest<Feature> {
-
-  @Test
-  public void shouldSucceedToInstantiate() {
-    Feature feature = new Feature("abc");
-
-    assertThat(feature).isNotNull();
-    assertThat(feature.getText()).isEqualTo("abc");
+  private ElementBusinessType() {
+    throw new IllegalStateException("Utility class");
   }
 
-  @Override
-  public Feature createObject1() {
-    return new Feature("xxx");
-  }
+  public static final String ADDRESS_CITY = "ADDRESS_CITY";
+  public static final String ADDRESS_POSTAL_CODE = "ADDRESS_POSTAL_CODE";
+  public static final String ADDRESS_STREET = "ADDRESS_STREET";
 
-  @Override
-  public Feature createObject2() {
-    return new Feature("yyy");
-  }
+  public static final String EMAIL = "EMAIL";
+  public static final String PASSWORD = "PASSWORD";
+  public static final String TEL = "TEL";
+  public static final String URL = "URL";
 }

@@ -22,6 +22,7 @@ package io.polygenesis.generators.angular;
 
 import io.polygenesis.core.ModelRepository;
 import io.polygenesis.models.reactivestate.ReactiveStateModelRepository;
+import io.polygenesis.models.ui.UiModelRepository;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -31,7 +32,10 @@ public abstract class AbstractPolyGenesisAngularGeneratorTest {
 
   protected Set<ModelRepository> getModelRepositories() {
     Set<ModelRepository> modelRepositories =
-        new LinkedHashSet<>(Arrays.asList(new ReactiveStateModelRepository(new LinkedHashSet<>())));
+        new LinkedHashSet<>(
+            Arrays.asList(
+                new ReactiveStateModelRepository(new LinkedHashSet<>()),
+                new UiModelRepository(new LinkedHashSet<>())));
 
     return modelRepositories;
   }

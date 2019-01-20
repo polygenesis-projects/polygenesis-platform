@@ -25,7 +25,9 @@ import io.polygenesis.core.AbstractGenerator;
 import io.polygenesis.core.CoreRegistry;
 import io.polygenesis.core.ModelRepository;
 import io.polygenesis.generators.angular.reactivestate.StoreExporter;
+import io.polygenesis.generators.angular.ui.UiExporter;
 import io.polygenesis.models.reactivestate.ReactiveStateModelRepository;
+import io.polygenesis.models.ui.UiModelRepository;
 import java.nio.file.Path;
 import java.util.Set;
 
@@ -37,8 +39,10 @@ import java.util.Set;
 public class PolyGenesisAngularGenerator extends AbstractGenerator {
 
   private final StoreExporter storeExporter;
+  private final UiExporter uiExporter;
 
   private ReactiveStateModelRepository reactiveStateModelRepository;
+  private UiModelRepository uiModelRepository;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -49,11 +53,17 @@ public class PolyGenesisAngularGenerator extends AbstractGenerator {
    *
    * @param generationPath the generation path
    * @param storeExporter the store exporter
+   * @param uiExporter the ui exporter
    */
-  public PolyGenesisAngularGenerator(Path generationPath, StoreExporter storeExporter) {
+  public PolyGenesisAngularGenerator(
+      Path generationPath, StoreExporter storeExporter, UiExporter uiExporter) {
     super(generationPath);
+
     Assertion.isNotNull(storeExporter, "StoreExporter is required");
     this.storeExporter = storeExporter;
+
+    Assertion.isNotNull(uiExporter, "UiExporter is required");
+    this.uiExporter = uiExporter;
   }
 
   // ===============================================================================================
@@ -67,6 +77,10 @@ public class PolyGenesisAngularGenerator extends AbstractGenerator {
     reactiveStateModelRepository
         .getStores()
         .forEach(store -> storeExporter.export(getGenerationPath(), store));
+
+    uiModelRepository
+        .getFeatures()
+        .forEach(feature -> uiExporter.export(getGenerationPath(), feature));
   }
 
   // ===============================================================================================
@@ -82,5 +96,9 @@ public class PolyGenesisAngularGenerator extends AbstractGenerator {
     reactiveStateModelRepository =
         CoreRegistry.getModelRepositoryResolver()
             .resolve(modelRepositories, ReactiveStateModelRepository.class);
+
+    uiModelRepository =
+        CoreRegistry.getModelRepositoryResolver()
+            .resolve(modelRepositories, UiModelRepository.class);
   }
 }

@@ -18,25 +18,20 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.models.reactivestate;
+package io.polygenesis.models.ui;
 
-import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.Thing;
+import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * Deduces a {@link Feature} provided a {@link io.polygenesis.core.Thing}.
- *
- * @author Christos Tsakostas
- */
-public class FeatureDeducer {
+import io.polygenesis.commons.feature.FeatureName;
+import org.junit.Test;
 
-  /**
-   * Feature deduction.
-   *
-   * @param thing the thing
-   * @return the feature
-   */
-  public Feature from(Thing thing) {
-    return new Feature(TextConverter.toLowerCamel(thing.getName().getText()));
+/** @author Christos Tsakostas */
+public class FeatureNameDeducerTest extends AbstractUiTest {
+
+  @Test
+  public void from() {
+    FeatureNameDeducer featureNameDeducer = new FeatureNameDeducer();
+
+    assertThat(featureNameDeducer.from(createThing())).isEqualTo(new FeatureName("someThing"));
   }
 }

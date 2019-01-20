@@ -26,6 +26,7 @@ import io.polygenesis.core.Deducer;
 import io.polygenesis.core.Generator;
 import io.polygenesis.generators.angular.PolyGenesisAngularGeneratorFactory;
 import io.polygenesis.models.reactivestate.ReactiveStateRegistry;
+import io.polygenesis.models.ui.UiRegistry;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
@@ -47,9 +48,10 @@ public class GenesisTest {
 
     Genesis genesis = new Genesis();
 
-    //    Set<ModelRepository> modelRepositories;
     Set<Deducer> deducers =
-        new LinkedHashSet<>(Arrays.asList(ReactiveStateRegistry.getReactiveStateDeducer()));
+        new LinkedHashSet<>(
+            Arrays.asList(
+                ReactiveStateRegistry.getReactiveStateDeducer(), UiRegistry.getUiDeducer()));
 
     Set<Generator> generators =
         new LinkedHashSet<>(

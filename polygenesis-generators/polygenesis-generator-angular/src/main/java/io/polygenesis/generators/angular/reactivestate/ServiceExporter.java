@@ -57,7 +57,7 @@ public class ServiceExporter {
         Paths.get(
             generationPath.toString(),
             PATH_NGRX,
-            TextConverter.toLowerHyphen(store.getFeature().getText()),
+            TextConverter.toLowerHyphen(store.getFeatureName().getText()),
             PATH_SERVICES);
     PathService.ensurePath(effectsPath);
 
@@ -79,6 +79,6 @@ public class ServiceExporter {
    * @return the string
    */
   private String makeServiceFileName(Store store) {
-    return TextConverter.toLowerHyphen(store.getFeature().getText()) + POSTFIX_SERVICE_TS;
+    return TextConverter.toLowerHyphen(store.getFeatureName().getText()) + POSTFIX_SERVICE_TS;
   }
 }

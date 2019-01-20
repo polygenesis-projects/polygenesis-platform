@@ -18,19 +18,27 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.models.reactivestate;
+package io.polygenesis.models.ui.element;
 
-import static org.assertj.core.api.Assertions.assertThat;
+/**
+ * The type Input element standard type.
+ *
+ * @author Christos Tsakostas
+ */
+public class InputElementStandardType {
 
-import org.junit.Test;
-
-/** @author Christos Tsakostas */
-public class FeatureDeducerTest extends AbstractReactiveStateTest {
-
-  @Test
-  public void from() {
-    FeatureDeducer featureDeducer = new FeatureDeducer();
-
-    assertThat(featureDeducer.from(createThing())).isEqualTo(new Feature("someThing"));
+  private InputElementStandardType() {
+    throw new IllegalStateException("Utility class");
   }
+
+  public static final String EDIT_TEXT = "EDIT_TEXT";
+  public static final String EDIT_LONG_TEXT = "EDIT_LONG_TEXT";
+  public static final String EDIT_NUMBER = "EDIT_NUMBER";
+  public static final String EDIT_DATE = "EDIT_DATE";
+
+  public static final String SELECT_SINGLE = "SELECT_SINGLE";
+  public static final String SELECT_MULTIPLE = "SELECT_MULTIPLE";
+
+  public static final String TOGGLE = "TOGGLE";
+  public static final String TOGGLE_WITH_RESET = "TOGGLE_WITH_RESET";
 }

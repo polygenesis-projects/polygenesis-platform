@@ -56,7 +56,7 @@ public class ModuleExporter {
         Paths.get(
             generationPath.toString(),
             PATH_NGRX,
-            TextConverter.toLowerHyphen(store.getFeature().getText()));
+            TextConverter.toLowerHyphen(store.getFeatureName().getText()));
     PathService.ensurePath(modulePath);
 
     FreemarkerService.export(
@@ -77,6 +77,6 @@ public class ModuleExporter {
    * @return the string
    */
   private String makeModuleFileName(Store store) {
-    return TextConverter.toLowerHyphen(store.getFeature().getText()) + POSTFIX_MODULE_TS;
+    return TextConverter.toLowerHyphen(store.getFeatureName().getText()) + POSTFIX_MODULE_TS;
   }
 }

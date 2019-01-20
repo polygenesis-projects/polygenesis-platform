@@ -57,7 +57,7 @@ public class ActionExporter {
         Paths.get(
             generationPath.toString(),
             PATH_NGRX,
-            TextConverter.toLowerHyphen(store.getFeature().getText()),
+            TextConverter.toLowerHyphen(store.getFeatureName().getText()),
             PATH_ACTIONS);
     PathService.ensurePath(actionsPath);
 
@@ -79,6 +79,6 @@ public class ActionExporter {
    * @return the string
    */
   private String makeActionsFileName(Store store) {
-    return TextConverter.toLowerHyphen(store.getFeature().getText()) + POSTFIX_ACTIONS_TS;
+    return TextConverter.toLowerHyphen(store.getFeatureName().getText()) + POSTFIX_ACTIONS_TS;
   }
 }

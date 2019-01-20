@@ -57,7 +57,7 @@ public class EffectExporter {
         Paths.get(
             generationPath.toString(),
             PATH_NGRX,
-            TextConverter.toLowerHyphen(store.getFeature().getText()),
+            TextConverter.toLowerHyphen(store.getFeatureName().getText()),
             PATH_EFFECTS);
     PathService.ensurePath(effectsPath);
 
@@ -79,6 +79,6 @@ public class EffectExporter {
    * @return the string
    */
   private String makeEffectsFileName(Store store) {
-    return TextConverter.toLowerHyphen(store.getFeature().getText()) + POSTFIX_EFFECTS_TS;
+    return TextConverter.toLowerHyphen(store.getFeatureName().getText()) + POSTFIX_EFFECTS_TS;
   }
 }

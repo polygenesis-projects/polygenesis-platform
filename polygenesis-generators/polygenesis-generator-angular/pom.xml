@@ -23,6 +23,10 @@
       <groupId>io.polygenesis.models</groupId>
       <artifactId>polygenesis-model-reactive-state</artifactId>
     </dependency>
+    <dependency>
+      <groupId>io.polygenesis.models</groupId>
+      <artifactId>polygenesis-model-ui</artifactId>
+    </dependency>
 
     <!--TEST-->
     <dependency>

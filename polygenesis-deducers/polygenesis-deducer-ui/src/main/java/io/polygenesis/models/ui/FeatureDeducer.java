@@ -18,29 +18,47 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.models.reactivestate;
+package io.polygenesis.models.ui;
 
-import io.polygenesis.commons.text.AbstractText;
+import io.polygenesis.commons.assertions.Assertion;
+import io.polygenesis.core.Thing;
 
 /**
- * Denotes a business feature.
- *
- * <p>It can be anything, such as an entity or a concept, making sense to the business.
+ * The type Feature deducer.
  *
  * @author Christos Tsakostas
  */
-public class Feature extends AbstractText {
+public class FeatureDeducer {
+
+  private final FeatureNameDeducer featureNameDeducer;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
-   * Instantiates a new Feature.
+   * Instantiates a new Feature deducer.
    *
-   * @param text the text
+   * @param featureNameDeducer the feature name deducer
    */
-  public Feature(String text) {
-    super(text);
+  public FeatureDeducer(FeatureNameDeducer featureNameDeducer) {
+    Assertion.isNotNull(featureNameDeducer, "featureNameDeducer is required");
+    this.featureNameDeducer = featureNameDeducer;
+  }
+
+  // ===============================================================================================
+  // FUNCTIONALITY
+  // ===============================================================================================
+
+  /**
+   * Deduce {@link Feature} from {@link Thing}.
+   *
+   * @param thing the thing
+   * @return the store
+   */
+  public Feature deduceFeatureFromThing(Thing thing) {
+    Feature feature = new Feature(featureNameDeducer.from(thing));
+
+    return feature;
   }
 }

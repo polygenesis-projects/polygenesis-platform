@@ -32,9 +32,9 @@ public class ReactiveStateDeducerImplTest {
 
   @Test
   public void deduce() {
-    FeatureDeducer featureDeducer = new FeatureDeducer();
+    FeatureNameDeducer featureNameDeducer = new FeatureNameDeducer();
     ActionDeducer actionDeducer = new ActionDeducer();
-    StoreDeducer storeDeducer = new StoreDeducer(featureDeducer, actionDeducer);
+    StoreDeducer storeDeducer = new StoreDeducer(featureNameDeducer, actionDeducer);
     ReactiveStateDeducer reactiveStateDeducer = new ReactiveStateDeducerImpl(storeDeducer);
     ThingRepository thingRepository = new ThingRepositoryImpl(new LinkedHashSet<>());
 
