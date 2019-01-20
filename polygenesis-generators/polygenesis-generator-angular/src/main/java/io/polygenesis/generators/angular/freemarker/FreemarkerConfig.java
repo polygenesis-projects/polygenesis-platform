@@ -21,8 +21,12 @@
 package io.polygenesis.generators.angular.freemarker;
 
 import freemarker.cache.ClassTemplateLoader;
+import freemarker.ext.beans.BeansWrapper;
 import freemarker.template.Configuration;
+import freemarker.template.DefaultObjectWrapperBuilder;
 import freemarker.template.TemplateExceptionHandler;
+import freemarker.template.TemplateHashModel;
+import freemarker.template.TemplateModelException;
 
 /**
  * The type Freemarker config.
@@ -63,6 +67,8 @@ public class FreemarkerConfig {
     configuration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
     configuration.setLogTemplateExceptions(false);
     configuration.setWrapUncheckedExceptions(true);
+
+    setTextService(configuration);
   }
 
   // ===============================================================================================
@@ -76,5 +82,20 @@ public class FreemarkerConfig {
    */
   public Configuration getConfiguration() {
     return configuration;
+  }
+
+  // ===============================================================================================
+  // PRIVATE
+  // ===============================================================================================
+  private void setTextService(Configuration configuration) {
+    BeansWrapper wrapper = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_28).build();
+    TemplateHashModel staticModels = wrapper.getStaticModels();
+    try {
+      TemplateHashModel templateHashModelTextService =
+          (TemplateHashModel) staticModels.get("io.polygenesis.commons.text.TextService");
+      configuration.setSharedVariable("textService", templateHashModelTextService);
+    } catch (TemplateModelException e) {
+      throw new IllegalStateException(e.getMessage(), e);
+    }
   }
 }

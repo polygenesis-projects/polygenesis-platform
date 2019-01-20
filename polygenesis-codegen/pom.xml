@@ -22,13 +22,13 @@
     <!--POLYGENESIS MODELS-->
     <dependency>
       <groupId>io.polygenesis.models</groupId>
-      <artifactId>polygenesis-model-state</artifactId>
+      <artifactId>polygenesis-model-reactive-state</artifactId>
     </dependency>
 
     <!--POLYGENESIS DEDUCERS-->
     <dependency>
       <groupId>io.polygenesis.deducers</groupId>
-      <artifactId>polygenesis-deducer-state</artifactId>
+      <artifactId>polygenesis-deducer-reactive-state</artifactId>
     </dependency>
 
     <!--POLYGENESIS GENERATORS-->

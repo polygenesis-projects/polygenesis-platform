@@ -20,34 +20,25 @@
 
 package io.polygenesis.generators.angular;
 
-import io.polygenesis.core.ModelRepository;
-import io.polygenesis.models.state.StateModelRepository;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.LinkedHashSet;
-import java.util.Set;
 import org.junit.Before;
 import org.junit.Test;
 
 /** @author Christos Tsakostas */
-public class PolyGenesisAngularGeneratorTest {
+public class PolyGenesisAngularGeneratorTest extends AbstractPolyGenesisAngularGeneratorTest {
 
   private PolyGenesisAngularGenerator generator;
 
   @Before
   public void setUp() throws Exception {
     generator =
-        PolyGenesisAngularGeneratorService.newInstance(
+        PolyGenesisAngularGeneratorFactory.newInstance(
             Paths.get("tmp/polygenesis-angular-generator"));
   }
 
   @Test
   public void shouldInitialize() {
-    Set<ModelRepository> modelRepositories =
-        new LinkedHashSet<>(Arrays.asList(new StateModelRepository(new LinkedHashSet<>())));
-
-    generator.generate(modelRepositories);
-
+    generator.generate(getModelRepositories());
     // TODO
   }
 }

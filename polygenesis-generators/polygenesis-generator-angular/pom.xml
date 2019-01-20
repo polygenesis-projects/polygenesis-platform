@@ -21,7 +21,7 @@
     <!--POLYGENESIS MODELS-->
     <dependency>
       <groupId>io.polygenesis.models</groupId>
-      <artifactId>polygenesis-model-state</artifactId>
+      <artifactId>polygenesis-model-reactive-state</artifactId>
     </dependency>
 
     <!--TEST-->
