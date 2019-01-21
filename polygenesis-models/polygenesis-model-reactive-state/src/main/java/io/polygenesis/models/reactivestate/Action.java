@@ -21,7 +21,6 @@
 package io.polygenesis.models.reactivestate;
 
 import io.polygenesis.commons.assertions.Assertion;
-import io.polygenesis.commons.text.Text;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -33,7 +32,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 public class Action {
 
   private ActionType actionType;
-  private Text name;
+  private ActionName name;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -45,7 +44,7 @@ public class Action {
    * @param actionType the action type
    * @param name the name
    */
-  public Action(ActionType actionType, Text name) {
+  public Action(ActionType actionType, ActionName name) {
     setActionType(actionType);
     setName(name);
   }
@@ -68,7 +67,7 @@ public class Action {
    *
    * @return the name
    */
-  public Text getName() {
+  public ActionName getName() {
     return name;
   }
 
@@ -80,7 +79,7 @@ public class Action {
     this.actionType = actionType;
   }
 
-  private void setName(Text name) {
+  private void setName(ActionName name) {
     Assertion.isNotNull(name, "Name is required");
     this.name = name;
   }

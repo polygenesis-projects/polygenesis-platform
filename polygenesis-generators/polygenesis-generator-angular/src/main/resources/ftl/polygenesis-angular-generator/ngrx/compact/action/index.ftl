@@ -23,5 +23,5 @@
   // ${ action.name.lowerHyphen }
 </#list>
 
-// ${ textService.toLowerHyphen("someThing") }
+// ${ textConverter.toLowerHyphen("someThing") }
 

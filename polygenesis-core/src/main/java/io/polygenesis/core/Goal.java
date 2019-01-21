@@ -20,7 +20,7 @@
 
 package io.polygenesis.core;
 
-import io.polygenesis.commons.text.Text;
+import io.polygenesis.commons.text.AbstractText;
 
 /**
  * One of the most essential parts of PolyGenesis is the <b>Goal</b>. Based on the Goal of a {@link
@@ -39,7 +39,7 @@ import io.polygenesis.commons.text.Text;
  *
  * @author Christos Tsakostas
  */
-public class Goal extends Text {
+public class Goal extends AbstractText {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)

@@ -20,8 +20,5 @@
 <#include "*/author/author-ts.ftl">
 
 <#list store.actions as action>
-  // ${ action.name.lowerHyphen }
+  // ${ textConverter.toLowerHyphen(action.name.text) }
 </#list>
-
-// ${ textService.toLowerHyphen("someThing") }
-

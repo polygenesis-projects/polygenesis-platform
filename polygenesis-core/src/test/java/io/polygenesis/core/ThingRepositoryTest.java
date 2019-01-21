@@ -22,7 +22,6 @@ package io.polygenesis.core;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.polygenesis.commons.text.Text;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import org.junit.Test;
@@ -42,14 +41,16 @@ public class ThingRepositoryTest {
   public void shouldSucceedToGetThingByName() {
     ThingRepository repository = new ThingRepositoryImpl(createThings());
 
-    assertThat(repository.getThingByName(new Text("someThing"))).isPresent();
+    assertThat(repository.getThingByName(new ThingName("someThing"))).isPresent();
   }
 
   @Test
   public void shouldSucceedToGetThingFunction() {
     ThingRepository repository = new ThingRepositoryImpl(createThings());
 
-    assertThat(repository.getThingFunction(new Text("someThing"), new Text("someFunction")))
+    assertThat(
+            repository.getThingFunction(
+                new ThingName("someThing"), new FunctionName("someFunction")))
         .isPresent();
   }
 
@@ -57,7 +58,9 @@ public class ThingRepositoryTest {
   public void shouldFailToGetThingFunction() {
     ThingRepository repository = new ThingRepositoryImpl(createThings());
 
-    assertThat(repository.getThingFunction(new Text("someThing"), new Text("someNonExistingGoal")))
+    assertThat(
+            repository.getThingFunction(
+                new ThingName("someThing"), new FunctionName("someNonExistingGoal")))
         .isEmpty();
   }
 
@@ -67,18 +70,21 @@ public class ThingRepositoryTest {
 
     assertThat(
             repository.getThingFunction(
-                new Text("someNonExistingThing"), new Text("someNonExistingGoal")))
+                new ThingName("someNonExistingThing"), new FunctionName("someNonExistingGoal")))
         .isEmpty();
   }
 
   private Set<Thing> createThings() {
     Set<Thing> things = new LinkedHashSet<>();
 
-    Thing someThing = new Thing(new Text("someThing"));
+    Thing someThing = new Thing(new ThingName("someThing"));
 
     Function someFunction =
         new Function(
-            someThing, new Goal("someGoal"), new Text("someFunction"), new LinkedHashSet<>());
+            someThing,
+            new Goal("someGoal"),
+            new FunctionName("someFunction"),
+            new LinkedHashSet<>());
 
     someThing.appendFunction(someFunction);
 

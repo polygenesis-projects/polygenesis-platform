@@ -20,8 +20,6 @@
 
 package io.polygenesis.core.iomodel;
 
-import io.polygenesis.commons.text.Text;
-
 /** @author Christos Tsakostas */
 class TestIoModel extends IoModel {
 
@@ -29,15 +27,16 @@ class TestIoModel extends IoModel {
     super(parent);
   }
 
-  public TestIoModel(Text dataType, Text variableName) {
+  public TestIoModel(DataTypeName dataType, VariableName variableName) {
     super(dataType, variableName);
   }
 
-  public TestIoModel(Text dataType, Text variableName, IoModelGroup parent) {
+  public TestIoModel(DataTypeName dataType, VariableName variableName, IoModelGroup parent) {
     super(dataType, variableName, parent);
   }
 
-  public TestIoModel(Text genericType, Text dataType, Text variableName) {
+  public TestIoModel(
+      GenericTypeName genericType, DataTypeName dataType, VariableName variableName) {
     super(genericType, dataType, variableName);
   }
 }

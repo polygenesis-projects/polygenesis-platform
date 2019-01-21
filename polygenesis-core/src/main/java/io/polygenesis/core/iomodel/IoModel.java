@@ -20,23 +20,22 @@
 
 package io.polygenesis.core.iomodel;
 
-import io.polygenesis.commons.text.Text;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * This is the base class for {@link IoModelPrimitive}, {@link IoModelGroup}, and {@link
- * IoModelArray}.
+ * IoModelArray}*.
  *
  * @author Christos Tsakostas
  */
 public abstract class IoModel {
 
-  private Text genericType;
+  private GenericTypeName genericType;
 
-  private Text dataType;
+  private DataTypeName dataType;
 
-  private Text variableName;
+  private VariableName variableName;
 
   private IoModelGroup parent;
 
@@ -59,7 +58,7 @@ public abstract class IoModel {
    * @param dataType the data type
    * @param variableName the variable name
    */
-  public IoModel(Text dataType, Text variableName) {
+  public IoModel(DataTypeName dataType, VariableName variableName) {
     setDataType(dataType);
     setVariableName(variableName);
   }
@@ -71,7 +70,7 @@ public abstract class IoModel {
    * @param variableName the variable name
    * @param parent the parent
    */
-  public IoModel(Text dataType, Text variableName, IoModelGroup parent) {
+  public IoModel(DataTypeName dataType, VariableName variableName, IoModelGroup parent) {
     this(dataType, variableName);
     setParent(parent);
   }
@@ -83,7 +82,7 @@ public abstract class IoModel {
    * @param dataType the data type
    * @param variableName the variable name
    */
-  public IoModel(Text genericType, Text dataType, Text variableName) {
+  public IoModel(GenericTypeName genericType, DataTypeName dataType, VariableName variableName) {
     this(dataType, variableName);
     setGenericType(genericType);
   }
@@ -97,7 +96,7 @@ public abstract class IoModel {
    *
    * @return the generic type
    */
-  public Text getGenericType() {
+  public GenericTypeName getGenericType() {
     return genericType;
   }
 
@@ -106,7 +105,7 @@ public abstract class IoModel {
    *
    * @return the data type
    */
-  public Text getDataType() {
+  public DataTypeName getDataType() {
     return dataType;
   }
 
@@ -115,7 +114,7 @@ public abstract class IoModel {
    *
    * @return the variable name
    */
-  public Text getVariableName() {
+  public VariableName getVariableName() {
     return variableName;
   }
 
@@ -149,9 +148,9 @@ public abstract class IoModel {
     return false;
   }
 
-  private boolean isDataTypePrimitive(Text dataType) {
+  private boolean isDataTypePrimitive(DataTypeName dataType) {
     try {
-      ModelPrimitiveType.valueOf(dataType.getUpperCase());
+      ModelPrimitiveType.valueOf(dataType.getText().toUpperCase());
       return true;
     } catch (Exception e) {
       return false;
@@ -162,15 +161,15 @@ public abstract class IoModel {
   // GUARDS
   // ===============================================================================================
 
-  private void setGenericType(Text genericType) {
+  private void setGenericType(GenericTypeName genericType) {
     this.genericType = genericType;
   }
 
-  private void setDataType(Text dataType) {
+  private void setDataType(DataTypeName dataType) {
     this.dataType = dataType;
   }
 
-  private void setVariableName(Text variableName) {
+  private void setVariableName(VariableName variableName) {
     this.variableName = variableName;
   }
 

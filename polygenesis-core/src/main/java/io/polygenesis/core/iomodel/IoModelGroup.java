@@ -21,7 +21,6 @@
 package io.polygenesis.core.iomodel;
 
 import io.polygenesis.commons.assertions.Assertion;
-import io.polygenesis.commons.text.Text;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -57,7 +56,8 @@ public class IoModelGroup extends IoModel {
    * @param dataType the data type
    * @param variableName the variable name
    */
-  public IoModelGroup(Text genericType, Text dataType, Text variableName) {
+  public IoModelGroup(
+      GenericTypeName genericType, DataTypeName dataType, VariableName variableName) {
     super(genericType, dataType, variableName);
     setModels(new LinkedHashSet<>());
   }

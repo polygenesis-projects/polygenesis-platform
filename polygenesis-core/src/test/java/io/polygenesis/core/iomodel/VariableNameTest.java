@@ -18,29 +18,18 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.commons.text;
+package io.polygenesis.core.iomodel;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import org.junit.Test;
 
 /** @author Christos Tsakostas */
-public class TextServiceTest {
+public class VariableNameTest {
 
   @Test
-  public void shouldFailToInstantiate() throws NoSuchMethodException {
-    Constructor<TextService> constructor = TextService.class.getDeclaredConstructor();
-    constructor.setAccessible(true);
-
-    assertThatThrownBy(constructor::newInstance).isInstanceOf(InvocationTargetException.class);
-  }
-
-  @Test
-  public void shouldSucceedToLowerHyphen() {
-    assertThat(TextService.toLowerHyphen("someThing")).isEqualTo("some-thing");
-    assertThat(TextService.toLowerHyphen("SomeThing")).isEqualTo("some-thing");
+  public void shouldInitialize() {
+    VariableName variableName = new VariableName("asd");
+    assertThat(variableName).isNotNull();
   }
 }

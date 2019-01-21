@@ -27,6 +27,8 @@ import java.util.Objects;
 /**
  * Value object for string fields.
  *
+ * <p>It enforces input to lower camel format.
+ *
  * @author Christos Tsakostas
  */
 public abstract class AbstractText implements Serializable {
@@ -34,6 +36,7 @@ public abstract class AbstractText implements Serializable {
   private static final long serialVersionUID = 1L;
 
   private String text;
+  private String original;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -61,13 +64,23 @@ public abstract class AbstractText implements Serializable {
     return text;
   }
 
+  /**
+   * Gets original.
+   *
+   * @return the original
+   */
+  public String getOriginal() {
+    return original;
+  }
+
   // ===============================================================================================
   // GUARDS
   // ===============================================================================================
 
   private void setText(String text) {
     Assertion.isNotEmpty(text, "text is required");
-    this.text = text;
+    this.text = TextConverter.toLowerCamel(text);
+    this.original = text;
   }
 
   // ===============================================================================================

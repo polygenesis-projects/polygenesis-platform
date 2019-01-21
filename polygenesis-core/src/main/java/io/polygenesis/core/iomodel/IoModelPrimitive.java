@@ -20,7 +20,6 @@
 
 package io.polygenesis.core.iomodel;
 
-import io.polygenesis.commons.text.Text;
 import java.lang.annotation.Annotation;
 import java.util.Set;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -47,7 +46,8 @@ public class IoModelPrimitive extends IoModel {
    * @param variableName the variable name
    * @param annotations the annotations
    */
-  public IoModelPrimitive(Text dataType, Text variableName, Set<Annotation> annotations) {
+  public IoModelPrimitive(
+      DataTypeName dataType, VariableName variableName, Set<Annotation> annotations) {
     super(dataType, variableName);
     setAnnotations(annotations);
     setThingIdentity(false);
@@ -62,7 +62,10 @@ public class IoModelPrimitive extends IoModel {
    * @param annotations the annotations
    */
   public IoModelPrimitive(
-      Text dataType, Text variableName, IoModelGroup parent, Set<Annotation> annotations) {
+      DataTypeName dataType,
+      VariableName variableName,
+      IoModelGroup parent,
+      Set<Annotation> annotations) {
     super(dataType, variableName, parent);
     setAnnotations(annotations);
     setThingIdentity(false);

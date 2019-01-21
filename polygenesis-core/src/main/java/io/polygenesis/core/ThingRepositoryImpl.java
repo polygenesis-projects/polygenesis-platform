@@ -21,7 +21,6 @@
 package io.polygenesis.core;
 
 import io.polygenesis.commons.assertions.Assertion;
-import io.polygenesis.commons.text.Text;
 import java.util.Optional;
 import java.util.Set;
 
@@ -61,13 +60,13 @@ public class ThingRepositoryImpl implements ThingRepository {
 
   /** {@inheritDoc} */
   @Override
-  public Optional<Thing> getThingByName(Text thingName) {
+  public Optional<Thing> getThingByName(ThingName thingName) {
     return things.stream().filter(thing -> thing.getName().equals(thingName)).findFirst();
   }
 
   /** {@inheritDoc} */
   @Override
-  public Optional<Function> getThingFunction(Text thingName, Text goalName) {
+  public Optional<Function> getThingFunction(ThingName thingName, FunctionName functionName) {
     Optional<Thing> optionalThing = getThingByName(thingName);
 
     return optionalThing.flatMap(
@@ -75,7 +74,7 @@ public class ThingRepositoryImpl implements ThingRepository {
             thing
                 .getFunctions()
                 .stream()
-                .filter(goal -> goal.getName().equals(goalName))
+                .filter(goal -> goal.getName().equals(functionName))
                 .findFirst());
   }
 

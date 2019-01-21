@@ -68,7 +68,7 @@ public class FreemarkerConfig {
     configuration.setLogTemplateExceptions(false);
     configuration.setWrapUncheckedExceptions(true);
 
-    setTextService(configuration);
+    setTextConverter(configuration);
   }
 
   // ===============================================================================================
@@ -87,13 +87,13 @@ public class FreemarkerConfig {
   // ===============================================================================================
   // PRIVATE
   // ===============================================================================================
-  private void setTextService(Configuration configuration) {
+  private void setTextConverter(Configuration configuration) {
     BeansWrapper wrapper = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_28).build();
     TemplateHashModel staticModels = wrapper.getStaticModels();
     try {
-      TemplateHashModel templateHashModelTextService =
-          (TemplateHashModel) staticModels.get("io.polygenesis.commons.text.TextService");
-      configuration.setSharedVariable("textService", templateHashModelTextService);
+      TemplateHashModel templateHashModelTextConverter =
+          (TemplateHashModel) staticModels.get("io.polygenesis.commons.text.TextConverter");
+      configuration.setSharedVariable("textConverter", templateHashModelTextConverter);
     } catch (TemplateModelException e) {
       throw new IllegalStateException(e.getMessage(), e);
     }

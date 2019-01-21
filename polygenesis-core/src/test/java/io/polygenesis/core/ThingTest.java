@@ -23,8 +23,9 @@ package io.polygenesis.core;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.polygenesis.commons.test.AbstractEqualityTest;
-import io.polygenesis.commons.text.Text;
+import io.polygenesis.core.iomodel.DataTypeName;
 import io.polygenesis.core.iomodel.IoModelPrimitive;
+import io.polygenesis.core.iomodel.VariableName;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import org.junit.Test;
@@ -34,7 +35,7 @@ public class ThingTest extends AbstractEqualityTest<Thing> {
 
   @Test
   public void shouldCreateThingWithName() {
-    Thing thing = new Thing(new Text("someThingName"));
+    Thing thing = new Thing(new ThingName("someThingName"));
 
     assertThat(thing).isNotNull();
 
@@ -49,52 +50,52 @@ public class ThingTest extends AbstractEqualityTest<Thing> {
     thing.appendFunction(function1);
     thing.appendFunctions(functionSet);
 
-    assertThat(thing.getName()).isEqualTo(new Text("someThingName"));
+    assertThat(thing.getName()).isEqualTo(new ThingName("someThingName"));
     assertThat(thing.getParent()).isNull();
     assertThat(thing.getFunctions().size()).isEqualTo(3);
   }
 
   @Test
   public void shouldCreateThingWithNameAndParent() {
-    Thing parentThing = new Thing(new Text("someParentThingName"));
-    Thing thing = new Thing(new Text("someThingName"), parentThing);
+    Thing parentThing = new Thing(new ThingName("someParentThingName"));
+    Thing thing = new Thing(new ThingName("someThingName"), parentThing);
 
     assertThat(thing).isNotNull();
-    assertThat(thing.getName()).isEqualTo(new Text("someThingName"));
+    assertThat(thing.getName()).isEqualTo(new ThingName("someThingName"));
     assertThat(thing.getParent()).isEqualTo(parentThing);
-    assertThat(thing.getParent()).isEqualTo(new Thing(new Text("someParentThingName")));
+    assertThat(thing.getParent()).isEqualTo(new Thing(new ThingName("someParentThingName")));
   }
 
   private Function createGoal1() {
     return new Function(
-        new Thing(new Text("thingName")),
+        new Thing(new ThingName("thingName")),
         new Goal("someGoal"),
-        new Text("goalName"),
+        new FunctionName("functionName"),
         new LinkedHashSet<>(),
         new ReturnValue(createIoModelPrimitive()));
   }
 
   private Function createGoal2() {
     return new Function(
-        new Thing(new Text("thingName")),
+        new Thing(new ThingName("thingName")),
         new Goal("someGoal"),
-        new Text("anotherGoalName"),
+        new FunctionName("anotherFunctionName"),
         new LinkedHashSet<>(),
         new ReturnValue(createIoModelPrimitive()));
   }
 
   private Function createGoal3() {
     return new Function(
-        new Thing(new Text("thingName")),
+        new Thing(new ThingName("thingName")),
         new Goal("someGoal"),
-        new Text("someAnotherNewGoalName"),
+        new FunctionName("someAnotherNewFunctionName"),
         new LinkedHashSet<>(),
         new ReturnValue(createIoModelPrimitive()));
   }
 
   private IoModelPrimitive createIoModelPrimitive() {
     return new IoModelPrimitive(
-        new Text("datatype"), new Text("variableName"), new LinkedHashSet<>());
+        new DataTypeName("datatype"), new VariableName("variableName"), new LinkedHashSet<>());
   }
 
   // ===============================================================================================
@@ -102,11 +103,11 @@ public class ThingTest extends AbstractEqualityTest<Thing> {
   // ===============================================================================================
   @Override
   public Thing createObject1() {
-    return new Thing(new Text("xxx"));
+    return new Thing(new ThingName("xxx"));
   }
 
   @Override
   public Thing createObject2() {
-    return new Thing(new Text("yyy"));
+    return new Thing(new ThingName("yyy"));
   }
 }

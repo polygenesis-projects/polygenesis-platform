@@ -18,37 +18,23 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.models.reactivestate;
+package io.polygenesis.core.iomodel;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import io.polygenesis.commons.text.AbstractText;
 
-import java.util.Set;
-import org.junit.Before;
-import org.junit.Test;
+/**
+ * The type Generic type name.
+ *
+ * @author Christos Tsakostas
+ */
+public class GenericTypeName extends AbstractText {
 
-/** @author Christos Tsakostas */
-public class ActionDeducerTest extends AbstractReactiveStateTest {
-
-  private ActionDeducer actionDeducer;
-
-  @Before
-  public void setUp() {
-    actionDeducer = new ActionDeducer();
-  }
-
-  @Test
-  public void deduce() {
-    Set<Action> actions = actionDeducer.deduce(createThing());
-
-    assertThat(actions.size()).isEqualTo(3);
-
-    assertThat(actions)
-        .contains(new Action(ActionType.SUBMIT, new ActionName("CREATE_SOME_THING_SUBMIT")));
-    assertThat(actions)
-        .contains(
-            new Action(ActionType.ON_SUCCESS, new ActionName("CREATE_SOME_THING_ON_SUCCESS")));
-    assertThat(actions)
-        .contains(
-            new Action(ActionType.ON_FAILURE, new ActionName("CREATE_SOME_THING_ON_FAILURE")));
+  /**
+   * Instantiates a new Generic type name.
+   *
+   * @param text the text
+   */
+  public GenericTypeName(String text) {
+    super(text);
   }
 }

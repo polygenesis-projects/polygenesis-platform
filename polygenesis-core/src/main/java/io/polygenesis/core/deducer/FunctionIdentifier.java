@@ -21,12 +21,14 @@
 package io.polygenesis.core.deducer;
 
 import io.polygenesis.annotations.core.GFunction;
-import io.polygenesis.commons.text.Text;
+import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.Argument;
 import io.polygenesis.core.Function;
+import io.polygenesis.core.FunctionName;
 import io.polygenesis.core.Goal;
 import io.polygenesis.core.ReturnValue;
 import io.polygenesis.core.Thing;
+import io.polygenesis.core.ThingName;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.LinkedHashSet;
@@ -109,7 +111,7 @@ public class FunctionIdentifier {
   private Optional<Function> identifyGoalInMethod(Thing thing, Method method) {
     GFunction annotationGFunction = AnnotationUtils.findAnnotation(method, GFunction.class);
     if (annotationGFunction != null) {
-      Thing thingToExamine = new Thing(new Text(annotationGFunction.thingName()));
+      Thing thingToExamine = new Thing(new ThingName(annotationGFunction.thingName()));
 
       if (thing.equals(thingToExamine)) {
 
@@ -153,7 +155,8 @@ public class FunctionIdentifier {
         }
 
         Function function =
-            new Function(thing, goal, identifyName(annotationGFunction), arguments, returnValue);
+            new Function(
+                thing, goal, identifyFunctionName(annotationGFunction), arguments, returnValue);
 
         return Optional.of(function);
       } else {
@@ -167,18 +170,18 @@ public class FunctionIdentifier {
   /**
    * Identify name.
    *
-   * @param annotationGFunction the annotation {@link GFunction}
-   * @return the name as {@link Text}
+   * @param annotationGFunction the annotation g function
+   * @return the function name
    */
-  private Text identifyName(GFunction annotationGFunction) {
+  private FunctionName identifyFunctionName(GFunction annotationGFunction) {
     String name = annotationGFunction.name();
 
     if (name.equals("")) {
-      return new Text(
-          new Text(annotationGFunction.goal()).getLowerCamel()
-              + new Text(annotationGFunction.thingName()).getUpperCamel());
+      return new FunctionName(
+          TextConverter.toLowerCamel(annotationGFunction.goal())
+              + TextConverter.toUpperCamel(annotationGFunction.thingName()));
     }
 
-    return new Text(name);
+    return new FunctionName(name);
   }
 }

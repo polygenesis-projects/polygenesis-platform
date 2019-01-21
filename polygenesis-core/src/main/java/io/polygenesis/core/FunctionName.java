@@ -18,29 +18,23 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.commons.text;
+package io.polygenesis.core;
 
-import com.google.common.base.CaseFormat;
+import io.polygenesis.commons.text.AbstractText;
 
 /**
- * Text conversion methods, necessary for code generation.
+ * The type Function name.
  *
  * @author Christos Tsakostas
  */
-public final class TextService {
-
-  private TextService() {
-    throw new IllegalStateException("Utility class");
-  }
+public class FunctionName extends AbstractText {
 
   /**
-   * To lower hyphen.
+   * Instantiates a new Function name.
    *
-   * @param input the input
-   * @return the string
+   * @param text the text
    */
-  public static String toLowerHyphen(String input) {
-    String modified = input;
-    return CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_HYPHEN, modified);
+  public FunctionName(String text) {
+    super(text);
   }
 }

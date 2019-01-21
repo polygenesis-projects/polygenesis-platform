@@ -20,6 +20,7 @@
 
 package io.polygenesis.models.reactivestate;
 
+import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.Thing;
 
 /**
@@ -36,6 +37,6 @@ public class FeatureDeducer {
    * @return the feature
    */
   public Feature from(Thing thing) {
-    return new Feature(thing.getName().getModified());
+    return new Feature(TextConverter.toLowerCamel(thing.getName().getText()));
   }
 }
