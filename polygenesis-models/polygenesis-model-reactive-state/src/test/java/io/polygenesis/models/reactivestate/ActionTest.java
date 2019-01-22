@@ -23,7 +23,6 @@ package io.polygenesis.models.reactivestate;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.polygenesis.commons.test.AbstractEqualityTest;
-import io.polygenesis.commons.text.Text;
 import org.junit.Test;
 
 /** @author Christos Tsakostas */
@@ -31,20 +30,20 @@ public class ActionTest extends AbstractEqualityTest<Action> {
 
   @Test
   public void shouldSucceedToInstantiate() {
-    Action action = new Action(ActionType.SUBMIT, new Text("xxx"));
+    Action action = new Action(ActionType.SUBMIT, new ActionName("xxx"));
 
     assertThat(action).isNotNull();
     assertThat(action.getActionType()).isEqualTo(ActionType.SUBMIT);
-    assertThat(action.getName()).isEqualTo(new Text("xxx"));
+    assertThat(action.getName()).isEqualTo(new ActionName("xxx"));
   }
 
   @Override
   public Action createObject1() {
-    return new Action(ActionType.SUBMIT, new Text("xxx"));
+    return new Action(ActionType.SUBMIT, new ActionName("xxx"));
   }
 
   @Override
   public Action createObject2() {
-    return new Action(ActionType.RESET, new Text("xxx"));
+    return new Action(ActionType.RESET, new ActionName("xxx"));
   }
 }

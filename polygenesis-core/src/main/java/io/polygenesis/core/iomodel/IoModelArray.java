@@ -20,8 +20,6 @@
 
 package io.polygenesis.core.iomodel;
 
-import io.polygenesis.commons.text.Text;
-
 /**
  * The type Io model array.
  *
@@ -49,7 +47,8 @@ public class IoModelArray extends IoModelGroup {
    * @param dataType the data type
    * @param variableName the variable name
    */
-  public IoModelArray(Text genericType, Text dataType, Text variableName) {
+  public IoModelArray(
+      GenericTypeName genericType, DataTypeName dataType, VariableName variableName) {
     super(genericType, dataType, variableName);
   }
 }

@@ -21,20 +21,23 @@
 package io.polygenesis.models.reactivestate;
 
 import io.polygenesis.annotations.core.GGoalStandardType;
-import io.polygenesis.commons.text.Text;
 import io.polygenesis.core.Function;
+import io.polygenesis.core.FunctionName;
 import io.polygenesis.core.Goal;
 import io.polygenesis.core.ReturnValue;
 import io.polygenesis.core.Thing;
+import io.polygenesis.core.ThingName;
+import io.polygenesis.core.iomodel.DataTypeName;
 import io.polygenesis.core.iomodel.IoModelPrimitive;
 import io.polygenesis.core.iomodel.ModelPrimitiveType;
+import io.polygenesis.core.iomodel.VariableName;
 import java.util.LinkedHashSet;
 
 /** @author Christos Tsakostas */
 public abstract class AbstractReactiveStateTest {
 
   protected Thing createThing() {
-    Thing thing = new Thing(new Text("someThing"));
+    Thing thing = new Thing(new ThingName("someThing"));
 
     // =============================================================================================
     // CREATE
@@ -43,11 +46,11 @@ public abstract class AbstractReactiveStateTest {
         new Function(
             thing,
             new Goal(GGoalStandardType.CMD_CREATE),
-            new Text("createSomeThing"),
+            new FunctionName("createSomeThing"),
             new ReturnValue(
                 new IoModelPrimitive(
-                    new Text(ModelPrimitiveType.STRING.name()),
-                    new Text("response"),
+                    new DataTypeName(ModelPrimitiveType.STRING.name()),
+                    new VariableName("response"),
                     new LinkedHashSet<>())));
     thing.appendFunction(createFunction);
 
@@ -58,11 +61,11 @@ public abstract class AbstractReactiveStateTest {
         new Function(
             thing,
             new Goal("someCustomGoal"),
-            new Text("createSomeThing"),
+            new FunctionName("createSomeThing"),
             new ReturnValue(
                 new IoModelPrimitive(
-                    new Text(ModelPrimitiveType.STRING.name()),
-                    new Text("response"),
+                    new DataTypeName(ModelPrimitiveType.STRING.name()),
+                    new VariableName("response"),
                     new LinkedHashSet<>())));
     thing.appendFunction(customGoalFunction);
 

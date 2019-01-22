@@ -20,11 +20,13 @@
 
 package io.polygenesis.core.deducer;
 
-import io.polygenesis.commons.text.Text;
+import io.polygenesis.core.iomodel.DataTypeName;
+import io.polygenesis.core.iomodel.GenericTypeName;
 import io.polygenesis.core.iomodel.IoModel;
 import io.polygenesis.core.iomodel.IoModelArray;
 import io.polygenesis.core.iomodel.IoModelGroup;
 import io.polygenesis.core.iomodel.IoModelPrimitive;
+import io.polygenesis.core.iomodel.VariableName;
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
@@ -66,9 +68,9 @@ public class IoModelDeducer {
     if (recursiveObject.isGenericInterface()) {
       // IoModelArray
       return new IoModelArray(
-          new Text(recursiveObject.getGenericType()),
-          new Text(recursiveObject.getDataType()),
-          new Text(recursiveObject.getName()));
+          new GenericTypeName(recursiveObject.getGenericType()),
+          new DataTypeName(recursiveObject.getDataType()),
+          new VariableName(recursiveObject.getName()));
     } else if (!recursiveObject.isCustomObject()) {
       // IoModelPrimitive
       if (recursiveObject.getGenericType() != null) {
@@ -76,8 +78,8 @@ public class IoModelDeducer {
       }
 
       return new IoModelPrimitive(
-          new Text(dataTypeConverter.convert(recursiveObject.getDataType()).name()),
-          new Text(recursiveObject.getName()),
+          new DataTypeName(dataTypeConverter.convert(recursiveObject.getDataType()).name()),
+          new VariableName(recursiveObject.getName()),
           safeGetAnnotationsFrom(recursiveObject));
 
     } else {
@@ -85,10 +87,10 @@ public class IoModelDeducer {
       IoModelGroup modelGroupResponse =
           new IoModelGroup(
               recursiveObject.getGenericType() != null
-                  ? new Text(recursiveObject.getGenericType())
+                  ? new GenericTypeName(recursiveObject.getGenericType())
                   : null,
-              new Text(recursiveObject.getDataType()),
-              new Text(recursiveObject.getName()));
+              new DataTypeName(recursiveObject.getDataType()),
+              new VariableName(recursiveObject.getName()));
 
       this.fillIoModelGroup(modelGroupResponse, recursiveObject);
 
@@ -123,9 +125,9 @@ public class IoModelDeducer {
                   // Should not add primitives for Ignored or automatically set fields.
                   IoModelPrimitive modelPrimitive =
                       new IoModelPrimitive(
-                          new Text(
+                          new DataTypeName(
                               dataTypeConverter.convert(childRecursiveObject.getDataType()).name()),
-                          new Text(childRecursiveObject.getName()),
+                          new VariableName(childRecursiveObject.getName()),
                           modelGroup,
                           safeGetAnnotationsFrom(childRecursiveObject));
 

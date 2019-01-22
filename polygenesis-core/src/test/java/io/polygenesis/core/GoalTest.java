@@ -18,37 +18,18 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.models.reactivestate;
+package io.polygenesis.core;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.Set;
-import org.junit.Before;
 import org.junit.Test;
 
 /** @author Christos Tsakostas */
-public class ActionDeducerTest extends AbstractReactiveStateTest {
-
-  private ActionDeducer actionDeducer;
-
-  @Before
-  public void setUp() {
-    actionDeducer = new ActionDeducer();
-  }
+public class GoalTest {
 
   @Test
-  public void deduce() {
-    Set<Action> actions = actionDeducer.deduce(createThing());
-
-    assertThat(actions.size()).isEqualTo(3);
-
-    assertThat(actions)
-        .contains(new Action(ActionType.SUBMIT, new ActionName("CREATE_SOME_THING_SUBMIT")));
-    assertThat(actions)
-        .contains(
-            new Action(ActionType.ON_SUCCESS, new ActionName("CREATE_SOME_THING_ON_SUCCESS")));
-    assertThat(actions)
-        .contains(
-            new Action(ActionType.ON_FAILURE, new ActionName("CREATE_SOME_THING_ON_FAILURE")));
+  public void shouldInitialize() {
+    Goal goal = new Goal("asd");
+    assertThat(goal).isNotNull();
   }
 }

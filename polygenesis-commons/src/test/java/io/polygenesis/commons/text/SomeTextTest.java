@@ -23,10 +23,11 @@ package io.polygenesis.commons.text;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import io.polygenesis.commons.test.AbstractEqualityTest;
 import org.junit.Test;
 
 /** @author Christos Tsakostas */
-public class SomeTextTest {
+public class SomeTextTest extends AbstractEqualityTest<SomeText> {
 
   @Test
   public void shouldSucceedToInstantiate() {
@@ -34,6 +35,28 @@ public class SomeTextTest {
 
     assertThat(someText).isNotNull();
     assertThat(someText.getText()).isEqualTo("abc");
+  }
+
+  @Test
+  public void shouldSucceedForAllUpperCase() {
+    SomeText someText = new SomeText("CUSTOMER");
+
+    assertThat(someText.getText()).isEqualTo("customer");
+  }
+
+  @Test
+  public void shouldConvertUnderscoreToLowerCamel() {
+    SomeText someText = new SomeText("hello_world");
+
+    assertThat(someText.getText()).isEqualTo("helloWorld");
+  }
+
+  @Test
+  public void shouldSucceedForPackageName() {
+    SomeText someText = new SomeText("com.oregor.CreateUserRequest");
+
+    assertThat(someText.getOriginal()).isEqualTo("com.oregor.CreateUserRequest");
+    assertThat(someText.getText()).isEqualTo("createUserRequest");
   }
 
   @Test
@@ -49,56 +72,13 @@ public class SomeTextTest {
   // ===============================================================================================
   // Equality and Hash
   // ===============================================================================================
-  @Test
-  public void equalityShouldSucceedForTwoEqualObjects() {
-    SomeText someText1 = createSomeText1();
-    SomeText someText2 = createSomeText1();
-
-    assertThat(someText1.equals(someText2)).isTrue();
-  }
-
-  @Test
-  public void equalityShouldSucceedForSameObject() {
-    SomeText someText1 = createSomeText1();
-
-    assertThat(someText1.equals(someText1)).isTrue();
-  }
-
-  @Test
-  public void equalityShouldFailForNotEqualObjects() {
-    SomeText someText1 = createSomeText1();
-    SomeText someText2 = createSomeText2();
-
-    assertThat(someText1.equals(someText2)).isFalse();
-  }
-
-  @Test
-  public void equalityShouldFailForNullInput() {
-    SomeText someText1 = createSomeText1();
-
-    assertThat(someText1.equals(null)).isFalse();
-  }
-
-  @Test
-  public void equalityShouldFailForDifferentObject() {
-    SomeText someText1 = createSomeText1();
-    Object object = new Object();
-
-    assertThat(someText1.equals(object)).isFalse();
-  }
-
-  @Test
-  public void hashCodeShouldNotBeNull() {
-    SomeText someText1 = createSomeText1();
-
-    assertThat(someText1.hashCode()).isNotNull();
-  }
-
-  private SomeText createSomeText1() {
+  @Override
+  public SomeText createObject1() {
     return new SomeText("xxx");
   }
 
-  private SomeText createSomeText2() {
+  @Override
+  public SomeText createObject2() {
     return new SomeText("yyy");
   }
 }

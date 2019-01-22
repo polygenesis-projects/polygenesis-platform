@@ -23,7 +23,6 @@ package io.polygenesis.core.iomodel;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.polygenesis.commons.test.AbstractEqualityTest;
-import io.polygenesis.commons.text.Text;
 import org.junit.Test;
 
 /** @author Christos Tsakostas */
@@ -33,25 +32,32 @@ public class IoModelGroupTest extends AbstractEqualityTest<IoModelGroup> {
   public void shouldInitializeIoModelGroup() {
     IoModelGroup ioModelGroup =
         new IoModelGroup(
-            new Text("java.util.list"), new Text("java.lang.String"), new Text("someVariableName"));
+            new GenericTypeName("java.util.list"),
+            new DataTypeName("java.lang.String"),
+            new VariableName("someVariableName"));
 
     assertThat(ioModelGroup).isNotNull();
-    assertThat(ioModelGroup.getGenericType()).isEqualTo(new Text("java.util.list"));
-    assertThat(ioModelGroup.getDataType()).isEqualTo(new Text("java.lang.String"));
-    assertThat(ioModelGroup.getVariableName()).isEqualTo(new Text("someVariableName"));
+    assertThat(ioModelGroup.getGenericType()).isEqualTo(new GenericTypeName("java.util.list"));
+    assertThat(ioModelGroup.getDataType()).isEqualTo(new DataTypeName("java.lang.String"));
+    assertThat(ioModelGroup.getVariableName()).isEqualTo(new VariableName("someVariableName"));
 
     IoModelArray childIoModelArray =
         new IoModelArray(
-            new Text("java.util.list"), new Text("java.lang.String"), new Text("someVariableName"));
+            new GenericTypeName("java.util.list"),
+            new DataTypeName("java.lang.String"),
+            new VariableName("someVariableName"));
     ioModelGroup.addIoModelArray(childIoModelArray);
 
     IoModelGroup childIoModelGroup =
         new IoModelGroup(
-            new Text("java.util.list"), new Text("java.lang.String"), new Text("someVariableName"));
+            new GenericTypeName("java.util.list"),
+            new DataTypeName("java.lang.String"),
+            new VariableName("someVariableName"));
     ioModelGroup.addIoModelGroup(childIoModelGroup);
 
     IoModelPrimitive childIoModelPrimitive =
-        new IoModelPrimitive(new Text("java.lang.String"), new Text("someVariableName"), null);
+        new IoModelPrimitive(
+            new DataTypeName("java.lang.String"), new VariableName("someVariableName"), null);
     ioModelGroup.addIoModelPrimitive(childIoModelPrimitive);
 
     assertThat(ioModelGroup.getModels().size()).isEqualTo(3);
@@ -65,28 +71,35 @@ public class IoModelGroupTest extends AbstractEqualityTest<IoModelGroup> {
   public void shouldInitializeIoModelArrayWithParent() {
     IoModelGroup parent =
         new IoModelGroup(
-            new Text("java.util.list"), new Text("java.lang.String"), new Text("someVariableName"));
+            new GenericTypeName("java.util.list"),
+            new DataTypeName("java.lang.String"),
+            new VariableName("someVariableName"));
 
     IoModelGroup ioModelGroup = new IoModelGroup(parent);
 
     assertThat(ioModelGroup).isNotNull();
     assertThat(ioModelGroup.getParent()).isNotNull();
-    assertThat(ioModelGroup.getParent().getGenericType()).isEqualTo(new Text("java.util.list"));
-    assertThat(ioModelGroup.getParent().getDataType()).isEqualTo(new Text("java.lang.String"));
-    assertThat(ioModelGroup.getParent().getVariableName()).isEqualTo(new Text("someVariableName"));
+    assertThat(ioModelGroup.getParent().getGenericType())
+        .isEqualTo(new GenericTypeName("java.util.list"));
+    assertThat(ioModelGroup.getParent().getDataType())
+        .isEqualTo(new DataTypeName("java.lang.String"));
+    assertThat(ioModelGroup.getParent().getVariableName())
+        .isEqualTo(new VariableName("someVariableName"));
   }
 
   @Override
   public IoModelGroup createObject1() {
     return new IoModelGroup(
-        new Text("java.util.list"), new Text("java.lang.String"), new Text("someVariableName"));
+        new GenericTypeName("java.util.list"),
+        new DataTypeName("java.lang.String"),
+        new VariableName("someVariableName"));
   }
 
   @Override
   public IoModelGroup createObject2() {
     return new IoModelGroup(
-        new Text("java.util.list"),
-        new Text("java.lang.String"),
-        new Text("someOtherVariableName"));
+        new GenericTypeName("java.util.list"),
+        new DataTypeName("java.lang.String"),
+        new VariableName("someOtherVariableName"));
   }
 }

@@ -22,9 +22,10 @@ package io.polygenesis.core.deducer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.polygenesis.commons.text.Text;
 import io.polygenesis.core.Function;
+import io.polygenesis.core.FunctionName;
 import io.polygenesis.core.Thing;
+import io.polygenesis.core.ThingName;
 import io.polygenesis.core.ThingRepository;
 import java.util.LinkedHashSet;
 import java.util.Optional;
@@ -82,12 +83,12 @@ public class AnnotationsThingDeducerImplTest {
     assertThat(repository).isNotNull();
     assertThat(repository.getThings()).isNotNull();
     assertThat(repository.getThings().size()).isEqualTo(1);
-    assertThat(repository.getThingByName(new Text("someThing"))).isPresent();
+    assertThat(repository.getThingByName(new ThingName("someThing"))).isPresent();
 
     // =============================================================================================
     // ASSERTIONS FOR THING: SOMETHING
     // =============================================================================================
-    Optional<Thing> optionalSomeThing = repository.getThingByName(new Text("someThing"));
+    Optional<Thing> optionalSomeThing = repository.getThingByName(new ThingName("someThing"));
     if (!optionalSomeThing.isPresent()) {
       throw new IllegalStateException();
     }
@@ -104,7 +105,7 @@ public class AnnotationsThingDeducerImplTest {
   // ===============================================================================================
   private void assertionsForGoalCalculation(Thing someThing) {
     Optional<Function> optionalGoalCalculation =
-        repository.getThingFunction(someThing.getName(), new Text("calculationSomeThing"));
+        repository.getThingFunction(someThing.getName(), new FunctionName("calculationSomeThing"));
 
     if (!optionalGoalCalculation.isPresent()) {
       throw new IllegalStateException();

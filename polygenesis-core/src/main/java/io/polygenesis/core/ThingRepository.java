@@ -20,7 +20,6 @@
 
 package io.polygenesis.core;
 
-import io.polygenesis.commons.text.Text;
 import java.util.Optional;
 import java.util.Set;
 
@@ -44,14 +43,14 @@ public interface ThingRepository extends ModelRepository {
    * @param thingName the thing name
    * @return the thing by name
    */
-  Optional<Thing> getThingByName(Text thingName);
+  Optional<Thing> getThingByName(ThingName thingName);
 
   /**
    * Gets a thing's function.
    *
    * @param thingName the thing name
-   * @param goalName the function name
+   * @param functionName the function name
    * @return the thing function
    */
-  Optional<Function> getThingFunction(Text thingName, Text goalName);
+  Optional<Function> getThingFunction(ThingName thingName, FunctionName functionName);
 }

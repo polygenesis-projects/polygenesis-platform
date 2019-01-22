@@ -23,7 +23,6 @@ package io.polygenesis.core.iomodel;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.polygenesis.commons.test.AbstractEqualityTest;
-import io.polygenesis.commons.text.Text;
 import org.junit.Test;
 
 /** @author Christos Tsakostas */
@@ -33,15 +32,18 @@ public class IoModelTest extends AbstractEqualityTest<TestIoModel> {
   public void shouldInitializeTestIoModel() {
     IoModelGroup parent =
         new IoModelGroup(
-            new Text("java.util.list"), new Text("java.lang.String"), new Text("someVariableName"));
+            new GenericTypeName("java.util.list"),
+            new DataTypeName("java.lang.String"),
+            new VariableName("someVariableName"));
 
     TestIoModel testIoModel =
-        new TestIoModel(new Text("java.lang.String"), new Text("someVariableName"), parent);
+        new TestIoModel(
+            new DataTypeName("java.lang.String"), new VariableName("someVariableName"), parent);
 
     assertThat(testIoModel).isNotNull();
     assertThat(testIoModel.getGenericType()).isNull();
-    assertThat(testIoModel.getDataType()).isEqualTo(new Text("java.lang.String"));
-    assertThat(testIoModel.getVariableName()).isEqualTo(new Text("someVariableName"));
+    assertThat(testIoModel.getDataType()).isEqualTo(new DataTypeName("java.lang.String"));
+    assertThat(testIoModel.getVariableName()).isEqualTo(new VariableName("someVariableName"));
   }
 
   // ===============================================================================================
@@ -49,12 +51,17 @@ public class IoModelTest extends AbstractEqualityTest<TestIoModel> {
   // ===============================================================================================
   @Override
   public TestIoModel createObject1() {
-    return new TestIoModel(new Text("genericType"), new Text("dataType"), new Text("variableName"));
+    return new TestIoModel(
+        new GenericTypeName("genericType"),
+        new DataTypeName("dataType"),
+        new VariableName("variableName"));
   }
 
   @Override
   public TestIoModel createObject2() {
     return new TestIoModel(
-        new Text("genericType"), new Text("dataType"), new Text("someOtherVariableName"));
+        new GenericTypeName("genericType"),
+        new DataTypeName("dataType"),
+        new VariableName("someOtherVariableName"));
   }
 }

@@ -20,7 +20,6 @@
 
 package io.polygenesis.core;
 
-import io.polygenesis.commons.text.Text;
 import java.util.Set;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -46,7 +45,7 @@ public class Function {
    *
    * <p>It will be used in code generation.
    */
-  private Text name;
+  private FunctionName name;
 
   /** Optional return value of the Function. */
   private ReturnValue returnValue;
@@ -58,7 +57,7 @@ public class Function {
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
-  private Function(Thing thing, Goal goal, Text name) {
+  private Function(Thing thing, Goal goal, FunctionName name) {
     setThing(thing);
     setGoal(goal);
     setName(name);
@@ -72,7 +71,7 @@ public class Function {
    * @param name the name
    * @param returnValue the return value
    */
-  public Function(Thing thing, Goal goal, Text name, ReturnValue returnValue) {
+  public Function(Thing thing, Goal goal, FunctionName name, ReturnValue returnValue) {
     this(thing, goal, name);
     setReturnValue(returnValue);
   }
@@ -85,7 +84,7 @@ public class Function {
    * @param name the name
    * @param arguments the arguments
    */
-  public Function(Thing thing, Goal goal, Text name, Set<Argument> arguments) {
+  public Function(Thing thing, Goal goal, FunctionName name, Set<Argument> arguments) {
     this(thing, goal, name);
     setArguments(arguments);
   }
@@ -100,7 +99,7 @@ public class Function {
    * @param returnValue the return value
    */
   public Function(
-      Thing thing, Goal goal, Text name, Set<Argument> arguments, ReturnValue returnValue) {
+      Thing thing, Goal goal, FunctionName name, Set<Argument> arguments, ReturnValue returnValue) {
     this(thing, goal, name, arguments);
     setReturnValue(returnValue);
   }
@@ -132,7 +131,7 @@ public class Function {
    *
    * @return the name
    */
-  public Text getName() {
+  public FunctionName getName() {
     return name;
   }
 
@@ -166,7 +165,7 @@ public class Function {
     this.goal = goal;
   }
 
-  private void setName(Text name) {
+  private void setName(FunctionName name) {
     this.name = name;
   }
 

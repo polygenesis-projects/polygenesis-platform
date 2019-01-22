@@ -26,7 +26,7 @@ import static io.polygenesis.generators.angular.reactivestate.StoreExporterConst
 import static io.polygenesis.generators.angular.reactivestate.StoreExporterConstants.POSTFIX_SERVICE_TS;
 
 import io.polygenesis.commons.path.PathService;
-import io.polygenesis.commons.text.TextService;
+import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.generators.angular.freemarker.FreemarkerConfig;
 import io.polygenesis.generators.angular.freemarker.FreemarkerService;
 import io.polygenesis.models.reactivestate.Store;
@@ -57,7 +57,7 @@ public class ServiceExporter {
         Paths.get(
             generationPath.toString(),
             PATH_NGRX,
-            TextService.toLowerHyphen(store.getFeature().getText()),
+            TextConverter.toLowerHyphen(store.getFeature().getText()),
             PATH_SERVICES);
     PathService.ensurePath(effectsPath);
 
@@ -79,6 +79,6 @@ public class ServiceExporter {
    * @return the string
    */
   private String makeServiceFileName(Store store) {
-    return TextService.toLowerHyphen(store.getFeature().getText()) + POSTFIX_SERVICE_TS;
+    return TextConverter.toLowerHyphen(store.getFeature().getText()) + POSTFIX_SERVICE_TS;
   }
 }

@@ -21,7 +21,7 @@
 package io.polygenesis.models.reactivestate;
 
 import io.polygenesis.annotations.core.GGoalStandardType;
-import io.polygenesis.commons.text.Text;
+import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.Function;
 import io.polygenesis.core.Thing;
 import java.util.Arrays;
@@ -103,9 +103,20 @@ public class ActionDeducer {
     return actions;
   }
 
+  /**
+   * Create action.
+   *
+   * @param function the function
+   * @param actionType the action type
+   * @return the action
+   */
   public Action createAction(Function function, ActionType actionType) {
     return new Action(
-        actionType, new Text(function.getName().getUpperUnderscore() + "_" + actionType.name()));
+        actionType,
+        new ActionName(
+            TextConverter.toUpperUnderscore(function.getName().getText())
+                + "_"
+                + actionType.name()));
   }
 
   /** Initializes {@link io.polygenesis.core.Goal} to {@link ActionType} map. */

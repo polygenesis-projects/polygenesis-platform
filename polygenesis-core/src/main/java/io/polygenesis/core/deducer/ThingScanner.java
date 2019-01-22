@@ -21,8 +21,8 @@
 package io.polygenesis.core.deducer;
 
 import io.polygenesis.annotations.core.GFunction;
-import io.polygenesis.commons.text.Text;
 import io.polygenesis.core.Thing;
+import io.polygenesis.core.ThingName;
 import java.lang.reflect.Method;
 import java.util.LinkedHashSet;
 import java.util.Optional;
@@ -81,7 +81,7 @@ public class ThingScanner {
   private Optional<Thing> identifyThingInMethod(Method method) {
     GFunction annotationGFunction = AnnotationUtils.findAnnotation(method, GFunction.class);
     if (annotationGFunction != null) {
-      Thing thing = new Thing(new Text(annotationGFunction.thingName()));
+      Thing thing = new Thing(new ThingName(annotationGFunction.thingName()));
       return Optional.of(thing);
     } else {
       return Optional.empty();

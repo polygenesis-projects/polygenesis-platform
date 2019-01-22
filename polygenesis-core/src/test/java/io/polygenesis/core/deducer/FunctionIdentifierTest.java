@@ -25,9 +25,9 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
-import io.polygenesis.commons.text.Text;
 import io.polygenesis.core.Function;
 import io.polygenesis.core.Thing;
+import io.polygenesis.core.ThingName;
 import io.polygenesis.core.sample.AnnotatedInterface;
 import io.polygenesis.core.sample.NotAnnotatedInterface;
 import java.lang.reflect.Method;
@@ -46,7 +46,7 @@ public class FunctionIdentifierTest {
 
     MethodOutputDescriptor methodOutputDescriptor = mock(MethodOutputDescriptor.class);
 
-    Thing thing = new Thing(new Text("someFancyThing"));
+    Thing thing = new Thing(new ThingName("someFancyThing"));
     Set<Class<?>> classes = new LinkedHashSet<>();
     classes.add(AnnotatedInterface.class);
 

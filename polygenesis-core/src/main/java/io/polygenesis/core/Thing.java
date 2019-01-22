@@ -20,7 +20,6 @@
 
 package io.polygenesis.core;
 
-import io.polygenesis.commons.text.Text;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -42,7 +41,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 public class Thing {
 
   /** The name of a {@link Thing}. */
-  private Text name;
+  private ThingName name;
 
   /** Optionally a {@link Thing} may be the child of another {@link Thing} acting as the parent. */
   private Thing parent;
@@ -58,7 +57,7 @@ public class Thing {
    *
    * @param thingName the thing name
    */
-  public Thing(Text thingName) {
+  public Thing(ThingName thingName) {
     setName(thingName);
     setFunctions(new LinkedHashSet<>());
   }
@@ -69,7 +68,7 @@ public class Thing {
    * @param thingName the thing name
    * @param parentThing the parent thing
    */
-  public Thing(Text thingName, Thing parentThing) {
+  public Thing(ThingName thingName, Thing parentThing) {
     setName(thingName);
     setParent(parentThing);
     setFunctions(new LinkedHashSet<>());
@@ -106,7 +105,7 @@ public class Thing {
    *
    * @return the name
    */
-  public Text getName() {
+  public ThingName getName() {
     return name;
   }
 
@@ -132,7 +131,7 @@ public class Thing {
   // GUARDS
   // ===============================================================================================
 
-  private void setName(Text name) {
+  private void setName(ThingName name) {
     this.name = name;
   }
 
