@@ -12,12 +12,6 @@
   <artifactId>polygenesis-generator-angular</artifactId>
 
   <dependencies>
-    <!--FREEMARKER-->
-    <dependency>
-      <groupId>org.freemarker</groupId>
-      <artifactId>freemarker</artifactId>
-    </dependency>
-
     <!--POLYGENESIS MODELS-->
     <dependency>
       <groupId>io.polygenesis.models</groupId>

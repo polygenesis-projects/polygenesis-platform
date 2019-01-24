@@ -25,10 +25,9 @@ import static io.polygenesis.generators.angular.reactivestate.StoreExporterConst
 import static io.polygenesis.generators.angular.reactivestate.StoreExporterConstants.PATH_SERVICES;
 import static io.polygenesis.generators.angular.reactivestate.StoreExporterConstants.POSTFIX_SERVICE_TS;
 
+import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.path.PathService;
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.generators.angular.freemarker.FreemarkerConfig;
-import io.polygenesis.generators.angular.freemarker.FreemarkerService;
 import io.polygenesis.models.reactivestate.Store;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -40,6 +39,16 @@ import java.util.Map;
  * @author Christos Tsakostas
  */
 public class ServiceExporter {
+
+  private final FreemarkerService freemarkerService;
+
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
+  public ServiceExporter(FreemarkerService freemarkerService) {
+    this.freemarkerService = freemarkerService;
+  }
 
   // ===============================================================================================
   // FUNCTIONALITY
@@ -61,11 +70,8 @@ public class ServiceExporter {
             PATH_SERVICES);
     PathService.ensurePath(effectsPath);
 
-    FreemarkerService.export(
-        FreemarkerConfig.getInstance().getConfiguration(),
-        dataModel,
-        FTL_SERVICE,
-        Paths.get(effectsPath.toString(), makeServiceFileName(store)));
+    freemarkerService.export(
+        dataModel, FTL_SERVICE, Paths.get(effectsPath.toString(), makeServiceFileName(store)));
   }
 
   // ===============================================================================================

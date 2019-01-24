@@ -23,10 +23,9 @@ package io.polygenesis.generators.angular.ui;
 import static io.polygenesis.generators.angular.ui.UiExporterConstants.FTL_MODULE;
 import static io.polygenesis.generators.angular.ui.UiExporterConstants.POSTFIX_MODULE_TS;
 
+import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.path.PathService;
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.generators.angular.freemarker.FreemarkerConfig;
-import io.polygenesis.generators.angular.freemarker.FreemarkerService;
 import io.polygenesis.models.ui.Feature;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -38,6 +37,21 @@ import java.util.Map;
  * @author Christos Tsakostas
  */
 public class UiModuleExporter {
+
+  private final FreemarkerService freemarkerService;
+
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
+  /**
+   * Instantiates a new Ui module exporter.
+   *
+   * @param freemarkerService the freemarker service
+   */
+  public UiModuleExporter(FreemarkerService freemarkerService) {
+    this.freemarkerService = freemarkerService;
+  }
 
   // ===============================================================================================
   // FUNCTIONALITY
@@ -57,11 +71,8 @@ public class UiModuleExporter {
             TextConverter.toLowerHyphen(feature.getFeatureName().getText()));
     PathService.ensurePath(modulePath);
 
-    FreemarkerService.export(
-        FreemarkerConfig.getInstance().getConfiguration(),
-        dataModel,
-        FTL_MODULE,
-        Paths.get(modulePath.toString(), makeModuleFileName(feature)));
+    freemarkerService.export(
+        dataModel, FTL_MODULE, Paths.get(modulePath.toString(), makeModuleFileName(feature)));
   }
 
   // ===============================================================================================

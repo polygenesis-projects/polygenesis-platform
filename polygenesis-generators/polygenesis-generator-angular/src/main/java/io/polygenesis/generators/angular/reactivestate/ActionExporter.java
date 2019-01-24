@@ -25,10 +25,9 @@ import static io.polygenesis.generators.angular.reactivestate.StoreExporterConst
 import static io.polygenesis.generators.angular.reactivestate.StoreExporterConstants.PATH_NGRX;
 import static io.polygenesis.generators.angular.reactivestate.StoreExporterConstants.POSTFIX_ACTIONS_TS;
 
+import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.path.PathService;
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.generators.angular.freemarker.FreemarkerConfig;
-import io.polygenesis.generators.angular.freemarker.FreemarkerService;
 import io.polygenesis.models.reactivestate.Store;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -40,6 +39,21 @@ import java.util.Map;
  * @author Christos Tsakostas
  */
 public class ActionExporter {
+
+  private final FreemarkerService freemarkerService;
+
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
+  /**
+   * Instantiates a new Action exporter.
+   *
+   * @param freemarkerService the freemarker service
+   */
+  public ActionExporter(FreemarkerService freemarkerService) {
+    this.freemarkerService = freemarkerService;
+  }
 
   // ===============================================================================================
   // FUNCTIONALITY
@@ -61,11 +75,8 @@ public class ActionExporter {
             PATH_ACTIONS);
     PathService.ensurePath(actionsPath);
 
-    FreemarkerService.export(
-        FreemarkerConfig.getInstance().getConfiguration(),
-        dataModel,
-        FTL_ACTION,
-        Paths.get(actionsPath.toString(), makeActionsFileName(store)));
+    freemarkerService.export(
+        dataModel, FTL_ACTION, Paths.get(actionsPath.toString(), makeActionsFileName(store)));
   }
 
   // ===============================================================================================

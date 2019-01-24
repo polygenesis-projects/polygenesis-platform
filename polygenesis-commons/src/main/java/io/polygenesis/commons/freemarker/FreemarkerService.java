@@ -18,7 +18,7 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.generators.angular.freemarker;
+package io.polygenesis.commons.freemarker;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -37,19 +37,33 @@ import java.util.Map;
  */
 public class FreemarkerService {
 
+  private final Configuration configuration;
+
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
+  /**
+   * Instantiates a new Freemarker service.
+   *
+   * @param configuration the configuration
+   */
+  public FreemarkerService(Configuration configuration) {
+    this.configuration = configuration;
+  }
+
+  // ===============================================================================================
+  // FUNCTIONALITY
+  // ===============================================================================================
+
   /**
    * Export.
    *
-   * @param configuration the configuration
    * @param dataModel the data model
    * @param ftlTemplate the ftl template
    * @param generationFilePath the generation file path
    */
-  public static void export(
-      Configuration configuration,
-      Map<String, Object> dataModel,
-      String ftlTemplate,
-      Path generationFilePath) {
+  public void export(Map<String, Object> dataModel, String ftlTemplate, Path generationFilePath) {
 
     try {
       Template template = configuration.getTemplate(ftlTemplate);

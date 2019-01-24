@@ -20,6 +20,8 @@
 
 package io.polygenesis.generators.angular;
 
+import io.polygenesis.commons.freemarker.FreemarkerConfig;
+import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.generators.angular.reactivestate.ActionExporter;
 import io.polygenesis.generators.angular.reactivestate.EffectExporter;
 import io.polygenesis.generators.angular.reactivestate.IndexReducerExporter;
@@ -46,13 +48,15 @@ public class PolyGenesisAngularGeneratorFactory {
   private static final UiExporter uiExporter;
 
   static {
-    ActionExporter actionExporter = new ActionExporter();
-    ReducerExporter reducerExporter = new ReducerExporter();
-    IndexReducerExporter indexReducerExporter = new IndexReducerExporter();
-    EffectExporter effectExporter = new EffectExporter();
-    ServiceExporter serviceExporter = new ServiceExporter();
-    ModelExporter modelExporter = new ModelExporter();
-    ModuleExporter moduleExporter = new ModuleExporter();
+    FreemarkerService freemarkerService =
+        new FreemarkerService(FreemarkerConfig.getInstance().getConfiguration());
+    ActionExporter actionExporter = new ActionExporter(freemarkerService);
+    ReducerExporter reducerExporter = new ReducerExporter(freemarkerService);
+    IndexReducerExporter indexReducerExporter = new IndexReducerExporter(freemarkerService);
+    EffectExporter effectExporter = new EffectExporter(freemarkerService);
+    ServiceExporter serviceExporter = new ServiceExporter(freemarkerService);
+    ModelExporter modelExporter = new ModelExporter(freemarkerService);
+    ModuleExporter moduleExporter = new ModuleExporter(freemarkerService);
 
     storeExporter =
         new StoreExporter(
@@ -64,7 +68,7 @@ public class PolyGenesisAngularGeneratorFactory {
             modelExporter,
             moduleExporter);
 
-    UiModuleExporter uiModuleExporter = new UiModuleExporter();
+    UiModuleExporter uiModuleExporter = new UiModuleExporter(freemarkerService);
 
     uiExporter = new UiExporter(uiModuleExporter);
   }

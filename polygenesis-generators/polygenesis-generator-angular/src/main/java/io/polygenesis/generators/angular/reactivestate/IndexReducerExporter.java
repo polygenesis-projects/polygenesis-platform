@@ -25,10 +25,9 @@ import static io.polygenesis.generators.angular.reactivestate.StoreExporterConst
 import static io.polygenesis.generators.angular.reactivestate.StoreExporterConstants.PATH_NGRX;
 import static io.polygenesis.generators.angular.reactivestate.StoreExporterConstants.POSTFIX_INDEX_REDUCER_TS;
 
+import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.path.PathService;
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.generators.angular.freemarker.FreemarkerConfig;
-import io.polygenesis.generators.angular.freemarker.FreemarkerService;
 import io.polygenesis.models.reactivestate.Store;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -40,6 +39,21 @@ import java.util.Map;
  * @author Christos Tsakostas
  */
 public class IndexReducerExporter {
+
+  private final FreemarkerService freemarkerService;
+
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
+  /**
+   * Instantiates a new Index reducer exporter.
+   *
+   * @param freemarkerService the freemarker service
+   */
+  public IndexReducerExporter(FreemarkerService freemarkerService) {
+    this.freemarkerService = freemarkerService;
+  }
 
   // ===============================================================================================
   // FUNCTIONALITY
@@ -61,8 +75,7 @@ public class IndexReducerExporter {
             PATH_INDEX_REDUCER);
     PathService.ensurePath(reducersPath);
 
-    FreemarkerService.export(
-        FreemarkerConfig.getInstance().getConfiguration(),
+    freemarkerService.export(
         dataModel,
         FTL_INDEX_REDUCER,
         Paths.get(reducersPath.toString(), makeIndexReducerFileName()));
