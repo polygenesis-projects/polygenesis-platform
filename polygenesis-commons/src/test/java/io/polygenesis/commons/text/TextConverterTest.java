@@ -121,4 +121,12 @@ public class TextConverterTest {
     assertThat(TextConverter.toLowerHyphen("someThing")).isEqualTo("some-thing");
     assertThat(TextConverter.toLowerHyphen("SomeThing")).isEqualTo("some-thing");
   }
+
+  @Test
+  public void shouldSucceedToLowerCamel() {
+    assertThat(TextConverter.toLowerCamel("someThing")).isEqualTo("someThing");
+    assertThat(TextConverter.toLowerCamel("some-thing")).isEqualTo("someThing");
+    assertThat(TextConverter.toLowerCamel("some_thing")).isEqualTo("someThing");
+    assertThat(TextConverter.toLowerCamel("some thing")).isEqualTo("someThing");
+  }
 }

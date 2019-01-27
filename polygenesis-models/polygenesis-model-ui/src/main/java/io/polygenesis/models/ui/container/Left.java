@@ -20,15 +20,23 @@
 
 package io.polygenesis.models.ui.container;
 
+import io.polygenesis.models.ui.element.ElementGroup;
+
 /**
  * The type Left.
  *
  * @author Christos Tsakostas
  */
-public class Left extends AbstractContainer {
+public class Left extends AbstractContainerWithElements {
 
   public Left(
-      ContainerName containerName, Top top, Right right, Bottom bottom, Left left, Center center) {
-    super(containerName, top, right, bottom, left, center);
+      ContainerName containerName,
+      Top top,
+      Right right,
+      Bottom bottom,
+      Left left,
+      Center center,
+      ElementGroup elementGroup) {
+    super(containerName, top, right, bottom, left, center, elementGroup);
   }
 }

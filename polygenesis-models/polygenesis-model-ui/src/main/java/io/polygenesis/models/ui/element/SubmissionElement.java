@@ -25,4 +25,18 @@ package io.polygenesis.models.ui.element;
  *
  * @author Christos Tsakostas
  */
-public class SubmissionElement extends AbstractElement {}
+public class SubmissionElement extends AbstractElement {
+
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
+  /**
+   * Instantiates a new Submission element.
+   *
+   * @param elementName the element name
+   */
+  public SubmissionElement(ElementName elementName) {
+    super(elementName);
+  }
+}

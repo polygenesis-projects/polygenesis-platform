@@ -21,6 +21,7 @@
 package io.polygenesis.models.ui;
 
 import io.polygenesis.core.ThingRepository;
+import io.polygenesis.models.ui.container.LayoutContainer;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -31,14 +32,16 @@ import java.util.Set;
  */
 public class UiDeducerImpl implements UiDeducer {
 
-  private FeatureDeducer featureDeducer;
+  private final FeatureDeducer featureDeducer;
+  private final LayoutDeducer layoutDeducer;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
-  public UiDeducerImpl(FeatureDeducer featureDeducer) {
+  public UiDeducerImpl(FeatureDeducer featureDeducer, LayoutDeducer layoutDeducer) {
     this.featureDeducer = featureDeducer;
+    this.layoutDeducer = layoutDeducer;
   }
 
   // ===============================================================================================
@@ -52,6 +55,8 @@ public class UiDeducerImpl implements UiDeducer {
         .getThings()
         .forEach(thing -> features.add(featureDeducer.deduceFeatureFromThing(thing)));
 
-    return new UiModelRepository(features);
+    Set<LayoutContainer> layoutContainers = layoutDeducer.deduceLayoutsFromFeatures();
+
+    return new UiModelRepository(features, layoutContainers);
   }
 }

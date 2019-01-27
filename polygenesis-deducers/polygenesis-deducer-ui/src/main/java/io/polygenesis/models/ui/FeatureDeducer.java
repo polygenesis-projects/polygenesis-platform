@@ -22,6 +22,9 @@ package io.polygenesis.models.ui;
 
 import io.polygenesis.commons.assertions.Assertion;
 import io.polygenesis.core.Thing;
+import io.polygenesis.models.ui.container.AbstractContainer;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * The type Feature deducer.
@@ -31,6 +34,7 @@ import io.polygenesis.core.Thing;
 public class FeatureDeducer {
 
   private final FeatureNameDeducer featureNameDeducer;
+  private final ContainerDeducer containerDeducer;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -41,9 +45,11 @@ public class FeatureDeducer {
    *
    * @param featureNameDeducer the feature name deducer
    */
-  public FeatureDeducer(FeatureNameDeducer featureNameDeducer) {
+  public FeatureDeducer(FeatureNameDeducer featureNameDeducer, ContainerDeducer containerDeducer) {
     Assertion.isNotNull(featureNameDeducer, "featureNameDeducer is required");
     this.featureNameDeducer = featureNameDeducer;
+    Assertion.isNotNull(containerDeducer, "containerDeducer is required");
+    this.containerDeducer = containerDeducer;
   }
 
   // ===============================================================================================
@@ -57,7 +63,15 @@ public class FeatureDeducer {
    * @return the store
    */
   public Feature deduceFeatureFromThing(Thing thing) {
-    Feature feature = new Feature(featureNameDeducer.from(thing));
+    Set<AbstractContainer> containers = new LinkedHashSet<>();
+    Feature feature = new Feature(featureNameDeducer.from(thing), containers);
+
+    thing
+        .getFunctions()
+        .forEach(
+            function ->
+                containers.add(
+                    containerDeducer.deduceContainerFromThingFunction(feature, function)));
 
     return feature;
   }

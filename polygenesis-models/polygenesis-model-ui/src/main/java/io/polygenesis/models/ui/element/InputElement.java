@@ -25,4 +25,18 @@ package io.polygenesis.models.ui.element;
  *
  * @author Christos Tsakostas
  */
-public class InputElement extends AbstractElement {}
+public class InputElement extends AbstractElement {
+
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
+  /**
+   * Instantiates a new Input element.
+   *
+   * @param elementName the element name
+   */
+  public InputElement(ElementName elementName) {
+    super(elementName);
+  }
+}

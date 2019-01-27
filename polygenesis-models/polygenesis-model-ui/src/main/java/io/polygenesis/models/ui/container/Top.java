@@ -20,15 +20,27 @@
 
 package io.polygenesis.models.ui.container;
 
+import io.polygenesis.models.ui.element.ElementGroup;
+
 /**
  * The type Top.
  *
  * @author Christos Tsakostas
  */
-public class Top extends AbstractContainer {
+public class Top extends AbstractContainerWithElements {
 
   public Top(
-      ContainerName containerName, Top top, Right right, Bottom bottom, Left left, Center center) {
-    super(containerName, top, right, bottom, left, center);
+      ContainerName containerName,
+      Top top,
+      Right right,
+      Bottom bottom,
+      Left left,
+      Center center,
+      ElementGroup elementGroup) {
+    super(containerName, top, right, bottom, left, center, elementGroup);
+  }
+
+  public Top(ContainerName containerName, ElementGroup elementGroup) {
+    super(containerName, null, null, null, null, null, elementGroup);
   }
 }

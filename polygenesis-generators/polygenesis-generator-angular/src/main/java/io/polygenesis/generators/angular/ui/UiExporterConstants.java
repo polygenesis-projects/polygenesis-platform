@@ -31,35 +31,39 @@ public final class UiExporterConstants {
     throw new IllegalStateException("Utility class");
   }
 
-  public static final String PATH_NGRX = "ngrx";
+  // ===============================================================================================
+  // FREEMARKER TEMPLATES
+  // ===============================================================================================
 
-  public static final String FTL_ACTION =
-      "polygenesis-angular-generator/ngrx/analytical/action/index.ftl";
-  public static final String FTL_REDUCER =
-      "polygenesis-angular-generator/ngrx/analytical/reducer/index.ftl";
-  public static final String FTL_INDEX_REDUCER =
-      "polygenesis-angular-generator/ngrx/shared/index-reducer/index.ftl";
-  public static final String FTL_EFFECT =
-      "polygenesis-angular-generator/ngrx/shared/effect/index.ftl";
-  public static final String FTL_SERVICE =
-      "polygenesis-angular-generator/ngrx/shared/service/index.ftl";
-  public static final String FTL_MODEL =
-      "polygenesis-angular-generator/ngrx/shared/model/index.ftl";
   public static final String FTL_MODULE =
       "polygenesis-angular-generator/ui/default/module/index.ftl";
 
-  public static final String PATH_ACTIONS = "actions";
-  public static final String PATH_REDUCERS = "reducers";
-  public static final String PATH_INDEX_REDUCER = "reducers";
-  public static final String PATH_EFFECTS = "effects";
-  public static final String PATH_SERVICES = "services";
-  public static final String PATH_MODELS = "models";
+  public static final String FTL_CONTAINER_HTML =
+      "polygenesis-angular-generator/ui/default/container/inline/html/index.ftl";
+  public static final String FTL_CONTAINER_SCSS =
+      "polygenesis-angular-generator/ui/default/container/inline/scss/index.ftl";
+  public static final String FTL_CONTAINER_TS =
+      "polygenesis-angular-generator/ui/default/container/inline/ts/index.ftl";
+  public static final String FTL_CONTAINER_SPEC_TS =
+      "polygenesis-angular-generator/ui/default/container/inline/spec/index.ftl";
 
-  public static final String POSTFIX_ACTIONS_TS = ".actions.ts";
-  public static final String POSTFIX_REDUCERS_TS = ".reducers.ts";
-  public static final String POSTFIX_INDEX_REDUCER_TS = "index.ts";
-  public static final String POSTFIX_EFFECTS_TS = ".effects.ts";
-  public static final String POSTFIX_SERVICE_TS = ".service.ts";
-  public static final String POSTFIX_MODEL_TS = ".model.ts";
+  public static final String FTL_APP_SHARED_LAYOUT_HTML =
+      "polygenesis-angular-generator/src/app/shared/layouts/layout.component.html.ftl";
+  public static final String FTL_APP_SHARED_LAYOUT_TS =
+      "polygenesis-angular-generator/src/app/shared/layouts/layout.component.ts.ftl";
+  public static final String FTL_APP_SHARED_LAYOUT_SPEC_TS =
+      "polygenesis-angular-generator/src/app/shared/layouts/layout.component.spec.ts.ftl";
+  public static final String FTL_APP_SHARED_LAYOUT_SCSS =
+      "polygenesis-angular-generator/src/app/shared/layouts/layout.component.scss.ftl";
+
+  // ===============================================================================================
+  // OUTPUT FILES
+  // ===============================================================================================
+
   public static final String POSTFIX_MODULE_TS = ".module.ts";
+
+  public static final String POSTFIX_COMPONENT_HTML = ".component.html";
+  public static final String POSTFIX_COMPONENT_SCSS = ".component.scss";
+  public static final String POSTFIX_COMPONENT_TYPESCRIPT = ".component.ts";
+  public static final String POSTFIX_COMPONENT_TYPESCRIPT_SPEC = ".component.spec.ts";
 }

@@ -20,6 +20,8 @@
 
 package io.polygenesis.models.ui.element;
 
+import io.polygenesis.commons.assertions.Assertion;
+
 /**
  * Base class for anything appearing on the UI.
  *
@@ -27,4 +29,47 @@ package io.polygenesis.models.ui.element;
  *
  * @author Christos Tsakostas
  */
-public abstract class AbstractElement {}
+public abstract class AbstractElement {
+
+  private ElementName elementName;
+
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
+  /**
+   * Instantiates a new Abstract element.
+   *
+   * @param elementName the element name
+   */
+  public AbstractElement(ElementName elementName) {
+    setElementName(elementName);
+  }
+
+  // ===============================================================================================
+  // GETTERS
+  // ===============================================================================================
+
+  /**
+   * Gets element name.
+   *
+   * @return the element name
+   */
+  public ElementName getElementName() {
+    return elementName;
+  }
+
+  // ===============================================================================================
+  // GUARDS
+  // ===============================================================================================
+
+  /**
+   * Sets element name.
+   *
+   * @param elementName the element name
+   */
+  private void setElementName(ElementName elementName) {
+    Assertion.isNotNull(elementName, "elementName is required");
+    this.elementName = elementName;
+  }
+}

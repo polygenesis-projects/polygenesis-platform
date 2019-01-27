@@ -18,27 +18,19 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.models.ui.container;
+package io.polygenesis.generators.angular.ui.container;
 
-import io.polygenesis.commons.text.AbstractText;
+import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * The type Layout name.
- *
- * @author Christos Tsakostas
- */
-public class LayoutName extends AbstractText {
+import org.junit.Test;
 
-  // ===============================================================================================
-  // CONSTRUCTOR(S)
-  // ===============================================================================================
+/** @author Christos Tsakostas */
+public class UiContainerFolderTypeTest {
 
-  /**
-   * Instantiates a new Layout name.
-   *
-   * @param text the text
-   */
-  public LayoutName(String text) {
-    super(text);
+  @Test
+  public void testType() {
+    assertThat(UiContainerFolderType.COMPONENT.toString()).isEqualTo("components");
+    assertThat(UiContainerFolderType.LAYOUT.toString()).isEqualTo("layouts");
+    assertThat(UiContainerFolderType.PAGE.toString()).isEqualTo("pages");
   }
 }

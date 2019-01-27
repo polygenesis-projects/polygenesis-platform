@@ -22,7 +22,13 @@ package io.polygenesis.models.ui;
 
 import io.polygenesis.core.Function;
 import io.polygenesis.models.ui.container.AbstractContainer;
+import io.polygenesis.models.ui.container.Bottom;
+import io.polygenesis.models.ui.container.Center;
+import io.polygenesis.models.ui.container.ContainerName;
 import io.polygenesis.models.ui.container.InlineContainer;
+import io.polygenesis.models.ui.container.Left;
+import io.polygenesis.models.ui.container.Right;
+import io.polygenesis.models.ui.container.Top;
 
 /**
  * The type Container deducer.
@@ -51,7 +57,14 @@ public class ContainerDeducer {
    * @return the container
    */
   public AbstractContainer deduceContainerFromThingFunction(Feature feature, Function function) {
-    InlineContainer container = new InlineContainer();
+    InlineContainer container =
+        new InlineContainer(
+            new ContainerName(function.getName().getText()),
+            new Top(null, null, null, null, null, null, null),
+            new Right(null, null, null, null, null, null, null),
+            new Bottom(null, null, null, null, null, null, null),
+            new Left(null, null, null, null, null, null, null),
+            new Center(null, null, null, null, null, null, null));
 
     return container;
   }

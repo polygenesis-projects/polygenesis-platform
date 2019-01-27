@@ -22,6 +22,7 @@ package io.polygenesis.models.ui;
 
 import io.polygenesis.core.Function;
 import io.polygenesis.models.ui.element.ElementGroup;
+import io.polygenesis.models.ui.element.ElementName;
 import java.util.LinkedHashSet;
 
 /**
@@ -62,7 +63,9 @@ public class ComponentDeducer {
    * @return the container
    */
   public ElementGroup deduceComponentFromIoModel(Feature feature, Function function) {
-    ElementGroup elementGroup = new ElementGroup(new LinkedHashSet<>());
+    ElementGroup elementGroup =
+        new ElementGroup(
+            new ElementName(feature.getFeatureName().getText()), new LinkedHashSet<>());
 
     // TODO
     elementDeducer.deduceElementFromIoModel(feature, function);

@@ -35,9 +35,11 @@ public class UiRegistry {
 
   static {
     FeatureNameDeducer featureNameDeducer = new FeatureNameDeducer();
-    FeatureDeducer featureDeducer = new FeatureDeducer(featureNameDeducer);
+    ContainerDeducer containerDeducer = new ContainerDeducer();
+    FeatureDeducer featureDeducer = new FeatureDeducer(featureNameDeducer, containerDeducer);
+    LayoutDeducer layoutDeducer = new LayoutDeducer();
 
-    uiDeducer = new UiDeducerImpl(featureDeducer);
+    uiDeducer = new UiDeducerImpl(featureDeducer, layoutDeducer);
   }
 
   // ===============================================================================================

@@ -25,4 +25,18 @@ package io.polygenesis.models.ui.element;
  *
  * @author Christos Tsakostas
  */
-public class SupportiveElement extends AbstractElement {}
+public class SupportiveElement extends AbstractElement {
+
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
+  /**
+   * Instantiates a new Supportive element.
+   *
+   * @param elementName the element name
+   */
+  public SupportiveElement(ElementName elementName) {
+    super(elementName);
+  }
+}

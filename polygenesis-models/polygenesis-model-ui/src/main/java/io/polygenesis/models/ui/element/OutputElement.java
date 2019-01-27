@@ -25,4 +25,18 @@ package io.polygenesis.models.ui.element;
  *
  * @author Christos Tsakostas
  */
-public class OutputElement extends AbstractElement {}
+public class OutputElement extends AbstractElement {
+
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
+  /**
+   * Instantiates a new Output element.
+   *
+   * @param elementName the element name
+   */
+  public OutputElement(ElementName elementName) {
+    super(elementName);
+  }
+}

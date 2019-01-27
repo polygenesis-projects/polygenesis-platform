@@ -22,10 +22,12 @@ package io.polygenesis.models.ui;
 
 import io.polygenesis.commons.assertions.Assertion;
 import io.polygenesis.commons.feature.FeatureName;
+import io.polygenesis.models.ui.container.AbstractContainer;
+import java.util.Set;
 
 /**
  * Encapsulates all of the UI models related to a Feature. A Feature is equivalent to a {@link
- * io.polygenesis.core.Thing}* from the core model.
+ * io.polygenesis.core.Thing}** from the core model.
  *
  * @author Christos Tsakostas
  * @see io.polygenesis.core.Thing
@@ -33,6 +35,7 @@ import io.polygenesis.commons.feature.FeatureName;
 public class Feature {
 
   private FeatureName featureName;
+  private Set<AbstractContainer> containers;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -42,9 +45,11 @@ public class Feature {
    * Instantiates a new Feature ui.
    *
    * @param featureName the feature name
+   * @param containers the containers
    */
-  public Feature(FeatureName featureName) {
+  public Feature(FeatureName featureName, Set<AbstractContainer> containers) {
     setFeatureName(featureName);
+    setContainers(containers);
   }
 
   // ===============================================================================================
@@ -60,6 +65,15 @@ public class Feature {
     return featureName;
   }
 
+  /**
+   * Gets containers.
+   *
+   * @return the containers
+   */
+  public Set<AbstractContainer> getContainers() {
+    return containers;
+  }
+
   // ===============================================================================================
   // GUARDS
   // ===============================================================================================
@@ -69,8 +83,17 @@ public class Feature {
    *
    * @param featureName the feature name
    */
-  public void setFeatureName(FeatureName featureName) {
+  private void setFeatureName(FeatureName featureName) {
     Assertion.isNotNull(featureName, "Feature Name is required");
     this.featureName = featureName;
+  }
+
+  /**
+   * Sets containers.
+   *
+   * @param containers the containers
+   */
+  private void setContainers(Set<AbstractContainer> containers) {
+    this.containers = containers;
   }
 }

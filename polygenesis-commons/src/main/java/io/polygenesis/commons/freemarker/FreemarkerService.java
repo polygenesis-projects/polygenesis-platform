@@ -23,6 +23,7 @@ package io.polygenesis.commons.freemarker;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import io.polygenesis.commons.path.PathService;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -66,6 +67,8 @@ public class FreemarkerService {
   public void export(Map<String, Object> dataModel, String ftlTemplate, Path generationFilePath) {
 
     try {
+      PathService.ensurePath(generationFilePath.getParent());
+
       Template template = configuration.getTemplate(ftlTemplate);
       Writer file = new FileWriter(new File(generationFilePath.toString()));
       template.process(dataModel, file);

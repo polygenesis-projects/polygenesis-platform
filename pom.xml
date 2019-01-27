@@ -110,6 +110,9 @@
     <!--FREEMARKER-->
     <freemarker.version>2.3.28</freemarker.version>
 
+    <!--REFLECTIONS-->
+    <reflections.version>0.9.11</reflections.version>
+
     <!--INFLECTOR-->
     <evo-inflector.version>1.2.2</evo-inflector.version>
 
@@ -153,6 +156,13 @@
         <groupId>org.freemarker</groupId>
         <artifactId>freemarker</artifactId>
         <version>${freemarker.version}</version>
+      </dependency>
+
+      <!--REFLECTIONS-->
+      <dependency>
+        <groupId>org.reflections</groupId>
+        <artifactId>reflections</artifactId>
+        <version>${reflections.version}</version>
       </dependency>
 
       <!--INFLECTOR-->

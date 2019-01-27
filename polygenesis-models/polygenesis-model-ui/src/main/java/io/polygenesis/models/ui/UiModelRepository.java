@@ -22,6 +22,7 @@ package io.polygenesis.models.ui;
 
 import io.polygenesis.commons.assertions.Assertion;
 import io.polygenesis.core.ModelRepository;
+import io.polygenesis.models.ui.container.LayoutContainer;
 import java.util.Set;
 
 /**
@@ -32,6 +33,7 @@ import java.util.Set;
 public class UiModelRepository implements ModelRepository {
 
   private Set<Feature> features;
+  private Set<LayoutContainer> layouts;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -41,9 +43,11 @@ public class UiModelRepository implements ModelRepository {
    * Instantiates a new Ui model repository.
    *
    * @param features the features
+   * @param layouts the layouts
    */
-  public UiModelRepository(Set<Feature> features) {
+  public UiModelRepository(Set<Feature> features, Set<LayoutContainer> layouts) {
     setFeatures(features);
+    setLayouts(layouts);
   }
 
   // ===============================================================================================
@@ -59,6 +63,15 @@ public class UiModelRepository implements ModelRepository {
     return features;
   }
 
+  /**
+   * Gets layouts.
+   *
+   * @return the layouts
+   */
+  public Set<LayoutContainer> getLayouts() {
+    return layouts;
+  }
+
   // ===============================================================================================
   // GUARDS
   // ===============================================================================================
@@ -71,5 +84,15 @@ public class UiModelRepository implements ModelRepository {
   private void setFeatures(Set<Feature> features) {
     Assertion.isNotNull(features, "features is required");
     this.features = features;
+  }
+
+  /**
+   * Sets layouts.
+   *
+   * @param layouts the layouts
+   */
+  private void setLayouts(Set<LayoutContainer> layouts) {
+    Assertion.isNotNull(layouts, "layouts is required");
+    this.layouts = layouts;
   }
 }

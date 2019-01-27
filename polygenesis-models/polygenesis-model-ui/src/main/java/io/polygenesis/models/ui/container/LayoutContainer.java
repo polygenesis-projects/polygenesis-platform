@@ -27,8 +27,6 @@ package io.polygenesis.models.ui.container;
  */
 public class LayoutContainer extends InlineContainer {
 
-  private LayoutName layoutName;
-
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
@@ -52,12 +50,4 @@ public class LayoutContainer extends InlineContainer {
   // GETTERS
   // ===============================================================================================
 
-  /**
-   * Gets layout name.
-   *
-   * @return the layout name
-   */
-  public LayoutName getLayoutName() {
-    return layoutName;
-  }
 }

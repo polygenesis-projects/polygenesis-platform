@@ -20,8 +20,10 @@
 
 package io.polygenesis.generators.angular.ui;
 
+import io.polygenesis.generators.angular.ui.container.UiContainerExporter;
 import io.polygenesis.models.ui.Feature;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,14 +34,16 @@ import java.util.Map;
  */
 public class UiExporter {
 
-  private UiModuleExporter uiModuleExporter;
+  private final UiModuleExporter uiModuleExporter;
+  private final UiContainerExporter uiContainerExporter;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
-  public UiExporter(UiModuleExporter uiModuleExporter) {
+  public UiExporter(UiModuleExporter uiModuleExporter, UiContainerExporter uiContainerExporter) {
     this.uiModuleExporter = uiModuleExporter;
+    this.uiContainerExporter = uiContainerExporter;
   }
 
   // ===============================================================================================
@@ -53,9 +57,17 @@ public class UiExporter {
    * @param feature the feature
    */
   public void export(Path generationPath, Feature feature) {
+    Path generationPathApp = Paths.get(generationPath.toString(), "app");
+
     Map<String, Object> dataModel = new HashMap<>();
     dataModel.put("feature", feature);
 
-    uiModuleExporter.exportModule(generationPath, feature, dataModel);
+    feature
+        .getContainers()
+        .forEach(
+            container ->
+                uiContainerExporter.exportFeatureContainer(generationPathApp, feature, container));
+
+    uiModuleExporter.exportModule(generationPathApp, feature, dataModel);
   }
 }

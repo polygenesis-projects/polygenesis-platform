@@ -153,7 +153,13 @@ public final class TextConverter {
     }
 
     // i.e. USER_REGISTER
-    enforced = underscoreToLowerCamel(enforced);
+    enforced = delimiterToLowerCamel(enforced, "_");
+
+    // i.e. USER-REGISTER
+    enforced = delimiterToLowerCamel(enforced, "-");
+
+    // i.e. USER REGISTER
+    enforced = delimiterToLowerCamel(enforced, " ");
 
     // i.e. COLLECTION
     enforced = allUpperCaseToLowerCase(enforced);
@@ -165,17 +171,17 @@ public final class TextConverter {
   }
 
   /**
-   * Underscore to lower camel string.
+   * Delimiter to lower camel string.
    *
    * @param input the input
    * @return the string
    */
-  private static String underscoreToLowerCamel(String input) {
-    if (input.contains("_")) {
+  private static String delimiterToLowerCamel(String input, String delimiterCharacter) {
+    if (input.contains(delimiterCharacter)) {
       StringBuilder sb = new StringBuilder(input.toLowerCase());
 
       for (int i = 0; i < sb.length(); i++) {
-        if (sb.charAt(i) == '_') {
+        if (sb.charAt(i) == delimiterCharacter.charAt(0)) {
           sb.deleteCharAt(i);
           sb.replace(i, i + 1, String.valueOf(Character.toUpperCase(sb.charAt(i))));
         }

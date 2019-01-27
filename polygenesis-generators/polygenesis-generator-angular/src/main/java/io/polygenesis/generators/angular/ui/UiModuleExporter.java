@@ -60,14 +60,14 @@ public class UiModuleExporter {
   /**
    * Export module.
    *
-   * @param generationPath the generation path
+   * @param generationPathApp the generation app path
    * @param feature the feature
    * @param dataModel the data model
    */
-  public void exportModule(Path generationPath, Feature feature, Map<String, Object> dataModel) {
+  public void exportModule(Path generationPathApp, Feature feature, Map<String, Object> dataModel) {
     Path modulePath =
         Paths.get(
-            generationPath.toString(),
+            generationPathApp.toString(),
             TextConverter.toLowerHyphen(feature.getFeatureName().getText()));
     PathService.ensurePath(modulePath);
 

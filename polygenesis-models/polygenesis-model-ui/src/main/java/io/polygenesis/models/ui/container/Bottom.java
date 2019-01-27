@@ -20,15 +20,23 @@
 
 package io.polygenesis.models.ui.container;
 
+import io.polygenesis.models.ui.element.ElementGroup;
+
 /**
  * The type Bottom.
  *
  * @author Christos Tsakostas
  */
-public class Bottom extends AbstractContainer {
+public class Bottom extends AbstractContainerWithElements {
 
   public Bottom(
-      ContainerName containerName, Top top, Right right, Bottom bottom, Left left, Center center) {
-    super(containerName, top, right, bottom, left, center);
+      ContainerName containerName,
+      Top top,
+      Right right,
+      Bottom bottom,
+      Left left,
+      Center center,
+      ElementGroup elementGroup) {
+    super(containerName, top, right, bottom, left, center, elementGroup);
   }
 }

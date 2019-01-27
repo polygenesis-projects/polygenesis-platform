@@ -27,10 +27,6 @@ package io.polygenesis.models.ui.container;
  */
 public class InlineContainer extends AbstractContainer {
 
-  public InlineContainer() {
-    super(null, null, null, null, null, null);
-  }
-
   public InlineContainer(
       ContainerName containerName, Top top, Right right, Bottom bottom, Left left, Center center) {
     super(containerName, top, right, bottom, left, center);

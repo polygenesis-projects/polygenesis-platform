@@ -35,7 +35,7 @@ public abstract class AbstractPolyGenesisAngularGeneratorTest {
         new LinkedHashSet<>(
             Arrays.asList(
                 new ReactiveStateModelRepository(new LinkedHashSet<>()),
-                new UiModelRepository(new LinkedHashSet<>())));
+                new UiModelRepository(new LinkedHashSet<>(), new LinkedHashSet<>())));
 
     return modelRepositories;
   }

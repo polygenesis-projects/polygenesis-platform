@@ -38,10 +38,12 @@ public class ElementGroup extends AbstractElement {
   /**
    * Instantiates a new Element group.
    *
+   * @param elementName the element name
    * @param elements the elements
    */
-  public ElementGroup(Set<AbstractElement> elements) {
-    this.elements = elements;
+  public ElementGroup(ElementName elementName, Set<AbstractElement> elements) {
+    super(elementName);
+    setElements(elements);
   }
 
   // ===============================================================================================
@@ -55,5 +57,18 @@ public class ElementGroup extends AbstractElement {
    */
   public Set<AbstractElement> getElements() {
     return elements;
+  }
+
+  // ===============================================================================================
+  // GUARDS
+  // ===============================================================================================
+
+  /**
+   * Sets elements.
+   *
+   * @param elements the elements
+   */
+  private void setElements(Set<AbstractElement> elements) {
+    this.elements = elements;
   }
 }
