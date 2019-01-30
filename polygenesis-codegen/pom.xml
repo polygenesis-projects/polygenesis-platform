@@ -45,6 +45,12 @@
       <artifactId>polygenesis-generator-angular</artifactId>
     </dependency>
 
+    <!--POLYGENESIS SCAFFOLDERS-->
+    <dependency>
+      <groupId>io.polygenesis.scaffolders</groupId>
+      <artifactId>polygenesis-scaffolder-java-microservice</artifactId>
+    </dependency>
+
     <!--TEST-->
     <dependency>
       <groupId>io.polygenesis</groupId>

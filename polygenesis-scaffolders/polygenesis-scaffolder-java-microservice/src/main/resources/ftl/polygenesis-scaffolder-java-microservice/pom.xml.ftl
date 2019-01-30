@@ -1,19 +1,40 @@
+<#--
+ ==========================LICENSE_START=================================
+ PolyGenesis Platform
+ ========================================================================
+ Copyright (C) 2015 - 2019 OREGOR LTD
+ ========================================================================
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ ===========================LICENSE_END==================================
+-->
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <packaging>pom</packaging>
   <modules>
-    <module>polygenesis-annotations</module>
-    <module>polygenesis-codegen</module>
-    <module>polygenesis-commons</module>
-    <module>polygenesis-commons-test</module>
-    <module>polygenesis-core</module>
-    <module>polygenesis-deducers</module>
-    <module>polygenesis-generators</module>
-    <module>polygenesis-models</module>
-    <module>polygenesis-scaffolders</module>
+<#if projectDescription.microservice>
+    <module>${ projectDescription.modulePrefix }-api</module>
+    <module>${ projectDescription.modulePrefix }-api-impl</module>
+    <module>${ projectDescription.modulePrefix }-app</module>
+    <module>${ projectDescription.modulePrefix }-domain-model</module>
+    <module>${ projectDescription.modulePrefix }-primary-adapters</module>
+    <module>${ projectDescription.modulePrefix }-secondary-adapters</module>
+</#if>
+<#list projectDescription.extraModules as extraModule>
+    <module>${ projectDescription.modulePrefix }-${ extraModule }</module>
+</#list>
   </modules>
   <parent>
     <groupId>org.springframework.boot</groupId>
@@ -21,24 +42,24 @@
     <version>2.1.1.RELEASE</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
-  <groupId>io.polygenesis</groupId>
-  <artifactId>polygenesis-platform</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <name>PolyGenesis Platform</name>
-  <description>PolyGenesis is an Extensible &amp; Cross-language Automatic Programming Platform.</description>
-  <url>https://www.polygenesis.io</url>
+  <groupId>${ projectDescription.groupId }</groupId>
+  <artifactId>${ projectDescription.artifactId }</artifactId>
+  <version>${ projectDescription.version }</version>
+  <name>${ projectDescription.name }</name>
+  <description>${ projectDescription.description }</description>
+  <url>${ projectDescription.url }</url>
 
-  <inceptionYear>2015</inceptionYear>
+  <inceptionYear>${ projectDescription.inceptionYear }</inceptionYear>
 
   <organization>
-    <name>OREGOR LTD</name>
-    <url>https://www.oregor.com</url>
+    <name>${ projectDescription.organizationName }</name>
+    <url>${ projectDescription.organizationUrl }</url>
   </organization>
 
   <licenses>
     <license>
-      <name>The Apache License, Version 2.0</name>
-      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <name>${ projectDescription.licenseName }</name>
+      <url>${ projectDescription.url }</url>
     </license>
   </licenses>
 
@@ -52,20 +73,25 @@
   </developers>
 
   <scm>
-    <connection>scm:git:git://github.com/polygenesis-projects/polygenesis-platform.git</connection>
-    <developerConnection>scm:git:git@github.com:polygenesis-projects/polygenesis-platform.git
+    <connection>
+      ${ projectDescription.scmConnection }
+    </connection>
+    <developerConnection>
+      ${ projectDescription.scmDeveloperConnection }
     </developerConnection>
-    <url>http://github.com/polygenesis-projects/polygenesis-platform/tree/master</url>
+    <url>
+      ${ projectDescription.scmUrl }
+    </url>
     <tag>HEAD</tag>
   </scm>
 
   <distributionManagement>
     <snapshotRepository>
-      <id>ossrh-polygenesis</id>
+      <id>${ projectDescription.distributionProfile }</id>
       <url>https://oss.sonatype.org/content/repositories/snapshots</url>
     </snapshotRepository>
     <repository>
-      <id>ossrh-polygenesis</id>
+      <id>${ projectDescription.distributionProfile }</id>
       <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
     </repository>
   </distributionManagement>
@@ -117,10 +143,8 @@
     <!--INFLECTOR-->
     <evo-inflector.version>1.2.2</evo-inflector.version>
 
-    <!--TEST-->
-    <junit.version>4.12</junit.version>
-    <mockito.version>2.23.4</mockito.version>
-    <assertj.version>3.11.1</assertj.version>
+    <!--OREGOR-DDD4J-->
+    <oregor-ddd4j.version>0.0.1-SNAPSHOT</oregor-ddd4j.version>
   </properties>
 
   <dependencies>
@@ -128,139 +152,54 @@
 
   <dependencyManagement>
     <dependencies>
-      <!--APACHE-->
+<#if projectDescription.microservice>
+      <!--API-->
       <dependency>
-        <groupId>org.apache.commons</groupId>
-        <artifactId>commons-lang3</artifactId>
-        <version>${commons-lang3.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>commons-io</groupId>
-        <artifactId>commons-io</artifactId>
-        <version>${commons-io-version}</version>
-      </dependency>
-      <dependency>
-        <groupId>commons-validator</groupId>
-        <artifactId>commons-validator</artifactId>
-        <version>${commons-validator.version}</version>
-      </dependency>
-
-      <!--GUAVA-->
-      <dependency>
-        <groupId>com.google.guava</groupId>
-        <artifactId>guava</artifactId>
-        <version>${guava.version}</version>
-      </dependency>
-
-      <!--FREEMARKER-->
-      <dependency>
-        <groupId>org.freemarker</groupId>
-        <artifactId>freemarker</artifactId>
-        <version>${freemarker.version}</version>
-      </dependency>
-
-      <!--REFLECTIONS-->
-      <dependency>
-        <groupId>org.reflections</groupId>
-        <artifactId>reflections</artifactId>
-        <version>${reflections.version}</version>
-      </dependency>
-
-      <!--INFLECTOR-->
-      <dependency>
-        <groupId>org.atteo</groupId>
-        <artifactId>evo-inflector</artifactId>
-        <version>${evo-inflector.version}</version>
-      </dependency>
-
-      <!--TEST-->
-      <dependency>
-        <groupId>junit</groupId>
-        <artifactId>junit</artifactId>
-        <version>${junit.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.assertj</groupId>
-        <artifactId>assertj-core</artifactId>
-        <version>${assertj.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.mockito</groupId>
-        <artifactId>mockito-core</artifactId>
-        <version>${mockito.version}</version>
-      </dependency>
-
-      <!--POLYGENESIS ANNOTATIONS-->
-      <dependency>
-        <groupId>io.polygenesis</groupId>
-        <artifactId>polygenesis-annotations</artifactId>
+        <groupId>${ projectDescription.groupId }</groupId>
+        <artifactId>${ projectDescription.modulePrefix }-api</artifactId>
+        <#noparse>
         <version>${project.version}</version>
+        </#noparse>
       </dependency>
 
-      <!--POLYGENESIS COMMONS-->
+      <!--API IMPL-->
       <dependency>
-        <groupId>io.polygenesis</groupId>
-        <artifactId>polygenesis-commons</artifactId>
+        <groupId>${ projectDescription.groupId }</groupId>
+        <artifactId>${ projectDescription.modulePrefix }-api-impl</artifactId>
+        <#noparse>
         <version>${project.version}</version>
+        </#noparse>
       </dependency>
 
-      <!--POLYGENESIS COMMONS TEST-->
+      <!--DOMAIN MODEL-->
       <dependency>
-        <groupId>io.polygenesis</groupId>
-        <artifactId>polygenesis-commons-test</artifactId>
+        <groupId>${ projectDescription.groupId }</groupId>
+        <artifactId>${ projectDescription.modulePrefix }-domain-model</artifactId>
+        <#noparse>
         <version>${project.version}</version>
-        <scope>test</scope>
-        <type>test-jar</type>
+        </#noparse>
       </dependency>
 
-      <!--POLYGENESIS CORE-->
+      <!--OREGOR-DDD4J-->
       <dependency>
-        <groupId>io.polygenesis</groupId>
-        <artifactId>polygenesis-core</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-
-      <!--POLYGENESIS MODELS-->
-      <dependency>
-        <groupId>io.polygenesis.models</groupId>
-        <artifactId>polygenesis-model-reactive-state</artifactId>
-        <version>${project.version}</version>
+        <groupId>com.oregor.ddd4j</groupId>
+        <artifactId>ddd4j-core</artifactId>
+        <#noparse>
+        <version>${oregor-ddd4j.version}</version>
+        </#noparse>
       </dependency>
       <dependency>
-        <groupId>io.polygenesis.models</groupId>
-        <artifactId>polygenesis-model-ui</artifactId>
-        <version>${project.version}</version>
+        <groupId>com.oregor.ddd4j</groupId>
+        <artifactId>ddd4j-spring-data-jpa</artifactId>
+        <#noparse>
+        <version>${oregor-ddd4j.version}</version>
+        </#noparse>
       </dependency>
-
-      <!--POLYGENESIS DEDUCERS-->
-      <dependency>
-        <groupId>io.polygenesis.deducers</groupId>
-        <artifactId>polygenesis-deducer-reactive-state</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>io.polygenesis.deducers</groupId>
-        <artifactId>polygenesis-deducer-ui</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-
-      <!--POLYGENESIS GENERATORS-->
-      <dependency>
-        <groupId>io.polygenesis.generators</groupId>
-        <artifactId>polygenesis-generator-angular</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-
-      <!--POLYGENESIS SCAFFOLDERS-->
-      <dependency>
-        <groupId>io.polygenesis.scaffolders</groupId>
-        <artifactId>polygenesis-scaffolder-java-microservice</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-
+</#if>
     </dependencies>
   </dependencyManagement>
 
+<#noparse>
 
   <build>
     <!-- ===================================================================== -->
@@ -290,7 +229,9 @@
           <version>${license-maven-plugin.version}</version>
           <configuration>
             <licenseName>apache_v2</licenseName>
-            <projectName>PolyGenesis Platform</projectName>
+            </#noparse>
+            <projectName>${ projectDescription.name }</projectName>
+            <#noparse>
             <addJavaLicenseAfterPackage>false</addJavaLicenseAfterPackage>
             <emptyLineAfterHeader>true</emptyLineAfterHeader>
             <failOnMissingHeader>true</failOnMissingHeader>
@@ -652,7 +593,9 @@
             <version>${nexus-staging-maven-plugin.version}</version>
             <extensions>true</extensions>
             <configuration>
-              <serverId>ossrh-polygenesis</serverId>
+</#noparse>
+              <serverId>${ projectDescription.distributionProfile }</serverId>
+<#noparse>
               <nexusUrl>https://oss.sonatype.org/</nexusUrl>
               <autoReleaseAfterClose>true</autoReleaseAfterClose>
             </configuration>
@@ -918,3 +861,5 @@
   </reporting>
 
 </project>
+</#noparse>
+

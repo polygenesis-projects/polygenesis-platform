@@ -86,6 +86,10 @@ public class Genesis {
    * @param generators the generators
    */
   public void generate(Set<ModelRepository> modelRepositories, Set<Generator> generators) {
+    if (generators.isEmpty()) {
+      throw new IllegalArgumentException("generators cannot be empty");
+    }
+
     generators.forEach(generator -> generator.generate(modelRepositories));
   }
 
