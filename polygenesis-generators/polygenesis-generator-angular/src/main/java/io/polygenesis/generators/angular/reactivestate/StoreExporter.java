@@ -79,19 +79,19 @@ public class StoreExporter {
   /**
    * Export.
    *
-   * @param generationPath the generation path
+   * @param generationPathApp the generation app path
    * @param store the store
    */
-  public void export(Path generationPath, Store store) {
+  public void export(Path generationPathApp, Store store) {
     Map<String, Object> dataModel = new HashMap<>();
     dataModel.put("store", store);
 
-    actionExporter.exportActions(generationPath, store, dataModel);
-    reducerExporter.exportReducers(generationPath, store, dataModel);
-    indexReducerExporter.exportIndexReducer(generationPath, store, dataModel);
-    effectExporter.exportEffects(generationPath, store, dataModel);
-    serviceExporter.exportService(generationPath, store, dataModel);
-    modelExporter.exportModels(generationPath, store, dataModel);
-    moduleExporter.exportModule(generationPath, store, dataModel);
+    actionExporter.exportActions(generationPathApp, store, dataModel);
+    reducerExporter.exportReducers(generationPathApp, store, dataModel);
+    indexReducerExporter.exportIndexReducer(generationPathApp, store, dataModel);
+    effectExporter.exportEffects(generationPathApp, store, dataModel);
+    serviceExporter.exportService(generationPathApp, store, dataModel);
+    modelExporter.exportModels(generationPathApp, store, dataModel);
+    moduleExporter.exportModule(generationPathApp, store, dataModel);
   }
 }

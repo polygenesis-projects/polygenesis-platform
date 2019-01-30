@@ -22,6 +22,7 @@ package io.polygenesis.models.reactivestate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import io.polygenesis.commons.feature.FeatureName;
 import io.polygenesis.commons.test.AbstractEqualityTest;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -33,24 +34,24 @@ public class StoreTest extends AbstractEqualityTest<Store> {
   @Test
   public void shouldSucceedToInstantiate() {
     Set<Action> actions = new LinkedHashSet<>();
-    Store store = new Store(new Feature("abc"), actions);
+    Store store = new Store(new FeatureName("abc"), actions);
 
     assertThat(store).isNotNull();
-    assertThat(store.getFeature()).isEqualTo(new Feature("abc"));
+    assertThat(store.getFeatureName()).isEqualTo(new FeatureName("abc"));
     assertThat(store.getActions().size()).isEqualTo(0);
   }
 
   @Override
   public Store createObject1() {
-    Feature feature = new Feature("xxx");
+    FeatureName featureName = new FeatureName("xxx");
     Set<Action> actions = new LinkedHashSet<>();
-    return new Store(feature, actions);
+    return new Store(featureName, actions);
   }
 
   @Override
   public Store createObject2() {
-    Feature feature = new Feature("yyy");
+    FeatureName featureName = new FeatureName("yyy");
     Set<Action> actions = new LinkedHashSet<>();
-    return new Store(feature, actions);
+    return new Store(featureName, actions);
   }
 }

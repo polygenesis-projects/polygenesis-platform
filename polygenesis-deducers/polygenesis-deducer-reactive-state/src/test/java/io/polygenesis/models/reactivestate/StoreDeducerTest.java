@@ -28,20 +28,20 @@ import org.junit.Test;
 /** @author Christos Tsakostas */
 public class StoreDeducerTest extends AbstractReactiveStateTest {
 
-  private FeatureDeducer featureDeducer;
+  private FeatureNameDeducer featureNameDeducer;
   private ActionDeducer actionDeducer;
   private StoreDeducer storeDeducer;
 
   @Before
   public void setUp() {
-    featureDeducer = new FeatureDeducer();
+    featureNameDeducer = new FeatureNameDeducer();
     actionDeducer = new ActionDeducer();
-    storeDeducer = new StoreDeducer(featureDeducer, actionDeducer);
+    storeDeducer = new StoreDeducer(featureNameDeducer, actionDeducer);
   }
 
   @Test
   public void deduceStoreForThing() {
-    Store store = storeDeducer.deduceStoreForThing(createThing());
+    Store store = storeDeducer.deduceStoreFromThing(createThing());
 
     assertThat(store).isNotNull();
   }

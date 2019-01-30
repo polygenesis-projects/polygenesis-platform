@@ -20,6 +20,7 @@
 
 package io.polygenesis.models.reactivestate;
 
+import io.polygenesis.commons.assertions.Assertion;
 import io.polygenesis.core.ThingRepository;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -31,7 +32,7 @@ import java.util.Set;
  */
 public class ReactiveStateDeducerImpl implements ReactiveStateDeducer {
 
-  private StoreDeducer storeDeducer;
+  private final StoreDeducer storeDeducer;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -43,7 +44,8 @@ public class ReactiveStateDeducerImpl implements ReactiveStateDeducer {
    * @param storeDeducer the store deducer
    */
   public ReactiveStateDeducerImpl(StoreDeducer storeDeducer) {
-    setStoreDeducer(storeDeducer);
+    Assertion.isNotNull(storeDeducer, "storeDeducer is required");
+    this.storeDeducer = storeDeducer;
   }
 
   // ===============================================================================================
@@ -56,20 +58,8 @@ public class ReactiveStateDeducerImpl implements ReactiveStateDeducer {
 
     thingRepository
         .getThings()
-        .forEach(thing -> stores.add(storeDeducer.deduceStoreForThing(thing)));
+        .forEach(thing -> stores.add(storeDeducer.deduceStoreFromThing(thing)));
 
     return new ReactiveStateModelRepository(stores);
-  }
-
-  // ===============================================================================================
-  // PRIVATE
-  // ===============================================================================================
-
-  // ===============================================================================================
-  // GUARDS
-  // ===============================================================================================
-
-  private void setStoreDeducer(StoreDeducer storeDeducer) {
-    this.storeDeducer = storeDeducer;
   }
 }

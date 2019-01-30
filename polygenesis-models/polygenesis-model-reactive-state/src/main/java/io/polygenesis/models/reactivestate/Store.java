@@ -21,6 +21,7 @@
 package io.polygenesis.models.reactivestate;
 
 import io.polygenesis.commons.assertions.Assertion;
+import io.polygenesis.commons.feature.FeatureName;
 import java.util.Objects;
 import java.util.Set;
 
@@ -33,7 +34,7 @@ import java.util.Set;
  */
 public class Store {
 
-  private Feature feature;
+  private FeatureName featureName;
   private Set<Action> actions;
 
   // ===============================================================================================
@@ -43,11 +44,11 @@ public class Store {
   /**
    * Instantiates a new Store.
    *
-   * @param feature the feature
+   * @param featureName the feature name
    * @param actions the actions
    */
-  public Store(Feature feature, Set<Action> actions) {
-    setFeature(feature);
+  public Store(FeatureName featureName, Set<Action> actions) {
+    setFeatureName(featureName);
     setActions(actions);
   }
 
@@ -56,12 +57,12 @@ public class Store {
   // ===============================================================================================
 
   /**
-   * Gets feature.
+   * Gets featureName.
    *
-   * @return the feature
+   * @return the featureName
    */
-  public Feature getFeature() {
-    return feature;
+  public FeatureName getFeatureName() {
+    return featureName;
   }
 
   /**
@@ -77,9 +78,9 @@ public class Store {
   // GUARDS
   // ===============================================================================================
 
-  private void setFeature(Feature feature) {
-    Assertion.isNotNull(feature, "feature is required");
-    this.feature = feature;
+  private void setFeatureName(FeatureName featureName) {
+    Assertion.isNotNull(featureName, "featureName name is required");
+    this.featureName = featureName;
   }
 
   private void setActions(Set<Action> actions) {
@@ -100,11 +101,11 @@ public class Store {
       return false;
     }
     Store store = (Store) o;
-    return Objects.equals(feature, store.feature) && Objects.equals(actions, store.actions);
+    return Objects.equals(featureName, store.featureName) && Objects.equals(actions, store.actions);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(feature, actions);
+    return Objects.hash(featureName, actions);
   }
 }

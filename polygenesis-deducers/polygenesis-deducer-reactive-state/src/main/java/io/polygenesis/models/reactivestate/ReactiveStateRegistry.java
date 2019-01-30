@@ -34,9 +34,9 @@ public class ReactiveStateRegistry {
   private static final ReactiveStateDeducer reactiveStateDeducer;
 
   static {
-    FeatureDeducer featureDeducer = new FeatureDeducer();
+    FeatureNameDeducer featureNameDeducer = new FeatureNameDeducer();
     ActionDeducer actionDeducer = new ActionDeducer();
-    StoreDeducer storeDeducer = new StoreDeducer(featureDeducer, actionDeducer);
+    StoreDeducer storeDeducer = new StoreDeducer(featureNameDeducer, actionDeducer);
 
     reactiveStateDeducer = new ReactiveStateDeducerImpl(storeDeducer);
   }

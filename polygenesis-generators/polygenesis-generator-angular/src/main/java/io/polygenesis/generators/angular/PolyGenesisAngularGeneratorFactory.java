@@ -20,6 +20,15 @@
 
 package io.polygenesis.generators.angular;
 
+import io.polygenesis.commons.freemarker.FreemarkerConfig;
+import io.polygenesis.commons.freemarker.FreemarkerService;
+import io.polygenesis.generators.angular.once.OnceAppModuleExporter;
+import io.polygenesis.generators.angular.once.OnceCoreModuleExporter;
+import io.polygenesis.generators.angular.once.OnceEnvironmentsExporter;
+import io.polygenesis.generators.angular.once.OnceExporter;
+import io.polygenesis.generators.angular.once.OnceLandingModuleExporter;
+import io.polygenesis.generators.angular.once.OnceSharedModuleExporter;
+import io.polygenesis.generators.angular.once.OnceSourceRootExporter;
 import io.polygenesis.generators.angular.reactivestate.ActionExporter;
 import io.polygenesis.generators.angular.reactivestate.EffectExporter;
 import io.polygenesis.generators.angular.reactivestate.IndexReducerExporter;
@@ -28,6 +37,13 @@ import io.polygenesis.generators.angular.reactivestate.ModuleExporter;
 import io.polygenesis.generators.angular.reactivestate.ReducerExporter;
 import io.polygenesis.generators.angular.reactivestate.ServiceExporter;
 import io.polygenesis.generators.angular.reactivestate.StoreExporter;
+import io.polygenesis.generators.angular.ui.UiExporter;
+import io.polygenesis.generators.angular.ui.UiModuleExporter;
+import io.polygenesis.generators.angular.ui.container.UiContainerExporter;
+import io.polygenesis.generators.angular.ui.container.UiContainerHtmlExporter;
+import io.polygenesis.generators.angular.ui.container.UiContainerScssExporter;
+import io.polygenesis.generators.angular.ui.container.UiContainerTypescriptExporter;
+import io.polygenesis.generators.angular.ui.container.UiContainerTypescriptSpecExporter;
 import java.nio.file.Path;
 
 /**
@@ -40,16 +56,21 @@ public class PolyGenesisAngularGeneratorFactory {
   // ===============================================================================================
   // SINGLETONS / STATIC
   // ===============================================================================================
+  private static final OnceExporter onceExporter;
   private static final StoreExporter storeExporter;
+  private static final UiExporter uiExporter;
 
   static {
-    ActionExporter actionExporter = new ActionExporter();
-    ReducerExporter reducerExporter = new ReducerExporter();
-    IndexReducerExporter indexReducerExporter = new IndexReducerExporter();
-    EffectExporter effectExporter = new EffectExporter();
-    ServiceExporter serviceExporter = new ServiceExporter();
-    ModelExporter modelExporter = new ModelExporter();
-    ModuleExporter moduleExporter = new ModuleExporter();
+    FreemarkerService freemarkerService =
+        new FreemarkerService(FreemarkerConfig.getInstance().getConfiguration());
+
+    ActionExporter actionExporter = new ActionExporter(freemarkerService);
+    ReducerExporter reducerExporter = new ReducerExporter(freemarkerService);
+    IndexReducerExporter indexReducerExporter = new IndexReducerExporter(freemarkerService);
+    EffectExporter effectExporter = new EffectExporter(freemarkerService);
+    ServiceExporter serviceExporter = new ServiceExporter(freemarkerService);
+    ModelExporter modelExporter = new ModelExporter(freemarkerService);
+    ModuleExporter moduleExporter = new ModuleExporter(freemarkerService);
 
     storeExporter =
         new StoreExporter(
@@ -60,6 +81,43 @@ public class PolyGenesisAngularGeneratorFactory {
             serviceExporter,
             modelExporter,
             moduleExporter);
+
+    UiModuleExporter uiModuleExporter = new UiModuleExporter(freemarkerService);
+    UiContainerHtmlExporter uiContainerHtmlExporter =
+        new UiContainerHtmlExporter(freemarkerService);
+    UiContainerScssExporter uiContainerScssExporter =
+        new UiContainerScssExporter(freemarkerService);
+    UiContainerTypescriptExporter uiContainerTypescriptExporter =
+        new UiContainerTypescriptExporter(freemarkerService);
+    UiContainerTypescriptSpecExporter uiContainerTypescriptSpecExporter =
+        new UiContainerTypescriptSpecExporter(freemarkerService);
+    UiContainerExporter uiContainerExporter =
+        new UiContainerExporter(
+            uiContainerHtmlExporter,
+            uiContainerScssExporter,
+            uiContainerTypescriptExporter,
+            uiContainerTypescriptSpecExporter);
+
+    uiExporter = new UiExporter(uiModuleExporter, uiContainerExporter);
+
+    OnceSourceRootExporter onceSourceRootExporter = new OnceSourceRootExporter(freemarkerService);
+    OnceEnvironmentsExporter onceEnvironmentsExporter =
+        new OnceEnvironmentsExporter(freemarkerService);
+    OnceCoreModuleExporter onceCoreModuleExporter = new OnceCoreModuleExporter(freemarkerService);
+    OnceSharedModuleExporter onceSharedModuleExporter =
+        new OnceSharedModuleExporter(freemarkerService, uiContainerExporter);
+    OnceAppModuleExporter onceAppModuleExporter = new OnceAppModuleExporter(freemarkerService);
+    OnceLandingModuleExporter onceLandingModuleExporter =
+        new OnceLandingModuleExporter(freemarkerService);
+
+    onceExporter =
+        new OnceExporter(
+            onceSourceRootExporter,
+            onceEnvironmentsExporter,
+            onceCoreModuleExporter,
+            onceSharedModuleExporter,
+            onceAppModuleExporter,
+            onceLandingModuleExporter);
   }
 
   /**
@@ -69,6 +127,6 @@ public class PolyGenesisAngularGeneratorFactory {
    * @return the poly genesis angular generator
    */
   public static PolyGenesisAngularGenerator newInstance(Path generationPath) {
-    return new PolyGenesisAngularGenerator(generationPath, storeExporter);
+    return new PolyGenesisAngularGenerator(generationPath, onceExporter, storeExporter, uiExporter);
   }
 }

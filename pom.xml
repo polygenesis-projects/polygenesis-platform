@@ -110,6 +110,9 @@
     <!--FREEMARKER-->
     <freemarker.version>2.3.28</freemarker.version>
 
+    <!--REFLECTIONS-->
+    <reflections.version>0.9.11</reflections.version>
+
     <!--INFLECTOR-->
     <evo-inflector.version>1.2.2</evo-inflector.version>
 
@@ -153,6 +156,13 @@
         <groupId>org.freemarker</groupId>
         <artifactId>freemarker</artifactId>
         <version>${freemarker.version}</version>
+      </dependency>
+
+      <!--REFLECTIONS-->
+      <dependency>
+        <groupId>org.reflections</groupId>
+        <artifactId>reflections</artifactId>
+        <version>${reflections.version}</version>
       </dependency>
 
       <!--INFLECTOR-->
@@ -215,11 +225,21 @@
         <artifactId>polygenesis-model-reactive-state</artifactId>
         <version>${project.version}</version>
       </dependency>
+      <dependency>
+        <groupId>io.polygenesis.models</groupId>
+        <artifactId>polygenesis-model-ui</artifactId>
+        <version>${project.version}</version>
+      </dependency>
 
       <!--POLYGENESIS DEDUCERS-->
       <dependency>
         <groupId>io.polygenesis.deducers</groupId>
         <artifactId>polygenesis-deducer-reactive-state</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.polygenesis.deducers</groupId>
+        <artifactId>polygenesis-deducer-ui</artifactId>
         <version>${project.version}</version>
       </dependency>
 

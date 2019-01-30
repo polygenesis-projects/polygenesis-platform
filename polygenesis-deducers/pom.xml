@@ -15,6 +15,7 @@
 
   <modules>
     <module>polygenesis-deducer-reactive-state</module>
+    <module>polygenesis-deducer-ui</module>
   </modules>
 
 </project>

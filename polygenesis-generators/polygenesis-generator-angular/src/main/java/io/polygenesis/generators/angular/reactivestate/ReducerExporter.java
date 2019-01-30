@@ -25,10 +25,9 @@ import static io.polygenesis.generators.angular.reactivestate.StoreExporterConst
 import static io.polygenesis.generators.angular.reactivestate.StoreExporterConstants.PATH_REDUCERS;
 import static io.polygenesis.generators.angular.reactivestate.StoreExporterConstants.POSTFIX_REDUCERS_TS;
 
+import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.path.PathService;
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.generators.angular.freemarker.FreemarkerConfig;
-import io.polygenesis.generators.angular.freemarker.FreemarkerService;
 import io.polygenesis.models.reactivestate.Store;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -40,6 +39,21 @@ import java.util.Map;
  * @author Christos Tsakostas
  */
 public class ReducerExporter {
+
+  private final FreemarkerService freemarkerService;
+
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
+  /**
+   * Instantiates a new Reducer exporter.
+   *
+   * @param freemarkerService the freemarker service
+   */
+  public ReducerExporter(FreemarkerService freemarkerService) {
+    this.freemarkerService = freemarkerService;
+  }
 
   // ===============================================================================================
   // FUNCTIONALITY
@@ -57,15 +71,12 @@ public class ReducerExporter {
         Paths.get(
             generationPath.toString(),
             PATH_NGRX,
-            TextConverter.toLowerHyphen(store.getFeature().getText()),
+            TextConverter.toLowerHyphen(store.getFeatureName().getText()),
             PATH_REDUCERS);
     PathService.ensurePath(reducersPath);
 
-    FreemarkerService.export(
-        FreemarkerConfig.getInstance().getConfiguration(),
-        dataModel,
-        FTL_REDUCER,
-        Paths.get(reducersPath.toString(), makeReducersFileName(store)));
+    freemarkerService.export(
+        dataModel, FTL_REDUCER, Paths.get(reducersPath.toString(), makeReducersFileName(store)));
   }
 
   // ===============================================================================================
@@ -79,6 +90,6 @@ public class ReducerExporter {
    * @return the string
    */
   private String makeReducersFileName(Store store) {
-    return TextConverter.toLowerHyphen(store.getFeature().getText()) + POSTFIX_REDUCERS_TS;
+    return TextConverter.toLowerHyphen(store.getFeatureName().getText()) + POSTFIX_REDUCERS_TS;
   }
 }

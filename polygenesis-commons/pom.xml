@@ -31,6 +31,12 @@
       <artifactId>evo-inflector</artifactId>
     </dependency>
 
+    <!--FREEMARKER-->
+    <dependency>
+      <groupId>org.freemarker</groupId>
+      <artifactId>freemarker</artifactId>
+    </dependency>
+
     <!--TEST-->
     <dependency>
       <groupId>io.polygenesis</groupId>

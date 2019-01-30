@@ -24,11 +24,19 @@
       <groupId>io.polygenesis.models</groupId>
       <artifactId>polygenesis-model-reactive-state</artifactId>
     </dependency>
+    <dependency>
+      <groupId>io.polygenesis.models</groupId>
+      <artifactId>polygenesis-model-ui</artifactId>
+    </dependency>
 
     <!--POLYGENESIS DEDUCERS-->
     <dependency>
       <groupId>io.polygenesis.deducers</groupId>
       <artifactId>polygenesis-deducer-reactive-state</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.polygenesis.deducers</groupId>
+      <artifactId>polygenesis-deducer-ui</artifactId>
     </dependency>
 
     <!--POLYGENESIS GENERATORS-->

@@ -25,10 +25,9 @@ import static io.polygenesis.generators.angular.reactivestate.StoreExporterConst
 import static io.polygenesis.generators.angular.reactivestate.StoreExporterConstants.PATH_NGRX;
 import static io.polygenesis.generators.angular.reactivestate.StoreExporterConstants.POSTFIX_EFFECTS_TS;
 
+import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.path.PathService;
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.generators.angular.freemarker.FreemarkerConfig;
-import io.polygenesis.generators.angular.freemarker.FreemarkerService;
 import io.polygenesis.models.reactivestate.Store;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -40,6 +39,21 @@ import java.util.Map;
  * @author Christos Tsakostas
  */
 public class EffectExporter {
+
+  private final FreemarkerService freemarkerService;
+
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
+  /**
+   * Instantiates a new Effect exporter.
+   *
+   * @param freemarkerService the freemarker service
+   */
+  public EffectExporter(FreemarkerService freemarkerService) {
+    this.freemarkerService = freemarkerService;
+  }
 
   // ===============================================================================================
   // FUNCTIONALITY
@@ -57,15 +71,12 @@ public class EffectExporter {
         Paths.get(
             generationPath.toString(),
             PATH_NGRX,
-            TextConverter.toLowerHyphen(store.getFeature().getText()),
+            TextConverter.toLowerHyphen(store.getFeatureName().getText()),
             PATH_EFFECTS);
     PathService.ensurePath(effectsPath);
 
-    FreemarkerService.export(
-        FreemarkerConfig.getInstance().getConfiguration(),
-        dataModel,
-        FTL_EFFECT,
-        Paths.get(effectsPath.toString(), makeEffectsFileName(store)));
+    freemarkerService.export(
+        dataModel, FTL_EFFECT, Paths.get(effectsPath.toString(), makeEffectsFileName(store)));
   }
 
   // ===============================================================================================
@@ -79,6 +90,6 @@ public class EffectExporter {
    * @return the string
    */
   private String makeEffectsFileName(Store store) {
-    return TextConverter.toLowerHyphen(store.getFeature().getText()) + POSTFIX_EFFECTS_TS;
+    return TextConverter.toLowerHyphen(store.getFeatureName().getText()) + POSTFIX_EFFECTS_TS;
   }
 }

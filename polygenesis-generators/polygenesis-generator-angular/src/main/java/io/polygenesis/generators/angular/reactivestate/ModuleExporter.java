@@ -24,10 +24,9 @@ import static io.polygenesis.generators.angular.reactivestate.StoreExporterConst
 import static io.polygenesis.generators.angular.reactivestate.StoreExporterConstants.PATH_NGRX;
 import static io.polygenesis.generators.angular.reactivestate.StoreExporterConstants.POSTFIX_MODULE_TS;
 
+import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.path.PathService;
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.generators.angular.freemarker.FreemarkerConfig;
-import io.polygenesis.generators.angular.freemarker.FreemarkerService;
 import io.polygenesis.models.reactivestate.Store;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -39,6 +38,21 @@ import java.util.Map;
  * @author Christos Tsakostas
  */
 public class ModuleExporter {
+
+  private final FreemarkerService freemarkerService;
+
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
+  /**
+   * Instantiates a new Module exporter.
+   *
+   * @param freemarkerService the freemarker service
+   */
+  public ModuleExporter(FreemarkerService freemarkerService) {
+    this.freemarkerService = freemarkerService;
+  }
 
   // ===============================================================================================
   // FUNCTIONALITY
@@ -56,14 +70,11 @@ public class ModuleExporter {
         Paths.get(
             generationPath.toString(),
             PATH_NGRX,
-            TextConverter.toLowerHyphen(store.getFeature().getText()));
+            TextConverter.toLowerHyphen(store.getFeatureName().getText()));
     PathService.ensurePath(modulePath);
 
-    FreemarkerService.export(
-        FreemarkerConfig.getInstance().getConfiguration(),
-        dataModel,
-        FTL_MODULE,
-        Paths.get(modulePath.toString(), makeModuleFileName(store)));
+    freemarkerService.export(
+        dataModel, FTL_MODULE, Paths.get(modulePath.toString(), makeModuleFileName(store)));
   }
 
   // ===============================================================================================
@@ -77,6 +88,6 @@ public class ModuleExporter {
    * @return the string
    */
   private String makeModuleFileName(Store store) {
-    return TextConverter.toLowerHyphen(store.getFeature().getText()) + POSTFIX_MODULE_TS;
+    return TextConverter.toLowerHyphen(store.getFeatureName().getText()) + POSTFIX_MODULE_TS;
   }
 }
