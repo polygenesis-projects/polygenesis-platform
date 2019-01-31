@@ -85,4 +85,27 @@ public class GenesisTest {
     assertThatThrownBy(() -> genesis.generate(genesisRequest, deducers, generators))
         .isInstanceOf(IllegalArgumentException.class);
   }
+
+  @Test
+  public void shouldFailToGenerateForMissingGnerator() {
+    GenesisRequest genesisRequest =
+        GenesisRequestBuilder.empty()
+            .withAnnotationsRequest(
+                AnnotationsRequestBuilder.empty()
+                    .withPackagesToScan(new LinkedHashSet<>(Arrays.asList("io.polygenesis")))
+                    .build())
+            .build();
+
+    Genesis genesis = new Genesis();
+
+    Set<Deducer> deducers =
+        new LinkedHashSet<>(
+            Arrays.asList(
+                ReactiveStateRegistry.getReactiveStateDeducer(), UiRegistry.getUiDeducer()));
+
+    Set<Generator> generators = new LinkedHashSet<>(Arrays.asList());
+
+    assertThatThrownBy(() -> genesis.generate(genesisRequest, deducers, generators))
+        .isInstanceOf(IllegalArgumentException.class);
+  }
 }
