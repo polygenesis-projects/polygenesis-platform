@@ -24,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import io.polygenesis.core.Deducer;
 import io.polygenesis.core.Generator;
-import io.polygenesis.generators.angular.PolyGenesisAngularGeneratorFactory;
+import io.polygenesis.generators.angular.AngularGeneratorFactory;
 import io.polygenesis.models.reactivestate.ReactiveStateRegistry;
 import io.polygenesis.models.ui.UiRegistry;
 import java.nio.file.Paths;
@@ -56,7 +56,7 @@ public class GenesisTest {
     Set<Generator> generators =
         new LinkedHashSet<>(
             Arrays.asList(
-                PolyGenesisAngularGeneratorFactory.newInstance(
+                AngularGeneratorFactory.newInstance(
                     Paths.get("tmp/polygenesis-angular-generator"))));
 
     genesis.generate(genesisRequest, deducers, generators);
@@ -79,7 +79,7 @@ public class GenesisTest {
     Set<Generator> generators =
         new LinkedHashSet<>(
             Arrays.asList(
-                PolyGenesisAngularGeneratorFactory.newInstance(
+                AngularGeneratorFactory.newInstance(
                     Paths.get("tmp/polygenesis-angular-generator"))));
 
     assertThatThrownBy(() -> genesis.generate(genesisRequest, deducers, generators))

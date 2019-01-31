@@ -20,6 +20,8 @@
 
 package io.polygenesis.core.iomodel;
 
+import io.polygenesis.core.datatype.ClassDataType;
+
 /**
  * The type Io model array.
  *
@@ -48,7 +50,7 @@ public class IoModelArray extends IoModelGroup {
    * @param variableName the variable name
    */
   public IoModelArray(
-      GenericTypeName genericType, DataTypeName dataType, VariableName variableName) {
+      GenericTypeName genericType, ClassDataType dataType, VariableName variableName) {
     super(genericType, dataType, variableName);
   }
 }

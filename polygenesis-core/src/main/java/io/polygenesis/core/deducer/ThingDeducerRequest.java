@@ -20,7 +20,7 @@
 
 package io.polygenesis.core.deducer;
 
-import io.polygenesis.commons.assertions.Assertion;
+import com.oregor.ddd4j.check.assertion.Assertion;
 import java.util.LinkedHashSet;
 import java.util.Set;
 

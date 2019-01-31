@@ -20,8 +20,8 @@
 
 package io.polygenesis.models.reactivestate;
 
-import io.polygenesis.commons.feature.FeatureName;
 import io.polygenesis.commons.text.TextConverter;
+import io.polygenesis.commons.valueobjects.FeatureName;
 import io.polygenesis.core.Thing;
 
 /**

@@ -20,6 +20,7 @@
 
 package io.polygenesis.core.iomodel;
 
+import io.polygenesis.core.datatype.PrimitiveDataType;
 import java.lang.annotation.Annotation;
 import java.util.Set;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -36,6 +37,38 @@ public class IoModelPrimitive extends IoModel {
   private Boolean isThingIdentity;
 
   // ===============================================================================================
+  // STATIC
+  // ===============================================================================================
+
+  /**
+   * Of.
+   *
+   * @param primitiveDataType the primitive data type
+   * @param variableName the variable name
+   * @return the io model primitive
+   */
+  public static IoModelPrimitive of(
+      PrimitiveDataType primitiveDataType, VariableName variableName) {
+    return new IoModelPrimitive(primitiveDataType, variableName, null);
+  }
+
+  /**
+   * Of thing identity.
+   *
+   * @param primitiveDataType the primitive data type
+   * @param variableName the variable name
+   * @return the io model primitive
+   */
+  public static IoModelPrimitive ofThingIdentity(
+      PrimitiveDataType primitiveDataType, VariableName variableName) {
+    IoModelPrimitive ioModelPrimitive = new IoModelPrimitive(primitiveDataType, variableName, null);
+
+    ioModelPrimitive.setThingIdentity(true);
+
+    return ioModelPrimitive;
+  }
+
+  // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
@@ -47,7 +80,7 @@ public class IoModelPrimitive extends IoModel {
    * @param annotations the annotations
    */
   public IoModelPrimitive(
-      DataTypeName dataType, VariableName variableName, Set<Annotation> annotations) {
+      PrimitiveDataType dataType, VariableName variableName, Set<Annotation> annotations) {
     super(dataType, variableName);
     setAnnotations(annotations);
     setThingIdentity(false);
@@ -62,7 +95,7 @@ public class IoModelPrimitive extends IoModel {
    * @param annotations the annotations
    */
   public IoModelPrimitive(
-      DataTypeName dataType,
+      PrimitiveDataType dataType,
       VariableName variableName,
       IoModelGroup parent,
       Set<Annotation> annotations) {

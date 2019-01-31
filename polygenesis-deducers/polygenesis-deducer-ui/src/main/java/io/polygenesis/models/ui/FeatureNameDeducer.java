@@ -20,7 +20,7 @@
 
 package io.polygenesis.models.ui;
 
-import io.polygenesis.commons.feature.FeatureName;
+import io.polygenesis.commons.valueobjects.FeatureName;
 import io.polygenesis.core.Thing;
 
 /**

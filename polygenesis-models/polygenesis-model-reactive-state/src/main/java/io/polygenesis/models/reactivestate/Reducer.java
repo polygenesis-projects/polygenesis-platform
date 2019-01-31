@@ -20,7 +20,7 @@
 
 package io.polygenesis.models.reactivestate;
 
-import io.polygenesis.commons.assertions.Assertion;
+import com.oregor.ddd4j.check.assertion.Assertion;
 
 /**
  * A Reducer is a function called when an {@link Action} is requested and its role is to alter the

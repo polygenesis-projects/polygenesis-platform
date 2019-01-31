@@ -14,6 +14,7 @@
   <packaging>pom</packaging>
   <modules>
     <module>polygenesis-generator-angular</module>
+    <module>polygenesis-generator-java-api</module>
   </modules>
 
 </project>

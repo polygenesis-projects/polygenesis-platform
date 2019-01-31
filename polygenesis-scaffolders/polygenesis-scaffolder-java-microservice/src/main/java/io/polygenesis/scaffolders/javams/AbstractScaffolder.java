@@ -74,11 +74,24 @@ public abstract class AbstractScaffolder {
   // ===============================================================================================
   protected void ensureSources(Path generationPath, ProjectDescription projectDescription) {
     PathService.ensurePath(generationPath);
+
     PathService.ensurePath(
-        Paths.get(generationPath.toString(), "src/main/java", projectDescription.getGroupId()));
+        Paths.get(
+            generationPath.toString(), "src/main/java", toPath(projectDescription.getGroupId())));
+
     PathService.ensurePath(Paths.get(generationPath.toString(), "src/main/resources"));
+
     PathService.ensurePath(
-        Paths.get(generationPath.toString(), "src/test/java", projectDescription.getGroupId()));
+        Paths.get(
+            generationPath.toString(), "src/test/java", toPath(projectDescription.getGroupId())));
+
     PathService.ensurePath(Paths.get(generationPath.toString(), "src/test/resources"));
+  }
+
+  // ===============================================================================================
+  // PRIVATE
+  // ===============================================================================================
+  private String toPath(String groupId) {
+    return Paths.get(groupId.replaceAll("\\.", "/")).toString();
   }
 }

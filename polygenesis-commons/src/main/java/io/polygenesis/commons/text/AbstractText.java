@@ -20,7 +20,7 @@
 
 package io.polygenesis.commons.text;
 
-import io.polygenesis.commons.assertions.Assertion;
+import com.oregor.ddd4j.check.assertion.Assertion;
 import java.io.Serializable;
 import java.util.Objects;
 

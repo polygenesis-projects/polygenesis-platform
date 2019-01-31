@@ -20,6 +20,8 @@
 
 package io.polygenesis.core.iomodel;
 
+import io.polygenesis.core.datatype.AbstractDataType;
+
 /** @author Christos Tsakostas */
 class TestIoModel extends IoModel {
 
@@ -27,16 +29,16 @@ class TestIoModel extends IoModel {
     super(parent);
   }
 
-  public TestIoModel(DataTypeName dataType, VariableName variableName) {
+  public TestIoModel(AbstractDataType dataType, VariableName variableName) {
     super(dataType, variableName);
   }
 
-  public TestIoModel(DataTypeName dataType, VariableName variableName, IoModelGroup parent) {
+  public TestIoModel(AbstractDataType dataType, VariableName variableName, IoModelGroup parent) {
     super(dataType, variableName, parent);
   }
 
   public TestIoModel(
-      GenericTypeName genericType, DataTypeName dataType, VariableName variableName) {
+      GenericTypeName genericType, AbstractDataType dataType, VariableName variableName) {
     super(genericType, dataType, variableName);
   }
 }

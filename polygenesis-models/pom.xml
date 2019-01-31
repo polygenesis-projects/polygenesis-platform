@@ -14,6 +14,7 @@
   <packaging>pom</packaging>
 
   <modules>
+    <module>polygenesis-model-api</module>
     <module>polygenesis-model-reactive-state</module>
     <module>polygenesis-model-ui</module>
   </modules>

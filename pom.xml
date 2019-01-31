@@ -25,7 +25,8 @@
   <artifactId>polygenesis-platform</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <name>PolyGenesis Platform</name>
-  <description>PolyGenesis is an Extensible &amp; Cross-language Automatic Programming Platform.</description>
+  <description>PolyGenesis is an Extensible &amp; Cross-language Automatic Programming Platform.
+  </description>
   <url>https://www.polygenesis.io</url>
 
   <inceptionYear>2015</inceptionYear>
@@ -117,6 +118,9 @@
     <!--INFLECTOR-->
     <evo-inflector.version>1.2.2</evo-inflector.version>
 
+    <!--OREGOR-->
+    <oregor-ddd4j.version>0.0.1</oregor-ddd4j.version>
+
     <!--TEST-->
     <junit.version>4.12</junit.version>
     <mockito.version>2.23.4</mockito.version>
@@ -173,6 +177,15 @@
         <version>${evo-inflector.version}</version>
       </dependency>
 
+      <!--OREGOR-->
+      <dependency>
+        <groupId>com.oregor.ddd4j</groupId>
+        <artifactId>ddd4j-bom</artifactId>
+        <version>${oregor-ddd4j.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+
       <!--TEST-->
       <dependency>
         <groupId>junit</groupId>
@@ -223,6 +236,11 @@
       <!--POLYGENESIS MODELS-->
       <dependency>
         <groupId>io.polygenesis.models</groupId>
+        <artifactId>polygenesis-model-api</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.polygenesis.models</groupId>
         <artifactId>polygenesis-model-reactive-state</artifactId>
         <version>${project.version}</version>
       </dependency>
@@ -233,6 +251,11 @@
       </dependency>
 
       <!--POLYGENESIS DEDUCERS-->
+      <dependency>
+        <groupId>io.polygenesis.deducers</groupId>
+        <artifactId>polygenesis-deducer-api</artifactId>
+        <version>${project.version}</version>
+      </dependency>
       <dependency>
         <groupId>io.polygenesis.deducers</groupId>
         <artifactId>polygenesis-deducer-reactive-state</artifactId>
@@ -248,6 +271,11 @@
       <dependency>
         <groupId>io.polygenesis.generators</groupId>
         <artifactId>polygenesis-generator-angular</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.polygenesis.generators</groupId>
+        <artifactId>polygenesis-generator-java-api</artifactId>
         <version>${project.version}</version>
       </dependency>
 

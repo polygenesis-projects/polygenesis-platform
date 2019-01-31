@@ -20,7 +20,7 @@
 
 package io.polygenesis.core.deducer;
 
-import io.polygenesis.commons.assertions.Assertion;
+import com.oregor.ddd4j.check.assertion.Assertion;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;

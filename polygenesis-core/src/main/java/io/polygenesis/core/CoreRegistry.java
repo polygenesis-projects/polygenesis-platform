@@ -22,10 +22,10 @@ package io.polygenesis.core;
 
 import io.polygenesis.core.deducer.AnnotationsThingDeducerImpl;
 import io.polygenesis.core.deducer.ClassScanner;
-import io.polygenesis.core.deducer.DataTypeConverter;
 import io.polygenesis.core.deducer.FieldsInInterfaceMethodAnalyzer;
 import io.polygenesis.core.deducer.FunctionIdentifier;
 import io.polygenesis.core.deducer.IoModelDeducer;
+import io.polygenesis.core.deducer.JavaDataTypeConverter;
 import io.polygenesis.core.deducer.MethodAnalyzer;
 import io.polygenesis.core.deducer.RecursiveObjectFiller;
 import io.polygenesis.core.deducer.ThingDeducer;
@@ -61,9 +61,9 @@ public final class CoreRegistry {
     RecursiveObjectFiller recursiveObjectFiller =
         new RecursiveObjectFiller(typesAnalyzer, fieldsInInterfaceMethodAnalyzer);
 
-    DataTypeConverter dataTypeConverter = new DataTypeConverter();
+    JavaDataTypeConverter javaDataTypeConverter = new JavaDataTypeConverter();
 
-    IoModelDeducer ioModelDeducer = new IoModelDeducer(dataTypeConverter);
+    IoModelDeducer ioModelDeducer = new IoModelDeducer(javaDataTypeConverter);
 
     FunctionIdentifier functionIdentifier =
         new FunctionIdentifier(methodAnalyzer, recursiveObjectFiller, ioModelDeducer);

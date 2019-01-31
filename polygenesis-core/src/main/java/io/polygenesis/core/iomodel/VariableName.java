@@ -29,6 +29,10 @@ import io.polygenesis.commons.text.AbstractText;
  */
 public class VariableName extends AbstractText {
 
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
   /**
    * Instantiates a new Variable name.
    *

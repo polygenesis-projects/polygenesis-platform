@@ -20,7 +20,10 @@
 
 package io.polygenesis.core.deducer;
 
-import io.polygenesis.core.iomodel.DataTypeName;
+import io.polygenesis.core.datatype.ClassDataType;
+import io.polygenesis.core.datatype.DataTypeName;
+import io.polygenesis.core.datatype.PackageName;
+import io.polygenesis.core.datatype.PrimitiveDataType;
 import io.polygenesis.core.iomodel.GenericTypeName;
 import io.polygenesis.core.iomodel.IoModel;
 import io.polygenesis.core.iomodel.IoModelArray;
@@ -39,7 +42,7 @@ import java.util.Set;
  */
 public class IoModelDeducer {
 
-  private final DataTypeConverter dataTypeConverter;
+  private final JavaDataTypeConverter javaDataTypeConverter;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -48,10 +51,10 @@ public class IoModelDeducer {
   /**
    * Instantiates a new Io model deducer.
    *
-   * @param dataTypeConverter the data type converter
+   * @param javaDataTypeConverter the data type converter
    */
-  public IoModelDeducer(DataTypeConverter dataTypeConverter) {
-    this.dataTypeConverter = dataTypeConverter;
+  public IoModelDeducer(JavaDataTypeConverter javaDataTypeConverter) {
+    this.javaDataTypeConverter = javaDataTypeConverter;
   }
 
   // ===============================================================================================
@@ -65,32 +68,37 @@ public class IoModelDeducer {
    * @return the io model
    */
   IoModel deduceResponse(RecursiveObject recursiveObject) {
+
     if (recursiveObject.isGenericInterface()) {
       // IoModelArray
       return new IoModelArray(
-          new GenericTypeName(recursiveObject.getGenericType()),
-          new DataTypeName(recursiveObject.getDataType()),
-          new VariableName(recursiveObject.getName()));
+          new GenericTypeName(recursiveObject.getStrGenericType()),
+          new ClassDataType(
+              convertToDataTypeNameFrom(recursiveObject.getStrDataType()),
+              convertToPackageName(recursiveObject.getStrDataType())),
+          new VariableName(recursiveObject.getStrName()));
     } else if (!recursiveObject.isCustomObject()) {
       // IoModelPrimitive
-      if (recursiveObject.getGenericType() != null) {
+      if (recursiveObject.getStrGenericType() != null) {
         throw new IllegalArgumentException("IoModelPrimitive cannot be Generic");
       }
 
       return new IoModelPrimitive(
-          new DataTypeName(dataTypeConverter.convert(recursiveObject.getDataType()).name()),
-          new VariableName(recursiveObject.getName()),
+          new PrimitiveDataType(convertToDataTypeNameFrom(recursiveObject.getStrDataType())),
+          new VariableName(recursiveObject.getStrName()),
           safeGetAnnotationsFrom(recursiveObject));
 
     } else {
       // IoModelGroup
       IoModelGroup modelGroupResponse =
           new IoModelGroup(
-              recursiveObject.getGenericType() != null
-                  ? new GenericTypeName(recursiveObject.getGenericType())
+              recursiveObject.getStrGenericType() != null
+                  ? new GenericTypeName(recursiveObject.getStrGenericType())
                   : null,
-              new DataTypeName(recursiveObject.getDataType()),
-              new VariableName(recursiveObject.getName()));
+              new ClassDataType(
+                  convertToDataTypeNameFrom(recursiveObject.getStrDataType()),
+                  convertToPackageName(recursiveObject.getStrDataType())),
+              new VariableName(recursiveObject.getStrName()));
 
       this.fillIoModelGroup(modelGroupResponse, recursiveObject);
 
@@ -108,7 +116,7 @@ public class IoModelDeducer {
         .getChildren()
         .forEach(
             childRecursiveObject -> {
-              if (childRecursiveObject.getGenericType() != null) {
+              if (childRecursiveObject.getStrGenericType() != null) {
                 IoModelArray modelArray = new IoModelArray(modelGroup);
 
                 fillIoModelGroup(modelArray, childRecursiveObject);
@@ -125,9 +133,9 @@ public class IoModelDeducer {
                   // Should not add primitives for Ignored or automatically set fields.
                   IoModelPrimitive modelPrimitive =
                       new IoModelPrimitive(
-                          new DataTypeName(
-                              dataTypeConverter.convert(childRecursiveObject.getDataType()).name()),
-                          new VariableName(childRecursiveObject.getName()),
+                          new PrimitiveDataType(
+                              convertToDataTypeNameFrom(childRecursiveObject.getStrDataType())),
+                          new VariableName(childRecursiveObject.getStrName()),
                           modelGroup,
                           safeGetAnnotationsFrom(childRecursiveObject));
 
@@ -142,6 +150,25 @@ public class IoModelDeducer {
       return new LinkedHashSet<>(Arrays.asList(recursiveObject.getAnnotations()));
     } else {
       return new LinkedHashSet<>();
+    }
+  }
+
+  private DataTypeName convertToDataTypeNameFrom(String strDataType) {
+    // TODO - maybe there is a better check?
+    int index = strDataType.lastIndexOf('.');
+    if (index > 0) {
+      return new DataTypeName(strDataType.substring(index + 1));
+    }
+
+    return new DataTypeName(javaDataTypeConverter.convert(strDataType).name());
+  }
+
+  private PackageName convertToPackageName(String strDataType) {
+    int index = strDataType.lastIndexOf('.');
+    if (index > 0) {
+      return new PackageName(strDataType.substring(0, index));
+    } else {
+      return new PackageName("");
     }
   }
 }

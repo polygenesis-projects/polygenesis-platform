@@ -23,6 +23,11 @@ package io.polygenesis.core.iomodel;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.polygenesis.commons.test.AbstractEqualityTest;
+import io.polygenesis.core.datatype.ClassDataType;
+import io.polygenesis.core.datatype.DataTypeName;
+import io.polygenesis.core.datatype.PackageName;
+import io.polygenesis.core.datatype.PrimaryType;
+import io.polygenesis.core.datatype.PrimitiveDataType;
 import org.junit.Test;
 
 /** @author Christos Tsakostas */
@@ -33,31 +38,39 @@ public class IoModelGroupTest extends AbstractEqualityTest<IoModelGroup> {
     IoModelGroup ioModelGroup =
         new IoModelGroup(
             new GenericTypeName("java.util.list"),
-            new DataTypeName("java.lang.String"),
+            new ClassDataType(
+                new DataTypeName(PrimaryType.STRING.name()), new PackageName("com.dummy")),
             new VariableName("someVariableName"));
 
     assertThat(ioModelGroup).isNotNull();
     assertThat(ioModelGroup.getGenericType()).isEqualTo(new GenericTypeName("java.util.list"));
-    assertThat(ioModelGroup.getDataType()).isEqualTo(new DataTypeName("java.lang.String"));
+    assertThat(ioModelGroup.getDataType())
+        .isEqualTo(
+            new ClassDataType(
+                new DataTypeName(PrimaryType.STRING.name()), new PackageName("com.dummy")));
     assertThat(ioModelGroup.getVariableName()).isEqualTo(new VariableName("someVariableName"));
 
     IoModelArray childIoModelArray =
         new IoModelArray(
             new GenericTypeName("java.util.list"),
-            new DataTypeName("java.lang.String"),
+            new ClassDataType(
+                new DataTypeName(PrimaryType.STRING.name()), new PackageName("com.dummy")),
             new VariableName("someVariableName"));
     ioModelGroup.addIoModelArray(childIoModelArray);
 
     IoModelGroup childIoModelGroup =
         new IoModelGroup(
             new GenericTypeName("java.util.list"),
-            new DataTypeName("java.lang.String"),
+            new ClassDataType(
+                new DataTypeName(PrimaryType.STRING.name()), new PackageName("com.dummy")),
             new VariableName("someVariableName"));
     ioModelGroup.addIoModelGroup(childIoModelGroup);
 
     IoModelPrimitive childIoModelPrimitive =
         new IoModelPrimitive(
-            new DataTypeName("java.lang.String"), new VariableName("someVariableName"), null);
+            new PrimitiveDataType(new DataTypeName(PrimaryType.STRING.name())),
+            new VariableName("someVariableName"),
+            null);
     ioModelGroup.addIoModelPrimitive(childIoModelPrimitive);
 
     assertThat(ioModelGroup.getModels().size()).isEqualTo(3);
@@ -72,7 +85,8 @@ public class IoModelGroupTest extends AbstractEqualityTest<IoModelGroup> {
     IoModelGroup parent =
         new IoModelGroup(
             new GenericTypeName("java.util.list"),
-            new DataTypeName("java.lang.String"),
+            new ClassDataType(
+                new DataTypeName(PrimaryType.STRING.name()), new PackageName("com.dummy")),
             new VariableName("someVariableName"));
 
     IoModelGroup ioModelGroup = new IoModelGroup(parent);
@@ -82,7 +96,9 @@ public class IoModelGroupTest extends AbstractEqualityTest<IoModelGroup> {
     assertThat(ioModelGroup.getParent().getGenericType())
         .isEqualTo(new GenericTypeName("java.util.list"));
     assertThat(ioModelGroup.getParent().getDataType())
-        .isEqualTo(new DataTypeName("java.lang.String"));
+        .isEqualTo(
+            new ClassDataType(
+                new DataTypeName(PrimaryType.STRING.name()), new PackageName("com.dummy")));
     assertThat(ioModelGroup.getParent().getVariableName())
         .isEqualTo(new VariableName("someVariableName"));
   }
@@ -91,7 +107,8 @@ public class IoModelGroupTest extends AbstractEqualityTest<IoModelGroup> {
   public IoModelGroup createObject1() {
     return new IoModelGroup(
         new GenericTypeName("java.util.list"),
-        new DataTypeName("java.lang.String"),
+        new ClassDataType(
+            new DataTypeName(PrimaryType.STRING.name()), new PackageName("com.dummy")),
         new VariableName("someVariableName"));
   }
 
@@ -99,7 +116,8 @@ public class IoModelGroupTest extends AbstractEqualityTest<IoModelGroup> {
   public IoModelGroup createObject2() {
     return new IoModelGroup(
         new GenericTypeName("java.util.list"),
-        new DataTypeName("java.lang.String"),
+        new ClassDataType(
+            new DataTypeName(PrimaryType.STRING.name()), new PackageName("com.dummy")),
         new VariableName("someOtherVariableName"));
   }
 }

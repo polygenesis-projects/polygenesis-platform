@@ -110,7 +110,7 @@ public class RecursiveObjectFiller {
           return recursiveObject
               .getChildren()
               .stream()
-              .filter(p -> p.getGenericType() != null)
+              .filter(p -> p.getStrGenericType() != null)
               .findFirst()
               .orElse(null);
         }

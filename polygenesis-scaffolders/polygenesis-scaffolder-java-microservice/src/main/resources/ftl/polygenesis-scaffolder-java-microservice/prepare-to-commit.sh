@@ -38,7 +38,8 @@ set -e
 # SCRIPTS_START
 #########################################
 
-./mvnw license:update-file-header
+# Uncomment the line below if you want to include license information in your source files.
+#./mvnw license:update-file-header
 
 ./mvnw fmt:format
 

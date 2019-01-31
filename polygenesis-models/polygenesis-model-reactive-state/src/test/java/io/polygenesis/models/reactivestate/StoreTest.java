@@ -22,8 +22,8 @@ package io.polygenesis.models.reactivestate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.polygenesis.commons.feature.FeatureName;
 import io.polygenesis.commons.test.AbstractEqualityTest;
+import io.polygenesis.commons.valueobjects.FeatureName;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import org.junit.Test;

@@ -20,8 +20,8 @@
 
 package io.polygenesis.models.reactivestate;
 
-import io.polygenesis.commons.assertions.Assertion;
-import io.polygenesis.commons.feature.FeatureName;
+import com.oregor.ddd4j.check.assertion.Assertion;
+import io.polygenesis.commons.valueobjects.FeatureName;
 import java.util.Objects;
 import java.util.Set;
 
