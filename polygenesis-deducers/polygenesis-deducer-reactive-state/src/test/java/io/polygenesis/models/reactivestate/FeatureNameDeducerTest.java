@@ -22,7 +22,7 @@ package io.polygenesis.models.reactivestate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.polygenesis.commons.feature.FeatureName;
+import io.polygenesis.commons.valueobjects.FeatureName;
 import org.junit.Test;
 
 /** @author Christos Tsakostas */

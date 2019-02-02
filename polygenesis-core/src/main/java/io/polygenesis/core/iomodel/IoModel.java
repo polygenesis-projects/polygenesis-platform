@@ -20,12 +20,14 @@
 
 package io.polygenesis.core.iomodel;
 
+import io.polygenesis.core.datatype.AbstractDataType;
+import io.polygenesis.core.datatype.PrimaryType;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * This is the base class for {@link IoModelPrimitive}, {@link IoModelGroup}, and {@link
- * IoModelArray}*.
+ * IoModelArray}**.
  *
  * @author Christos Tsakostas
  */
@@ -33,7 +35,7 @@ public abstract class IoModel {
 
   private GenericTypeName genericType;
 
-  private DataTypeName dataType;
+  private AbstractDataType dataType;
 
   private VariableName variableName;
 
@@ -58,7 +60,7 @@ public abstract class IoModel {
    * @param dataType the data type
    * @param variableName the variable name
    */
-  public IoModel(DataTypeName dataType, VariableName variableName) {
+  public IoModel(AbstractDataType dataType, VariableName variableName) {
     setDataType(dataType);
     setVariableName(variableName);
   }
@@ -70,7 +72,7 @@ public abstract class IoModel {
    * @param variableName the variable name
    * @param parent the parent
    */
-  public IoModel(DataTypeName dataType, VariableName variableName, IoModelGroup parent) {
+  public IoModel(AbstractDataType dataType, VariableName variableName, IoModelGroup parent) {
     this(dataType, variableName);
     setParent(parent);
   }
@@ -82,7 +84,8 @@ public abstract class IoModel {
    * @param dataType the data type
    * @param variableName the variable name
    */
-  public IoModel(GenericTypeName genericType, DataTypeName dataType, VariableName variableName) {
+  public IoModel(
+      GenericTypeName genericType, AbstractDataType dataType, VariableName variableName) {
     this(dataType, variableName);
     setGenericType(genericType);
   }
@@ -105,7 +108,7 @@ public abstract class IoModel {
    *
    * @return the data type
    */
-  public DataTypeName getDataType() {
+  public AbstractDataType getDataType() {
     return dataType;
   }
 
@@ -148,13 +151,23 @@ public abstract class IoModel {
     return false;
   }
 
-  private boolean isDataTypePrimitive(DataTypeName dataType) {
+  // TODO: move into AbstractDataType
+  private boolean isDataTypePrimitive(AbstractDataType dataType) {
     try {
-      ModelPrimitiveType.valueOf(dataType.getText().toUpperCase());
+      PrimaryType.valueOf(dataType.getDataTypeName().getText().toUpperCase());
       return true;
     } catch (Exception e) {
       return false;
     }
+  }
+
+  /**
+   * Is io model group boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isIoModelGroup() {
+    return this instanceof IoModelGroup;
   }
 
   // ===============================================================================================
@@ -165,7 +178,7 @@ public abstract class IoModel {
     this.genericType = genericType;
   }
 
-  private void setDataType(DataTypeName dataType) {
+  private void setDataType(AbstractDataType dataType) {
     this.dataType = dataType;
   }
 

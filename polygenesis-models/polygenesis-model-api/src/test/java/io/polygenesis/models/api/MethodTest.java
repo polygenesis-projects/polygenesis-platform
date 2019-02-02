@@ -1,0 +1,58 @@
+/*-
+ * ==========================LICENSE_START=================================
+ * PolyGenesis Platform
+ * ========================================================================
+ * Copyright (C) 2015 - 2019 OREGOR LTD
+ * ========================================================================
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ===========================LICENSE_END==================================
+ */
+
+package io.polygenesis.models.api;
+
+import io.polygenesis.commons.test.AbstractEqualityTest;
+import io.polygenesis.core.ReturnValue;
+import io.polygenesis.core.datatype.DataTypeName;
+import io.polygenesis.core.datatype.PrimaryType;
+import io.polygenesis.core.datatype.PrimitiveDataType;
+import io.polygenesis.core.iomodel.IoModelPrimitive;
+import io.polygenesis.core.iomodel.VariableName;
+import java.util.LinkedHashSet;
+
+/** @author Christos Tsakostas */
+public class MethodTest extends AbstractEqualityTest<Method> {
+
+  @Override
+  public Method createObject1() {
+    return new Method(
+        new MethodName("someMethodName"),
+        new ReturnValue(
+            new IoModelPrimitive(
+                new PrimitiveDataType(new DataTypeName(PrimaryType.STRING.name())),
+                new VariableName("someVariableName"),
+                new LinkedHashSet<>())),
+        new LinkedHashSet<>());
+  }
+
+  @Override
+  public Method createObject2() {
+    return new Method(
+        new MethodName("someOtherMethodName"),
+        new ReturnValue(
+            new IoModelPrimitive(
+                new PrimitiveDataType(new DataTypeName(PrimaryType.STRING.name())),
+                new VariableName("someVariableName"),
+                new LinkedHashSet<>())),
+        new LinkedHashSet<>());
+  }
+}

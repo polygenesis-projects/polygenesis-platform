@@ -35,11 +35,11 @@ public class RecursiveObject {
 
   private Set<RecursiveObject> children;
 
-  private String genericType;
+  private String strGenericType;
 
-  private String dataType;
+  private String strDataType;
 
-  private String name;
+  private String strName;
 
   private boolean genericInterface;
 
@@ -52,14 +52,14 @@ public class RecursiveObject {
   /**
    * Instantiates a new Recursive object.
    *
-   * @param genericType the generic type
-   * @param dataType the data type
-   * @param name the name
+   * @param strGenericType the generic type
+   * @param strDataType the data type
+   * @param strName the name
    */
-  private RecursiveObject(String genericType, String dataType, String name) {
-    this.genericType = genericType;
-    this.dataType = dataType;
-    this.name = name;
+  private RecursiveObject(String strGenericType, String strDataType, String strName) {
+    this.strGenericType = strGenericType;
+    this.strDataType = strDataType;
+    this.strName = strName;
 
     this.parent = null;
     this.children = new LinkedHashSet<>();
@@ -68,13 +68,14 @@ public class RecursiveObject {
   /**
    * Instantiates a new Recursive object.
    *
-   * @param genericType the generic type
-   * @param dataType the data type
+   * @param strGenericType the generic type
+   * @param strDataType the data type
    * @param name the name
    * @param parent the parent
    */
-  public RecursiveObject(String genericType, String dataType, String name, RecursiveObject parent) {
-    this(genericType, dataType, name);
+  public RecursiveObject(
+      String strGenericType, String strDataType, String name, RecursiveObject parent) {
+    this(strGenericType, strDataType, name);
     this.parent = parent;
   }
 
@@ -118,8 +119,8 @@ public class RecursiveObject {
    *
    * @return the generic type
    */
-  public String getGenericType() {
-    return genericType;
+  public String getStrGenericType() {
+    return strGenericType;
   }
 
   /**
@@ -127,8 +128,8 @@ public class RecursiveObject {
    *
    * @return the data type
    */
-  public String getDataType() {
-    return dataType;
+  public String getStrDataType() {
+    return strDataType;
   }
 
   /**
@@ -136,8 +137,8 @@ public class RecursiveObject {
    *
    * @return the name
    */
-  public String getName() {
-    return name;
+  public String getStrName() {
+    return strName;
   }
 
   // ===============================================================================================
@@ -150,7 +151,7 @@ public class RecursiveObject {
    * @return the boolean
    */
   private boolean isPrimitive() {
-    return !this.getDataType().contains(".");
+    return !this.getStrDataType().contains(".");
   }
 
   /**
@@ -159,7 +160,7 @@ public class RecursiveObject {
    * @return the boolean
    */
   private boolean isJavaObject() {
-    return this.getDataType().contains("java");
+    return this.getStrDataType().contains("java");
   }
 
   /**

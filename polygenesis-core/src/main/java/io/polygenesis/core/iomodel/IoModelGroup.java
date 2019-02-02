@@ -20,7 +20,8 @@
 
 package io.polygenesis.core.iomodel;
 
-import io.polygenesis.commons.assertions.Assertion;
+import com.oregor.ddd4j.check.assertion.Assertion;
+import io.polygenesis.core.datatype.ClassDataType;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -52,12 +53,21 @@ public class IoModelGroup extends IoModel {
   /**
    * Instantiates a new Io model group.
    *
+   * @param dataType the data type
+   */
+  public IoModelGroup(ClassDataType dataType) {
+    this(null, dataType, new VariableName(dataType.getDataTypeName().getText()));
+  }
+
+  /**
+   * Instantiates a new Io model group.
+   *
    * @param genericType the generic type
    * @param dataType the data type
    * @param variableName the variable name
    */
   public IoModelGroup(
-      GenericTypeName genericType, DataTypeName dataType, VariableName variableName) {
+      GenericTypeName genericType, ClassDataType dataType, VariableName variableName) {
     super(genericType, dataType, variableName);
     setModels(new LinkedHashSet<>());
   }
@@ -73,6 +83,7 @@ public class IoModelGroup extends IoModel {
    * @return the boolean
    */
   public boolean addIoModelPrimitive(IoModelPrimitive model) {
+
     return models.add(model);
   }
 

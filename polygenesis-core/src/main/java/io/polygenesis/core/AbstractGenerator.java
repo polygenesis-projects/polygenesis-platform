@@ -20,7 +20,7 @@
 
 package io.polygenesis.core;
 
-import io.polygenesis.commons.assertions.Assertion;
+import com.oregor.ddd4j.check.assertion.Assertion;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;

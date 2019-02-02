@@ -94,7 +94,7 @@ public class FieldsInInterfaceMethodAnalyzer {
 
       // Check that we do not use the same name twice: e.g. getContent & hasContent
       if (collectionDtoRecursiveObject == null
-          || !collectionDtoRecursiveObject.getName().equals(fieldName)) {
+          || !collectionDtoRecursiveObject.getStrName().equals(fieldName)) {
         RecursiveObject childRecursiveObject =
             new RecursiveObject(null, methodReturnTypeClazz.getTypeName(), fieldName, parent);
 

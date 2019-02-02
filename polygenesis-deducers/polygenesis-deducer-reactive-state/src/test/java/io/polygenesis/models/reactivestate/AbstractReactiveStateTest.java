@@ -27,9 +27,10 @@ import io.polygenesis.core.Goal;
 import io.polygenesis.core.ReturnValue;
 import io.polygenesis.core.Thing;
 import io.polygenesis.core.ThingName;
-import io.polygenesis.core.iomodel.DataTypeName;
+import io.polygenesis.core.datatype.DataTypeName;
+import io.polygenesis.core.datatype.PrimaryType;
+import io.polygenesis.core.datatype.PrimitiveDataType;
 import io.polygenesis.core.iomodel.IoModelPrimitive;
-import io.polygenesis.core.iomodel.ModelPrimitiveType;
 import io.polygenesis.core.iomodel.VariableName;
 import java.util.LinkedHashSet;
 
@@ -49,7 +50,7 @@ public abstract class AbstractReactiveStateTest {
             new FunctionName("createSomeThing"),
             new ReturnValue(
                 new IoModelPrimitive(
-                    new DataTypeName(ModelPrimitiveType.STRING.name()),
+                    new PrimitiveDataType(new DataTypeName(PrimaryType.STRING.name())),
                     new VariableName("response"),
                     new LinkedHashSet<>())));
     thing.appendFunction(createFunction);
@@ -64,7 +65,7 @@ public abstract class AbstractReactiveStateTest {
             new FunctionName("createSomeThing"),
             new ReturnValue(
                 new IoModelPrimitive(
-                    new DataTypeName(ModelPrimitiveType.STRING.name()),
+                    new PrimitiveDataType(new DataTypeName(PrimaryType.STRING.name())),
                     new VariableName("response"),
                     new LinkedHashSet<>())));
     thing.appendFunction(customGoalFunction);

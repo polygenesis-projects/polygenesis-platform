@@ -20,7 +20,7 @@
 
 package io.polygenesis.models.ui.element;
 
-import io.polygenesis.commons.assertions.Assertion;
+import com.oregor.ddd4j.check.assertion.Assertion;
 
 /**
  * Base class for anything appearing on the UI.

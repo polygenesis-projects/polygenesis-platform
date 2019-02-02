@@ -23,6 +23,11 @@ package io.polygenesis.core.iomodel;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.polygenesis.commons.test.AbstractEqualityTest;
+import io.polygenesis.core.datatype.ClassDataType;
+import io.polygenesis.core.datatype.DataTypeName;
+import io.polygenesis.core.datatype.PackageName;
+import io.polygenesis.core.datatype.PrimaryType;
+import io.polygenesis.core.datatype.PrimitiveDataType;
 import java.util.LinkedHashSet;
 import org.junit.Test;
 
@@ -35,7 +40,8 @@ public class IoModelPrimitiveTest extends AbstractEqualityTest<IoModelPrimitive>
 
     assertThat(ioModelPrimitive).isNotNull();
     assertThat(ioModelPrimitive.getGenericType()).isNull();
-    assertThat(ioModelPrimitive.getDataType()).isEqualTo(new DataTypeName("java.lang.String"));
+    assertThat(ioModelPrimitive.getDataType())
+        .isEqualTo(new PrimitiveDataType(new DataTypeName(PrimaryType.STRING.name())));
     assertThat(ioModelPrimitive.getVariableName()).isEqualTo(new VariableName("someVariableName"));
 
     assertThat(ioModelPrimitive.getAnnotations()).isNotNull();
@@ -49,12 +55,13 @@ public class IoModelPrimitiveTest extends AbstractEqualityTest<IoModelPrimitive>
     IoModelGroup parent =
         new IoModelGroup(
             new GenericTypeName("java.util.list"),
-            new DataTypeName("java.lang.String"),
+            new ClassDataType(
+                new DataTypeName(PrimaryType.STRING.name()), new PackageName("com.dummy")),
             new VariableName("someVariableName"));
 
     IoModelPrimitive ioModelPrimitive =
         new IoModelPrimitive(
-            new DataTypeName("java.lang.String"),
+            new PrimitiveDataType(new DataTypeName(PrimaryType.STRING.name())),
             new VariableName("someVariableName"),
             parent,
             new LinkedHashSet<>());
@@ -64,7 +71,9 @@ public class IoModelPrimitiveTest extends AbstractEqualityTest<IoModelPrimitive>
     assertThat(ioModelPrimitive.getParent().getGenericType())
         .isEqualTo(new GenericTypeName("java.util.list"));
     assertThat(ioModelPrimitive.getParent().getDataType())
-        .isEqualTo(new DataTypeName("java.lang.String"));
+        .isEqualTo(
+            new ClassDataType(
+                new DataTypeName(PrimaryType.STRING.name()), new PackageName("com.dummy")));
     assertThat(ioModelPrimitive.getParent().getVariableName())
         .isEqualTo(new VariableName("someVariableName"));
 
@@ -79,7 +88,7 @@ public class IoModelPrimitiveTest extends AbstractEqualityTest<IoModelPrimitive>
   @Override
   public IoModelPrimitive createObject1() {
     return new IoModelPrimitive(
-        new DataTypeName("java.lang.String"),
+        new PrimitiveDataType(new DataTypeName(PrimaryType.STRING.name())),
         new VariableName("someVariableName"),
         new LinkedHashSet<>());
   }
@@ -87,7 +96,7 @@ public class IoModelPrimitiveTest extends AbstractEqualityTest<IoModelPrimitive>
   @Override
   public IoModelPrimitive createObject2() {
     return new IoModelPrimitive(
-        new DataTypeName("java.lang.String"),
+        new PrimitiveDataType(new DataTypeName(PrimaryType.STRING.name())),
         new VariableName("someOtherVariableName"),
         new LinkedHashSet<>());
   }

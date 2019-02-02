@@ -20,7 +20,7 @@
 
 package io.polygenesis.models.ui;
 
-import io.polygenesis.commons.assertions.Assertion;
+import com.oregor.ddd4j.check.assertion.Assertion;
 import io.polygenesis.core.Thing;
 import io.polygenesis.models.ui.container.AbstractContainer;
 import java.util.LinkedHashSet;

@@ -29,6 +29,10 @@ import io.polygenesis.commons.text.AbstractText;
  */
 public class GenericTypeName extends AbstractText {
 
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
   /**
    * Instantiates a new Generic type name.
    *

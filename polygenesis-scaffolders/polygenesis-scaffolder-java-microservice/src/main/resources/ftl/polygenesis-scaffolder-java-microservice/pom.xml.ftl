@@ -143,8 +143,8 @@
     <!--INFLECTOR-->
     <evo-inflector.version>1.2.2</evo-inflector.version>
 
-    <!--OREGOR-DDD4J-->
-    <oregor-ddd4j.version>0.0.1-SNAPSHOT</oregor-ddd4j.version>
+    <!--OREGOR-->
+    <oregor-ddd4j.version>0.0.2-SNAPSHOT</oregor-ddd4j.version>
   </properties>
 
   <dependencies>
@@ -180,20 +180,15 @@
         </#noparse>
       </dependency>
 
-      <!--OREGOR-DDD4J-->
+      <!--OREGOR-->
       <dependency>
         <groupId>com.oregor.ddd4j</groupId>
-        <artifactId>ddd4j-core</artifactId>
+        <artifactId>ddd4j-bom</artifactId>
         <#noparse>
-        <version>${oregor-ddd4j.version}</version>
+          <version>${oregor-ddd4j.version}</version>
         </#noparse>
-      </dependency>
-      <dependency>
-        <groupId>com.oregor.ddd4j</groupId>
-        <artifactId>ddd4j-spring-data-jpa</artifactId>
-        <#noparse>
-        <version>${oregor-ddd4j.version}</version>
-        </#noparse>
+        <type>pom</type>
+        <scope>import</scope>
       </dependency>
 </#if>
     </dependencies>

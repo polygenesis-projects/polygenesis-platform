@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <parent>
+    <artifactId>polygenesis-models</artifactId>
+    <groupId>io.polygenesis.models</groupId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>polygenesis-model-api</artifactId>
+
+  <dependencies>
+    <dependency>
+      <groupId>io.polygenesis</groupId>
+      <artifactId>polygenesis-core</artifactId>
+    </dependency>
+
+    <!--TEST-->
+    <dependency>
+      <groupId>io.polygenesis</groupId>
+      <artifactId>polygenesis-commons-test</artifactId>
+      <scope>test</scope>
+      <type>test-jar</type>
+    </dependency>
+  </dependencies>
+
+</project>

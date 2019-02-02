@@ -58,7 +58,7 @@
     <!--OREGOR-DDD4J-->
     <dependency>
       <groupId>com.oregor.ddd4j</groupId>
-      <artifactId>ddd4j-spring-data-jpa</artifactId>
+      <artifactId>ddd4j-core-spring-data-jpa</artifactId>
     </dependency>
 
     <!--TEST-->

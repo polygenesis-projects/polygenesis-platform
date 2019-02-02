@@ -20,7 +20,7 @@
 
 package io.polygenesis.models.reactivestate;
 
-import io.polygenesis.commons.assertions.Assertion;
+import com.oregor.ddd4j.check.assertion.Assertion;
 import io.polygenesis.core.ModelRepository;
 import java.util.Set;
 

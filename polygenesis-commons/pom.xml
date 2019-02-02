@@ -37,6 +37,12 @@
       <artifactId>freemarker</artifactId>
     </dependency>
 
+    <!--OREGOR-->
+    <dependency>
+      <groupId>com.oregor.ddd4j</groupId>
+      <artifactId>ddd4j-check</artifactId>
+    </dependency>
+
     <!--TEST-->
     <dependency>
       <groupId>io.polygenesis</groupId>

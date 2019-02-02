@@ -42,7 +42,7 @@ public class AnnotationsThingDeducerImplTest {
   private TypesAnalyzer typesAnalyzer;
   private FieldsInInterfaceMethodAnalyzer fieldsInInterfaceMethodAnalyzer;
   private RecursiveObjectFiller recursiveObjectFiller;
-  private DataTypeConverter dataTypeConverter;
+  private JavaDataTypeConverter javaDataTypeConverter;
   private IoModelDeducer ioModelDeducer;
   private FunctionIdentifier functionIdentifier;
   private ThingDeducer thingDeducer;
@@ -57,8 +57,8 @@ public class AnnotationsThingDeducerImplTest {
     fieldsInInterfaceMethodAnalyzer = new FieldsInInterfaceMethodAnalyzer();
     recursiveObjectFiller =
         new RecursiveObjectFiller(typesAnalyzer, fieldsInInterfaceMethodAnalyzer);
-    dataTypeConverter = new DataTypeConverter();
-    ioModelDeducer = new IoModelDeducer(dataTypeConverter);
+    javaDataTypeConverter = new JavaDataTypeConverter();
+    ioModelDeducer = new IoModelDeducer(javaDataTypeConverter);
     functionIdentifier =
         new FunctionIdentifier(methodAnalyzer, recursiveObjectFiller, ioModelDeducer);
     thingDeducer = new AnnotationsThingDeducerImpl(classScanner, thingScanner, functionIdentifier);

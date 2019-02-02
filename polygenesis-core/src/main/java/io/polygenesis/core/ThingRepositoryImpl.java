@@ -20,7 +20,7 @@
 
 package io.polygenesis.core;
 
-import io.polygenesis.commons.assertions.Assertion;
+import com.oregor.ddd4j.check.assertion.Assertion;
 import java.util.Optional;
 import java.util.Set;
 
