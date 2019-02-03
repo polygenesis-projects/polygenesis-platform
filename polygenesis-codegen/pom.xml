@@ -19,24 +19,18 @@
       <artifactId>polygenesis-core</artifactId>
     </dependency>
 
-    <!--POLYGENESIS MODELS-->
-    <dependency>
-      <groupId>io.polygenesis.models</groupId>
-      <artifactId>polygenesis-model-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.polygenesis.models</groupId>
-      <artifactId>polygenesis-model-reactive-state</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.polygenesis.models</groupId>
-      <artifactId>polygenesis-model-ui</artifactId>
-    </dependency>
-
     <!--POLYGENESIS DEDUCERS-->
     <dependency>
       <groupId>io.polygenesis.deducers</groupId>
       <artifactId>polygenesis-deducer-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.polygenesis.deducers</groupId>
+      <artifactId>polygenesis-deducer-api-rest</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.polygenesis.deducers</groupId>
+      <artifactId>polygenesis-deducer-domain</artifactId>
     </dependency>
     <dependency>
       <groupId>io.polygenesis.deducers</groupId>
@@ -56,6 +50,38 @@
       <groupId>io.polygenesis.generators</groupId>
       <artifactId>polygenesis-generator-java-api</artifactId>
     </dependency>
+    <dependency>
+      <groupId>io.polygenesis.generators</groupId>
+      <artifactId>polygenesis-generator-java-api-impl</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.polygenesis.generators</groupId>
+      <artifactId>polygenesis-generator-java-api-rest</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.polygenesis.generators</groupId>
+      <artifactId>polygenesis-generator-java-api-shared</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.polygenesis.generators</groupId>
+      <artifactId>polygenesis-generator-java-domain</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.polygenesis.generators</groupId>
+      <artifactId>polygenesis-generator-java-persistence-rdbms</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.polygenesis.generators</groupId>
+      <artifactId>polygenesis-generator-java-publisher-activemq</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.polygenesis.generators</groupId>
+      <artifactId>polygenesis-generator-java-subscriber-activemq</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.polygenesis.generators</groupId>
+      <artifactId>polygenesis-generator-sql-flyway</artifactId>
+    </dependency>
 
     <!--POLYGENESIS SCAFFOLDERS-->
     <dependency>
@@ -71,5 +97,4 @@
       <type>test-jar</type>
     </dependency>
   </dependencies>
-
 </project>

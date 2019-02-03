@@ -55,6 +55,9 @@ public class OregorGenesisScaffolderTest {
     projectDescription.setExtraModules(
         new LinkedHashSet<>(
             Arrays.asList(
+                "app-invoiceful",
+                "app-polyfono",
+                "app-polygenesis",
                 "backoffice-invoiceful",
                 "backoffice-polyfono",
                 "backoffice-polygenesis",

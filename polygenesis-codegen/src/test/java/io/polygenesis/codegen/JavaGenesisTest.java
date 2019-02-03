@@ -25,7 +25,13 @@ import io.polygenesis.core.Generator;
 import io.polygenesis.core.ThingRepositoryImpl;
 import io.polygenesis.core.datatype.PackageName;
 import io.polygenesis.generators.java.api.JavaApiGeneratorFactory;
+import io.polygenesis.generators.java.api.JavaApiImplGeneratorFactory;
+import io.polygenesis.generators.java.api.JavaApiRestGeneratorFactory;
+import io.polygenesis.generators.java.domain.JavaDomainGeneratorFactory;
+import io.polygenesis.generators.java.rdbms.JavaRdbmsGeneratorFactory;
 import io.polygenesis.models.api.ApiDeducerFactory;
+import io.polygenesis.models.api.RestDeducerFactory;
+import io.polygenesis.models.domain.DomainDeducerFactory;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
@@ -39,18 +45,28 @@ public class JavaGenesisTest {
   public void shouldGenerateForAnnotationsAndStateDeducer() {
     Genesis genesis = new Genesis();
 
+    PackageName rootPackageName = new PackageName("com.oregor.microservice.account");
+
     Set<Deducer> deducers =
         new LinkedHashSet<>(
             Arrays.asList(
-                ApiDeducerFactory.newInstance(new PackageName("com.oregor.microservice.account"))));
+                ApiDeducerFactory.newInstance(rootPackageName),
+                DomainDeducerFactory.newInstance(rootPackageName),
+                RestDeducerFactory.newInstance(rootPackageName)));
 
     Set<Generator> generators =
         new LinkedHashSet<>(
             Arrays.asList(
                 JavaApiGeneratorFactory.newInstance(
                     Paths.get("tmp/polygenesis-generator-java-api")),
-                JavaApiGeneratorFactory.newInstance(
-                    Paths.get("tmp/polygenesis-generator-java-api-impl"))));
+                JavaApiImplGeneratorFactory.newInstance(
+                    Paths.get("tmp/polygenesis-generator-java-api-impl")),
+                JavaApiRestGeneratorFactory.newInstance(
+                    Paths.get("tmp/polygenesis-generator-java-api-rest")),
+                JavaDomainGeneratorFactory.newInstance(
+                    Paths.get("tmp/polygenesis-generator-java-domain")),
+                JavaRdbmsGeneratorFactory.newInstance(
+                    Paths.get("tmp/polygenesis-generator-java-rdbms"))));
 
     genesis.generate(
         new ThingRepositoryImpl(

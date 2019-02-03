@@ -100,7 +100,7 @@ public class DtoExporter {
 
     freemarkerService.export(
         dataModel,
-        "polygenesis-generator-java-api/Object.java.ftl",
+        "polygenesis-generator-java-api/Dto.java.ftl",
         makeFileName(generationPath, ioModelGroup));
   }
 
