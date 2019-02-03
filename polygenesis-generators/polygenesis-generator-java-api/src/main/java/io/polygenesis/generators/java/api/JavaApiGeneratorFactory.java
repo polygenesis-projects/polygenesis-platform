@@ -35,8 +35,8 @@ public final class JavaApiGeneratorFactory {
   // ===============================================================================================
   // DEPENDENCIES
   // ===============================================================================================
-  private static final ServiceExporter serviceExporter;
-  private static final DtoExporter DTO_EXPORTER;
+  private static final ApiServiceExporter apiServiceExporter;
+  private static final DtoExporter dtoExporter;
 
   // ===============================================================================================
   // STATIC INITIALIZATION OF DEPENDENCIES
@@ -48,17 +48,17 @@ public final class JavaApiGeneratorFactory {
 
     FromDataTypeToJavaConverter fromDataTypeToJavaConverter = new FromDataTypeToJavaConverter();
 
-    MethodProjectionMaker methodProjectionMaker =
-        new MethodProjectionMaker(fromDataTypeToJavaConverter);
+    ApiMethodProjectionMaker apiMethodProjectionMaker =
+        new ApiMethodProjectionMaker(fromDataTypeToJavaConverter);
 
-    ServiceProjectionMaker serviceProjectionMaker =
-        new ServiceProjectionMaker(methodProjectionMaker);
+    ApiServiceProjectionMaker apiServiceProjectionMaker =
+        new ApiServiceProjectionMaker(apiMethodProjectionMaker);
 
-    serviceExporter = new ServiceExporter(freemarkerService, serviceProjectionMaker);
+    apiServiceExporter = new ApiServiceExporter(freemarkerService, apiServiceProjectionMaker);
 
     DtoProjectionMaker dtoProjectionMaker = new DtoProjectionMaker(fromDataTypeToJavaConverter);
 
-    DTO_EXPORTER = new DtoExporter(freemarkerService, dtoProjectionMaker);
+    dtoExporter = new DtoExporter(freemarkerService, dtoProjectionMaker);
   }
 
   // ===============================================================================================
@@ -80,6 +80,6 @@ public final class JavaApiGeneratorFactory {
    * @return the java api generator
    */
   public static JavaApiGenerator newInstance(Path generationPath) {
-    return new JavaApiGenerator(generationPath, serviceExporter, DTO_EXPORTER);
+    return new JavaApiGenerator(generationPath, apiServiceExporter, dtoExporter);
   }
 }

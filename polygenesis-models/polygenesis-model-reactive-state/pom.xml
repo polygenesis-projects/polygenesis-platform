@@ -12,6 +12,7 @@
   <artifactId>polygenesis-model-reactive-state</artifactId>
 
   <dependencies>
+    <!--CORE-->
     <dependency>
       <groupId>io.polygenesis</groupId>
       <artifactId>polygenesis-core</artifactId>

@@ -32,6 +32,16 @@
   <artifactId>${ projectDescription.modulePrefix }-api-impl</artifactId>
 
   <dependencies>
+    <!--SPRING STEREOTYPE & TRANSACTION ANNOTATIONS-->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-tx</artifactId>
+    </dependency>
+
     <!--API-->
     <dependency>
       <groupId>${ projectDescription.groupId }</groupId>

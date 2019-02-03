@@ -15,6 +15,14 @@
   <modules>
     <module>polygenesis-generator-angular</module>
     <module>polygenesis-generator-java-api</module>
+    <module>polygenesis-generator-java-api-impl</module>
+    <module>polygenesis-generator-java-api-rest</module>
+    <module>polygenesis-generator-java-api-shared</module>
+    <module>polygenesis-generator-java-domain</module>
+    <module>polygenesis-generator-java-persistence-rdbms</module>
+    <module>polygenesis-generator-java-publisher-activemq</module>
+    <module>polygenesis-generator-java-subscriber-activemq</module>
+    <module>polygenesis-generator-sql-flyway</module>
   </modules>
 
 </project>

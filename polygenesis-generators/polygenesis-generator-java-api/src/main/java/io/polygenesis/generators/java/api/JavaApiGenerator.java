@@ -34,7 +34,7 @@ import java.util.Set;
  */
 public class JavaApiGenerator extends AbstractGenerator {
 
-  private final ServiceExporter serviceExporter;
+  private final ApiServiceExporter apiServiceExporter;
   private final DtoExporter dtoExporter;
 
   private ServiceModelRepository serviceModelRepository;
@@ -47,13 +47,13 @@ public class JavaApiGenerator extends AbstractGenerator {
    * Instantiates a new Java api generator.
    *
    * @param generationPath the generation path
-   * @param serviceExporter the service exporter
+   * @param apiServiceExporter the service exporter
    * @param dtoExporter the io model group exporter
    */
   public JavaApiGenerator(
-      Path generationPath, ServiceExporter serviceExporter, DtoExporter dtoExporter) {
+      Path generationPath, ApiServiceExporter apiServiceExporter, DtoExporter dtoExporter) {
     super(generationPath);
-    this.serviceExporter = serviceExporter;
+    this.apiServiceExporter = apiServiceExporter;
     this.dtoExporter = dtoExporter;
   }
 
@@ -69,7 +69,7 @@ public class JavaApiGenerator extends AbstractGenerator {
         .getServices()
         .forEach(
             service -> {
-              serviceExporter.export(getGenerationPath(), service);
+              apiServiceExporter.export(getGenerationPath(), service);
               dtoExporter.export(getGenerationPath(), service);
             });
   }

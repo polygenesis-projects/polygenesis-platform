@@ -241,6 +241,16 @@
       </dependency>
       <dependency>
         <groupId>io.polygenesis.models</groupId>
+        <artifactId>polygenesis-model-api-rest</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.polygenesis.models</groupId>
+        <artifactId>polygenesis-model-domain</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.polygenesis.models</groupId>
         <artifactId>polygenesis-model-reactive-state</artifactId>
         <version>${project.version}</version>
       </dependency>
@@ -254,6 +264,16 @@
       <dependency>
         <groupId>io.polygenesis.deducers</groupId>
         <artifactId>polygenesis-deducer-api</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.polygenesis.deducers</groupId>
+        <artifactId>polygenesis-deducer-api-rest</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.polygenesis.deducers</groupId>
+        <artifactId>polygenesis-deducer-domain</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
@@ -276,6 +296,46 @@
       <dependency>
         <groupId>io.polygenesis.generators</groupId>
         <artifactId>polygenesis-generator-java-api</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.polygenesis.generators</groupId>
+        <artifactId>polygenesis-generator-java-api-impl</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.polygenesis.generators</groupId>
+        <artifactId>polygenesis-generator-java-api-rest</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.polygenesis.generators</groupId>
+        <artifactId>polygenesis-generator-java-api-shared</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.polygenesis.generators</groupId>
+        <artifactId>polygenesis-generator-java-domain</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.polygenesis.generators</groupId>
+        <artifactId>polygenesis-generator-java-persistence-rdbms</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.polygenesis.generators</groupId>
+        <artifactId>polygenesis-generator-java-publisher-activemq</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.polygenesis.generators</groupId>
+        <artifactId>polygenesis-generator-java-subscriber-activemq</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.polygenesis.generators</groupId>
+        <artifactId>polygenesis-generator-sql-flyway</artifactId>
         <version>${project.version}</version>
       </dependency>
 

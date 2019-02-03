@@ -32,10 +32,10 @@
   <artifactId>${ projectDescription.modulePrefix }-domain-model</artifactId>
 
   <dependencies>
-    <!--SPRING BOOT JPA-->
+    <!--JPA ANNOTATIONS-->
     <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-data-jpa</artifactId>
+      <groupId>javax.persistence</groupId>
+      <artifactId>javax.persistence-api</artifactId>
     </dependency>
 
     <!--QUERY DSL-->

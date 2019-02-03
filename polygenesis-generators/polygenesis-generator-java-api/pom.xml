@@ -12,10 +12,16 @@
   <artifactId>polygenesis-generator-java-api</artifactId>
 
   <dependencies>
-    <!--POLYGENESIS MODELS-->
+    <!--MODEL-->
     <dependency>
       <groupId>io.polygenesis.models</groupId>
       <artifactId>polygenesis-model-api</artifactId>
+    </dependency>
+
+    <!--POLYGENESIS JAVA GENERATOR SHARED-->
+    <dependency>
+      <groupId>io.polygenesis.generators</groupId>
+      <artifactId>polygenesis-generator-java-api-shared</artifactId>
     </dependency>
 
     <!--TEST-->
