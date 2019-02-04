@@ -20,9 +20,36 @@
 
 package io.polygenesis.models.domain;
 
+import io.polygenesis.core.iomodel.IoModelGroup;
+import io.polygenesis.core.iomodel.VariableName;
+import java.util.Optional;
+
 /**
  * The type Aggregate entity collection.
  *
  * @author Christos Tsakostas
  */
-public class AggregateEntityCollection {}
+public class AggregateEntityCollection extends AbstractProperty {
+
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
+  /**
+   * Instantiates a new Aggregate entity collection.
+   *
+   * @param variableName the variable name
+   */
+  public AggregateEntityCollection(VariableName variableName) {
+    super(variableName);
+  }
+
+  // ===============================================================================================
+  // OVERRIDES
+  // ===============================================================================================
+
+  @Override
+  public Optional<IoModelGroup> getIoModelGroupAsOptional() {
+    return Optional.empty();
+  }
+}

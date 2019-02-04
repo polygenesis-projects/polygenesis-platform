@@ -52,14 +52,34 @@ public class DomainModelScaffolder extends AbstractScaffolder {
   @Override
   public void scaffold(
       Path generationPath, ProjectDescription projectDescription, Map<String, Object> dataModel) {
+
     Path modulePath =
         Paths.get(
             generationPath.toString(), projectDescription.getModulePrefix() + "-domain-model");
+
     ensureSources(modulePath, projectDescription);
+
+    exportDomainMavenPomXml(modulePath, dataModel);
+    exportConstants(modulePath, projectDescription, dataModel);
+  }
+
+  private void exportDomainMavenPomXml(Path modulePath, Map<String, Object> dataModel) {
 
     freemarkerService.export(
         dataModel,
         "polygenesis-scaffolder-java-microservice/domain-model/pom.xml.ftl",
         Paths.get(modulePath.toString(), "pom.xml"));
+  }
+
+  private void exportConstants(
+      Path modulePath, ProjectDescription projectDescription, Map<String, Object> dataModel) {
+    freemarkerService.exportIfNotExists(
+        dataModel,
+        "polygenesis-scaffolder-java-microservice/domain-model/Constants.java.ftl",
+        Paths.get(
+            modulePath.toString(),
+            "src/main/java",
+            toPath(projectDescription.getGroupId()),
+            "Constants.java"));
   }
 }

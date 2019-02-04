@@ -29,7 +29,7 @@ public class DataTypeNameTest {
 
   @Test
   public void shouldInitialize() {
-    DataTypeName dataTypeName = new DataTypeName(PrimaryType.STRING.name());
+    DataTypeName dataTypeName = new DataTypeName(PrimitiveType.STRING.name());
     assertThat(dataTypeName).isNotNull();
   }
 }

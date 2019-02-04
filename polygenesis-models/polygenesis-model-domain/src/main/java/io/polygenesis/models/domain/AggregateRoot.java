@@ -22,6 +22,7 @@ package io.polygenesis.models.domain;
 
 import io.polygenesis.commons.text.Name;
 import io.polygenesis.core.datatype.PackageName;
+import java.util.Set;
 
 /**
  * The type Aggregate root.
@@ -32,14 +33,11 @@ public class AggregateRoot {
 
   private PackageName packageName;
   private Name name;
-
-  //  private AggregateRootName aggregateRootName;
-  //  private Set<AggregateEntity> aggregateEntities;
-  //  private Set<AggregateEntityCollection> aggregateEntityCollections;
-  //  private Set<ValueObject> valueObjects;
-  //  private Set<ValueObjectCollection> valueObjectCollections;
-  //  private Set<StateMutationCommand> stateMutationCommands;
-  //  private Set<StateQuery> stateQueries;
+  private Set<AbstractProperty> properties;
+  private Set<StateMutationMethod> stateMutationMethods;
+  private Set<StateQueryMethod> stateQueryMethods;
+  private Persistence persistence;
+  private Set<Constructor> constructors;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -50,10 +48,49 @@ public class AggregateRoot {
    *
    * @param packageName the package name
    * @param name the name
+   * @param properties the properties
+   * @param persistence the persistence
+   * @param constructors the constructors
    */
-  public AggregateRoot(PackageName packageName, Name name) {
+  public AggregateRoot(
+      PackageName packageName,
+      Name name,
+      Set<AbstractProperty> properties,
+      Persistence persistence,
+      Set<Constructor> constructors) {
     setPackageName(packageName);
     setName(name);
+    setProperties(properties);
+    setPersistence(persistence);
+    setConstructors(constructors);
+  }
+
+  /**
+   * Instantiates a new Aggregate root.
+   *
+   * @param packageName the package name
+   * @param name the name
+   * @param properties the properties
+   * @param stateMutationMethods the state mutation methods
+   * @param stateQueryMethods the state query methods
+   * @param persistence the persistence
+   * @param constructors the constructors
+   */
+  public AggregateRoot(
+      PackageName packageName,
+      Name name,
+      Set<AbstractProperty> properties,
+      Set<StateMutationMethod> stateMutationMethods,
+      Set<StateQueryMethod> stateQueryMethods,
+      Persistence persistence,
+      Set<Constructor> constructors) {
+    setPackageName(packageName);
+    setName(name);
+    setProperties(properties);
+    setStateMutationMethods(stateMutationMethods);
+    setStateQueryMethods(stateQueryMethods);
+    setPersistence(persistence);
+    setConstructors(constructors);
   }
 
   // ===============================================================================================
@@ -78,6 +115,51 @@ public class AggregateRoot {
     return name;
   }
 
+  /**
+   * Gets properties.
+   *
+   * @return the properties
+   */
+  public Set<AbstractProperty> getProperties() {
+    return properties;
+  }
+
+  /**
+   * Gets state mutation methods.
+   *
+   * @return the state mutation methods
+   */
+  public Set<StateMutationMethod> getStateMutationMethods() {
+    return stateMutationMethods;
+  }
+
+  /**
+   * Gets state query methods.
+   *
+   * @return the state query methods
+   */
+  public Set<StateQueryMethod> getStateQueryMethods() {
+    return stateQueryMethods;
+  }
+
+  /**
+   * Gets persistence.
+   *
+   * @return the persistence
+   */
+  public Persistence getPersistence() {
+    return persistence;
+  }
+
+  /**
+   * Gets constructors.
+   *
+   * @return the constructors
+   */
+  public Set<Constructor> getConstructors() {
+    return constructors;
+  }
+
   // ===============================================================================================
   // GUARDS
   // ===============================================================================================
@@ -98,5 +180,50 @@ public class AggregateRoot {
    */
   private void setName(Name name) {
     this.name = name;
+  }
+
+  /**
+   * Sets properties.
+   *
+   * @param properties the properties
+   */
+  private void setProperties(Set<AbstractProperty> properties) {
+    this.properties = properties;
+  }
+
+  /**
+   * Sets state mutation methods.
+   *
+   * @param stateMutationMethods the state mutation methods
+   */
+  private void setStateMutationMethods(Set<StateMutationMethod> stateMutationMethods) {
+    this.stateMutationMethods = stateMutationMethods;
+  }
+
+  /**
+   * Sets state query methods.
+   *
+   * @param stateQueryMethods the state query methods
+   */
+  private void setStateQueryMethods(Set<StateQueryMethod> stateQueryMethods) {
+    this.stateQueryMethods = stateQueryMethods;
+  }
+
+  /**
+   * Sets persistence.
+   *
+   * @param persistence the persistence
+   */
+  private void setPersistence(Persistence persistence) {
+    this.persistence = persistence;
+  }
+
+  /**
+   * Sets constructors.
+   *
+   * @param constructors the constructors
+   */
+  private void setConstructors(Set<Constructor> constructors) {
+    this.constructors = constructors;
   }
 }

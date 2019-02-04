@@ -20,15 +20,18 @@
 
 package io.polygenesis.core.datatype;
 
+import java.util.Optional;
+
 /**
  * The type Map data type.
  *
  * @author Christos Tsakostas
  */
-public class MapDataType extends AbstractMultipleDataType {
+public class MapDataType extends AbstractDataType {
 
-  private AbstractObjectDataType simpleDataTypeKey;
-  private AbstractObjectDataType simpleDataTypeValue;
+  private MapType mapType;
+  private AbstractDataType key;
+  private AbstractDataType value;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -38,16 +41,16 @@ public class MapDataType extends AbstractMultipleDataType {
    * Instantiates a new Map data type.
    *
    * @param dataTypeName the data type name
-   * @param simpleDataTypeKey the simple data type key
-   * @param simpleDataTypeValue the simple data type value
+   * @param mapType the kind of map data type
+   * @param key the key
+   * @param value the value
    */
   public MapDataType(
-      DataTypeName dataTypeName,
-      AbstractObjectDataType simpleDataTypeKey,
-      AbstractObjectDataType simpleDataTypeValue) {
-    super(dataTypeName);
-    this.simpleDataTypeKey = simpleDataTypeKey;
-    this.simpleDataTypeValue = simpleDataTypeValue;
+      DataTypeName dataTypeName, MapType mapType, AbstractDataType key, AbstractDataType value) {
+    super(DataKind.MAP, dataTypeName);
+    this.mapType = mapType;
+    this.key = key;
+    this.value = value;
   }
 
   // ===============================================================================================
@@ -55,20 +58,38 @@ public class MapDataType extends AbstractMultipleDataType {
   // ===============================================================================================
 
   /**
-   * Gets simple data type key.
+   * Gets kind of map data type.
    *
-   * @return the simple data type key
+   * @return the kind of map data type
    */
-  public AbstractObjectDataType getSimpleDataTypeKey() {
-    return simpleDataTypeKey;
+  public MapType getMapType() {
+    return mapType;
   }
 
   /**
-   * Gets simple data type value.
+   * Gets key.
    *
-   * @return the simple data type value
+   * @return the key
    */
-  public AbstractObjectDataType getSimpleDataTypeValue() {
-    return simpleDataTypeValue;
+  public AbstractDataType getKey() {
+    return key;
+  }
+
+  /**
+   * Gets value.
+   *
+   * @return the value
+   */
+  public AbstractDataType getValue() {
+    return value;
+  }
+
+  // ===============================================================================================
+  // OVERRIDES
+  // ===============================================================================================
+
+  @Override
+  public Optional<PackageName> getOptionalPackageName() {
+    return Optional.empty();
   }
 }

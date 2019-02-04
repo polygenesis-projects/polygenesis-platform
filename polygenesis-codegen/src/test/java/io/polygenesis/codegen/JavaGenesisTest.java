@@ -20,15 +20,16 @@
 
 package io.polygenesis.codegen;
 
+import io.polygenesis.commons.text.Name;
 import io.polygenesis.core.Deducer;
 import io.polygenesis.core.Generator;
 import io.polygenesis.core.ThingRepositoryImpl;
 import io.polygenesis.core.datatype.PackageName;
 import io.polygenesis.generators.java.api.JavaApiGeneratorFactory;
-import io.polygenesis.generators.java.api.JavaApiImplGeneratorFactory;
-import io.polygenesis.generators.java.api.JavaApiRestGeneratorFactory;
+import io.polygenesis.generators.java.apiimpl.JavaApiImplGeneratorFactory;
 import io.polygenesis.generators.java.domain.JavaDomainGeneratorFactory;
 import io.polygenesis.generators.java.rdbms.JavaRdbmsGeneratorFactory;
+import io.polygenesis.generators.java.rest.JavaApiRestGeneratorFactory;
 import io.polygenesis.models.api.ApiDeducerFactory;
 import io.polygenesis.models.api.RestDeducerFactory;
 import io.polygenesis.models.domain.DomainDeducerFactory;
@@ -60,17 +61,19 @@ public class JavaGenesisTest {
                 JavaApiGeneratorFactory.newInstance(
                     Paths.get("tmp/polygenesis-generator-java-api")),
                 JavaApiImplGeneratorFactory.newInstance(
-                    Paths.get("tmp/polygenesis-generator-java-api-impl")),
+                    Paths.get("tmp/polygenesis-generator-java-api-impl"), rootPackageName),
                 JavaApiRestGeneratorFactory.newInstance(
                     Paths.get("tmp/polygenesis-generator-java-api-rest")),
                 JavaDomainGeneratorFactory.newInstance(
-                    Paths.get("tmp/polygenesis-generator-java-domain")),
+                    Paths.get("tmp/polygenesis-generator-java-domain"), rootPackageName),
                 JavaRdbmsGeneratorFactory.newInstance(
-                    Paths.get("tmp/polygenesis-generator-java-rdbms"))));
+                    Paths.get("tmp/polygenesis-generator-java-rdbms"),
+                    rootPackageName,
+                    new Name("account"))));
 
     genesis.generate(
         new ThingRepositoryImpl(
-            new LinkedHashSet<>(Arrays.asList(JavaGenesisThingCustomer.create()))),
+            new LinkedHashSet<>(Arrays.asList(JavaGenesisThingBusiness.create()))),
         deducers,
         generators);
   }

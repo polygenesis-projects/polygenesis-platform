@@ -22,10 +22,10 @@ package io.polygenesis.core;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import io.polygenesis.annotations.core.GoalType;
 import io.polygenesis.commons.test.AbstractEqualityTest;
-import io.polygenesis.core.datatype.DataTypeName;
-import io.polygenesis.core.datatype.PrimaryType;
 import io.polygenesis.core.datatype.PrimitiveDataType;
+import io.polygenesis.core.datatype.PrimitiveType;
 import io.polygenesis.core.iomodel.IoModelPrimitive;
 import io.polygenesis.core.iomodel.VariableName;
 import java.util.LinkedHashSet;
@@ -80,7 +80,7 @@ public class FunctionTest extends AbstractEqualityTest<Function> {
   public Function createObject1() {
     return new Function(
         new Thing(new ThingName("thingName")),
-        new Goal("someGoal"),
+        new Goal(GoalType.CREATE),
         new FunctionName("functionName"),
         new LinkedHashSet<>(),
         new ReturnValue(createIoModelPrimitive()));
@@ -90,7 +90,7 @@ public class FunctionTest extends AbstractEqualityTest<Function> {
   public Function createObject2() {
     return new Function(
         new Thing(new ThingName("thingName")),
-        new Goal("someGoal"),
+        new Goal(GoalType.CREATE),
         new FunctionName("anotherFunctionName"),
         new LinkedHashSet<>(),
         new ReturnValue(createIoModelPrimitive()));
@@ -103,7 +103,7 @@ public class FunctionTest extends AbstractEqualityTest<Function> {
   private Function createFunctionWithReturnValueAndNoArguments() {
     return new Function(
         new Thing(new ThingName("thingName")),
-        new Goal("someGoal"),
+        new Goal(GoalType.CREATE),
         new FunctionName("functionName"),
         new ReturnValue(createIoModelPrimitive()));
   }
@@ -111,15 +111,16 @@ public class FunctionTest extends AbstractEqualityTest<Function> {
   private Function createFunctionWithArgumentsAndNoReturnValue() {
     return new Function(
         new Thing(new ThingName("thingName")),
-        new Goal("someGoal"),
+        new Goal(GoalType.CREATE),
         new FunctionName("functionName"),
         new LinkedHashSet<>());
   }
 
   private IoModelPrimitive createIoModelPrimitive() {
     return new IoModelPrimitive(
-        new PrimitiveDataType(new DataTypeName(PrimaryType.STRING.name())),
+        new PrimitiveDataType(PrimitiveType.STRING),
         new VariableName("variableName"),
-        new LinkedHashSet<>());
+        new LinkedHashSet<>(),
+        false);
   }
 }

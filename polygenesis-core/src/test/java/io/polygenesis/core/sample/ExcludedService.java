@@ -21,15 +21,15 @@
 package io.polygenesis.core.sample;
 
 import io.polygenesis.annotations.core.GFunction;
-import io.polygenesis.annotations.core.GGoalStandardType;
+import io.polygenesis.annotations.core.GoalType;
 import java.util.List;
 
 /** @author Christos Tsakostas */
 public interface ExcludedService {
 
-  @GFunction(goal = GGoalStandardType.QRY_CALCULATION, thingName = "sum")
+  @GFunction(goal = GoalType.CALCULATE, thingName = "sum")
   int add(int a, int b);
 
-  @GFunction(goal = GGoalStandardType.QRY_COLLECTION, thingName = "someEntity")
+  @GFunction(goal = GoalType.FETCH_COLLECTION, thingName = "someEntity")
   List<Integer> getListOfIDs();
 }

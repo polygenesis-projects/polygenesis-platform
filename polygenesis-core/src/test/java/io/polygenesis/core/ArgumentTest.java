@@ -23,9 +23,8 @@ package io.polygenesis.core;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.polygenesis.commons.test.AbstractEqualityTest;
-import io.polygenesis.core.datatype.DataTypeName;
-import io.polygenesis.core.datatype.PrimaryType;
 import io.polygenesis.core.datatype.PrimitiveDataType;
+import io.polygenesis.core.datatype.PrimitiveType;
 import io.polygenesis.core.iomodel.IoModelPrimitive;
 import io.polygenesis.core.iomodel.VariableName;
 import java.util.LinkedHashSet;
@@ -44,16 +43,18 @@ public class ArgumentTest extends AbstractEqualityTest<Argument> {
 
   private IoModelPrimitive createIoModelPrimitive1() {
     return new IoModelPrimitive(
-        new PrimitiveDataType(new DataTypeName(PrimaryType.STRING.name())),
+        new PrimitiveDataType(PrimitiveType.STRING),
         new VariableName("someVariableName"),
-        new LinkedHashSet<>());
+        new LinkedHashSet<>(),
+        false);
   }
 
   private IoModelPrimitive createIoModelPrimitive2() {
     return new IoModelPrimitive(
-        new PrimitiveDataType(new DataTypeName(PrimaryType.STRING.name())),
+        new PrimitiveDataType(PrimitiveType.STRING),
         new VariableName("someOtherVariableName"),
-        new LinkedHashSet<>());
+        new LinkedHashSet<>(),
+        false);
   }
 
   @Override

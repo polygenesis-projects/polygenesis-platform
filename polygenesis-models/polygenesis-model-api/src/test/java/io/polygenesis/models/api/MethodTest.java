@@ -22,9 +22,8 @@ package io.polygenesis.models.api;
 
 import io.polygenesis.commons.test.AbstractEqualityTest;
 import io.polygenesis.core.ReturnValue;
-import io.polygenesis.core.datatype.DataTypeName;
-import io.polygenesis.core.datatype.PrimaryType;
 import io.polygenesis.core.datatype.PrimitiveDataType;
+import io.polygenesis.core.datatype.PrimitiveType;
 import io.polygenesis.core.iomodel.IoModelPrimitive;
 import io.polygenesis.core.iomodel.VariableName;
 import java.util.LinkedHashSet;
@@ -38,9 +37,10 @@ public class MethodTest extends AbstractEqualityTest<Method> {
         new MethodName("someMethodName"),
         new ReturnValue(
             new IoModelPrimitive(
-                new PrimitiveDataType(new DataTypeName(PrimaryType.STRING.name())),
+                new PrimitiveDataType(PrimitiveType.STRING),
                 new VariableName("someVariableName"),
-                new LinkedHashSet<>())),
+                new LinkedHashSet<>(),
+                false)),
         new LinkedHashSet<>());
   }
 
@@ -50,9 +50,10 @@ public class MethodTest extends AbstractEqualityTest<Method> {
         new MethodName("someOtherMethodName"),
         new ReturnValue(
             new IoModelPrimitive(
-                new PrimitiveDataType(new DataTypeName(PrimaryType.STRING.name())),
+                new PrimitiveDataType(PrimitiveType.STRING),
                 new VariableName("someVariableName"),
-                new LinkedHashSet<>())),
+                new LinkedHashSet<>(),
+                false)),
         new LinkedHashSet<>());
   }
 }

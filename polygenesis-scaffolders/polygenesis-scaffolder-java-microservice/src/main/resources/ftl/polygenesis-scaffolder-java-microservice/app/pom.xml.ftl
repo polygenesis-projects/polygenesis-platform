@@ -32,20 +32,64 @@
   <artifactId>${ projectDescription.modulePrefix }-app</artifactId>
 
   <dependencies>
-    <!--SPRING BOOT WEB-->
+    <!-- ===================================================================================== -->
+    <!-- SPRING BOOT WEB -->
+    <!-- ===================================================================================== -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
 
-    <!--DATABASE-->
+    <!-- API IMPL -->
+    <dependency>
+      <groupId>com.oregor.microservices.${ projectDescription.modulePrefix }</groupId>
+      <artifactId>${ projectDescription.modulePrefix }-api-impl</artifactId>
+    </dependency>
+
+    <!-- ===================================================================================== -->
+    <!-- PRIMARY ADAPTERS                                                                      -->
+    <!-- ===================================================================================== -->
+
+    <!-- REST SPRING -->
+    <dependency>
+      <groupId>com.oregor.microservices.${ projectDescription.modulePrefix }.${ projectDescription.modulePrefix }-primary-adapters</groupId>
+      <artifactId>${ projectDescription.modulePrefix }-rest-spring</artifactId>
+    </dependency>
+
+    <!-- SUBSCRIBER ACTIVEMQ -->
+    <dependency>
+      <groupId>com.oregor.microservices.${ projectDescription.modulePrefix }.${ projectDescription.modulePrefix }-primary-adapters</groupId>
+      <artifactId>${ projectDescription.modulePrefix }-subscriber-activemq</artifactId>
+    </dependency>
+
+    <!-- ===================================================================================== -->
+    <!-- SECONDARY ADAPTERS                                                                    -->
+    <!-- ===================================================================================== -->
+
+    <!-- PERSISTENCE RDBMS -->
+    <dependency>
+      <groupId>com.oregor.microservices.${ projectDescription.modulePrefix }.${ projectDescription.modulePrefix }-secondary-adapters</groupId>
+      <artifactId>${ projectDescription.modulePrefix }-persistence-rdbms</artifactId>
+    </dependency>
+
+    <!-- PUBLISHER ACTIVEMQ -->
+    <dependency>
+      <groupId>com.oregor.microservices.${ projectDescription.modulePrefix }.${ projectDescription.modulePrefix }-secondary-adapters</groupId>
+      <artifactId>${ projectDescription.modulePrefix }-publisher-activemq</artifactId>
+    </dependency>
+
+    <!-- ===================================================================================== -->
+    <!-- DATABASE -->
+    <!-- ===================================================================================== -->
     <dependency>
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>
       <scope>runtime</scope>
     </dependency>
 
-    <!--TEST-->
+    <!-- ===================================================================================== -->
+    <!-- TEST -->
+    <!-- ===================================================================================== -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>

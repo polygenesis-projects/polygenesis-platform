@@ -22,14 +22,26 @@ package io.polygenesis.core;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import io.polygenesis.annotations.core.GoalType;
+import io.polygenesis.commons.test.AbstractEqualityTest;
 import org.junit.Test;
 
 /** @author Christos Tsakostas */
-public class GoalTest {
+public class GoalTest extends AbstractEqualityTest<Goal> {
 
   @Test
   public void shouldInitialize() {
-    Goal goal = new Goal("asd");
+    Goal goal = new Goal(GoalType.CREATE);
     assertThat(goal).isNotNull();
+  }
+
+  @Override
+  public Goal createObject1() {
+    return new Goal(GoalType.CREATE);
+  }
+
+  @Override
+  public Goal createObject2() {
+    return new Goal(GoalType.MODIFY);
   }
 }

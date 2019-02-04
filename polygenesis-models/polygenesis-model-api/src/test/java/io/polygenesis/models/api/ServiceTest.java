@@ -20,6 +20,7 @@
 
 package io.polygenesis.models.api;
 
+import io.polygenesis.annotations.core.CqsType;
 import io.polygenesis.commons.test.AbstractEqualityTest;
 import io.polygenesis.core.ThingName;
 import io.polygenesis.core.datatype.PackageName;
@@ -34,7 +35,7 @@ public class ServiceTest extends AbstractEqualityTest<Service> {
         new PackageName("com.oregor"),
         new ServiceName("create"),
         new LinkedHashSet<>(),
-        ServiceCqrsType.COMMAND,
+        CqsType.COMMAND,
         new ThingName("aaa"));
   }
 
@@ -44,7 +45,7 @@ public class ServiceTest extends AbstractEqualityTest<Service> {
         new PackageName("com.oregor"),
         new ServiceName("create"),
         new LinkedHashSet<>(),
-        ServiceCqrsType.MIXED,
+        CqsType.SUPPORTIVE,
         new ThingName("aaa"));
   }
 }

@@ -22,6 +22,7 @@ package io.polygenesis.models.api;
 
 import io.polygenesis.core.ThingRepository;
 import io.polygenesis.core.datatype.PackageName;
+import io.polygenesis.models.apirest.RestModelRepository;
 
 /**
  * The type Domain deducer.

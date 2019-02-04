@@ -21,25 +21,21 @@
 package io.polygenesis.core.iomodel;
 
 import io.polygenesis.core.datatype.AbstractDataType;
-import io.polygenesis.core.datatype.PrimaryType;
+import io.polygenesis.core.datatype.PrimitiveType;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * This is the base class for {@link IoModelPrimitive}, {@link IoModelGroup}, and {@link
- * IoModelArray}**.
+ * IoModelArray}***.
  *
  * @author Christos Tsakostas
  */
 public abstract class IoModel {
 
-  private GenericTypeName genericType;
-
-  private AbstractDataType dataType;
-
-  private VariableName variableName;
-
-  private IoModelGroup parent;
+  private final IoModelGroup parent;
+  private final AbstractDataType dataType;
+  private final VariableName variableName;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -51,7 +47,9 @@ public abstract class IoModel {
    * @param parent the parent
    */
   public IoModel(IoModelGroup parent) {
-    setParent(parent);
+    this.dataType = null;
+    this.variableName = null;
+    this.parent = parent;
   }
 
   /**
@@ -61,8 +59,9 @@ public abstract class IoModel {
    * @param variableName the variable name
    */
   public IoModel(AbstractDataType dataType, VariableName variableName) {
-    setDataType(dataType);
-    setVariableName(variableName);
+    this.dataType = dataType;
+    this.variableName = variableName;
+    this.parent = null;
   }
 
   /**
@@ -73,35 +72,14 @@ public abstract class IoModel {
    * @param parent the parent
    */
   public IoModel(AbstractDataType dataType, VariableName variableName, IoModelGroup parent) {
-    this(dataType, variableName);
-    setParent(parent);
-  }
-
-  /**
-   * Instantiates a new Io model.
-   *
-   * @param genericType the generic type
-   * @param dataType the data type
-   * @param variableName the variable name
-   */
-  public IoModel(
-      GenericTypeName genericType, AbstractDataType dataType, VariableName variableName) {
-    this(dataType, variableName);
-    setGenericType(genericType);
+    this.dataType = dataType;
+    this.variableName = variableName;
+    this.parent = parent;
   }
 
   // ===============================================================================================
   // GETTERS
   // ===============================================================================================
-
-  /**
-   * Gets generic type.
-   *
-   * @return the generic type
-   */
-  public GenericTypeName getGenericType() {
-    return genericType;
-  }
 
   /**
    * Gets data type.
@@ -154,7 +132,7 @@ public abstract class IoModel {
   // TODO: move into AbstractDataType
   private boolean isDataTypePrimitive(AbstractDataType dataType) {
     try {
-      PrimaryType.valueOf(dataType.getDataTypeName().getText().toUpperCase());
+      PrimitiveType.valueOf(dataType.getDataTypeName().getText().toUpperCase());
       return true;
     } catch (Exception e) {
       return false;
@@ -168,26 +146,6 @@ public abstract class IoModel {
    */
   public boolean isIoModelGroup() {
     return this instanceof IoModelGroup;
-  }
-
-  // ===============================================================================================
-  // GUARDS
-  // ===============================================================================================
-
-  private void setGenericType(GenericTypeName genericType) {
-    this.genericType = genericType;
-  }
-
-  private void setDataType(AbstractDataType dataType) {
-    this.dataType = dataType;
-  }
-
-  private void setVariableName(VariableName variableName) {
-    this.variableName = variableName;
-  }
-
-  private void setParent(IoModelGroup parent) {
-    this.parent = parent;
   }
 
   // ===============================================================================================
@@ -207,7 +165,6 @@ public abstract class IoModel {
     IoModel ioModel = (IoModel) o;
 
     return new EqualsBuilder()
-        .append(genericType, ioModel.genericType)
         .append(dataType, ioModel.dataType)
         .append(variableName, ioModel.variableName)
         .append(parent, ioModel.parent)
@@ -217,7 +174,6 @@ public abstract class IoModel {
   @Override
   public int hashCode() {
     return new HashCodeBuilder(17, 37)
-        .append(genericType)
         .append(dataType)
         .append(variableName)
         .append(parent)

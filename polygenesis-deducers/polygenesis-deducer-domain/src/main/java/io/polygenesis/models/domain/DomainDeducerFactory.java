@@ -39,7 +39,11 @@ public final class DomainDeducerFactory {
   // ===============================================================================================
 
   static {
-    aggregateRootDeducer = new AggregateRootDeducer();
+    AggregateRootPropertyDeducer aggregateRootPropertyDeducer = new AggregateRootPropertyDeducer();
+    AggregateConstructorDeducer aggregateConstructorDeducer =
+        new AggregateConstructorDeducer(aggregateRootPropertyDeducer);
+    aggregateRootDeducer =
+        new AggregateRootDeducer(aggregateRootPropertyDeducer, aggregateConstructorDeducer);
   }
 
   // ===============================================================================================

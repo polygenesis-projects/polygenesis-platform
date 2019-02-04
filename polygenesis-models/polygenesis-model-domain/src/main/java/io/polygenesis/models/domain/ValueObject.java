@@ -20,9 +20,87 @@
 
 package io.polygenesis.models.domain;
 
+import io.polygenesis.core.datatype.ClassDataType;
+import io.polygenesis.core.iomodel.IoModelGroup;
+import io.polygenesis.core.iomodel.VariableName;
+import java.util.Optional;
+
 /**
  * The type Value object.
  *
  * @author Christos Tsakostas
  */
-public class ValueObject {}
+public class ValueObject extends AbstractProperty {
+
+  private IoModelGroup ioModelGroup;
+  private ClassDataType classDataType;
+
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
+  /**
+   * Instantiates a new Value object.
+   *
+   * @param ioModelGroup the io model group
+   * @param variableName the variable name
+   */
+  public ValueObject(IoModelGroup ioModelGroup, VariableName variableName) {
+    super(variableName);
+    setIoModelGroup(ioModelGroup);
+    setClassDataType((ClassDataType) ioModelGroup.getDataType());
+  }
+
+  // ===============================================================================================
+  // GETTERS
+  // ===============================================================================================
+
+  /**
+   * Gets io model group.
+   *
+   * @return the io model group
+   */
+  public IoModelGroup getIoModelGroup() {
+    return ioModelGroup;
+  }
+
+  /**
+   * Gets class data type.
+   *
+   * @return the class data type
+   */
+  public ClassDataType getClassDataType() {
+    return classDataType;
+  }
+
+  // ===============================================================================================
+  // GUARDS
+  // ===============================================================================================
+
+  /**
+   * Sets io model group.
+   *
+   * @param ioModelGroup the io model group
+   */
+  private void setIoModelGroup(IoModelGroup ioModelGroup) {
+    this.ioModelGroup = ioModelGroup;
+  }
+
+  /**
+   * Sets class data type.
+   *
+   * @param classDataType the class data type
+   */
+  private void setClassDataType(ClassDataType classDataType) {
+    this.classDataType = classDataType;
+  }
+
+  // ===============================================================================================
+  // OVERRIDES
+  // ===============================================================================================
+
+  @Override
+  public Optional<IoModelGroup> getIoModelGroupAsOptional() {
+    return Optional.of(getIoModelGroup());
+  }
+}

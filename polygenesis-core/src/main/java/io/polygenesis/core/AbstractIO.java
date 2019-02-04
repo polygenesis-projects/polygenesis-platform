@@ -21,6 +21,7 @@
 package io.polygenesis.core;
 
 import io.polygenesis.core.iomodel.IoModel;
+import io.polygenesis.core.iomodel.IoModelGroup;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -57,6 +58,23 @@ abstract class AbstractIO {
    */
   public IoModel getModel() {
     return model;
+  }
+
+  // ===============================================================================================
+  // QUERIES
+  // ===============================================================================================
+
+  /**
+   * Gets as io model group.
+   *
+   * @return the as io model group
+   */
+  public IoModelGroup getAsIoModelGroup() {
+    if (model.isIoModelGroup()) {
+      return (IoModelGroup) model;
+    } else {
+      throw new IllegalStateException();
+    }
   }
 
   // ===============================================================================================

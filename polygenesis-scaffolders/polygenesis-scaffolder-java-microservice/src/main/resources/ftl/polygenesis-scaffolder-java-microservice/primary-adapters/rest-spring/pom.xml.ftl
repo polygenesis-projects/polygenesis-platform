@@ -32,14 +32,19 @@
   <artifactId>${ projectDescription.modulePrefix }-rest-spring</artifactId>
 
   <dependencies>
-    <!--SPRING BOOT JPA-->
+    <!-- SPRING BOOT WEB -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-data-jpa</artifactId>
+      <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
 
+    <!-- API -->
+    <dependency>
+      <groupId>${ projectDescription.groupId }</groupId>
+      <artifactId>${ projectDescription.modulePrefix }-api</artifactId>
+    </dependency>
 
-    <!--TEST-->
+    <!-- TEST -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>

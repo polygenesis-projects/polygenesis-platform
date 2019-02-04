@@ -20,8 +20,10 @@
 
 package io.polygenesis.commons.keyvalue;
 
+import com.oregor.ddd4j.check.assertion.Assertion;
+
 /**
- * Utility class for Keys & Values.
+ * Container for Key-Value Pairs.
  *
  * @author Christos Tsakostas
  */
@@ -77,6 +79,7 @@ public class KeyValue {
    * @param key the key
    */
   private void setKey(Object key) {
+    Assertion.isNotNull(key, "key is required");
     this.key = key;
   }
 
@@ -86,6 +89,7 @@ public class KeyValue {
    * @param value the value
    */
   private void setValue(Object value) {
+    Assertion.isNotNull(value, "value is required");
     this.value = value;
   }
 }

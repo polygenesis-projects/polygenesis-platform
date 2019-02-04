@@ -36,9 +36,4 @@ class TestIoModel extends IoModel {
   public TestIoModel(AbstractDataType dataType, VariableName variableName, IoModelGroup parent) {
     super(dataType, variableName, parent);
   }
-
-  public TestIoModel(
-      GenericTypeName genericType, AbstractDataType dataType, VariableName variableName) {
-    super(genericType, dataType, variableName);
-  }
 }

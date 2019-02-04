@@ -35,6 +35,29 @@ import java.util.Set;
 public class AggregateRootDeducer {
 
   // ===============================================================================================
+  // DEPENDENCIES
+  // ===============================================================================================
+  private final AggregateRootPropertyDeducer aggregateRootPropertyDeducer;
+  private final AggregateConstructorDeducer aggregateConstructorDeducer;
+
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
+  /**
+   * Instantiates a new Aggregate root deducer.
+   *
+   * @param aggregateRootPropertyDeducer the aggregate root property deducer
+   * @param aggregateConstructorDeducer the aggregate constructor deducer
+   */
+  public AggregateRootDeducer(
+      AggregateRootPropertyDeducer aggregateRootPropertyDeducer,
+      AggregateConstructorDeducer aggregateConstructorDeducer) {
+    this.aggregateRootPropertyDeducer = aggregateRootPropertyDeducer;
+    this.aggregateConstructorDeducer = aggregateConstructorDeducer;
+  }
+
+  // ===============================================================================================
   // FUNCTIONALITY
   // ===============================================================================================
 
@@ -52,11 +75,22 @@ public class AggregateRootDeducer {
     thingRepository
         .getThings()
         .forEach(
-            thing ->
-                aggregateRoots.add(
-                    new AggregateRoot(
-                        makeAggregateRootPackageName(rootPackageName, thing),
-                        makeAggregateRootName(thing))));
+            thing -> {
+              PackageName packageName = makeAggregateRootPackageName(rootPackageName, thing);
+              Name aggregateRootName = makeAggregateRootName(thing);
+              Set<AbstractProperty> properties = aggregateRootPropertyDeducer.deduceFrom(thing);
+              Set<Constructor> constructors = aggregateConstructorDeducer.deduceFrom(thing);
+              Persistence persistence =
+                  new Persistence(
+                      packageName,
+                      makePersistenceName(thing),
+                      aggregateRootName,
+                      makeAggregateRootIdName(thing));
+
+              aggregateRoots.add(
+                  new AggregateRoot(
+                      packageName, aggregateRootName, properties, persistence, constructors));
+            });
 
     return aggregateRoots;
   }
@@ -72,5 +106,13 @@ public class AggregateRootDeducer {
 
   private Name makeAggregateRootName(Thing thing) {
     return new Name(thing.getName().getText());
+  }
+
+  private Name makeAggregateRootIdName(Thing thing) {
+    return new Name(thing.getName().getText() + "Id");
+  }
+
+  private Name makePersistenceName(Thing thing) {
+    return new Name(thing.getName().getText() + "Persistence");
   }
 }

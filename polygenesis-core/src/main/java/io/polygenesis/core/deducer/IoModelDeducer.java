@@ -24,6 +24,7 @@ import io.polygenesis.core.datatype.ClassDataType;
 import io.polygenesis.core.datatype.DataTypeName;
 import io.polygenesis.core.datatype.PackageName;
 import io.polygenesis.core.datatype.PrimitiveDataType;
+import io.polygenesis.core.datatype.PrimitiveType;
 import io.polygenesis.core.iomodel.GenericTypeName;
 import io.polygenesis.core.iomodel.IoModel;
 import io.polygenesis.core.iomodel.IoModelArray;
@@ -84,17 +85,19 @@ public class IoModelDeducer {
       }
 
       return new IoModelPrimitive(
-          new PrimitiveDataType(convertToDataTypeNameFrom(recursiveObject.getStrDataType())),
+          new PrimitiveDataType(convertToPrimitiveTypeFrom(recursiveObject.getStrDataType())),
           new VariableName(recursiveObject.getStrName()),
-          safeGetAnnotationsFrom(recursiveObject));
+          safeGetAnnotationsFrom(recursiveObject),
+          false);
 
     } else {
       // IoModelGroup
+      if (recursiveObject.getStrGenericType() != null) {
+        throw new IllegalStateException("Something is wrong! No Generic should be here.");
+      }
+
       IoModelGroup modelGroupResponse =
           new IoModelGroup(
-              recursiveObject.getStrGenericType() != null
-                  ? new GenericTypeName(recursiveObject.getStrGenericType())
-                  : null,
               new ClassDataType(
                   convertToDataTypeNameFrom(recursiveObject.getStrDataType()),
                   convertToPackageName(recursiveObject.getStrDataType())),
@@ -134,10 +137,11 @@ public class IoModelDeducer {
                   IoModelPrimitive modelPrimitive =
                       new IoModelPrimitive(
                           new PrimitiveDataType(
-                              convertToDataTypeNameFrom(childRecursiveObject.getStrDataType())),
+                              convertToPrimitiveTypeFrom(childRecursiveObject.getStrDataType())),
                           new VariableName(childRecursiveObject.getStrName()),
                           modelGroup,
-                          safeGetAnnotationsFrom(childRecursiveObject));
+                          safeGetAnnotationsFrom(childRecursiveObject),
+                          false);
 
                   modelGroup.addIoModelPrimitive(modelPrimitive);
                 }
@@ -161,6 +165,10 @@ public class IoModelDeducer {
     }
 
     return new DataTypeName(javaDataTypeConverter.convert(strDataType).name());
+  }
+
+  private PrimitiveType convertToPrimitiveTypeFrom(String strDataType) {
+    return javaDataTypeConverter.convert(strDataType);
   }
 
   private PackageName convertToPackageName(String strDataType) {

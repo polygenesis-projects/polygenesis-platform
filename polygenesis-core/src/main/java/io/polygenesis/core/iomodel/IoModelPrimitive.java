@@ -33,8 +33,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  */
 public class IoModelPrimitive extends IoModel {
 
-  private Set<Annotation> annotations;
-  private Boolean isThingIdentity;
+  private final Set<Annotation> annotations;
+  private final Boolean isThingIdentity;
 
   // ===============================================================================================
   // STATIC
@@ -49,7 +49,20 @@ public class IoModelPrimitive extends IoModel {
    */
   public static IoModelPrimitive of(
       PrimitiveDataType primitiveDataType, VariableName variableName) {
-    return new IoModelPrimitive(primitiveDataType, variableName, null);
+    return new IoModelPrimitive(primitiveDataType, variableName, null, false);
+  }
+
+  /**
+   * Of parent io model primitive.
+   *
+   * @param parent the parent
+   * @param primitiveDataType the primitive data type
+   * @param variableName the variable name
+   * @return the io model primitive
+   */
+  public static IoModelPrimitive ofParent(
+      IoModelGroup parent, PrimitiveDataType primitiveDataType, VariableName variableName) {
+    return new IoModelPrimitive(primitiveDataType, variableName, parent, null, false);
   }
 
   /**
@@ -61,9 +74,24 @@ public class IoModelPrimitive extends IoModel {
    */
   public static IoModelPrimitive ofThingIdentity(
       PrimitiveDataType primitiveDataType, VariableName variableName) {
-    IoModelPrimitive ioModelPrimitive = new IoModelPrimitive(primitiveDataType, variableName, null);
+    IoModelPrimitive ioModelPrimitive =
+        new IoModelPrimitive(primitiveDataType, variableName, null, true);
 
-    ioModelPrimitive.setThingIdentity(true);
+    return ioModelPrimitive;
+  }
+
+  /**
+   * Of thing identity with parent io model primitive.
+   *
+   * @param parent the parent
+   * @param primitiveDataType the primitive data type
+   * @param variableName the variable name
+   * @return the io model primitive
+   */
+  public static IoModelPrimitive ofThingIdentityWithParent(
+      IoModelGroup parent, PrimitiveDataType primitiveDataType, VariableName variableName) {
+    IoModelPrimitive ioModelPrimitive =
+        new IoModelPrimitive(primitiveDataType, variableName, parent, null, true);
 
     return ioModelPrimitive;
   }
@@ -78,12 +106,16 @@ public class IoModelPrimitive extends IoModel {
    * @param dataType the data type
    * @param variableName the variable name
    * @param annotations the annotations
+   * @param isThingIdentity the is thing identity
    */
   public IoModelPrimitive(
-      PrimitiveDataType dataType, VariableName variableName, Set<Annotation> annotations) {
+      PrimitiveDataType dataType,
+      VariableName variableName,
+      Set<Annotation> annotations,
+      Boolean isThingIdentity) {
     super(dataType, variableName);
-    setAnnotations(annotations);
-    setThingIdentity(false);
+    this.annotations = annotations;
+    this.isThingIdentity = isThingIdentity;
   }
 
   /**
@@ -93,15 +125,17 @@ public class IoModelPrimitive extends IoModel {
    * @param variableName the variable name
    * @param parent the parent
    * @param annotations the annotations
+   * @param isThingIdentity the is thing identity
    */
   public IoModelPrimitive(
       PrimitiveDataType dataType,
       VariableName variableName,
       IoModelGroup parent,
-      Set<Annotation> annotations) {
+      Set<Annotation> annotations,
+      Boolean isThingIdentity) {
     super(dataType, variableName, parent);
-    setAnnotations(annotations);
-    setThingIdentity(false);
+    this.annotations = annotations;
+    this.isThingIdentity = isThingIdentity;
   }
 
   // ===============================================================================================
@@ -124,18 +158,6 @@ public class IoModelPrimitive extends IoModel {
    */
   public Boolean getThingIdentity() {
     return isThingIdentity;
-  }
-
-  // ===============================================================================================
-  // GUARDS
-  // ===============================================================================================
-
-  private void setAnnotations(Set<Annotation> annotations) {
-    this.annotations = annotations;
-  }
-
-  private void setThingIdentity(Boolean thingIdentity) {
-    isThingIdentity = thingIdentity;
   }
 
   // ===============================================================================================

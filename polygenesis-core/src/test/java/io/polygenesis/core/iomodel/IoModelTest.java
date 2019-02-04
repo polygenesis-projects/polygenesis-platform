@@ -26,8 +26,8 @@ import io.polygenesis.commons.test.AbstractEqualityTest;
 import io.polygenesis.core.datatype.ClassDataType;
 import io.polygenesis.core.datatype.DataTypeName;
 import io.polygenesis.core.datatype.PackageName;
-import io.polygenesis.core.datatype.PrimaryType;
 import io.polygenesis.core.datatype.PrimitiveDataType;
+import io.polygenesis.core.datatype.PrimitiveType;
 import org.junit.Test;
 
 /** @author Christos Tsakostas */
@@ -37,21 +37,17 @@ public class IoModelTest extends AbstractEqualityTest<TestIoModel> {
   public void shouldInitializeTestIoModel() {
     IoModelGroup parent =
         new IoModelGroup(
-            new GenericTypeName("java.util.list"),
-            new ClassDataType(
-                new DataTypeName(PrimaryType.STRING.name()), new PackageName("com.dummy")),
+            new ClassDataType(new DataTypeName("SomeClass"), new PackageName("com.dummy")),
             new VariableName("someVariableName"));
 
     TestIoModel testIoModel =
         new TestIoModel(
-            new PrimitiveDataType(new DataTypeName(PrimaryType.STRING.name())),
+            new PrimitiveDataType(PrimitiveType.STRING),
             new VariableName("someVariableName"),
             parent);
 
     assertThat(testIoModel).isNotNull();
-    assertThat(testIoModel.getGenericType()).isNull();
-    assertThat(testIoModel.getDataType())
-        .isEqualTo(new PrimitiveDataType(new DataTypeName(PrimaryType.STRING.name())));
+    assertThat(testIoModel.getDataType()).isEqualTo(new PrimitiveDataType(PrimitiveType.STRING));
     assertThat(testIoModel.getVariableName()).isEqualTo(new VariableName("someVariableName"));
   }
 
@@ -61,18 +57,14 @@ public class IoModelTest extends AbstractEqualityTest<TestIoModel> {
   @Override
   public TestIoModel createObject1() {
     return new TestIoModel(
-        new GenericTypeName("genericType"),
-        new ClassDataType(
-            new DataTypeName(PrimaryType.STRING.name()), new PackageName("com.dummy")),
+        new ClassDataType(new DataTypeName("SomeClass"), new PackageName("com.dummy")),
         new VariableName("variableName"));
   }
 
   @Override
   public TestIoModel createObject2() {
     return new TestIoModel(
-        new GenericTypeName("genericType"),
-        new ClassDataType(
-            new DataTypeName(PrimaryType.STRING.name()), new PackageName("com.dummy")),
+        new ClassDataType(new DataTypeName("SomeClass"), new PackageName("com.dummy")),
         new VariableName("someOtherVariableName"));
   }
 }

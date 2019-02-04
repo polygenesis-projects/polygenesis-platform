@@ -22,6 +22,7 @@ package io.polygenesis.core;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import io.polygenesis.annotations.core.GoalType;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import org.junit.Test;
@@ -82,7 +83,7 @@ public class ThingRepositoryTest {
     Function someFunction =
         new Function(
             someThing,
-            new Goal("someGoal"),
+            new Goal(GoalType.CREATE),
             new FunctionName("someFunction"),
             new LinkedHashSet<>());
 

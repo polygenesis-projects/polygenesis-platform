@@ -54,6 +54,7 @@ public class AppScaffolder extends AbstractScaffolder {
       Path generationPath, ProjectDescription projectDescription, Map<String, Object> dataModel) {
     Path modulePath =
         Paths.get(generationPath.toString(), projectDescription.getModulePrefix() + "-app");
+
     ensureSources(modulePath, projectDescription);
 
     freemarkerService.export(
@@ -67,7 +68,7 @@ public class AppScaffolder extends AbstractScaffolder {
         Paths.get(
             modulePath.toString(),
             "src/main/java",
-            projectDescription.getGroupId(),
+            toPath(projectDescription.getGroupId()),
             "Application.java"));
 
     freemarkerService.export(
@@ -76,7 +77,7 @@ public class AppScaffolder extends AbstractScaffolder {
         Paths.get(
             modulePath.toString(),
             "src/test/java",
-            projectDescription.getGroupId(),
+            toPath(projectDescription.getGroupId()),
             "ApplicationTest.java"));
   }
 }

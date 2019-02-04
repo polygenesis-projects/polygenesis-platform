@@ -21,6 +21,7 @@
 package io.polygenesis.models.api;
 
 import io.polygenesis.core.Deducer;
+import io.polygenesis.models.apirest.RestModelRepository;
 
 /**
  * The interface Api deducer.

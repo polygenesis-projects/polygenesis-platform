@@ -88,10 +88,7 @@ public abstract class AbstractScaffolder {
     PathService.ensurePath(Paths.get(generationPath.toString(), "src/test/resources"));
   }
 
-  // ===============================================================================================
-  // PRIVATE
-  // ===============================================================================================
-  private String toPath(String groupId) {
+  protected String toPath(String groupId) {
     return Paths.get(groupId.replaceAll("\\.", "/")).toString();
   }
 }

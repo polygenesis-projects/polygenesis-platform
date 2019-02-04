@@ -106,6 +106,7 @@
     <maven-dependency-plugin.version>2.9</maven-dependency-plugin.version>
     <cobertura-maven-plugin.version>2.6</cobertura-maven-plugin.version>
     <versions-maven-plugin.version>2.7</versions-maven-plugin.version>
+    <querydsl-apt-maven-plugin.version>1.1.3</querydsl-apt-maven-plugin.version>
 
     <!--APACHE-->
     <commons-lang3.version>3.5</commons-lang3.version>
@@ -134,7 +135,7 @@
   <dependencyManagement>
     <dependencies>
 <#if projectDescription.microservice>
-      <!--API-->
+      <!-- API -->
       <dependency>
         <groupId>${ projectDescription.groupId }</groupId>
         <artifactId>${ projectDescription.modulePrefix }-api</artifactId>
@@ -143,7 +144,7 @@
         </#noparse>
       </dependency>
 
-      <!--API IMPL-->
+      <!-- API IMPL -->
       <dependency>
         <groupId>${ projectDescription.groupId }</groupId>
         <artifactId>${ projectDescription.modulePrefix }-api-impl</artifactId>
@@ -152,7 +153,7 @@
         </#noparse>
       </dependency>
 
-      <!--DOMAIN MODEL-->
+      <!-- DOMAIN MODEL -->
       <dependency>
         <groupId>${ projectDescription.groupId }</groupId>
         <artifactId>${ projectDescription.modulePrefix }-domain-model</artifactId>
@@ -161,7 +162,53 @@
         </#noparse>
       </dependency>
 
-      <!--OREGOR-->
+      <!-- ===================================================================================== -->
+      <!-- PRIMARY ADAPTERS                                                                      -->
+      <!-- ===================================================================================== -->
+
+      <!-- REST SPRING -->
+      <dependency>
+        <groupId>${ projectDescription.groupId }.${ projectDescription.modulePrefix }-primary-adapters</groupId>
+        <artifactId>${ projectDescription.modulePrefix }-rest-spring</artifactId>
+        <#noparse>
+        <version>${project.version}</version>
+        </#noparse>
+      </dependency>
+
+      <!-- SUBSCRIBER ACTIVEMQ -->
+      <dependency>
+        <groupId>${ projectDescription.groupId }.${ projectDescription.modulePrefix }-primary-adapters</groupId>
+        <artifactId>${ projectDescription.modulePrefix }-subscriber-activemq</artifactId>
+        <#noparse>
+        <version>${project.version}</version>
+        </#noparse>
+      </dependency>
+
+      <!-- ===================================================================================== -->
+      <!-- SECONDARY ADAPTERS                                                                    -->
+      <!-- ===================================================================================== -->
+
+      <!-- PERSISTENCE RDBMS -->
+      <dependency>
+        <groupId>${ projectDescription.groupId }.${ projectDescription.modulePrefix }-secondary-adapters</groupId>
+        <artifactId>${ projectDescription.modulePrefix }-persistence-rdbms</artifactId>
+        <#noparse>
+        <version>${project.version}</version>
+        </#noparse>
+      </dependency>
+
+      <!-- PUBLISHER ACTIVEMQ -->
+      <dependency>
+        <groupId>${ projectDescription.groupId }.${ projectDescription.modulePrefix }-secondary-adapters</groupId>
+        <artifactId>${ projectDescription.modulePrefix }-publisher-activemq</artifactId>
+        <#noparse>
+        <version>${project.version}</version>
+        </#noparse>
+      </dependency>
+
+      <!-- ===================================================================================== -->
+      <!-- OREGOR                                                                                -->
+      <!-- ===================================================================================== -->
       <dependency>
         <groupId>com.oregor.ddd4j</groupId>
         <artifactId>ddd4j-bom</artifactId>
@@ -268,6 +315,9 @@
             <failsOnError>true</failsOnError>
             <failOnViolation>true</failOnViolation>
             <logViolationsToConsole>true</logViolationsToConsole>
+            <sourceDirectories>
+              <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
+            </sourceDirectories>
             <excludes>**/module-info.java</excludes>
             <violationSeverity>warning</violationSeverity>
             <encoding>${project.build.sourceEncoding}</encoding>
@@ -474,6 +524,27 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
       </plugin>
+
+      <!-- ===================================================================== -->
+      <!--QUERY DSL-->
+      <!-- ===================================================================== -->
+      <plugin>
+        <groupId>com.mysema.maven</groupId>
+        <artifactId>apt-maven-plugin</artifactId>
+        <version>${querydsl-apt-maven-plugin.version}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>process</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>target/generated-sources/java</outputDirectory>
+              <processor>com.querydsl.apt.jpa.JPAAnnotationProcessor</processor>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
     </plugins>
   </build>
 

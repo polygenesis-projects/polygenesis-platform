@@ -21,14 +21,11 @@
 package io.polygenesis.codegen.annotatedapi;
 
 import io.polygenesis.annotations.core.GFunction;
-import io.polygenesis.annotations.core.GGoalStandardType;
+import io.polygenesis.annotations.core.GoalType;
 
 /** @author Christos Tsakostas */
 public interface AnnotatedInterface {
 
-  @GFunction(
-      goal = GGoalStandardType.QRY_CALCULATION,
-      thingName = "someFancyThing",
-      name = "someCustomName")
+  @GFunction(goal = GoalType.CALCULATE, thingName = "someFancyThing", name = "someCustomName")
   void someAnnotatedMethod();
 }

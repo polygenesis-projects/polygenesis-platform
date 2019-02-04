@@ -25,7 +25,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import io.polygenesis.core.datatype.ClassDataType;
 import io.polygenesis.core.datatype.DataTypeName;
 import io.polygenesis.core.datatype.PackageName;
-import io.polygenesis.core.datatype.PrimaryType;
 import org.junit.Test;
 
 /** @author Christos Tsakostas */
@@ -36,16 +35,13 @@ public class IoModelArrayTest {
     IoModelArray ioModelArray =
         new IoModelArray(
             new GenericTypeName("java.util.list"),
-            new ClassDataType(
-                new DataTypeName(PrimaryType.STRING.name()), new PackageName("com.dummy")),
+            new ClassDataType(new DataTypeName("SomeClass"), new PackageName("com.dummy")),
             new VariableName("someVariableName"));
 
     assertThat(ioModelArray).isNotNull();
     assertThat(ioModelArray.getGenericType()).isEqualTo(new GenericTypeName("java.util.list"));
     assertThat(ioModelArray.getDataType())
-        .isEqualTo(
-            new ClassDataType(
-                new DataTypeName(PrimaryType.STRING.name()), new PackageName("com.dummy")));
+        .isEqualTo(new ClassDataType(new DataTypeName("SomeClass"), new PackageName("com.dummy")));
     assertThat(ioModelArray.getVariableName()).isEqualTo(new VariableName("someVariableName"));
   }
 
@@ -53,21 +49,15 @@ public class IoModelArrayTest {
   public void shouldInitializeIoModelArrayWithParent() {
     IoModelGroup parent =
         new IoModelGroup(
-            new GenericTypeName("java.util.list"),
-            new ClassDataType(
-                new DataTypeName(PrimaryType.STRING.name()), new PackageName("com.dummy")),
+            new ClassDataType(new DataTypeName("SomeClass"), new PackageName("com.dummy")),
             new VariableName("someVariableName"));
 
     IoModelArray ioModelArray = new IoModelArray(parent);
 
     assertThat(ioModelArray).isNotNull();
     assertThat(ioModelArray.getParent()).isNotNull();
-    assertThat(ioModelArray.getParent().getGenericType())
-        .isEqualTo(new GenericTypeName("java.util.list"));
     assertThat(ioModelArray.getParent().getDataType())
-        .isEqualTo(
-            new ClassDataType(
-                new DataTypeName(PrimaryType.STRING.name()), new PackageName("com.dummy")));
+        .isEqualTo(new ClassDataType(new DataTypeName("SomeClass"), new PackageName("com.dummy")));
     assertThat(ioModelArray.getParent().getVariableName())
         .isEqualTo(new VariableName("someVariableName"));
   }

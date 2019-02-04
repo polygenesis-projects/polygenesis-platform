@@ -20,9 +20,36 @@
 
 package io.polygenesis.models.domain;
 
+import io.polygenesis.core.iomodel.IoModelGroup;
+import io.polygenesis.core.iomodel.VariableName;
+
 /**
  * The type Aggregate entity.
  *
  * @author Christos Tsakostas
  */
-public class AggregateEntity {}
+public class AggregateEntity extends ValueObject {
+
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
+  /**
+   * Instantiates a new Aggregate entity.
+   *
+   * @param ioModelGroup the io model group
+   * @param variableName the variable name
+   */
+  public AggregateEntity(IoModelGroup ioModelGroup, VariableName variableName) {
+    super(ioModelGroup, variableName);
+  }
+
+  // ===============================================================================================
+  // GETTERS
+  // ===============================================================================================
+
+  // ===============================================================================================
+  // GUARDS
+  // ===============================================================================================
+
+}
