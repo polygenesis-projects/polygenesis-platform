@@ -29,6 +29,8 @@ import java.util.Optional;
  */
 public class PrimitiveDataType extends AbstractDataType {
 
+  private PrimitiveType primitiveType;
+
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
@@ -36,10 +38,24 @@ public class PrimitiveDataType extends AbstractDataType {
   /**
    * Instantiates a new Primitive data type.
    *
-   * @param dataTypeName the data type name
+   * @param primitiveType the primary type
    */
-  public PrimitiveDataType(DataTypeName dataTypeName) {
-    super(dataTypeName);
+  public PrimitiveDataType(PrimitiveType primitiveType) {
+    super(DataKind.PRIMITIVE, new DataTypeName(primitiveType.name()));
+    this.primitiveType = primitiveType;
+  }
+
+  // ===============================================================================================
+  // GETTERS
+  // ===============================================================================================
+
+  /**
+   * Gets primitive type.
+   *
+   * @return the primitive type
+   */
+  public PrimitiveType getPrimitiveType() {
+    return primitiveType;
   }
 
   // ===============================================================================================

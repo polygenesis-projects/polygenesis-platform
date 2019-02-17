@@ -21,6 +21,7 @@
 package io.polygenesis.models.reactivestate;
 
 import io.polygenesis.annotations.core.GGoalStandardType;
+import io.polygenesis.annotations.core.GoalType;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.Function;
 import io.polygenesis.core.Thing;
@@ -122,17 +123,17 @@ public class ActionDeducer {
   /** Initializes {@link io.polygenesis.core.Goal} to {@link ActionType} map. */
   private static void initializeGoalToActionTypeMap() {
     goalToActionTypeMap.put(
-        GGoalStandardType.CMD_CREATE,
+        GoalType.CREATE.name(),
         new LinkedHashSet<>(
             Arrays.asList(ActionType.SUBMIT, ActionType.ON_SUCCESS, ActionType.ON_FAILURE)));
 
     goalToActionTypeMap.put(
-        GGoalStandardType.CMD_UPDATE,
+        GoalType.MODIFY.name(),
         new LinkedHashSet<>(
             Arrays.asList(ActionType.SUBMIT, ActionType.ON_SUCCESS, ActionType.ON_FAILURE)));
 
     goalToActionTypeMap.put(
-        GGoalStandardType.CMD_DELETE,
+        GoalType.DELETE.name(),
         new LinkedHashSet<>(
             Arrays.asList(ActionType.SUBMIT, ActionType.ON_SUCCESS, ActionType.ON_FAILURE)));
 

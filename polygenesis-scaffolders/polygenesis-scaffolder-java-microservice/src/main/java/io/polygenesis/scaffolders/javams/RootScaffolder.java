@@ -73,23 +73,31 @@ public class RootScaffolder extends AbstractScaffolder {
     gitIgnoreScaffolder.scaffold(generationPath, projectDescription, dataModel);
 
     try {
-
       PathService.ensurePath(Paths.get(generationPath.toString(), ".mvn/wrapper/"));
 
-      Files.copy(
-          getClass().getResourceAsStream(FTL_PATH + "/prepare-to-commit.sh"),
-          Paths.get(generationPath.toString(), "prepare-to-commit.sh"),
-          StandardCopyOption.REPLACE_EXISTING);
+      Path targetPrepareToCommit = Paths.get(generationPath.toString(), "prepare-to-commit.sh");
+      if (!Files.exists(targetPrepareToCommit)) {
+        Files.copy(
+            getClass().getResourceAsStream(FTL_PATH + "/prepare-to-commit.sh"),
+            targetPrepareToCommit,
+            StandardCopyOption.REPLACE_EXISTING);
+      }
 
-      Files.copy(
-          getClass().getResourceAsStream(FTL_PATH + "/mvnw"),
-          Paths.get(generationPath.toString(), "mvnw"),
-          StandardCopyOption.REPLACE_EXISTING);
+      Path targetMvnw = Paths.get(generationPath.toString(), "mvnw");
+      if (!Files.exists(targetMvnw)) {
+        Files.copy(
+            getClass().getResourceAsStream(FTL_PATH + "/mvnw"),
+            targetMvnw,
+            StandardCopyOption.REPLACE_EXISTING);
+      }
 
-      Files.copy(
-          getClass().getResourceAsStream(FTL_PATH + "/mvnw.cmd"),
-          Paths.get(generationPath.toString(), "mvnw.cmd"),
-          StandardCopyOption.REPLACE_EXISTING);
+      Path targetMvnwCmd = Paths.get(generationPath.toString(), "mvnw.cmd");
+      if (!Files.exists(targetMvnwCmd)) {
+        Files.copy(
+            getClass().getResourceAsStream(FTL_PATH + "/mvnw.cmd"),
+            targetMvnwCmd,
+            StandardCopyOption.REPLACE_EXISTING);
+      }
 
       Files.copy(
           getClass().getResourceAsStream(FTL_PATH + "/.mvn/wrapper/maven-wrapper.jar"),

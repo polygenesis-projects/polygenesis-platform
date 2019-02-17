@@ -20,6 +20,7 @@
 
 package io.polygenesis.models.api;
 
+import io.polygenesis.annotations.core.CqsType;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.Thing;
 import io.polygenesis.core.ThingName;
@@ -58,7 +59,7 @@ public class ServiceDeducer {
                         makeServicePackageName(rootPackageName, thing.getName()),
                         makeServiceName(thing.getName()),
                         getCommandMethods(thing),
-                        ServiceCqrsType.COMMAND,
+                        CqsType.COMMAND,
                         thing.getName())));
 
     return services;

@@ -20,6 +20,7 @@
 
 package io.polygenesis.core.datatype;
 
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -27,7 +28,9 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class ClassDataType extends AbstractObjectDataType {
+public class ClassDataType extends AbstractDataType {
+
+  private PackageName packageName;
 
   // Optional
   private Set<AbstractDataType> genericsDefinitions;
@@ -47,7 +50,21 @@ public class ClassDataType extends AbstractObjectDataType {
    * @param packageName the package name
    */
   public ClassDataType(DataTypeName dataTypeName, PackageName packageName) {
-    super(dataTypeName, packageName);
+    super(DataKind.CLASS, dataTypeName);
+    this.packageName = packageName;
+  }
+
+  // ===============================================================================================
+  // BEHAVIOUR
+  // ===============================================================================================
+
+  /**
+   * Change data type name to.
+   *
+   * @param dataTypeName the data type name
+   */
+  public ClassDataType changeDataTypeNameTo(DataTypeName dataTypeName) {
+    return new ClassDataType(dataTypeName, getOptionalPackageName().get());
   }
 
   // ===============================================================================================
@@ -79,5 +96,14 @@ public class ClassDataType extends AbstractObjectDataType {
    */
   public Set<InterfaceDataType> getImplementsInterfaceDataTypes() {
     return implementsInterfaceDataTypes;
+  }
+
+  // ===============================================================================================
+  // OVERRIDES
+  // ===============================================================================================
+
+  @Override
+  public Optional<PackageName> getOptionalPackageName() {
+    return Optional.of(packageName);
   }
 }

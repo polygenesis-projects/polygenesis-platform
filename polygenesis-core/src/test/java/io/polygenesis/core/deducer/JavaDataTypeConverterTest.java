@@ -23,7 +23,7 @@ package io.polygenesis.core.deducer;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import io.polygenesis.core.datatype.PrimaryType;
+import io.polygenesis.core.datatype.PrimitiveType;
 import org.junit.Test;
 
 /** @author Christos Tsakostas */
@@ -33,15 +33,15 @@ public class JavaDataTypeConverterTest {
   public void shouldConvert() {
     JavaDataTypeConverter javaDataTypeConverter = new JavaDataTypeConverter();
 
-    assertThat(javaDataTypeConverter.convert("void")).isEqualTo(PrimaryType.VOID);
-    assertThat(javaDataTypeConverter.convert("java.lang.String")).isEqualTo(PrimaryType.STRING);
-    assertThat(javaDataTypeConverter.convert("int")).isEqualTo(PrimaryType.INTEGER);
-    assertThat(javaDataTypeConverter.convert("java.lang.Integer")).isEqualTo(PrimaryType.INTEGER);
-    assertThat(javaDataTypeConverter.convert("long")).isEqualTo(PrimaryType.LONG);
-    assertThat(javaDataTypeConverter.convert("java.lang.Long")).isEqualTo(PrimaryType.LONG);
-    assertThat(javaDataTypeConverter.convert("boolean")).isEqualTo(PrimaryType.BOOLEAN);
-    assertThat(javaDataTypeConverter.convert("java.lang.Boolean")).isEqualTo(PrimaryType.BOOLEAN);
-    assertThat(javaDataTypeConverter.convert("java.util.List")).isEqualTo(PrimaryType.ARRAY);
+    assertThat(javaDataTypeConverter.convert("void")).isEqualTo(PrimitiveType.VOID);
+    assertThat(javaDataTypeConverter.convert("java.lang.String")).isEqualTo(PrimitiveType.STRING);
+    assertThat(javaDataTypeConverter.convert("int")).isEqualTo(PrimitiveType.INTEGER);
+    assertThat(javaDataTypeConverter.convert("java.lang.Integer")).isEqualTo(PrimitiveType.INTEGER);
+    assertThat(javaDataTypeConverter.convert("long")).isEqualTo(PrimitiveType.LONG);
+    assertThat(javaDataTypeConverter.convert("java.lang.Long")).isEqualTo(PrimitiveType.LONG);
+    assertThat(javaDataTypeConverter.convert("boolean")).isEqualTo(PrimitiveType.BOOLEAN);
+    assertThat(javaDataTypeConverter.convert("java.lang.Boolean")).isEqualTo(PrimitiveType.BOOLEAN);
+    assertThat(javaDataTypeConverter.convert("java.util.List")).isEqualTo(PrimitiveType.ARRAY);
   }
 
   @Test

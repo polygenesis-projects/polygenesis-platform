@@ -20,6 +20,7 @@
 
 package io.polygenesis.core;
 
+import io.polygenesis.annotations.core.GoalType;
 import io.polygenesis.commons.text.AbstractText;
 
 /**
@@ -50,7 +51,16 @@ public class Goal extends AbstractText {
    *
    * @param goalType the goal type
    */
-  public Goal(String goalType) {
-    super(goalType);
+  //  public Goal(String goalType) {
+  //    super(goalType);
+  //  }
+
+  public Goal(GoalType goalType) {
+    super(goalType.name());
   }
+
+  // ===============================================================================================
+  // OVERRIDES
+  // ===============================================================================================
+
 }

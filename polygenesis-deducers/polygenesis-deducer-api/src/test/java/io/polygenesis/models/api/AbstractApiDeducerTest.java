@@ -20,16 +20,15 @@
 
 package io.polygenesis.models.api;
 
-import io.polygenesis.annotations.core.GGoalStandardType;
+import io.polygenesis.annotations.core.GoalType;
 import io.polygenesis.core.Function;
 import io.polygenesis.core.FunctionName;
 import io.polygenesis.core.Goal;
 import io.polygenesis.core.ReturnValue;
 import io.polygenesis.core.Thing;
 import io.polygenesis.core.ThingName;
-import io.polygenesis.core.datatype.DataTypeName;
-import io.polygenesis.core.datatype.PrimaryType;
 import io.polygenesis.core.datatype.PrimitiveDataType;
+import io.polygenesis.core.datatype.PrimitiveType;
 import io.polygenesis.core.iomodel.IoModelPrimitive;
 import io.polygenesis.core.iomodel.VariableName;
 import java.util.LinkedHashSet;
@@ -46,13 +45,14 @@ public abstract class AbstractApiDeducerTest {
     Function createFunction =
         new Function(
             thing,
-            new Goal(GGoalStandardType.CMD_CREATE),
+            new Goal(GoalType.CREATE),
             new FunctionName("createSomeThing"),
             new ReturnValue(
                 new IoModelPrimitive(
-                    new PrimitiveDataType(new DataTypeName(PrimaryType.STRING.name())),
+                    new PrimitiveDataType(PrimitiveType.STRING),
                     new VariableName("response"),
-                    new LinkedHashSet<>())));
+                    new LinkedHashSet<>(),
+                    false)));
     thing.appendFunction(createFunction);
 
     // =============================================================================================
@@ -61,13 +61,14 @@ public abstract class AbstractApiDeducerTest {
     Function customGoalFunction =
         new Function(
             thing,
-            new Goal("someCustomGoal"),
+            new Goal(GoalType.VALIDATE),
             new FunctionName("createSomeThing"),
             new ReturnValue(
                 new IoModelPrimitive(
-                    new PrimitiveDataType(new DataTypeName(PrimaryType.STRING.name())),
+                    new PrimitiveDataType(PrimitiveType.STRING),
                     new VariableName("response"),
-                    new LinkedHashSet<>())));
+                    new LinkedHashSet<>(),
+                    false)));
     thing.appendFunction(customGoalFunction);
 
     return thing;

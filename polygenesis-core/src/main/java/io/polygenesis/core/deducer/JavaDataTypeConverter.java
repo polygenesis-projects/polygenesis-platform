@@ -20,7 +20,7 @@
 
 package io.polygenesis.core.deducer;
 
-import io.polygenesis.core.datatype.PrimaryType;
+import io.polygenesis.core.datatype.PrimitiveType;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,7 +35,7 @@ public class JavaDataTypeConverter {
   // STATIC
   // ===============================================================================================
 
-  private static Map<String, PrimaryType> dataTypeMap;
+  private static Map<String, PrimitiveType> dataTypeMap;
 
   static {
     initialize();
@@ -51,7 +51,7 @@ public class JavaDataTypeConverter {
    * @param type the type
    * @return the data type
    */
-  PrimaryType convert(String type) {
+  PrimitiveType convert(String type) {
     if (dataTypeMap.containsKey(type)) {
       return dataTypeMap.get(type);
     } else {
@@ -66,19 +66,19 @@ public class JavaDataTypeConverter {
   private static void initialize() {
     dataTypeMap = new HashMap<>();
 
-    dataTypeMap.put("void", PrimaryType.VOID);
+    dataTypeMap.put("void", PrimitiveType.VOID);
 
-    dataTypeMap.put("java.lang.String", PrimaryType.STRING);
+    dataTypeMap.put("java.lang.String", PrimitiveType.STRING);
 
-    dataTypeMap.put("int", PrimaryType.INTEGER);
-    dataTypeMap.put("java.lang.Integer", PrimaryType.INTEGER);
+    dataTypeMap.put("int", PrimitiveType.INTEGER);
+    dataTypeMap.put("java.lang.Integer", PrimitiveType.INTEGER);
 
-    dataTypeMap.put("long", PrimaryType.LONG);
-    dataTypeMap.put("java.lang.Long", PrimaryType.LONG);
+    dataTypeMap.put("long", PrimitiveType.LONG);
+    dataTypeMap.put("java.lang.Long", PrimitiveType.LONG);
 
-    dataTypeMap.put("boolean", PrimaryType.BOOLEAN);
-    dataTypeMap.put("java.lang.Boolean", PrimaryType.BOOLEAN);
+    dataTypeMap.put("boolean", PrimitiveType.BOOLEAN);
+    dataTypeMap.put("java.lang.Boolean", PrimitiveType.BOOLEAN);
 
-    dataTypeMap.put("java.util.List", PrimaryType.ARRAY);
+    dataTypeMap.put("java.util.List", PrimitiveType.ARRAY);
   }
 }

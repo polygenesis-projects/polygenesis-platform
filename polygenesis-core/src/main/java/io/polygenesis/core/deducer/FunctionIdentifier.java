@@ -178,7 +178,7 @@ public class FunctionIdentifier {
 
     if (name.equals("")) {
       return new FunctionName(
-          TextConverter.toLowerCamel(annotationGFunction.goal())
+          TextConverter.toLowerCamel(annotationGFunction.goal().name())
               + TextConverter.toUpperCamel(annotationGFunction.thingName()));
     }
 

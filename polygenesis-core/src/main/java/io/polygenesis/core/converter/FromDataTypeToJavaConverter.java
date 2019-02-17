@@ -21,7 +21,7 @@
 package io.polygenesis.core.converter;
 
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.datatype.PrimaryType;
+import io.polygenesis.core.datatype.PrimitiveType;
 import io.polygenesis.core.iomodel.IoModel;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,7 +38,7 @@ public class FromDataTypeToJavaConverter {
   // STATIC
   // ===============================================================================================
 
-  private static Map<PrimaryType, String> dataTypeMap;
+  private static Map<PrimitiveType, String> dataTypeMap;
 
   static {
     initialize();
@@ -57,7 +57,7 @@ public class FromDataTypeToJavaConverter {
   public String getDeclaredVariableType(IoModel model) {
     String candidate = TextConverter.toUpperCamel(model.getDataType().getDataTypeName().getText());
 
-    return Stream.of(PrimaryType.values())
+    return Stream.of(PrimitiveType.values())
         .filter(value -> value.name().equals(candidate.toUpperCase()))
         .findFirst()
         .map(primaryType -> dataTypeMap.get(primaryType))
@@ -71,19 +71,19 @@ public class FromDataTypeToJavaConverter {
   private static void initialize() {
     dataTypeMap = new HashMap<>();
 
-    dataTypeMap.put(PrimaryType.VOID, "void");
+    dataTypeMap.put(PrimitiveType.VOID, "void");
 
-    dataTypeMap.put(PrimaryType.STRING, "String");
+    dataTypeMap.put(PrimitiveType.STRING, "String");
 
-    dataTypeMap.put(PrimaryType.INTEGER, "int");
-    dataTypeMap.put(PrimaryType.INTEGER, "java.lang.Integer");
+    dataTypeMap.put(PrimitiveType.INTEGER, "int");
+    dataTypeMap.put(PrimitiveType.INTEGER, "java.lang.Integer");
 
-    dataTypeMap.put(PrimaryType.LONG, "long");
-    dataTypeMap.put(PrimaryType.LONG, "java.lang.Long");
+    dataTypeMap.put(PrimitiveType.LONG, "long");
+    dataTypeMap.put(PrimitiveType.LONG, "java.lang.Long");
 
-    dataTypeMap.put(PrimaryType.BOOLEAN, "boolean");
-    dataTypeMap.put(PrimaryType.BOOLEAN, "java.lang.Boolean");
+    dataTypeMap.put(PrimitiveType.BOOLEAN, "boolean");
+    dataTypeMap.put(PrimitiveType.BOOLEAN, "java.lang.Boolean");
 
-    dataTypeMap.put(PrimaryType.ARRAY, "java.util.List");
+    dataTypeMap.put(PrimitiveType.ARRAY, "java.util.List");
   }
 }

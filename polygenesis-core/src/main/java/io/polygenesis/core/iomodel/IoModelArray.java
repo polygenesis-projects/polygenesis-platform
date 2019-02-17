@@ -29,6 +29,8 @@ import io.polygenesis.core.datatype.ClassDataType;
  */
 public class IoModelArray extends IoModelGroup {
 
+  private final GenericTypeName genericType;
+
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
@@ -40,6 +42,7 @@ public class IoModelArray extends IoModelGroup {
    */
   public IoModelArray(IoModelGroup parent) {
     super(parent);
+    this.genericType = null;
   }
 
   /**
@@ -51,6 +54,37 @@ public class IoModelArray extends IoModelGroup {
    */
   public IoModelArray(
       GenericTypeName genericType, ClassDataType dataType, VariableName variableName) {
-    super(genericType, dataType, variableName);
+    super(dataType, variableName);
+    this.genericType = genericType;
+  }
+
+  /**
+   * Instantiates a new Io model array.
+   *
+   * @param parent the parent
+   * @param genericType the generic type
+   * @param dataType the data type
+   * @param variableName the variable name
+   */
+  public IoModelArray(
+      IoModelGroup parent,
+      GenericTypeName genericType,
+      ClassDataType dataType,
+      VariableName variableName) {
+    super(parent, dataType, variableName);
+    this.genericType = genericType;
+  }
+
+  // ===============================================================================================
+  // GETTERS
+  // ===============================================================================================
+
+  /**
+   * Gets generic type.
+   *
+   * @return the generic type
+   */
+  public GenericTypeName getGenericType() {
+    return genericType;
   }
 }

@@ -24,7 +24,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /**
- * The type Data type.
+ * The Data type.
  *
  * <p>References:
  *
@@ -38,7 +38,10 @@ import java.util.Optional;
  */
 public abstract class AbstractDataType {
 
-  private DataTypeName dataTypeName;
+  private final DataKind dataKind;
+
+  /** Name such as: int, BigDecimal, CreateCustomerRequest etc. */
+  private final DataTypeName dataTypeName;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -47,12 +50,19 @@ public abstract class AbstractDataType {
   /**
    * Instantiates a new Abstract data type.
    *
+   * @param dataKind the data type
    * @param dataTypeName the data type name
    */
-  public AbstractDataType(DataTypeName dataTypeName) {
+  public AbstractDataType(DataKind dataKind, DataTypeName dataTypeName) {
+    this.dataKind = dataKind;
     this.dataTypeName = dataTypeName;
   }
 
+  /**
+   * Gets optional package name.
+   *
+   * @return the optional package name
+   */
   // ===============================================================================================
   // ABSTRACT
   // ===============================================================================================
@@ -69,6 +79,28 @@ public abstract class AbstractDataType {
    */
   public DataTypeName getDataTypeName() {
     return dataTypeName;
+  }
+
+  /**
+   * Gets data kind.
+   *
+   * @return the data kind
+   */
+  public DataKind getDataKind() {
+    return dataKind;
+  }
+
+  // ===============================================================================================
+  // QUERIES
+  // ===============================================================================================
+
+  /**
+   * Is primitive boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isPrimitive() {
+    return dataKind.equals(DataKind.PRIMITIVE);
   }
 
   // ===============================================================================================

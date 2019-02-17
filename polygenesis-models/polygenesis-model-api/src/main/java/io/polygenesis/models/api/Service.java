@@ -20,6 +20,7 @@
 
 package io.polygenesis.models.api;
 
+import io.polygenesis.annotations.core.CqsType;
 import io.polygenesis.core.ThingName;
 import io.polygenesis.core.datatype.PackageName;
 import java.util.Objects;
@@ -35,7 +36,7 @@ public class Service {
   private PackageName packageName;
   private ServiceName serviceName;
   private Set<Method> methods;
-  private ServiceCqrsType cqrsType;
+  private CqsType cqrsType;
   private ThingName thingName;
 
   // ===============================================================================================
@@ -55,7 +56,7 @@ public class Service {
       PackageName packageName,
       ServiceName serviceName,
       Set<Method> methods,
-      ServiceCqrsType cqrsType,
+      CqsType cqrsType,
       ThingName thingName) {
     setPackageName(packageName);
     setServiceName(serviceName);
@@ -100,7 +101,7 @@ public class Service {
    *
    * @return the cqrs type
    */
-  public ServiceCqrsType getCqrsType() {
+  public CqsType getCqrsType() {
     return cqrsType;
   }
 
@@ -149,7 +150,7 @@ public class Service {
    *
    * @param cqrsType the cqrs type
    */
-  private void setCqrsType(ServiceCqrsType cqrsType) {
+  private void setCqrsType(CqsType cqrsType) {
     this.cqrsType = cqrsType;
   }
 

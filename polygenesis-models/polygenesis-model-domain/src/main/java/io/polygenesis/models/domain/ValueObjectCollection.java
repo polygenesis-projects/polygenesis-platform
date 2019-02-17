@@ -20,9 +20,36 @@
 
 package io.polygenesis.models.domain;
 
+import io.polygenesis.core.iomodel.IoModelGroup;
+import io.polygenesis.core.iomodel.VariableName;
+import java.util.Optional;
+
 /**
  * The type Value object collection.
  *
  * @author Christos Tsakostas
  */
-public class ValueObjectCollection {}
+public class ValueObjectCollection extends AbstractProperty {
+
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
+  /**
+   * Instantiates a new Value object collection.
+   *
+   * @param variableName the variable name
+   */
+  public ValueObjectCollection(VariableName variableName) {
+    super(variableName);
+  }
+
+  // ===============================================================================================
+  // OVERRIDES
+  // ===============================================================================================
+
+  @Override
+  public Optional<IoModelGroup> getIoModelGroupAsOptional() {
+    return Optional.empty();
+  }
+}

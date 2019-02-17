@@ -49,11 +49,9 @@ public @interface GFunction {
   /**
    * The goal type of a method. e.g. create, collection, etc.
    *
-   * <p>Struggle to use one of the values provided at {@link GGoalStandardType}.
-   *
    * @return the string
    */
-  String goal();
+  GoalType goal();
 
   /**
    * Thing name.

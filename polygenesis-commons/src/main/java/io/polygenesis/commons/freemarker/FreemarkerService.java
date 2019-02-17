@@ -28,6 +28,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
 
@@ -76,6 +77,20 @@ public class FreemarkerService {
       file.close();
     } catch (IOException | TemplateException e) {
       throw new IllegalStateException(e.getMessage(), e);
+    }
+  }
+
+  /**
+   * Export if not exists.
+   *
+   * @param dataModel the data model
+   * @param ftlTemplate the ftl template
+   * @param generationFilePath the generation file path
+   */
+  public void exportIfNotExists(
+      Map<String, Object> dataModel, String ftlTemplate, Path generationFilePath) {
+    if (!Files.exists(generationFilePath)) {
+      export(dataModel, ftlTemplate, generationFilePath);
     }
   }
 }

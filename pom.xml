@@ -295,47 +295,12 @@
       </dependency>
       <dependency>
         <groupId>io.polygenesis.generators</groupId>
-        <artifactId>polygenesis-generator-java-api</artifactId>
+        <artifactId>polygenesis-generator-java</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>io.polygenesis.generators</groupId>
-        <artifactId>polygenesis-generator-java-api-impl</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>io.polygenesis.generators</groupId>
-        <artifactId>polygenesis-generator-java-api-rest</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>io.polygenesis.generators</groupId>
-        <artifactId>polygenesis-generator-java-api-shared</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>io.polygenesis.generators</groupId>
-        <artifactId>polygenesis-generator-java-domain</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>io.polygenesis.generators</groupId>
-        <artifactId>polygenesis-generator-java-persistence-rdbms</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>io.polygenesis.generators</groupId>
-        <artifactId>polygenesis-generator-java-publisher-activemq</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>io.polygenesis.generators</groupId>
-        <artifactId>polygenesis-generator-java-subscriber-activemq</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>io.polygenesis.generators</groupId>
-        <artifactId>polygenesis-generator-sql-flyway</artifactId>
+        <artifactId>polygenesis-generator-sql</artifactId>
         <version>${project.version}</version>
       </dependency>
 

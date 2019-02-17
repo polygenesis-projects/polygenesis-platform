@@ -1,0 +1,73 @@
+/*-
+ * ==========================LICENSE_START=================================
+ * PolyGenesis Platform
+ * ========================================================================
+ * Copyright (C) 2015 - 2019 OREGOR LTD
+ * ========================================================================
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ===========================LICENSE_END==================================
+ */
+
+package io.polygenesis.models.apirest;
+
+import io.polygenesis.core.ModelRepository;
+import java.util.Set;
+
+/**
+ * The type Rest model repository.
+ *
+ * @author Christos Tsakostas
+ */
+public class RestModelRepository implements ModelRepository {
+
+  private Set<Resource> resources;
+
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
+  /**
+   * Instantiates a new Rest model repository.
+   *
+   * @param resources the resources
+   */
+  public RestModelRepository(Set<Resource> resources) {
+    setResources(resources);
+  }
+
+  // ===============================================================================================
+  // GETTERS
+  // ===============================================================================================
+
+  /**
+   * Gets resources.
+   *
+   * @return the resources
+   */
+  public Set<Resource> getResources() {
+    return resources;
+  }
+
+  // ===============================================================================================
+  // GUARDS
+  // ===============================================================================================
+
+  /**
+   * Sets resources.
+   *
+   * @param resources the resources
+   */
+  private void setResources(Set<Resource> resources) {
+    this.resources = resources;
+  }
+}
