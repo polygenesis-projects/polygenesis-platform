@@ -39,7 +39,7 @@ public class ReactiveStateDeducerImplTest {
     ThingRepository thingRepository = new ThingRepositoryImpl(new LinkedHashSet<>());
 
     ReactiveStateModelRepository reactiveStateModelRepository =
-        reactiveStateDeducer.deduce(thingRepository);
+        reactiveStateDeducer.deduce(thingRepository, new LinkedHashSet<>());
 
     assertThat(reactiveStateModelRepository).isNotNull();
     assertThat(reactiveStateModelRepository.getStores()).isNotNull();

@@ -24,7 +24,6 @@ import io.polygenesis.annotations.core.CqsType;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.Thing;
 import io.polygenesis.core.ThingName;
-import io.polygenesis.core.ThingRepository;
 import io.polygenesis.core.datatype.PackageName;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -37,46 +36,91 @@ import java.util.Set;
 public class ServiceDeducer {
 
   // ===============================================================================================
+  // DEPENDENCIES
+  // ===============================================================================================
+
+  private final DtoDeducer dtoDeducer;
+
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
+  /**
+   * Instantiates a new Service deducer.
+   *
+   * @param dtoDeducer the dto deducer
+   */
+  public ServiceDeducer(DtoDeducer dtoDeducer) {
+    this.dtoDeducer = dtoDeducer;
+  }
+
+  // ===============================================================================================
   // FUNCTIONALITY
   // ===============================================================================================
 
   /**
    * Deduce from set.
    *
-   * @param thingRepository the thing repository
+   * @param thing the thing
    * @param rootPackageName the package name
    * @return the set
    */
-  public Set<Service> deduceFrom(ThingRepository thingRepository, PackageName rootPackageName) {
+  public Set<Service> deduceFrom(Thing thing, PackageName rootPackageName) {
     Set<Service> services = new LinkedHashSet<>();
 
-    thingRepository
-        .getThings()
-        .forEach(
-            thing ->
-                services.add(
-                    new Service(
-                        makeServicePackageName(rootPackageName, thing.getName()),
-                        makeServiceName(thing.getName()),
-                        getCommandMethods(thing),
-                        CqsType.COMMAND,
-                        thing.getName())));
+    Set<Dto> dtos = dtoDeducer.deduce(thing.getFunctions());
+
+    Set<Method> commandMethods = getCommandMethods(thing);
+    if (!commandMethods.isEmpty()) {
+      services.add(
+          new Service(
+              makeServicePackageName(rootPackageName, thing.getName()),
+              makeCommandServiceName(thing.getName()),
+              commandMethods,
+              CqsType.COMMAND,
+              thing.getName(),
+              dtos));
+    }
+
+    Set<Method> queryMethods = getQueryMethods(thing);
+    if (!queryMethods.isEmpty()) {
+      services.add(
+          new Service(
+              makeServicePackageName(rootPackageName, thing.getName()),
+              makeQueryServiceName(thing.getName()),
+              queryMethods,
+              CqsType.QUERY,
+              thing.getName(),
+              dtos));
+    }
 
     return services;
   }
+
+  // ===============================================================================================
+  // PRIVATE
+  // ===============================================================================================
 
   private Set<Method> getCommandMethods(Thing thing) {
     Set<Method> methods = new LinkedHashSet<>();
 
     thing
         .getFunctions()
-        .forEach(
-            function ->
-                methods.add(
-                    new Method(
-                        new MethodName(function.getName().getText()),
-                        function.getReturnValue(),
-                        function.getArguments())));
+        .stream()
+        .filter(function -> function.getGoal().isCommand())
+        .forEach(function -> methods.add(new Method(function)));
+
+    return methods;
+  }
+
+  private Set<Method> getQueryMethods(Thing thing) {
+    Set<Method> methods = new LinkedHashSet<>();
+
+    thing
+        .getFunctions()
+        .stream()
+        .filter(function -> !function.getGoal().isCommand())
+        .forEach(function -> methods.add(new Method(function)));
 
     return methods;
   }
@@ -86,7 +130,11 @@ public class ServiceDeducer {
         rootPackageName.getText() + "." + TextConverter.toLowerCase(thingName.getText()));
   }
 
-  private ServiceName makeServiceName(ThingName thingName) {
+  private ServiceName makeCommandServiceName(ThingName thingName) {
     return new ServiceName(thingName.getText() + "Service");
+  }
+
+  private ServiceName makeQueryServiceName(ThingName thingName) {
+    return new ServiceName(thingName.getText() + "QueryService");
   }
 }

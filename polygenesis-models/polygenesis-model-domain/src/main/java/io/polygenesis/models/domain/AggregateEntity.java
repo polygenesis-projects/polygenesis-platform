@@ -37,11 +37,13 @@ public class AggregateEntity extends ValueObject {
   /**
    * Instantiates a new Aggregate entity.
    *
+   * @param originatingIoModelGroup the originating io model group
    * @param ioModelGroup the io model group
    * @param variableName the variable name
    */
-  public AggregateEntity(IoModelGroup ioModelGroup, VariableName variableName) {
-    super(ioModelGroup, variableName);
+  public AggregateEntity(
+      IoModelGroup originatingIoModelGroup, IoModelGroup ioModelGroup, VariableName variableName) {
+    super(PropertyType.AGGREGATE_ENTITY, originatingIoModelGroup, ioModelGroup, variableName);
   }
 
   // ===============================================================================================

@@ -20,7 +20,6 @@
 
 package io.polygenesis.generators.java.shared;
 
-import io.polygenesis.commons.keyvalue.KeyValue;
 import java.util.Set;
 
 /**
@@ -30,7 +29,7 @@ import java.util.Set;
  */
 public class ConstructorProjection {
 
-  private Set<KeyValue> parameters;
+  private Set<ArgumentProjection> parameters;
   private String superImpl;
 
   // ===============================================================================================
@@ -43,7 +42,7 @@ public class ConstructorProjection {
    * @param parameters the parameters
    * @param superImpl the super
    */
-  public ConstructorProjection(Set<KeyValue> parameters, String superImpl) {
+  public ConstructorProjection(Set<ArgumentProjection> parameters, String superImpl) {
     setParameters(parameters);
     setSuperImpl(superImpl);
   }
@@ -57,7 +56,7 @@ public class ConstructorProjection {
    *
    * @return the parameters
    */
-  public Set<KeyValue> getParameters() {
+  public Set<ArgumentProjection> getParameters() {
     return parameters;
   }
 
@@ -79,7 +78,7 @@ public class ConstructorProjection {
    *
    * @param parameters the parameters
    */
-  private void setParameters(Set<KeyValue> parameters) {
+  private void setParameters(Set<ArgumentProjection> parameters) {
     this.parameters = parameters;
   }
 

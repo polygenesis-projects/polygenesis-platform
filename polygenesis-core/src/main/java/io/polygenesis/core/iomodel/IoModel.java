@@ -27,7 +27,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * This is the base class for {@link IoModelPrimitive}, {@link IoModelGroup}, and {@link
- * IoModelArray}***.
+ * IoModelArray}****.
  *
  * @author Christos Tsakostas
  */
@@ -146,6 +146,19 @@ public abstract class IoModel {
    */
   public boolean isIoModelGroup() {
     return this instanceof IoModelGroup;
+  }
+
+  /**
+   * Is thing identity boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isThingIdentity() {
+    if (this instanceof IoModelPrimitive) {
+      return ((IoModelPrimitive) this).getThingIdentity();
+    } else {
+      return false;
+    }
   }
 
   // ===============================================================================================

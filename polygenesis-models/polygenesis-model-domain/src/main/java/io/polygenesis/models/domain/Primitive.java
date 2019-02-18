@@ -20,6 +20,8 @@
 
 package io.polygenesis.models.domain;
 
+import io.polygenesis.commons.keyvalue.KeyValue;
+import io.polygenesis.core.iomodel.IoModel;
 import io.polygenesis.core.iomodel.IoModelGroup;
 import io.polygenesis.core.iomodel.IoModelPrimitive;
 import io.polygenesis.core.iomodel.VariableName;
@@ -45,7 +47,7 @@ public class Primitive extends AbstractProperty {
    * @param variableName the variable name
    */
   public Primitive(IoModelPrimitive ioModelPrimitive, VariableName variableName) {
-    super(variableName);
+    super(PropertyType.PRIMITIVE, variableName);
     setIoModelPrimitive(ioModelPrimitive);
   }
 
@@ -82,5 +84,17 @@ public class Primitive extends AbstractProperty {
   @Override
   public Optional<IoModelGroup> getIoModelGroupAsOptional() {
     return Optional.empty();
+  }
+
+  @Override
+  public IoModel getIoModel() {
+    return ioModelPrimitive;
+  }
+
+  @Override
+  public KeyValue getAsKeyValue() {
+    return new KeyValue(
+        getIoModelPrimitive().getDataType().getDataTypeName().getText(),
+        getVariableName().getText());
   }
 }

@@ -15,7 +15,8 @@
 
   <modules>
     <module>polygenesis-model-api</module>
-    <module>polygenesis-model-api-rest</module>
+    <module>polygenesis-model-api-impl</module>
+    <module>polygenesis-model-rest</module>
     <module>polygenesis-model-domain</module>
     <module>polygenesis-model-reactive-state</module>
     <module>polygenesis-model-ui</module>

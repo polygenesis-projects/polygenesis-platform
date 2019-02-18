@@ -21,6 +21,7 @@
 package io.polygenesis.models.api;
 
 import io.polygenesis.annotations.core.CqsType;
+import io.polygenesis.core.Function;
 import io.polygenesis.core.ThingName;
 import io.polygenesis.core.datatype.PackageName;
 import java.util.Objects;
@@ -38,6 +39,7 @@ public class Service {
   private Set<Method> methods;
   private CqsType cqrsType;
   private ThingName thingName;
+  private Set<Dto> dtos;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -51,18 +53,40 @@ public class Service {
    * @param methods the methods
    * @param cqrsType the cqrs type
    * @param thingName the thing name
+   * @param dtos the dtos
    */
   public Service(
       PackageName packageName,
       ServiceName serviceName,
       Set<Method> methods,
       CqsType cqrsType,
-      ThingName thingName) {
+      ThingName thingName,
+      Set<Dto> dtos) {
     setPackageName(packageName);
     setServiceName(serviceName);
     setMethods(methods);
     setCqrsType(cqrsType);
     setThingName(thingName);
+    setDtos(dtos);
+  }
+
+  // ===============================================================================================
+  // QUERIES
+  // ===============================================================================================
+
+  /**
+   * Contains function.
+   *
+   * @param function the function
+   * @return the boolean
+   */
+  public boolean contains(Function function) {
+
+    return getMethods()
+        .stream()
+        .filter(method -> method.getFunction().equals(function))
+        .findFirst()
+        .isPresent();
   }
 
   // ===============================================================================================
@@ -114,6 +138,15 @@ public class Service {
     return thingName;
   }
 
+  /**
+   * Gets dtos.
+   *
+   * @return the dtos
+   */
+  public Set<Dto> getDtos() {
+    return dtos;
+  }
+
   // ===============================================================================================
   // GUARDS
   // ===============================================================================================
@@ -161,6 +194,15 @@ public class Service {
    */
   private void setThingName(ThingName thingName) {
     this.thingName = thingName;
+  }
+
+  /**
+   * Sets dtos.
+   *
+   * @param dtos the dtos
+   */
+  private void setDtos(Set<Dto> dtos) {
+    this.dtos = dtos;
   }
 
   // ===============================================================================================

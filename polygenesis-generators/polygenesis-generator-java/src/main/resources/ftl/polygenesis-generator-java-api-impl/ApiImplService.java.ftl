@@ -65,7 +65,7 @@ public class ${ projection.objectNameWithOptionalExtendsImplements } {
 	// IMPLEMENTATION(S)
 	// ===============================================================================================
 
-<#list projection.methodProjections as methodProjection>
+<#list projection.functionProjections as methodProjection>
 	/**
 	 * ${ methodProjection.description }
 <#if methodProjection.arguments?size gt 0 || methodProjection.returnValue??>
@@ -84,18 +84,8 @@ public class ${ projection.objectNameWithOptionalExtendsImplements } {
 		Assertion.isNotNull(${ argument.value }, "${ textConverter.toUpperCamelSpaces(argument.value) } cannot be null");
 	</#list>
 
-		// TODO
-	<#list aggregateRootProjection.constructors as constructor>
-		${ textConverter.toUpperCamel(aggregateRootProjection.objectName) } ${ textConverter.toLowerCamel(aggregateRootProjection.objectName) } = new ${ textConverter.toUpperCamel(aggregateRootProjection.objectName) }(
-		<#list constructor.parameters as parameter>
-			set${ textConverter.toUpperCamel(parameter.value) }(${ textConverter.toLowerCamel(parameter.value) })<#sep>,</#sep>
-		</#list>
-		);
-	</#list>
-
-		${ textConverter.toLowerCamel(aggregateRootProjection.objectName) }Persistence.store(${ textConverter.toLowerCamel(aggregateRootProjection.objectName) });
-
-		return new ${ methodProjection.returnValue}(${ textConverter.toLowerCamel(aggregateRootProjection.objectName) }.getId());
+${ methodProjection.implementation}
 	}
+
 </#list>
 }

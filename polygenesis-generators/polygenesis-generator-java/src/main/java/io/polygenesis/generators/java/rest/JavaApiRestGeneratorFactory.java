@@ -22,7 +22,9 @@ package io.polygenesis.generators.java.rest;
 
 import io.polygenesis.commons.freemarker.FreemarkerConfig;
 import io.polygenesis.commons.freemarker.FreemarkerService;
+import io.polygenesis.commons.text.Name;
 import io.polygenesis.core.converter.FromDataTypeToJavaConverter;
+import io.polygenesis.core.datatype.PackageName;
 import java.nio.file.Path;
 
 /**
@@ -37,6 +39,7 @@ public final class JavaApiRestGeneratorFactory {
   // ===============================================================================================
   private static final ResourceExporter resourceExporter;
   private static final ResourceTestExporter resourceTestExporter;
+  private static final RestConstantsProjectionExporter restConstantsProjectionExporter;
 
   // ===============================================================================================
   // STATIC INITIALIZATION OF DEPENDENCIES
@@ -48,16 +51,22 @@ public final class JavaApiRestGeneratorFactory {
 
     FromDataTypeToJavaConverter fromDataTypeToJavaConverter = new FromDataTypeToJavaConverter();
 
+    EndpointProjectionConverter endpointProjectionConverter =
+        new EndpointProjectionConverter(fromDataTypeToJavaConverter);
+
     ResourceProjectionConverter resourceProjectionConverter =
-        new ResourceProjectionConverter(fromDataTypeToJavaConverter);
+        new ResourceProjectionConverter(fromDataTypeToJavaConverter, endpointProjectionConverter);
 
     resourceExporter = new ResourceExporter(freemarkerService, resourceProjectionConverter);
 
     ResourceTestProjectionConverter resourceTestProjectionConverter =
-        new ResourceTestProjectionConverter(fromDataTypeToJavaConverter);
+        new ResourceTestProjectionConverter(
+            fromDataTypeToJavaConverter, endpointProjectionConverter);
 
     resourceTestExporter =
         new ResourceTestExporter(freemarkerService, resourceTestProjectionConverter);
+
+    restConstantsProjectionExporter = new RestConstantsProjectionExporter(freemarkerService);
   }
 
   // ===============================================================================================
@@ -76,9 +85,18 @@ public final class JavaApiRestGeneratorFactory {
    * New instance java api generator.
    *
    * @param generationPath the generation path
+   * @param rootPackageName the root package name
+   * @param contextName the context name
    * @return the java api generator
    */
-  public static JavaApiRestGenerator newInstance(Path generationPath) {
-    return new JavaApiRestGenerator(generationPath, resourceExporter, resourceTestExporter);
+  public static JavaApiRestGenerator newInstance(
+      Path generationPath, PackageName rootPackageName, Name contextName) {
+    return new JavaApiRestGenerator(
+        generationPath,
+        rootPackageName,
+        contextName,
+        resourceExporter,
+        resourceTestExporter,
+        restConstantsProjectionExporter);
   }
 }

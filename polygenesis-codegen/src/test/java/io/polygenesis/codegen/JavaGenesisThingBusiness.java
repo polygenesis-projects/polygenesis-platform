@@ -46,9 +46,14 @@ public class JavaGenesisThingBusiness {
     Thing business = new Thing(new ThingName("business"));
 
     business.appendFunction(functionCreate(business));
+    business.appendFunction(functionFetchDetail(business));
 
     return business;
   }
+
+  // ===============================================================================================
+  // CREATE
+  // ===============================================================================================
 
   private static Function functionCreate(Thing business) {
     // ARGUMENTS
@@ -58,23 +63,24 @@ public class JavaGenesisThingBusiness {
                 new DataTypeName("CreateBusinessRequest"),
                 new PackageName("com.oregor.microservice.account.business")));
 
-    // name
+    // ARGUMENT - NAME
     argumentIoModelGroup.addIoModelPrimitive(
         IoModelPrimitive.ofParent(
             argumentIoModelGroup,
             new PrimitiveDataType(PrimitiveType.STRING),
             new VariableName("name")));
 
-    // postal address
+    // ARGUMENT - POSTAL ADDRESS
     argumentIoModelGroup.addIoModelGroup(postalAddress(argumentIoModelGroup));
 
-    // RETURN
+    // RETURN VALUE
     IoModelGroup returnValueIoModelGroup =
         new IoModelGroup(
             new ClassDataType(
                 new DataTypeName("CreateBusinessResponse"),
                 new PackageName("com.oregor.microservice.account.business")));
 
+    // RETURN VALUE - BUSINESSID
     returnValueIoModelGroup.addIoModelPrimitive(
         IoModelPrimitive.ofThingIdentityWithParent(
             returnValueIoModelGroup,
@@ -89,7 +95,45 @@ public class JavaGenesisThingBusiness {
         new ReturnValue(returnValueIoModelGroup));
   }
 
-  // postalAddress
+  // ===============================================================================================
+  // FETCH DETAIL
+  // ===============================================================================================
+
+  private static Function functionFetchDetail(Thing business) {
+    // ARGUMENTS
+    IoModelGroup argumentIoModelGroup =
+        new IoModelGroup(
+            new ClassDataType(
+                new DataTypeName("FetchBusinessRequest"),
+                new PackageName("com.oregor.microservice.account.business")));
+
+    // ARGUMENT - BusinessID
+    argumentIoModelGroup.addIoModelPrimitive(
+        IoModelPrimitive.ofThingIdentityWithParent(
+            argumentIoModelGroup,
+            new PrimitiveDataType(PrimitiveType.STRING),
+            new VariableName("businessId")));
+
+    // RETURN VALUE
+    IoModelGroup returnValueIoModelGroup =
+        new IoModelGroup(
+            new ClassDataType(
+                new DataTypeName("FetchBusinessResponse"),
+                new PackageName("com.oregor.microservice.account.business")));
+
+    return new Function(
+        business,
+        new Goal(GoalType.FETCH_ONE),
+        new FunctionName("fetch"),
+        new LinkedHashSet<>(Arrays.asList(new Argument(argumentIoModelGroup))),
+        new ReturnValue(returnValueIoModelGroup));
+  }
+
+  // ===============================================================================================
+  // SHARED
+  // ===============================================================================================
+
+  // POSTAL ADDRESS
   private static IoModelGroup postalAddress(IoModelGroup parent) {
     IoModelGroup postalAddress =
         new IoModelGroup(

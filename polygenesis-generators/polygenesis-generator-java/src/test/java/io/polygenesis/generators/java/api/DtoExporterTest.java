@@ -23,9 +23,14 @@ package io.polygenesis.generators.java.api;
 import static org.mockito.Mockito.mock;
 
 import io.polygenesis.annotations.core.CqsType;
+import io.polygenesis.annotations.core.GoalType;
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.core.Argument;
+import io.polygenesis.core.Function;
+import io.polygenesis.core.FunctionName;
+import io.polygenesis.core.Goal;
 import io.polygenesis.core.ReturnValue;
+import io.polygenesis.core.Thing;
 import io.polygenesis.core.ThingName;
 import io.polygenesis.core.datatype.ClassDataType;
 import io.polygenesis.core.datatype.DataTypeName;
@@ -36,7 +41,6 @@ import io.polygenesis.core.iomodel.IoModelGroup;
 import io.polygenesis.core.iomodel.IoModelPrimitive;
 import io.polygenesis.core.iomodel.VariableName;
 import io.polygenesis.models.api.Method;
-import io.polygenesis.models.api.MethodName;
 import io.polygenesis.models.api.Service;
 import io.polygenesis.models.api.ServiceName;
 import java.nio.file.Path;
@@ -105,8 +109,7 @@ public class DtoExporterTest {
 
     createArguments.add(argument);
 
-    Method createMethod =
-        new Method(new MethodName("createMethodName"), createReturnValue, createArguments);
+    Method createMethod = new Method(makeFunctionCreate());
 
     methods.add(createMethod);
 
@@ -115,7 +118,8 @@ public class DtoExporterTest {
         new ServiceName("someServiceName"),
         methods,
         CqsType.COMMAND,
-        thingName);
+        thingName,
+        new LinkedHashSet<>());
   }
 
   // postalAddress
@@ -144,5 +148,19 @@ public class DtoExporterTest {
             postalAddress, new PrimitiveDataType(PrimitiveType.STRING), new VariableName("city")));
 
     return postalAddress;
+  }
+
+  private Function makeFunctionCreate() {
+    Thing thing = new Thing(new ThingName("customer"));
+    ReturnValue returnValue =
+        new ReturnValue(
+            IoModelPrimitive.of(
+                new PrimitiveDataType(PrimitiveType.STRING), new VariableName("someRet")));
+    return new Function(
+        thing,
+        new Goal(GoalType.CREATE),
+        new FunctionName("create"),
+        new LinkedHashSet<>(),
+        returnValue);
   }
 }

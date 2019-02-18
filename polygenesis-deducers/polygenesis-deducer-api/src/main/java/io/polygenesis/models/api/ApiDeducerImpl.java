@@ -20,8 +20,11 @@
 
 package io.polygenesis.models.api;
 
+import io.polygenesis.core.ModelRepository;
 import io.polygenesis.core.ThingRepository;
 import io.polygenesis.core.datatype.PackageName;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * The type Api deducer.
@@ -65,20 +68,25 @@ public class ApiDeducerImpl implements ApiDeducer {
   }
 
   // ===============================================================================================
-  // GUARDS
-  // ===============================================================================================
-
-  // ===============================================================================================
   // OVERRIDES
   // ===============================================================================================
 
   @Override
-  public ServiceModelRepository deduce(ThingRepository thingRepository) {
+  public ServiceModelRepository deduce(
+      ThingRepository thingRepository, Set<ModelRepository> modelRepositories) {
     if (thingRepository.getThings().isEmpty()) {
       throw new IllegalStateException("thingRepository cannot be empty");
     }
 
-    return new ServiceModelRepository(
-        serviceDeducer.deduceFrom(thingRepository, getRootPackageName()));
+    Set<Service> services = new LinkedHashSet<>();
+
+    thingRepository
+        .getThings()
+        .forEach(
+            thing -> {
+              services.addAll(serviceDeducer.deduceFrom(thing, getRootPackageName()));
+            });
+
+    return new ServiceModelRepository(services);
   }
 }

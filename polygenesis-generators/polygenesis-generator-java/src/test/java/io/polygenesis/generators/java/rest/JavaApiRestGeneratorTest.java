@@ -26,9 +26,11 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
+import io.polygenesis.commons.text.Name;
 import io.polygenesis.core.ModelRepository;
-import io.polygenesis.models.apirest.Resource;
-import io.polygenesis.models.apirest.RestModelRepository;
+import io.polygenesis.core.datatype.PackageName;
+import io.polygenesis.models.rest.Resource;
+import io.polygenesis.models.rest.RestModelRepository;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -45,18 +47,30 @@ import org.junit.Test;
 public class JavaApiRestGeneratorTest {
 
   private Path generationPath;
+  private PackageName rootPackageName;
+  private Name contextName;
   private ResourceExporter resourceExporter;
   private ResourceTestExporter resourceTestExporter;
+  private RestConstantsProjectionExporter restConstantsProjectionExporter;
   private JavaApiRestGenerator javaApiRestGenerator;
 
   /** Sets up. */
   @Before
   public void setUp() {
     generationPath = Paths.get("tmp");
+    rootPackageName = new PackageName("com.oregor");
+    contextName = new Name("someContext");
     resourceExporter = mock(ResourceExporter.class);
     resourceTestExporter = mock(ResourceTestExporter.class);
+    restConstantsProjectionExporter = mock(RestConstantsProjectionExporter.class);
     javaApiRestGenerator =
-        new JavaApiRestGenerator(generationPath, resourceExporter, resourceTestExporter);
+        new JavaApiRestGenerator(
+            generationPath,
+            rootPackageName,
+            contextName,
+            resourceExporter,
+            resourceTestExporter,
+            restConstantsProjectionExporter);
   }
 
   /** Should generate. */
@@ -64,7 +78,7 @@ public class JavaApiRestGeneratorTest {
   public void shouldGenerate() {
     javaApiRestGenerator.generate(createModelRepositories());
 
-    verify(resourceExporter).export(eq(generationPath), any(Resource.class));
+    verify(resourceExporter).export(eq(generationPath), any(Resource.class), eq(rootPackageName));
   }
 
   /** Should fail on missing rest model repository. */
@@ -74,7 +88,7 @@ public class JavaApiRestGeneratorTest {
     assertThatThrownBy(() -> javaApiRestGenerator.generate(new LinkedHashSet<>()))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessageContaining(
-            "No Model Repository found for Class=io.polygenesis.models.apirest.RestModelRepository "
+            "No Model Repository found for Class=io.polygenesis.models.rest.RestModelRepository "
                 + "in provided modelRepositories");
   }
 

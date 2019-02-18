@@ -31,6 +31,10 @@ import java.util.Set;
  */
 public class MethodDeducer {
 
+  // ===============================================================================================
+  // FUNCTIONALITY
+  // ===============================================================================================
+
   /**
    * Deduce command methods from set.
    *
@@ -40,15 +44,7 @@ public class MethodDeducer {
   public Set<Method> deduceCommandMethodsFrom(Thing thing) {
     Set<Method> methods = new LinkedHashSet<>();
 
-    thing
-        .getFunctions()
-        .forEach(
-            function ->
-                methods.add(
-                    new Method(
-                        new MethodName(function.getName().getText()),
-                        function.getReturnValue(),
-                        function.getArguments())));
+    thing.getFunctions().forEach(function -> methods.add(new Method(function)));
 
     return methods;
   }
@@ -62,15 +58,7 @@ public class MethodDeducer {
   public Set<Method> deduceQueryMethodsFrom(Thing thing) {
     Set<Method> methods = new LinkedHashSet<>();
 
-    thing
-        .getFunctions()
-        .forEach(
-            function ->
-                methods.add(
-                    new Method(
-                        new MethodName(function.getName().getText()),
-                        function.getReturnValue(),
-                        function.getArguments())));
+    thing.getFunctions().forEach(function -> methods.add(new Method(function)));
 
     return methods;
   }

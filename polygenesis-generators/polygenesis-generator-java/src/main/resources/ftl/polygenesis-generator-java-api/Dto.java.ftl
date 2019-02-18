@@ -22,7 +22,7 @@ package ${ projection.packageName };
 
 </#if>
 <#list projection.imports as import>
-  import ${ import };
+import ${ import };
 </#list>
 
 /**
@@ -36,6 +36,30 @@ public class ${ projection.objectNameWithOptionalExtendsImplements } {
   private ${ variable.key } ${ variable.value };
 </#list>
 
+  // ===============================================================================================
+  // CONSTRUCTOR
+  // ===============================================================================================
+
+<#list projection.constructors as constructor>
+  /**
+   * Instantiates a new ${ textConverter.toUpperCamelSpaces(projection.objectName) }.
+  <#if constructor.parameters?size gt 0>
+   *
+  </#if>
+  <#list constructor.parameters as parameter>
+   * @param ${ textConverter.toLowerCamel(parameter.value) } the ${ textConverter.toLowerCamelSpaces(parameter.value) }
+  </#list>
+   */
+  public ${ textConverter.toUpperCamel(projection.objectName) }(<#list constructor.parameters as parameter>${ textConverter.toUpperCamel(parameter.key) } ${ textConverter.toLowerCamel(parameter.value) }<#sep>, </#sep><#if !(parameter?has_next)>) {</#if></#list><#if constructor.parameters?size == 0>) {</#if>
+  <#if constructor.superImpl??>
+    ${ constructor.superImpl }
+  </#if>
+  <#list constructor.parameters as parameter>
+    this.${ textConverter.toLowerCamel(parameter.value) } = ${ textConverter.toLowerCamel(parameter.value) };
+  </#list>
+  }
+
+</#list>
   // ===============================================================================================
   // GETTERS
   // ===============================================================================================

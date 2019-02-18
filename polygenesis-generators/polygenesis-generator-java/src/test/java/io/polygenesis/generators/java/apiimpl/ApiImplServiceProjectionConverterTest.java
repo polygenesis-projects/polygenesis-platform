@@ -26,6 +26,7 @@ import static org.mockito.Mockito.mock;
 
 import io.polygenesis.models.api.Service;
 import io.polygenesis.models.api.ServiceName;
+import io.polygenesis.models.apiimpl.ServiceImplementation;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -41,7 +42,8 @@ public class ApiImplServiceProjectionConverterTest {
   /** Sets up. */
   @Before
   public void setUp() {
-    ApiImplMethodProjectionMaker methodProjectionMaker = mock(ApiImplMethodProjectionMaker.class);
+    ApiImplMethodProjectionConverter methodProjectionMaker =
+        mock(ApiImplMethodProjectionConverter.class);
     apiImplServiceProjectionConverter =
         new ApiImplServiceProjectionConverter(methodProjectionMaker);
   }
@@ -50,12 +52,15 @@ public class ApiImplServiceProjectionConverterTest {
   @Test
   public void shouldSuccessfullyProjectObjectNameWithOptionalExtendsImplements() {
     Service service = mock(Service.class);
+    ServiceImplementation serviceImplementation = mock(ServiceImplementation.class);
     ServiceName serviceName = new ServiceName("someServiceName");
 
     given(service.getServiceName()).willReturn(serviceName);
+    given(serviceImplementation.getService()).willReturn(service);
 
     String objectNameWithOptionalExtendsImplements =
-        apiImplServiceProjectionConverter.projectObjectNameWithOptionalExtendsImplements(service);
+        apiImplServiceProjectionConverter.projectObjectNameWithOptionalExtendsImplements(
+            serviceImplementation);
 
     assertThat(objectNameWithOptionalExtendsImplements)
         .isEqualTo("SomeServiceNameImpl implements SomeServiceName");

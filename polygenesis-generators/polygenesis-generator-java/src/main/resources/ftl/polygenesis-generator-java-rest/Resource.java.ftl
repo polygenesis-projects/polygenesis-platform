@@ -26,11 +26,12 @@ import ${ import };
 </#list>
 
 /**
-* ${ projection.description }
-*
-* @author PolyGenesis
-*/
+ * ${ projection.description }
+ *
+ * @author PolyGenesis
+ */
 @RestController
+@RequestMapping(RestConstants.CONTEXT_REQUEST_MAPPING)
 public class ${ projection.objectNameWithOptionalExtendsImplements } {
 
   // ===============================================================================================
@@ -64,37 +65,25 @@ public class ${ projection.objectNameWithOptionalExtendsImplements } {
   // ENDPOINTS
   // ===============================================================================================
 
-<#list projection.methodProjections as methodProjection>
+<#list projection.functionProjections as functionProjection>
   /**
-  * ${ methodProjection.description }
-  <#if methodProjection.arguments?size gt 0 || methodProjection.returnValue??>
-    *
+   * ${ functionProjection.description }
+  <#if functionProjection.arguments?size gt 0 || functionProjection.returnValue??>
+   *
   </#if>
-  <#list methodProjection.arguments as argument>
-    * @param ${ argument.value } the ${ textConverter.toUpperCamelSpaces(argument.value) }
+  <#list functionProjection.arguments as argument>
+   * @param ${ argument.value } the ${ textConverter.toUpperCamelSpaces(argument.value) }
   </#list>
-  <#if methodProjection.returnValue??>
-    * @return the ${ textConverter.toUpperCamelSpaces(methodProjection.returnValue) }
+  <#if functionProjection.returnValue??>
+   * @return the ${ textConverter.toUpperCamelSpaces(functionProjection.returnValue) }
   </#if>
-  */
-  @Override
-  public ${ methodProjection.returnValue} ${ methodProjection.name }(${ methodProjection.argumentsCommaSeparated }) {
-  <#list methodProjection.arguments as argument>
-    Assertion.isNotNull(${ argument.value }, "${ textConverter.toUpperCamelSpaces(argument.value) } cannot be null");
+   */
+  <#list functionProjection.annotations as annotation>
+  ${ annotation }
   </#list>
-
-  // TODO
-  <#list aggregateRootProjection.constructors as constructor>
-    ${ textConverter.toUpperCamel(aggregateRootProjection.objectName) } ${ textConverter.toLowerCamel(aggregateRootProjection.objectName) } = new ${ textConverter.toUpperCamel(aggregateRootProjection.objectName) }(
-    <#list constructor.parameters as parameter>
-      set${ textConverter.toUpperCamel(parameter.value) }(${ textConverter.toLowerCamel(parameter.value) })<#sep>,</#sep>
-    </#list>
-    );
-  </#list>
-
-  ${ textConverter.toLowerCamel(aggregateRootProjection.objectName) }Persistence.store(${ textConverter.toLowerCamel(aggregateRootProjection.objectName) });
-
-  return new ${ methodProjection.returnValue}(${ textConverter.toLowerCamel(aggregateRootProjection.objectName) }.getId());
+  public ${ functionProjection.returnValue} ${ functionProjection.name }(${ functionProjection.argumentsCommaSeparated }) {
+    return ${ functionProjection.serviceName }.${ functionProjection.name }(<#list functionProjection.arguments as argument>${ argument.value }<#sep>, </#sep></#list>);
   }
+
 </#list>
 }

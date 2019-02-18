@@ -29,7 +29,7 @@ import static org.mockito.Mockito.verify;
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.text.Name;
 import io.polygenesis.core.datatype.PackageName;
-import io.polygenesis.models.apirest.Resource;
+import io.polygenesis.models.rest.Resource;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -44,6 +44,7 @@ import org.junit.Test;
 public class ResourceExporterTest {
 
   private Path generationPath;
+  private PackageName rootPackageName;
   private Resource resource;
   private FreemarkerService freemarkerService;
   private ResourceProjectionConverter resourceProjectionConverter;
@@ -53,6 +54,7 @@ public class ResourceExporterTest {
   @Before
   public void setUp() {
     generationPath = Paths.get("tmp");
+    rootPackageName = new PackageName("com.oregor");
     resource = mock(Resource.class);
     freemarkerService = mock(FreemarkerService.class);
     resourceProjectionConverter = mock(ResourceProjectionConverter.class);
@@ -65,7 +67,7 @@ public class ResourceExporterTest {
     given(resource.getPackageName()).willReturn(new PackageName("com.oregor"));
     given(resource.getName()).willReturn(new Name("someResource"));
 
-    resourceExporter.export(generationPath, resource);
+    resourceExporter.export(generationPath, resource, rootPackageName);
 
     verify(freemarkerService)
         .export(

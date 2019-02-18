@@ -15,9 +15,10 @@
 
   <modules>
     <module>polygenesis-deducer-api</module>
-    <module>polygenesis-deducer-api-rest</module>
+    <module>polygenesis-deducer-api-impl</module>
     <module>polygenesis-deducer-domain</module>
     <module>polygenesis-deducer-reactive-state</module>
+    <module>polygenesis-deducer-rest</module>
     <module>polygenesis-deducer-ui</module>
   </modules>
 

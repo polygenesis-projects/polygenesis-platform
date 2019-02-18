@@ -20,6 +20,8 @@
 
 package io.polygenesis.models.domain;
 
+import io.polygenesis.commons.keyvalue.KeyValue;
+import io.polygenesis.core.iomodel.IoModel;
 import io.polygenesis.core.iomodel.IoModelGroup;
 import io.polygenesis.core.iomodel.VariableName;
 import java.util.Optional;
@@ -31,6 +33,7 @@ import java.util.Optional;
  */
 public abstract class AbstractProperty {
 
+  private PropertyType propertyType;
   private VariableName variableName;
 
   // ===============================================================================================
@@ -40,15 +43,26 @@ public abstract class AbstractProperty {
   /**
    * Instantiates a new Abstract property.
    *
+   * @param propertyType the property type
    * @param variableName the variable name
    */
-  public AbstractProperty(VariableName variableName) {
+  public AbstractProperty(PropertyType propertyType, VariableName variableName) {
+    setPropertyType(propertyType);
     setVariableName(variableName);
   }
 
   // ===============================================================================================
   // GETTERS
   // ===============================================================================================
+
+  /**
+   * Gets property type.
+   *
+   * @return the property type
+   */
+  public PropertyType getPropertyType() {
+    return propertyType;
+  }
 
   /**
    * Gets variable name.
@@ -70,9 +84,32 @@ public abstract class AbstractProperty {
    */
   public abstract Optional<IoModelGroup> getIoModelGroupAsOptional();
 
+  /**
+   * Gets io model.
+   *
+   * @return the io model
+   */
+  public abstract IoModel getIoModel();
+
+  /**
+   * Gets as key value.
+   *
+   * @return the as key value
+   */
+  public abstract KeyValue getAsKeyValue();
+
   // ===============================================================================================
   // GUARDS
   // ===============================================================================================
+
+  /**
+   * Sets property type.
+   *
+   * @param propertyType the property type
+   */
+  private void setPropertyType(PropertyType propertyType) {
+    this.propertyType = propertyType;
+  }
 
   /**
    * Sets variable name.

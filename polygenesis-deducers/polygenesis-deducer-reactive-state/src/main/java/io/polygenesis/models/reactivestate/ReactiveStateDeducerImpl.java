@@ -21,6 +21,7 @@
 package io.polygenesis.models.reactivestate;
 
 import com.oregor.ddd4j.check.assertion.Assertion;
+import io.polygenesis.core.ModelRepository;
 import io.polygenesis.core.ThingRepository;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -53,7 +54,8 @@ public class ReactiveStateDeducerImpl implements ReactiveStateDeducer {
   // ===============================================================================================
 
   @Override
-  public ReactiveStateModelRepository deduce(ThingRepository thingRepository) {
+  public ReactiveStateModelRepository deduce(
+      ThingRepository thingRepository, Set<ModelRepository> modelRepositories) {
     Set<Store> stores = new LinkedHashSet<>();
 
     thingRepository

@@ -57,7 +57,7 @@ public class ValueObjectProjectionConverter extends AbstractObjectProjectionMake
   // ===============================================================================================
 
   @Override
-  public ObjectProjection convert(ValueObject source, Object... arg) {
+  public ObjectProjection convert(ValueObject source, Object... args) {
     return make(source.getIoModelGroup());
   }
 

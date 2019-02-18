@@ -46,6 +46,13 @@ public class ${ projection.objectNameWithOptionalExtendsImplements } {
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
+  /**
+   * No-args constructor for persistence frameworks.
+   */
+  private ${ textConverter.toUpperCamel(projection.objectName) }() {
+    super();
+  }
+
 <#list projection.constructors as constructor>
   /**
    * Instantiates a new ${ textConverter.toUpperCamelSpaces(projection.objectName) }.
@@ -55,8 +62,13 @@ public class ${ projection.objectNameWithOptionalExtendsImplements } {
   </#list>
    */
   public ${ textConverter.toUpperCamel(projection.objectName) }(<#list constructor.parameters as parameter>${ textConverter.toUpperCamel(parameter.key) } ${ textConverter.toLowerCamel(parameter.value) }<#sep>, </#sep><#if !(parameter?has_next)>) {</#if></#list>
+  <#if constructor.superImpl??>
+    ${ constructor.superImpl }
+  </#if>
   <#list constructor.parameters as parameter>
+    <#if !parameter.getThingIdentity() >
     set${ textConverter.toUpperCamel(parameter.value) }(${ textConverter.toLowerCamel(parameter.value) });
+    </#if>
   </#list>
   }
 

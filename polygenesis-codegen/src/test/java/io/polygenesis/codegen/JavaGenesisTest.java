@@ -25,14 +25,15 @@ import io.polygenesis.core.Deducer;
 import io.polygenesis.core.Generator;
 import io.polygenesis.core.ThingRepositoryImpl;
 import io.polygenesis.core.datatype.PackageName;
+import io.polygenesis.deducers.apiimpl.ApiImplDeducerFactory;
 import io.polygenesis.generators.java.api.JavaApiGeneratorFactory;
 import io.polygenesis.generators.java.apiimpl.JavaApiImplGeneratorFactory;
 import io.polygenesis.generators.java.domain.JavaDomainGeneratorFactory;
 import io.polygenesis.generators.java.rdbms.JavaRdbmsGeneratorFactory;
 import io.polygenesis.generators.java.rest.JavaApiRestGeneratorFactory;
 import io.polygenesis.models.api.ApiDeducerFactory;
-import io.polygenesis.models.api.RestDeducerFactory;
 import io.polygenesis.models.domain.DomainDeducerFactory;
+import io.polygenesis.models.rest.RestDeducerFactory;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
@@ -53,21 +54,24 @@ public class JavaGenesisTest {
             Arrays.asList(
                 ApiDeducerFactory.newInstance(rootPackageName),
                 DomainDeducerFactory.newInstance(rootPackageName),
+                ApiImplDeducerFactory.newInstance(rootPackageName),
                 RestDeducerFactory.newInstance(rootPackageName)));
 
     Set<Generator> generators =
         new LinkedHashSet<>(
             Arrays.asList(
                 JavaApiGeneratorFactory.newInstance(
-                    Paths.get("tmp/polygenesis-generator-java-api")),
+                    Paths.get("tmp/polygenesis-generator-java/api")),
                 JavaApiImplGeneratorFactory.newInstance(
-                    Paths.get("tmp/polygenesis-generator-java-api-impl"), rootPackageName),
+                    Paths.get("tmp/polygenesis-generator-java/api-impl"), rootPackageName),
                 JavaApiRestGeneratorFactory.newInstance(
-                    Paths.get("tmp/polygenesis-generator-java-api-rest")),
+                    Paths.get("tmp/polygenesis-generator-java/api-rest"),
+                    rootPackageName,
+                    new Name("account")),
                 JavaDomainGeneratorFactory.newInstance(
-                    Paths.get("tmp/polygenesis-generator-java-domain"), rootPackageName),
+                    Paths.get("tmp/polygenesis-generator-java/domain"), rootPackageName),
                 JavaRdbmsGeneratorFactory.newInstance(
-                    Paths.get("tmp/polygenesis-generator-java-rdbms"),
+                    Paths.get("tmp/polygenesis-generator-java/rdbms"),
                     rootPackageName,
                     new Name("account"))));
 

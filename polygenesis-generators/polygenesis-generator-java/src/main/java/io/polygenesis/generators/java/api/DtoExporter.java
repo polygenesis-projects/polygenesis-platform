@@ -76,11 +76,14 @@ public class DtoExporter {
         .getMethods()
         .forEach(
             method -> {
-              if (method.getReturnValue().getModel().isIoModelGroup()) {
-                export(generationPath, (IoModelGroup) method.getReturnValue().getModel());
+              if (method.getFunction().getReturnValue().getModel().isIoModelGroup()) {
+                export(
+                    generationPath,
+                    (IoModelGroup) method.getFunction().getReturnValue().getModel());
               }
 
               method
+                  .getFunction()
                   .getArguments()
                   .forEach(
                       argument -> {

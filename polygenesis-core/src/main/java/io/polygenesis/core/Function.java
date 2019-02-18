@@ -20,6 +20,8 @@
 
 package io.polygenesis.core;
 
+import io.polygenesis.core.iomodel.IoModelPrimitive;
+import java.util.Optional;
 import java.util.Set;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -151,6 +153,27 @@ public class Function {
    */
   public Set<Argument> getArguments() {
     return arguments;
+  }
+
+  // ===============================================================================================
+  // QUERIES
+  // ===============================================================================================
+
+  /**
+   * Retrieve thing identity from argument optional.
+   *
+   * @param argument the argument
+   * @return the optional
+   */
+  public Optional<IoModelPrimitive> retrieveThingIdentityFromArgument(Argument argument) {
+
+    return argument
+        .getAsIoModelGroup()
+        .getModels()
+        .stream()
+        .filter(model -> model.isThingIdentity())
+        .map(IoModelPrimitive.class::cast)
+        .findFirst();
   }
 
   // ===============================================================================================

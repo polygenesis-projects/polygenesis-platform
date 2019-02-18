@@ -23,7 +23,7 @@ package io.polygenesis.generators.java.rest;
 import io.polygenesis.commons.converter.Converter;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.converter.FromDataTypeToJavaConverter;
-import io.polygenesis.models.apirest.Resource;
+import io.polygenesis.models.rest.Resource;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -43,14 +43,30 @@ public class ResourceTestProjectionConverter extends ResourceProjectionConverter
    * Instantiates a new Resource test projection converter.
    *
    * @param fromDataTypeToJavaConverter the from data type to java converter
+   * @param endpointProjectionConverter the endpoint projection converter
    */
-  public ResourceTestProjectionConverter(FromDataTypeToJavaConverter fromDataTypeToJavaConverter) {
-    super(fromDataTypeToJavaConverter);
+  public ResourceTestProjectionConverter(
+      FromDataTypeToJavaConverter fromDataTypeToJavaConverter,
+      EndpointProjectionConverter endpointProjectionConverter) {
+    super(fromDataTypeToJavaConverter, endpointProjectionConverter);
   }
 
   // ===============================================================================================
   // OVERRIDES
   // ===============================================================================================
+
+  @Override
+  public ResourceProjection convert(Resource resource, Object... args) {
+    return new ResourceProjection(
+        projectPackageName(resource),
+        projectImports(),
+        projectDescription(resource),
+        projectObjectName(resource),
+        projectObjectNameWithOptionalExtendsImplements(resource),
+        projectVariables(resource),
+        projectConstructors(resource),
+        projectMethods(resource));
+  }
 
   // ===============================================================================================
   // PROTECTED
@@ -59,10 +75,9 @@ public class ResourceTestProjectionConverter extends ResourceProjectionConverter
   /**
    * Project imports set.
    *
-   * @param resource the resource
    * @return the set
    */
-  protected Set<String> projectImports(Resource resource) {
+  protected Set<String> projectImports() {
     Set<String> imports = new TreeSet<>();
 
     imports.add("static org.assertj.core.api.Assertions.assertThat");

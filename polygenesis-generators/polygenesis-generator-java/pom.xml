@@ -19,7 +19,11 @@
     </dependency>
     <dependency>
       <groupId>io.polygenesis.models</groupId>
-      <artifactId>polygenesis-model-api-rest</artifactId>
+      <artifactId>polygenesis-model-api-impl</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.polygenesis.models</groupId>
+      <artifactId>polygenesis-model-rest</artifactId>
     </dependency>
     <dependency>
       <groupId>io.polygenesis.models</groupId>

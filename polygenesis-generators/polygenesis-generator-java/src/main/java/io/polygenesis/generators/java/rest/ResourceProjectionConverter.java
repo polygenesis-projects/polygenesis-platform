@@ -21,13 +21,16 @@
 package io.polygenesis.generators.java.rest;
 
 import io.polygenesis.commons.converter.Converter;
-import io.polygenesis.commons.keyvalue.KeyValue;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.converter.FromDataTypeToJavaConverter;
+import io.polygenesis.core.datatype.PackageName;
 import io.polygenesis.generators.java.shared.AbstractObjectProjectionMaker;
+import io.polygenesis.generators.java.shared.ArgumentProjection;
 import io.polygenesis.generators.java.shared.ConstructorProjection;
-import io.polygenesis.generators.java.shared.MethodProjection;
-import io.polygenesis.models.apirest.Resource;
+import io.polygenesis.generators.java.shared.FunctionProjection;
+import io.polygenesis.models.rest.HttpMethod;
+import io.polygenesis.models.rest.Resource;
+import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.TreeSet;
@@ -40,6 +43,8 @@ import java.util.TreeSet;
 public class ResourceProjectionConverter extends AbstractObjectProjectionMaker
     implements Converter<Resource, ResourceProjection> {
 
+  private final EndpointProjectionConverter endpointProjectionConverter;
+
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
@@ -48,9 +53,13 @@ public class ResourceProjectionConverter extends AbstractObjectProjectionMaker
    * Instantiates a new Resource projection converter.
    *
    * @param fromDataTypeToJavaConverter the from data type to java converter
+   * @param endpointProjectionConverter the endpoint projection converter
    */
-  public ResourceProjectionConverter(FromDataTypeToJavaConverter fromDataTypeToJavaConverter) {
+  public ResourceProjectionConverter(
+      FromDataTypeToJavaConverter fromDataTypeToJavaConverter,
+      EndpointProjectionConverter endpointProjectionConverter) {
     super(fromDataTypeToJavaConverter);
+    this.endpointProjectionConverter = endpointProjectionConverter;
   }
 
   // ===============================================================================================
@@ -58,16 +67,18 @@ public class ResourceProjectionConverter extends AbstractObjectProjectionMaker
   // ===============================================================================================
 
   @Override
-  public ResourceProjection convert(Resource resource, Object... arg) {
+  public ResourceProjection convert(Resource resource, Object... args) {
+    PackageName rootPackageName = (PackageName) args[0];
+
     return new ResourceProjection(
         projectPackageName(resource),
-        projectImports(resource),
+        projectImports(resource, rootPackageName),
         projectDescription(resource),
         projectObjectName(resource),
         projectObjectNameWithOptionalExtendsImplements(resource),
         projectVariables(resource),
-        projectConstructors(),
-        projectMethods());
+        projectConstructors(resource),
+        projectMethods(resource));
   }
 
   // ===============================================================================================
@@ -90,10 +101,30 @@ public class ResourceProjectionConverter extends AbstractObjectProjectionMaker
    * @param resource the resource
    * @return the set
    */
-  protected Set<String> projectImports(Resource resource) {
+  protected Set<String> projectImports(Resource resource, PackageName rootPackageName) {
     Set<String> imports = new TreeSet<>();
 
     imports.add("org.springframework.web.bind.annotation.RestController");
+    imports.add("org.springframework.web.bind.annotation.RequestMapping");
+    imports.add("com.oregor.ddd4j.rest.AbstractRestController");
+    imports.add(String.format("%s.RestConstants", rootPackageName.getText()));
+
+    resource
+        .getEndpoints()
+        .forEach(
+            endpoint -> {
+              if (endpoint.getHttpMethod().equals(HttpMethod.POST)) {
+                imports.add("org.springframework.web.bind.annotation.PostMapping");
+                imports.add("org.springframework.web.bind.annotation.RequestBody");
+              } else if (endpoint.getHttpMethod().equals(HttpMethod.PUT)) {
+                imports.add("org.springframework.web.bind.annotation.PutMapping");
+                imports.add("org.springframework.web.bind.annotation.RequestBody");
+              } else if (endpoint.getHttpMethod().equals(HttpMethod.GET)) {
+                imports.add("org.springframework.web.bind.annotation.GetMapping");
+              } else if (endpoint.getHttpMethod().equals(HttpMethod.DELETE)) {
+                imports.add("org.springframework.web.bind.annotation.DeleteMapping");
+              }
+            });
 
     return imports;
   }
@@ -142,6 +173,7 @@ public class ResourceProjectionConverter extends AbstractObjectProjectionMaker
 
     stringBuilder.append(TextConverter.toUpperCamel(resource.getName().getText()));
     stringBuilder.append("RestService");
+    stringBuilder.append(" extends AbstractRestController");
 
     return stringBuilder.toString();
   }
@@ -152,16 +184,46 @@ public class ResourceProjectionConverter extends AbstractObjectProjectionMaker
    * @param resource the resource
    * @return the set
    */
-  protected Set<KeyValue> projectVariables(Resource resource) {
-    return new LinkedHashSet<>();
+  protected Set<ArgumentProjection> projectVariables(Resource resource) {
+    Set<ArgumentProjection> keyValues = new LinkedHashSet<>();
+
+    resource
+        .getServices()
+        .forEach(
+            service ->
+                keyValues.add(
+                    new ArgumentProjection(
+                        TextConverter.toUpperCamel(service.getServiceName().getText()),
+                        TextConverter.toLowerCamel(service.getServiceName().getText()))));
+
+    return keyValues;
   }
 
-  protected Set<ConstructorProjection> projectConstructors() {
-    return new LinkedHashSet<>();
+  /**
+   * Project constructors set.
+   *
+   * @param resource the resource
+   * @return the set
+   */
+  protected Set<ConstructorProjection> projectConstructors(Resource resource) {
+    return new LinkedHashSet<>(
+        Arrays.asList(new ConstructorProjection(projectVariables(resource), "")));
   }
 
-  protected Set<MethodProjection> projectMethods() {
-    // TODO
-    return new LinkedHashSet<>();
+  /**
+   * Project methods set.
+   *
+   * @param resource the resource
+   * @return the set
+   */
+  protected Set<FunctionProjection> projectMethods(Resource resource) {
+    Set<FunctionProjection> functionProjections = new LinkedHashSet<>();
+
+    resource
+        .getEndpoints()
+        .forEach(
+            endpoint -> functionProjections.add(endpointProjectionConverter.convert(endpoint)));
+
+    return functionProjections;
   }
 }

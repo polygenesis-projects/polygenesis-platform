@@ -25,7 +25,7 @@ import io.polygenesis.core.AbstractGenerator;
 import io.polygenesis.core.CoreRegistry;
 import io.polygenesis.core.ModelRepository;
 import io.polygenesis.core.datatype.PackageName;
-import io.polygenesis.models.api.ServiceModelRepository;
+import io.polygenesis.models.apiimpl.ServiceImplementationModelRepository;
 import io.polygenesis.models.domain.AggregateRoot;
 import io.polygenesis.models.domain.DomainModelRepository;
 import java.nio.file.Path;
@@ -42,6 +42,7 @@ public class JavaApiImplGenerator extends AbstractGenerator {
   private final PackageName rootPackageName;
   private final ApiImplServiceExporter apiImplServiceExporter;
   private final ApiImplServiceTestExporter apiImplServiceTestExporter;
+  private final AggregateRootConverterExporter aggregateRootConverterExporter;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -54,16 +55,19 @@ public class JavaApiImplGenerator extends AbstractGenerator {
    * @param rootPackageName the root package name
    * @param apiImplServiceExporter the api impl service exporter
    * @param apiImplServiceTestExporter the api impl service test exporter
+   * @param aggregateRootConverterExporter the aggregate root converter exporter
    */
   public JavaApiImplGenerator(
       Path generationPath,
       PackageName rootPackageName,
       ApiImplServiceExporter apiImplServiceExporter,
-      ApiImplServiceTestExporter apiImplServiceTestExporter) {
+      ApiImplServiceTestExporter apiImplServiceTestExporter,
+      AggregateRootConverterExporter aggregateRootConverterExporter) {
     super(generationPath);
     this.rootPackageName = rootPackageName;
     this.apiImplServiceExporter = apiImplServiceExporter;
     this.apiImplServiceTestExporter = apiImplServiceTestExporter;
+    this.aggregateRootConverterExporter = aggregateRootConverterExporter;
   }
 
   // ===============================================================================================
@@ -85,33 +89,46 @@ public class JavaApiImplGenerator extends AbstractGenerator {
 
   @Override
   public void generate(Set<ModelRepository> modelRepositories) {
-    ServiceModelRepository serviceModelRepository =
-        CoreRegistry.getModelRepositoryResolver()
-            .resolve(modelRepositories, ServiceModelRepository.class);
-
     DomainModelRepository domainModelRepository =
         CoreRegistry.getModelRepositoryResolver()
             .resolve(modelRepositories, DomainModelRepository.class);
 
-    serviceModelRepository
-        .getServices()
+    ServiceImplementationModelRepository serviceImplementationModelRepository =
+        CoreRegistry.getModelRepositoryResolver()
+            .resolve(modelRepositories, ServiceImplementationModelRepository.class);
+
+    if (serviceImplementationModelRepository.getServiceImplementations().isEmpty()) {
+      throw new IllegalStateException();
+    }
+
+    serviceImplementationModelRepository
+        .getServiceImplementations()
         .forEach(
-            service -> {
+            serviceImplementation -> {
               Optional<AggregateRoot> optionalAggregateRoot =
                   domainModelRepository.getAggregateRootByName(
-                      new Name(service.getThingName().getText()));
+                      new Name(serviceImplementation.getService().getThingName().getText()));
 
               if (!optionalAggregateRoot.isPresent()) {
                 throw new IllegalStateException(
                     String.format(
                         "Cannot get AggregateRoot with name=%s. Check that the AggregateRoot "
                             + "exists and take care of the order of generators",
-                        service.getThingName().getText()));
+                        serviceImplementation.getService().getThingName().getText()));
               }
 
               apiImplServiceExporter.export(
-                  getGenerationPath(), getRootPackageName(), service, optionalAggregateRoot.get());
-              apiImplServiceTestExporter.export(getGenerationPath(), service);
+                  getGenerationPath(),
+                  getRootPackageName(),
+                  serviceImplementation,
+                  optionalAggregateRoot.get());
+              apiImplServiceTestExporter.export(getGenerationPath(), serviceImplementation);
             });
+
+    serviceImplementationModelRepository
+        .getAggregateRootConverters()
+        .forEach(
+            aggregateRootConverter ->
+                aggregateRootConverterExporter.export(getGenerationPath(), aggregateRootConverter));
   }
 }

@@ -38,6 +38,13 @@ public class ${ projection.objectNameWithOptionalExtendsImplements } {
   // ===============================================================================================
 
   /**
+   * No-args constructor for persistence frameworks.
+   */
+  private ${ textConverter.toUpperCamel(projection.objectName) }() {
+    super();
+  }
+
+  /**
    * Instantiates a new Id.
    *
    * @param rootUuid the root uuid
