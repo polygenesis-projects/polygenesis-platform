@@ -20,7 +20,6 @@
 
 package io.polygenesis.generators.java.shared;
 
-import io.polygenesis.commons.keyvalue.KeyValue;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.datatype.DataTypeName;
 import io.polygenesis.core.datatype.PackageName;
@@ -41,7 +40,7 @@ public abstract class AbstractServiceProjectionMaker implements ServiceProjectio
   // DEPENDENCIES
   // ===============================================================================================
 
-  private final MethodProjectionMaker methodProjectionMaker;
+  private final FunctionProjectionMaker functionProjectionMaker;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -50,10 +49,10 @@ public abstract class AbstractServiceProjectionMaker implements ServiceProjectio
   /**
    * Instantiates a new Abstract service projection maker.
    *
-   * @param methodProjectionMaker the method projection maker
+   * @param functionProjectionMaker the method projection maker
    */
-  public AbstractServiceProjectionMaker(MethodProjectionMaker methodProjectionMaker) {
-    this.methodProjectionMaker = methodProjectionMaker;
+  public AbstractServiceProjectionMaker(FunctionProjectionMaker functionProjectionMaker) {
+    this.functionProjectionMaker = functionProjectionMaker;
   }
 
   // ===============================================================================================
@@ -70,14 +69,20 @@ public abstract class AbstractServiceProjectionMaker implements ServiceProjectio
         projectObjectNameWithOptionalExtendsImplements(service),
         projectVariables(service),
         projectConstructors(service),
-        fillMethodProjections(service));
+        fillFunctionProjections(service));
   }
 
   // ===============================================================================================
   // PROTECTED
   // ===============================================================================================
 
-  private String projectPackageName(Service service) {
+  /**
+   * Project package name string.
+   *
+   * @param service the service
+   * @return the string
+   */
+  protected String projectPackageName(Service service) {
     return service.getPackageName().getText();
   }
 
@@ -95,6 +100,7 @@ public abstract class AbstractServiceProjectionMaker implements ServiceProjectio
         .forEach(
             method -> {
               method
+                  .getFunction()
                   .getReturnValue()
                   .getModel()
                   .getDataType()
@@ -106,12 +112,14 @@ public abstract class AbstractServiceProjectionMaker implements ServiceProjectio
                               makeCanonicalObjectName(
                                   packageName,
                                   method
+                                      .getFunction()
                                       .getReturnValue()
                                       .getModel()
                                       .getDataType()
                                       .getDataTypeName())));
 
               method
+                  .getFunction()
                   .getArguments()
                   .forEach(
                       argument -> {
@@ -189,14 +197,15 @@ public abstract class AbstractServiceProjectionMaker implements ServiceProjectio
    * @param service the service
    * @return the set
    */
-  protected Set<MethodProjection> fillMethodProjections(Service service) {
-    Set<MethodProjection> methodProjections = new LinkedHashSet<>();
+  protected Set<FunctionProjection> fillFunctionProjections(Service service) {
+    Set<FunctionProjection> functionProjections = new LinkedHashSet<>();
 
     service
         .getMethods()
-        .forEach(method -> methodProjections.add(methodProjectionMaker.make(method)));
+        .forEach(
+            method -> functionProjections.add(functionProjectionMaker.make(method.getFunction())));
 
-    return methodProjections;
+    return functionProjections;
   }
 
   /**
@@ -205,7 +214,7 @@ public abstract class AbstractServiceProjectionMaker implements ServiceProjectio
    * @param service the service
    * @return the set
    */
-  protected Set<KeyValue> projectVariables(Service service) {
+  protected Set<ArgumentProjection> projectVariables(Service service) {
     return new LinkedHashSet<>(Arrays.asList());
   }
 

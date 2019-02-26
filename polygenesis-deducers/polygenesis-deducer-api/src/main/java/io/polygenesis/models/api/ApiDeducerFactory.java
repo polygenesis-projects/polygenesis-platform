@@ -39,7 +39,9 @@ public final class ApiDeducerFactory {
   // ===============================================================================================
 
   static {
-    serviceDeducer = new ServiceDeducer();
+    DtoDeducer dtoDeducer = new DtoDeducer();
+
+    serviceDeducer = new ServiceDeducer(dtoDeducer);
   }
 
   // ===============================================================================================

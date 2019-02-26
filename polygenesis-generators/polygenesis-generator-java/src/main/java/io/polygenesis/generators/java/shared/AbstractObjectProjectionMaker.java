@@ -20,12 +20,12 @@
 
 package io.polygenesis.generators.java.shared;
 
-import io.polygenesis.commons.keyvalue.KeyValue;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.converter.FromDataTypeToJavaConverter;
 import io.polygenesis.core.datatype.DataTypeName;
 import io.polygenesis.core.datatype.PackageName;
 import io.polygenesis.core.iomodel.IoModelGroup;
+import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -75,7 +75,7 @@ public abstract class AbstractObjectProjectionMaker implements ObjectProjectionM
         projectObjectNameWithOptionalExtendsImplements(modelGroup),
         modelGroup,
         projectVariables(modelGroup),
-        projectConstructors(),
+        projectConstructors(modelGroup),
         projectMethods());
   }
 
@@ -177,15 +177,15 @@ public abstract class AbstractObjectProjectionMaker implements ObjectProjectionM
    * @param modelGroup the model group
    * @return the set
    */
-  protected Set<KeyValue> projectVariables(IoModelGroup modelGroup) {
-    Set<KeyValue> variables = new LinkedHashSet<>();
+  protected Set<ArgumentProjection> projectVariables(IoModelGroup modelGroup) {
+    Set<ArgumentProjection> variables = new LinkedHashSet<>();
 
     modelGroup
         .getModels()
         .forEach(
             model -> {
               variables.add(
-                  new KeyValue(
+                  new ArgumentProjection(
                       fromDataTypeToJavaConverter.getDeclaredVariableType(model),
                       model.getVariableName().getText()));
             });
@@ -198,9 +198,9 @@ public abstract class AbstractObjectProjectionMaker implements ObjectProjectionM
    *
    * @return the set
    */
-  protected Set<ConstructorProjection> projectConstructors() {
-    // TODO
-    return new LinkedHashSet<>();
+  protected Set<ConstructorProjection> projectConstructors(IoModelGroup modelGroup) {
+    return new LinkedHashSet<>(
+        Arrays.asList(new ConstructorProjection(projectVariables(modelGroup), "")));
   }
 
   /**
@@ -208,7 +208,7 @@ public abstract class AbstractObjectProjectionMaker implements ObjectProjectionM
    *
    * @return the set
    */
-  protected Set<MethodProjection> projectMethods() {
+  protected Set<FunctionProjection> projectMethods() {
     // TODO
     return new LinkedHashSet<>();
   }

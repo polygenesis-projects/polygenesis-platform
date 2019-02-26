@@ -20,6 +20,7 @@
 
 package io.polygenesis.models.ui;
 
+import io.polygenesis.core.ModelRepository;
 import io.polygenesis.core.ThingRepository;
 import io.polygenesis.models.ui.container.LayoutContainer;
 import java.util.LinkedHashSet;
@@ -48,7 +49,8 @@ public class UiDeducerImpl implements UiDeducer {
   // OVERRIDES
   // ===============================================================================================
   @Override
-  public UiModelRepository deduce(ThingRepository thingRepository) {
+  public UiModelRepository deduce(
+      ThingRepository thingRepository, Set<ModelRepository> modelRepositories) {
     Set<Feature> features = new LinkedHashSet<>();
 
     thingRepository

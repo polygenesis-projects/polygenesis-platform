@@ -21,7 +21,13 @@
 package io.polygenesis.generators.java.api;
 
 import io.polygenesis.core.converter.FromDataTypeToJavaConverter;
+import io.polygenesis.core.iomodel.IoModelGroup;
 import io.polygenesis.generators.java.shared.AbstractObjectProjectionMaker;
+import io.polygenesis.generators.java.shared.ConstructorProjection;
+import io.polygenesis.generators.java.shared.ObjectProjection;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * The type Dto object projection maker.
@@ -41,5 +47,30 @@ public class DtoObjectProjectionMaker extends AbstractObjectProjectionMaker {
    */
   public DtoObjectProjectionMaker(FromDataTypeToJavaConverter fromDataTypeToJavaConverter) {
     super(fromDataTypeToJavaConverter);
+  }
+
+  // ===============================================================================================
+  // OVERRIDES
+  // ===============================================================================================
+
+  @Override
+  public ObjectProjection make(IoModelGroup modelGroup) {
+    return new ObjectProjection(
+        projectPackageName(modelGroup),
+        projectImports(modelGroup),
+        projectDescription(modelGroup),
+        projectObjectName(modelGroup),
+        projectObjectNameWithOptionalExtendsImplements(modelGroup),
+        modelGroup,
+        projectVariables(modelGroup),
+        projectConstructors(modelGroup),
+        projectMethods());
+  }
+
+  protected Set<ConstructorProjection> projectConstructors(IoModelGroup modelGroup) {
+    return new LinkedHashSet<>(
+        Arrays.asList(
+            new ConstructorProjection(new LinkedHashSet<>(), "super();"),
+            new ConstructorProjection(projectVariables(modelGroup), "")));
   }
 }

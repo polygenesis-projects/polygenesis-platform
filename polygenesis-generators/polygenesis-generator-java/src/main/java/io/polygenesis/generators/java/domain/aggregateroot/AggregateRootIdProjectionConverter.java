@@ -21,12 +21,12 @@
 package io.polygenesis.generators.java.domain.aggregateroot;
 
 import io.polygenesis.commons.converter.Converter;
-import io.polygenesis.commons.keyvalue.KeyValue;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.converter.FromDataTypeToJavaConverter;
 import io.polygenesis.generators.java.shared.AbstractObjectProjectionMaker;
+import io.polygenesis.generators.java.shared.ArgumentProjection;
 import io.polygenesis.generators.java.shared.ConstructorProjection;
-import io.polygenesis.generators.java.shared.MethodProjection;
+import io.polygenesis.generators.java.shared.FunctionProjection;
 import io.polygenesis.generators.java.shared.ObjectProjection;
 import io.polygenesis.models.domain.AggregateRoot;
 import java.util.LinkedHashSet;
@@ -60,7 +60,7 @@ public class AggregateRootIdProjectionConverter extends AbstractObjectProjection
   // ===============================================================================================
 
   @Override
-  public ObjectProjection convert(AggregateRoot source, Object... arg) {
+  public ObjectProjection convert(AggregateRoot source, Object... args) {
     return new ObjectProjection(
         source.getPackageName().getText(),
         projectImports(),
@@ -146,7 +146,7 @@ public class AggregateRootIdProjectionConverter extends AbstractObjectProjection
    *
    * @return the set
    */
-  protected Set<KeyValue> projectVariables() {
+  protected Set<ArgumentProjection> projectVariables() {
     return new LinkedHashSet<>();
   }
 
@@ -160,7 +160,7 @@ public class AggregateRootIdProjectionConverter extends AbstractObjectProjection
    *
    * @return the set
    */
-  protected Set<MethodProjection> projectMethods() {
+  protected Set<FunctionProjection> projectMethods() {
     // TODO
     return new LinkedHashSet<>();
   }

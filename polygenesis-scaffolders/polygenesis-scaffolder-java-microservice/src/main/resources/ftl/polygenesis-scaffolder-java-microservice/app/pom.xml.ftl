@@ -42,7 +42,7 @@
 
     <!-- API IMPL -->
     <dependency>
-      <groupId>com.oregor.microservices.${ projectDescription.modulePrefix }</groupId>
+      <groupId>${ projectDescription.groupId }</groupId>
       <artifactId>${ projectDescription.modulePrefix }-api-impl</artifactId>
     </dependency>
 
@@ -52,13 +52,13 @@
 
     <!-- REST SPRING -->
     <dependency>
-      <groupId>com.oregor.microservices.${ projectDescription.modulePrefix }.${ projectDescription.modulePrefix }-primary-adapters</groupId>
+      <groupId>${ projectDescription.groupId }.${ projectDescription.modulePrefix }-primary-adapters</groupId>
       <artifactId>${ projectDescription.modulePrefix }-rest-spring</artifactId>
     </dependency>
 
     <!-- SUBSCRIBER ACTIVEMQ -->
     <dependency>
-      <groupId>com.oregor.microservices.${ projectDescription.modulePrefix }.${ projectDescription.modulePrefix }-primary-adapters</groupId>
+      <groupId>${ projectDescription.groupId }.${ projectDescription.modulePrefix }-primary-adapters</groupId>
       <artifactId>${ projectDescription.modulePrefix }-subscriber-activemq</artifactId>
     </dependency>
 
@@ -68,13 +68,13 @@
 
     <!-- PERSISTENCE RDBMS -->
     <dependency>
-      <groupId>com.oregor.microservices.${ projectDescription.modulePrefix }.${ projectDescription.modulePrefix }-secondary-adapters</groupId>
+      <groupId>${ projectDescription.groupId }.${ projectDescription.modulePrefix }-secondary-adapters</groupId>
       <artifactId>${ projectDescription.modulePrefix }-persistence-rdbms</artifactId>
     </dependency>
 
     <!-- PUBLISHER ACTIVEMQ -->
     <dependency>
-      <groupId>com.oregor.microservices.${ projectDescription.modulePrefix }.${ projectDescription.modulePrefix }-secondary-adapters</groupId>
+      <groupId>${ projectDescription.groupId }.${ projectDescription.modulePrefix }-secondary-adapters</groupId>
       <artifactId>${ projectDescription.modulePrefix }-publisher-activemq</artifactId>
     </dependency>
 

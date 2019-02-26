@@ -20,7 +20,6 @@
 
 package io.polygenesis.generators.java.shared;
 
-import io.polygenesis.commons.keyvalue.KeyValue;
 import io.polygenesis.core.iomodel.IoModelGroup;
 import java.util.Set;
 
@@ -32,9 +31,9 @@ import java.util.Set;
 public class ObjectProjection extends AbstractProjection {
 
   private IoModelGroup modelGroup;
-  private Set<KeyValue> variables;
+  private Set<ArgumentProjection> variables;
   private Set<ConstructorProjection> constructors;
-  private Set<MethodProjection> methodProjections;
+  private Set<FunctionProjection> functionProjections;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -50,7 +49,7 @@ public class ObjectProjection extends AbstractProjection {
    * @param objectNameWithOptionalExtendsImplements the object name with optional extends implements
    * @param variables the variables
    * @param constructors the constructors
-   * @param methodProjections the method projections
+   * @param functionProjections the method projections
    */
   public ObjectProjection(
       String packageName,
@@ -58,13 +57,13 @@ public class ObjectProjection extends AbstractProjection {
       String description,
       String objectName,
       String objectNameWithOptionalExtendsImplements,
-      Set<KeyValue> variables,
+      Set<ArgumentProjection> variables,
       Set<ConstructorProjection> constructors,
-      Set<MethodProjection> methodProjections) {
+      Set<FunctionProjection> functionProjections) {
     super(packageName, imports, description, objectName, objectNameWithOptionalExtendsImplements);
     setVariables(variables);
     setConstructors(constructors);
-    setMethodProjections(methodProjections);
+    setFunctionProjections(functionProjections);
   }
 
   /**
@@ -78,7 +77,7 @@ public class ObjectProjection extends AbstractProjection {
    * @param modelGroup the model group
    * @param variables the variables
    * @param constructors the constructors
-   * @param methodProjections the method projections
+   * @param functionProjections the method projections
    */
   public ObjectProjection(
       String packageName,
@@ -87,14 +86,14 @@ public class ObjectProjection extends AbstractProjection {
       String objectName,
       String objectNameWithOptionalExtendsImplements,
       IoModelGroup modelGroup,
-      Set<KeyValue> variables,
+      Set<ArgumentProjection> variables,
       Set<ConstructorProjection> constructors,
-      Set<MethodProjection> methodProjections) {
+      Set<FunctionProjection> functionProjections) {
     super(packageName, imports, description, objectName, objectNameWithOptionalExtendsImplements);
     setModelGroup(modelGroup);
     setVariables(variables);
     setConstructors(constructors);
-    setMethodProjections(methodProjections);
+    setFunctionProjections(functionProjections);
   }
 
   // ===============================================================================================
@@ -115,7 +114,7 @@ public class ObjectProjection extends AbstractProjection {
    *
    * @return the variables
    */
-  public Set<KeyValue> getVariables() {
+  public Set<ArgumentProjection> getVariables() {
     return variables;
   }
 
@@ -133,8 +132,8 @@ public class ObjectProjection extends AbstractProjection {
    *
    * @return the method projections
    */
-  public Set<MethodProjection> getMethodProjections() {
-    return methodProjections;
+  public Set<FunctionProjection> getFunctionProjections() {
+    return functionProjections;
   }
 
   // ===============================================================================================
@@ -155,7 +154,7 @@ public class ObjectProjection extends AbstractProjection {
    *
    * @param variables the variables
    */
-  private void setVariables(Set<KeyValue> variables) {
+  private void setVariables(Set<ArgumentProjection> variables) {
     this.variables = variables;
   }
 
@@ -171,9 +170,9 @@ public class ObjectProjection extends AbstractProjection {
   /**
    * Sets method projections.
    *
-   * @param methodProjections the method projections
+   * @param functionProjections the method projections
    */
-  public void setMethodProjections(Set<MethodProjection> methodProjections) {
-    this.methodProjections = methodProjections;
+  public void setFunctionProjections(Set<FunctionProjection> functionProjections) {
+    this.functionProjections = functionProjections;
   }
 }

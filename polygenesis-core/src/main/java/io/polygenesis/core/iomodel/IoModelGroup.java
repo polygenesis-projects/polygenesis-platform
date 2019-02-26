@@ -22,6 +22,7 @@ package io.polygenesis.core.iomodel;
 
 import com.oregor.ddd4j.check.assertion.Assertion;
 import io.polygenesis.core.datatype.ClassDataType;
+import io.polygenesis.core.datatype.PrimitiveDataType;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -115,10 +116,22 @@ public class IoModelGroup extends IoModel {
   // CHANGES
   // ===============================================================================================
 
+  /**
+   * With new class data type io model group.
+   *
+   * @param dataType the data type
+   * @return the io model group
+   */
   public IoModelGroup withNewClassDataType(ClassDataType dataType) {
     return new IoModelGroup(dataType, getVariableName(), getParent(), getModels());
   }
 
+  /**
+   * With new variable name io model group.
+   *
+   * @param variableName the variable name
+   * @return the io model group
+   */
   public IoModelGroup withNewVariableName(VariableName variableName) {
     return new IoModelGroup((ClassDataType) getDataType(), variableName, getParent(), getModels());
   }
@@ -163,6 +176,38 @@ public class IoModelGroup extends IoModel {
     return models.add(model);
   }
 
+  /**
+   * Add io model.
+   *
+   * @param model the model
+   */
+  public void addIoModel(IoModel model) {
+    Assertion.isNotNull(model, "Model is required");
+
+    if (model.isIoModelGroup()) {
+      IoModelGroup ioModelGroup =
+          new IoModelGroup(
+              ((IoModelGroup) model).getClassDataType(),
+              model.getVariableName(),
+              this,
+              ((IoModelGroup) model).getModels());
+
+      models.add(ioModelGroup);
+    } else if (model.isPrimitive()) {
+      IoModelPrimitive ioModelPrimitive =
+          new IoModelPrimitive(
+              (PrimitiveDataType) model.getDataType(),
+              model.getVariableName(),
+              this,
+              ((IoModelPrimitive) model).getAnnotations(),
+              ((IoModelPrimitive) model).getThingIdentity());
+
+      models.add(ioModelPrimitive);
+    } else {
+      throw new UnsupportedOperationException();
+    }
+  }
+
   // ===============================================================================================
   // GETTERS
   // ===============================================================================================
@@ -186,6 +231,11 @@ public class IoModelGroup extends IoModel {
    * @return the class data type
    */
   public ClassDataType getClassDataType() {
+    if (!getDataType().isClass()) {
+      throw new IllegalStateException(
+          String.format(
+              "Datatype=%s is not ClassDataType", getDataType().getDataTypeName().getText()));
+    }
     return (ClassDataType) getDataType();
   }
 

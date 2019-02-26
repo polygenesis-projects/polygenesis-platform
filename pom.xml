@@ -241,7 +241,12 @@
       </dependency>
       <dependency>
         <groupId>io.polygenesis.models</groupId>
-        <artifactId>polygenesis-model-api-rest</artifactId>
+        <artifactId>polygenesis-model-api-impl</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.polygenesis.models</groupId>
+        <artifactId>polygenesis-model-rest</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
@@ -268,7 +273,12 @@
       </dependency>
       <dependency>
         <groupId>io.polygenesis.deducers</groupId>
-        <artifactId>polygenesis-deducer-api-rest</artifactId>
+        <artifactId>polygenesis-deducer-api-impl</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.polygenesis.deducers</groupId>
+        <artifactId>polygenesis-deducer-rest</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>

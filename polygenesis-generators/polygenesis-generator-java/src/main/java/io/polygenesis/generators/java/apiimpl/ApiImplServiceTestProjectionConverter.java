@@ -24,6 +24,7 @@ import io.polygenesis.commons.converter.Converter;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.generators.java.shared.ObjectProjection;
 import io.polygenesis.models.api.Service;
+import io.polygenesis.models.apiimpl.ServiceImplementation;
 import java.util.Set;
 
 /**
@@ -32,7 +33,7 @@ import java.util.Set;
  * @author Christos Tsakostas
  */
 public class ApiImplServiceTestProjectionConverter extends ApiImplServiceProjectionConverter
-    implements Converter<Service, ObjectProjection> {
+    implements Converter<ServiceImplementation, ObjectProjection> {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -43,7 +44,8 @@ public class ApiImplServiceTestProjectionConverter extends ApiImplServiceProject
    *
    * @param methodProjectionMaker the method projection maker
    */
-  public ApiImplServiceTestProjectionConverter(ApiImplMethodProjectionMaker methodProjectionMaker) {
+  public ApiImplServiceTestProjectionConverter(
+      ApiImplMethodProjectionConverter methodProjectionMaker) {
     super(methodProjectionMaker);
   }
 
@@ -52,8 +54,18 @@ public class ApiImplServiceTestProjectionConverter extends ApiImplServiceProject
   // ===============================================================================================
 
   @Override
-  public ObjectProjection convert(Service source, Object... arg) {
-    return super.make(source);
+  public ObjectProjection convert(ServiceImplementation serviceImplementation, Object... args) {
+    Service service = serviceImplementation.getService();
+
+    return new ObjectProjection(
+        projectPackageName(service),
+        projectImports(service),
+        projectDescription(service),
+        projectObjectName(service),
+        projectObjectNameWithOptionalExtendsImplements(service),
+        projectVariables(serviceImplementation),
+        projectConstructors(service),
+        fillFunctionProjections(service));
   }
 
   @Override

@@ -25,6 +25,7 @@ import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.datatype.PackageName;
 import io.polygenesis.generators.java.domain.aggregateroot.AggregateRootProjectionConverter;
 import io.polygenesis.models.api.Service;
+import io.polygenesis.models.apiimpl.ServiceImplementation;
 import io.polygenesis.models.domain.AggregateRoot;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -75,16 +76,18 @@ public class ApiImplServiceExporter {
    *
    * @param generationPath the generation path
    * @param rootPackageName the root package name
-   * @param service the service
+   * @param serviceImplementation the service implementation
    * @param aggregateRoot the aggregate root
    */
   public void export(
       Path generationPath,
       PackageName rootPackageName,
-      Service service,
+      ServiceImplementation serviceImplementation,
       AggregateRoot aggregateRoot) {
     Map<String, Object> dataModel = new HashMap<>();
-    dataModel.put("projection", apiImplServiceProjectionConverter.make(service));
+    dataModel.put(
+        "projection",
+        apiImplServiceProjectionConverter.convert(serviceImplementation, aggregateRoot));
     dataModel.put(
         "aggregateRootProjection",
         aggregateRootProjectionConverter.convert(aggregateRoot, rootPackageName));
@@ -92,8 +95,12 @@ public class ApiImplServiceExporter {
     freemarkerService.export(
         dataModel,
         "polygenesis-generator-java-api-impl/ApiImplService.java.ftl",
-        makeFileName(generationPath, service));
+        makeFileName(generationPath, serviceImplementation.getService()));
   }
+
+  // ===============================================================================================
+  // PRIVATE
+  // ===============================================================================================
 
   private Path makeFileName(Path generationPath, Service service) {
 

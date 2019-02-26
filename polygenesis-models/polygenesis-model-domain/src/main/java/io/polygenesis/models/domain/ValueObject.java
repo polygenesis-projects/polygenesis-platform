@@ -20,9 +20,11 @@
 
 package io.polygenesis.models.domain;
 
-import io.polygenesis.core.datatype.ClassDataType;
+import io.polygenesis.commons.keyvalue.KeyValue;
+import io.polygenesis.core.iomodel.IoModel;
 import io.polygenesis.core.iomodel.IoModelGroup;
 import io.polygenesis.core.iomodel.VariableName;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -32,8 +34,8 @@ import java.util.Optional;
  */
 public class ValueObject extends AbstractProperty {
 
+  private IoModelGroup originatingIoModelGroup;
   private IoModelGroup ioModelGroup;
-  private ClassDataType classDataType;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -42,18 +44,47 @@ public class ValueObject extends AbstractProperty {
   /**
    * Instantiates a new Value object.
    *
+   * @param propertyType the property type
+   * @param originatingIoModelGroup the originating io model group
    * @param ioModelGroup the io model group
    * @param variableName the variable name
    */
-  public ValueObject(IoModelGroup ioModelGroup, VariableName variableName) {
-    super(variableName);
+  public ValueObject(
+      PropertyType propertyType,
+      IoModelGroup originatingIoModelGroup,
+      IoModelGroup ioModelGroup,
+      VariableName variableName) {
+    super(propertyType, variableName);
+    setOriginatingIoModelGroup(originatingIoModelGroup);
     setIoModelGroup(ioModelGroup);
-    setClassDataType((ClassDataType) ioModelGroup.getDataType());
+  }
+
+  /**
+   * Instantiates a new Value object.
+   *
+   * @param originatingIoModelGroup the originating io model group
+   * @param ioModelGroup the io model group
+   * @param variableName the variable name
+   */
+  public ValueObject(
+      IoModelGroup originatingIoModelGroup, IoModelGroup ioModelGroup, VariableName variableName) {
+    super(PropertyType.VALUE_OBJECT, variableName);
+    setOriginatingIoModelGroup(originatingIoModelGroup);
+    setIoModelGroup(ioModelGroup);
   }
 
   // ===============================================================================================
   // GETTERS
   // ===============================================================================================
+
+  /**
+   * Gets originating io model group.
+   *
+   * @return the originating io model group
+   */
+  public IoModelGroup getOriginatingIoModelGroup() {
+    return originatingIoModelGroup;
+  }
 
   /**
    * Gets io model group.
@@ -64,18 +95,18 @@ public class ValueObject extends AbstractProperty {
     return ioModelGroup;
   }
 
-  /**
-   * Gets class data type.
-   *
-   * @return the class data type
-   */
-  public ClassDataType getClassDataType() {
-    return classDataType;
-  }
-
   // ===============================================================================================
   // GUARDS
   // ===============================================================================================
+
+  /**
+   * Sets originating io model group.
+   *
+   * @param originatingIoModelGroup the originating io model group
+   */
+  private void setOriginatingIoModelGroup(IoModelGroup originatingIoModelGroup) {
+    this.originatingIoModelGroup = originatingIoModelGroup;
+  }
 
   /**
    * Sets io model group.
@@ -86,15 +117,6 @@ public class ValueObject extends AbstractProperty {
     this.ioModelGroup = ioModelGroup;
   }
 
-  /**
-   * Sets class data type.
-   *
-   * @param classDataType the class data type
-   */
-  private void setClassDataType(ClassDataType classDataType) {
-    this.classDataType = classDataType;
-  }
-
   // ===============================================================================================
   // OVERRIDES
   // ===============================================================================================
@@ -102,5 +124,35 @@ public class ValueObject extends AbstractProperty {
   @Override
   public Optional<IoModelGroup> getIoModelGroupAsOptional() {
     return Optional.of(getIoModelGroup());
+  }
+
+  @Override
+  public IoModel getIoModel() {
+    return ioModelGroup;
+  }
+
+  @Override
+  public KeyValue getAsKeyValue() {
+    return new KeyValue(
+        getIoModelGroup().getClassDataType().getDataTypeName().getText(),
+        getVariableName().getText());
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    ValueObject that = (ValueObject) o;
+    return Objects.equals(originatingIoModelGroup, that.originatingIoModelGroup)
+        && Objects.equals(ioModelGroup, that.ioModelGroup);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(originatingIoModelGroup, ioModelGroup);
   }
 }

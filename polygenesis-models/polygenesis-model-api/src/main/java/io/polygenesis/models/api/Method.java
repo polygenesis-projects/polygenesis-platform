@@ -20,10 +20,8 @@
 
 package io.polygenesis.models.api;
 
-import io.polygenesis.core.Argument;
-import io.polygenesis.core.ReturnValue;
+import io.polygenesis.core.Function;
 import java.util.Objects;
-import java.util.Set;
 
 /**
  * The type Method.
@@ -32,9 +30,7 @@ import java.util.Set;
  */
 public class Method {
 
-  private MethodName methodName;
-  private ReturnValue returnValue;
-  private Set<Argument> arguments;
+  private Function function;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -43,14 +39,10 @@ public class Method {
   /**
    * Instantiates a new Method.
    *
-   * @param methodName the method name
-   * @param returnValue the return value
-   * @param arguments the arguments
+   * @param function the function
    */
-  public Method(MethodName methodName, ReturnValue returnValue, Set<Argument> arguments) {
-    setMethodName(methodName);
-    setReturnValue(returnValue);
-    setArguments(arguments);
+  public Method(Function function) {
+    setFunction(function);
   }
 
   // ===============================================================================================
@@ -58,30 +50,12 @@ public class Method {
   // ===============================================================================================
 
   /**
-   * Gets method name.
+   * Gets function.
    *
-   * @return the method name
+   * @return the function
    */
-  public MethodName getMethodName() {
-    return methodName;
-  }
-
-  /**
-   * Gets return value.
-   *
-   * @return the return value
-   */
-  public ReturnValue getReturnValue() {
-    return returnValue;
-  }
-
-  /**
-   * Gets arguments.
-   *
-   * @return the arguments
-   */
-  public Set<Argument> getArguments() {
-    return arguments;
+  public Function getFunction() {
+    return function;
   }
 
   // ===============================================================================================
@@ -89,30 +63,12 @@ public class Method {
   // ===============================================================================================
 
   /**
-   * Sets method name.
+   * Sets function.
    *
-   * @param methodName the method name
+   * @param function the function
    */
-  private void setMethodName(MethodName methodName) {
-    this.methodName = methodName;
-  }
-
-  /**
-   * Sets return value.
-   *
-   * @param returnValue the return value
-   */
-  private void setReturnValue(ReturnValue returnValue) {
-    this.returnValue = returnValue;
-  }
-
-  /**
-   * Sets arguments.
-   *
-   * @param arguments the arguments
-   */
-  private void setArguments(Set<Argument> arguments) {
-    this.arguments = arguments;
+  private void setFunction(Function function) {
+    this.function = function;
   }
 
   // ===============================================================================================
@@ -128,13 +84,11 @@ public class Method {
       return false;
     }
     Method method = (Method) o;
-    return Objects.equals(methodName, method.methodName)
-        && Objects.equals(returnValue, method.returnValue)
-        && Objects.equals(arguments, method.arguments);
+    return Objects.equals(function, method.function);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(methodName, returnValue, arguments);
+    return Objects.hash(function);
   }
 }

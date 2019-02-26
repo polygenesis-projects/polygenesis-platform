@@ -48,8 +48,8 @@ public final class JavaApiGeneratorFactory {
 
     FromDataTypeToJavaConverter fromDataTypeToJavaConverter = new FromDataTypeToJavaConverter();
 
-    ApiMethodProjectionMaker apiMethodProjectionMaker =
-        new ApiMethodProjectionMaker(fromDataTypeToJavaConverter);
+    ApiFunctionProjectionMaker apiMethodProjectionMaker =
+        new ApiFunctionProjectionMaker(fromDataTypeToJavaConverter);
 
     ApiServiceProjectionMaker apiServiceProjectionMaker =
         new ApiServiceProjectionMaker(apiMethodProjectionMaker);

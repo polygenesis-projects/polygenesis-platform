@@ -23,6 +23,8 @@ package io.polygenesis.generators.java.rest;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import io.polygenesis.commons.text.Name;
+import io.polygenesis.core.datatype.PackageName;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Paths;
@@ -52,7 +54,8 @@ public class JavaApiRestGeneratorFactoryTest {
   @Test
   public void shouldCreateNewInstance() {
     JavaApiRestGenerator javaApiGenerator =
-        JavaApiRestGeneratorFactory.newInstance(Paths.get("tmp"));
+        JavaApiRestGeneratorFactory.newInstance(
+            Paths.get("tmp"), new PackageName("com.oregor"), new Name("someContext"));
     assertThat(javaApiGenerator).isNotNull();
   }
 }

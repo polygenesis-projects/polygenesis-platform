@@ -20,9 +20,9 @@
 
 package io.polygenesis.generators.java.rest;
 
-import io.polygenesis.commons.keyvalue.KeyValue;
+import io.polygenesis.generators.java.shared.ArgumentProjection;
 import io.polygenesis.generators.java.shared.ConstructorProjection;
-import io.polygenesis.generators.java.shared.MethodProjection;
+import io.polygenesis.generators.java.shared.FunctionProjection;
 import io.polygenesis.generators.java.shared.ObjectProjection;
 import java.util.Set;
 
@@ -47,7 +47,7 @@ public class ResourceProjection extends ObjectProjection {
    * @param objectNameWithOptionalExtendsImplements the object name with optional extends implements
    * @param variables the variables
    * @param constructors the constructors
-   * @param methodProjections the method projections
+   * @param functionProjections the method projections
    */
   public ResourceProjection(
       String packageName,
@@ -55,9 +55,9 @@ public class ResourceProjection extends ObjectProjection {
       String description,
       String objectName,
       String objectNameWithOptionalExtendsImplements,
-      Set<KeyValue> variables,
+      Set<ArgumentProjection> variables,
       Set<ConstructorProjection> constructors,
-      Set<MethodProjection> methodProjections) {
+      Set<FunctionProjection> functionProjections) {
     super(
         packageName,
         imports,
@@ -66,6 +66,6 @@ public class ResourceProjection extends ObjectProjection {
         objectNameWithOptionalExtendsImplements,
         variables,
         constructors,
-        methodProjections);
+        functionProjections);
   }
 }

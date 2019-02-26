@@ -21,18 +21,19 @@
 package io.polygenesis.generators.java.domain.aggregateroot;
 
 import io.polygenesis.commons.converter.Converter;
-import io.polygenesis.commons.keyvalue.KeyValue;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.converter.FromDataTypeToJavaConverter;
 import io.polygenesis.core.datatype.PackageName;
 import io.polygenesis.core.iomodel.IoModelGroup;
 import io.polygenesis.generators.java.shared.AbstractObjectProjectionMaker;
+import io.polygenesis.generators.java.shared.ArgumentProjection;
 import io.polygenesis.generators.java.shared.ConstructorProjection;
-import io.polygenesis.generators.java.shared.MethodProjection;
+import io.polygenesis.generators.java.shared.FunctionProjection;
 import io.polygenesis.generators.java.shared.ObjectProjection;
+import io.polygenesis.models.domain.AbstractProperty;
 import io.polygenesis.models.domain.AggregateRoot;
 import io.polygenesis.models.domain.Primitive;
-import java.util.Arrays;
+import io.polygenesis.models.domain.PropertyType;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -64,8 +65,8 @@ public class AggregateRootProjectionConverter extends AbstractObjectProjectionMa
   // ===============================================================================================
 
   @Override
-  public ObjectProjection convert(AggregateRoot aggregateRoot, Object... arg) {
-    PackageName rootPackageName = (PackageName) arg[0];
+  public ObjectProjection convert(AggregateRoot aggregateRoot, Object... args) {
+    PackageName rootPackageName = (PackageName) args[0];
 
     return new ObjectProjection(
         aggregateRoot.getPackageName().getText(),
@@ -99,11 +100,18 @@ public class AggregateRootProjectionConverter extends AbstractObjectProjectionMa
               Optional<IoModelGroup> optionalIoModelGroup = property.getIoModelGroupAsOptional();
               if (optionalIoModelGroup.isPresent()) {
                 IoModelGroup ioModelGroup = optionalIoModelGroup.get();
-                imports.add(
-                    ioModelGroup.getClassDataType().getOptionalPackageName().get().getText()
-                        + "."
-                        + TextConverter.toUpperCamel(
-                            ioModelGroup.getDataType().getDataTypeName().getText()));
+
+                if (!ioModelGroup
+                    .getClassDataType()
+                    .getOptionalPackageName()
+                    .get()
+                    .equals(aggregateRoot.getPackageName())) {
+                  imports.add(
+                      ioModelGroup.getClassDataType().getOptionalPackageName().get().getText()
+                          + "."
+                          + TextConverter.toUpperCamel(
+                              ioModelGroup.getDataType().getDataTypeName().getText()));
+                }
               }
             });
 
@@ -171,8 +179,8 @@ public class AggregateRootProjectionConverter extends AbstractObjectProjectionMa
    * @param aggregateRoot the aggregate root
    * @return the set
    */
-  protected Set<KeyValue> projectVariables(AggregateRoot aggregateRoot) {
-    Set<KeyValue> variables = new LinkedHashSet<>();
+  protected Set<ArgumentProjection> projectVariables(AggregateRoot aggregateRoot) {
+    Set<ArgumentProjection> variables = new LinkedHashSet<>();
 
     aggregateRoot
         .getProperties()
@@ -180,21 +188,25 @@ public class AggregateRootProjectionConverter extends AbstractObjectProjectionMa
             property -> {
               Optional<IoModelGroup> optionalIoModelGroup = property.getIoModelGroupAsOptional();
               if (optionalIoModelGroup.isPresent()) {
-                IoModelGroup ioModelGroup = optionalIoModelGroup.get();
-                variables.add(
-                    new KeyValue(
-                        fromDataTypeToJavaConverter.getDeclaredVariableType(ioModelGroup),
-                        ioModelGroup.getVariableName().getText()));
+                if (!property.getPropertyType().equals(PropertyType.AGGREGATE_ROOT_ID)) {
+                  IoModelGroup ioModelGroup = optionalIoModelGroup.get();
+                  variables.add(
+                      new ArgumentProjection(
+                          fromDataTypeToJavaConverter.getDeclaredVariableType(ioModelGroup),
+                          ioModelGroup.getVariableName().getText()));
+                }
               } else {
                 if (property instanceof Primitive) {
                   Primitive primitive = (Primitive) property;
                   variables.add(
-                      new KeyValue(
+                      new ArgumentProjection(
                           fromDataTypeToJavaConverter.getDeclaredVariableType(
                               primitive.getIoModelPrimitive()),
                           primitive.getVariableName().getText()));
                 } else {
-                  throw new IllegalStateException();
+                  throw new IllegalStateException(
+                      String.format(
+                          "Cannot project variable=%s", property.getVariableName().getText()));
                 }
               }
             });
@@ -203,9 +215,21 @@ public class AggregateRootProjectionConverter extends AbstractObjectProjectionMa
   }
 
   protected Set<ConstructorProjection> projectConstructors(AggregateRoot aggregateRoot) {
-    // TODO
-    return new LinkedHashSet<>(
-        Arrays.asList(new ConstructorProjection(projectVariables(aggregateRoot), "")));
+    Set<ConstructorProjection> constructorProjections = new LinkedHashSet<>();
+
+    aggregateRoot
+        .getConstructors()
+        .forEach(
+            constructor -> {
+              constructorProjections.add(
+                  new ConstructorProjection(
+                      makeConstructorArguments(constructor.getProperties()),
+                      String.format(
+                          "super(%sId);",
+                          TextConverter.toLowerCamel(aggregateRoot.getName().getText()))));
+            });
+
+    return constructorProjections;
   }
 
   /**
@@ -213,8 +237,31 @@ public class AggregateRootProjectionConverter extends AbstractObjectProjectionMa
    *
    * @return the set
    */
-  protected Set<MethodProjection> projectMethods() {
+  protected Set<FunctionProjection> projectMethods() {
     // TODO
     return new LinkedHashSet<>();
+  }
+
+  private Set<ArgumentProjection> makeConstructorArguments(Set<AbstractProperty> properties) {
+    Set<ArgumentProjection> keyValues = new LinkedHashSet<>();
+
+    properties
+        .stream()
+        .forEach(
+            property -> {
+              if (property.getPropertyType().equals(PropertyType.AGGREGATE_ROOT_ID)) {
+                keyValues.add(
+                    new ArgumentProjection(
+                        property.getAsKeyValue().getKey(),
+                        property.getAsKeyValue().getValue(),
+                        true));
+              } else {
+                keyValues.add(
+                    new ArgumentProjection(
+                        property.getAsKeyValue().getKey(), property.getAsKeyValue().getValue()));
+              }
+            });
+
+    return keyValues;
   }
 }

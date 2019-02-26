@@ -40,6 +40,7 @@ public final class JavaApiImplGeneratorFactory {
   // ===============================================================================================
   private static final ApiImplServiceExporter apiImplServiceExporter;
   private static final ApiImplServiceTestExporter apiImplServiceTestExporter;
+  private static final AggregateRootConverterExporter aggregateRootConverterExporter;
 
   // ===============================================================================================
   // STATIC INITIALIZATION OF DEPENDENCIES
@@ -51,8 +52,17 @@ public final class JavaApiImplGeneratorFactory {
 
     FromDataTypeToJavaConverter fromDataTypeToJavaConverter = new FromDataTypeToJavaConverter();
 
-    ApiImplMethodProjectionMaker apiImplMethodProjectionMaker =
-        new ApiImplMethodProjectionMaker(fromDataTypeToJavaConverter);
+    ApiImplCommandMethodImplementation apiImplCommandMethodImplementation =
+        new ApiImplCommandMethodImplementation();
+
+    ApiImplQueryMethodImplementation apiImplQueryMethodImplementation =
+        new ApiImplQueryMethodImplementation();
+
+    ApiImplMethodProjectionConverter apiImplMethodProjectionMaker =
+        new ApiImplMethodProjectionConverter(
+            fromDataTypeToJavaConverter,
+            apiImplCommandMethodImplementation,
+            apiImplQueryMethodImplementation);
 
     ApiImplServiceProjectionConverter apiImplServiceProjectionConverter =
         new ApiImplServiceProjectionConverter(apiImplMethodProjectionMaker);
@@ -69,6 +79,18 @@ public final class JavaApiImplGeneratorFactory {
 
     apiImplServiceTestExporter =
         new ApiImplServiceTestExporter(freemarkerService, apiImplServiceTestProjectionConverter);
+
+    AggregateRootConverterMethodProjectionConverter
+        aggregateRootConverterMethodProjectionConverter =
+            new AggregateRootConverterMethodProjectionConverter(fromDataTypeToJavaConverter);
+
+    AggregateRootConverterProjectionConverter aggregateRootConverterProjectionConverter =
+        new AggregateRootConverterProjectionConverter(
+            aggregateRootConverterMethodProjectionConverter);
+
+    aggregateRootConverterExporter =
+        new AggregateRootConverterExporter(
+            freemarkerService, aggregateRootConverterProjectionConverter);
   }
 
   // ===============================================================================================
@@ -91,6 +113,10 @@ public final class JavaApiImplGeneratorFactory {
    */
   public static JavaApiImplGenerator newInstance(Path generationPath, PackageName rootPackageName) {
     return new JavaApiImplGenerator(
-        generationPath, rootPackageName, apiImplServiceExporter, apiImplServiceTestExporter);
+        generationPath,
+        rootPackageName,
+        apiImplServiceExporter,
+        apiImplServiceTestExporter,
+        aggregateRootConverterExporter);
   }
 }

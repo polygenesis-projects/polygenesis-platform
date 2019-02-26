@@ -36,7 +36,8 @@ public class ServiceTest extends AbstractEqualityTest<Service> {
         new ServiceName("create"),
         new LinkedHashSet<>(),
         CqsType.COMMAND,
-        new ThingName("aaa"));
+        new ThingName("aaa"),
+        new LinkedHashSet<>());
   }
 
   @Override
@@ -46,6 +47,7 @@ public class ServiceTest extends AbstractEqualityTest<Service> {
         new ServiceName("create"),
         new LinkedHashSet<>(),
         CqsType.SUPPORTIVE,
-        new ThingName("aaa"));
+        new ThingName("aaa"),
+        new LinkedHashSet<>());
   }
 }

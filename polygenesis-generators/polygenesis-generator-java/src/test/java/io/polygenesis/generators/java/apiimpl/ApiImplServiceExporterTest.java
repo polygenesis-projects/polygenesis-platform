@@ -31,6 +31,7 @@ import io.polygenesis.core.datatype.PackageName;
 import io.polygenesis.generators.java.domain.aggregateroot.AggregateRootProjectionConverter;
 import io.polygenesis.models.api.Service;
 import io.polygenesis.models.api.ServiceName;
+import io.polygenesis.models.apiimpl.ServiceImplementation;
 import io.polygenesis.models.domain.AggregateRoot;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -43,6 +44,7 @@ public class ApiImplServiceExporterTest {
 
   private Path generationPath;
   private PackageName rootPackageName;
+  private ServiceImplementation serviceImplementation;
   private Service service;
   private AggregateRoot aggregateRoot;
   private FreemarkerService freemarkerService;
@@ -54,6 +56,7 @@ public class ApiImplServiceExporterTest {
   public void setUp() {
     generationPath = Paths.get("tmp");
     rootPackageName = new PackageName("com.oregor");
+    serviceImplementation = mock(ServiceImplementation.class);
     service = mock(Service.class);
     aggregateRoot = mock(AggregateRoot.class);
     freemarkerService = mock(FreemarkerService.class);
@@ -66,12 +69,14 @@ public class ApiImplServiceExporterTest {
 
   @Test
   public void shouldExport() {
+    given(serviceImplementation.getService()).willReturn(service);
     given(service.getPackageName()).willReturn(new PackageName("com.oregor"));
     given(service.getServiceName()).willReturn(new ServiceName("someServiceName"));
 
-    apiImplServiceExporter.export(generationPath, rootPackageName, service, aggregateRoot);
+    apiImplServiceExporter.export(
+        generationPath, rootPackageName, serviceImplementation, aggregateRoot);
 
-    verify(apiImplServiceProjectionConverter).make(eq(service));
+    verify(apiImplServiceProjectionConverter).convert(eq(serviceImplementation), eq(aggregateRoot));
     verify(freemarkerService)
         .export(
             any(HashMap.class),

@@ -103,7 +103,8 @@ public class Genesis {
   public Set<ModelRepository> deduceModelRepositories(
       ThingRepository thingRepository, Set<Deducer> deducers) {
     Set<ModelRepository> modelRepositories = new LinkedHashSet<>();
-    deducers.forEach(deducer -> modelRepositories.add(deducer.deduce(thingRepository)));
+    deducers.forEach(
+        deducer -> modelRepositories.add(deducer.deduce(thingRepository, modelRepositories)));
     return modelRepositories;
   }
 

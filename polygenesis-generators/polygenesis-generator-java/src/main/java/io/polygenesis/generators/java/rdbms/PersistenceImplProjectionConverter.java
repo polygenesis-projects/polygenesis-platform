@@ -21,14 +21,14 @@
 package io.polygenesis.generators.java.rdbms;
 
 import io.polygenesis.commons.converter.Converter;
-import io.polygenesis.commons.keyvalue.KeyValue;
 import io.polygenesis.commons.text.Name;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.converter.FromDataTypeToJavaConverter;
 import io.polygenesis.core.datatype.PackageName;
 import io.polygenesis.generators.java.shared.AbstractObjectProjectionMaker;
+import io.polygenesis.generators.java.shared.ArgumentProjection;
 import io.polygenesis.generators.java.shared.ConstructorProjection;
-import io.polygenesis.generators.java.shared.MethodProjection;
+import io.polygenesis.generators.java.shared.FunctionProjection;
 import io.polygenesis.generators.java.shared.ObjectProjection;
 import io.polygenesis.models.domain.Persistence;
 import java.util.Arrays;
@@ -63,9 +63,9 @@ public class PersistenceImplProjectionConverter extends AbstractObjectProjection
   // ===============================================================================================
 
   @Override
-  public ObjectProjection convert(Persistence source, Object... arg) {
-    PackageName rootPackageName = (PackageName) arg[0];
-    Name contextName = (Name) arg[1];
+  public ObjectProjection convert(Persistence source, Object... args) {
+    PackageName rootPackageName = (PackageName) args[0];
+    Name contextName = (Name) args[1];
 
     return new ObjectProjection(
         source.getPackageName().getText(),
@@ -170,7 +170,7 @@ public class PersistenceImplProjectionConverter extends AbstractObjectProjection
    *
    * @return the set
    */
-  protected Set<KeyValue> projectVariables() {
+  protected Set<ArgumentProjection> projectVariables() {
     return new LinkedHashSet<>();
   }
 
@@ -188,15 +188,15 @@ public class PersistenceImplProjectionConverter extends AbstractObjectProjection
             new ConstructorProjection(
                 new LinkedHashSet<>(
                     Arrays.asList(
-                        new KeyValue(
+                        new ArgumentProjection(
                             TextConverter.toUpperCamel(persistence.getAggregateRootName().getText())
                                 + "Repository",
                             "repository"),
-                        new KeyValue(
+                        new ArgumentProjection(
                             TextConverter.toUpperCamel(contextName.getText())
                                 + "DomainMessageDataRepository",
                             "domainMessageDataRepository"),
-                        new KeyValue(
+                        new ArgumentProjection(
                             TextConverter.toUpperCamel(contextName.getText())
                                 + "DomainMessageDataConverter",
                             "domainMessageDataConverter"))),
@@ -208,7 +208,7 @@ public class PersistenceImplProjectionConverter extends AbstractObjectProjection
    *
    * @return the set
    */
-  protected Set<MethodProjection> projectMethods() {
+  protected Set<FunctionProjection> projectMethods() {
     // TODO
     return new LinkedHashSet<>();
   }

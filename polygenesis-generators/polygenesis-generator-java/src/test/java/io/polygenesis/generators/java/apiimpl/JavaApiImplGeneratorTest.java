@@ -33,6 +33,9 @@ import io.polygenesis.core.ThingName;
 import io.polygenesis.core.datatype.PackageName;
 import io.polygenesis.models.api.Service;
 import io.polygenesis.models.api.ServiceModelRepository;
+import io.polygenesis.models.apiimpl.AggregateRootConverter;
+import io.polygenesis.models.apiimpl.ServiceImplementation;
+import io.polygenesis.models.apiimpl.ServiceImplementationModelRepository;
 import io.polygenesis.models.domain.AggregateRoot;
 import io.polygenesis.models.domain.DomainModelRepository;
 import java.nio.file.Path;
@@ -54,6 +57,7 @@ public class JavaApiImplGeneratorTest {
   private PackageName rootPackageName;
   private ApiImplServiceExporter apiImplServiceExporter;
   private ApiImplServiceTestExporter apiImplServiceTestExporter;
+  private AggregateRootConverterExporter aggregateRootConverterExporter;
   private JavaApiImplGenerator javaApiImplGenerator;
 
   /**
@@ -67,9 +71,14 @@ public class JavaApiImplGeneratorTest {
     rootPackageName = new PackageName("com.oregor");
     apiImplServiceExporter = mock(ApiImplServiceExporter.class);
     apiImplServiceTestExporter = mock(ApiImplServiceTestExporter.class);
+    aggregateRootConverterExporter = mock(AggregateRootConverterExporter.class);
     javaApiImplGenerator =
         new JavaApiImplGenerator(
-            generationPath, rootPackageName, apiImplServiceExporter, apiImplServiceTestExporter);
+            generationPath,
+            rootPackageName,
+            apiImplServiceExporter,
+            apiImplServiceTestExporter,
+            aggregateRootConverterExporter);
   }
 
   /** Should generate. */
@@ -79,7 +88,10 @@ public class JavaApiImplGeneratorTest {
 
     verify(apiImplServiceExporter)
         .export(
-            eq(generationPath), eq(rootPackageName), any(Service.class), any(AggregateRoot.class));
+            eq(generationPath),
+            eq(rootPackageName),
+            any(ServiceImplementation.class),
+            any(AggregateRoot.class));
   }
 
   /** Should fail on missing service model repository. */
@@ -88,9 +100,7 @@ public class JavaApiImplGeneratorTest {
 
     assertThatThrownBy(() -> javaApiImplGenerator.generate(new LinkedHashSet<>()))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessageContaining(
-            "No Model Repository found for Class=io.polygenesis.models.api.ServiceModelRepository "
-                + "in provided modelRepositories");
+        .hasMessageContaining("No Model Repository found for");
   }
 
   // ===============================================================================================
@@ -99,7 +109,10 @@ public class JavaApiImplGeneratorTest {
 
   private Set<ModelRepository> createModelRepositories() {
     return new LinkedHashSet<>(
-        Arrays.asList(createServiceModelRepository(), createDomainModelRepository()));
+        Arrays.asList(
+            createServiceModelRepository(),
+            createDomainModelRepository(),
+            createServiceImplementationModelRepository()));
   }
 
   private ServiceModelRepository createServiceModelRepository() {
@@ -120,5 +133,20 @@ public class JavaApiImplGeneratorTest {
     aggregateRoots.add(aggregateRoot);
 
     return new DomainModelRepository(aggregateRoots);
+  }
+
+  private ServiceImplementationModelRepository createServiceImplementationModelRepository() {
+    Set<ServiceImplementation> serviceImplementations = new LinkedHashSet<>();
+    Set<AggregateRootConverter> aggregateRootConverters = new LinkedHashSet<>();
+
+    ServiceImplementation serviceImplementation = mock(ServiceImplementation.class);
+    Service service = mock(Service.class);
+    given(service.getThingName()).willReturn(new ThingName("someThing"));
+    given(serviceImplementation.getService()).willReturn(service);
+
+    serviceImplementations.add(serviceImplementation);
+
+    return new ServiceImplementationModelRepository(
+        serviceImplementations, aggregateRootConverters);
   }
 }

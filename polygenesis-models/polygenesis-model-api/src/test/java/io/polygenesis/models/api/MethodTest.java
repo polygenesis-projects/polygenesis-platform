@@ -20,12 +20,13 @@
 
 package io.polygenesis.models.api;
 
+import io.polygenesis.annotations.core.GoalType;
 import io.polygenesis.commons.test.AbstractEqualityTest;
-import io.polygenesis.core.ReturnValue;
-import io.polygenesis.core.datatype.PrimitiveDataType;
-import io.polygenesis.core.datatype.PrimitiveType;
-import io.polygenesis.core.iomodel.IoModelPrimitive;
-import io.polygenesis.core.iomodel.VariableName;
+import io.polygenesis.core.Function;
+import io.polygenesis.core.FunctionName;
+import io.polygenesis.core.Goal;
+import io.polygenesis.core.Thing;
+import io.polygenesis.core.ThingName;
 import java.util.LinkedHashSet;
 
 /** @author Christos Tsakostas */
@@ -33,27 +34,17 @@ public class MethodTest extends AbstractEqualityTest<Method> {
 
   @Override
   public Method createObject1() {
+    Thing thing = new Thing(new ThingName("customer"));
     return new Method(
-        new MethodName("someMethodName"),
-        new ReturnValue(
-            new IoModelPrimitive(
-                new PrimitiveDataType(PrimitiveType.STRING),
-                new VariableName("someVariableName"),
-                new LinkedHashSet<>(),
-                false)),
-        new LinkedHashSet<>());
+        new Function(
+            thing, new Goal(GoalType.CREATE), new FunctionName("create"), new LinkedHashSet<>()));
   }
 
   @Override
   public Method createObject2() {
+    Thing thing = new Thing(new ThingName("user"));
     return new Method(
-        new MethodName("someOtherMethodName"),
-        new ReturnValue(
-            new IoModelPrimitive(
-                new PrimitiveDataType(PrimitiveType.STRING),
-                new VariableName("someVariableName"),
-                new LinkedHashSet<>(),
-                false)),
-        new LinkedHashSet<>());
+        new Function(
+            thing, new Goal(GoalType.CREATE), new FunctionName("create"), new LinkedHashSet<>()));
   }
 }

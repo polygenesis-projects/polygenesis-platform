@@ -64,7 +64,7 @@ public class ${ projection.objectNameWithOptionalExtendsImplements } {
 	// TESTS
 	// ===============================================================================================
 
-<#list projection.methodProjections as methodProjection>
+<#list projection.functionProjections as methodProjection>
 	/**
 	 * Should succeed to ${ textConverter.toUpperCamelSpaces(methodProjection.name) }.
 	 */

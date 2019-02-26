@@ -38,7 +38,7 @@ public class ApiServiceProjectionMaker extends AbstractServiceProjectionMaker {
    *
    * @param methodProjectionMaker the method projection maker
    */
-  public ApiServiceProjectionMaker(ApiMethodProjectionMaker methodProjectionMaker) {
+  public ApiServiceProjectionMaker(ApiFunctionProjectionMaker methodProjectionMaker) {
     super(methodProjectionMaker);
   }
 

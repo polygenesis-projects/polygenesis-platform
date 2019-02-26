@@ -20,8 +20,10 @@
 
 package io.polygenesis.models.domain;
 
+import io.polygenesis.core.ModelRepository;
 import io.polygenesis.core.ThingRepository;
 import io.polygenesis.core.datatype.PackageName;
+import java.util.Set;
 
 /**
  * The type Domain deducer.
@@ -56,7 +58,8 @@ public class DomainDeducerImpl implements DomainDeducer {
   // ===============================================================================================
 
   @Override
-  public DomainModelRepository deduce(ThingRepository thingRepository) {
+  public DomainModelRepository deduce(
+      ThingRepository thingRepository, Set<ModelRepository> modelRepositories) {
     return new DomainModelRepository(
         aggregateRootDeducer.deduceFrom(thingRepository, rootPackageName));
   }

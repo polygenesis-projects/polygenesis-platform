@@ -31,7 +31,7 @@ import ${ import };
  * @author PolyGenesis
  */
 public interface ${ projection.objectNameWithOptionalExtendsImplements } {
-<#list projection.methodProjections as methodProjection>
+<#list projection.functionProjections as methodProjection>
 
 	/**
 	 * ${ methodProjection.description }

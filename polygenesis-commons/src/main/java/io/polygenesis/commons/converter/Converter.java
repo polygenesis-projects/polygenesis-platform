@@ -39,5 +39,5 @@ public interface Converter<S, T> {
    * @return the converted object, which must be an instance of {@code T} (potentially {@code null})
    * @throws IllegalArgumentException if the source cannot be converted to the desired target type
    */
-  T convert(S source, Object... arg);
+  T convert(S source, Object... args);
 }

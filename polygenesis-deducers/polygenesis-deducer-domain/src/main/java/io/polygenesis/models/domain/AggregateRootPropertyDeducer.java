@@ -22,7 +22,10 @@ package io.polygenesis.models.domain;
 
 import io.polygenesis.core.Function;
 import io.polygenesis.core.Thing;
+import io.polygenesis.core.datatype.ClassDataType;
+import io.polygenesis.core.datatype.DataKind;
 import io.polygenesis.core.datatype.DataTypeName;
+import io.polygenesis.core.datatype.PackageName;
 import io.polygenesis.core.iomodel.IoModel;
 import io.polygenesis.core.iomodel.IoModelGroup;
 import io.polygenesis.core.iomodel.IoModelPrimitive;
@@ -47,10 +50,12 @@ public class AggregateRootPropertyDeducer {
    * @param thing the thing
    * @return the set
    */
-  public Set<AbstractProperty> deduceFrom(Thing thing) {
+  public Set<AbstractProperty> deduceFrom(Thing thing, PackageName rootPackageName) {
     Set<AbstractProperty> properties = new LinkedHashSet<>();
 
-    thing.getFunctions().forEach(function -> properties.addAll(deduceFrom(function)));
+    thing
+        .getFunctions()
+        .forEach(function -> properties.addAll(deduceFrom(function, rootPackageName)));
 
     return properties;
   }
@@ -61,8 +66,26 @@ public class AggregateRootPropertyDeducer {
    * @param function the function
    * @return the set
    */
-  public Set<AbstractProperty> deduceFrom(Function function) {
+  public Set<AbstractProperty> deduceFrom(Function function, PackageName rootPackageName) {
     Set<AbstractProperty> properties = new LinkedHashSet<>();
+
+    // Add Aggregate Root ID
+    if (function.getGoal().isCreate()) {
+
+      IoModelGroup ioModelGroup =
+          new IoModelGroup(
+              new ClassDataType(
+                  new DataTypeName(function.getThing().getName().getText() + "Id"),
+                  new PackageName(
+                      String.format(
+                          "%s.%s",
+                          rootPackageName.getText(),
+                          function.getThing().getName().getText().toLowerCase()))));
+
+      properties.add(
+          new AggregateRootId(
+              ioModelGroup, new VariableName(function.getThing().getName().getText() + "Id")));
+    }
 
     function
         .getArguments()
@@ -74,7 +97,9 @@ public class AggregateRootPropertyDeducer {
                     .getModels()
                     .forEach(
                         model -> {
-                          properties.add(makeAbstractProperty(model));
+                          if (!isPropertyThingIdentity(model)) {
+                            properties.add(makeAbstractProperty(model));
+                          }
                         });
 
               } else {
@@ -92,12 +117,12 @@ public class AggregateRootPropertyDeducer {
   private AbstractProperty makeAbstractProperty(IoModel model) {
     switch (model.getDataType().getDataKind()) {
       case CLASS:
-        IoModelGroup ioModelGroup = (IoModelGroup) model;
+        IoModelGroup originatingIoModelGroup = (IoModelGroup) model;
 
         IoModelGroup newIoModelGroup =
-            ioModelGroup
+            originatingIoModelGroup
                 .withNewClassDataType(
-                    ioModelGroup
+                    originatingIoModelGroup
                         .getClassDataType()
                         .changeDataTypeNameTo(
                             new DataTypeName(makeValueObjectVariableName(model.getVariableName()))))
@@ -105,6 +130,7 @@ public class AggregateRootPropertyDeducer {
                     new VariableName(makeValueObjectVariableName(model.getVariableName())));
 
         return new ValueObject(
+            originatingIoModelGroup,
             newIoModelGroup,
             new VariableName(makeValueObjectVariableName(model.getVariableName())));
       case PRIMITIVE:
@@ -122,5 +148,13 @@ public class AggregateRootPropertyDeducer {
     } else {
       return text;
     }
+  }
+
+  private boolean isPropertyThingIdentity(IoModel model) {
+    if (model.getDataType().getDataKind().equals(DataKind.PRIMITIVE)
+        && ((IoModelPrimitive) model).getThingIdentity()) {
+      return true;
+    }
+    return false;
   }
 }

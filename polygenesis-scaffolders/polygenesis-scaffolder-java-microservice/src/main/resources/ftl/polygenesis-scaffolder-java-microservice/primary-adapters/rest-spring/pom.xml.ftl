@@ -32,19 +32,25 @@
   <artifactId>${ projectDescription.modulePrefix }-rest-spring</artifactId>
 
   <dependencies>
-    <!-- SPRING BOOT WEB -->
+    <!--SPRING BOOT WEB-->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
 
-    <!-- API -->
+    <!--API-->
     <dependency>
       <groupId>${ projectDescription.groupId }</groupId>
       <artifactId>${ projectDescription.modulePrefix }-api</artifactId>
     </dependency>
 
-    <!-- TEST -->
+    <!--OREGOR-DDD4J-->
+    <dependency>
+      <groupId>com.oregor.ddd4j</groupId>
+      <artifactId>ddd4j-primary-adapter-rest-spring</artifactId>
+    </dependency>
+
+    <!--TEST-->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>

@@ -23,6 +23,7 @@ package io.polygenesis.generators.java.apiimpl;
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.models.api.Service;
+import io.polygenesis.models.apiimpl.ServiceImplementation;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -67,18 +68,22 @@ public class ApiImplServiceTestExporter {
    * Export.
    *
    * @param generationPath the generation path
-   * @param service the service
+   * @param serviceImplementation the service implementation
    */
-  public void export(Path generationPath, Service service) {
+  public void export(Path generationPath, ServiceImplementation serviceImplementation) {
     Map<String, Object> dataModel = new HashMap<>();
-    dataModel.put("projection", apiImplServiceTestProjectionConverter.make(service));
-    dataModel.put("serviceInterface", service.getServiceName().getText());
-    dataModel.put("serviceInterfaceImpl", service.getServiceName().getText() + "Impl");
+    dataModel.put(
+        "projection", apiImplServiceTestProjectionConverter.convert(serviceImplementation));
+    dataModel.put(
+        "serviceInterface", serviceImplementation.getService().getServiceName().getText());
+    dataModel.put(
+        "serviceInterfaceImpl",
+        serviceImplementation.getService().getServiceName().getText() + "Impl");
 
     freemarkerService.export(
         dataModel,
         "polygenesis-generator-java-api-impl/ApiImplServiceTest.java.ftl",
-        makeFileName(generationPath, service));
+        makeFileName(generationPath, serviceImplementation.getService()));
   }
 
   private Path makeFileName(Path generationPath, Service service) {

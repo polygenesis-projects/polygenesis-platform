@@ -20,6 +20,8 @@
 
 package io.polygenesis.core;
 
+import java.util.Set;
+
 /**
  * Contract for PolyGenesis Deducers.
  *
@@ -32,7 +34,8 @@ public interface Deducer<R extends ModelRepository> {
    * Deduces a model's repository.
    *
    * @param thingRepository the thing repository
+   * @param modelRepositories the model repositories
    * @return the ModelRepository
    */
-  R deduce(ThingRepository thingRepository);
+  R deduce(ThingRepository thingRepository, Set<ModelRepository> modelRepositories);
 }

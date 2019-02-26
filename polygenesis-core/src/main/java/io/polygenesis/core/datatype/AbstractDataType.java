@@ -103,6 +103,15 @@ public abstract class AbstractDataType {
     return dataKind.equals(DataKind.PRIMITIVE);
   }
 
+  /**
+   * Is class boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isClass() {
+    return dataKind.equals(DataKind.CLASS);
+  }
+
   // ===============================================================================================
   // OVERRIDES
   // ===============================================================================================

@@ -22,7 +22,9 @@ package io.polygenesis.models.api;
 
 import com.oregor.ddd4j.check.assertion.Assertion;
 import io.polygenesis.core.ModelRepository;
+import io.polygenesis.core.ThingName;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * The type Service model repository.
@@ -44,6 +46,23 @@ public class ServiceModelRepository implements ModelRepository {
    */
   public ServiceModelRepository(Set<Service> services) {
     setServices(services);
+  }
+
+  // ===============================================================================================
+  // QUERIES
+  // ===============================================================================================
+
+  /**
+   * Gets services by.
+   *
+   * @param thingName the thing name
+   * @return the services by
+   */
+  public Set<Service> getServicesBy(ThingName thingName) {
+    return services
+        .stream()
+        .filter(service -> service.getThingName().equals(thingName))
+        .collect(Collectors.toSet());
   }
 
   // ===============================================================================================

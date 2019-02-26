@@ -20,10 +20,12 @@
 
 package io.polygenesis.generators.java.rest;
 
+import io.polygenesis.commons.text.Name;
 import io.polygenesis.core.AbstractGenerator;
 import io.polygenesis.core.CoreRegistry;
 import io.polygenesis.core.ModelRepository;
-import io.polygenesis.models.apirest.RestModelRepository;
+import io.polygenesis.core.datatype.PackageName;
+import io.polygenesis.models.rest.RestModelRepository;
 import java.nio.file.Path;
 import java.util.Set;
 
@@ -34,8 +36,11 @@ import java.util.Set;
  */
 public class JavaApiRestGenerator extends AbstractGenerator {
 
+  private final PackageName rootPackageName;
+  private final Name contextName;
   private final ResourceExporter resourceExporter;
   private final ResourceTestExporter resourceTestExporter;
+  private final RestConstantsProjectionExporter restConstantsProjectionExporter;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -45,16 +50,47 @@ public class JavaApiRestGenerator extends AbstractGenerator {
    * Instantiates a new Java api rest generator.
    *
    * @param generationPath the generation path
+   * @param rootPackageName the root package name
+   * @param contextName the context name
    * @param resourceExporter the resource exporter
    * @param resourceTestExporter the resource test exporter
+   * @param restConstantsProjectionExporter the rest constants projection exporter
    */
   public JavaApiRestGenerator(
       Path generationPath,
+      PackageName rootPackageName,
+      Name contextName,
       ResourceExporter resourceExporter,
-      ResourceTestExporter resourceTestExporter) {
+      ResourceTestExporter resourceTestExporter,
+      RestConstantsProjectionExporter restConstantsProjectionExporter) {
     super(generationPath);
+    this.rootPackageName = rootPackageName;
+    this.contextName = contextName;
     this.resourceExporter = resourceExporter;
     this.resourceTestExporter = resourceTestExporter;
+    this.restConstantsProjectionExporter = restConstantsProjectionExporter;
+  }
+
+  // ===============================================================================================
+  // GETTERS
+  // ===============================================================================================
+
+  /**
+   * Gets root package name.
+   *
+   * @return the root package name
+   */
+  public PackageName getRootPackageName() {
+    return rootPackageName;
+  }
+
+  /**
+   * Gets context name.
+   *
+   * @return the context name
+   */
+  public Name getContextName() {
+    return contextName;
   }
 
   // ===============================================================================================
@@ -68,8 +104,12 @@ public class JavaApiRestGenerator extends AbstractGenerator {
         .getResources()
         .forEach(
             resource -> {
-              resourceExporter.export(getGenerationPath(), resource);
-              resourceTestExporter.export(getGenerationPath(), resource);
+              resourceExporter.export(getGenerationPath(), resource, getRootPackageName());
+              resourceTestExporter.export(getGenerationPath(), resource, getRootPackageName());
             });
+
+    restConstantsProjectionExporter.export(
+        getGenerationPath(),
+        new RestConstantsProjection(getRootPackageName().getText(), getContextName().getText()));
   }
 }

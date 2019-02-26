@@ -22,7 +22,8 @@ package io.polygenesis.generators.java.rest;
 
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.models.apirest.Resource;
+import io.polygenesis.core.datatype.PackageName;
+import io.polygenesis.models.rest.Resource;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -69,9 +70,9 @@ public class ResourceExporter {
    * @param generationPath the generation path
    * @param resource the resource
    */
-  public void export(Path generationPath, Resource resource) {
+  public void export(Path generationPath, Resource resource, PackageName rootPackageName) {
     Map<String, Object> dataModel = new HashMap<>();
-    dataModel.put("projection", resourceProjectionConverter.convert(resource));
+    dataModel.put("projection", resourceProjectionConverter.convert(resource, rootPackageName));
 
     freemarkerService.export(
         dataModel,

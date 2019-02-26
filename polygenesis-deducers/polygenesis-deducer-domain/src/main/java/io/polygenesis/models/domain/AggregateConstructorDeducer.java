@@ -23,6 +23,7 @@ package io.polygenesis.models.domain;
 import io.polygenesis.annotations.core.GoalType;
 import io.polygenesis.core.Goal;
 import io.polygenesis.core.Thing;
+import io.polygenesis.core.datatype.PackageName;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -61,7 +62,7 @@ public class AggregateConstructorDeducer {
    * @param thing the thing
    * @return the set
    */
-  public Set<Constructor> deduceFrom(Thing thing) {
+  public Set<Constructor> deduceFrom(Thing thing, PackageName rootPackageName) {
     Set<Constructor> constructors = new LinkedHashSet<>();
 
     thing
@@ -70,7 +71,9 @@ public class AggregateConstructorDeducer {
         .filter(function -> function.getGoal().equals(new Goal(GoalType.CREATE)))
         .forEach(
             function -> {
-              constructors.add(new Constructor(aggregateRootPropertyDeducer.deduceFrom(function)));
+              constructors.add(
+                  new Constructor(
+                      aggregateRootPropertyDeducer.deduceFrom(function, rootPackageName)));
             });
 
     return constructors;
