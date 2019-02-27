@@ -18,15 +18,15 @@
  ===========================LICENSE_END==================================
 -->
 
-package ${ projection.packageName };
+package ${ packageName };
 
 import com.oregor.ddd4j.core.SpringDomainMessageDataRepository;
 
 /**
  * The interface Context domain message data repository.
  *
- * @author Christos Tsakostas
+ * @author PolyGenesis
  */
-public interface ${ projection.objectNameWithOptionalExtendsImplements } {
+public interface ${ fullObjectName } {
 
 }

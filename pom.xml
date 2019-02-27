@@ -12,7 +12,9 @@
     <module>polygenesis-core</module>
     <module>polygenesis-deducers</module>
     <module>polygenesis-generators</module>
+    <module>polygenesis-implementations</module>
     <module>polygenesis-models</module>
+    <module>polygenesis-representations</module>
     <module>polygenesis-scaffolders</module>
   </modules>
   <parent>
@@ -294,6 +296,30 @@
       <dependency>
         <groupId>io.polygenesis.deducers</groupId>
         <artifactId>polygenesis-deducer-ui</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+
+      <!--POLYGENESIS REPRESENTATIONS-->
+      <dependency>
+        <groupId>io.polygenesis.representations</groupId>
+        <artifactId>polygenesis-representation-java</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.polygenesis.representations</groupId>
+        <artifactId>polygenesis-representation-typescript</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+
+      <!--POLYGENESIS IMPLEMENTATIONS-->
+      <dependency>
+        <groupId>io.polygenesis.implementations</groupId>
+        <artifactId>polygenesis-implementation-java</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.polygenesis.implementations</groupId>
+        <artifactId>polygenesis-implementation-typescript</artifactId>
         <version>${project.version}</version>
       </dependency>
 

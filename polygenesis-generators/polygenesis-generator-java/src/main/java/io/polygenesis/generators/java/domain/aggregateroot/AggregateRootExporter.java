@@ -41,7 +41,7 @@ public class AggregateRootExporter {
   // ===============================================================================================
 
   private final FreemarkerService freemarkerService;
-  private final AggregateRootProjectionConverter aggregateRootProjectionConverter;
+  private final AggregateRootClassRepresentable aggregateRootClassRepresentable;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -51,13 +51,13 @@ public class AggregateRootExporter {
    * Instantiates a new Aggregate root projection exporter.
    *
    * @param freemarkerService the freemarker service
-   * @param aggregateRootProjectionConverter the aggregate root projection converter
+   * @param aggregateRootClassRepresentable the aggregate root projection converter
    */
   public AggregateRootExporter(
       FreemarkerService freemarkerService,
-      AggregateRootProjectionConverter aggregateRootProjectionConverter) {
+      AggregateRootClassRepresentable aggregateRootClassRepresentable) {
     this.freemarkerService = freemarkerService;
-    this.aggregateRootProjectionConverter = aggregateRootProjectionConverter;
+    this.aggregateRootClassRepresentable = aggregateRootClassRepresentable;
   }
 
   // ===============================================================================================
@@ -75,11 +75,11 @@ public class AggregateRootExporter {
       Path generationPath, AggregateRoot aggregateRoot, PackageName rootPackageName) {
     Map<String, Object> dataModel = new HashMap<>();
     dataModel.put(
-        "projection", aggregateRootProjectionConverter.convert(aggregateRoot, rootPackageName));
+        "representation", aggregateRootClassRepresentable.create(aggregateRoot, rootPackageName));
 
     freemarkerService.export(
         dataModel,
-        "polygenesis-generator-java-domain/AggregateRoot.java.ftl",
+        "polygenesis-representation-java/Class.java.ftl",
         makeFileName(generationPath, aggregateRoot));
   }
 

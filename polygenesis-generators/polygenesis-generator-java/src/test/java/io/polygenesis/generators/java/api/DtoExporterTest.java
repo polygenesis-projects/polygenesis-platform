@@ -20,7 +20,10 @@
 
 package io.polygenesis.generators.java.api;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import io.polygenesis.annotations.core.CqsType;
 import io.polygenesis.annotations.core.GoalType;
@@ -40,6 +43,7 @@ import io.polygenesis.core.datatype.PrimitiveType;
 import io.polygenesis.core.iomodel.IoModelGroup;
 import io.polygenesis.core.iomodel.IoModelPrimitive;
 import io.polygenesis.core.iomodel.VariableName;
+import io.polygenesis.models.api.Dto;
 import io.polygenesis.models.api.Method;
 import io.polygenesis.models.api.Service;
 import io.polygenesis.models.api.ServiceName;
@@ -56,7 +60,7 @@ public class DtoExporterTest {
   private Path generationPath;
   private Service service;
   private FreemarkerService freemarkerService;
-  private DtoObjectProjectionMaker dtoObjectProjectionMaker;
+  private DtoClassRepresentable dtoClassRepresentable;
   private DtoExporter dtoExporter;
 
   @Before
@@ -64,21 +68,22 @@ public class DtoExporterTest {
     generationPath = Paths.get("tmp");
     service = makeService();
     freemarkerService = mock(FreemarkerService.class);
-    dtoObjectProjectionMaker = mock(DtoObjectProjectionMaker.class);
-    dtoExporter = new DtoExporter(freemarkerService, dtoObjectProjectionMaker);
+    dtoClassRepresentable = mock(DtoClassRepresentable.class);
+    dtoExporter = new DtoExporter(freemarkerService, dtoClassRepresentable);
   }
 
   @Test
   public void shouldExport() {
     dtoExporter.export(generationPath, service);
 
-    // TODO
+    verify(dtoClassRepresentable, times(2)).create(any(Dto.class));
 
-    //    verify(dtoObjectProjectionMaker).make(eq(service));
+    // TODO
     //    verify(freemarkerService).export(
     //        any(HashMap.class),
-    //        eq("polygenesis-generator-java-api/ApiService.java.ftl"),
-    //        eq(Paths.get("tmp/src/main/java/com/oregor/SomeServiceName.java")));
+    //        eq("polygenesis-generator-java/Class.java.ftl"),
+    //
+    // eq(Paths.get("tmp/src/main/java/com/oregor/microservice/some/business/CreateBusinessRequest.java")));
   }
 
   // ===============================================================================================
@@ -102,6 +107,7 @@ public class DtoExporterTest {
             new ClassDataType(
                 new DataTypeName("CreateBusinessRequest"),
                 new PackageName("com.oregor.microservice.some.business")));
+
     // postal address
     argumentIoModelGroup.addIoModelGroup(postalAddress(argumentIoModelGroup));
 
@@ -113,13 +119,17 @@ public class DtoExporterTest {
 
     methods.add(createMethod);
 
+    Set<Dto> dtos = new LinkedHashSet<>();
+    dtos.add(new Dto(argument.getAsIoModelGroup()));
+    dtos.add(new Dto(createReturnValue.getAsIoModelGroup()));
+
     return new Service(
         new PackageName("com.oregor"),
         new ServiceName("someServiceName"),
         methods,
         CqsType.COMMAND,
         thingName,
-        new LinkedHashSet<>());
+        dtos);
   }
 
   // postalAddress

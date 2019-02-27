@@ -40,7 +40,7 @@ public class PersistenceExporter {
   // ===============================================================================================
 
   private final FreemarkerService freemarkerService;
-  private final PersistenceProjectionConverter persistenceProjectionConverter;
+  private final PersistenceInterfaceRepresentable persistenceInterfaceRepresentable;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -50,13 +50,13 @@ public class PersistenceExporter {
    * Instantiates a new Persistence exporter.
    *
    * @param freemarkerService the freemarker service
-   * @param persistenceProjectionConverter the persistence projection converter
+   * @param persistenceInterfaceRepresentable the persistence projection converter
    */
   public PersistenceExporter(
       FreemarkerService freemarkerService,
-      PersistenceProjectionConverter persistenceProjectionConverter) {
+      PersistenceInterfaceRepresentable persistenceInterfaceRepresentable) {
     this.freemarkerService = freemarkerService;
-    this.persistenceProjectionConverter = persistenceProjectionConverter;
+    this.persistenceInterfaceRepresentable = persistenceInterfaceRepresentable;
   }
 
   // ===============================================================================================
@@ -71,11 +71,11 @@ public class PersistenceExporter {
    */
   public void export(Path generationPath, Persistence persistence) {
     Map<String, Object> dataModel = new HashMap<>();
-    dataModel.put("projection", persistenceProjectionConverter.convert(persistence));
+    dataModel.put("representation", persistenceInterfaceRepresentable.create(persistence));
 
     freemarkerService.export(
         dataModel,
-        "polygenesis-generator-java-domain/Persistence.java.ftl",
+        "polygenesis-representation-java/Interface.java.ftl",
         makeFileName(generationPath, persistence));
   }
 

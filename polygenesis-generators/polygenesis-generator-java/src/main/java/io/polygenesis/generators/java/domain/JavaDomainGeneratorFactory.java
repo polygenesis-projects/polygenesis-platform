@@ -22,18 +22,19 @@ package io.polygenesis.generators.java.domain;
 
 import io.polygenesis.commons.freemarker.FreemarkerConfig;
 import io.polygenesis.commons.freemarker.FreemarkerService;
-import io.polygenesis.core.converter.FromDataTypeToJavaConverter;
 import io.polygenesis.core.datatype.PackageName;
 import io.polygenesis.generators.java.domain.aggregateentity.AggregateEntityExporter;
+import io.polygenesis.generators.java.domain.aggregateroot.AggregateRootClassRepresentable;
 import io.polygenesis.generators.java.domain.aggregateroot.AggregateRootExporter;
+import io.polygenesis.generators.java.domain.aggregateroot.AggregateRootIdClassRepresentable;
 import io.polygenesis.generators.java.domain.aggregateroot.AggregateRootIdExporter;
-import io.polygenesis.generators.java.domain.aggregateroot.AggregateRootIdProjectionConverter;
-import io.polygenesis.generators.java.domain.aggregateroot.AggregateRootProjectionConverter;
 import io.polygenesis.generators.java.domain.domainevent.DomainEventExporter;
 import io.polygenesis.generators.java.domain.persistence.PersistenceExporter;
-import io.polygenesis.generators.java.domain.persistence.PersistenceProjectionConverter;
+import io.polygenesis.generators.java.domain.persistence.PersistenceInterfaceRepresentable;
+import io.polygenesis.generators.java.domain.valueobject.ValueObjectClassRepresentable;
 import io.polygenesis.generators.java.domain.valueobject.ValueObjectExporter;
-import io.polygenesis.generators.java.domain.valueobject.ValueObjectProjectionConverter;
+import io.polygenesis.representations.java.FromDataTypeToJavaConverter;
+import io.polygenesis.representations.java.FunctionToMethodRepresentationConverter;
 import java.nio.file.Path;
 
 /**
@@ -63,33 +64,36 @@ public final class JavaDomainGeneratorFactory {
 
     FromDataTypeToJavaConverter fromDataTypeToJavaConverter = new FromDataTypeToJavaConverter();
 
-    AggregateRootProjectionConverter aggregateRootProjectionConverter =
-        new AggregateRootProjectionConverter(fromDataTypeToJavaConverter);
+    AggregateRootClassRepresentable aggregateRootClassRepresentable =
+        new AggregateRootClassRepresentable(fromDataTypeToJavaConverter);
 
     aggregateRootExporter =
-        new AggregateRootExporter(freemarkerService, aggregateRootProjectionConverter);
+        new AggregateRootExporter(freemarkerService, aggregateRootClassRepresentable);
 
-    AggregateRootIdProjectionConverter aggregateRootIdProjectionConverter =
-        new AggregateRootIdProjectionConverter(fromDataTypeToJavaConverter);
+    AggregateRootIdClassRepresentable aggregateRootIdClassRepresentable =
+        new AggregateRootIdClassRepresentable(fromDataTypeToJavaConverter);
 
     aggregateRootIdExporter =
-        new AggregateRootIdExporter(freemarkerService, aggregateRootIdProjectionConverter);
+        new AggregateRootIdExporter(freemarkerService, aggregateRootIdClassRepresentable);
 
     aggregateEntityExporter = new AggregateEntityExporter(freemarkerService);
 
-    ValueObjectProjectionConverter valueObjectProjectionConverter =
-        new ValueObjectProjectionConverter(fromDataTypeToJavaConverter);
+    ValueObjectClassRepresentable valueObjectClassRepresentable =
+        new ValueObjectClassRepresentable(fromDataTypeToJavaConverter);
 
-    valueObjectExporter =
-        new ValueObjectExporter(freemarkerService, valueObjectProjectionConverter);
+    valueObjectExporter = new ValueObjectExporter(freemarkerService, valueObjectClassRepresentable);
 
     domainEventExporter = new DomainEventExporter(freemarkerService);
 
-    PersistenceProjectionConverter persistenceProjectionConverter =
-        new PersistenceProjectionConverter(fromDataTypeToJavaConverter);
+    FunctionToMethodRepresentationConverter functionToMethodRepresentationConverter =
+        new FunctionToMethodRepresentationConverter(fromDataTypeToJavaConverter);
+
+    PersistenceInterfaceRepresentable persistenceInterfaceRepresentable =
+        new PersistenceInterfaceRepresentable(
+            fromDataTypeToJavaConverter, functionToMethodRepresentationConverter);
 
     persistenceExporter =
-        new PersistenceExporter(freemarkerService, persistenceProjectionConverter);
+        new PersistenceExporter(freemarkerService, persistenceInterfaceRepresentable);
   }
 
   // ===============================================================================================

@@ -100,7 +100,7 @@ public class ApiImplDeducer implements Deducer<ServiceImplementationModelReposit
                         service ->
                             serviceImplementations.add(
                                 serviceImplementationDeducer.deduce(
-                                    service, aggregateRootConverter)));
+                                    service, optionalAggregateRoot.get(), aggregateRootConverter)));
               }
             });
 

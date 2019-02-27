@@ -41,7 +41,7 @@ public class ResourceTestExporter {
   // ===============================================================================================
 
   private final FreemarkerService freemarkerService;
-  private final ResourceTestProjectionConverter resourceTestProjectionConverter;
+  private final ResourceTestClassRepresentable resourceTestClassRepresentable;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -51,13 +51,13 @@ public class ResourceTestExporter {
    * Instantiates a new Resource test exporter.
    *
    * @param freemarkerService the freemarker service
-   * @param resourceTestProjectionConverter the resource test projection converter
+   * @param resourceTestClassRepresentable the resource test class representable
    */
   public ResourceTestExporter(
       FreemarkerService freemarkerService,
-      ResourceTestProjectionConverter resourceTestProjectionConverter) {
+      ResourceTestClassRepresentable resourceTestClassRepresentable) {
     this.freemarkerService = freemarkerService;
-    this.resourceTestProjectionConverter = resourceTestProjectionConverter;
+    this.resourceTestClassRepresentable = resourceTestClassRepresentable;
   }
 
   // ===============================================================================================
@@ -69,14 +69,16 @@ public class ResourceTestExporter {
    *
    * @param generationPath the generation path
    * @param resource the resource
+   * @param rootPackageName the root package name
    */
   public void export(Path generationPath, Resource resource, PackageName rootPackageName) {
     Map<String, Object> dataModel = new HashMap<>();
-    dataModel.put("projection", resourceTestProjectionConverter.convert(resource, rootPackageName));
+    dataModel.put(
+        "representation", resourceTestClassRepresentable.create(resource, rootPackageName));
 
     freemarkerService.export(
         dataModel,
-        "polygenesis-generator-java-rest/ResourceTest.java.ftl",
+        "polygenesis-representation-java/Empty.java.ftl",
         makeFileName(generationPath, resource));
   }
 

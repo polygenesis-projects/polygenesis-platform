@@ -23,7 +23,7 @@ package io.polygenesis.generators.java.api;
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.datatype.PackageName;
-import io.polygenesis.core.iomodel.IoModelGroup;
+import io.polygenesis.models.api.Dto;
 import io.polygenesis.models.api.Service;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -31,7 +31,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * The type Io model group exporter.
+ * The type Dto exporter.
  *
  * @author Christos Tsakostas
  */
@@ -42,7 +42,7 @@ public class DtoExporter {
   // ===============================================================================================
 
   private final FreemarkerService freemarkerService;
-  private final DtoObjectProjectionMaker dtoObjectProjectionMaker;
+  private final DtoClassRepresentable dtoClassRepresentable;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -52,12 +52,12 @@ public class DtoExporter {
    * Instantiates a new Dto exporter.
    *
    * @param freemarkerService the freemarker service
-   * @param dtoObjectProjectionMaker the dto object projection maker
+   * @param dtoClassRepresentable the dto class representable
    */
   public DtoExporter(
-      FreemarkerService freemarkerService, DtoObjectProjectionMaker dtoObjectProjectionMaker) {
+      FreemarkerService freemarkerService, DtoClassRepresentable dtoClassRepresentable) {
     this.freemarkerService = freemarkerService;
-    this.dtoObjectProjectionMaker = dtoObjectProjectionMaker;
+    this.dtoClassRepresentable = dtoClassRepresentable;
   }
 
   // ===============================================================================================
@@ -72,55 +72,26 @@ public class DtoExporter {
    */
   public void export(Path generationPath, Service service) {
 
-    service
-        .getMethods()
-        .forEach(
-            method -> {
-              if (method.getFunction().getReturnValue().getModel().isIoModelGroup()) {
-                export(
-                    generationPath,
-                    (IoModelGroup) method.getFunction().getReturnValue().getModel());
-              }
-
-              method
-                  .getFunction()
-                  .getArguments()
-                  .forEach(
-                      argument -> {
-                        if (argument.getModel().isIoModelGroup()) {
-                          export(generationPath, (IoModelGroup) argument.getModel());
-                        }
-                      });
-            });
+    service.getDtos().forEach(dto -> export(generationPath, dto));
   }
 
   // ===============================================================================================
   // PRIVATE
   // ===============================================================================================
 
-  private void export(Path generationPath, IoModelGroup ioModelGroup) {
+  private void export(Path generationPath, Dto dto) {
     Map<String, Object> dataModel = new HashMap<>();
-    dataModel.put("projection", dtoObjectProjectionMaker.make(ioModelGroup));
+    dataModel.put("representation", dtoClassRepresentable.create(dto));
 
     freemarkerService.export(
         dataModel,
-        "polygenesis-generator-java-api/Dto.java.ftl",
-        makeFileName(generationPath, ioModelGroup));
-
-    // Export of model group children of ioModelGroup recursively
-    ioModelGroup
-        .getModels()
-        .forEach(
-            model -> {
-              if (model.isIoModelGroup()) {
-                export(generationPath, (IoModelGroup) model);
-              }
-            });
+        "polygenesis-representation-java/Class.java.ftl",
+        makeFileName(generationPath, dto));
   }
 
-  private Path makeFileName(Path generationPath, IoModelGroup ioModelGroup) {
+  private Path makeFileName(Path generationPath, Dto dto) {
     PackageName servicePackageName =
-        ioModelGroup
+        dto.getOriginatingIoModelGroup()
             .getDataType()
             .getOptionalPackageName()
             .orElseThrow(IllegalArgumentException::new);
@@ -129,7 +100,8 @@ public class DtoExporter {
         generationPath.toString(),
         "src/main/java",
         servicePackageName.toPath().toString(),
-        TextConverter.toUpperCamel(ioModelGroup.getDataType().getDataTypeName().getText())
+        TextConverter.toUpperCamel(
+                dto.getOriginatingIoModelGroup().getDataType().getDataTypeName().getText())
             + ".java");
   }
 }

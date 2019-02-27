@@ -18,7 +18,7 @@
  ===========================LICENSE_END==================================
 -->
 
-package ${ projection.packageName };
+package ${ packageName };
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oregor.ddd4j.core.AbstractDomainMessageDataConverter;
@@ -27,17 +27,17 @@ import org.springframework.stereotype.Component;
 /**
  * The type Context domain message data converter.
  *
- * @author Christos Tsakostas
+ * @author PolyGenesis
  */
 @Component
-public class ${ projection.objectNameWithOptionalExtendsImplements } {
+public class ${ fullObjectName } {
 
   /**
    * Instantiates a new Context domain message data converter.
    *
    * @param objectMapper the object mapper
    */
-  public ${ projection.objectName }(ObjectMapper objectMapper) {
+  public ${ simpleObjectName }(ObjectMapper objectMapper) {
     super(objectMapper);
   }
 

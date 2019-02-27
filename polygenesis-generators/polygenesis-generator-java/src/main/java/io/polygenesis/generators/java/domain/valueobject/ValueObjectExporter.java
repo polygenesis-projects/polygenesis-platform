@@ -39,23 +39,17 @@ public class ValueObjectExporter {
   // DEPENDENCIES
   // ===============================================================================================
   private final FreemarkerService freemarkerService;
-  private final ValueObjectProjectionConverter valueObjectProjectionConverter;
+  private final ValueObjectClassRepresentable valueObjectClassRepresentable;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
-  /**
-   * Instantiates a new Value object exporter.
-   *
-   * @param freemarkerService the freemarker service
-   * @param valueObjectProjectionConverter the value object projection converter
-   */
   public ValueObjectExporter(
       FreemarkerService freemarkerService,
-      ValueObjectProjectionConverter valueObjectProjectionConverter) {
+      ValueObjectClassRepresentable valueObjectClassRepresentable) {
     this.freemarkerService = freemarkerService;
-    this.valueObjectProjectionConverter = valueObjectProjectionConverter;
+    this.valueObjectClassRepresentable = valueObjectClassRepresentable;
   }
 
   // ===============================================================================================
@@ -70,11 +64,11 @@ public class ValueObjectExporter {
    */
   public void export(Path generationPath, ValueObject valueObject) {
     Map<String, Object> dataModel = new HashMap<>();
-    dataModel.put("projection", valueObjectProjectionConverter.convert(valueObject));
+    dataModel.put("representation", valueObjectClassRepresentable.create(valueObject));
 
     freemarkerService.export(
         dataModel,
-        "polygenesis-generator-java-domain/ValueObject.java.ftl",
+        "polygenesis-representation-java/Class.java.ftl",
         makeFileName(generationPath, valueObject));
   }
 

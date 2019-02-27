@@ -23,8 +23,8 @@ package io.polygenesis.generators.java.rest;
 import io.polygenesis.commons.freemarker.FreemarkerConfig;
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.text.Name;
-import io.polygenesis.core.converter.FromDataTypeToJavaConverter;
 import io.polygenesis.core.datatype.PackageName;
+import io.polygenesis.representations.java.FromDataTypeToJavaConverter;
 import java.nio.file.Path;
 
 /**
@@ -51,20 +51,20 @@ public final class JavaApiRestGeneratorFactory {
 
     FromDataTypeToJavaConverter fromDataTypeToJavaConverter = new FromDataTypeToJavaConverter();
 
-    EndpointProjectionConverter endpointProjectionConverter =
-        new EndpointProjectionConverter(fromDataTypeToJavaConverter);
+    EndpointMethodRepresentable endpointMethodRepresentable =
+        new EndpointMethodRepresentable(fromDataTypeToJavaConverter);
 
-    ResourceProjectionConverter resourceProjectionConverter =
-        new ResourceProjectionConverter(fromDataTypeToJavaConverter, endpointProjectionConverter);
+    ResourceClassRepresentable resourceClassRepresentable =
+        new ResourceClassRepresentable(fromDataTypeToJavaConverter, endpointMethodRepresentable);
 
-    resourceExporter = new ResourceExporter(freemarkerService, resourceProjectionConverter);
+    resourceExporter = new ResourceExporter(freemarkerService, resourceClassRepresentable);
 
-    ResourceTestProjectionConverter resourceTestProjectionConverter =
-        new ResourceTestProjectionConverter(
-            fromDataTypeToJavaConverter, endpointProjectionConverter);
+    ResourceTestClassRepresentable resourceTestClassRepresentable =
+        new ResourceTestClassRepresentable(
+            fromDataTypeToJavaConverter, endpointMethodRepresentable);
 
     resourceTestExporter =
-        new ResourceTestExporter(freemarkerService, resourceTestProjectionConverter);
+        new ResourceTestExporter(freemarkerService, resourceTestClassRepresentable);
 
     restConstantsProjectionExporter = new RestConstantsProjectionExporter(freemarkerService);
   }

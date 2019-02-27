@@ -42,23 +42,17 @@ public class PersistenceImplExporter {
   // ===============================================================================================
 
   private final FreemarkerService freemarkerService;
-  private final PersistenceImplProjectionConverter persistenceImplProjectionConverter;
+  private final PersistenceImplClassRepresentable persistenceImplClassRepresentable;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
-  /**
-   * Instantiates a new Persistence impl exporter.
-   *
-   * @param freemarkerService the freemarker service
-   * @param persistenceImplProjectionConverter the persistence impl projection converter
-   */
   public PersistenceImplExporter(
       FreemarkerService freemarkerService,
-      PersistenceImplProjectionConverter persistenceImplProjectionConverter) {
+      PersistenceImplClassRepresentable persistenceImplClassRepresentable) {
     this.freemarkerService = freemarkerService;
-    this.persistenceImplProjectionConverter = persistenceImplProjectionConverter;
+    this.persistenceImplClassRepresentable = persistenceImplClassRepresentable;
   }
 
   // ===============================================================================================
@@ -76,12 +70,12 @@ public class PersistenceImplExporter {
       Path generationPath, Persistence persistence, PackageName rootPackageName, Name contextName) {
     Map<String, Object> dataModel = new HashMap<>();
     dataModel.put(
-        "projection",
-        persistenceImplProjectionConverter.convert(persistence, rootPackageName, contextName));
+        "representation",
+        persistenceImplClassRepresentable.create(persistence, rootPackageName, contextName));
 
     freemarkerService.export(
         dataModel,
-        "polygenesis-generator-java-persistence-rdbms/PersistenceImpl.java.ftl",
+        "polygenesis-representation-java/Class.java.ftl",
         makeFileName(generationPath, persistence));
   }
 

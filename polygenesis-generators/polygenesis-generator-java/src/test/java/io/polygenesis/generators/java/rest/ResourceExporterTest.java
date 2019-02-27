@@ -47,7 +47,7 @@ public class ResourceExporterTest {
   private PackageName rootPackageName;
   private Resource resource;
   private FreemarkerService freemarkerService;
-  private ResourceProjectionConverter resourceProjectionConverter;
+  private ResourceClassRepresentable resourceClassRepresentable;
   private ResourceExporter resourceExporter;
 
   /** Sets up. */
@@ -57,8 +57,8 @@ public class ResourceExporterTest {
     rootPackageName = new PackageName("com.oregor");
     resource = mock(Resource.class);
     freemarkerService = mock(FreemarkerService.class);
-    resourceProjectionConverter = mock(ResourceProjectionConverter.class);
-    resourceExporter = new ResourceExporter(freemarkerService, resourceProjectionConverter);
+    resourceClassRepresentable = mock(ResourceClassRepresentable.class);
+    resourceExporter = new ResourceExporter(freemarkerService, resourceClassRepresentable);
   }
 
   /** Should export. */
@@ -72,7 +72,7 @@ public class ResourceExporterTest {
     verify(freemarkerService)
         .export(
             any(HashMap.class),
-            eq("polygenesis-generator-java-rest/Resource.java.ftl"),
+            eq("polygenesis-representation-java/Class.java.ftl"),
             eq(Paths.get("tmp/src/main/java/com/oregor/SomeResourceRestService.java")));
   }
 }

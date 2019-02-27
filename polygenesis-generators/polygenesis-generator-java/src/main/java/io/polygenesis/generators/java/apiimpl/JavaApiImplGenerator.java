@@ -40,8 +40,8 @@ import java.util.Set;
 public class JavaApiImplGenerator extends AbstractGenerator {
 
   private final PackageName rootPackageName;
-  private final ApiImplServiceExporter apiImplServiceExporter;
-  private final ApiImplServiceTestExporter apiImplServiceTestExporter;
+  private final ServiceImplementationExporter serviceImplementationExporter;
+  private final ServiceImplementationTestExporter serviceImplementationTestExporter;
   private final AggregateRootConverterExporter aggregateRootConverterExporter;
 
   // ===============================================================================================
@@ -53,20 +53,20 @@ public class JavaApiImplGenerator extends AbstractGenerator {
    *
    * @param generationPath the generation path
    * @param rootPackageName the root package name
-   * @param apiImplServiceExporter the api impl service exporter
-   * @param apiImplServiceTestExporter the api impl service test exporter
+   * @param serviceImplementationExporter the api impl service exporter
+   * @param serviceImplementationTestExporter the api impl service test exporter
    * @param aggregateRootConverterExporter the aggregate root converter exporter
    */
   public JavaApiImplGenerator(
       Path generationPath,
       PackageName rootPackageName,
-      ApiImplServiceExporter apiImplServiceExporter,
-      ApiImplServiceTestExporter apiImplServiceTestExporter,
+      ServiceImplementationExporter serviceImplementationExporter,
+      ServiceImplementationTestExporter serviceImplementationTestExporter,
       AggregateRootConverterExporter aggregateRootConverterExporter) {
     super(generationPath);
     this.rootPackageName = rootPackageName;
-    this.apiImplServiceExporter = apiImplServiceExporter;
-    this.apiImplServiceTestExporter = apiImplServiceTestExporter;
+    this.serviceImplementationExporter = serviceImplementationExporter;
+    this.serviceImplementationTestExporter = serviceImplementationTestExporter;
     this.aggregateRootConverterExporter = aggregateRootConverterExporter;
   }
 
@@ -117,12 +117,12 @@ public class JavaApiImplGenerator extends AbstractGenerator {
                         serviceImplementation.getService().getThingName().getText()));
               }
 
-              apiImplServiceExporter.export(
+              serviceImplementationExporter.export(
                   getGenerationPath(),
                   getRootPackageName(),
                   serviceImplementation,
                   optionalAggregateRoot.get());
-              apiImplServiceTestExporter.export(getGenerationPath(), serviceImplementation);
+              serviceImplementationTestExporter.export(getGenerationPath(), serviceImplementation);
             });
 
     serviceImplementationModelRepository

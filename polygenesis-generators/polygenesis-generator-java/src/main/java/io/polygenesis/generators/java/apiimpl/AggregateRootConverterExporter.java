@@ -40,7 +40,7 @@ public class AggregateRootConverterExporter {
   // ===============================================================================================
 
   private final FreemarkerService freemarkerService;
-  private final AggregateRootConverterProjectionConverter aggregateRootConverterProjectionConverter;
+  private final AggregateRootConverterClassRepresentable aggregateRootConverterClassRepresentable;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -50,13 +50,13 @@ public class AggregateRootConverterExporter {
    * Instantiates a new Aggregate root converter exporter.
    *
    * @param freemarkerService the freemarker service
-   * @param aggregateRootConverterProjectionConverter the aggregate root converter converter
+   * @param aggregateRootConverterClassRepresentable the aggregate root converter converter
    */
   public AggregateRootConverterExporter(
       FreemarkerService freemarkerService,
-      AggregateRootConverterProjectionConverter aggregateRootConverterProjectionConverter) {
+      AggregateRootConverterClassRepresentable aggregateRootConverterClassRepresentable) {
     this.freemarkerService = freemarkerService;
-    this.aggregateRootConverterProjectionConverter = aggregateRootConverterProjectionConverter;
+    this.aggregateRootConverterClassRepresentable = aggregateRootConverterClassRepresentable;
   }
 
   // ===============================================================================================
@@ -72,11 +72,11 @@ public class AggregateRootConverterExporter {
   public void export(Path generationPath, AggregateRootConverter aggregateRootConverter) {
     Map<String, Object> dataModel = new HashMap<>();
     dataModel.put(
-        "projection", aggregateRootConverterProjectionConverter.convert(aggregateRootConverter));
+        "representation", aggregateRootConverterClassRepresentable.create(aggregateRootConverter));
 
     freemarkerService.export(
         dataModel,
-        "polygenesis-generator-java-api-impl/AggregateRootConverter.java.ftl",
+        "polygenesis-representation-java/Class.java.ftl",
         makeFileName(generationPath, aggregateRootConverter));
   }
 
