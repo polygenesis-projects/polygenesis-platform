@@ -23,8 +23,9 @@ package io.polygenesis.generators.java.rdbms;
 import io.polygenesis.commons.freemarker.FreemarkerConfig;
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.text.Name;
-import io.polygenesis.core.converter.FromDataTypeToJavaConverter;
 import io.polygenesis.core.datatype.PackageName;
+import io.polygenesis.representations.java.FromDataTypeToJavaConverter;
+import io.polygenesis.representations.java.FunctionToMethodRepresentationConverter;
 import java.nio.file.Path;
 
 /**
@@ -38,7 +39,9 @@ public final class JavaRdbmsGeneratorFactory {
   // DEPENDENCIES
   // ===============================================================================================
   private static final PersistenceImplExporter persistenceImplExporter;
-  private static final DomainMessageExporter domainMessageExporter;
+  private static final DomainMessageDataExporter domainMessageDataExporter;
+  private static final DomainMessageDataConverterExporter domainMessageDataConverterExporter;
+  private static final DomainMessageDataRepositoryExporter domainMessageDataRepositoryExporter;
   private static final SpringDataRepositoryExporter springDataRepositoryExporter;
   private static final RdbmsTestExporter rdbmsTestExporter;
   private static final RdbmsTestConfigExporter rdbmsTestConfigExporter;
@@ -51,22 +54,29 @@ public final class JavaRdbmsGeneratorFactory {
     FreemarkerService freemarkerService =
         new FreemarkerService(FreemarkerConfig.getInstance().getConfiguration());
 
+    domainMessageDataExporter = new DomainMessageDataExporter(freemarkerService);
+    domainMessageDataConverterExporter = new DomainMessageDataConverterExporter(freemarkerService);
+    domainMessageDataRepositoryExporter =
+        new DomainMessageDataRepositoryExporter(freemarkerService);
+
     FromDataTypeToJavaConverter fromDataTypeToJavaConverter = new FromDataTypeToJavaConverter();
 
-    PersistenceImplProjectionConverter persistenceImplProjectionConverter =
-        new PersistenceImplProjectionConverter(fromDataTypeToJavaConverter);
-
-    domainMessageExporter = new DomainMessageExporter(freemarkerService);
+    PersistenceImplClassRepresentable persistenceImplClassRepresentable =
+        new PersistenceImplClassRepresentable(fromDataTypeToJavaConverter);
 
     persistenceImplExporter =
-        new PersistenceImplExporter(freemarkerService, persistenceImplProjectionConverter);
+        new PersistenceImplExporter(freemarkerService, persistenceImplClassRepresentable);
 
-    SpringDataRepositoryProjectionConverter springDataRepositoryProjectionConverter =
-        new SpringDataRepositoryProjectionConverter(fromDataTypeToJavaConverter);
+    FunctionToMethodRepresentationConverter functionToMethodRepresentationConverter =
+        new FunctionToMethodRepresentationConverter(fromDataTypeToJavaConverter);
+
+    SpringDataRepositoryInterfaceRepresentable springDataRepositoryInterfaceRepresentable =
+        new SpringDataRepositoryInterfaceRepresentable(
+            fromDataTypeToJavaConverter, functionToMethodRepresentationConverter);
 
     springDataRepositoryExporter =
         new SpringDataRepositoryExporter(
-            freemarkerService, springDataRepositoryProjectionConverter);
+            freemarkerService, springDataRepositoryInterfaceRepresentable);
 
     rdbmsTestExporter = new RdbmsTestExporter(freemarkerService);
     rdbmsTestConfigExporter = new RdbmsTestConfigExporter(freemarkerService);
@@ -98,7 +108,9 @@ public final class JavaRdbmsGeneratorFactory {
         generationPath,
         rootPackageName,
         contextName,
-        domainMessageExporter,
+        domainMessageDataExporter,
+        domainMessageDataConverterExporter,
+        domainMessageDataRepositoryExporter,
         persistenceImplExporter,
         springDataRepositoryExporter,
         rdbmsTestExporter,

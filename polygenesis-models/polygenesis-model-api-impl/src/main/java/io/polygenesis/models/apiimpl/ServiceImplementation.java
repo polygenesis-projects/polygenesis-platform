@@ -21,6 +21,7 @@
 package io.polygenesis.models.apiimpl;
 
 import io.polygenesis.models.api.Service;
+import io.polygenesis.models.domain.AggregateRoot;
 import java.util.Objects;
 import java.util.Set;
 
@@ -33,6 +34,7 @@ public class ServiceImplementation {
 
   private Service service;
   private Set<Dependency> dependencies;
+  private AggregateRoot aggregateRoot;
   private AggregateRootConverter aggregateRootConverter;
 
   // ===============================================================================================
@@ -44,14 +46,17 @@ public class ServiceImplementation {
    *
    * @param service the service
    * @param dependencies the dependencies
+   * @param aggregateRoot the aggregate root
    * @param aggregateRootConverter the aggregate root converter
    */
   public ServiceImplementation(
       Service service,
       Set<Dependency> dependencies,
+      AggregateRoot aggregateRoot,
       AggregateRootConverter aggregateRootConverter) {
     setService(service);
     setDependencies(dependencies);
+    setAggregateRoot(aggregateRoot);
     setAggregateRootConverter(aggregateRootConverter);
   }
 
@@ -75,6 +80,15 @@ public class ServiceImplementation {
    */
   public Set<Dependency> getDependencies() {
     return dependencies;
+  }
+
+  /**
+   * Gets aggregate root.
+   *
+   * @return the aggregate root
+   */
+  public AggregateRoot getAggregateRoot() {
+    return aggregateRoot;
   }
 
   /**
@@ -109,6 +123,15 @@ public class ServiceImplementation {
   }
 
   /**
+   * Sets aggregate root.
+   *
+   * @param aggregateRoot the aggregate root
+   */
+  private void setAggregateRoot(AggregateRoot aggregateRoot) {
+    this.aggregateRoot = aggregateRoot;
+  }
+
+  /**
    * Sets aggregate root converter.
    *
    * @param aggregateRootConverter the aggregate root converter
@@ -130,11 +153,14 @@ public class ServiceImplementation {
       return false;
     }
     ServiceImplementation that = (ServiceImplementation) o;
-    return Objects.equals(service, that.service) && Objects.equals(dependencies, that.dependencies);
+    return Objects.equals(service, that.service)
+        && Objects.equals(dependencies, that.dependencies)
+        && Objects.equals(aggregateRoot, that.aggregateRoot)
+        && Objects.equals(aggregateRootConverter, that.aggregateRootConverter);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(service, dependencies);
+    return Objects.hash(service, dependencies, aggregateRoot, aggregateRootConverter);
   }
 }

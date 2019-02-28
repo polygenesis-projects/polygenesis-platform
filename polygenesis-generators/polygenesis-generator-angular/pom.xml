@@ -22,6 +22,12 @@
       <artifactId>polygenesis-model-ui</artifactId>
     </dependency>
 
+    <!--POLYGENESIS REPRESENTATIONS-->
+    <dependency>
+      <groupId>io.polygenesis.representations</groupId>
+      <artifactId>polygenesis-representation-typescript</artifactId>
+    </dependency>
+
     <!--TEST-->
     <dependency>
       <groupId>io.polygenesis</groupId>

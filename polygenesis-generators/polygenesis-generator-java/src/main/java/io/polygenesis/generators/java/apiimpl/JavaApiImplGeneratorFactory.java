@@ -22,14 +22,14 @@ package io.polygenesis.generators.java.apiimpl;
 
 import io.polygenesis.commons.freemarker.FreemarkerConfig;
 import io.polygenesis.commons.freemarker.FreemarkerService;
-import io.polygenesis.core.converter.FromDataTypeToJavaConverter;
 import io.polygenesis.core.datatype.PackageName;
-import io.polygenesis.generators.java.domain.aggregateroot.AggregateRootProjectionConverter;
+import io.polygenesis.generators.java.domain.aggregateroot.AggregateRootClassRepresentable;
+import io.polygenesis.representations.java.FromDataTypeToJavaConverter;
 import java.nio.file.Path;
 
 /**
  * The Java API Implementation Generator Factory creates new instances of {@link
- * JavaApiImplGenerator}*.
+ * JavaApiImplGenerator}**.
  *
  * @author Christos Tsakostas
  */
@@ -38,8 +38,8 @@ public final class JavaApiImplGeneratorFactory {
   // ===============================================================================================
   // DEPENDENCIES
   // ===============================================================================================
-  private static final ApiImplServiceExporter apiImplServiceExporter;
-  private static final ApiImplServiceTestExporter apiImplServiceTestExporter;
+  private static final ServiceImplementationExporter serviceImplementationExporter;
+  private static final ServiceImplementationTestExporter serviceImplementationTestExporter;
   private static final AggregateRootConverterExporter aggregateRootConverterExporter;
 
   // ===============================================================================================
@@ -52,45 +52,49 @@ public final class JavaApiImplGeneratorFactory {
 
     FromDataTypeToJavaConverter fromDataTypeToJavaConverter = new FromDataTypeToJavaConverter();
 
-    ApiImplCommandMethodImplementation apiImplCommandMethodImplementation =
-        new ApiImplCommandMethodImplementation();
+    ServiceImplementationMethodCommand serviceImplementationMethodCommandRepresentable =
+        new ServiceImplementationMethodCommand();
 
-    ApiImplQueryMethodImplementation apiImplQueryMethodImplementation =
-        new ApiImplQueryMethodImplementation();
+    ServiceImplementationMethodQuery serviceImplementationMethodQueryRepresentable =
+        new ServiceImplementationMethodQuery();
 
-    ApiImplMethodProjectionConverter apiImplMethodProjectionMaker =
-        new ApiImplMethodProjectionConverter(
+    ServiceImplementationMethodRepresentable apiImplMethodProjectionMaker =
+        new ServiceImplementationMethodRepresentable(
             fromDataTypeToJavaConverter,
-            apiImplCommandMethodImplementation,
-            apiImplQueryMethodImplementation);
+            serviceImplementationMethodCommandRepresentable,
+            serviceImplementationMethodQueryRepresentable);
 
-    ApiImplServiceProjectionConverter apiImplServiceProjectionConverter =
-        new ApiImplServiceProjectionConverter(apiImplMethodProjectionMaker);
+    ServiceImplementationClassRepresentable serviceImplementationClassRepresentable =
+        new ServiceImplementationClassRepresentable(
+            fromDataTypeToJavaConverter, apiImplMethodProjectionMaker);
 
-    AggregateRootProjectionConverter aggregateRootProjectionConverter =
-        new AggregateRootProjectionConverter(fromDataTypeToJavaConverter);
+    AggregateRootClassRepresentable aggregateRootClassRepresentable =
+        new AggregateRootClassRepresentable(fromDataTypeToJavaConverter);
 
-    apiImplServiceExporter =
-        new ApiImplServiceExporter(
-            freemarkerService, apiImplServiceProjectionConverter, aggregateRootProjectionConverter);
+    serviceImplementationExporter =
+        new ServiceImplementationExporter(
+            freemarkerService,
+            serviceImplementationClassRepresentable,
+            aggregateRootClassRepresentable);
 
-    ApiImplServiceTestProjectionConverter apiImplServiceTestProjectionConverter =
-        new ApiImplServiceTestProjectionConverter(apiImplMethodProjectionMaker);
+    ServiceImplementationTestClassRepresentable serviceImplementationTestClassRepresentable =
+        new ServiceImplementationTestClassRepresentable(
+            fromDataTypeToJavaConverter, apiImplMethodProjectionMaker);
 
-    apiImplServiceTestExporter =
-        new ApiImplServiceTestExporter(freemarkerService, apiImplServiceTestProjectionConverter);
+    serviceImplementationTestExporter =
+        new ServiceImplementationTestExporter(
+            freemarkerService, serviceImplementationTestClassRepresentable);
 
-    AggregateRootConverterMethodProjectionConverter
-        aggregateRootConverterMethodProjectionConverter =
-            new AggregateRootConverterMethodProjectionConverter(fromDataTypeToJavaConverter);
+    AggregateRootConverterMethodRepresentable aggregateRootConverterMethodRepresentable =
+        new AggregateRootConverterMethodRepresentable(fromDataTypeToJavaConverter);
 
-    AggregateRootConverterProjectionConverter aggregateRootConverterProjectionConverter =
-        new AggregateRootConverterProjectionConverter(
-            aggregateRootConverterMethodProjectionConverter);
+    AggregateRootConverterClassRepresentable aggregateRootConverterClassRepresentable =
+        new AggregateRootConverterClassRepresentable(
+            fromDataTypeToJavaConverter, aggregateRootConverterMethodRepresentable);
 
     aggregateRootConverterExporter =
         new AggregateRootConverterExporter(
-            freemarkerService, aggregateRootConverterProjectionConverter);
+            freemarkerService, aggregateRootConverterClassRepresentable);
   }
 
   // ===============================================================================================
@@ -109,14 +113,15 @@ public final class JavaApiImplGeneratorFactory {
    * New instance java api generator.
    *
    * @param generationPath the generation path
+   * @param rootPackageName the root package name
    * @return the java api generator
    */
   public static JavaApiImplGenerator newInstance(Path generationPath, PackageName rootPackageName) {
     return new JavaApiImplGenerator(
         generationPath,
         rootPackageName,
-        apiImplServiceExporter,
-        apiImplServiceTestExporter,
+        serviceImplementationExporter,
+        serviceImplementationTestExporter,
         aggregateRootConverterExporter);
   }
 }

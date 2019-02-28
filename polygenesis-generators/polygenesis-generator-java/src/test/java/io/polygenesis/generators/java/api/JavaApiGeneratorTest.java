@@ -41,23 +41,23 @@ import org.junit.Test;
 public class JavaApiGeneratorTest {
 
   private Path generationPath;
-  private ApiServiceExporter apiServiceExporter;
+  private ServiceExporter serviceExporter;
   private DtoExporter dtoExporter;
   private JavaApiGenerator javaApiGenerator;
 
   @Before
   public void setUp() {
     generationPath = Paths.get("tmp");
-    apiServiceExporter = mock(ApiServiceExporter.class);
+    serviceExporter = mock(ServiceExporter.class);
     dtoExporter = mock(DtoExporter.class);
-    javaApiGenerator = new JavaApiGenerator(generationPath, apiServiceExporter, dtoExporter);
+    javaApiGenerator = new JavaApiGenerator(generationPath, serviceExporter, dtoExporter);
   }
 
   @Test
   public void shouldGenerate() {
     javaApiGenerator.generate(createModelRepositories());
 
-    verify(apiServiceExporter).export(eq(generationPath), any(Service.class));
+    verify(serviceExporter).export(eq(generationPath), any(Service.class));
     verify(dtoExporter).export(eq(generationPath), any(Service.class));
   }
 

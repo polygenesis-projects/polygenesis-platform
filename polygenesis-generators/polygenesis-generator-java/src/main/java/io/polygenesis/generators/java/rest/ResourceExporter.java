@@ -41,23 +41,16 @@ public class ResourceExporter {
   // ===============================================================================================
 
   private final FreemarkerService freemarkerService;
-  private final ResourceProjectionConverter resourceProjectionConverter;
+  private final ResourceClassRepresentable resourceClassRepresentable;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
-  /**
-   * Instantiates a new Resource exporter.
-   *
-   * @param freemarkerService the freemarker service
-   * @param resourceProjectionConverter the resource projection converter
-   */
   public ResourceExporter(
-      FreemarkerService freemarkerService,
-      ResourceProjectionConverter resourceProjectionConverter) {
+      FreemarkerService freemarkerService, ResourceClassRepresentable resourceClassRepresentable) {
     this.freemarkerService = freemarkerService;
-    this.resourceProjectionConverter = resourceProjectionConverter;
+    this.resourceClassRepresentable = resourceClassRepresentable;
   }
 
   // ===============================================================================================
@@ -72,11 +65,11 @@ public class ResourceExporter {
    */
   public void export(Path generationPath, Resource resource, PackageName rootPackageName) {
     Map<String, Object> dataModel = new HashMap<>();
-    dataModel.put("projection", resourceProjectionConverter.convert(resource, rootPackageName));
+    dataModel.put("representation", resourceClassRepresentable.create(resource, rootPackageName));
 
     freemarkerService.export(
         dataModel,
-        "polygenesis-generator-java-rest/Resource.java.ftl",
+        "polygenesis-representation-java/Class.java.ftl",
         makeFileName(generationPath, resource));
   }
 

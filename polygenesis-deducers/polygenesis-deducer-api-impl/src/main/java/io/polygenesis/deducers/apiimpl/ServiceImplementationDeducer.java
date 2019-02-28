@@ -24,6 +24,7 @@ import io.polygenesis.models.api.Service;
 import io.polygenesis.models.apiimpl.AggregateRootConverter;
 import io.polygenesis.models.apiimpl.Dependency;
 import io.polygenesis.models.apiimpl.ServiceImplementation;
+import io.polygenesis.models.domain.AggregateRoot;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -42,17 +43,18 @@ public class ServiceImplementationDeducer {
    * Deduce service implementation.
    *
    * @param service the service
+   * @param aggregateRoot the aggregate root
    * @param aggregateRootConverter the aggregate root converter
    * @return the service implementation
    */
   public ServiceImplementation deduce(
-      Service service, AggregateRootConverter aggregateRootConverter) {
+      Service service, AggregateRoot aggregateRoot, AggregateRootConverter aggregateRootConverter) {
     Set<Dependency> dependencies = new LinkedHashSet<>();
 
     dependencies.add(
         new Dependency(
             aggregateRootConverter.getDataType(), aggregateRootConverter.getVariableName()));
 
-    return new ServiceImplementation(service, dependencies, aggregateRootConverter);
+    return new ServiceImplementation(service, dependencies, aggregateRoot, aggregateRootConverter);
   }
 }

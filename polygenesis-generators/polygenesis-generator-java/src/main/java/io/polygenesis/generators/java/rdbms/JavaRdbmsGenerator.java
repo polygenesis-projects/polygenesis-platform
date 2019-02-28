@@ -38,7 +38,9 @@ public class JavaRdbmsGenerator extends AbstractGenerator {
 
   private final PackageName rootPackageName;
   private final Name contextName;
-  private final DomainMessageExporter domainMessageExporter;
+  private final DomainMessageDataExporter domainMessageDataExporter;
+  private final DomainMessageDataConverterExporter domainMessageDataConverterExporter;
+  private final DomainMessageDataRepositoryExporter domainMessageDataRepositoryExporter;
   private final PersistenceImplExporter persistenceImplExporter;
   private final SpringDataRepositoryExporter springDataRepositoryExporter;
   private final RdbmsTestExporter rdbmsTestExporter;
@@ -56,7 +58,9 @@ public class JavaRdbmsGenerator extends AbstractGenerator {
    * @param generationPath the generation path
    * @param rootPackageName the root package name
    * @param contextName the context name
-   * @param domainMessageExporter the domain message exporter
+   * @param domainMessageDataExporter the domain message data exporter
+   * @param domainMessageDataConverterExporter the domain message data converter exporter
+   * @param domainMessageDataRepositoryExporter the domain message data repository exporter
    * @param persistenceImplExporter the persistence impl exporter
    * @param springDataRepositoryExporter the spring data repository exporter
    * @param rdbmsTestExporter the rdbms test exporter
@@ -66,7 +70,9 @@ public class JavaRdbmsGenerator extends AbstractGenerator {
       Path generationPath,
       PackageName rootPackageName,
       Name contextName,
-      DomainMessageExporter domainMessageExporter,
+      DomainMessageDataExporter domainMessageDataExporter,
+      DomainMessageDataConverterExporter domainMessageDataConverterExporter,
+      DomainMessageDataRepositoryExporter domainMessageDataRepositoryExporter,
       PersistenceImplExporter persistenceImplExporter,
       SpringDataRepositoryExporter springDataRepositoryExporter,
       RdbmsTestExporter rdbmsTestExporter,
@@ -74,7 +80,9 @@ public class JavaRdbmsGenerator extends AbstractGenerator {
     super(generationPath);
     this.rootPackageName = rootPackageName;
     this.contextName = contextName;
-    this.domainMessageExporter = domainMessageExporter;
+    this.domainMessageDataExporter = domainMessageDataExporter;
+    this.domainMessageDataConverterExporter = domainMessageDataConverterExporter;
+    this.domainMessageDataRepositoryExporter = domainMessageDataRepositoryExporter;
     this.persistenceImplExporter = persistenceImplExporter;
     this.springDataRepositoryExporter = springDataRepositoryExporter;
     this.rdbmsTestExporter = rdbmsTestExporter;
@@ -111,7 +119,11 @@ public class JavaRdbmsGenerator extends AbstractGenerator {
   public void generate(Set<ModelRepository> modelRepositories) {
     initializeModelRepositories(modelRepositories);
 
-    domainMessageExporter.export(getGenerationPath(), getRootPackageName(), getContextName());
+    domainMessageDataExporter.export(getGenerationPath(), getRootPackageName(), getContextName());
+    domainMessageDataConverterExporter.export(
+        getGenerationPath(), getRootPackageName(), getContextName());
+    domainMessageDataRepositoryExporter.export(
+        getGenerationPath(), getRootPackageName(), getContextName());
     rdbmsTestExporter.export(getGenerationPath(), getRootPackageName());
     rdbmsTestConfigExporter.export(getGenerationPath(), getRootPackageName());
 

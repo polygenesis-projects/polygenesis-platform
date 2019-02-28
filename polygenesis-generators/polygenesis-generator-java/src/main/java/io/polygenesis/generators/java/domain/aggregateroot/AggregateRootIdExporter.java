@@ -40,7 +40,7 @@ public class AggregateRootIdExporter {
   // ===============================================================================================
 
   private final FreemarkerService freemarkerService;
-  private final AggregateRootIdProjectionConverter aggregateRootIdProjectionConverter;
+  private final AggregateRootIdClassRepresentable aggregateRootIdClassRepresentable;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -50,13 +50,13 @@ public class AggregateRootIdExporter {
    * Instantiates a new Aggregate root projection exporter.
    *
    * @param freemarkerService the freemarker service
-   * @param aggregateRootIdProjectionConverter the aggregate root ID projection converter
+   * @param aggregateRootIdClassRepresentable the aggregate root ID projection converter
    */
   public AggregateRootIdExporter(
       FreemarkerService freemarkerService,
-      AggregateRootIdProjectionConverter aggregateRootIdProjectionConverter) {
+      AggregateRootIdClassRepresentable aggregateRootIdClassRepresentable) {
     this.freemarkerService = freemarkerService;
-    this.aggregateRootIdProjectionConverter = aggregateRootIdProjectionConverter;
+    this.aggregateRootIdClassRepresentable = aggregateRootIdClassRepresentable;
   }
 
   // ===============================================================================================
@@ -71,11 +71,11 @@ public class AggregateRootIdExporter {
    */
   public void export(Path generationPath, AggregateRoot aggregateRoot) {
     Map<String, Object> dataModel = new HashMap<>();
-    dataModel.put("projection", aggregateRootIdProjectionConverter.convert(aggregateRoot));
+    dataModel.put("representation", aggregateRootIdClassRepresentable.create(aggregateRoot));
 
     freemarkerService.export(
         dataModel,
-        "polygenesis-generator-java-domain/AggregateRootId.java.ftl",
+        "polygenesis-representation-java/Class.java.ftl",
         makeFileName(generationPath, aggregateRoot));
   }
 

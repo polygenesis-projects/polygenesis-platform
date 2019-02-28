@@ -18,7 +18,7 @@
  ===========================LICENSE_END==================================
 -->
 
-package ${ projection.packageName };
+package ${ packageName };
 
 import com.oregor.ddd4j.core.AbstractDomainMessageData;
 import java.time.LocalDateTime;
@@ -28,12 +28,12 @@ import javax.persistence.Entity;
 /**
  * The type Context domain message data.
  *
- * @author Christos Tsakostas
+ * @author PolyGenesis
  */
 @Entity
-public class ${ projection.objectNameWithOptionalExtendsImplements } extends AbstractDomainMessageData {
+public class ${ simpleObjectName } extends AbstractDomainMessageData {
 
-  private ${ projection.objectName }() {
+  private ${ simpleObjectName }() {
     super();
   }
 
@@ -51,7 +51,7 @@ public class ${ projection.objectNameWithOptionalExtendsImplements } extends Abs
    * @param principal the principal
    * @param ipAddress the ip address
    */
-  public ${ projection.objectName }(
+  public ${ simpleObjectName }(
       UUID id,
       String context,
       String tenantId,

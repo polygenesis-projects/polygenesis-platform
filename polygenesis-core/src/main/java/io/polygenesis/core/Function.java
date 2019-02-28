@@ -29,8 +29,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 /**
  * In the context of automatic programming, Function is defined as an activity expressing what has
  * to be done, with a {@link Goal}, written by a programmer in a specific programming language to or
- * the purpose of a {@link Thing} characterized by a Name and Properties provided as activity's
- * optional arguments and return value.
+ * the purpose of a {@link Thing}, which is characterized by a Name and Properties provided as
+ * activity's optional arguments and return value.
  *
  * @author Christos Tsakostas
  */

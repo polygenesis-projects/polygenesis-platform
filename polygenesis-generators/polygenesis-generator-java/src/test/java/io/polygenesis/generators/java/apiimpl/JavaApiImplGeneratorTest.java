@@ -55,8 +55,8 @@ public class JavaApiImplGeneratorTest {
 
   private Path generationPath;
   private PackageName rootPackageName;
-  private ApiImplServiceExporter apiImplServiceExporter;
-  private ApiImplServiceTestExporter apiImplServiceTestExporter;
+  private ServiceImplementationExporter serviceImplementationExporter;
+  private ServiceImplementationTestExporter serviceImplementationTestExporter;
   private AggregateRootConverterExporter aggregateRootConverterExporter;
   private JavaApiImplGenerator javaApiImplGenerator;
 
@@ -69,15 +69,15 @@ public class JavaApiImplGeneratorTest {
   public void setUp() {
     generationPath = Paths.get("tmp");
     rootPackageName = new PackageName("com.oregor");
-    apiImplServiceExporter = mock(ApiImplServiceExporter.class);
-    apiImplServiceTestExporter = mock(ApiImplServiceTestExporter.class);
+    serviceImplementationExporter = mock(ServiceImplementationExporter.class);
+    serviceImplementationTestExporter = mock(ServiceImplementationTestExporter.class);
     aggregateRootConverterExporter = mock(AggregateRootConverterExporter.class);
     javaApiImplGenerator =
         new JavaApiImplGenerator(
             generationPath,
             rootPackageName,
-            apiImplServiceExporter,
-            apiImplServiceTestExporter,
+            serviceImplementationExporter,
+            serviceImplementationTestExporter,
             aggregateRootConverterExporter);
   }
 
@@ -86,7 +86,7 @@ public class JavaApiImplGeneratorTest {
   public void shouldGenerate() {
     javaApiImplGenerator.generate(createModelRepositories());
 
-    verify(apiImplServiceExporter)
+    verify(serviceImplementationExporter)
         .export(
             eq(generationPath),
             eq(rootPackageName),

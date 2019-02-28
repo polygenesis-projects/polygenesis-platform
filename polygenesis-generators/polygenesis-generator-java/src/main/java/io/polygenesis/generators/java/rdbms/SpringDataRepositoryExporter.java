@@ -40,23 +40,18 @@ public class SpringDataRepositoryExporter {
   // ===============================================================================================
 
   private final FreemarkerService freemarkerService;
-  private final SpringDataRepositoryProjectionConverter springDataRepositoryProjectionConverter;
+  private final SpringDataRepositoryInterfaceRepresentable
+      springDataRepositoryInterfaceRepresentable;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
-  /**
-   * Instantiates a new Spring data repository exporter.
-   *
-   * @param freemarkerService the freemarker service
-   * @param springDataRepositoryProjectionConverter the spring data repository projection converter
-   */
   public SpringDataRepositoryExporter(
       FreemarkerService freemarkerService,
-      SpringDataRepositoryProjectionConverter springDataRepositoryProjectionConverter) {
+      SpringDataRepositoryInterfaceRepresentable springDataRepositoryInterfaceRepresentable) {
     this.freemarkerService = freemarkerService;
-    this.springDataRepositoryProjectionConverter = springDataRepositoryProjectionConverter;
+    this.springDataRepositoryInterfaceRepresentable = springDataRepositoryInterfaceRepresentable;
   }
 
   // ===============================================================================================
@@ -71,12 +66,11 @@ public class SpringDataRepositoryExporter {
    */
   public void export(Path generationPath, Persistence persistence) {
     Map<String, Object> dataModel = new HashMap<>();
-    dataModel.put("projection", springDataRepositoryProjectionConverter.convert(persistence));
-    dataModel.put("aggregateRoot", persistence.getAggregateRootName().getText());
+    dataModel.put("representation", springDataRepositoryInterfaceRepresentable.create(persistence));
 
     freemarkerService.export(
         dataModel,
-        "polygenesis-generator-java-persistence-rdbms/SpringDataRepository.java.ftl",
+        "polygenesis-representation-java/Interface.java.ftl",
         makeFileName(generationPath, persistence));
   }
 

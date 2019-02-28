@@ -22,7 +22,8 @@ package io.polygenesis.generators.java.api;
 
 import io.polygenesis.commons.freemarker.FreemarkerConfig;
 import io.polygenesis.commons.freemarker.FreemarkerService;
-import io.polygenesis.core.converter.FromDataTypeToJavaConverter;
+import io.polygenesis.representations.java.FromDataTypeToJavaConverter;
+import io.polygenesis.representations.java.FunctionToMethodRepresentationConverter;
 import java.nio.file.Path;
 
 /**
@@ -35,7 +36,7 @@ public final class JavaApiGeneratorFactory {
   // ===============================================================================================
   // DEPENDENCIES
   // ===============================================================================================
-  private static final ApiServiceExporter apiServiceExporter;
+  private static final ServiceExporter serviceExporter;
   private static final DtoExporter dtoExporter;
 
   // ===============================================================================================
@@ -48,18 +49,19 @@ public final class JavaApiGeneratorFactory {
 
     FromDataTypeToJavaConverter fromDataTypeToJavaConverter = new FromDataTypeToJavaConverter();
 
-    ApiFunctionProjectionMaker apiMethodProjectionMaker =
-        new ApiFunctionProjectionMaker(fromDataTypeToJavaConverter);
+    FunctionToMethodRepresentationConverter functionToMethodRepresentationConverter =
+        new FunctionToMethodRepresentationConverter(fromDataTypeToJavaConverter);
 
-    ApiServiceProjectionMaker apiServiceProjectionMaker =
-        new ApiServiceProjectionMaker(apiMethodProjectionMaker);
+    ServiceInterfaceRepresentable serviceInterfaceRepresentable =
+        new ServiceInterfaceRepresentable(
+            fromDataTypeToJavaConverter, functionToMethodRepresentationConverter);
 
-    apiServiceExporter = new ApiServiceExporter(freemarkerService, apiServiceProjectionMaker);
+    serviceExporter = new ServiceExporter(freemarkerService, serviceInterfaceRepresentable);
 
-    DtoObjectProjectionMaker dtoObjectProjectionMaker =
-        new DtoObjectProjectionMaker(fromDataTypeToJavaConverter);
+    DtoClassRepresentable dtoClassRepresentable =
+        new DtoClassRepresentable(fromDataTypeToJavaConverter);
 
-    dtoExporter = new DtoExporter(freemarkerService, dtoObjectProjectionMaker);
+    dtoExporter = new DtoExporter(freemarkerService, dtoClassRepresentable);
   }
 
   // ===============================================================================================
@@ -81,6 +83,6 @@ public final class JavaApiGeneratorFactory {
    * @return the java api generator
    */
   public static JavaApiGenerator newInstance(Path generationPath) {
-    return new JavaApiGenerator(generationPath, apiServiceExporter, dtoExporter);
+    return new JavaApiGenerator(generationPath, serviceExporter, dtoExporter);
   }
 }
