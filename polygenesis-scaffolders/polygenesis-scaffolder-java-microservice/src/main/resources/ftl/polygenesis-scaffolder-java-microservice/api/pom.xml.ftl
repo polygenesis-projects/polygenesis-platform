@@ -32,6 +32,12 @@
   <artifactId>${ projectDescription.modulePrefix }-api</artifactId>
 
   <dependencies>
+    <!--OREGOR-DDD4J-->
+    <dependency>
+      <groupId>com.oregor.ddd4j</groupId>
+      <artifactId>ddd4j-api</artifactId>
+    </dependency>
+
     <!--TEST-->
     <dependency>
       <groupId>org.springframework.boot</groupId>

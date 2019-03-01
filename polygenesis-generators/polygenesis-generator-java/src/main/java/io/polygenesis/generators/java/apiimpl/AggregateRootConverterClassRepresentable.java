@@ -342,6 +342,15 @@ public class AggregateRootConverterClassRepresentable
     Thing thing = new Thing(new ThingName("Converter"));
     Goal goal = new Goal("CONVERT");
 
-    return new Function(thing, goal, new FunctionName("convert"), arguments, returnValue);
+    return new Function(
+        thing,
+        goal,
+        new FunctionName(
+            String.format(
+                "convertTo%s",
+                TextConverter.toUpperCamel(
+                    returnValue.getModel().getDataType().getDataTypeName().getText()))),
+        arguments,
+        returnValue);
   }
 }

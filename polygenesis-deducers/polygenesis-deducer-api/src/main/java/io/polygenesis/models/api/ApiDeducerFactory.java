@@ -40,8 +40,9 @@ public final class ApiDeducerFactory {
 
   static {
     DtoDeducer dtoDeducer = new DtoDeducer();
+    ServiceMethodDeducer serviceMethodDeducer = new ServiceMethodDeducer(dtoDeducer);
 
-    serviceDeducer = new ServiceDeducer(dtoDeducer);
+    serviceDeducer = new ServiceDeducer(serviceMethodDeducer, dtoDeducer);
   }
 
   // ===============================================================================================
@@ -62,6 +63,6 @@ public final class ApiDeducerFactory {
    * @return the api deducer
    */
   public static ApiDeducer newInstance(PackageName packageName) {
-    return new ApiDeducerImpl(packageName, serviceDeducer);
+    return new ApiDeducer(packageName, serviceDeducer);
   }
 }

@@ -44,6 +44,7 @@ import io.polygenesis.core.iomodel.IoModelGroup;
 import io.polygenesis.core.iomodel.IoModelPrimitive;
 import io.polygenesis.core.iomodel.VariableName;
 import io.polygenesis.models.api.Dto;
+import io.polygenesis.models.api.DtoType;
 import io.polygenesis.models.api.Method;
 import io.polygenesis.models.api.Service;
 import io.polygenesis.models.api.ServiceName;
@@ -115,13 +116,17 @@ public class DtoExporterTest {
 
     createArguments.add(argument);
 
-    Method createMethod = new Method(makeFunctionCreate());
+    Method createMethod =
+        new Method(
+            makeFunctionCreate(),
+            new Dto(DtoType.API_REQUEST, argument.getAsIoModelGroup()),
+            new Dto(DtoType.API_RESPONSE, createReturnValue.getAsIoModelGroup()));
 
     methods.add(createMethod);
 
     Set<Dto> dtos = new LinkedHashSet<>();
-    dtos.add(new Dto(argument.getAsIoModelGroup()));
-    dtos.add(new Dto(createReturnValue.getAsIoModelGroup()));
+    dtos.add(new Dto(DtoType.API_REQUEST, argument.getAsIoModelGroup()));
+    dtos.add(new Dto(DtoType.API_RESPONSE, createReturnValue.getAsIoModelGroup()));
 
     return new Service(
         new PackageName("com.oregor"),

@@ -34,6 +34,6 @@ public final class Constants {
   /**
    * The constant DEFAULT_TABLE_PREFIX.
    */
-  public static final String DEFAULT_TABLE_PREFIX = "pre_";
+  public static final String DEFAULT_TABLE_PREFIX = "${ projectDescription.tablePrefix }";
 
 }

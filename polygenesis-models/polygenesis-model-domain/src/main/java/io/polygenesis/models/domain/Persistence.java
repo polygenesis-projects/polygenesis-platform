@@ -34,6 +34,7 @@ public class Persistence {
   private Name name;
   private Name aggregateRootName;
   private Name aggregateRootIdName;
+  private Boolean multiTenant;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -46,13 +47,19 @@ public class Persistence {
    * @param name the name
    * @param aggregateRootName the aggregate root name
    * @param aggregateRootIdName the aggregate root id name
+   * @param multiTenant the multi tenant
    */
   public Persistence(
-      PackageName packageName, Name name, Name aggregateRootName, Name aggregateRootIdName) {
+      PackageName packageName,
+      Name name,
+      Name aggregateRootName,
+      Name aggregateRootIdName,
+      Boolean multiTenant) {
     setPackageName(packageName);
     setName(name);
     setAggregateRootName(aggregateRootName);
     setAggregateRootIdName(aggregateRootIdName);
+    setMultiTenant(multiTenant);
   }
 
   // ===============================================================================================
@@ -95,6 +102,15 @@ public class Persistence {
     return aggregateRootIdName;
   }
 
+  /**
+   * Gets multi tenant.
+   *
+   * @return the multi tenant
+   */
+  public Boolean getMultiTenant() {
+    return multiTenant;
+  }
+
   // ===============================================================================================
   // GUARDS
   // ===============================================================================================
@@ -133,5 +149,14 @@ public class Persistence {
    */
   private void setAggregateRootIdName(Name aggregateRootIdName) {
     this.aggregateRootIdName = aggregateRootIdName;
+  }
+
+  /**
+   * Sets multi tenant.
+   *
+   * @param multiTenant the multi tenant
+   */
+  private void setMultiTenant(Boolean multiTenant) {
+    this.multiTenant = multiTenant;
   }
 }

@@ -20,11 +20,13 @@
 
 package io.polygenesis.models.api;
 
+import static java.util.stream.Collectors.toCollection;
+
 import com.oregor.ddd4j.check.assertion.Assertion;
 import io.polygenesis.core.ModelRepository;
 import io.polygenesis.core.ThingName;
+import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * The type Service model repository.
@@ -62,7 +64,7 @@ public class ServiceModelRepository implements ModelRepository {
     return services
         .stream()
         .filter(service -> service.getThingName().equals(thingName))
-        .collect(Collectors.toSet());
+        .collect(toCollection(LinkedHashSet::new));
   }
 
   // ===============================================================================================

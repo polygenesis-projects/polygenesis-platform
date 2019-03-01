@@ -24,6 +24,7 @@ import com.oregor.ddd4j.core.AbstractDomainMessageData;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import javax.persistence.Entity;
+import javax.persistence.Table;
 
 /**
  * The type Context domain message data.
@@ -31,6 +32,7 @@ import javax.persistence.Entity;
  * @author PolyGenesis
  */
 @Entity
+@Table(name = Constants.DEFAULT_TABLE_PREFIX + "domain_message")
 public class ${ simpleObjectName } extends AbstractDomainMessageData {
 
   private ${ simpleObjectName }() {
@@ -38,40 +40,31 @@ public class ${ simpleObjectName } extends AbstractDomainMessageData {
   }
 
   /**
-   * Instantiates a new Some context domain message data.
+   * Instantiates a new Context domain message data.
    *
    * @param id the id
-   * @param context the context
+   * @param rootId the root id
    * @param tenantId the tenant id
-   * @param objectId the object id
-   * @param occurredOn the occurred on
-   * @param eventType the event type
-   * @param eventVersion the event version
-   * @param eventBody the event body
+   * @param streamVersion the stream version
+   * @param messageName the message name
+   * @param messageVersion the message version
+   * @param message the message
    * @param principal the principal
    * @param ipAddress the ip address
+   * @param occurredOn the occurred on
    */
   public ${ simpleObjectName }(
       UUID id,
-      String context,
-      String tenantId,
-      String objectId,
-      LocalDateTime occurredOn,
-      String eventType,
-      Integer eventVersion,
-      String eventBody,
+      UUID rootId,
+      UUID tenantId,
+      Integer streamVersion,
+      String messageName,
+      Integer messageVersion,
+      String message,
       String principal,
-      String ipAddress) {
-    super(
-        id,
-        context,
-        tenantId,
-        objectId,
-        occurredOn,
-        eventType,
-        eventVersion,
-        eventBody,
-        principal,
-        ipAddress);
+      String ipAddress,
+      LocalDateTime occurredOn) {
+    super(id, rootId, tenantId, streamVersion, messageName, messageVersion, message, principal,
+      ipAddress, occurredOn);
   }
 }

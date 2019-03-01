@@ -18,48 +18,39 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.models.api;
+package io.polygenesis.codegen;
 
 import io.polygenesis.core.Thing;
-import java.util.LinkedHashSet;
+import io.polygenesis.core.dsl.DataBuilder;
+import io.polygenesis.core.dsl.ThingBuilder;
+import io.polygenesis.core.iomodel.IoModel;
 import java.util.Set;
 
-/**
- * The type Method deducer.
- *
- * @author Christos Tsakostas
- */
-public class MethodDeducer {
+/** @author Christos Tsakostas */
+public class ThingTodo {
 
-  // ===============================================================================================
-  // FUNCTIONALITY
-  // ===============================================================================================
+  public static Thing create() {
+    Thing business =
+        ThingBuilder.create("todo", OregorDdd4jExampleGenesisTest.JAVA_ROOT_PACKAGE)
+            .withFunctionCreate(data())
+            .withFunctionModify(data())
+            .withFunctionFetchOne(data())
+            .withFunctionFetchPagedCollection(data())
+            .get();
 
-  /**
-   * Deduce command methods from set.
-   *
-   * @param thing the thing
-   * @return the set
-   */
-  public Set<Method> deduceCommandMethodsFrom(Thing thing) {
-    Set<Method> methods = new LinkedHashSet<>();
-
-    thing.getFunctions().forEach(function -> methods.add(new Method(function)));
-
-    return methods;
+    return business;
   }
 
-  /**
-   * Deduce query methods from set.
-   *
-   * @param thing the thing
-   * @return the set
-   */
-  public Set<Method> deduceQueryMethodsFrom(Thing thing) {
-    Set<Method> methods = new LinkedHashSet<>();
+  // ===============================================================================================
+  // DATA
+  // ===============================================================================================
 
-    thing.getFunctions().forEach(function -> methods.add(new Method(function)));
-
-    return methods;
+  private static Set<IoModel> data() {
+    return DataBuilder.create()
+        .withTextProperty("description")
+        .build()
+        .withBooleanProperty("done")
+        .build()
+        .build();
   }
 }

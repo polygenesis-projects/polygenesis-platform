@@ -87,11 +87,17 @@ public class AggregateRootDeducer {
                       packageName,
                       makePersistenceName(thing),
                       aggregateRootName,
-                      makeAggregateRootIdName(thing));
+                      makeAggregateRootIdName(thing),
+                      thing.getMultiTenant());
 
               aggregateRoots.add(
                   new AggregateRoot(
-                      packageName, aggregateRootName, properties, persistence, constructors));
+                      packageName,
+                      aggregateRootName,
+                      properties,
+                      persistence,
+                      constructors,
+                      thing.getMultiTenant()));
             });
 
     return aggregateRoots;

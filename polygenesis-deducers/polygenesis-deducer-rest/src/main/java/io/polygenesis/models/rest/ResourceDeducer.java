@@ -123,7 +123,7 @@ public class ResourceDeducer {
   private Service getServiceFor(Function function, ServiceModelRepository serviceModelRepository) {
     if (serviceModelRepository.getServices().isEmpty()) {
       throw new IllegalStateException(
-          "serviceModelRepository is empty. Check the order of the decucers.");
+          "serviceModelRepository is create. Check the order of the decucers.");
     }
 
     Optional<Service> optionalService =

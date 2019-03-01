@@ -20,10 +20,10 @@
 
 package io.polygenesis.core;
 
+import com.oregor.ddd4j.check.assertion.Assertion;
 import java.util.LinkedHashSet;
+import java.util.Objects;
 import java.util.Set;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * {@link Thing} is defined as a concept or an entity on or for which a {@link Goal} is defined.
@@ -48,6 +48,8 @@ public class Thing {
 
   private Set<Function> functions;
 
+  private Boolean multiTenant;
+
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
@@ -60,6 +62,19 @@ public class Thing {
   public Thing(ThingName thingName) {
     setName(thingName);
     setFunctions(new LinkedHashSet<>());
+    setMultiTenant(false);
+  }
+
+  /**
+   * Instantiates a new Thing.
+   *
+   * @param thingName the thing name
+   * @param multiTenant the multi tenant
+   */
+  public Thing(ThingName thingName, Boolean multiTenant) {
+    setName(thingName);
+    setFunctions(new LinkedHashSet<>());
+    setMultiTenant(multiTenant);
   }
 
   /**
@@ -72,6 +87,7 @@ public class Thing {
     setName(thingName);
     setParent(parentThing);
     setFunctions(new LinkedHashSet<>());
+    setMultiTenant(parentThing.getMultiTenant());
   }
 
   // ===============================================================================================
@@ -127,20 +143,54 @@ public class Thing {
     return functions;
   }
 
+  /**
+   * Gets multi tenant.
+   *
+   * @return the multi tenant
+   */
+  public Boolean getMultiTenant() {
+    return multiTenant;
+  }
+
   // ===============================================================================================
   // GUARDS
   // ===============================================================================================
 
+  /**
+   * Sets name.
+   *
+   * @param name the name
+   */
   private void setName(ThingName name) {
     this.name = name;
   }
 
+  /**
+   * Sets parent.
+   *
+   * @param parent the parent
+   */
   private void setParent(Thing parent) {
     this.parent = parent;
   }
 
+  /**
+   * Sets functions.
+   *
+   * @param functions the functions
+   */
   private void setFunctions(Set<Function> functions) {
     this.functions = functions;
+  }
+
+  /**
+   * Sets multi tenant.
+   *
+   * @param multiTenant the multi tenant
+   */
+  private void setMultiTenant(Boolean multiTenant) {
+    Assertion.isNotNull(multiTenant, "multiTenant is required");
+    this.multiTenant = multiTenant;
   }
 
   // ===============================================================================================
@@ -152,18 +202,17 @@ public class Thing {
     if (this == o) {
       return true;
     }
-
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-
     Thing thing = (Thing) o;
-
-    return new EqualsBuilder().append(name, thing.name).append(parent, thing.parent).isEquals();
+    return Objects.equals(name, thing.name)
+        && Objects.equals(parent, thing.parent)
+        && Objects.equals(multiTenant, thing.multiTenant);
   }
 
   @Override
   public int hashCode() {
-    return new HashCodeBuilder(17, 37).append(name).append(parent).toHashCode();
+    return Objects.hash(name, parent, multiTenant);
   }
 }

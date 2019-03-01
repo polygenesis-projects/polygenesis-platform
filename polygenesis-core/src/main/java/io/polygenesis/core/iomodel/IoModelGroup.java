@@ -20,12 +20,13 @@
 
 package io.polygenesis.core.iomodel;
 
+import static java.util.stream.Collectors.toCollection;
+
 import com.oregor.ddd4j.check.assertion.Assertion;
 import io.polygenesis.core.datatype.ClassDataType;
 import io.polygenesis.core.datatype.PrimitiveDataType;
 import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -200,7 +201,7 @@ public class IoModelGroup extends IoModel {
               model.getVariableName(),
               this,
               ((IoModelPrimitive) model).getAnnotations(),
-              ((IoModelPrimitive) model).getThingIdentity());
+              ((IoModelPrimitive) model).getDataBusinessType());
 
       models.add(ioModelPrimitive);
     } else {
@@ -218,7 +219,7 @@ public class IoModelGroup extends IoModel {
    * @return the models
    */
   public Set<IoModel> getModels() {
-    return models.stream().collect(Collectors.toSet());
+    return models.stream().collect(toCollection(LinkedHashSet::new));
   }
 
   // ===============================================================================================

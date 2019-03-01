@@ -26,6 +26,7 @@ import io.polygenesis.annotations.core.GoalType;
 import io.polygenesis.commons.test.AbstractEqualityTest;
 import io.polygenesis.core.datatype.PrimitiveDataType;
 import io.polygenesis.core.datatype.PrimitiveType;
+import io.polygenesis.core.iomodel.DataBusinessType;
 import io.polygenesis.core.iomodel.IoModelPrimitive;
 import io.polygenesis.core.iomodel.VariableName;
 import java.util.LinkedHashSet;
@@ -121,6 +122,6 @@ public class FunctionTest extends AbstractEqualityTest<Function> {
         new PrimitiveDataType(PrimitiveType.STRING),
         new VariableName("variableName"),
         new LinkedHashSet<>(),
-        false);
+        DataBusinessType.ANY);
   }
 }

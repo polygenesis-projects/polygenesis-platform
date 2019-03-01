@@ -20,7 +20,11 @@
 
 package io.polygenesis.models.api;
 
+import io.polygenesis.core.iomodel.IoModel;
+import io.polygenesis.core.iomodel.IoModelArray;
 import io.polygenesis.core.iomodel.IoModelGroup;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * The type Dto.
@@ -29,6 +33,7 @@ import io.polygenesis.core.iomodel.IoModelGroup;
  */
 public class Dto {
 
+  private DtoType dtoType;
   private IoModelGroup originatingIoModelGroup;
 
   // ===============================================================================================
@@ -38,15 +43,26 @@ public class Dto {
   /**
    * Instantiates a new Dto.
    *
+   * @param dtoType the dto type
    * @param originatingIoModelGroup the originating io model group
    */
-  public Dto(IoModelGroup originatingIoModelGroup) {
+  public Dto(DtoType dtoType, IoModelGroup originatingIoModelGroup) {
+    setDtoType(dtoType);
     setOriginatingIoModelGroup(originatingIoModelGroup);
   }
 
   // ===============================================================================================
   // GETTERS
   // ===============================================================================================
+
+  /**
+   * Gets dto type.
+   *
+   * @return the dto type
+   */
+  public DtoType getDtoType() {
+    return dtoType;
+  }
 
   /**
    * Gets originating io model group.
@@ -58,8 +74,34 @@ public class Dto {
   }
 
   // ===============================================================================================
+  // QUERIES
+  // ===============================================================================================
+
+  /**
+   * Gets array element as optional.
+   *
+   * @return the array element as optional
+   */
+  public Optional<IoModel> getArrayElementAsOptional() {
+    if (getOriginatingIoModelGroup().isIoModelArray()) {
+      return Optional.of(((IoModelArray) getOriginatingIoModelGroup()).getArrayElement());
+    } else {
+      return Optional.empty();
+    }
+  }
+
+  // ===============================================================================================
   // GUARDS
   // ===============================================================================================
+
+  /**
+   * Sets dto type.
+   *
+   * @param dtoType the dto type
+   */
+  private void setDtoType(DtoType dtoType) {
+    this.dtoType = dtoType;
+  }
 
   /**
    * Sets originating io model group.
@@ -68,5 +110,27 @@ public class Dto {
    */
   private void setOriginatingIoModelGroup(IoModelGroup originatingIoModelGroup) {
     this.originatingIoModelGroup = originatingIoModelGroup;
+  }
+
+  // ===============================================================================================
+  // OVERRIDES
+  // ===============================================================================================
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Dto dto = (Dto) o;
+    return dtoType == dto.dtoType
+        && Objects.equals(originatingIoModelGroup, dto.originatingIoModelGroup);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(dtoType, originatingIoModelGroup);
   }
 }

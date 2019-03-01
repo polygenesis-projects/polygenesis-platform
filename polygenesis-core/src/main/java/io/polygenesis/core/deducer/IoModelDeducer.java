@@ -25,6 +25,7 @@ import io.polygenesis.core.datatype.DataTypeName;
 import io.polygenesis.core.datatype.PackageName;
 import io.polygenesis.core.datatype.PrimitiveDataType;
 import io.polygenesis.core.datatype.PrimitiveType;
+import io.polygenesis.core.iomodel.DataBusinessType;
 import io.polygenesis.core.iomodel.GenericTypeName;
 import io.polygenesis.core.iomodel.IoModel;
 import io.polygenesis.core.iomodel.IoModelArray;
@@ -88,7 +89,7 @@ public class IoModelDeducer {
           new PrimitiveDataType(convertToPrimitiveTypeFrom(recursiveObject.getStrDataType())),
           new VariableName(recursiveObject.getStrName()),
           safeGetAnnotationsFrom(recursiveObject),
-          false);
+          DataBusinessType.ANY);
 
     } else {
       // IoModelGroup
@@ -141,7 +142,7 @@ public class IoModelDeducer {
                           new VariableName(childRecursiveObject.getStrName()),
                           modelGroup,
                           safeGetAnnotationsFrom(childRecursiveObject),
-                          false);
+                          DataBusinessType.ANY);
 
                   modelGroup.addIoModelPrimitive(modelPrimitive);
                 }

@@ -33,6 +33,7 @@ import io.polygenesis.core.datatype.DataTypeName;
 import io.polygenesis.core.datatype.PackageName;
 import io.polygenesis.core.datatype.PrimitiveDataType;
 import io.polygenesis.core.datatype.PrimitiveType;
+import io.polygenesis.core.iomodel.DataBusinessType;
 import io.polygenesis.core.iomodel.IoModelGroup;
 import io.polygenesis.core.iomodel.IoModelPrimitive;
 import io.polygenesis.core.iomodel.VariableName;
@@ -82,7 +83,8 @@ public class JavaGenesisThingBusiness {
 
     // RETURN VALUE - BUSINESSID
     returnValueIoModelGroup.addIoModelPrimitive(
-        IoModelPrimitive.ofThingIdentityWithParent(
+        IoModelPrimitive.ofDataBusinessTypeWithParent(
+            DataBusinessType.THING_IDENTITY,
             returnValueIoModelGroup,
             new PrimitiveDataType(PrimitiveType.STRING),
             new VariableName("businessId")));
@@ -109,7 +111,8 @@ public class JavaGenesisThingBusiness {
 
     // ARGUMENT - BusinessID
     argumentIoModelGroup.addIoModelPrimitive(
-        IoModelPrimitive.ofThingIdentityWithParent(
+        IoModelPrimitive.ofDataBusinessTypeWithParent(
+            DataBusinessType.THING_IDENTITY,
             argumentIoModelGroup,
             new PrimitiveDataType(PrimitiveType.STRING),
             new VariableName("businessId")));

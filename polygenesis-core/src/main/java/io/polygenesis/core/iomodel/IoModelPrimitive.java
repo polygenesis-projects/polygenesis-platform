@@ -34,7 +34,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 public class IoModelPrimitive extends IoModel {
 
   private final Set<Annotation> annotations;
-  private final Boolean isThingIdentity;
+  private final DataBusinessType dataBusinessType;
 
   // ===============================================================================================
   // STATIC
@@ -49,7 +49,7 @@ public class IoModelPrimitive extends IoModel {
    */
   public static IoModelPrimitive of(
       PrimitiveDataType primitiveDataType, VariableName variableName) {
-    return new IoModelPrimitive(primitiveDataType, variableName, null, false);
+    return new IoModelPrimitive(primitiveDataType, variableName, null, DataBusinessType.ANY);
   }
 
   /**
@@ -62,7 +62,8 @@ public class IoModelPrimitive extends IoModel {
    */
   public static IoModelPrimitive ofParent(
       IoModelGroup parent, PrimitiveDataType primitiveDataType, VariableName variableName) {
-    return new IoModelPrimitive(primitiveDataType, variableName, parent, null, false);
+    return new IoModelPrimitive(
+        primitiveDataType, variableName, parent, null, DataBusinessType.ANY);
   }
 
   /**
@@ -75,7 +76,8 @@ public class IoModelPrimitive extends IoModel {
   public static IoModelPrimitive ofThingIdentity(
       PrimitiveDataType primitiveDataType, VariableName variableName) {
     IoModelPrimitive ioModelPrimitive =
-        new IoModelPrimitive(primitiveDataType, variableName, null, true);
+        new IoModelPrimitive(
+            primitiveDataType, variableName, null, DataBusinessType.THING_IDENTITY);
 
     return ioModelPrimitive;
   }
@@ -83,15 +85,19 @@ public class IoModelPrimitive extends IoModel {
   /**
    * Of thing identity with parent io model primitive.
    *
+   * @param dataBusinessType the data business type
    * @param parent the parent
    * @param primitiveDataType the primitive data type
    * @param variableName the variable name
    * @return the io model primitive
    */
-  public static IoModelPrimitive ofThingIdentityWithParent(
-      IoModelGroup parent, PrimitiveDataType primitiveDataType, VariableName variableName) {
+  public static IoModelPrimitive ofDataBusinessTypeWithParent(
+      DataBusinessType dataBusinessType,
+      IoModelGroup parent,
+      PrimitiveDataType primitiveDataType,
+      VariableName variableName) {
     IoModelPrimitive ioModelPrimitive =
-        new IoModelPrimitive(primitiveDataType, variableName, parent, null, true);
+        new IoModelPrimitive(primitiveDataType, variableName, parent, null, dataBusinessType);
 
     return ioModelPrimitive;
   }
@@ -106,16 +112,16 @@ public class IoModelPrimitive extends IoModel {
    * @param dataType the data type
    * @param variableName the variable name
    * @param annotations the annotations
-   * @param isThingIdentity the is thing identity
+   * @param dataBusinessType the data business type
    */
   public IoModelPrimitive(
       PrimitiveDataType dataType,
       VariableName variableName,
       Set<Annotation> annotations,
-      Boolean isThingIdentity) {
+      DataBusinessType dataBusinessType) {
     super(dataType, variableName);
     this.annotations = annotations;
-    this.isThingIdentity = isThingIdentity;
+    this.dataBusinessType = dataBusinessType;
   }
 
   /**
@@ -125,17 +131,17 @@ public class IoModelPrimitive extends IoModel {
    * @param variableName the variable name
    * @param parent the parent
    * @param annotations the annotations
-   * @param isThingIdentity the is thing identity
+   * @param dataBusinessType the data business type
    */
   public IoModelPrimitive(
       PrimitiveDataType dataType,
       VariableName variableName,
       IoModelGroup parent,
       Set<Annotation> annotations,
-      Boolean isThingIdentity) {
+      DataBusinessType dataBusinessType) {
     super(dataType, variableName, parent);
     this.annotations = annotations;
-    this.isThingIdentity = isThingIdentity;
+    this.dataBusinessType = dataBusinessType;
   }
 
   // ===============================================================================================
@@ -152,12 +158,25 @@ public class IoModelPrimitive extends IoModel {
   }
 
   /**
-   * Checks id primitive model is thing identity.
+   * Gets data business type.
+   *
+   * @return the data business type
+   */
+  public DataBusinessType getDataBusinessType() {
+    return dataBusinessType;
+  }
+
+  // ===============================================================================================
+  // QUERIES
+  // ===============================================================================================
+
+  /**
+   * Checks if primitive model is thing identity.
    *
    * @return the thing identity flag
    */
   public Boolean getThingIdentity() {
-    return isThingIdentity;
+    return dataBusinessType.equals(DataBusinessType.THING_IDENTITY);
   }
 
   // ===============================================================================================
@@ -179,7 +198,7 @@ public class IoModelPrimitive extends IoModel {
     return new EqualsBuilder()
         .appendSuper(super.equals(o))
         .append(annotations, that.annotations)
-        .append(isThingIdentity, that.isThingIdentity)
+        .append(dataBusinessType, that.dataBusinessType)
         .isEquals();
   }
 
@@ -188,7 +207,7 @@ public class IoModelPrimitive extends IoModel {
     return new HashCodeBuilder(17, 37)
         .appendSuper(super.hashCode())
         .append(annotations)
-        .append(isThingIdentity)
+        .append(dataBusinessType)
         .toHashCode();
   }
 }

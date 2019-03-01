@@ -21,7 +21,7 @@
 package io.polygenesis.generators.java.apiimpl;
 
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.Function;
+import io.polygenesis.models.api.Method;
 import io.polygenesis.models.apiimpl.AggregateRootConverter;
 import io.polygenesis.models.domain.AggregateRoot;
 
@@ -35,24 +35,100 @@ public class ServiceImplementationMethodQuery extends ServiceImplementationMetho
   /**
    * Make query implementation string.
    *
-   * @param function the function
+   * @param method the method
    * @param aggregateRoot the aggregate root
    * @param aggregateRootConverter the aggregate root converter
    * @return the string
    */
   public String makeQueryImplementation(
-      Function function,
-      AggregateRoot aggregateRoot,
-      AggregateRootConverter aggregateRootConverter) {
+      Method method, AggregateRoot aggregateRoot, AggregateRootConverter aggregateRootConverter) {
     StringBuilder stringBuilder = new StringBuilder();
 
-    stringBuilder.append(restoreAggregateRoot(function, aggregateRoot));
+    stringBuilder.append(makeNotNullAssertion(method));
 
+    if (method.getFunction().getGoal().isFetchOne()) {
+      stringBuilder.append(restoreAggregateRoot(method, aggregateRoot));
+      stringBuilder.append("\n");
+      stringBuilder.append(
+          makeReturnValueForFetchOne(method, aggregateRoot, aggregateRootConverter));
+    }
+
+    if (method.getFunction().getGoal().isFetchPagedCollection()) {
+      stringBuilder.append(makePaginated(method, aggregateRoot));
+      stringBuilder.append("\n");
+      stringBuilder.append(makeReturnValueForFetchPagedCollection(method, aggregateRootConverter));
+    }
+
+    return stringBuilder.toString();
+  }
+
+  /**
+   * Make not null assertion string.
+   *
+   * @return the string
+   */
+  protected String makeNotNullAssertion(Method method) {
+    StringBuilder stringBuilder = new StringBuilder();
+
+    stringBuilder.append("\t\t");
+    stringBuilder.append("Assertion.isNotNull(");
+    stringBuilder.append(
+        TextConverter.toLowerCamel(
+            method
+                .getRequestDto()
+                .getOriginatingIoModelGroup()
+                .getDataType()
+                .getDataTypeName()
+                .getText()));
+    stringBuilder.append(", \"");
+    stringBuilder.append(
+        TextConverter.toUpperCamelSpaces(
+            method
+                .getRequestDto()
+                .getOriginatingIoModelGroup()
+                .getDataType()
+                .getDataTypeName()
+                .getText()));
+    stringBuilder.append(" is required\");");
+    stringBuilder.append("\n");
     stringBuilder.append("\n");
 
-    if (function.getGoal().isFetchOne()) {
-      stringBuilder.append(makeReturnValueForFetchOne(aggregateRoot, aggregateRootConverter));
-    }
+    return stringBuilder.toString();
+  }
+
+  /**
+   * Make paginated string.
+   *
+   * @param method the method
+   * @param aggregateRoot the aggregate root
+   * @return the string
+   */
+  protected String makePaginated(Method method, AggregateRoot aggregateRoot) {
+    StringBuilder stringBuilder = new StringBuilder();
+
+    String request =
+        TextConverter.toLowerCamel(
+            method
+                .getRequestDto()
+                .getOriginatingIoModelGroup()
+                .getDataType()
+                .getDataTypeName()
+                .getText());
+
+    stringBuilder.append("\t\t");
+    stringBuilder.append("Paginated<");
+    stringBuilder.append(TextConverter.toUpperCamel(aggregateRoot.getName().getText()));
+    stringBuilder.append(">");
+    stringBuilder.append(" paginated = ");
+    stringBuilder.append(TextConverter.toLowerCamel(aggregateRoot.getName().getText()));
+    stringBuilder.append("Persistence.findPaginated(");
+    stringBuilder.append(request);
+    stringBuilder.append(".getPageNumber()");
+    stringBuilder.append(", ");
+    stringBuilder.append(request);
+    stringBuilder.append(".getPageSize()");
+    stringBuilder.append(");");
+    stringBuilder.append("\n");
 
     return stringBuilder.toString();
   }
@@ -60,21 +136,89 @@ public class ServiceImplementationMethodQuery extends ServiceImplementationMetho
   /**
    * Make return value for fetch one string.
    *
+   * @param method the method
    * @param aggregateRoot the aggregate root
    * @param aggregateRootConverter the aggregate root converter
    * @return the string
    */
   protected String makeReturnValueForFetchOne(
-      AggregateRoot aggregateRoot, AggregateRootConverter aggregateRootConverter) {
+      Method method, AggregateRoot aggregateRoot, AggregateRootConverter aggregateRootConverter) {
     StringBuilder stringBuilder = new StringBuilder();
 
     stringBuilder.append("\t\t");
     stringBuilder.append("return ");
     stringBuilder.append(aggregateRootConverter.getVariableName().getText());
-    stringBuilder.append(".convert(");
+    stringBuilder.append(".convertTo");
+    stringBuilder.append(
+        TextConverter.toUpperCamel(
+            method
+                .getResponseDto()
+                .getOriginatingIoModelGroup()
+                .getDataType()
+                .getDataTypeName()
+                .getText()));
+    stringBuilder.append("(");
     stringBuilder.append(TextConverter.toLowerCamel(aggregateRoot.getName().getText()));
-    stringBuilder.append(".get()");
     stringBuilder.append(");");
+
+    return stringBuilder.toString();
+  }
+
+  /**
+   * Make return value for fetch paged collection string.
+   *
+   * @param method the method
+   * @param aggregateRootConverter the aggregate root converter
+   * @return the string
+   */
+  protected String makeReturnValueForFetchPagedCollection(
+      Method method, AggregateRootConverter aggregateRootConverter) {
+    StringBuilder stringBuilder = new StringBuilder();
+
+    String request =
+        TextConverter.toLowerCamel(
+            method
+                .getRequestDto()
+                .getOriginatingIoModelGroup()
+                .getClassDataType()
+                .getDataTypeName()
+                .getText());
+
+    stringBuilder.append("\t\t");
+    stringBuilder.append("return new ");
+    stringBuilder.append(
+        TextConverter.toUpperCamel(
+            method
+                .getResponseDto()
+                .getOriginatingIoModelGroup()
+                .getDataType()
+                .getDataTypeName()
+                .getText()));
+    stringBuilder.append("(");
+    stringBuilder.append("\n");
+    stringBuilder.append("\t\t\t\tStreamSupport\n");
+    stringBuilder.append("\t\t\t\t\t\t.stream(paginated.getItems().spliterator(), false)\n");
+    stringBuilder.append("\t\t\t\t\t\t.map(");
+    stringBuilder.append(
+        TextConverter.toLowerCamel(
+            aggregateRootConverter.getDataType().getDataTypeName().getText()));
+    stringBuilder.append("::convertTo");
+    stringBuilder.append(
+        TextConverter.toUpperCamel(
+            method
+                .getResponseDto()
+                .getArrayElementAsOptional()
+                .orElseThrow(IllegalArgumentException::new)
+                .getDataType()
+                .getDataTypeName()
+                .getText()));
+    stringBuilder.append(")\n");
+    stringBuilder.append("\t\t\t\t\t\t.collect(Collectors.toList()),\n");
+    stringBuilder.append("\t\t\t\tpaginated.getTotalPages(),\n");
+    stringBuilder.append("\t\t\t\tpaginated.getTotalElements(),\n");
+    stringBuilder.append(String.format("\t\t\t\t%s.getPageNumber(),\n", request));
+    stringBuilder.append(String.format("\t\t\t\t%s.getPageSize()\n", request));
+    stringBuilder.append("\t\t);");
 
     return stringBuilder.toString();
   }

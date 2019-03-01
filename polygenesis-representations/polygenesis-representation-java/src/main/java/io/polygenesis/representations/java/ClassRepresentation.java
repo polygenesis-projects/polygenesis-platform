@@ -20,9 +20,11 @@
 
 package io.polygenesis.representations.java;
 
+import static java.util.stream.Collectors.toCollection;
+
+import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * The type Class representation.
@@ -122,7 +124,7 @@ public class ClassRepresentation extends AbstractObjectRepresentation {
         .stream()
         .filter(
             methodRepresentation -> methodRepresentation.getMethodType().equals(MethodType.GETTER))
-        .collect(Collectors.toSet());
+        .collect(toCollection(LinkedHashSet::new));
   }
 
   /**
@@ -135,7 +137,7 @@ public class ClassRepresentation extends AbstractObjectRepresentation {
         .stream()
         .filter(
             methodRepresentation -> methodRepresentation.getMethodType().equals(MethodType.SETTER))
-        .collect(Collectors.toSet());
+        .collect(toCollection(LinkedHashSet::new));
   }
 
   /**
@@ -148,7 +150,7 @@ public class ClassRepresentation extends AbstractObjectRepresentation {
         .stream()
         .filter(
             methodRepresentation -> methodRepresentation.getMethodType().equals(MethodType.GUARD))
-        .collect(Collectors.toSet());
+        .collect(toCollection(LinkedHashSet::new));
   }
 
   /**
@@ -160,7 +162,7 @@ public class ClassRepresentation extends AbstractObjectRepresentation {
     return methodRepresentations
         .stream()
         .filter(methodRepresentation -> methodRepresentation.getMethodType().equals(MethodType.ANY))
-        .collect(Collectors.toSet());
+        .collect(toCollection(LinkedHashSet::new));
   }
 
   // ===============================================================================================

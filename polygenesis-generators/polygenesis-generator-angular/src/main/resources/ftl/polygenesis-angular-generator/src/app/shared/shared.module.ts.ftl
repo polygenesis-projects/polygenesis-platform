@@ -22,7 +22,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 <#list layouts as layout>
-import { ${ textConverter.toUpperCamel(layout.containerName.text) }Component } from './layouts/${ textConverter.toLowerHyphen(layout.containerName.text) }/${ textConverter.toLowerHyphen(layout.containerName.text)}.component.ts';
+import { ${ textConverter.toUpperCamel(layout.containerName.text) }Component } from './layouts/${ textConverter.toLowerHyphen(layout.containerName.text) }/${ textConverter.toLowerHyphen(layout.containerName.text)}.component';
 </#list>
 
 @NgModule({

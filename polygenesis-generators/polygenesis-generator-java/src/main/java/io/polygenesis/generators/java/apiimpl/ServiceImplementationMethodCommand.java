@@ -22,7 +22,7 @@ package io.polygenesis.generators.java.apiimpl;
 
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.Argument;
-import io.polygenesis.core.Function;
+import io.polygenesis.models.api.Method;
 import io.polygenesis.models.apiimpl.AggregateRootConverter;
 import io.polygenesis.models.apiimpl.ValueObjectFromDto;
 import io.polygenesis.models.domain.AbstractProperty;
@@ -40,27 +40,29 @@ public class ServiceImplementationMethodCommand extends ServiceImplementationMet
   /**
    * Make command implementation string.
    *
-   * @param function the function
+   * @param method the method
    * @param aggregateRoot the aggregate root
    * @param aggregateRootConverter the aggregate root converter
    * @return the string
    */
   public String makeCommandImplementation(
-      Function function,
-      AggregateRoot aggregateRoot,
-      AggregateRootConverter aggregateRootConverter) {
+      Method method, AggregateRoot aggregateRoot, AggregateRootConverter aggregateRootConverter) {
     StringBuilder stringBuilder = new StringBuilder();
 
-    if (function.getGoal().isCreate()) {
-      stringBuilder.append(
-          makeCreateAggregateRoot(function, aggregateRoot, aggregateRootConverter));
+    if (method.getFunction().getGoal().isCreate()) {
+      stringBuilder.append(makeCreateAggregateRoot(method, aggregateRoot, aggregateRootConverter));
+      stringBuilder.append("\n");
+    }
+
+    if (method.getFunction().getGoal().isModify()) {
+      stringBuilder.append(restoreAggregateRoot(method, aggregateRoot));
       stringBuilder.append("\n");
     }
 
     stringBuilder.append(makePersistAggregateRoot(aggregateRoot));
     stringBuilder.append("\n");
 
-    String returnValue = makeReturnValue(function);
+    String returnValue = makeReturnValue(method);
     if (!returnValue.equals("")) {
       stringBuilder.append(returnValue);
     }
@@ -71,15 +73,13 @@ public class ServiceImplementationMethodCommand extends ServiceImplementationMet
   /**
    * Make crate aggregate root string.
    *
-   * @param function the function
+   * @param method the method
    * @param aggregateRoot the aggregate root
    * @param aggregateRootConverter the aggregate root converter
    * @return the string
    */
   protected String makeCreateAggregateRoot(
-      Function function,
-      AggregateRoot aggregateRoot,
-      AggregateRootConverter aggregateRootConverter) {
+      Method method, AggregateRoot aggregateRoot, AggregateRootConverter aggregateRootConverter) {
     if (aggregateRoot.getConstructors().size() > 1) {
       throw new IllegalStateException(
           String.format(
@@ -87,7 +87,7 @@ public class ServiceImplementationMethodCommand extends ServiceImplementationMet
               aggregateRoot.getName().getText()));
     }
 
-    if (function.getArguments().size() > 1) {
+    if (method.getFunction().getArguments().size() > 1) {
       throw new IllegalStateException(
           String.format(
               "Currently, only one Argument is supported for Services. AggregateRoot=%s",
@@ -102,7 +102,12 @@ public class ServiceImplementationMethodCommand extends ServiceImplementationMet
             .orElseThrow(IllegalArgumentException::new);
 
     Argument argument =
-        function.getArguments().stream().findFirst().orElseThrow(IllegalArgumentException::new);
+        method
+            .getFunction()
+            .getArguments()
+            .stream()
+            .findFirst()
+            .orElseThrow(IllegalArgumentException::new);
 
     StringBuilder stringBuilder = new StringBuilder();
 

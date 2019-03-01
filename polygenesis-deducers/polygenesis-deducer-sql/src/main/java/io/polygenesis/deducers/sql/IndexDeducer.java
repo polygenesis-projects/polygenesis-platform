@@ -18,13 +18,28 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.models.api;
+package io.polygenesis.deducers.sql;
 
-import org.junit.Test;
+import io.polygenesis.models.sql.Index;
+import io.polygenesis.models.sql.IndexName;
 
-/** @author Christos Tsakostas */
-public class ApiDeducerImplTest extends AbstractApiDeducerTest {
+/**
+ * The type Index deducer.
+ *
+ * @author Christos Tsakostas
+ */
+public class IndexDeducer {
 
-  @Test
-  public void deduce() {}
+  // ===============================================================================================
+  // FUNCTIONALITY
+  // ===============================================================================================
+
+  /**
+   * Deduce index.
+   *
+   * @return the index
+   */
+  public Index deduce() {
+    return new Index(new IndexName("iii"));
+  }
 }

@@ -20,132 +20,83 @@
 
 package io.polygenesis.codegen;
 
-import io.polygenesis.annotations.core.GoalType;
-import io.polygenesis.core.Argument;
-import io.polygenesis.core.Function;
-import io.polygenesis.core.FunctionName;
-import io.polygenesis.core.Goal;
-import io.polygenesis.core.ReturnValue;
 import io.polygenesis.core.Thing;
-import io.polygenesis.core.ThingName;
 import io.polygenesis.core.datatype.ClassDataType;
 import io.polygenesis.core.datatype.DataTypeName;
 import io.polygenesis.core.datatype.PackageName;
 import io.polygenesis.core.datatype.PrimitiveDataType;
 import io.polygenesis.core.datatype.PrimitiveType;
+import io.polygenesis.core.dsl.DataBuilder;
+import io.polygenesis.core.dsl.ThingBuilder;
+import io.polygenesis.core.iomodel.IoModel;
 import io.polygenesis.core.iomodel.IoModelGroup;
 import io.polygenesis.core.iomodel.IoModelPrimitive;
 import io.polygenesis.core.iomodel.VariableName;
-import java.util.Arrays;
 import java.util.LinkedHashSet;
+import java.util.Set;
 
 /** @author Christos Tsakostas */
 public class ThingBusiness {
 
   public static Thing create() {
-    Thing business = new Thing(new ThingName("business"));
-
-    business.appendFunction(functionCreate(business));
-    business.appendFunction(functionFetchOne(business));
+    Thing business =
+        ThingBuilder.createMultiTenant("business", OregorDdd4jExampleGenesisTest.JAVA_ROOT_PACKAGE)
+            .withFunctionCreate(createData())
+            .withFunctionFetchOne(fetchOneData())
+            .withFunctionFetchPagedCollection(fetchCollectionData())
+            .get();
 
     return business;
   }
 
   // ===============================================================================================
-  // FUNCTION CREATE
+  // DATA CREATE
   // ===============================================================================================
 
-  private static Function functionCreate(Thing business) {
-    // ---------------------------------------------------------------------------------------------
-    // ARGUMENTS
-    // ---------------------------------------------------------------------------------------------
-    IoModelGroup argumentIoModelGroup =
-        new IoModelGroup(
-            new ClassDataType(
-                new DataTypeName("CreateBusinessRequest"),
-                new PackageName(OregorDdd4jExampleGenesisTest.ROOT_PACKAGE + ".business")));
+  private static Set<IoModel> createData() {
 
-    // name
-    argumentIoModelGroup.addIoModelPrimitive(
-        IoModelPrimitive.ofParent(
-            argumentIoModelGroup,
-            new PrimitiveDataType(PrimitiveType.STRING),
-            new VariableName("name")));
-
-    // postal address
-    argumentIoModelGroup.addIoModelGroup(postalAddress(argumentIoModelGroup));
-
-    // ---------------------------------------------------------------------------------------------
-    // RETURN VALUE
-    // ---------------------------------------------------------------------------------------------
-    IoModelGroup returnValueIoModelGroup =
-        new IoModelGroup(
-            new ClassDataType(
-                new DataTypeName("CreateBusinessResponse"),
-                new PackageName(OregorDdd4jExampleGenesisTest.ROOT_PACKAGE + ".business")));
-
-    returnValueIoModelGroup.addIoModelPrimitive(
-        IoModelPrimitive.ofThingIdentityWithParent(
-            returnValueIoModelGroup,
-            new PrimitiveDataType(PrimitiveType.STRING),
-            new VariableName("businessId")));
-
-    // ---------------------------------------------------------------------------------------------
-
-    return new Function(
-        business,
-        new Goal(GoalType.CREATE),
-        new FunctionName("create"),
-        new LinkedHashSet<>(Arrays.asList(new Argument(argumentIoModelGroup))),
-        new ReturnValue(returnValueIoModelGroup));
+    return DataBuilder.create()
+        .withTextProperty("name")
+        .build()
+        .withTextProperty("taxId")
+        .build()
+        .build();
   }
 
   // ===============================================================================================
-  // FUNCTION FETCH DETAIL
+  // DATA FETCH ONE
   // ===============================================================================================
 
-  private static Function functionFetchOne(Thing business) {
-    // ---------------------------------------------------------------------------------------------
-    // ARGUMENTS
-    // ---------------------------------------------------------------------------------------------
-    IoModelGroup argumentIoModelGroup =
-        new IoModelGroup(
-            new ClassDataType(
-                new DataTypeName("FetchBusinessRequest"),
-                new PackageName(OregorDdd4jExampleGenesisTest.ROOT_PACKAGE + ".business")));
+  private static Set<IoModel> fetchOneData() {
+    Set<IoModel> models = new LinkedHashSet<>();
 
-    // ---------------------------------------------------------------------------------------------
+    // name
+    models.add(
+        IoModelPrimitive.of(new PrimitiveDataType(PrimitiveType.STRING), new VariableName("name")));
 
-    argumentIoModelGroup.addIoModelPrimitive(
-        IoModelPrimitive.ofThingIdentityWithParent(
-            argumentIoModelGroup,
-            new PrimitiveDataType(PrimitiveType.STRING),
-            new VariableName("businessId")));
+    // postal address
+    // TODO
+    // models.add(postalAddress());
 
-    // ---------------------------------------------------------------------------------------------
-    // RETURN VALUE
-    // ---------------------------------------------------------------------------------------------
-    IoModelGroup returnValueIoModelGroup =
-        new IoModelGroup(
-            new ClassDataType(
-                new DataTypeName("FetchBusinessResponse"),
-                new PackageName(OregorDdd4jExampleGenesisTest.ROOT_PACKAGE + ".business")));
+    return models;
+  }
 
-    // ---------------------------------------------------------------------------------------------
+  // ===============================================================================================
+  // DATA FETCH COLLECTION
+  // ===============================================================================================
 
-    returnValueIoModelGroup.addIoModelPrimitive(
-        IoModelPrimitive.ofParent(
-            returnValueIoModelGroup,
-            new PrimitiveDataType(PrimitiveType.STRING),
-            new VariableName("name")));
+  private static Set<IoModel> fetchCollectionData() {
+    Set<IoModel> models = new LinkedHashSet<>();
 
-    // ---------------------------------------------------------------------------------------------
-    return new Function(
-        business,
-        new Goal(GoalType.FETCH_ONE),
-        new FunctionName("fetch"),
-        new LinkedHashSet<>(Arrays.asList(new Argument(argumentIoModelGroup))),
-        new ReturnValue(returnValueIoModelGroup));
+    // name
+    models.add(
+        IoModelPrimitive.of(new PrimitiveDataType(PrimitiveType.STRING), new VariableName("name")));
+
+    // postal address
+    // TODO
+    // models.add(postalAddress());
+
+    return models;
   }
 
   // ===============================================================================================
@@ -156,10 +107,9 @@ public class ThingBusiness {
   // POSTAL ADDRESS
   // ===============================================================================================
 
-  private static IoModelGroup postalAddress(IoModelGroup parent) {
+  private static IoModelGroup postalAddress() {
     IoModelGroup postalAddress =
         new IoModelGroup(
-            parent,
             new ClassDataType(
                 new DataTypeName("PostalAddressDto"),
                 new PackageName("com.oregor.ddd4j.example.shared")));

@@ -36,7 +36,7 @@ public class ElementBusinessType {
   public static final String ADDRESS_STREET = "ADDRESS_STREET";
 
   public static final String EMAIL = "EMAIL";
-  public static final String PASSWORD = "PASSWORD";
+  public static final String PASS = "PASS";
   public static final String TEL = "TEL";
   public static final String URL = "URL";
 }

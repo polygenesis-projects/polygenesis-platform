@@ -74,7 +74,7 @@ public class ThingRepositoryImpl implements ThingRepository {
             thing
                 .getFunctions()
                 .stream()
-                .filter(goal -> goal.getName().equals(functionName))
+                .filter(function -> function.getName().equals(functionName))
                 .findFirst());
   }
 

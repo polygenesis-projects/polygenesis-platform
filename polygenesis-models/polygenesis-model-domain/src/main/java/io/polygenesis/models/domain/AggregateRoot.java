@@ -38,6 +38,7 @@ public class AggregateRoot {
   private Set<StateQueryMethod> stateQueryMethods;
   private Persistence persistence;
   private Set<Constructor> constructors;
+  private Boolean multiTenant;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -57,12 +58,14 @@ public class AggregateRoot {
       Name name,
       Set<AbstractProperty> properties,
       Persistence persistence,
-      Set<Constructor> constructors) {
+      Set<Constructor> constructors,
+      Boolean multiTenant) {
     setPackageName(packageName);
     setName(name);
     setProperties(properties);
     setPersistence(persistence);
     setConstructors(constructors);
+    setMultiTenant(multiTenant);
   }
 
   /**
@@ -83,7 +86,8 @@ public class AggregateRoot {
       Set<StateMutationMethod> stateMutationMethods,
       Set<StateQueryMethod> stateQueryMethods,
       Persistence persistence,
-      Set<Constructor> constructors) {
+      Set<Constructor> constructors,
+      Boolean multiTenant) {
     setPackageName(packageName);
     setName(name);
     setProperties(properties);
@@ -91,6 +95,7 @@ public class AggregateRoot {
     setStateQueryMethods(stateQueryMethods);
     setPersistence(persistence);
     setConstructors(constructors);
+    setMultiTenant(multiTenant);
   }
 
   // ===============================================================================================
@@ -160,6 +165,15 @@ public class AggregateRoot {
     return constructors;
   }
 
+  /**
+   * Gets multi tenant.
+   *
+   * @return the multi tenant
+   */
+  public Boolean getMultiTenant() {
+    return multiTenant;
+  }
+
   // ===============================================================================================
   // GUARDS
   // ===============================================================================================
@@ -225,5 +239,14 @@ public class AggregateRoot {
    */
   private void setConstructors(Set<Constructor> constructors) {
     this.constructors = constructors;
+  }
+
+  /**
+   * Sets multi tenant.
+   *
+   * @param multiTenant the multi tenant
+   */
+  private void setMultiTenant(Boolean multiTenant) {
+    this.multiTenant = multiTenant;
   }
 }

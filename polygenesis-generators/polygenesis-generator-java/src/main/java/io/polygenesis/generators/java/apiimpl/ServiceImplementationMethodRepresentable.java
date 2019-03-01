@@ -136,10 +136,10 @@ public class ServiceImplementationMethodRepresentable extends AbstractMethodRepr
 
     if (function.getGoal().isCommand()) {
       return serviceImplementationMethodCommandRepresentable.makeCommandImplementation(
-          function, aggregateRoot, aggregateRootConverter);
+          source, aggregateRoot, aggregateRootConverter);
     } else {
       return serviceImplementationMethodQueryRepresentable.makeQueryImplementation(
-          function, aggregateRoot, aggregateRootConverter);
+          source, aggregateRoot, aggregateRootConverter);
     }
   }
 }

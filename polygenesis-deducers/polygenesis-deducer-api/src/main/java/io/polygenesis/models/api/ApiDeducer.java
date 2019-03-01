@@ -21,10 +21,73 @@
 package io.polygenesis.models.api;
 
 import io.polygenesis.core.Deducer;
+import io.polygenesis.core.ModelRepository;
+import io.polygenesis.core.ThingRepository;
+import io.polygenesis.core.datatype.PackageName;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
- * The interface Api deducer.
+ * The type Api deducer.
  *
  * @author Christos Tsakostas
  */
-public interface ApiDeducer extends Deducer<ServiceModelRepository> {}
+public class ApiDeducer implements Deducer<ServiceModelRepository> {
+
+  // ===============================================================================================
+  // DEPENDENCIES
+  // ===============================================================================================
+  private final PackageName rootPackageName;
+  private final ServiceDeducer serviceDeducer;
+
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
+  /**
+   * Instantiates a new Api deducer.
+   *
+   * @param rootPackageName the package name
+   * @param serviceDeducer the service deducer
+   */
+  public ApiDeducer(PackageName rootPackageName, ServiceDeducer serviceDeducer) {
+    this.rootPackageName = rootPackageName;
+    this.serviceDeducer = serviceDeducer;
+  }
+
+  // ===============================================================================================
+  // GETTERS
+  // ===============================================================================================
+
+  /**
+   * Gets package name.
+   *
+   * @return the package name
+   */
+  public PackageName getRootPackageName() {
+    return rootPackageName;
+  }
+
+  // ===============================================================================================
+  // OVERRIDES
+  // ===============================================================================================
+
+  @Override
+  public ServiceModelRepository deduce(
+      ThingRepository thingRepository, Set<ModelRepository> modelRepositories) {
+    if (thingRepository.getThings().isEmpty()) {
+      throw new IllegalArgumentException("thingRepository cannot be empty");
+    }
+
+    Set<Service> services = new LinkedHashSet<>();
+
+    thingRepository
+        .getThings()
+        .forEach(
+            thing -> {
+              services.addAll(serviceDeducer.deduceFrom(thing, getRootPackageName()));
+            });
+
+    return new ServiceModelRepository(services);
+  }
+}
