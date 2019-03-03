@@ -23,7 +23,7 @@ package io.polygenesis.deducers.apiimpl;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.datatype.ClassDataType;
 import io.polygenesis.core.datatype.DataTypeName;
-import io.polygenesis.core.iomodel.IoModelGroup;
+import io.polygenesis.core.iomodel.IoModel;
 import io.polygenesis.core.iomodel.VariableName;
 import io.polygenesis.models.api.Dto;
 import io.polygenesis.models.api.Service;
@@ -150,13 +150,17 @@ public class AggregateRootConverterDeducer {
                     fetchCollectionDtoFromAggregateRoots.add(
                         new FetchCollectionDtoFromAggregateRoot(
                             findDtoInServiceFromIoModelGroup(
-                                service, method.getFunction().getReturnValue().getAsIoModelGroup()),
+                                service,
+                                method
+                                    .getResponseDto()
+                                    .getArrayElementAsOptional()
+                                    .orElseThrow(IllegalArgumentException::new)),
                             aggregateRoot));
                   });
         });
   }
 
-  private Dto findDtoInServiceFromIoModelGroup(Service service, IoModelGroup ioModelGroup) {
+  private Dto findDtoInServiceFromIoModelGroup(Service service, IoModel ioModelGroup) {
     return service
         .getDtos()
         .stream()

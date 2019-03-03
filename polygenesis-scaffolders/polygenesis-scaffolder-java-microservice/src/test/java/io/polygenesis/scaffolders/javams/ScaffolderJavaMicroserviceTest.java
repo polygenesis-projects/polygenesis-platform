@@ -36,6 +36,9 @@ public class ScaffolderJavaMicroserviceTest {
     assertThat(scaffolderJavaMicroservice).isNotNull();
 
     ProjectDescription projectDescription = new ProjectDescription();
+
+    projectDescription.setContext("account");
+    projectDescription.setTablePrefix("ddd");
     projectDescription.setGroupId("com.oregor.microservices.account");
     projectDescription.setArtifactId("oregor-microservice-account");
     projectDescription.setModulePrefix("account");

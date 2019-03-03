@@ -48,6 +48,7 @@ public class IoModelGroupTest extends AbstractEqualityTest<IoModelGroup> {
     IoModelArray childIoModelArray =
         new IoModelArray(
             ioModelGroup,
+            null,
             new GenericTypeName("java.util.list"),
             new ClassDataType(new DataTypeName("SomeClass"), new PackageName("com.dummy")),
             new VariableName("someVariableName"));
@@ -66,7 +67,7 @@ public class IoModelGroupTest extends AbstractEqualityTest<IoModelGroup> {
             new VariableName("someVariableName"),
             ioModelGroup,
             null,
-            false);
+            DataBusinessType.ANY);
     ioModelGroup.addIoModelPrimitive(childIoModelPrimitive);
 
     assertThat(ioModelGroup.getModels().size()).isEqualTo(3);

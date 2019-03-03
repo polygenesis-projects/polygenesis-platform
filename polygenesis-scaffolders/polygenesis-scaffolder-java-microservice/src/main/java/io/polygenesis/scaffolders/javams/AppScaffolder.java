@@ -57,6 +57,10 @@ public class AppScaffolder extends AbstractScaffolder {
 
     ensureSources(modulePath, projectDescription);
 
+    exportApplicationYml(modulePath, dataModel);
+    exportConfigApplicationDevYml(modulePath, dataModel);
+    exportConfigApplicationCiYml(modulePath, dataModel);
+
     freemarkerService.export(
         dataModel,
         "polygenesis-scaffolder-java-microservice/app/pom.xml.ftl",
@@ -79,5 +83,26 @@ public class AppScaffolder extends AbstractScaffolder {
             "src/test/java",
             toPath(projectDescription.getGroupId()),
             "ApplicationTest.java"));
+  }
+
+  private void exportApplicationYml(Path modulePath, Map<String, Object> dataModel) {
+    freemarkerService.export(
+        dataModel,
+        "polygenesis-scaffolder-java-microservice/app/resources/application.yml.ftl",
+        Paths.get(modulePath.toString(), "src/main/resources", "application.yml"));
+  }
+
+  private void exportConfigApplicationDevYml(Path modulePath, Map<String, Object> dataModel) {
+    freemarkerService.export(
+        dataModel,
+        "polygenesis-scaffolder-java-microservice/app/resources/config/application-dev.yml.ftl",
+        Paths.get(modulePath.toString(), "src/main/resources/config", "application-dev.yml"));
+  }
+
+  private void exportConfigApplicationCiYml(Path modulePath, Map<String, Object> dataModel) {
+    freemarkerService.export(
+        dataModel,
+        "polygenesis-scaffolder-java-microservice/app/resources/config/application-ci.yml.ftl",
+        Paths.get(modulePath.toString(), "src/main/resources/config", "application-ci.yml"));
   }
 }

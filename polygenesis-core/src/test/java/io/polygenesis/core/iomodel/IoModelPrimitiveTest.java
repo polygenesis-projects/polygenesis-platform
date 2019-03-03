@@ -62,7 +62,7 @@ public class IoModelPrimitiveTest extends AbstractEqualityTest<IoModelPrimitive>
             new VariableName("someVariableName"),
             parent,
             new LinkedHashSet<>(),
-            false);
+            DataBusinessType.ANY);
 
     assertThat(ioModelPrimitive).isNotNull();
     assertThat(ioModelPrimitive.getParent()).isNotNull();
@@ -85,7 +85,7 @@ public class IoModelPrimitiveTest extends AbstractEqualityTest<IoModelPrimitive>
         new PrimitiveDataType(PrimitiveType.STRING),
         new VariableName("someVariableName"),
         new LinkedHashSet<>(),
-        false);
+        DataBusinessType.ANY);
   }
 
   @Override
@@ -94,6 +94,6 @@ public class IoModelPrimitiveTest extends AbstractEqualityTest<IoModelPrimitive>
         new PrimitiveDataType(PrimitiveType.STRING),
         new VariableName("someOtherVariableName"),
         new LinkedHashSet<>(),
-        false);
+        DataBusinessType.ANY);
   }
 }

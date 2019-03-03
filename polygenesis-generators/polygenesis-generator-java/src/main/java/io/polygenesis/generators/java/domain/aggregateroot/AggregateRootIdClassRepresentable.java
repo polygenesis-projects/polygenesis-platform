@@ -27,6 +27,7 @@ import io.polygenesis.representations.java.ConstructorRepresentation;
 import io.polygenesis.representations.java.FieldRepresentation;
 import io.polygenesis.representations.java.FromDataTypeToJavaConverter;
 import io.polygenesis.representations.java.MethodRepresentation;
+import io.polygenesis.representations.java.ParameterRepresentation;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -75,13 +76,23 @@ public class AggregateRootIdClassRepresentable extends AbstractClassRepresentabl
     // ---------------------------------------------------------------------------------------------
     // Create constructor with parameters
     // ---------------------------------------------------------------------------------------------
-    Set<FieldRepresentation> fieldRepresentations = fieldRepresentations(source);
 
-    fieldRepresentations.add(new FieldRepresentation("UUID", "rootUuid", true));
-
-    constructorRepresentations.add(
-        createConstructorWithSettersFromFieldRepresentations(
-            source.getName().getText(), fieldRepresentations));
+    if (source.getMultiTenant()) {
+      constructorRepresentations.add(
+          createConstructorWithImplementation(
+              source.getName().getText(),
+              new LinkedHashSet<>(
+                  Arrays.asList(
+                      new ParameterRepresentation("UUID", "rootId"),
+                      new ParameterRepresentation("UUID", "tenantId"))),
+              "\t\tsuper(rootId, tenantId);"));
+    } else {
+      constructorRepresentations.add(
+          createConstructorWithImplementation(
+              source.getName().getText(),
+              new LinkedHashSet<>(Arrays.asList(new ParameterRepresentation("UUID", "rootId"))),
+              "\t\tsuper(rootId);"));
+    }
 
     return constructorRepresentations;
   }
@@ -100,7 +111,12 @@ public class AggregateRootIdClassRepresentable extends AbstractClassRepresentabl
   public Set<String> imports(AggregateRoot source, Object... args) {
     Set<String> imports = new TreeSet<>();
 
-    imports.add("com.oregor.ddd4j.core.AggregateRootId");
+    if (source.getMultiTenant()) {
+      imports.add("com.oregor.ddd4j.core.AggregateRootIdWithTenantId");
+    } else {
+      imports.add("com.oregor.ddd4j.core.AggregateRootId");
+    }
+
     imports.add("javax.persistence.Embeddable");
     imports.add("java.util.UUID");
 
@@ -147,7 +163,12 @@ public class AggregateRootIdClassRepresentable extends AbstractClassRepresentabl
     stringBuilder.append(TextConverter.toUpperCamel(source.getName().getText()));
     stringBuilder.append("Id");
     stringBuilder.append(" extends ");
-    stringBuilder.append("AggregateRootId");
+
+    if (source.getMultiTenant()) {
+      stringBuilder.append("AggregateRootIdWithTenantId");
+    } else {
+      stringBuilder.append("AggregateRootId");
+    }
 
     return stringBuilder.toString();
   }

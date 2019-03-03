@@ -121,7 +121,12 @@ public class PersistenceImplClassRepresentable extends AbstractClassRepresentabl
 
     String context = TextConverter.toUpperCamel(contextName.getText());
 
-    imports.add("com.oregor.ddd4j.core.AbstractJpaPersistence");
+    if (source.getMultiTenant()) {
+      imports.add("com.oregor.ddd4j.core.AbstractJpaPersistenceWithTenant");
+    } else {
+      imports.add("com.oregor.ddd4j.core.AbstractJpaPersistence");
+    }
+
     imports.add(rootPackageName.getText() + "." + context + "DomainMessageData");
     imports.add(rootPackageName.getText() + "." + context + "DomainMessageDataConverter");
     imports.add(rootPackageName.getText() + "." + context + "DomainMessageDataRepository");
@@ -165,15 +170,20 @@ public class PersistenceImplClassRepresentable extends AbstractClassRepresentabl
 
   @Override
   public String fullObjectName(Persistence source, Object... args) {
-    Name contextName = (Name) args[1];
-
     StringBuilder stringBuilder = new StringBuilder();
-
-    String context = TextConverter.toUpperCamel(contextName.getText());
 
     stringBuilder.append(TextConverter.toUpperCamel(source.getName().getText()));
     stringBuilder.append("Impl");
-    stringBuilder.append("\n\t\textends AbstractJpaPersistence<");
+
+    if (source.getMultiTenant()) {
+      stringBuilder.append("\n\t\textends AbstractJpaPersistenceWithTenant<");
+    } else {
+      stringBuilder.append("\n\t\textends AbstractJpaPersistence<");
+    }
+
+    Name contextName = (Name) args[1];
+    String context = TextConverter.toUpperCamel(contextName.getText());
+
     stringBuilder.append(
         "\n\t\t" + TextConverter.toUpperCamel(source.getAggregateRootName().getText()) + ",");
     stringBuilder.append(

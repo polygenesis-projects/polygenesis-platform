@@ -20,6 +20,8 @@
 
 package io.polygenesis.generators.java.api;
 
+import static java.util.stream.Collectors.toCollection;
+
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.models.api.Service;
 import io.polygenesis.representations.java.AbstractInterfaceRepresentable;
@@ -29,7 +31,6 @@ import io.polygenesis.representations.java.MethodRepresentation;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.stream.Collectors;
 
 /**
  * The type Service interface representable.
@@ -65,7 +66,7 @@ public class ServiceInterfaceRepresentable extends AbstractInterfaceRepresentabl
         .stream()
         .map(method -> method.getFunction())
         .map(function -> functionToMethodRepresentationConverter.create(function))
-        .collect(Collectors.toSet());
+        .collect(toCollection(LinkedHashSet::new));
   }
 
   @Override

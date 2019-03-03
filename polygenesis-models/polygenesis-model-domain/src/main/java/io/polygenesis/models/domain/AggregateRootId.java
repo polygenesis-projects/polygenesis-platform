@@ -28,7 +28,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /**
- * The type Value object.
+ * The type Aggregate root id.
  *
  * @author Christos Tsakostas
  */

@@ -20,6 +20,8 @@
 
 package io.polygenesis.generators.java.rest;
 
+import static java.util.stream.Collectors.toCollection;
+
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.datatype.PackageName;
 import io.polygenesis.models.rest.HttpMethod;
@@ -33,7 +35,6 @@ import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.stream.Collectors;
 
 /**
  * The type Resource class representable.
@@ -94,7 +95,7 @@ public class ResourceClassRepresentable extends AbstractClassRepresentable<Resou
         .getEndpoints()
         .stream()
         .map(endpoint -> endpointMethodRepresentable.create(endpoint))
-        .collect(Collectors.toSet());
+        .collect(toCollection(LinkedHashSet::new));
   }
 
   @Override

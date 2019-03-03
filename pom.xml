@@ -263,6 +263,11 @@
       </dependency>
       <dependency>
         <groupId>io.polygenesis.models</groupId>
+        <artifactId>polygenesis-model-sql</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.polygenesis.models</groupId>
         <artifactId>polygenesis-model-ui</artifactId>
         <version>${project.version}</version>
       </dependency>
@@ -291,6 +296,11 @@
       <dependency>
         <groupId>io.polygenesis.deducers</groupId>
         <artifactId>polygenesis-deducer-reactive-state</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.polygenesis.deducers</groupId>
+        <artifactId>polygenesis-deducer-sql</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>

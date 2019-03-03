@@ -15,7 +15,7 @@
     <!--POLYGENESIS MODELS-->
     <dependency>
       <groupId>io.polygenesis.models</groupId>
-      <artifactId>polygenesis-model-api</artifactId>
+      <artifactId>polygenesis-model-sql</artifactId>
     </dependency>
 
     <!--TEST-->

@@ -20,6 +20,7 @@
 
 package io.polygenesis.models.api;
 
+import com.oregor.ddd4j.check.assertion.Assertion;
 import io.polygenesis.core.Function;
 import java.util.Objects;
 
@@ -31,6 +32,8 @@ import java.util.Objects;
 public class Method {
 
   private Function function;
+  private Dto requestDto;
+  private Dto responseDto;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -40,9 +43,13 @@ public class Method {
    * Instantiates a new Method.
    *
    * @param function the function
+   * @param requestDto the request dto
+   * @param responseDto the response dto
    */
-  public Method(Function function) {
+  public Method(Function function, Dto requestDto, Dto responseDto) {
     setFunction(function);
+    setRequestDto(requestDto);
+    setResponseDto(responseDto);
   }
 
   // ===============================================================================================
@@ -58,6 +65,24 @@ public class Method {
     return function;
   }
 
+  /**
+   * Gets request dto.
+   *
+   * @return the request dto
+   */
+  public Dto getRequestDto() {
+    return requestDto;
+  }
+
+  /**
+   * Gets response dto.
+   *
+   * @return the response dto
+   */
+  public Dto getResponseDto() {
+    return responseDto;
+  }
+
   // ===============================================================================================
   // GUARDS
   // ===============================================================================================
@@ -68,7 +93,31 @@ public class Method {
    * @param function the function
    */
   private void setFunction(Function function) {
+    Assertion.isNotNull(function, "function is required");
+
     this.function = function;
+  }
+
+  /**
+   * Sets request dto.
+   *
+   * @param requestDto the request dto
+   */
+  private void setRequestDto(Dto requestDto) {
+    Assertion.isNotNull(requestDto, "requestDto is required");
+
+    this.requestDto = requestDto;
+  }
+
+  /**
+   * Sets response dto.
+   *
+   * @param responseDto the response dto
+   */
+  private void setResponseDto(Dto responseDto) {
+    Assertion.isNotNull(responseDto, "responseDto is required");
+
+    this.responseDto = responseDto;
   }
 
   // ===============================================================================================
@@ -84,11 +133,13 @@ public class Method {
       return false;
     }
     Method method = (Method) o;
-    return Objects.equals(function, method.function);
+    return Objects.equals(function, method.function)
+        && Objects.equals(requestDto, method.requestDto)
+        && Objects.equals(responseDto, method.responseDto);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(function);
+    return Objects.hash(function, requestDto, responseDto);
   }
 }

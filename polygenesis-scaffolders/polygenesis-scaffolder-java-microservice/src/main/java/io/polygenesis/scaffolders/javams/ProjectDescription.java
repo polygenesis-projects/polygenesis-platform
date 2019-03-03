@@ -30,6 +30,8 @@ import java.util.Set;
  */
 public class ProjectDescription {
 
+  private String context;
+  private String tablePrefix;
   private String groupId;
   private String artifactId;
   private String modulePrefix;
@@ -62,6 +64,24 @@ public class ProjectDescription {
   // ===============================================================================================
   // GETTERS
   // ===============================================================================================
+
+  /**
+   * Gets context.
+   *
+   * @return the context
+   */
+  public String getContext() {
+    return context;
+  }
+
+  /**
+   * Gets table prefix.
+   *
+   * @return the table prefix
+   */
+  public String getTablePrefix() {
+    return tablePrefix;
+  }
 
   /**
    * Gets group id.
@@ -216,6 +236,11 @@ public class ProjectDescription {
     return extraModules;
   }
 
+  /**
+   * Is microservice boolean.
+   *
+   * @return the boolean
+   */
   public boolean isMicroservice() {
     return microservice;
   }
@@ -223,6 +248,24 @@ public class ProjectDescription {
   // ===============================================================================================
   // SETTERS
   // ===============================================================================================
+
+  /**
+   * Sets context.
+   *
+   * @param context the context
+   */
+  public void setContext(String context) {
+    this.context = context;
+  }
+
+  /**
+   * Sets table prefix.
+   *
+   * @param tablePrefix the table prefix
+   */
+  public void setTablePrefix(String tablePrefix) {
+    this.tablePrefix = tablePrefix;
+  }
 
   /**
    * Sets group id.
@@ -377,6 +420,11 @@ public class ProjectDescription {
     this.extraModules = extraModules;
   }
 
+  /**
+   * Sets microservice.
+   *
+   * @param microservice the microservice
+   */
   public void setMicroservice(boolean microservice) {
     this.microservice = microservice;
   }

@@ -26,6 +26,7 @@ import io.polygenesis.core.datatype.ClassDataType;
 import io.polygenesis.core.datatype.DataKind;
 import io.polygenesis.core.datatype.DataTypeName;
 import io.polygenesis.core.datatype.PackageName;
+import io.polygenesis.core.iomodel.DataBusinessType;
 import io.polygenesis.core.iomodel.IoModel;
 import io.polygenesis.core.iomodel.IoModelGroup;
 import io.polygenesis.core.iomodel.IoModelPrimitive;
@@ -71,20 +72,7 @@ public class AggregateRootPropertyDeducer {
 
     // Add Aggregate Root ID
     if (function.getGoal().isCreate()) {
-
-      IoModelGroup ioModelGroup =
-          new IoModelGroup(
-              new ClassDataType(
-                  new DataTypeName(function.getThing().getName().getText() + "Id"),
-                  new PackageName(
-                      String.format(
-                          "%s.%s",
-                          rootPackageName.getText(),
-                          function.getThing().getName().getText().toLowerCase()))));
-
-      properties.add(
-          new AggregateRootId(
-              ioModelGroup, new VariableName(function.getThing().getName().getText() + "Id")));
+      properties.add(makeAggregateRootId(function, rootPackageName));
     }
 
     function
@@ -97,7 +85,9 @@ public class AggregateRootPropertyDeducer {
                     .getModels()
                     .forEach(
                         model -> {
-                          if (!isPropertyThingIdentity(model)) {
+                          if (!isPropertyThingIdentity(model)
+                              && !isPropertyPageNumber(model)
+                              && !isPropertyPageSize(model)) {
                             properties.add(makeAbstractProperty(model));
                           }
                         });
@@ -150,9 +140,40 @@ public class AggregateRootPropertyDeducer {
     }
   }
 
+  private AggregateRootId makeAggregateRootId(Function function, PackageName rootPackageName) {
+    IoModelGroup ioModelGroup =
+        new IoModelGroup(
+            new ClassDataType(
+                new DataTypeName(function.getThing().getName().getText() + "Id"),
+                new PackageName(
+                    String.format(
+                        "%s.%s",
+                        rootPackageName.getText(),
+                        function.getThing().getName().getText().toLowerCase()))));
+
+    return new AggregateRootId(
+        ioModelGroup, new VariableName(function.getThing().getName().getText() + "Id"));
+  }
+
   private boolean isPropertyThingIdentity(IoModel model) {
     if (model.getDataType().getDataKind().equals(DataKind.PRIMITIVE)
         && ((IoModelPrimitive) model).getThingIdentity()) {
+      return true;
+    }
+    return false;
+  }
+
+  private boolean isPropertyPageNumber(IoModel model) {
+    if (model.getDataType().getDataKind().equals(DataKind.PRIMITIVE)
+        && ((IoModelPrimitive) model).getDataBusinessType().equals(DataBusinessType.PAGE_NUMBER)) {
+      return true;
+    }
+    return false;
+  }
+
+  private boolean isPropertyPageSize(IoModel model) {
+    if (model.getDataType().getDataKind().equals(DataKind.PRIMITIVE)
+        && ((IoModelPrimitive) model).getDataBusinessType().equals(DataBusinessType.PAGE_SIZE)) {
       return true;
     }
     return false;

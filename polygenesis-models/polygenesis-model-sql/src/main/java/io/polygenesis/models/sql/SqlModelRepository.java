@@ -18,40 +18,35 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.models.api;
+package io.polygenesis.models.sql;
 
+import com.oregor.ddd4j.check.assertion.Assertion;
 import io.polygenesis.core.ModelRepository;
-import io.polygenesis.core.ThingRepository;
-import io.polygenesis.core.datatype.PackageName;
-import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
- * The type Api deducer.
+ * The type Sql model repository.
  *
  * @author Christos Tsakostas
  */
-public class ApiDeducerImpl implements ApiDeducer {
+public class SqlModelRepository implements ModelRepository {
 
-  // ===============================================================================================
-  // DEPENDENCIES
-  // ===============================================================================================
-  private final PackageName rootPackageName;
-  private final ServiceDeducer serviceDeducer;
+  private Set<Table> tables;
+  private Set<Index> indices;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
-   * Instantiates a new Api deducer.
+   * Instantiates a new Sql model repository.
    *
-   * @param rootPackageName the package name
-   * @param serviceDeducer the service deducer
+   * @param tables the tables
+   * @param indices the indices
    */
-  public ApiDeducerImpl(PackageName rootPackageName, ServiceDeducer serviceDeducer) {
-    this.rootPackageName = rootPackageName;
-    this.serviceDeducer = serviceDeducer;
+  public SqlModelRepository(Set<Table> tables, Set<Index> indices) {
+    setTables(tables);
+    setIndices(indices);
   }
 
   // ===============================================================================================
@@ -59,34 +54,48 @@ public class ApiDeducerImpl implements ApiDeducer {
   // ===============================================================================================
 
   /**
-   * Gets package name.
+   * Gets tables.
    *
-   * @return the package name
+   * @return the tables
    */
-  public PackageName getRootPackageName() {
-    return rootPackageName;
+  public Set<Table> getTables() {
+    return tables;
+  }
+
+  /**
+   * Gets indices.
+   *
+   * @return the indices
+   */
+  public Set<Index> getIndices() {
+    return indices;
   }
 
   // ===============================================================================================
-  // OVERRIDES
+  // QUERIES
   // ===============================================================================================
 
-  @Override
-  public ServiceModelRepository deduce(
-      ThingRepository thingRepository, Set<ModelRepository> modelRepositories) {
-    if (thingRepository.getThings().isEmpty()) {
-      throw new IllegalStateException("thingRepository cannot be empty");
-    }
+  // ===============================================================================================
+  // GUARDS
+  // ===============================================================================================
 
-    Set<Service> services = new LinkedHashSet<>();
+  /**
+   * Sets tables.
+   *
+   * @param tables the tables
+   */
+  private void setTables(Set<Table> tables) {
+    Assertion.isNotNull(tables, "tables is required");
+    this.tables = tables;
+  }
 
-    thingRepository
-        .getThings()
-        .forEach(
-            thing -> {
-              services.addAll(serviceDeducer.deduceFrom(thing, getRootPackageName()));
-            });
-
-    return new ServiceModelRepository(services);
+  /**
+   * Sets indices.
+   *
+   * @param indices the indices
+   */
+  private void setIndices(Set<Index> indices) {
+    Assertion.isNotNull(indices, "indices is required");
+    this.indices = indices;
   }
 }

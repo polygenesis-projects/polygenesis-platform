@@ -19,7 +19,7 @@
     <module>polygenesis-model-rest</module>
     <module>polygenesis-model-domain</module>
     <module>polygenesis-model-reactive-state</module>
+    <module>polygenesis-model-sql</module>
     <module>polygenesis-model-ui</module>
   </modules>
-
 </project>

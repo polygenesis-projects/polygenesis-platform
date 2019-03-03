@@ -20,6 +20,8 @@
 
 package io.polygenesis.representations.java;
 
+import static java.util.stream.Collectors.toCollection;
+
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.datatype.DataTypeName;
 import io.polygenesis.core.datatype.PackageName;
@@ -27,7 +29,6 @@ import io.polygenesis.core.iomodel.IoModelGroup;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * The type Abstract class representable.
@@ -172,6 +173,25 @@ public abstract class AbstractClassRepresentable<S> implements ClassRepresentabl
             });
 
     return variables;
+  }
+
+  /**
+   * Create constructor with implementation constructor representation.
+   *
+   * @param dataType the data type
+   * @param parameterRepresentations the parameter representations
+   * @param implementation the implementation
+   * @return the constructor representation
+   */
+  protected ConstructorRepresentation createConstructorWithImplementation(
+      String dataType,
+      Set<ParameterRepresentation> parameterRepresentations,
+      String implementation) {
+    String description =
+        String.format("Instantiates a new %s.", TextConverter.toUpperCamelSpaces(dataType));
+
+    return new ConstructorRepresentation(
+        new LinkedHashSet<>(), description, "public", parameterRepresentations, implementation);
   }
 
   /**
@@ -427,7 +447,7 @@ public abstract class AbstractClassRepresentable<S> implements ClassRepresentabl
                     fieldRepresentation.getVariableName(),
                     fieldRepresentation.getAnnotations(),
                     fieldRepresentation.getThingIdentity()))
-        .collect(Collectors.toSet());
+        .collect(toCollection(LinkedHashSet::new));
   }
 
   /**

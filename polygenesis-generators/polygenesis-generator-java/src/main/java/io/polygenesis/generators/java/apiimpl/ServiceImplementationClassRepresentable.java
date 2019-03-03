@@ -23,6 +23,7 @@ package io.polygenesis.generators.java.apiimpl;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.datatype.PackageName;
 import io.polygenesis.core.iomodel.IoModelGroup;
+import io.polygenesis.models.api.Method;
 import io.polygenesis.models.api.Service;
 import io.polygenesis.models.apiimpl.ServiceImplementation;
 import io.polygenesis.models.domain.AggregateRoot;
@@ -140,6 +141,20 @@ public class ServiceImplementationClassRepresentable
     imports.add("org.springframework.stereotype.Service");
     imports.add("org.springframework.transaction.annotation.Transactional");
 
+    Optional<Method> optionalMethodFetchPagedCollection =
+        source
+            .getService()
+            .getMethods()
+            .stream()
+            .filter(method -> method.getFunction().getGoal().isFetchPagedCollection())
+            .findFirst();
+
+    if (optionalMethodFetchPagedCollection.isPresent()) {
+      imports.add("java.util.stream.Collectors");
+      imports.add("java.util.stream.StreamSupport");
+      imports.add("com.oregor.ddd4j.core.Paginated");
+    }
+
     return imports;
   }
 
@@ -239,7 +254,6 @@ public class ServiceImplementationClassRepresentable
             method -> {
               if (method.getFunction().getGoal().isFetchOne()
                   || method.getFunction().getGoal().isModify()) {
-                imports.add("java.util.Optional");
                 imports.add("java.util.UUID");
               }
             });

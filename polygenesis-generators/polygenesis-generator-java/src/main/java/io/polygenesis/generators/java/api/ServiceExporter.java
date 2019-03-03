@@ -46,6 +46,12 @@ public class ServiceExporter {
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
+  /**
+   * Instantiates a new Service exporter.
+   *
+   * @param freemarkerService the freemarker service
+   * @param serviceInterfaceRepresentable the service interface representable
+   */
   public ServiceExporter(
       FreemarkerService freemarkerService,
       ServiceInterfaceRepresentable serviceInterfaceRepresentable) {

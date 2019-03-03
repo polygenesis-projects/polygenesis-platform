@@ -27,6 +27,10 @@ import io.polygenesis.core.FunctionName;
 import io.polygenesis.core.Goal;
 import io.polygenesis.core.Thing;
 import io.polygenesis.core.ThingName;
+import io.polygenesis.core.datatype.ClassDataType;
+import io.polygenesis.core.datatype.DataTypeName;
+import io.polygenesis.core.datatype.PackageName;
+import io.polygenesis.core.iomodel.IoModelGroup;
 import java.util.LinkedHashSet;
 
 /** @author Christos Tsakostas */
@@ -34,17 +38,43 @@ public class MethodTest extends AbstractEqualityTest<Method> {
 
   @Override
   public Method createObject1() {
+    Dto requestDto =
+        new Dto(
+            DtoType.API_REQUEST,
+            new IoModelGroup(
+                new ClassDataType(new DataTypeName("asd"), new PackageName("com.oregor"))));
+    Dto responseDto =
+        new Dto(
+            DtoType.API_REQUEST,
+            new IoModelGroup(
+                new ClassDataType(new DataTypeName("xyz"), new PackageName("com.oregor"))));
+
     Thing thing = new Thing(new ThingName("customer"));
     return new Method(
         new Function(
-            thing, new Goal(GoalType.CREATE), new FunctionName("create"), new LinkedHashSet<>()));
+            thing, new Goal(GoalType.CREATE), new FunctionName("create"), new LinkedHashSet<>()),
+        requestDto,
+        responseDto);
   }
 
   @Override
   public Method createObject2() {
+    Dto requestDto =
+        new Dto(
+            DtoType.API_REQUEST,
+            new IoModelGroup(
+                new ClassDataType(new DataTypeName("asd"), new PackageName("com.oregor"))));
+    Dto responseDto =
+        new Dto(
+            DtoType.API_REQUEST,
+            new IoModelGroup(
+                new ClassDataType(new DataTypeName("xyz"), new PackageName("com.oregor"))));
+
     Thing thing = new Thing(new ThingName("user"));
     return new Method(
         new Function(
-            thing, new Goal(GoalType.CREATE), new FunctionName("create"), new LinkedHashSet<>()));
+            thing, new Goal(GoalType.CREATE), new FunctionName("create"), new LinkedHashSet<>()),
+        requestDto,
+        responseDto);
   }
 }

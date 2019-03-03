@@ -22,10 +22,10 @@ package io.polygenesis.generators.java.apiimpl;
 
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.Argument;
-import io.polygenesis.core.Function;
 import io.polygenesis.core.ReturnValue;
 import io.polygenesis.core.iomodel.IoModelGroup;
 import io.polygenesis.core.iomodel.IoModelPrimitive;
+import io.polygenesis.models.api.Method;
 import io.polygenesis.models.domain.AggregateRoot;
 import java.util.Optional;
 
@@ -39,40 +39,25 @@ public abstract class ServiceImplementationMethodShared {
   /**
    * Restore aggregate root string.
    *
-   * @param function the function
+   * @param method the method
    * @param aggregateRoot the aggregate root
    * @return the string
    */
-  protected String restoreAggregateRoot(Function function, AggregateRoot aggregateRoot) {
+  protected String restoreAggregateRoot(Method method, AggregateRoot aggregateRoot) {
     StringBuilder stringBuilder = new StringBuilder();
 
     stringBuilder.append("\t\t");
-    stringBuilder.append("Optional<");
     stringBuilder.append(TextConverter.toUpperCamelSpaces(aggregateRoot.getName().getText()));
-    stringBuilder.append(">");
     stringBuilder.append(" ");
     stringBuilder.append(TextConverter.toLowerCamel(aggregateRoot.getName().getText()));
     stringBuilder.append(" = ");
     stringBuilder.append(TextConverter.toLowerCamel(aggregateRoot.getName().getText()));
     stringBuilder.append("Persistence");
     stringBuilder.append(".restore(");
-    stringBuilder.append(constructNewAggregateRootIdFromArgument(function, aggregateRoot));
-    stringBuilder.append(");");
-    stringBuilder.append("\n");
-    stringBuilder.append("\n");
-
-    stringBuilder.append("\t\t");
-    stringBuilder.append("if (!");
-    stringBuilder.append(TextConverter.toLowerCamel(aggregateRoot.getName().getText()));
-    stringBuilder.append(".isPresent()) {");
-    stringBuilder.append("\n");
-    stringBuilder.append("\t\t\t");
-    stringBuilder.append("throw new IllegalArgumentException(\"Cannot restore ");
+    stringBuilder.append(constructNewAggregateRootIdFromArgument(method, aggregateRoot));
+    stringBuilder.append(").orElseThrow(() -> new IllegalArgumentException(\"Cannot restore ");
     stringBuilder.append(TextConverter.toUpperCamelSpaces(aggregateRoot.getName().getText()));
-    stringBuilder.append("\");");
-    stringBuilder.append("\n");
-    stringBuilder.append("\t\t");
-    stringBuilder.append("}");
+    stringBuilder.append("\"));");
     stringBuilder.append("\n");
 
     return stringBuilder.toString();
@@ -81,19 +66,24 @@ public abstract class ServiceImplementationMethodShared {
   /**
    * Construct new aggregate root id from argument string.
    *
-   * @param function the function
+   * @param method the method
    * @param aggregateRoot the aggregate root
    * @return the string
    */
   protected String constructNewAggregateRootIdFromArgument(
-      Function function, AggregateRoot aggregateRoot) {
+      Method method, AggregateRoot aggregateRoot) {
     StringBuilder stringBuilder = new StringBuilder();
 
     Argument argument =
-        function.getArguments().stream().findFirst().orElseThrow(IllegalArgumentException::new);
+        method
+            .getFunction()
+            .getArguments()
+            .stream()
+            .findFirst()
+            .orElseThrow(IllegalArgumentException::new);
 
     Optional<IoModelPrimitive> optionalIoModelPrimitive =
-        function.retrieveThingIdentityFromArgument(argument);
+        method.getFunction().retrieveThingIdentityFromArgument(argument);
 
     if (!optionalIoModelPrimitive.isPresent()) {
       throw new IllegalStateException();
@@ -113,6 +103,16 @@ public abstract class ServiceImplementationMethodShared {
         TextConverter.toUpperCamel(optionalIoModelPrimitive.get().getVariableName().getText()));
     stringBuilder.append("()");
     stringBuilder.append(")"); // UUID.fromString
+
+    if (aggregateRoot.getMultiTenant()) {
+      stringBuilder.append(", UUID.fromString(");
+      stringBuilder.append(
+          TextConverter.toLowerCamel(argument.getModel().getVariableName().getText()));
+      stringBuilder.append(".");
+      stringBuilder.append("getTenantId()");
+      stringBuilder.append(")"); // UUID.fromString
+    }
+
     stringBuilder.append(")");
 
     return stringBuilder.toString();
@@ -121,20 +121,21 @@ public abstract class ServiceImplementationMethodShared {
   /**
    * Make return value string.
    *
-   * @param function the function
+   * @param method the method
    * @return the string
    */
-  protected String makeReturnValue(Function function) {
+  protected String makeReturnValue(Method method) {
     StringBuilder stringBuilder = new StringBuilder();
 
-    ReturnValue returnValue = function.getReturnValue();
+    ReturnValue returnValue = method.getFunction().getReturnValue();
     if (returnValue != null) {
       if (returnValue.getModel().isIoModelGroup()) {
         stringBuilder.append(makeReturnValueForIoModelGroup(returnValue.getAsIoModelGroup()));
       } else {
         throw new IllegalStateException(
             String.format(
-                "Cannot make Return Value for function=%s", function.getName().getText()));
+                "Cannot make Return Value for function=%s",
+                method.getFunction().getName().getText()));
       }
     }
 

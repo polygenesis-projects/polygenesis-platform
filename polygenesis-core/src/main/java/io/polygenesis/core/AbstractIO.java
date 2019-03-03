@@ -21,6 +21,7 @@
 package io.polygenesis.core;
 
 import io.polygenesis.core.iomodel.IoModel;
+import io.polygenesis.core.iomodel.IoModelArray;
 import io.polygenesis.core.iomodel.IoModelGroup;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -70,10 +71,14 @@ abstract class AbstractIO {
    * @return the as io model group
    */
   public IoModelGroup getAsIoModelGroup() {
+    if (model.isIoModelArray()) {
+      return (IoModelArray) model;
+    }
+
     if (model.isIoModelGroup()) {
       return (IoModelGroup) model;
     } else {
-      throw new IllegalStateException();
+      throw new IllegalStateException("Model is not IoModelGroup");
     }
   }
 

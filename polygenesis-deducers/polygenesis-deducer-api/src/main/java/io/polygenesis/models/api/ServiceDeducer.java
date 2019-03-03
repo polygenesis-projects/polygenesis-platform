@@ -39,6 +39,7 @@ public class ServiceDeducer {
   // DEPENDENCIES
   // ===============================================================================================
 
+  private final ServiceMethodDeducer serviceMethodDeducer;
   private final DtoDeducer dtoDeducer;
 
   // ===============================================================================================
@@ -48,9 +49,11 @@ public class ServiceDeducer {
   /**
    * Instantiates a new Service deducer.
    *
+   * @param serviceMethodDeducer the service method deducer
    * @param dtoDeducer the dto deducer
    */
-  public ServiceDeducer(DtoDeducer dtoDeducer) {
+  public ServiceDeducer(ServiceMethodDeducer serviceMethodDeducer, DtoDeducer dtoDeducer) {
+    this.serviceMethodDeducer = serviceMethodDeducer;
     this.dtoDeducer = dtoDeducer;
   }
 
@@ -68,9 +71,15 @@ public class ServiceDeducer {
   public Set<Service> deduceFrom(Thing thing, PackageName rootPackageName) {
     Set<Service> services = new LinkedHashSet<>();
 
-    Set<Dto> dtos = dtoDeducer.deduce(thing.getFunctions());
+    Set<Method> commandMethods = serviceMethodDeducer.deduceCommandMethods(thing);
+    Set<Method> queryMethods = serviceMethodDeducer.deduceQueryMethods(thing);
 
-    Set<Method> commandMethods = getCommandMethods(thing);
+    Set<Method> allMethods = new LinkedHashSet<>();
+    allMethods.addAll(commandMethods);
+    allMethods.addAll(queryMethods);
+
+    Set<Dto> dtos = dtoDeducer.deduceAllDtosInMethods(allMethods);
+
     if (!commandMethods.isEmpty()) {
       services.add(
           new Service(
@@ -82,7 +91,6 @@ public class ServiceDeducer {
               dtos));
     }
 
-    Set<Method> queryMethods = getQueryMethods(thing);
     if (!queryMethods.isEmpty()) {
       services.add(
           new Service(
@@ -100,30 +108,6 @@ public class ServiceDeducer {
   // ===============================================================================================
   // PRIVATE
   // ===============================================================================================
-
-  private Set<Method> getCommandMethods(Thing thing) {
-    Set<Method> methods = new LinkedHashSet<>();
-
-    thing
-        .getFunctions()
-        .stream()
-        .filter(function -> function.getGoal().isCommand())
-        .forEach(function -> methods.add(new Method(function)));
-
-    return methods;
-  }
-
-  private Set<Method> getQueryMethods(Thing thing) {
-    Set<Method> methods = new LinkedHashSet<>();
-
-    thing
-        .getFunctions()
-        .stream()
-        .filter(function -> !function.getGoal().isCommand())
-        .forEach(function -> methods.add(new Method(function)));
-
-    return methods;
-  }
 
   private PackageName makeServicePackageName(PackageName rootPackageName, ThingName thingName) {
     return new PackageName(

@@ -72,7 +72,11 @@ public class SpringDataRepositoryInterfaceRepresentable
   public Set<String> imports(Persistence source, Object... args) {
     Set<String> imports = new TreeSet<>();
 
-    imports.add("com.oregor.ddd4j.core.SpringDataRepository");
+    if (source.getMultiTenant()) {
+      imports.add("com.oregor.ddd4j.core.SpringDataRepositoryWithTenant");
+    } else {
+      imports.add("com.oregor.ddd4j.core.SpringDataRepository");
+    }
 
     return imports;
   }
@@ -119,7 +123,13 @@ public class SpringDataRepositoryInterfaceRepresentable
     stringBuilder.append(" ");
     stringBuilder.append("extends");
     stringBuilder.append(" ");
-    stringBuilder.append("SpringDataRepository<");
+
+    if (source.getMultiTenant()) {
+      stringBuilder.append("SpringDataRepositoryWithTenant<");
+    } else {
+      stringBuilder.append("SpringDataRepository<");
+    }
+
     stringBuilder.append(TextConverter.toUpperCamel(source.getAggregateRootName().getText()));
     stringBuilder.append(", ");
     stringBuilder.append(TextConverter.toUpperCamel(source.getAggregateRootIdName().getText()));

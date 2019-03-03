@@ -76,13 +76,13 @@ public class FromDataTypeToJavaConverter {
     dataTypeMap.put(PrimitiveType.STRING, "String");
 
     dataTypeMap.put(PrimitiveType.INTEGER, "int");
-    dataTypeMap.put(PrimitiveType.INTEGER, "java.lang.Integer");
+    dataTypeMap.put(PrimitiveType.INTEGER, "Integer");
 
     dataTypeMap.put(PrimitiveType.LONG, "long");
     dataTypeMap.put(PrimitiveType.LONG, "java.lang.Long");
 
     dataTypeMap.put(PrimitiveType.BOOLEAN, "boolean");
-    dataTypeMap.put(PrimitiveType.BOOLEAN, "java.lang.Boolean");
+    dataTypeMap.put(PrimitiveType.BOOLEAN, "Boolean");
 
     dataTypeMap.put(PrimitiveType.ARRAY, "java.util.List");
   }

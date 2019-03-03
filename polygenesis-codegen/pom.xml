@@ -42,6 +42,10 @@
     </dependency>
     <dependency>
       <groupId>io.polygenesis.deducers</groupId>
+      <artifactId>polygenesis-deducer-sql</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.polygenesis.deducers</groupId>
       <artifactId>polygenesis-deducer-ui</artifactId>
     </dependency>
 

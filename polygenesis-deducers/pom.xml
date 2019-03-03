@@ -19,6 +19,7 @@
     <module>polygenesis-deducer-domain</module>
     <module>polygenesis-deducer-reactive-state</module>
     <module>polygenesis-deducer-rest</module>
+    <module>polygenesis-deducer-sql</module>
     <module>polygenesis-deducer-ui</module>
   </modules>
 
