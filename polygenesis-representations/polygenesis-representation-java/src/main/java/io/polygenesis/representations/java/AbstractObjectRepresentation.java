@@ -43,7 +43,7 @@ public class AbstractObjectRepresentation {
   private String description;
   private String modifiers;
   private String simpleObjectName;
-  /** Full object Name With Optional Extends and Implements. */
+  /** Full object Name With Extends and Implements, if any. */
   private String fullObjectName;
 
   // ===============================================================================================

@@ -64,7 +64,8 @@ public class ClassDataType extends AbstractDataType {
    * @param dataTypeName the data type name
    */
   public ClassDataType changeDataTypeNameTo(DataTypeName dataTypeName) {
-    return new ClassDataType(dataTypeName, getOptionalPackageName().get());
+    return new ClassDataType(
+        dataTypeName, getOptionalPackageName().orElseThrow(IllegalArgumentException::new));
   }
 
   // ===============================================================================================

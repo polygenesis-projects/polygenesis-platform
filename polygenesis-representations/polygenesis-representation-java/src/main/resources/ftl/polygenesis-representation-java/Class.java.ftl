@@ -40,6 +40,9 @@ ${ representation.modifiers }<#if representation.modifiers != ""> </#if>class ${
 
 </#if>
 <#list representation.fieldRepresentations as fieldRepresentation>
+  <#list fieldRepresentation.annotations as annotation>
+  ${ annotation }
+  </#list>
   private ${ fieldRepresentation.dataType } ${ fieldRepresentation.variableName };
 </#list>
 <#if representation.constructorRepresentations?size gt 0>

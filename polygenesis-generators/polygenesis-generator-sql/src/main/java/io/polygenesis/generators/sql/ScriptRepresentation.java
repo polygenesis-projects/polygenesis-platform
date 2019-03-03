@@ -20,9 +20,91 @@
 
 package io.polygenesis.generators.sql;
 
+import java.util.Objects;
+import java.util.Set;
+
 /**
  * The type Script representation.
  *
  * @author Christos Tsakostas
  */
-public class ScriptRepresentation {}
+public class ScriptRepresentation {
+
+  private Set<String> createTables;
+  private Set<String> createTableIndices;
+
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
+  public ScriptRepresentation(Set<String> createTables, Set<String> createTableIndices) {
+    setCreateTables(createTables);
+    setCreateTableIndices(createTableIndices);
+  }
+
+  // ===============================================================================================
+  // GETTERS
+  // ===============================================================================================
+
+  /**
+   * Gets create tables.
+   *
+   * @return the create tables
+   */
+  public Set<String> getCreateTables() {
+    return createTables;
+  }
+
+  /**
+   * Gets create table indices.
+   *
+   * @return the create table indices
+   */
+  public Set<String> getCreateTableIndices() {
+    return createTableIndices;
+  }
+
+  // ===============================================================================================
+  // SETTERS
+  // ===============================================================================================
+
+  /**
+   * Sets create tables.
+   *
+   * @param createTables the create tables
+   */
+  private void setCreateTables(Set<String> createTables) {
+    this.createTables = createTables;
+  }
+
+  /**
+   * Sets create table indices.
+   *
+   * @param createTableIndices the create table indices
+   */
+  private void setCreateTableIndices(Set<String> createTableIndices) {
+    this.createTableIndices = createTableIndices;
+  }
+
+  // ===============================================================================================
+  // OVERRIDES
+  // ===============================================================================================
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    ScriptRepresentation that = (ScriptRepresentation) o;
+    return Objects.equals(createTables, that.createTables)
+        && Objects.equals(createTableIndices, that.createTableIndices);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(createTables, createTableIndices);
+  }
+}

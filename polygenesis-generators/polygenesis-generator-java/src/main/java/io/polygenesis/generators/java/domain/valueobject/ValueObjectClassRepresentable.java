@@ -22,9 +22,9 @@ package io.polygenesis.generators.java.domain.valueobject;
 
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.models.domain.ValueObject;
+import io.polygenesis.representations.commons.FieldRepresentation;
 import io.polygenesis.representations.java.AbstractClassRepresentable;
 import io.polygenesis.representations.java.ConstructorRepresentation;
-import io.polygenesis.representations.java.FieldRepresentation;
 import io.polygenesis.representations.java.FromDataTypeToJavaConverter;
 import io.polygenesis.representations.java.MethodRepresentation;
 import java.util.Arrays;

@@ -33,25 +33,38 @@ public class StoreTest extends AbstractEqualityTest<Store> {
 
   @Test
   public void shouldSucceedToInstantiate() {
-    Set<Action> actions = new LinkedHashSet<>();
-    Store store = new Store(new FeatureName("abc"), actions);
+    Set<ActionGroup> actionGroups = new LinkedHashSet<>();
+    Set<EffectGroup> effectGroups = new LinkedHashSet<>();
+    Set<Model> models = new LinkedHashSet<>();
+    Set<ReducerGroup> reducerGroups = new LinkedHashSet<>();
+
+    Store store =
+        new Store(new FeatureName("abc"), actionGroups, effectGroups, models, reducerGroups);
 
     assertThat(store).isNotNull();
     assertThat(store.getFeatureName()).isEqualTo(new FeatureName("abc"));
-    assertThat(store.getActions().size()).isEqualTo(0);
+    assertThat(store.getActionGroups().size()).isEqualTo(0);
   }
 
   @Override
   public Store createObject1() {
     FeatureName featureName = new FeatureName("xxx");
-    Set<Action> actions = new LinkedHashSet<>();
-    return new Store(featureName, actions);
+    Set<ActionGroup> actionGroups = new LinkedHashSet<>();
+    Set<EffectGroup> effectGroups = new LinkedHashSet<>();
+    Set<Model> models = new LinkedHashSet<>();
+    Set<ReducerGroup> reducerGroups = new LinkedHashSet<>();
+
+    return new Store(featureName, actionGroups, effectGroups, models, reducerGroups);
   }
 
   @Override
   public Store createObject2() {
     FeatureName featureName = new FeatureName("yyy");
-    Set<Action> actions = new LinkedHashSet<>();
-    return new Store(featureName, actions);
+    Set<ActionGroup> actionGroups = new LinkedHashSet<>();
+    Set<EffectGroup> effectGroups = new LinkedHashSet<>();
+    Set<Model> models = new LinkedHashSet<>();
+    Set<ReducerGroup> reducerGroups = new LinkedHashSet<>();
+
+    return new Store(featureName, actionGroups, effectGroups, models, reducerGroups);
   }
 }

@@ -26,6 +26,8 @@ import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.datatype.DataTypeName;
 import io.polygenesis.core.datatype.PackageName;
 import io.polygenesis.core.iomodel.IoModelGroup;
+import io.polygenesis.representations.commons.FieldRepresentation;
+import io.polygenesis.representations.commons.ParameterRepresentation;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;

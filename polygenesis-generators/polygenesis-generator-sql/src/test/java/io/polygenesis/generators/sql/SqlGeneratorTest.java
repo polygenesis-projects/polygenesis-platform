@@ -34,13 +34,15 @@ public class SqlGeneratorTest {
   private Path generationPath;
   private ScriptExporter scriptExporter;
   private SqlGenerator sqlGenerator;
+  private String tablePrefix;
 
   @Before
   public void setUp() throws Exception {
     generationPath = Paths.get("tmp");
     scriptExporter = mock(ScriptExporter.class);
+    tablePrefix = "pre_";
 
-    sqlGenerator = new SqlGenerator(generationPath, scriptExporter);
+    sqlGenerator = new SqlGenerator(generationPath, scriptExporter, tablePrefix);
   }
 
   @Test

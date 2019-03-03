@@ -21,8 +21,7 @@
 package io.polygenesis.models.reactivestate;
 
 import com.oregor.ddd4j.check.assertion.Assertion;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
+import java.util.Objects;
 
 /**
  * Models a State Management Action.
@@ -31,8 +30,13 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  */
 public class Action {
 
+  // ===============================================================================================
+  // STATE
+  // ===============================================================================================
+
   private ActionType actionType;
   private ActionName name;
+  private Model payloadModel;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -43,10 +47,12 @@ public class Action {
    *
    * @param actionType the action type
    * @param name the name
+   * @param payloadModel the payload model
    */
-  public Action(ActionType actionType, ActionName name) {
+  public Action(ActionType actionType, ActionName name, Model payloadModel) {
     setActionType(actionType);
     setName(name);
+    setPayloadModel(payloadModel);
   }
 
   // ===============================================================================================
@@ -71,17 +77,47 @@ public class Action {
     return name;
   }
 
+  /**
+   * Gets payload model.
+   *
+   * @return the payload model
+   */
+  public Model getPayloadModel() {
+    return payloadModel;
+  }
+
   // ===============================================================================================
   // GUARDS
   // ===============================================================================================
+
+  /**
+   * Sets action type.
+   *
+   * @param actionType the action type
+   */
   private void setActionType(ActionType actionType) {
-    Assertion.isNotNull(actionType, "ActionType is required");
+    Assertion.isNotNull(actionType, "actionType is required");
     this.actionType = actionType;
   }
 
+  /**
+   * Sets name.
+   *
+   * @param name the name
+   */
   private void setName(ActionName name) {
-    Assertion.isNotNull(name, "Name is required");
+    Assertion.isNotNull(name, "name is required");
     this.name = name;
+  }
+
+  /**
+   * Sets payload model.
+   *
+   * @param payloadModel the payload model
+   */
+  private void setPayloadModel(Model payloadModel) {
+    Assertion.isNotNull(payloadModel, "payloadModel is required");
+    this.payloadModel = payloadModel;
   }
 
   // ===============================================================================================
@@ -93,21 +129,17 @@ public class Action {
     if (this == o) {
       return true;
     }
-
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-
     Action action = (Action) o;
-
-    return new EqualsBuilder()
-        .append(actionType, action.actionType)
-        .append(name, action.name)
-        .isEquals();
+    return actionType == action.actionType
+        && Objects.equals(name, action.name)
+        && Objects.equals(payloadModel, action.payloadModel);
   }
 
   @Override
   public int hashCode() {
-    return new HashCodeBuilder(17, 37).append(actionType).append(name).toHashCode();
+    return Objects.hash(actionType, name, payloadModel);
   }
 }

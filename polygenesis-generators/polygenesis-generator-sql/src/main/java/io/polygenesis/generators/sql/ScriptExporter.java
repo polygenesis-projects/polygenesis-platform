@@ -66,12 +66,15 @@ public class ScriptExporter {
    *
    * @param generationPath the generation path
    * @param sqlModelRepository the sql model repository
+   * @param tablePrefix the table prefix
    */
-  public void export(Path generationPath, SqlModelRepository sqlModelRepository) {
+  public void export(
+      Path generationPath, SqlModelRepository sqlModelRepository, String tablePrefix) {
     Map<String, Object> dataModel = new HashMap<>();
-    dataModel.put("representation", scriptRepresentable.create(sqlModelRepository));
     // TODO
-    dataModel.put("tablePrefix", "ddd_");
+    dataModel.put("representation", scriptRepresentable.create(sqlModelRepository));
+    dataModel.put("representation", sqlModelRepository);
+    dataModel.put("tablePrefix", tablePrefix);
 
     freemarkerService.export(
         dataModel,

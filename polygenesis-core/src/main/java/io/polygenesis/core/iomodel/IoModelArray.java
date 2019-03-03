@@ -30,7 +30,6 @@ import io.polygenesis.core.datatype.ClassDataType;
 public class IoModelArray extends IoModelGroup {
 
   private final IoModel arrayElement;
-  private final GenericTypeName genericType;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -44,7 +43,6 @@ public class IoModelArray extends IoModelGroup {
   public IoModelArray(IoModelGroup parent) {
     super(parent);
     this.arrayElement = null;
-    this.genericType = null;
   }
 
   /**
@@ -57,21 +55,17 @@ public class IoModelArray extends IoModelGroup {
   public IoModelArray(IoModel arrayElement, ClassDataType dataType, VariableName variableName) {
     super(dataType, variableName);
     this.arrayElement = arrayElement;
-    this.genericType = null;
   }
 
   /**
    * Instantiates a new Io model array.
    *
-   * @param genericType the generic type
    * @param dataType the data type
    * @param variableName the variable name
    */
-  public IoModelArray(
-      GenericTypeName genericType, ClassDataType dataType, VariableName variableName) {
+  public IoModelArray(ClassDataType dataType, VariableName variableName) {
     super(dataType, variableName);
     this.arrayElement = null;
-    this.genericType = genericType;
   }
 
   /**
@@ -79,19 +73,16 @@ public class IoModelArray extends IoModelGroup {
    *
    * @param parent the parent
    * @param arrayElement the array element
-   * @param genericType the generic type
    * @param dataType the data type
    * @param variableName the variable name
    */
   public IoModelArray(
       IoModelGroup parent,
       IoModel arrayElement,
-      GenericTypeName genericType,
       ClassDataType dataType,
       VariableName variableName) {
     super(parent, dataType, variableName);
     this.arrayElement = arrayElement;
-    this.genericType = genericType;
   }
 
   // ===============================================================================================
@@ -107,12 +98,8 @@ public class IoModelArray extends IoModelGroup {
     return arrayElement;
   }
 
-  /**
-   * Gets generic type.
-   *
-   * @return the generic type
-   */
-  public GenericTypeName getGenericType() {
-    return genericType;
-  }
+  // ===============================================================================================
+  // OVERRIDES
+  // ===============================================================================================
+
 }

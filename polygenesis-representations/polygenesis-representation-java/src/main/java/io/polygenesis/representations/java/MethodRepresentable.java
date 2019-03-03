@@ -20,6 +20,7 @@
 
 package io.polygenesis.representations.java;
 
+import io.polygenesis.representations.commons.ParameterRepresentation;
 import java.util.Set;
 
 /**

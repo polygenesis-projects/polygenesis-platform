@@ -20,6 +20,7 @@
 
 package io.polygenesis.models.api;
 
+import com.oregor.ddd4j.check.assertion.Assertion;
 import io.polygenesis.core.iomodel.IoModel;
 import io.polygenesis.core.iomodel.IoModelArray;
 import io.polygenesis.core.iomodel.IoModelGroup;
@@ -32,6 +33,10 @@ import java.util.Optional;
  * @author Christos Tsakostas
  */
 public class Dto {
+
+  // ===============================================================================================
+  // STATE
+  // ===============================================================================================
 
   private DtoType dtoType;
   private IoModelGroup originatingIoModelGroup;
@@ -100,6 +105,7 @@ public class Dto {
    * @param dtoType the dto type
    */
   private void setDtoType(DtoType dtoType) {
+    Assertion.isNotNull(dtoType, "dtoType is required");
     this.dtoType = dtoType;
   }
 
@@ -109,6 +115,7 @@ public class Dto {
    * @param originatingIoModelGroup the originating io model group
    */
   private void setOriginatingIoModelGroup(IoModelGroup originatingIoModelGroup) {
+    Assertion.isNotNull(originatingIoModelGroup, "originatingIoModelGroup is required");
     this.originatingIoModelGroup = originatingIoModelGroup;
   }
 

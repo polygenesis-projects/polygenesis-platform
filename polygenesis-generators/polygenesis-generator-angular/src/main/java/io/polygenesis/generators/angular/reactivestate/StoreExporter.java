@@ -20,8 +20,18 @@
 
 package io.polygenesis.generators.angular.reactivestate;
 
+import static io.polygenesis.generators.angular.reactivestate.StoreExporterConstants.PATH_ACTIONS;
+import static io.polygenesis.generators.angular.reactivestate.StoreExporterConstants.PATH_MODELS;
+import static io.polygenesis.generators.angular.reactivestate.StoreExporterConstants.PATH_NGRX;
+
+import io.polygenesis.commons.path.PathService;
+import io.polygenesis.commons.text.TextConverter;
+import io.polygenesis.generators.angular.reactivestate.action.ActionGroupExporter;
+import io.polygenesis.generators.angular.reactivestate.action.ActionIndexExporter;
+import io.polygenesis.generators.angular.reactivestate.model.ModelExporter;
 import io.polygenesis.models.reactivestate.Store;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,7 +42,12 @@ import java.util.Map;
  */
 public class StoreExporter {
 
-  private ActionExporter actionExporter;
+  // ===============================================================================================
+  // DEPENDENCIES
+  // ===============================================================================================
+
+  private ActionGroupExporter actionGroupExporter;
+  private ActionIndexExporter actionIndexExporter;
   private ReducerExporter reducerExporter;
   private IndexReducerExporter indexReducerExporter;
   private EffectExporter effectExporter;
@@ -47,7 +62,8 @@ public class StoreExporter {
   /**
    * Instantiates a new Store exporter.
    *
-   * @param actionExporter the action exporter
+   * @param actionGroupExporter the action group exporter
+   * @param actionIndexExporter the action index exporter
    * @param reducerExporter the reducer exporter
    * @param indexReducerExporter the index reducer exporter
    * @param effectExporter the effect exporter
@@ -56,14 +72,16 @@ public class StoreExporter {
    * @param moduleExporter the module exporter
    */
   public StoreExporter(
-      ActionExporter actionExporter,
+      ActionGroupExporter actionGroupExporter,
+      ActionIndexExporter actionIndexExporter,
       ReducerExporter reducerExporter,
       IndexReducerExporter indexReducerExporter,
       EffectExporter effectExporter,
       ServiceExporter serviceExporter,
       ModelExporter modelExporter,
       ModuleExporter moduleExporter) {
-    this.actionExporter = actionExporter;
+    this.actionGroupExporter = actionGroupExporter;
+    this.actionIndexExporter = actionIndexExporter;
     this.reducerExporter = reducerExporter;
     this.indexReducerExporter = indexReducerExporter;
     this.effectExporter = effectExporter;
@@ -86,12 +104,47 @@ public class StoreExporter {
     Map<String, Object> dataModel = new HashMap<>();
     dataModel.put("store", store);
 
-    actionExporter.exportActions(generationPathApp, store, dataModel);
+    Path actionsGenerationPath =
+        Paths.get(
+            generationPathApp.toString(),
+            PATH_NGRX,
+            TextConverter.toLowerHyphen(store.getFeatureName().getText()),
+            PATH_ACTIONS);
+    PathService.ensurePath(actionsGenerationPath);
+
+    store
+        .getActionGroups()
+        .forEach(
+            actionGroup ->
+                actionGroupExporter.exportActionGroup(
+                    actionsGenerationPath, store.getFeatureName(), actionGroup));
+
+    actionIndexExporter.exportActionIndex(actionsGenerationPath, store.getActionGroups());
+
     reducerExporter.exportReducers(generationPathApp, store, dataModel);
     indexReducerExporter.exportIndexReducer(generationPathApp, store, dataModel);
     effectExporter.exportEffects(generationPathApp, store, dataModel);
     serviceExporter.exportService(generationPathApp, store, dataModel);
-    modelExporter.exportModels(generationPathApp, store, dataModel);
+
+    Path modelsPath =
+        Paths.get(
+            generationPathApp.toString(),
+            PATH_NGRX,
+            TextConverter.toLowerHyphen(store.getFeatureName().getText()),
+            PATH_MODELS);
+    PathService.ensurePath(modelsPath);
+
+    store
+        .getModels()
+        .forEach(
+            model -> {
+              if (model.getModel().isIoModelGroup()) {
+                modelExporter.exportModels(modelsPath, model);
+              } else {
+                throw new IllegalArgumentException();
+              }
+            });
+
     moduleExporter.exportModule(generationPathApp, store, dataModel);
   }
 }

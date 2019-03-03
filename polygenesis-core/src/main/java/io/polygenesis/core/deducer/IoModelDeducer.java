@@ -26,7 +26,6 @@ import io.polygenesis.core.datatype.PackageName;
 import io.polygenesis.core.datatype.PrimitiveDataType;
 import io.polygenesis.core.datatype.PrimitiveType;
 import io.polygenesis.core.iomodel.DataBusinessType;
-import io.polygenesis.core.iomodel.GenericTypeName;
 import io.polygenesis.core.iomodel.IoModel;
 import io.polygenesis.core.iomodel.IoModelArray;
 import io.polygenesis.core.iomodel.IoModelGroup;
@@ -72,9 +71,9 @@ public class IoModelDeducer {
   IoModel deduceResponse(RecursiveObject recursiveObject) {
 
     if (recursiveObject.isGenericInterface()) {
+      // TODO: check if recursiveObject.getStrGenericType() plays a role?
       // IoModelArray
       return new IoModelArray(
-          new GenericTypeName(recursiveObject.getStrGenericType()),
           new ClassDataType(
               convertToDataTypeNameFrom(recursiveObject.getStrDataType()),
               convertToPackageName(recursiveObject.getStrDataType())),

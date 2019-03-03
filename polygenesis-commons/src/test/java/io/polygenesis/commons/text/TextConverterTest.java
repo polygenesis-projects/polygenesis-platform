@@ -46,6 +46,7 @@ public class TextConverterTest {
     assertThat(TextConverter.toLowerCamelSpaces(input)).isEqualTo("customer");
     assertThat(TextConverter.toLowerCase(input)).isEqualTo("customer");
     assertThat(TextConverter.toLowerHyphen(input)).isEqualTo("customer");
+    assertThat(TextConverter.toLowerUnderscore(input)).isEqualTo("customer");
 
     assertThat(TextConverter.toUpperCamel(input)).isEqualTo("Customer");
     assertThat(TextConverter.toUpperCamelSpaces(input)).isEqualTo("Customer");
@@ -78,6 +79,7 @@ public class TextConverterTest {
     assertThat(TextConverter.toLowerCamelSpaces(input)).isEqualTo("customer address");
     assertThat(TextConverter.toLowerCase(input)).isEqualTo("customeraddress");
     assertThat(TextConverter.toLowerHyphen(input)).isEqualTo("customer-address");
+    assertThat(TextConverter.toLowerUnderscore(input)).isEqualTo("customer_address");
 
     assertThat(TextConverter.toUpperCamel(input)).isEqualTo("CustomerAddress");
     assertThat(TextConverter.toUpperCamelSpaces(input)).isEqualTo("Customer Address");

@@ -65,9 +65,10 @@ public final class SqlGeneratorFactory {
    * New instance sql generator.
    *
    * @param generationPath the generation path
+   * @param tablePrefix the table prefix
    * @return the sql generator
    */
-  public static SqlGenerator newInstance(Path generationPath) {
-    return new SqlGenerator(generationPath, scriptExporter);
+  public static SqlGenerator newInstance(Path generationPath, String tablePrefix) {
+    return new SqlGenerator(generationPath, scriptExporter, tablePrefix);
   }
 }
