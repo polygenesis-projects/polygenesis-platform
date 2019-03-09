@@ -20,6 +20,8 @@
 
 package io.polygenesis.core.iomodel;
 
+import io.polygenesis.core.datatype.PrimitiveType;
+
 /** @author Christos Tsakostas */
 class TestIoModel extends IoModel {
 
@@ -33,6 +35,6 @@ class TestIoModel extends IoModel {
 
   @Override
   public String getDataType() {
-    return null;
+    return PrimitiveType.STRING.name();
   }
 }

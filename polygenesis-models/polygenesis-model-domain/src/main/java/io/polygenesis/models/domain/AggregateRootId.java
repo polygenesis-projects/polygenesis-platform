@@ -93,9 +93,7 @@ public class AggregateRootId extends AbstractProperty {
 
   @Override
   public KeyValue getAsKeyValue() {
-    return new KeyValue(
-        getIoModelGroup().getDataType(),
-        getVariableName().getText());
+    return new KeyValue(getIoModelGroup().getDataType(), getVariableName().getText());
   }
 
   @Override

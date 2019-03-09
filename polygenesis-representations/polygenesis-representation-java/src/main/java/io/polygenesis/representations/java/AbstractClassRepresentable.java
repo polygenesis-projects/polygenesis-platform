@@ -113,7 +113,6 @@ public abstract class AbstractClassRepresentable<S> implements ClassRepresentabl
         .forEach(
             model -> {
               imports.add(makeCanonicalObjectName(model.getPackageName(), model.getDataType()));
-
             });
 
     return imports;
@@ -158,7 +157,7 @@ public abstract class AbstractClassRepresentable<S> implements ClassRepresentabl
             model -> {
               variables.add(
                   new FieldRepresentation(
-                      fromDataTypeToJavaConverter.getDeclaredVariableType(model),
+                      fromDataTypeToJavaConverter.getDeclaredVariableType(model.getDataType()),
                       model.getVariableName().getText()));
             });
 

@@ -84,12 +84,13 @@ public class ServiceInterfaceRepresentable extends AbstractInterfaceRepresentabl
         .forEach(
             method -> {
               if (method.getFunction().getReturnValue().getModel().isIoModelGroup()) {
-                IoModelGroup ioModelGroup = (IoModelGroup) method.getFunction().getReturnValue()
-                    .getModel();
+                IoModelGroup ioModelGroup =
+                    (IoModelGroup) method.getFunction().getReturnValue().getModel();
 
                 if (!ioModelGroup.getPackageName().equals(source.getPackageName())) {
-                  imports.add(makeCanonicalObjectName(ioModelGroup.getPackageName(),
-                      ioModelGroup.getDataType()));
+                  imports.add(
+                      makeCanonicalObjectName(
+                          ioModelGroup.getPackageName(), ioModelGroup.getDataType()));
                 }
               }
 
@@ -100,12 +101,14 @@ public class ServiceInterfaceRepresentable extends AbstractInterfaceRepresentabl
                   .filter(argument -> argument.getModel().isIoModelGroup())
                   .map(argument -> argument.getModel())
                   .map(IoModelGroup.class::cast)
-                  .forEach(ioModelGroup -> {
-                    if (!ioModelGroup.getPackageName().equals(source.getPackageName())) {
-                      imports.add(makeCanonicalObjectName(ioModelGroup.getPackageName(),
-                          ioModelGroup.getDataType()));
-                    }
-                  });
+                  .forEach(
+                      ioModelGroup -> {
+                        if (!ioModelGroup.getPackageName().equals(source.getPackageName())) {
+                          imports.add(
+                              makeCanonicalObjectName(
+                                  ioModelGroup.getPackageName(), ioModelGroup.getDataType()));
+                        }
+                      });
             });
 
     return imports;

@@ -25,7 +25,6 @@ import static java.util.stream.Collectors.toCollection;
 import io.polygenesis.core.Argument;
 import io.polygenesis.core.Function;
 import io.polygenesis.core.iomodel.DataBusinessType;
-import io.polygenesis.core.iomodel.IoModelArray;
 import io.polygenesis.core.iomodel.IoModelGroup;
 import io.polygenesis.core.iomodel.IoModelPrimitive;
 import java.util.LinkedHashSet;
@@ -161,13 +160,10 @@ public class DtoDeducer {
   private void addDto(Set<Dto> dtos, Dto dto) {
     dtos.add(dto);
 
-    if (dto.getOriginatingIoModelGroup().isIoModelArray()) {
-      IoModelArray ioModelArray = (IoModelArray) dto.getOriginatingIoModelGroup();
-      if (ioModelArray.getArrayElement().isIoModelGroup()) {
-        addDto(
-            dtos,
-            new Dto(DtoType.COLLECTION_RECORD, (IoModelGroup) ioModelArray.getArrayElement()));
-      }
+    if (dto.getArrayElementAsOptional().isPresent()) {
+      addDto(
+          dtos,
+          new Dto(DtoType.COLLECTION_RECORD, (IoModelGroup) dto.getArrayElementAsOptional().get()));
     }
 
     // Add model group children of ioModelGroup recursively
@@ -175,7 +171,9 @@ public class DtoDeducer {
         .getModels()
         .forEach(
             model -> {
-              if (model.isIoModelGroup() || model.isIoModelArray()) {
+              // TODO
+              // if (model.isIoModelGroup() || model.isIoModelArray()) {
+              if (model.isIoModelGroup()) {
                 if (dto.getDtoType().equals(DtoType.API_COLLECTION_REQUEST)
                     || dto.getDtoType().equals(DtoType.API_PAGED_COLLECTION_REQUEST)) {
                   addDto(dtos, new Dto(DtoType.COLLECTION_RECORD, (IoModelGroup) model));

@@ -141,14 +141,10 @@ public class DtoExporterTest {
             new PackageName("com.oregor.microservice.some.shared"));
 
     postalAddress.addIoModelPrimitive(
-        IoModelPrimitive.of(
-            PrimitiveType.STRING,
-            new VariableName("streetAddress1")));
+        IoModelPrimitive.of(PrimitiveType.STRING, new VariableName("streetAddress1")));
 
     postalAddress.addIoModelPrimitive(
-        IoModelPrimitive.of(
-            PrimitiveType.STRING,
-            new VariableName("streetAddress2")));
+        IoModelPrimitive.of(PrimitiveType.STRING, new VariableName("streetAddress2")));
 
     postalAddress.addIoModelPrimitive(
         IoModelPrimitive.of(PrimitiveType.STRING, new VariableName("city")));
@@ -159,9 +155,7 @@ public class DtoExporterTest {
   private Function makeFunctionCreate() {
     Thing thing = new Thing(new ThingName("customer"));
     ReturnValue returnValue =
-        new ReturnValue(
-            IoModelPrimitive.of(
-                PrimitiveType.STRING, new VariableName("someRet")));
+        new ReturnValue(IoModelPrimitive.of(PrimitiveType.STRING, new VariableName("someRet")));
     return new Function(
         thing,
         new Goal(GoalType.CREATE),

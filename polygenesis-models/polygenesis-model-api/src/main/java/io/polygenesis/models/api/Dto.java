@@ -88,11 +88,20 @@ public class Dto {
    * @return the array element as optional
    */
   public Optional<IoModel> getArrayElementAsOptional() {
-    if (getOriginatingIoModelGroup().isIoModelArray()) {
-      return Optional.of(((IoModelArray) getOriginatingIoModelGroup()).getArrayElement());
-    } else {
-      return Optional.empty();
-    }
+    return getOriginatingIoModelGroup()
+        .getModels()
+        .stream()
+        .filter(model -> model.isIoModelArray())
+        .map(IoModelArray.class::cast)
+        .map(ioModelArray -> ioModelArray.getArrayElement())
+        .findFirst();
+
+    // TODO: fix as getOriginatingIoModelGroup() cannot be IoModelArray
+    //    if (getOriginatingIoModelGroup().isIoModelArray()) {
+    //      return Optional.of(((IoModelArray) getOriginatingIoModelGroup()).getArrayElement());
+    //    } else {
+    //      return Optional.empty();
+    //    }
   }
 
   // ===============================================================================================

@@ -71,8 +71,7 @@ public class IoModelDeducer {
     if (recursiveObject.isGenericInterface()) {
       // TODO: check if recursiveObject.getStrGenericType() plays a role?
       // IoModelArray
-      return new IoModelArray(
-          new VariableName(recursiveObject.getStrName()));
+      return new IoModelArray(new VariableName(recursiveObject.getStrName()));
     } else if (!recursiveObject.isCustomObject()) {
       // IoModelPrimitive
       if (recursiveObject.getStrGenericType() != null) {
@@ -116,7 +115,8 @@ public class IoModelDeducer {
               if (childRecursiveObject.getStrGenericType() != null) {
                 IoModelArray modelArray = new IoModelArray();
 
-                fillIoModelGroup(modelArray, childRecursiveObject);
+                // TODO: fillIoModelArray Element
+                // fillIoModelGroup(modelArray, childRecursiveObject);
 
                 modelGroup.addIoModelArray(modelArray);
               } else {

@@ -67,8 +67,7 @@ public class AggregateRootConverterMethodRepresentable
 
     stringBuilder.append("\t\treturn new ");
     stringBuilder.append(
-        TextConverter.toUpperCamel(
-            source.getReturnValue().getAsIoModelGroup().getDataType()));
+        TextConverter.toUpperCamel(source.getReturnValue().getAsIoModelGroup().getDataType()));
     stringBuilder.append("(\n");
 
     stringBuilder.append(

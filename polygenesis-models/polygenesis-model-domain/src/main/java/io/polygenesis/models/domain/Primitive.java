@@ -93,8 +93,6 @@ public class Primitive extends AbstractProperty {
 
   @Override
   public KeyValue getAsKeyValue() {
-    return new KeyValue(
-        getIoModelPrimitive().getDataType(),
-        getVariableName().getText());
+    return new KeyValue(getIoModelPrimitive().getDataType(), getVariableName().getText());
   }
 }

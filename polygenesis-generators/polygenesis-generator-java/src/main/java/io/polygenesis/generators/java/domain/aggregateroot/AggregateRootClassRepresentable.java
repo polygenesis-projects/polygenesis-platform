@@ -78,7 +78,8 @@ public class AggregateRootClassRepresentable extends AbstractClassRepresentable<
 
                   fieldRepresentations.add(
                       new FieldRepresentation(
-                          fromDataTypeToJavaConverter.getDeclaredVariableType(ioModelGroup),
+                          fromDataTypeToJavaConverter.getDeclaredVariableType(
+                              ioModelGroup.getDataType()),
                           ioModelGroup.getVariableName().getText(),
                           makeAnnotationsForValueObject(ioModelGroup)));
                 }
@@ -88,7 +89,7 @@ public class AggregateRootClassRepresentable extends AbstractClassRepresentable<
                   fieldRepresentations.add(
                       new FieldRepresentation(
                           fromDataTypeToJavaConverter.getDeclaredVariableType(
-                              primitive.getIoModelPrimitive()),
+                              primitive.getIoModelPrimitive().getDataType()),
                           primitive.getVariableName().getText()));
                 } else {
                   throw new IllegalStateException(
@@ -149,14 +150,11 @@ public class AggregateRootClassRepresentable extends AbstractClassRepresentable<
                 imports.add("javax.persistence.Column");
 
                 IoModelGroup ioModelGroup = optionalIoModelGroup.get();
-                if (!ioModelGroup
-                    .getPackageName()
-                    .equals(source.getPackageName())) {
+                if (!ioModelGroup.getPackageName().equals(source.getPackageName())) {
                   imports.add(
                       ioModelGroup.getPackageName().getText()
                           + "."
-                          + TextConverter.toUpperCamel(
-                          ioModelGroup.getDataType()));
+                          + TextConverter.toUpperCamel(ioModelGroup.getDataType()));
                 }
               }
             });
@@ -246,13 +244,15 @@ public class AggregateRootClassRepresentable extends AbstractClassRepresentable<
               if (property.getPropertyType().equals(PropertyType.AGGREGATE_ROOT_ID)) {
                 parameterRepresentations.add(
                     new ParameterRepresentation(
-                        property.getAsKeyValue().getKey().toString(),
+                        fromDataTypeToJavaConverter.getDeclaredVariableType(
+                            property.getAsKeyValue().getKey().toString()),
                         property.getAsKeyValue().getValue().toString(),
                         true));
               } else {
                 parameterRepresentations.add(
                     new ParameterRepresentation(
-                        property.getAsKeyValue().getKey().toString(),
+                        fromDataTypeToJavaConverter.getDeclaredVariableType(
+                            property.getAsKeyValue().getKey().toString()),
                         property.getAsKeyValue().getValue().toString()));
               }
             });

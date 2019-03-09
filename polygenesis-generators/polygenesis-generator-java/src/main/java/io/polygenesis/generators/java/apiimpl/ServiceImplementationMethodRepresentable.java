@@ -114,7 +114,8 @@ public class ServiceImplementationMethodRepresentable extends AbstractMethodRepr
             argument -> {
               parameterRepresentations.add(
                   new ParameterRepresentation(
-                      fromDataTypeToJavaConverter.getDeclaredVariableType(argument.getModel()),
+                      fromDataTypeToJavaConverter.getDeclaredVariableType(
+                          argument.getModel().getDataType()),
                       argument.getModel().getVariableName().getText()));
             });
 

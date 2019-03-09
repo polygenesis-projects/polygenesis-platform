@@ -23,7 +23,6 @@ package io.polygenesis.core.iomodel;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.polygenesis.commons.test.AbstractEqualityTest;
-import io.polygenesis.core.datatype.PrimitiveDataType;
 import io.polygenesis.core.datatype.PrimitiveType;
 import java.util.LinkedHashSet;
 import org.junit.Test;
@@ -36,8 +35,7 @@ public class IoModelPrimitiveTest extends AbstractEqualityTest<IoModelPrimitive>
     IoModelPrimitive ioModelPrimitive = createObject1();
 
     assertThat(ioModelPrimitive).isNotNull();
-    assertThat(ioModelPrimitive.getDataType())
-        .isEqualTo(new PrimitiveDataType(PrimitiveType.STRING));
+    assertThat(ioModelPrimitive.getDataType()).isEqualTo(PrimitiveType.STRING.name());
     assertThat(ioModelPrimitive.getVariableName()).isEqualTo(new VariableName("someVariableName"));
 
     assertThat(ioModelPrimitive.getAnnotations()).isNotNull();

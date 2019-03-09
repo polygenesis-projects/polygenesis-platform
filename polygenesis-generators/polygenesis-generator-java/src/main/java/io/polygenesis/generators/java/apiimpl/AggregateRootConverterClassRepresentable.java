@@ -65,7 +65,7 @@ public class AggregateRootConverterClassRepresentable
    *
    * @param fromDataTypeToJavaConverter the from data type to java converter
    * @param aggregateRootConverterMethodRepresentable the aggregate root converter method
-   * representable
+   *     representable
    */
   public AggregateRootConverterClassRepresentable(
       FromDataTypeToJavaConverter fromDataTypeToJavaConverter,
@@ -310,8 +310,7 @@ public class AggregateRootConverterClassRepresentable
 
     IoModelGroup ioModelGroup =
         new IoModelGroup(
-            new ObjectName(aggregateRoot.getName().getText()),
-            aggregateRoot.getPackageName());
+            new ObjectName(aggregateRoot.getName().getText()), aggregateRoot.getPackageName());
 
     aggregateRoot
         .getProperties()
@@ -337,9 +336,7 @@ public class AggregateRootConverterClassRepresentable
         goal,
         new FunctionName(
             String.format(
-                "convertTo%s",
-                TextConverter.toUpperCamel(
-                    returnValue.getModel().getDataType()))),
+                "convertTo%s", TextConverter.toUpperCamel(returnValue.getModel().getDataType()))),
         arguments,
         returnValue);
   }

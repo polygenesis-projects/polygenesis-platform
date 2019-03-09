@@ -95,7 +95,7 @@ public class AnnotationsThingDeducerImplTest {
 
     Thing someThing = optionalSomeThing.get();
 
-    assertThat(someThing.getFunctions().size()).isEqualTo(6);
+    assertThat(someThing.getFunctions().size()).isEqualTo(5);
 
     assertionsForGoalCalculation(someThing);
   }

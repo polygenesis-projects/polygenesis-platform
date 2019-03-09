@@ -109,7 +109,7 @@ public abstract class IoModel {
    * @return the boolean
    */
   public boolean isIoModelGroup() {
-    return this instanceof IoModelGroup && !(this instanceof IoModelArray);
+    return this instanceof IoModelGroup;
   }
 
   /**
@@ -147,8 +147,7 @@ public abstract class IoModel {
       return false;
     }
     IoModel ioModel = (IoModel) o;
-    return dataKind == ioModel.dataKind &&
-        Objects.equals(variableName, ioModel.variableName);
+    return dataKind == ioModel.dataKind && Objects.equals(variableName, ioModel.variableName);
   }
 
   @Override

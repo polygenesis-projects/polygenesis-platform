@@ -48,8 +48,7 @@ public class IoModelPrimitive extends IoModel {
    * @param variableName the variable name
    * @return the io model primitive
    */
-  public static IoModelPrimitive of(PrimitiveType primitiveType,
-      VariableName variableName) {
+  public static IoModelPrimitive of(PrimitiveType primitiveType, VariableName variableName) {
     return new IoModelPrimitive(primitiveType, variableName, null, DataBusinessType.ANY);
   }
 
@@ -62,14 +61,9 @@ public class IoModelPrimitive extends IoModel {
    * @return the io model primitive
    */
   public static IoModelPrimitive ofDataBusinessType(
-      DataBusinessType dataBusinessType,
-      PrimitiveType primitiveType,
-      VariableName variableName) {
+      DataBusinessType dataBusinessType, PrimitiveType primitiveType, VariableName variableName) {
 
-    return new IoModelPrimitive(primitiveType,
-        variableName,
-        null,
-        dataBusinessType);
+    return new IoModelPrimitive(primitiveType, variableName, null, dataBusinessType);
   }
 
   // ===============================================================================================
@@ -84,7 +78,8 @@ public class IoModelPrimitive extends IoModel {
    * @param annotations the annotations
    * @param dataBusinessType the data business type
    */
-  public IoModelPrimitive(PrimitiveType primitiveType,
+  public IoModelPrimitive(
+      PrimitiveType primitiveType,
       VariableName variableName,
       Set<Annotation> annotations,
       DataBusinessType dataBusinessType) {
@@ -97,7 +92,6 @@ public class IoModelPrimitive extends IoModel {
   // ===============================================================================================
   // GETTERS
   // ===============================================================================================
-
 
   /**
    * Gets primitive type.

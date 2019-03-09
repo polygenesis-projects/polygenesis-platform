@@ -99,19 +99,11 @@ public class ActionGroupRepresentable {
                     new LinkedHashSet<>(
                         Arrays.asList(
                             TextConverter.toUpperCamel(
-                                action
-                                    .getPayloadModel()
-                                    .getModel()
-                                    .getDataType()
-                            ))),
+                                action.getPayloadModel().getModel().getDataType()))),
                     String.format(
                         "../models/%s.model",
                         TextConverter.toLowerHyphen(
-                            action
-                                .getPayloadModel()
-                                .getModel()
-                                .getDataType()
-                        )));
+                            action.getPayloadModel().getModel().getDataType())));
               }
             });
 

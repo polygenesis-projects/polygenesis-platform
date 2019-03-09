@@ -79,11 +79,7 @@ public class AggregateEntityExporter {
     return Paths.get(
         generationPath.toString(),
         "src/main/java",
-        aggregateEntity
-            .getIoModelGroup()
-            .getPackageName()
-            .toPath()
-            .toString(),
+        aggregateEntity.getIoModelGroup().getPackageName().toPath().toString(),
         TextConverter.toUpperCamel(aggregateEntity.getVariableName().getText()) + ".java");
   }
 }

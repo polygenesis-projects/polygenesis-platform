@@ -86,7 +86,8 @@ public class FunctionToMethodRepresentationConverter extends AbstractMethodRepre
             argument -> {
               parameterRepresentations.add(
                   new ParameterRepresentation(
-                      fromDataTypeToJavaConverter.getDeclaredVariableType(argument.getModel()),
+                      fromDataTypeToJavaConverter.getDeclaredVariableType(
+                          argument.getModel().getDataType()),
                       argument.getModel().getVariableName().getText()));
             });
 

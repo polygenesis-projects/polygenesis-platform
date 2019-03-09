@@ -24,8 +24,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import io.polygenesis.commons.test.AbstractEqualityTest;
 import io.polygenesis.core.data.ObjectName;
-import io.polygenesis.core.datatype.ClassDataType;
-import io.polygenesis.core.datatype.DataTypeName;
 import io.polygenesis.core.datatype.PackageName;
 import io.polygenesis.core.datatype.PrimitiveType;
 import org.junit.Test;
@@ -42,14 +40,11 @@ public class IoModelGroupTest extends AbstractEqualityTest<IoModelGroup> {
             new VariableName("someVariableName"));
 
     assertThat(ioModelGroup).isNotNull();
-    assertThat(ioModelGroup.getDataType())
-        .isEqualTo(new ClassDataType(new DataTypeName("SomeClass"), new PackageName("com.dummy")));
+    assertThat(ioModelGroup.getDataType()).isEqualTo(new ObjectName("SomeClass").getText());
     assertThat(ioModelGroup.getVariableName()).isEqualTo(new VariableName("someVariableName"));
 
     IoModelArray childIoModelArray =
-        new IoModelArray(
-            ioModelGroup,
-            new VariableName("someVariableName"));
+        new IoModelArray(new VariableName("someVariableName"), ioModelGroup);
     ioModelGroup.addIoModelArray(childIoModelArray);
 
     IoModelGroup childIoModelGroup =
@@ -61,10 +56,7 @@ public class IoModelGroupTest extends AbstractEqualityTest<IoModelGroup> {
 
     IoModelPrimitive childIoModelPrimitive =
         new IoModelPrimitive(
-            PrimitiveType.STRING,
-            new VariableName("someVariableName"),
-            null,
-            DataBusinessType.ANY);
+            PrimitiveType.STRING, new VariableName("someVariableName"), null, DataBusinessType.ANY);
     ioModelGroup.addIoModelPrimitive(childIoModelPrimitive);
 
     assertThat(ioModelGroup.getModels().size()).isEqualTo(3);

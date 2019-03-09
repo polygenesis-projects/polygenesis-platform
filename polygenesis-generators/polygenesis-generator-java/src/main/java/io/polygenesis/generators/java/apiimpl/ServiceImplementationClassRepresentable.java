@@ -221,8 +221,8 @@ public class ServiceImplementationClassRepresentable
         .forEach(
             property -> {
               if (property.getPropertyType().equals(PropertyType.VALUE_OBJECT)) {
-                IoModelGroup modelGroup = property.getIoModelGroupAsOptional()
-                    .orElseThrow(IllegalAccessError::new);
+                IoModelGroup modelGroup =
+                    property.getIoModelGroupAsOptional().orElseThrow(IllegalAccessError::new);
 
                 if (modelGroup.getPackageName().equals(aggregateRoot.getPackageName())) {
                   imports.add(

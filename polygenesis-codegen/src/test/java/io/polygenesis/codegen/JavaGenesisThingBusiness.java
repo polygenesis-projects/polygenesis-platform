@@ -63,9 +63,7 @@ public class JavaGenesisThingBusiness {
 
     // ARGUMENT - NAME
     argumentIoModelGroup.addIoModelPrimitive(
-        IoModelPrimitive.of(
-            PrimitiveType.STRING,
-            new VariableName("name")));
+        IoModelPrimitive.of(PrimitiveType.STRING, new VariableName("name")));
 
     // ARGUMENT - POSTAL ADDRESS
     argumentIoModelGroup.addIoModelGroup(postalAddress());
@@ -79,9 +77,7 @@ public class JavaGenesisThingBusiness {
     // RETURN VALUE - BUSINESSID
     returnValueIoModelGroup.addIoModelPrimitive(
         IoModelPrimitive.ofDataBusinessType(
-            DataBusinessType.THING_IDENTITY,
-            PrimitiveType.STRING,
-            new VariableName("businessId")));
+            DataBusinessType.THING_IDENTITY, PrimitiveType.STRING, new VariableName("businessId")));
 
     return new Function(
         business,
@@ -105,9 +101,7 @@ public class JavaGenesisThingBusiness {
     // ARGUMENT - BusinessID
     argumentIoModelGroup.addIoModelPrimitive(
         IoModelPrimitive.ofDataBusinessType(
-            DataBusinessType.THING_IDENTITY,
-            PrimitiveType.STRING,
-            new VariableName("businessId")));
+            DataBusinessType.THING_IDENTITY, PrimitiveType.STRING, new VariableName("businessId")));
 
     // RETURN VALUE
     IoModelGroup returnValueIoModelGroup =
@@ -135,14 +129,10 @@ public class JavaGenesisThingBusiness {
             new PackageName("com.oregor.microservice.account.shared"));
 
     postalAddress.addIoModelPrimitive(
-        IoModelPrimitive.of(
-            PrimitiveType.STRING,
-            new VariableName("streetAddress1")));
+        IoModelPrimitive.of(PrimitiveType.STRING, new VariableName("streetAddress1")));
 
     postalAddress.addIoModelPrimitive(
-        IoModelPrimitive.of(
-            PrimitiveType.STRING,
-            new VariableName("streetAddress2")));
+        IoModelPrimitive.of(PrimitiveType.STRING, new VariableName("streetAddress2")));
 
     postalAddress.addIoModelPrimitive(
         IoModelPrimitive.of(PrimitiveType.STRING, new VariableName("city")));

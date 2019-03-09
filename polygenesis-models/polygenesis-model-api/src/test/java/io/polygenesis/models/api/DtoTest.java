@@ -41,8 +41,7 @@ public class DtoTest extends AbstractEqualityTest<Dto> {
     assertThat(dto).isNotNull();
     assertThat(dto.getOriginatingIoModelGroup()).isNotNull();
     assertThat(dto.getOriginatingIoModelGroup())
-        .isEqualTo(
-            new IoModelGroup(new ObjectName("asd"), new PackageName("com.oregor")));
+        .isEqualTo(new IoModelGroup(new ObjectName("asd"), new PackageName("com.oregor")));
   }
 
   @Override

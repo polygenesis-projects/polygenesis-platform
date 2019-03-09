@@ -27,7 +27,7 @@ import java.util.Objects;
  *
  * @author Christos Tsakostas
  */
-public class IoModelArray extends IoModelGroup {
+public class IoModelArray extends IoModel {
 
   private final IoModel arrayElement;
 
@@ -35,11 +35,18 @@ public class IoModelArray extends IoModelGroup {
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
+  /** Instantiates a new Io model array. */
+  public IoModelArray() {
+    this(null, null);
+  }
+
   /**
    * Instantiates a new Io model array.
+   *
+   * @param arrayElement the array element
    */
-  public IoModelArray() {
-    this.arrayElement = null;
+  public IoModelArray(IoModel arrayElement) {
+    this(null, arrayElement);
   }
 
   /**
@@ -48,19 +55,17 @@ public class IoModelArray extends IoModelGroup {
    * @param variableName the variable name
    */
   public IoModelArray(VariableName variableName) {
-    super(variableName);
-    this.arrayElement = null;
+    this(variableName, null);
   }
 
   /**
    * Instantiates a new Io model array.
    *
-   * @param arrayElement the array element
    * @param variableName the variable name
+   * @param arrayElement the array element
    */
-  public IoModelArray(IoModel arrayElement,
-      VariableName variableName) {
-    super(variableName);
+  public IoModelArray(VariableName variableName, IoModel arrayElement) {
+    super(DataKind.ARRAY, variableName);
     this.arrayElement = arrayElement;
   }
 
@@ -83,7 +88,7 @@ public class IoModelArray extends IoModelGroup {
 
   @Override
   public String getDataType() {
-    return "ARRAY";
+    return DataKind.ARRAY.name();
   }
 
   // ===============================================================================================

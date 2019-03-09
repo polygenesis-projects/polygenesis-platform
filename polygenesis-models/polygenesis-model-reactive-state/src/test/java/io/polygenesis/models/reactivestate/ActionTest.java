@@ -37,8 +37,7 @@ public class ActionTest extends AbstractEqualityTest<Action> {
         new Action(
             ActionType.SUBMIT,
             new ActionName("xxx"),
-            new Model(
-                IoModelPrimitive.of(PrimitiveType.STRING, new VariableName("name"))));
+            new Model(IoModelPrimitive.of(PrimitiveType.STRING, new VariableName("name"))));
 
     assertThat(action).isNotNull();
     assertThat(action.getActionType()).isEqualTo(ActionType.SUBMIT);
@@ -50,8 +49,7 @@ public class ActionTest extends AbstractEqualityTest<Action> {
     return new Action(
         ActionType.SUBMIT,
         new ActionName("xxx"),
-        new Model(
-            IoModelPrimitive.of(PrimitiveType.STRING, new VariableName("name"))));
+        new Model(IoModelPrimitive.of(PrimitiveType.STRING, new VariableName("name"))));
   }
 
   @Override
@@ -59,7 +57,6 @@ public class ActionTest extends AbstractEqualityTest<Action> {
     return new Action(
         ActionType.RESET,
         new ActionName("xxx"),
-        new Model(
-            IoModelPrimitive.of(PrimitiveType.STRING, new VariableName("name"))));
+        new Model(IoModelPrimitive.of(PrimitiveType.STRING, new VariableName("name"))));
   }
 }

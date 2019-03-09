@@ -44,9 +44,7 @@ public class IoModelGroup extends IoModel {
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
-  /**
-   * Instantiates a new Io model group.
-   */
+  /** Instantiates a new Io model group. */
   public IoModelGroup() {
     this(null, null, null, new LinkedHashSet<>());
   }
@@ -81,7 +79,8 @@ public class IoModelGroup extends IoModel {
     this(objectName, packageName, variableName, new LinkedHashSet<>());
   }
 
-  private IoModelGroup(ObjectName objectName,
+  private IoModelGroup(
+      ObjectName objectName,
       PackageName packageName,
       VariableName variableName,
       Set<IoModel> models) {
@@ -104,7 +103,6 @@ public class IoModelGroup extends IoModel {
   public IoModelGroup withNewObjectName(ObjectName objectName) {
     return new IoModelGroup(objectName, getPackageName(), getVariableName(), getModels());
   }
-
 
   /**
    * With new variable name io model group.
@@ -179,6 +177,10 @@ public class IoModelGroup extends IoModel {
               ((IoModelPrimitive) model).getDataBusinessType());
 
       models.add(ioModelPrimitive);
+    } else if (model.isIoModelArray()) {
+      IoModelArray ioModelArray =
+          new IoModelArray(model.getVariableName(), ((IoModelArray) model).getArrayElement());
+      models.add(ioModelArray);
     } else {
       throw new UnsupportedOperationException();
     }
@@ -240,13 +242,12 @@ public class IoModelGroup extends IoModel {
       return false;
     }
     IoModelGroup that = (IoModelGroup) o;
-    return Objects.equals(objectName, that.objectName) &&
-        Objects.equals(packageName, that.packageName) &&
-        Objects.equals(models, that.models);
+    return Objects.equals(objectName, that.objectName)
+        && Objects.equals(packageName, that.packageName);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(super.hashCode(), objectName, packageName, models);
+    return Objects.hash(super.hashCode(), objectName, packageName);
   }
 }

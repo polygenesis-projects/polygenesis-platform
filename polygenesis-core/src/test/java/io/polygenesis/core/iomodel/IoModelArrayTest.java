@@ -22,9 +22,6 @@ package io.polygenesis.core.iomodel;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.polygenesis.core.datatype.ClassDataType;
-import io.polygenesis.core.datatype.DataTypeName;
-import io.polygenesis.core.datatype.PackageName;
 import org.junit.Test;
 
 /** @author Christos Tsakostas */
@@ -32,12 +29,10 @@ public class IoModelArrayTest {
 
   @Test
   public void shouldInitializeIoModelArray() {
-    IoModelArray ioModelArray =
-        new IoModelArray(new VariableName("someVariableName"));
+    IoModelArray ioModelArray = new IoModelArray(new VariableName("someVariableName"));
 
     assertThat(ioModelArray).isNotNull();
-    assertThat(ioModelArray.getDataType())
-        .isEqualTo(new ClassDataType(new DataTypeName("SomeClass"), new PackageName("com.dummy")));
+    assertThat(ioModelArray.getDataType()).isEqualTo(DataKind.ARRAY.name());
     assertThat(ioModelArray.getVariableName()).isEqualTo(new VariableName("someVariableName"));
   }
 }

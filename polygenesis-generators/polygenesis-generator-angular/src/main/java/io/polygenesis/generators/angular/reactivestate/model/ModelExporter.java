@@ -94,8 +94,6 @@ public class ModelExporter {
    */
   private String makeModelFileName(Model model) {
     return String.format(
-        "%s.%s",
-        TextConverter.toLowerHyphen(model.getModel().getDataType()),
-        POSTFIX_MODEL_TS);
+        "%s.%s", TextConverter.toLowerHyphen(model.getModel().getDataType()), POSTFIX_MODEL_TS);
   }
 }

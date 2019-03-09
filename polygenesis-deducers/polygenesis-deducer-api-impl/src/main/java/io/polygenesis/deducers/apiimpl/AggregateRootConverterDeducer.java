@@ -86,6 +86,7 @@ public class AggregateRootConverterDeducer {
       Set<ValueObjectFromDto> valueObjectFromDtos,
       AggregateRoot aggregateRoot,
       Set<Service> services) {
+
     aggregateRoot
         .getProperties()
         .forEach(
@@ -166,6 +167,9 @@ public class AggregateRootConverterDeducer {
         .stream()
         .filter(dto -> dto.getOriginatingIoModelGroup().equals(ioModelGroup))
         .findFirst()
-        .orElseThrow(IllegalArgumentException::new);
+        .orElseThrow(
+            () ->
+                new IllegalArgumentException(
+                    String.format("Cannot find %s in Service DTOs", ioModelGroup.getDataType())));
   }
 }

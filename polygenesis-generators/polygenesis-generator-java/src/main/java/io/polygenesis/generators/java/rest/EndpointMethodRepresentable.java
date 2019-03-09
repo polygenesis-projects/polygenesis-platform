@@ -107,16 +107,18 @@ public class EndpointMethodRepresentable extends AbstractMethodRepresentable<End
             argument -> {
               if (argument.getModel().isIoModelGroup()
                   && (source.getFunction().getGoal().isCreate()
-                  || source.getFunction().getGoal().isModify())) {
+                      || source.getFunction().getGoal().isModify())) {
                 parameterRepresentations.add(
                     new ParameterRepresentation(
-                        fromDataTypeToJavaConverter.getDeclaredVariableType(argument.getModel()),
+                        fromDataTypeToJavaConverter.getDeclaredVariableType(
+                            argument.getModel().getDataType()),
                         argument.getModel().getVariableName().getText(),
                         new LinkedHashSet<>(Arrays.asList("@RequestBody"))));
               } else {
                 parameterRepresentations.add(
                     new ParameterRepresentation(
-                        fromDataTypeToJavaConverter.getDeclaredVariableType(argument.getModel()),
+                        fromDataTypeToJavaConverter.getDeclaredVariableType(
+                            argument.getModel().getDataType()),
                         argument.getModel().getVariableName().getText()));
               }
             });

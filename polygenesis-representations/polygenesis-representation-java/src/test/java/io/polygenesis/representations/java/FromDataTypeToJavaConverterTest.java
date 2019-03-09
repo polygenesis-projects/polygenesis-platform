@@ -34,16 +34,13 @@ public class FromDataTypeToJavaConverterTest {
 
   @Test
   public void shouldGetCorrectDeclaredVariableType() {
-    IoModelPrimitive model =
-        IoModelPrimitive.of(PrimitiveType.INTEGER, new VariableName("var"));
-    assertThat(converter.getDeclaredVariableType(model)).isEqualTo("Integer");
+    IoModelPrimitive model = IoModelPrimitive.of(PrimitiveType.INTEGER, new VariableName("var"));
+    assertThat(converter.getDeclaredVariableType(model.getDataType())).isEqualTo("Integer");
 
-    model =
-        IoModelPrimitive.of(PrimitiveType.STRING, new VariableName("var"));
-    assertThat(converter.getDeclaredVariableType(model)).isEqualTo("String");
+    model = IoModelPrimitive.of(PrimitiveType.STRING, new VariableName("var"));
+    assertThat(converter.getDeclaredVariableType(model.getDataType())).isEqualTo("String");
 
-    model =
-        IoModelPrimitive.of(PrimitiveType.BOOLEAN, new VariableName("var"));
-    assertThat(converter.getDeclaredVariableType(model)).isEqualTo("Boolean");
+    model = IoModelPrimitive.of(PrimitiveType.BOOLEAN, new VariableName("var"));
+    assertThat(converter.getDeclaredVariableType(model.getDataType())).isEqualTo("Boolean");
   }
 }

@@ -67,8 +67,7 @@ public class ModelRepresentable {
    */
   public ModelRepresentation create(Model model) {
     return new ModelRepresentation(
-        TextConverter.toUpperCamel(model.getModel().getDataType()),
-        fieldRepresentations(model));
+        TextConverter.toUpperCamel(model.getModel().getDataType()), fieldRepresentations(model));
   }
 
   // ===============================================================================================

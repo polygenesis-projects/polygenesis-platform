@@ -21,7 +21,6 @@
 package io.polygenesis.representations.java;
 
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.datatype.DataTypeName;
 import io.polygenesis.core.datatype.PackageName;
 
 /**

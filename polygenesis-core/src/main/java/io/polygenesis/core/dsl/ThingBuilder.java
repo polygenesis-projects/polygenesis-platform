@@ -299,15 +299,11 @@ public class ThingBuilder {
 
     argumentIoModelGroup.addIoModelPrimitive(
         IoModelPrimitive.ofDataBusinessType(
-            DataBusinessType.PAGE_NUMBER,
-            PrimitiveType.INTEGER,
-            new VariableName("pageNumber")));
+            DataBusinessType.PAGE_NUMBER, PrimitiveType.INTEGER, new VariableName("pageNumber")));
 
     argumentIoModelGroup.addIoModelPrimitive(
         IoModelPrimitive.ofDataBusinessType(
-            DataBusinessType.PAGE_SIZE,
-            PrimitiveType.INTEGER,
-            new VariableName("pageSize")));
+            DataBusinessType.PAGE_SIZE, PrimitiveType.INTEGER, new VariableName("pageSize")));
 
     // ---------------------------------------------------------------------------------------------
     // RETURN VALUE
@@ -326,10 +322,12 @@ public class ThingBuilder {
         String.format(
             "Fetch%sCollectionResponse", TextConverter.toUpperCamel(thing.getName().getText()));
 
-    IoModelArray returnValueIoModelGroup =
-        new IoModelArray(
-            arrayElement,
-            new VariableName(arrayDataTypeAndVariableName));
+    IoModelArray ioModelArray = new IoModelArray(new VariableName("someArray"), arrayElement);
+
+    IoModelGroup ioModelGroupReturnValue =
+        new IoModelGroup(new ObjectName(arrayDataTypeAndVariableName), this.packageName);
+
+    ioModelGroupReturnValue.addIoModel(ioModelArray);
 
     // ---------------------------------------------------------------------------------------------
     // FUNCTION
@@ -341,7 +339,7 @@ public class ThingBuilder {
             new Goal(GoalType.FETCH_PAGED_COLLECTION),
             new FunctionName("fetchCollection"),
             new LinkedHashSet<>(Arrays.asList(new Argument(argumentIoModelGroup))),
-            new ReturnValue(returnValueIoModelGroup));
+            new ReturnValue(ioModelGroupReturnValue));
 
     this.thing.appendFunction(function);
     return this;

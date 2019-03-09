@@ -23,7 +23,6 @@ package io.polygenesis.generators.java.api;
 import com.oregor.ddd4j.check.assertion.Assertion;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.iomodel.IoModel;
-import io.polygenesis.core.iomodel.IoModelArray;
 import io.polygenesis.core.iomodel.IoModelGroup;
 import io.polygenesis.models.api.Dto;
 import io.polygenesis.models.api.DtoType;
@@ -98,10 +97,13 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
         .getModels()
         .forEach(
             model -> {
-              fieldRepresentations.add(
-                  new FieldRepresentation(
-                      fromDataTypeToJavaConverter.getDeclaredVariableType(model),
-                      model.getVariableName().getText()));
+              // TODO: fix handling of arrays
+              if (!model.isIoModelArray()) {
+                fieldRepresentations.add(
+                    new FieldRepresentation(
+                        fromDataTypeToJavaConverter.getDeclaredVariableType(model.getDataType()),
+                        model.getVariableName().getText()));
+              }
             });
 
     return fieldRepresentations;
@@ -116,8 +118,7 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
     // ---------------------------------------------------------------------------------------------
     constructorRepresentations.add(
         createConstructorWithSetters(
-            source.getOriginatingIoModelGroup().getDataType(),
-            new LinkedHashSet<>()));
+            source.getOriginatingIoModelGroup().getDataType(), new LinkedHashSet<>()));
 
     // ---------------------------------------------------------------------------------------------
     // Create constructor with parameters
@@ -126,8 +127,7 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
 
     constructorRepresentations.add(
         createConstructorWithSettersFromFieldRepresentations(
-            source.getOriginatingIoModelGroup().getDataType(),
-            fieldRepresentations));
+            source.getOriginatingIoModelGroup().getDataType(), fieldRepresentations));
 
     // ---------------------------------------------------------------------------------------------
     // Create constructor for collection response
@@ -149,16 +149,17 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
   @Override
   public String packageName(Dto source, Object... args) {
     // TODO: source.getOriginatingIoModelGroup() should not be IoMoDelArray
-    if(source.getOriginatingIoModelGroup().getPackageName() == null) {
+    if (source.getOriginatingIoModelGroup().getPackageName() == null) {
       return null;
     }
 
-    Assertion.isNotNull(source.getOriginatingIoModelGroup(), "source.getOriginatingIoModelGroup() is required");
-    Assertion.isNotNull(source.getOriginatingIoModelGroup().getPackageName(), "source.getOriginatingIoModelGroup().getPackageName() is required");
+    Assertion.isNotNull(
+        source.getOriginatingIoModelGroup(), "source.getOriginatingIoModelGroup() is required");
+    Assertion.isNotNull(
+        source.getOriginatingIoModelGroup().getPackageName(),
+        "source.getOriginatingIoModelGroup().getPackageName() is required");
 
-    return source
-        .getOriginatingIoModelGroup()
-        .getPackageName().getText();
+    return source.getOriginatingIoModelGroup().getPackageName().getText();
   }
 
   @Override
@@ -182,12 +183,12 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
         .map(IoModelGroup.class::cast)
         .forEach(
             ioModelGroup -> {
-              if (!ioModelGroup.getPackageName()
+              if (!ioModelGroup
+                  .getPackageName()
                   .equals(source.getOriginatingIoModelGroup().getPackageName())) {
                 imports.add(
                     makeCanonicalObjectName(
                         ioModelGroup.getPackageName(), ioModelGroup.getDataType()));
-
               }
             });
 
@@ -206,8 +207,7 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
     stringBuilder.append("The ");
 
     stringBuilder.append(
-        TextConverter.toUpperCamelSpaces(
-            source.getOriginatingIoModelGroup().getDataType()));
+        TextConverter.toUpperCamelSpaces(source.getOriginatingIoModelGroup().getDataType()));
 
     stringBuilder.append(".");
 
@@ -224,8 +224,7 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
     StringBuilder stringBuilder = new StringBuilder();
 
     stringBuilder.append(
-        TextConverter.toUpperCamel(
-            source.getOriginatingIoModelGroup().getDataType()));
+        TextConverter.toUpperCamel(source.getOriginatingIoModelGroup().getDataType()));
 
     return stringBuilder.toString();
   }
@@ -241,14 +240,13 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
 
       if (source.getDtoType().equals(DtoType.API_COLLECTION_RESPONSE)
           || source.getDtoType().equals(DtoType.API_PAGED_COLLECTION_RESPONSE)) {
-        if (source.getOriginatingIoModelGroup().isIoModelArray()) {
+        if (source.getArrayElementAsOptional().isPresent()) {
+
           stringBuilder.append("<");
+
           stringBuilder.append(
-              TextConverter.toUpperCamel(
-                  ((IoModelArray) source.getOriginatingIoModelGroup())
-                      .getArrayElement()
-                      .getDataType()
-              ));
+              TextConverter.toUpperCamel(source.getArrayElementAsOptional().get().getDataType()));
+
           stringBuilder.append(">");
         } else {
           throw new IllegalArgumentException();
@@ -274,9 +272,7 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
 
     parameterRepresentations.add(
         new ParameterRepresentation(
-            String.format(
-                "List<%s>",
-                TextConverter.toUpperCamel(arrayElement.getDataType())),
+            String.format("List<%s>", TextConverter.toUpperCamel(arrayElement.getDataType())),
             "items"));
 
     parameterRepresentations.add(new ParameterRepresentation("Integer", "totalPages"));
@@ -290,8 +286,7 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
     String description =
         String.format(
             "Instantiates a new %s.",
-            TextConverter.toUpperCamelSpaces(
-                source.getOriginatingIoModelGroup().getDataType()));
+            TextConverter.toUpperCamelSpaces(source.getOriginatingIoModelGroup().getDataType()));
 
     return new ConstructorRepresentation(
         new LinkedHashSet<>(),

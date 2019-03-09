@@ -25,7 +25,6 @@ import io.polygenesis.annotations.core.GoalType;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.FunctionName;
 import io.polygenesis.core.Thing;
-import io.polygenesis.core.datatype.PrimitiveDataType;
 import io.polygenesis.core.datatype.PrimitiveType;
 import io.polygenesis.core.iomodel.IoModelPrimitive;
 import io.polygenesis.core.iomodel.VariableName;
@@ -101,8 +100,7 @@ public class ActionGroupDeducer {
                               ActionType.ON_FAILURE,
                               new Model(
                                   IoModelPrimitive.of(
-                                      PrimitiveType.STRING,
-                                      new VariableName("errorMessage")))));
+                                      PrimitiveType.STRING, new VariableName("errorMessage")))));
 
                       actionGroups.add(
                           new ActionGroup(
