@@ -20,10 +20,13 @@
 
 package io.polygenesis.models.domain;
 
+import com.oregor.ddd4j.check.assertion.Assertion;
 import io.polygenesis.commons.keyvalue.KeyValue;
 import io.polygenesis.core.data.IoModel;
 import io.polygenesis.core.data.IoModelGroup;
+import io.polygenesis.core.data.PrimitiveType;
 import io.polygenesis.core.data.VariableName;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -34,16 +37,74 @@ import java.util.Optional;
 public class PrimitiveCollection extends AbstractProperty {
 
   // ===============================================================================================
+  // STATE
+  // ===============================================================================================
+
+  private IoModel originatingIoModel;
+  private PrimitiveType primitiveType;
+
+  // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
    * Instantiates a new Primitive collection.
    *
+   * @param originatingIoModel the originating io model
    * @param variableName the variable name
+   * @param primitiveType the primitive type
    */
-  public PrimitiveCollection(VariableName variableName) {
+  public PrimitiveCollection(
+      IoModel originatingIoModel, VariableName variableName, PrimitiveType primitiveType) {
     super(PropertyType.PRIMITIVE_COLLECTION, variableName);
+    setOriginatingIoModel(originatingIoModel);
+    setPrimitiveType(primitiveType);
+  }
+
+  // ===============================================================================================
+  // GETTERS
+  // ===============================================================================================
+
+  /**
+   * Gets originating io model.
+   *
+   * @return the originating io model
+   */
+  public IoModel getOriginatingIoModel() {
+    return originatingIoModel;
+  }
+
+  /**
+   * Gets primitive type.
+   *
+   * @return the primitive type
+   */
+  public PrimitiveType getPrimitiveType() {
+    return primitiveType;
+  }
+
+  // ===============================================================================================
+  // GUARDS
+  // ===============================================================================================
+
+  /**
+   * Sets originating io model.
+   *
+   * @param originatingIoModel the originating io model
+   */
+  public void setOriginatingIoModel(IoModel originatingIoModel) {
+    Assertion.isNotNull(originatingIoModel, "originatingIoModel is required");
+    this.originatingIoModel = originatingIoModel;
+  }
+
+  /**
+   * Sets primitive type.
+   *
+   * @param primitiveType the primitive type
+   */
+  private void setPrimitiveType(PrimitiveType primitiveType) {
+    Assertion.isNotNull(primitiveType, "primitiveType is required");
+    this.primitiveType = primitiveType;
   }
 
   // ===============================================================================================
@@ -57,11 +118,29 @@ public class PrimitiveCollection extends AbstractProperty {
 
   @Override
   public IoModel getIoModel() {
-    throw new UnsupportedOperationException();
+    return getOriginatingIoModel();
   }
 
   @Override
   public KeyValue getAsKeyValue() {
-    throw new UnsupportedOperationException();
+    // TODO
+    return new KeyValue("List<String>", getVariableName().getText());
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    PrimitiveCollection that = (PrimitiveCollection) o;
+    return primitiveType == that.primitiveType;
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(primitiveType);
   }
 }

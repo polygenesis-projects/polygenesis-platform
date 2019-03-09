@@ -25,6 +25,7 @@ import io.polygenesis.core.Thing;
 import io.polygenesis.core.data.DataBusinessType;
 import io.polygenesis.core.data.DataKind;
 import io.polygenesis.core.data.IoModel;
+import io.polygenesis.core.data.IoModelArray;
 import io.polygenesis.core.data.IoModelGroup;
 import io.polygenesis.core.data.IoModelPrimitive;
 import io.polygenesis.core.data.ObjectName;
@@ -105,6 +106,15 @@ public class AggregateRootPropertyDeducer {
 
   private AbstractProperty makeAbstractProperty(IoModel model) {
     switch (model.getDataKind()) {
+      case ARRAY:
+        IoModelArray ioModelArray = (IoModelArray) model;
+        if (ioModelArray.getArrayElement().isPrimitive()) {
+          return makePrimitiveCollection(ioModelArray);
+        } else if (ioModelArray.getArrayElement().isIoModelGroup()) {
+          return makeValueObjectCollection(ioModelArray);
+        } else {
+          throw new IllegalArgumentException();
+        }
       case OBJECT:
         IoModelGroup originatingIoModelGroup = (IoModelGroup) model;
 
@@ -122,18 +132,24 @@ public class AggregateRootPropertyDeducer {
       case PRIMITIVE:
         return new Primitive((IoModelPrimitive) model, model.getVariableName());
       default:
-        throw new IllegalStateException();
+        throw new IllegalStateException(
+            String.format("Cannot make AbstractProperty for %s", model.getDataKind()));
     }
   }
 
-  private String makeValueObjectVariableName(VariableName variableName) {
-    String text = variableName.getText();
+  // ===============================================================================================
+  // MAKE PROPERTIES
+  // ===============================================================================================
 
-    if (text.toLowerCase().endsWith("dto")) {
-      return text.substring(0, text.length() - 3);
-    } else {
-      return text;
-    }
+  protected PrimitiveCollection makePrimitiveCollection(IoModelArray ioModelArray) {
+    return new PrimitiveCollection(
+        ioModelArray.getArrayElement(),
+        ioModelArray.getArrayElement().getVariableName(),
+        ((IoModelPrimitive) ioModelArray.getArrayElement()).getPrimitiveType());
+  }
+
+  protected ValueObjectCollection makeValueObjectCollection(IoModelArray ioModelArray) {
+    throw new UnsupportedOperationException();
   }
 
   private AggregateRootId makeAggregateRootId(Function function, PackageName rootPackageName) {
@@ -149,6 +165,24 @@ public class AggregateRootPropertyDeducer {
     return new AggregateRootId(
         ioModelGroup, new VariableName(function.getThing().getName().getText() + "Id"));
   }
+
+  // ===============================================================================================
+  // HELPER
+  // ===============================================================================================
+
+  private String makeValueObjectVariableName(VariableName variableName) {
+    String text = variableName.getText();
+
+    if (text.toLowerCase().endsWith("dto")) {
+      return text.substring(0, text.length() - 3);
+    } else {
+      return text;
+    }
+  }
+
+  // ===============================================================================================
+  // QUERIES
+  // ===============================================================================================
 
   private boolean isPropertyThingIdentity(IoModel model) {
     if (model.getDataKind().equals(DataKind.PRIMITIVE)

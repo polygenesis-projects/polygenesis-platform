@@ -21,29 +21,26 @@
 package io.polygenesis.core.dsl;
 
 import io.polygenesis.core.data.IoModel;
-import io.polygenesis.core.data.IoModelGroup;
-import io.polygenesis.core.data.ObjectName;
-import io.polygenesis.core.data.PackageName;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import io.polygenesis.core.data.IoModelArray;
+import io.polygenesis.core.data.VariableName;
 
 /**
- * The type Data group builder.
+ * The type Data array builder.
  *
  * @author Christos Tsakostas
  */
-public class DataGroupBuilder {
+public class DataArrayBuilder {
 
   private final String name;
-  private final Set<IoModel> models;
+  private final IoModel arrayElement;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
-  private DataGroupBuilder(String name) {
-    this.name = name;
-    this.models = new LinkedHashSet<>();
+  private DataArrayBuilder(String arrayName, IoModel arrayElement) {
+    this.name = arrayName;
+    this.arrayElement = arrayElement;
   }
 
   // ===============================================================================================
@@ -51,28 +48,14 @@ public class DataGroupBuilder {
   // ===============================================================================================
 
   /**
-   * Create group data builder.
+   * Create data array builder.
    *
-   * @param groupName the group name
-   * @return the data builder
+   * @param arrayName the array name
+   * @param arrayElement the array element
+   * @return the data array builder
    */
-  public static DataGroupBuilder create(String groupName) {
-    return new DataGroupBuilder(groupName);
-  }
-
-  // ===============================================================================================
-  // WITH
-  // ===============================================================================================
-
-  /**
-   * With group data data group builder.
-   *
-   * @param models the models
-   * @return the data group builder
-   */
-  public final DataGroupBuilder withGroupData(Set<IoModel> models) {
-    this.models.addAll(models);
-    return this;
+  public static DataArrayBuilder create(String arrayName, IoModel arrayElement) {
+    return new DataArrayBuilder(arrayName, arrayElement);
   }
 
   // ===============================================================================================
@@ -84,15 +67,7 @@ public class DataGroupBuilder {
    *
    * @return the io model group
    */
-  public final IoModelGroup build() {
-    IoModelGroup ioModelGroup =
-        new IoModelGroup(new ObjectName(name), new PackageName("com.oregor"));
-
-    models.forEach(
-        model -> {
-          ioModelGroup.addIoModel(model);
-        });
-
-    return ioModelGroup;
+  public final IoModelArray build() {
+    return new IoModelArray(new VariableName(this.name), this.arrayElement);
   }
 }

@@ -21,6 +21,7 @@
 package io.polygenesis.core.dsl;
 
 import io.polygenesis.core.data.IoModel;
+import io.polygenesis.core.data.IoModelArray;
 import io.polygenesis.core.data.IoModelGroup;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -95,6 +96,17 @@ public class DataBuilder {
    */
   public final DataBuilder withGroupData(IoModelGroup ioModelGroup) {
     this.models.add(ioModelGroup);
+    return this;
+  }
+
+  /**
+   * With array data data builder.
+   *
+   * @param ioModelArray the io model array
+   * @return the data builder
+   */
+  public final DataBuilder withArrayData(IoModelArray ioModelArray) {
+    this.models.add(ioModelArray);
     return this;
   }
 

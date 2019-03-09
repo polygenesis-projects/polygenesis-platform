@@ -25,6 +25,7 @@ import static java.util.stream.Collectors.toCollection;
 import io.polygenesis.core.Argument;
 import io.polygenesis.core.Function;
 import io.polygenesis.core.data.DataBusinessType;
+import io.polygenesis.core.data.IoModel;
 import io.polygenesis.core.data.IoModelGroup;
 import io.polygenesis.core.data.IoModelPrimitive;
 import java.util.LinkedHashSet;
@@ -161,9 +162,10 @@ public class DtoDeducer {
     dtos.add(dto);
 
     if (dto.getArrayElementAsOptional().isPresent()) {
-      addDto(
-          dtos,
-          new Dto(DtoType.COLLECTION_RECORD, (IoModelGroup) dto.getArrayElementAsOptional().get()));
+      IoModel arrayElement = dto.getArrayElementAsOptional().get();
+      if (arrayElement.isIoModelGroup()) {
+        addDto(dtos, new Dto(DtoType.COLLECTION_RECORD, (IoModelGroup) arrayElement));
+      }
     }
 
     // Add model group children of ioModelGroup recursively

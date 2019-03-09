@@ -22,7 +22,12 @@ package io.polygenesis.codegen;
 
 import io.polygenesis.core.Thing;
 import io.polygenesis.core.data.IoModel;
+import io.polygenesis.core.data.IoModelArray;
 import io.polygenesis.core.data.IoModelGroup;
+import io.polygenesis.core.data.IoModelPrimitive;
+import io.polygenesis.core.data.PrimitiveType;
+import io.polygenesis.core.data.VariableName;
+import io.polygenesis.core.dsl.DataArrayBuilder;
 import io.polygenesis.core.dsl.DataBuilder;
 import io.polygenesis.core.dsl.DataGroupBuilder;
 import io.polygenesis.core.dsl.ThingBuilder;
@@ -54,6 +59,7 @@ public class ThingBusiness {
         .withTextProperty("taxId")
         .build()
         .withGroupData(postalAddress())
+        .withArrayData(emailAddresses())
         .build();
   }
 
@@ -99,5 +105,12 @@ public class ThingBusiness {
                 .build()
                 .build())
         .build();
+  }
+
+  private static IoModelArray emailAddresses() {
+    IoModel arrayElement =
+        IoModelPrimitive.of(PrimitiveType.STRING, new VariableName("emailAddress"));
+
+    return DataArrayBuilder.create("emailAddresses", arrayElement).build();
   }
 }

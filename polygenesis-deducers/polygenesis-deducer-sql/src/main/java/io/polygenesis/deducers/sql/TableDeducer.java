@@ -94,6 +94,10 @@ public class TableDeducer {
                 case PRIMITIVE:
                   aggregateRootColumns.add(getColumnForPrimitive(property.getIoModel(), ""));
                   break;
+                case PRIMITIVE_COLLECTION:
+                  allAggregateRootRelatedTables.add(
+                      getTableForPrimitiveCollection(aggregateRoot, property));
+                  break;
                 case VALUE_OBJECT:
                   aggregateRootColumns.addAll(
                       getColumnsForValueObject(
@@ -181,6 +185,27 @@ public class TableDeducer {
             });
 
     return columns;
+  }
+
+  /**
+   * Gets table for primitive collection.
+   *
+   * @param aggregateRoot the aggregate root
+   * @param property the property
+   * @return the table for primitive collection
+   */
+  private Table getTableForPrimitiveCollection(
+      AggregateRoot aggregateRoot, AbstractProperty property) {
+    Set<Column> columns = new LinkedHashSet<>();
+
+    return new Table(
+        new TableName(
+            String.format(
+                "%s_%s",
+                aggregateRoot.getName().getText(),
+                property.getIoModel().getVariableName().getText())),
+        columns,
+        aggregateRoot.getMultiTenant());
   }
 
   /**

@@ -26,6 +26,7 @@ import io.polygenesis.core.data.PackageName;
 import io.polygenesis.models.domain.AbstractProperty;
 import io.polygenesis.models.domain.AggregateRoot;
 import io.polygenesis.models.domain.Primitive;
+import io.polygenesis.models.domain.PrimitiveCollection;
 import io.polygenesis.models.domain.PropertyType;
 import io.polygenesis.representations.commons.FieldRepresentation;
 import io.polygenesis.representations.commons.ParameterRepresentation;
@@ -91,6 +92,12 @@ public class AggregateRootClassRepresentable extends AbstractClassRepresentable<
                           fromDataTypeToJavaConverter.getDeclaredVariableType(
                               primitive.getIoModelPrimitive().getDataType()),
                           primitive.getVariableName().getText()));
+                } else if (property instanceof PrimitiveCollection) {
+                  // TODO
+                  fieldRepresentations.add(
+                      new FieldRepresentation(
+                          "List<String>", property.getVariableName().getText()));
+
                 } else {
                   throw new IllegalStateException(
                       String.format(
