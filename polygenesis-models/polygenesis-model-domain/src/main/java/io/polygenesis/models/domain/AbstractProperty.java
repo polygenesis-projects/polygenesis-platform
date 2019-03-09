@@ -20,7 +20,6 @@
 
 package io.polygenesis.models.domain;
 
-import io.polygenesis.commons.keyvalue.KeyValue;
 import io.polygenesis.core.data.IoModel;
 import io.polygenesis.core.data.IoModelGroup;
 import io.polygenesis.core.data.VariableName;
@@ -90,13 +89,6 @@ public abstract class AbstractProperty {
    * @return the io model
    */
   public abstract IoModel getIoModel();
-
-  /**
-   * Gets as key value.
-   *
-   * @return the as key value
-   */
-  public abstract KeyValue getAsKeyValue();
 
   // ===============================================================================================
   // GUARDS

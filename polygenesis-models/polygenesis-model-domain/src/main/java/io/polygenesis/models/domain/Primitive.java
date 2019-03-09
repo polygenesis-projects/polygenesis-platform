@@ -20,7 +20,6 @@
 
 package io.polygenesis.models.domain;
 
-import io.polygenesis.commons.keyvalue.KeyValue;
 import io.polygenesis.core.data.IoModel;
 import io.polygenesis.core.data.IoModelGroup;
 import io.polygenesis.core.data.IoModelPrimitive;
@@ -89,10 +88,5 @@ public class Primitive extends AbstractProperty {
   @Override
   public IoModel getIoModel() {
     return ioModelPrimitive;
-  }
-
-  @Override
-  public KeyValue getAsKeyValue() {
-    return new KeyValue(getIoModelPrimitive().getDataType(), getVariableName().getText());
   }
 }

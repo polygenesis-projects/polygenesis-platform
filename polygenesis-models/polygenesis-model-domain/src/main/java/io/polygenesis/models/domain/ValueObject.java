@@ -20,7 +20,6 @@
 
 package io.polygenesis.models.domain;
 
-import io.polygenesis.commons.keyvalue.KeyValue;
 import io.polygenesis.core.data.IoModel;
 import io.polygenesis.core.data.IoModelGroup;
 import io.polygenesis.core.data.VariableName;
@@ -129,11 +128,6 @@ public class ValueObject extends AbstractProperty {
   @Override
   public IoModel getIoModel() {
     return ioModelGroup;
-  }
-
-  @Override
-  public KeyValue getAsKeyValue() {
-    return new KeyValue(getIoModelGroup().getDataType(), getVariableName().getText());
   }
 
   @Override

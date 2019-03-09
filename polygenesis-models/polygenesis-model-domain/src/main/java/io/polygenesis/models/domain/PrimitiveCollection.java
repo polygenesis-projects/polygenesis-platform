@@ -122,12 +122,6 @@ public class PrimitiveCollection extends AbstractProperty {
   }
 
   @Override
-  public KeyValue getAsKeyValue() {
-    // TODO
-    return new KeyValue("List<String>", getVariableName().getText());
-  }
-
-  @Override
   public boolean equals(Object o) {
     if (this == o) {
       return true;

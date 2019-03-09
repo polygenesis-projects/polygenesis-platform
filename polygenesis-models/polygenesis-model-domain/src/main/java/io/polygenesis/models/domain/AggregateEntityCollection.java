@@ -59,9 +59,4 @@ public class AggregateEntityCollection extends AbstractProperty {
   public IoModel getIoModel() {
     throw new UnsupportedOperationException();
   }
-
-  @Override
-  public KeyValue getAsKeyValue() {
-    throw new UnsupportedOperationException();
-  }
 }

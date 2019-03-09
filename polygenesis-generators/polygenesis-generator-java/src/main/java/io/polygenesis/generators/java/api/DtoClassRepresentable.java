@@ -23,6 +23,7 @@ package io.polygenesis.generators.java.api;
 import com.oregor.ddd4j.check.assertion.Assertion;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.data.IoModel;
+import io.polygenesis.core.data.IoModelArray;
 import io.polygenesis.core.data.IoModelGroup;
 import io.polygenesis.models.api.Dto;
 import io.polygenesis.models.api.DtoType;
@@ -97,13 +98,11 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
         .getModels()
         .forEach(
             model -> {
-              // TODO: fix handling of arrays
-              if (!model.isIoModelArray()) {
-                fieldRepresentations.add(
-                    new FieldRepresentation(
-                        fromDataTypeToJavaConverter.getDeclaredVariableType(model.getDataType()),
-                        model.getVariableName().getText()));
-              }
+              fieldRepresentations.add(
+                  new FieldRepresentation(
+                      makeVariableDataType(model),
+                      makeVariableName(model)
+                  ));
             });
 
     return fieldRepresentations;
@@ -174,6 +173,14 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
         || source.getDtoType().equals(DtoType.API_PAGED_COLLECTION_RESPONSE)) {
       imports.add("java.util.List");
     }
+
+    source
+        .getOriginatingIoModelGroup()
+        .getModels()
+        .stream()
+        .filter(model -> model.isIoModelArray())
+        .findFirst()
+        .ifPresent(model -> imports.add("java.util.List"));
 
     source
         .getOriginatingIoModelGroup()
@@ -264,6 +271,12 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
   // PRIVATE
   // ===============================================================================================
 
+  /**
+   * Create constructor for collection response constructor representation.
+   *
+   * @param source the source
+   * @return the constructor representation
+   */
   private ConstructorRepresentation createConstructorForCollectionResponse(Dto source) {
     Set<ParameterRepresentation> parameterRepresentations = new LinkedHashSet<>();
 
@@ -294,5 +307,33 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
         MODIFIER_PUBLIC,
         parameterRepresentations,
         "\t\tsuper(items, totalPages, totalElements, pageNumber, pageSize);");
+  }
+
+  /**
+   * Make variable data type string.
+   *
+   * @param model the model
+   * @return the string
+   */
+  private String makeVariableDataType(IoModel model) {
+    if (model.isIoModelArray()) {
+      return String.format("List<%s>", fromDataTypeToJavaConverter.getDeclaredVariableType(
+          ((IoModelArray) model).getArrayElement().getDataType()
+      ));
+    } else {
+      return fromDataTypeToJavaConverter.getDeclaredVariableType(
+          model.getDataType()
+      );
+    }
+  }
+
+  /**
+   * Make variable name string.
+   *
+   * @param model the model
+   * @return the string
+   */
+  private String makeVariableName(IoModel model) {
+    return model.getVariableName().getText();
   }
 }

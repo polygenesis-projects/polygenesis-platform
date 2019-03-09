@@ -79,9 +79,8 @@ public class AggregateRootClassRepresentable extends AbstractClassRepresentable<
 
                   fieldRepresentations.add(
                       new FieldRepresentation(
-                          fromDataTypeToJavaConverter.getDeclaredVariableType(
-                              ioModelGroup.getDataType()),
-                          ioModelGroup.getVariableName().getText(),
+                          makeVariableDataType(property),
+                          makeVariableName(property),
                           makeAnnotationsForValueObject(ioModelGroup)));
                 }
               } else {
@@ -89,19 +88,20 @@ public class AggregateRootClassRepresentable extends AbstractClassRepresentable<
                   Primitive primitive = (Primitive) property;
                   fieldRepresentations.add(
                       new FieldRepresentation(
-                          fromDataTypeToJavaConverter.getDeclaredVariableType(
-                              primitive.getIoModelPrimitive().getDataType()),
-                          primitive.getVariableName().getText()));
+                          makeVariableDataType(property),
+                          makeVariableName(property)
+                      ));
                 } else if (property instanceof PrimitiveCollection) {
-                  // TODO
                   fieldRepresentations.add(
                       new FieldRepresentation(
-                          "List<String>", property.getVariableName().getText()));
+                          makeVariableDataType(property),
+                          makeVariableName(property)
+                      ));
 
                 } else {
                   throw new IllegalStateException(
-                      String.format(
-                          "Cannot project variable=%s", property.getVariableName().getText()));
+                      String.format("Cannot project variable=%s",
+                          property.getVariableName().getText()));
                 }
               }
             });
@@ -150,6 +150,12 @@ public class AggregateRootClassRepresentable extends AbstractClassRepresentable<
         .getProperties()
         .forEach(
             property -> {
+              if (property.getPropertyType().equals(PropertyType.PRIMITIVE_COLLECTION)
+                  || property.getPropertyType().equals(PropertyType.VALUE_OBJECT_COLLECTION)
+                  || property.getPropertyType().equals(PropertyType.AGGREGATE_ENTITY_COLLECTION)) {
+                imports.add("java.util.List");
+              }
+
               Optional<IoModelGroup> optionalIoModelGroup = property.getIoModelGroupAsOptional();
               if (optionalIoModelGroup.isPresent()) {
                 imports.add("javax.persistence.Embedded");
@@ -251,16 +257,15 @@ public class AggregateRootClassRepresentable extends AbstractClassRepresentable<
               if (property.getPropertyType().equals(PropertyType.AGGREGATE_ROOT_ID)) {
                 parameterRepresentations.add(
                     new ParameterRepresentation(
-                        fromDataTypeToJavaConverter.getDeclaredVariableType(
-                            property.getAsKeyValue().getKey().toString()),
-                        property.getAsKeyValue().getValue().toString(),
+                        makeVariableDataType(property),
+                        makeVariableName(property),
                         true));
               } else {
                 parameterRepresentations.add(
                     new ParameterRepresentation(
-                        fromDataTypeToJavaConverter.getDeclaredVariableType(
-                            property.getAsKeyValue().getKey().toString()),
-                        property.getAsKeyValue().getValue().toString()));
+                        makeVariableDataType(property),
+                        makeVariableName(property)
+                    ));
               }
             });
 
@@ -304,5 +309,22 @@ public class AggregateRootClassRepresentable extends AbstractClassRepresentable<
             });
 
     return annotations;
+  }
+
+  protected String makeVariableDataType(AbstractProperty property) {
+    switch (property.getPropertyType()) {
+      case PRIMITIVE_COLLECTION:
+        return String.format("List<%s>", fromDataTypeToJavaConverter.getDeclaredVariableType(
+            property.getIoModel().getDataType()
+        ));
+      default:
+        return fromDataTypeToJavaConverter.getDeclaredVariableType(
+            property.getIoModel().getDataType()
+        );
+    }
+  }
+
+  protected String makeVariableName(AbstractProperty property) {
+    return property.getVariableName().getText();
   }
 }
