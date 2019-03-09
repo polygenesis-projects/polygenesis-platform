@@ -20,6 +20,7 @@
 
 package io.polygenesis.core.datatype;
 
+import io.polygenesis.core.iomodel.DataKind;
 import java.util.Optional;
 
 /**

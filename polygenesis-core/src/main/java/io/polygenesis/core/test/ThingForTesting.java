@@ -101,7 +101,7 @@ public class ThingForTesting {
                 new PackageName(ROOT_PACKAGE + ".business")));
 
     returnValueIoModelGroup.addIoModelPrimitive(
-        IoModelPrimitive.ofDataBusinessTypeWithParent(
+        IoModelPrimitive.ofDataBusinessType(
             DataBusinessType.THING_IDENTITY,
             new PrimitiveDataType(PrimitiveType.STRING),
             new VariableName("businessId")));
@@ -133,7 +133,7 @@ public class ThingForTesting {
     // ---------------------------------------------------------------------------------------------
 
     argumentIoModelGroup.addIoModelPrimitive(
-        IoModelPrimitive.ofDataBusinessTypeWithParent(
+        IoModelPrimitive.ofDataBusinessType(
             DataBusinessType.THING_IDENTITY,
             new PrimitiveDataType(PrimitiveType.STRING),
             new VariableName("businessId")));
@@ -180,7 +180,7 @@ public class ThingForTesting {
     // ---------------------------------------------------------------------------------------------
 
     argumentIoModelGroup.addIoModelPrimitive(
-        IoModelPrimitive.ofDataBusinessTypeWithParent(
+        IoModelPrimitive.ofDataBusinessType(
             DataBusinessType.THING_IDENTITY,
             new PrimitiveDataType(PrimitiveType.STRING),
             new VariableName("businessId")));

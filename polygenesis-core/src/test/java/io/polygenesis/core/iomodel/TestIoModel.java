@@ -26,9 +26,10 @@ import io.polygenesis.core.datatype.AbstractDataType;
 class TestIoModel extends IoModel {
 
   public TestIoModel() {
+    super(DataKind.CLASS);
   }
 
   public TestIoModel(AbstractDataType dataType, VariableName variableName) {
-    super(dataType, variableName);
+    super(DataKind.PRIMITIVE, dataType, variableName);
   }
 }

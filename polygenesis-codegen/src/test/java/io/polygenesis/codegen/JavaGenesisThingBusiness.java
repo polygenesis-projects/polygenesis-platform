@@ -82,7 +82,7 @@ public class JavaGenesisThingBusiness {
 
     // RETURN VALUE - BUSINESSID
     returnValueIoModelGroup.addIoModelPrimitive(
-        IoModelPrimitive.ofDataBusinessTypeWithParent(
+        IoModelPrimitive.ofDataBusinessType(
             DataBusinessType.THING_IDENTITY,
             new PrimitiveDataType(PrimitiveType.STRING),
             new VariableName("businessId")));
@@ -109,7 +109,7 @@ public class JavaGenesisThingBusiness {
 
     // ARGUMENT - BusinessID
     argumentIoModelGroup.addIoModelPrimitive(
-        IoModelPrimitive.ofDataBusinessTypeWithParent(
+        IoModelPrimitive.ofDataBusinessType(
             DataBusinessType.THING_IDENTITY,
             new PrimitiveDataType(PrimitiveType.STRING),
             new VariableName("businessId")));

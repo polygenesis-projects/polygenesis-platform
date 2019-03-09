@@ -23,7 +23,7 @@ package io.polygenesis.models.domain;
 import io.polygenesis.core.Function;
 import io.polygenesis.core.Thing;
 import io.polygenesis.core.datatype.ClassDataType;
-import io.polygenesis.core.datatype.DataKind;
+import io.polygenesis.core.iomodel.DataKind;
 import io.polygenesis.core.datatype.DataTypeName;
 import io.polygenesis.core.datatype.PackageName;
 import io.polygenesis.core.iomodel.DataBusinessType;

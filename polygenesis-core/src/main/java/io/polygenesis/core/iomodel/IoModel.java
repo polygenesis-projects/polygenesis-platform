@@ -26,12 +26,13 @@ import java.util.Objects;
 
 /**
  * This is the base class for {@link IoModelPrimitive}, {@link IoModelGroup}, and {@link
- * IoModelArray}*.
+ * IoModelArray}***.
  *
  * @author Christos Tsakostas
  */
 public abstract class IoModel {
 
+  private final DataKind dataKind;
   private final AbstractDataType dataType;
   private final VariableName variableName;
 
@@ -41,19 +42,23 @@ public abstract class IoModel {
 
   /**
    * Instantiates a new Io model.
+   *
+   * @param dataKind the data kind
    */
-  public IoModel() {
-    this.dataType = null;
-    this.variableName = null;
+  public IoModel(DataKind dataKind) {
+    this(dataKind, null, null);
   }
 
   /**
    * Instantiates a new Io model.
    *
+   * @param dataKind the data kind
    * @param dataType the data type
    * @param variableName the variable name
    */
-  public IoModel(AbstractDataType dataType, VariableName variableName) {
+  public IoModel(DataKind dataKind, AbstractDataType dataType,
+      VariableName variableName) {
+    this.dataKind = dataKind;
     this.dataType = dataType;
     this.variableName = variableName;
   }
@@ -61,6 +66,15 @@ public abstract class IoModel {
   // ===============================================================================================
   // GETTERS
   // ===============================================================================================
+
+  /**
+   * Gets data kind.
+   *
+   * @return the data kind
+   */
+  public DataKind getDataKind() {
+    return dataKind;
+  }
 
   /**
    * Gets data type.

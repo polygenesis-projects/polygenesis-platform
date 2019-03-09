@@ -20,7 +20,7 @@
 
 package io.polygenesis.core.data;
 
-import io.polygenesis.core.datatype.DataKind;
+import io.polygenesis.core.iomodel.DataKind;
 import io.polygenesis.core.datatype.PrimitiveType;
 import io.polygenesis.core.iomodel.DataBusinessType;
 import io.polygenesis.core.iomodel.VariableName;

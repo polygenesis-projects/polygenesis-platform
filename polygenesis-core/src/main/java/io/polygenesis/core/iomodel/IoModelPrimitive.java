@@ -60,7 +60,7 @@ public class IoModelPrimitive extends IoModel {
    * @param variableName the variable name
    * @return the io model primitive
    */
-  public static IoModelPrimitive ofDataBusinessTypeWithParent(
+  public static IoModelPrimitive ofDataBusinessType(
       DataBusinessType dataBusinessType,
       PrimitiveDataType primitiveDataType,
       VariableName variableName) {
@@ -87,7 +87,7 @@ public class IoModelPrimitive extends IoModel {
       VariableName variableName,
       Set<Annotation> annotations,
       DataBusinessType dataBusinessType) {
-    super(dataType, variableName);
+    super(DataKind.PRIMITIVE, dataType, variableName);
     this.annotations = annotations;
     this.dataBusinessType = dataBusinessType;
   }

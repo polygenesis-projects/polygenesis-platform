@@ -136,7 +136,7 @@ public class ThingBuilder {
     // ---------------------------------------------------------------------------------------------
 
     returnValueIoModelGroup.addIoModelPrimitive(
-        IoModelPrimitive.ofDataBusinessTypeWithParent(
+        IoModelPrimitive.ofDataBusinessType(
             DataBusinessType.THING_IDENTITY,
             new PrimitiveDataType(PrimitiveType.STRING),
             new VariableName(
@@ -179,7 +179,7 @@ public class ThingBuilder {
 
     // ---------------------------------------------------------------------------------------------
     argumentIoModelGroup.addIoModelPrimitive(
-        IoModelPrimitive.ofDataBusinessTypeWithParent(
+        IoModelPrimitive.ofDataBusinessType(
             DataBusinessType.THING_IDENTITY,
             new PrimitiveDataType(PrimitiveType.STRING),
             new VariableName(
@@ -203,7 +203,7 @@ public class ThingBuilder {
     // ---------------------------------------------------------------------------------------------
 
     returnValueIoModelGroup.addIoModelPrimitive(
-        IoModelPrimitive.ofDataBusinessTypeWithParent(
+        IoModelPrimitive.ofDataBusinessType(
             DataBusinessType.THING_IDENTITY,
             new PrimitiveDataType(PrimitiveType.STRING),
             new VariableName(
@@ -247,7 +247,7 @@ public class ThingBuilder {
     // ---------------------------------------------------------------------------------------------
 
     argumentIoModelGroup.addIoModelPrimitive(
-        IoModelPrimitive.ofDataBusinessTypeWithParent(
+        IoModelPrimitive.ofDataBusinessType(
             DataBusinessType.THING_IDENTITY,
             new PrimitiveDataType(PrimitiveType.STRING),
             new VariableName(
@@ -307,13 +307,13 @@ public class ThingBuilder {
     // ---------------------------------------------------------------------------------------------
 
     argumentIoModelGroup.addIoModelPrimitive(
-        IoModelPrimitive.ofDataBusinessTypeWithParent(
+        IoModelPrimitive.ofDataBusinessType(
             DataBusinessType.PAGE_NUMBER,
             new PrimitiveDataType(PrimitiveType.INTEGER),
             new VariableName("pageNumber")));
 
     argumentIoModelGroup.addIoModelPrimitive(
-        IoModelPrimitive.ofDataBusinessTypeWithParent(
+        IoModelPrimitive.ofDataBusinessType(
             DataBusinessType.PAGE_SIZE,
             new PrimitiveDataType(PrimitiveType.INTEGER),
             new VariableName("pageSize")));

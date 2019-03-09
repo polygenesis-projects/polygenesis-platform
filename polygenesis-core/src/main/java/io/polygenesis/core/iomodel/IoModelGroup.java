@@ -47,7 +47,7 @@ public class IoModelGroup extends IoModel {
    * Instantiates a new Io model group.
    */
   public IoModelGroup() {
-    this.models = new LinkedHashSet<>();
+    this(null, null, new LinkedHashSet<>());
   }
 
   /**
@@ -81,7 +81,7 @@ public class IoModelGroup extends IoModel {
   private IoModelGroup(ClassDataType dataType,
       VariableName variableName,
       Set<IoModel> models) {
-    super(dataType, variableName);
+    super(DataKind.CLASS, dataType, variableName);
     this.models = models;
   }
 
