@@ -20,8 +20,6 @@
 
 package io.polygenesis.core.iomodel;
 
-import io.polygenesis.core.datatype.AbstractDataType;
-
 /** @author Christos Tsakostas */
 class TestIoModel extends IoModel {
 
@@ -29,7 +27,12 @@ class TestIoModel extends IoModel {
     super(DataKind.CLASS);
   }
 
-  public TestIoModel(AbstractDataType dataType, VariableName variableName) {
-    super(DataKind.PRIMITIVE, dataType, variableName);
+  public TestIoModel(VariableName variableName) {
+    super(DataKind.CLASS, variableName);
+  }
+
+  @Override
+  public String getDataType() {
+    return null;
   }
 }

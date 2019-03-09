@@ -55,15 +55,13 @@ public class FromDataTypeToSqlColumnConverter {
    * @return the column data type by
    */
   public ColumnDataType getColumnDataTypeBy(IoModel model) {
-    if (dataTypeMap.containsKey(
-        TextConverter.toUpperUnderscore(model.getDataType().getDataTypeName().getText()))) {
-      return dataTypeMap.get(
-          TextConverter.toUpperUnderscore(model.getDataType().getDataTypeName().getText()));
+    if (dataTypeMap.containsKey(model.getDataType())) {
+      return dataTypeMap.get(model.getDataType());
     } else {
       throw new IllegalArgumentException(
           String.format(
               "Cannot get ColumnDataType for primitive data type=%s",
-              TextConverter.toUpperCamel(model.getDataType().getDataTypeName().getText())));
+              TextConverter.toUpperCamel(model.getDataType())));
     }
   }
 

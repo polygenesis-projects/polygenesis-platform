@@ -28,8 +28,7 @@ import io.polygenesis.core.Goal;
 import io.polygenesis.core.ReturnValue;
 import io.polygenesis.core.Thing;
 import io.polygenesis.core.ThingName;
-import io.polygenesis.core.datatype.ClassDataType;
-import io.polygenesis.core.datatype.DataTypeName;
+import io.polygenesis.core.data.ObjectName;
 import io.polygenesis.core.iomodel.IoModelGroup;
 import io.polygenesis.models.apiimpl.AggregateRootConverter;
 import io.polygenesis.models.domain.AggregateRoot;
@@ -66,7 +65,7 @@ public class AggregateRootConverterClassRepresentable
    *
    * @param fromDataTypeToJavaConverter the from data type to java converter
    * @param aggregateRootConverterMethodRepresentable the aggregate root converter method
-   *     representable
+   * representable
    */
   public AggregateRootConverterClassRepresentable(
       FromDataTypeToJavaConverter fromDataTypeToJavaConverter,
@@ -127,9 +126,7 @@ public class AggregateRootConverterClassRepresentable
               if (!valueObjectFromDto
                   .getValueObject()
                   .getIoModelGroup()
-                  .getClassDataType()
-                  .getOptionalPackageName()
-                  .get()
+                  .getPackageName()
                   .equals(source.getDataType().getOptionalPackageName().get())) {
 
                 StringBuilder stringBuilder = new StringBuilder();
@@ -138,9 +135,7 @@ public class AggregateRootConverterClassRepresentable
                     valueObjectFromDto
                         .getValueObject()
                         .getIoModelGroup()
-                        .getClassDataType()
-                        .getOptionalPackageName()
-                        .get()
+                        .getPackageName()
                         .getText());
                 stringBuilder.append(".");
                 stringBuilder.append(
@@ -153,9 +148,7 @@ public class AggregateRootConverterClassRepresentable
               if (!valueObjectFromDto
                   .getDto()
                   .getOriginatingIoModelGroup()
-                  .getClassDataType()
-                  .getOptionalPackageName()
-                  .get()
+                  .getPackageName()
                   .equals(source.getDataType().getOptionalPackageName().get())) {
 
                 StringBuilder stringBuilder = new StringBuilder();
@@ -164,9 +157,7 @@ public class AggregateRootConverterClassRepresentable
                     valueObjectFromDto
                         .getDto()
                         .getOriginatingIoModelGroup()
-                        .getClassDataType()
-                        .getOptionalPackageName()
-                        .get()
+                        .getPackageName()
                         .getText());
                 stringBuilder.append(".");
                 stringBuilder.append(
@@ -319,9 +310,8 @@ public class AggregateRootConverterClassRepresentable
 
     IoModelGroup ioModelGroup =
         new IoModelGroup(
-            new ClassDataType(
-                new DataTypeName(aggregateRoot.getName().getText()),
-                aggregateRoot.getPackageName()));
+            new ObjectName(aggregateRoot.getName().getText()),
+            aggregateRoot.getPackageName());
 
     aggregateRoot
         .getProperties()
@@ -349,7 +339,7 @@ public class AggregateRootConverterClassRepresentable
             String.format(
                 "convertTo%s",
                 TextConverter.toUpperCamel(
-                    returnValue.getModel().getDataType().getDataTypeName().getText()))),
+                    returnValue.getModel().getDataType()))),
         arguments,
         returnValue);
   }

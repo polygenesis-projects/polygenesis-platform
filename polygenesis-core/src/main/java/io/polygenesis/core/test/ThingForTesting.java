@@ -28,8 +28,7 @@ import io.polygenesis.core.Goal;
 import io.polygenesis.core.ReturnValue;
 import io.polygenesis.core.Thing;
 import io.polygenesis.core.ThingName;
-import io.polygenesis.core.datatype.ClassDataType;
-import io.polygenesis.core.datatype.DataTypeName;
+import io.polygenesis.core.data.ObjectName;
 import io.polygenesis.core.datatype.PackageName;
 import io.polygenesis.core.datatype.PrimitiveDataType;
 import io.polygenesis.core.datatype.PrimitiveType;
@@ -78,15 +77,12 @@ public class ThingForTesting {
     // ---------------------------------------------------------------------------------------------
     IoModelGroup argumentIoModelGroup =
         new IoModelGroup(
-            new ClassDataType(
-                new DataTypeName("CreateBusinessRequest"),
-                new PackageName(ROOT_PACKAGE + ".business")));
+            new ObjectName("CreateBusinessRequest"),
+            new PackageName(ROOT_PACKAGE + ".business"));
 
     // name
     argumentIoModelGroup.addIoModelPrimitive(
-        IoModelPrimitive.of(
-            new PrimitiveDataType(PrimitiveType.STRING),
-            new VariableName("name")));
+        IoModelPrimitive.of(PrimitiveType.STRING, new VariableName("name")));
 
     // postal address
     argumentIoModelGroup.addIoModelGroup(postalAddress());
@@ -96,14 +92,13 @@ public class ThingForTesting {
     // ---------------------------------------------------------------------------------------------
     IoModelGroup returnValueIoModelGroup =
         new IoModelGroup(
-            new ClassDataType(
-                new DataTypeName("CreateBusinessResponse"),
-                new PackageName(ROOT_PACKAGE + ".business")));
+            new ObjectName("CreateBusinessResponse"),
+            new PackageName(ROOT_PACKAGE + ".business"));
 
     returnValueIoModelGroup.addIoModelPrimitive(
         IoModelPrimitive.ofDataBusinessType(
             DataBusinessType.THING_IDENTITY,
-            new PrimitiveDataType(PrimitiveType.STRING),
+            PrimitiveType.STRING,
             new VariableName("businessId")));
 
     // ---------------------------------------------------------------------------------------------
@@ -126,16 +121,15 @@ public class ThingForTesting {
     // ---------------------------------------------------------------------------------------------
     IoModelGroup argumentIoModelGroup =
         new IoModelGroup(
-            new ClassDataType(
-                new DataTypeName("FetchBusinessRequest"),
-                new PackageName(ROOT_PACKAGE + ".business")));
+            new ObjectName("FetchBusinessRequest"),
+            new PackageName(ROOT_PACKAGE + ".business"));
 
     // ---------------------------------------------------------------------------------------------
 
     argumentIoModelGroup.addIoModelPrimitive(
         IoModelPrimitive.ofDataBusinessType(
             DataBusinessType.THING_IDENTITY,
-            new PrimitiveDataType(PrimitiveType.STRING),
+            PrimitiveType.STRING,
             new VariableName("businessId")));
 
     // ---------------------------------------------------------------------------------------------
@@ -143,15 +137,14 @@ public class ThingForTesting {
     // ---------------------------------------------------------------------------------------------
     IoModelGroup returnValueIoModelGroup =
         new IoModelGroup(
-            new ClassDataType(
-                new DataTypeName("FetchBusinessResponse"),
-                new PackageName(ROOT_PACKAGE + ".business")));
+            new ObjectName("FetchBusinessResponse"),
+            new PackageName(ROOT_PACKAGE + ".business"));
 
     // ---------------------------------------------------------------------------------------------
 
     returnValueIoModelGroup.addIoModelPrimitive(
         IoModelPrimitive.of(
-            new PrimitiveDataType(PrimitiveType.STRING),
+            PrimitiveType.STRING,
             new VariableName("name")));
 
     // ---------------------------------------------------------------------------------------------
@@ -173,16 +166,15 @@ public class ThingForTesting {
     // ---------------------------------------------------------------------------------------------
     IoModelGroup argumentIoModelGroup =
         new IoModelGroup(
-            new ClassDataType(
-                new DataTypeName("FetchBusinessCollectionRequest"),
-                new PackageName(ROOT_PACKAGE + ".business")));
+            new ObjectName("FetchBusinessCollectionRequest"),
+            new PackageName(ROOT_PACKAGE + ".business"));
 
     // ---------------------------------------------------------------------------------------------
 
     argumentIoModelGroup.addIoModelPrimitive(
         IoModelPrimitive.ofDataBusinessType(
             DataBusinessType.THING_IDENTITY,
-            new PrimitiveDataType(PrimitiveType.STRING),
+            PrimitiveType.STRING,
             new VariableName("businessId")));
 
     // ---------------------------------------------------------------------------------------------
@@ -190,15 +182,14 @@ public class ThingForTesting {
     // ---------------------------------------------------------------------------------------------
     IoModelGroup returnValueIoModelGroup =
         new IoModelGroup(
-            new ClassDataType(
-                new DataTypeName("FetchBusinessCollectionResponse"),
-                new PackageName(ROOT_PACKAGE + ".business")));
+            new ObjectName("FetchBusinessCollectionResponse"),
+            new PackageName(ROOT_PACKAGE + ".business"));
 
     // ---------------------------------------------------------------------------------------------
 
     returnValueIoModelGroup.addIoModelPrimitive(
         IoModelPrimitive.of(
-            new PrimitiveDataType(PrimitiveType.STRING),
+            PrimitiveType.STRING,
             new VariableName("name")));
 
     // ---------------------------------------------------------------------------------------------
@@ -220,14 +211,13 @@ public class ThingForTesting {
     // ---------------------------------------------------------------------------------------------
     IoModelGroup argumentIoModelGroup1 =
         new IoModelGroup(
-            new ClassDataType(
-                new DataTypeName("CreateBusinessRequest1"),
-                new PackageName(ROOT_PACKAGE + ".business")));
+            new ObjectName("CreateBusinessRequest1"),
+            new PackageName(ROOT_PACKAGE + ".business"));
 
     // name
     argumentIoModelGroup1.addIoModelPrimitive(
         IoModelPrimitive.of(
-            new PrimitiveDataType(PrimitiveType.STRING),
+            PrimitiveType.STRING,
             new VariableName("name")));
 
     // ---------------------------------------------------------------------------------------------
@@ -235,14 +225,13 @@ public class ThingForTesting {
     // ---------------------------------------------------------------------------------------------
     IoModelGroup argumentIoModelGroup2 =
         new IoModelGroup(
-            new ClassDataType(
-                new DataTypeName("CreateBusinessRequest2"),
-                new PackageName(ROOT_PACKAGE + ".business")));
+            new ObjectName("CreateBusinessRequest2"),
+            new PackageName(ROOT_PACKAGE + ".business"));
 
     // name
     argumentIoModelGroup2.addIoModelPrimitive(
         IoModelPrimitive.of(
-            new PrimitiveDataType(PrimitiveType.STRING),
+            PrimitiveType.STRING,
             new VariableName("name")));
 
     // ---------------------------------------------------------------------------------------------
@@ -266,15 +255,14 @@ public class ThingForTesting {
     // ---------------------------------------------------------------------------------------------
     IoModelGroup returnValueIoModelGroup =
         new IoModelGroup(
-            new ClassDataType(
-                new DataTypeName("FetchBusinessCollectionResponse"),
-                new PackageName(ROOT_PACKAGE + ".business")));
+            new ObjectName("FetchBusinessCollectionResponse"),
+            new PackageName(ROOT_PACKAGE + ".business"));
 
     // ---------------------------------------------------------------------------------------------
 
     returnValueIoModelGroup.addIoModelPrimitive(
         IoModelPrimitive.of(
-            new PrimitiveDataType(PrimitiveType.STRING),
+            PrimitiveType.STRING,
             new VariableName("name")));
 
     // ---------------------------------------------------------------------------------------------
@@ -295,7 +283,7 @@ public class ThingForTesting {
     // PRIMITIVE
     // ---------------------------------------------------------------------------------------------
     IoModelPrimitive ioModelPrimitive =
-        IoModelPrimitive.of(new PrimitiveDataType(PrimitiveType.STRING), new VariableName("name"));
+        IoModelPrimitive.of(PrimitiveType.STRING, new VariableName("name"));
 
     // ---------------------------------------------------------------------------------------------
 
@@ -318,22 +306,21 @@ public class ThingForTesting {
   private static IoModelGroup postalAddress() {
     IoModelGroup postalAddress =
         new IoModelGroup(
-            new ClassDataType(
-                new DataTypeName("PostalAddressDto"),
-                new PackageName("com.oregor.ddd4j.example.shared")));
+            new ObjectName("PostalAddressDto"),
+            new PackageName("com.oregor.ddd4j.example.shared"));
 
     postalAddress.addIoModelPrimitive(
         IoModelPrimitive.of(
-            new PrimitiveDataType(PrimitiveType.STRING),
+            PrimitiveType.STRING,
             new VariableName("streetAddress1")));
 
     postalAddress.addIoModelPrimitive(
         IoModelPrimitive.of(
-            new PrimitiveDataType(PrimitiveType.STRING),
+            PrimitiveType.STRING,
             new VariableName("streetAddress2")));
 
     postalAddress.addIoModelPrimitive(
-        IoModelPrimitive.of(new PrimitiveDataType(PrimitiveType.STRING), new VariableName("city")));
+        IoModelPrimitive.of(PrimitiveType.STRING, new VariableName("city")));
 
     return postalAddress;
   }

@@ -20,10 +20,8 @@
 
 package io.polygenesis.core.deducer;
 
-import io.polygenesis.core.datatype.ClassDataType;
-import io.polygenesis.core.datatype.DataTypeName;
+import io.polygenesis.core.data.ObjectName;
 import io.polygenesis.core.datatype.PackageName;
-import io.polygenesis.core.datatype.PrimitiveDataType;
 import io.polygenesis.core.datatype.PrimitiveType;
 import io.polygenesis.core.iomodel.DataBusinessType;
 import io.polygenesis.core.iomodel.IoModel;
@@ -74,9 +72,6 @@ public class IoModelDeducer {
       // TODO: check if recursiveObject.getStrGenericType() plays a role?
       // IoModelArray
       return new IoModelArray(
-          new ClassDataType(
-              convertToDataTypeNameFrom(recursiveObject.getStrDataType()),
-              convertToPackageName(recursiveObject.getStrDataType())),
           new VariableName(recursiveObject.getStrName()));
     } else if (!recursiveObject.isCustomObject()) {
       // IoModelPrimitive
@@ -85,7 +80,7 @@ public class IoModelDeducer {
       }
 
       return new IoModelPrimitive(
-          new PrimitiveDataType(convertToPrimitiveTypeFrom(recursiveObject.getStrDataType())),
+          convertToPrimitiveTypeFrom(recursiveObject.getStrDataType()),
           new VariableName(recursiveObject.getStrName()),
           safeGetAnnotationsFrom(recursiveObject),
           DataBusinessType.ANY);
@@ -98,9 +93,8 @@ public class IoModelDeducer {
 
       IoModelGroup modelGroupResponse =
           new IoModelGroup(
-              new ClassDataType(
-                  convertToDataTypeNameFrom(recursiveObject.getStrDataType()),
-                  convertToPackageName(recursiveObject.getStrDataType())),
+              convertToObjectNameFrom(recursiveObject.getStrDataType()),
+              convertToPackageName(recursiveObject.getStrDataType()),
               new VariableName(recursiveObject.getStrName()));
 
       this.fillIoModelGroup(modelGroupResponse, recursiveObject);
@@ -136,8 +130,7 @@ public class IoModelDeducer {
                   // Should not add primitives for Ignored or automatically set fields.
                   IoModelPrimitive modelPrimitive =
                       new IoModelPrimitive(
-                          new PrimitiveDataType(
-                              convertToPrimitiveTypeFrom(childRecursiveObject.getStrDataType())),
+                          convertToPrimitiveTypeFrom(childRecursiveObject.getStrDataType()),
                           new VariableName(childRecursiveObject.getStrName()),
                           safeGetAnnotationsFrom(childRecursiveObject),
                           DataBusinessType.ANY);
@@ -156,14 +149,14 @@ public class IoModelDeducer {
     }
   }
 
-  private DataTypeName convertToDataTypeNameFrom(String strDataType) {
+  private ObjectName convertToObjectNameFrom(String strDataType) {
     // TODO - maybe there is a better check?
     int index = strDataType.lastIndexOf('.');
     if (index > 0) {
-      return new DataTypeName(strDataType.substring(index + 1));
+      return new ObjectName(strDataType.substring(index + 1));
     }
 
-    return new DataTypeName(javaDataTypeConverter.convert(strDataType).name());
+    return new ObjectName(javaDataTypeConverter.convert(strDataType).name());
   }
 
   private PrimitiveType convertToPrimitiveTypeFrom(String strDataType) {

@@ -55,7 +55,7 @@ public class FromDataTypeToJavaConverter {
    * @return the declared variable type
    */
   public String getDeclaredVariableType(IoModel model) {
-    String candidate = TextConverter.toUpperCamel(model.getDataType().getDataTypeName().getText());
+    String candidate = TextConverter.toUpperCamel(model.getDataType());
 
     return Stream.of(PrimitiveType.values())
         .filter(value -> value.name().equals(candidate.toUpperCase()))

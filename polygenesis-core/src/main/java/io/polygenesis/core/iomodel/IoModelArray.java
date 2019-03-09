@@ -20,7 +20,6 @@
 
 package io.polygenesis.core.iomodel;
 
-import io.polygenesis.core.datatype.ClassDataType;
 import java.util.Objects;
 
 /**
@@ -46,11 +45,10 @@ public class IoModelArray extends IoModelGroup {
   /**
    * Instantiates a new Io model array.
    *
-   * @param dataType the data type
    * @param variableName the variable name
    */
-  public IoModelArray(ClassDataType dataType, VariableName variableName) {
-    super(dataType, variableName);
+  public IoModelArray(VariableName variableName) {
+    super(variableName);
     this.arrayElement = null;
   }
 
@@ -58,14 +56,11 @@ public class IoModelArray extends IoModelGroup {
    * Instantiates a new Io model array.
    *
    * @param arrayElement the array element
-   * @param dataType the data type
    * @param variableName the variable name
    */
-  public IoModelArray(
-      IoModel arrayElement,
-      ClassDataType dataType,
+  public IoModelArray(IoModel arrayElement,
       VariableName variableName) {
-    super(dataType, variableName);
+    super(variableName);
     this.arrayElement = arrayElement;
   }
 
@@ -80,6 +75,15 @@ public class IoModelArray extends IoModelGroup {
    */
   public IoModel getArrayElement() {
     return arrayElement;
+  }
+
+  // ===============================================================================================
+  // ABSTRACT IMPLEMENTATION
+  // ===============================================================================================
+
+  @Override
+  public String getDataType() {
+    return "ARRAY";
   }
 
   // ===============================================================================================

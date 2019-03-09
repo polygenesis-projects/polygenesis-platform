@@ -153,13 +153,13 @@ public abstract class ServiceImplementationMethodShared {
 
     stringBuilder.append("\t\t");
     stringBuilder.append(
-        TextConverter.toUpperCamel(modelGroup.getClassDataType().getDataTypeName().getText()));
+        TextConverter.toUpperCamel(modelGroup.getDataType()));
     stringBuilder.append(" ");
     stringBuilder.append(
-        TextConverter.toLowerCamel(modelGroup.getClassDataType().getDataTypeName().getText()));
+        TextConverter.toLowerCamel(modelGroup.getDataType()));
     stringBuilder.append(" = new ");
     stringBuilder.append(
-        TextConverter.toUpperCamel(modelGroup.getClassDataType().getDataTypeName().getText()));
+        TextConverter.toUpperCamel(modelGroup.getDataType()));
     stringBuilder.append("();");
     stringBuilder.append("\n");
 
@@ -170,7 +170,7 @@ public abstract class ServiceImplementationMethodShared {
     stringBuilder.append("return");
     stringBuilder.append(" ");
     stringBuilder.append(
-        TextConverter.toLowerCamel(modelGroup.getClassDataType().getDataTypeName().getText()));
+        TextConverter.toLowerCamel(modelGroup.getDataType()));
     stringBuilder.append(";");
 
     return stringBuilder.toString();

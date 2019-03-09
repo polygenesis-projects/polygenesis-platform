@@ -20,8 +20,7 @@
 
 package io.polygenesis.core.dsl;
 
-import io.polygenesis.core.datatype.ClassDataType;
-import io.polygenesis.core.datatype.DataTypeName;
+import io.polygenesis.core.data.ObjectName;
 import io.polygenesis.core.datatype.PackageName;
 import io.polygenesis.core.iomodel.IoModel;
 import io.polygenesis.core.iomodel.IoModelGroup;
@@ -87,7 +86,7 @@ public class DataGroupBuilder {
    */
   public final IoModelGroup build() {
     IoModelGroup ioModelGroup =
-        new IoModelGroup(new ClassDataType(new DataTypeName(name), new PackageName("com.oregor")));
+        new IoModelGroup(new ObjectName(name), new PackageName("com.oregor"));
 
     models.forEach(
         model -> {

@@ -103,8 +103,7 @@ public class ActionGroupRepresentable {
                                     .getPayloadModel()
                                     .getModel()
                                     .getDataType()
-                                    .getDataTypeName()
-                                    .getText()))),
+                            ))),
                     String.format(
                         "../models/%s.model",
                         TextConverter.toLowerHyphen(
@@ -112,8 +111,7 @@ public class ActionGroupRepresentable {
                                 .getPayloadModel()
                                 .getModel()
                                 .getDataType()
-                                .getDataTypeName()
-                                .getText())));
+                        )));
               }
             });
 

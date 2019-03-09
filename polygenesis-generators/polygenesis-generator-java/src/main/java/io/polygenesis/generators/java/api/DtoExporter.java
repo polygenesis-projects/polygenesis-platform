@@ -80,6 +80,11 @@ public class DtoExporter {
   // ===============================================================================================
 
   private void export(Path generationPath, Dto dto) {
+    // TODO: getOriginatingIoModelGroup() should not be IoModelArray
+    if(dto.getOriginatingIoModelGroup().isIoModelArray()) {
+      return;
+    }
+
     Map<String, Object> dataModel = new HashMap<>();
     dataModel.put("representation", dtoClassRepresentable.create(dto));
 
@@ -92,16 +97,14 @@ public class DtoExporter {
   private Path makeFileName(Path generationPath, Dto dto) {
     PackageName servicePackageName =
         dto.getOriginatingIoModelGroup()
-            .getDataType()
-            .getOptionalPackageName()
-            .orElseThrow(IllegalArgumentException::new);
+            .getPackageName();
 
     return Paths.get(
         generationPath.toString(),
         "src/main/java",
         servicePackageName.toPath().toString(),
         TextConverter.toUpperCamel(
-                dto.getOriginatingIoModelGroup().getDataType().getDataTypeName().getText())
+            dto.getOriginatingIoModelGroup().getDataType())
             + ".java");
   }
 }

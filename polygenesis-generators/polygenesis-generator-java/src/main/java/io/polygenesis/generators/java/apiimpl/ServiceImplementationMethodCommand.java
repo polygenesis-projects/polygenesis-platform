@@ -208,9 +208,8 @@ public class ServiceImplementationMethodCommand extends ServiceImplementationMet
             valueObjectFromDto
                 .getDto()
                 .getOriginatingIoModelGroup()
-                .getClassDataType()
-                .getDataTypeName()
-                .getText()));
+                .getDataType()
+        ));
     stringBuilder.append("()");
     stringBuilder.append(")");
 

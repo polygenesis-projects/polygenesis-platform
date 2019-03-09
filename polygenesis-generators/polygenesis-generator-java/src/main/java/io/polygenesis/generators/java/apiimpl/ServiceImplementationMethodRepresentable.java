@@ -125,7 +125,7 @@ public class ServiceImplementationMethodRepresentable extends AbstractMethodRepr
   public String returnValue(Method source, Object... args) {
     // TODO - primitives
     return TextConverter.toUpperCamel(
-        source.getFunction().getReturnValue().getModel().getDataType().getDataTypeName().getText());
+        source.getFunction().getReturnValue().getModel().getDataType());
   }
 
   @Override

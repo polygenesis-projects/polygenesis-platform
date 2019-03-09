@@ -23,9 +23,6 @@ package io.polygenesis.core.iomodel;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.polygenesis.commons.test.AbstractEqualityTest;
-import io.polygenesis.core.datatype.ClassDataType;
-import io.polygenesis.core.datatype.DataTypeName;
-import io.polygenesis.core.datatype.PackageName;
 import io.polygenesis.core.datatype.PrimitiveDataType;
 import io.polygenesis.core.datatype.PrimitiveType;
 import org.junit.Test;
@@ -36,9 +33,7 @@ public class IoModelTest extends AbstractEqualityTest<TestIoModel> {
   @Test
   public void shouldInitializeTestIoModel() {
     TestIoModel testIoModel =
-        new TestIoModel(
-            new PrimitiveDataType(PrimitiveType.STRING),
-            new VariableName("someVariableName"));
+        new TestIoModel(new VariableName("someVariableName"));
 
     assertThat(testIoModel).isNotNull();
     assertThat(testIoModel.getDataType()).isEqualTo(new PrimitiveDataType(PrimitiveType.STRING));
@@ -51,14 +46,12 @@ public class IoModelTest extends AbstractEqualityTest<TestIoModel> {
   @Override
   public TestIoModel createObject1() {
     return new TestIoModel(
-        new ClassDataType(new DataTypeName("SomeClass"), new PackageName("com.dummy")),
         new VariableName("variableName"));
   }
 
   @Override
   public TestIoModel createObject2() {
     return new TestIoModel(
-        new ClassDataType(new DataTypeName("SomeClass"), new PackageName("com.dummy")),
         new VariableName("someOtherVariableName"));
   }
 }

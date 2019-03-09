@@ -101,7 +101,7 @@ public class ActionGroupDeducer {
                               ActionType.ON_FAILURE,
                               new Model(
                                   IoModelPrimitive.of(
-                                      new PrimitiveDataType(PrimitiveType.STRING),
+                                      PrimitiveType.STRING,
                                       new VariableName("errorMessage")))));
 
                       actionGroups.add(

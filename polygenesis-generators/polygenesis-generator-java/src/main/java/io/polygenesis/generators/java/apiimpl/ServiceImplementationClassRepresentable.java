@@ -21,7 +21,6 @@
 package io.polygenesis.generators.java.apiimpl;
 
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.datatype.PackageName;
 import io.polygenesis.core.iomodel.IoModelGroup;
 import io.polygenesis.models.api.Method;
 import io.polygenesis.models.api.Service;
@@ -222,16 +221,14 @@ public class ServiceImplementationClassRepresentable
         .forEach(
             property -> {
               if (property.getPropertyType().equals(PropertyType.VALUE_OBJECT)) {
-                IoModelGroup modelGroup = property.getIoModelGroupAsOptional().get();
-                Optional<PackageName> optionalPackageName =
-                    modelGroup.getClassDataType().getOptionalPackageName();
-                if (optionalPackageName.isPresent()
-                    && !optionalPackageName.get().equals(aggregateRoot.getPackageName())) {
+                IoModelGroup modelGroup = property.getIoModelGroupAsOptional()
+                    .orElseThrow(IllegalAccessError::new);
+
+                if (modelGroup.getPackageName().equals(aggregateRoot.getPackageName())) {
                   imports.add(
-                      optionalPackageName.get().getText()
+                      modelGroup.getPackageName().getText()
                           + "."
-                          + TextConverter.toUpperCamel(
-                              modelGroup.getClassDataType().getDataTypeName().getText()));
+                          + TextConverter.toUpperCamel(modelGroup.getDataType()));
                 }
               }
             });

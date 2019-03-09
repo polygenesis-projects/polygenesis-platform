@@ -81,9 +81,7 @@ public class AggregateEntityExporter {
         "src/main/java",
         aggregateEntity
             .getIoModelGroup()
-            .getClassDataType()
-            .getOptionalPackageName()
-            .orElseThrow(IllegalArgumentException::new)
+            .getPackageName()
             .toPath()
             .toString(),
         TextConverter.toUpperCamel(aggregateEntity.getVariableName().getText()) + ".java");

@@ -50,7 +50,7 @@ public class IoModelPrimitiveTest extends AbstractEqualityTest<IoModelPrimitive>
   public void shouldInitializeIoModelPrimitiveWithParent() {
     IoModelPrimitive ioModelPrimitive =
         new IoModelPrimitive(
-            new PrimitiveDataType(PrimitiveType.STRING),
+            PrimitiveType.STRING,
             new VariableName("someVariableName"),
             new LinkedHashSet<>(),
             DataBusinessType.ANY);
@@ -68,7 +68,7 @@ public class IoModelPrimitiveTest extends AbstractEqualityTest<IoModelPrimitive>
   @Override
   public IoModelPrimitive createObject1() {
     return new IoModelPrimitive(
-        new PrimitiveDataType(PrimitiveType.STRING),
+        PrimitiveType.STRING,
         new VariableName("someVariableName"),
         new LinkedHashSet<>(),
         DataBusinessType.ANY);
@@ -77,7 +77,7 @@ public class IoModelPrimitiveTest extends AbstractEqualityTest<IoModelPrimitive>
   @Override
   public IoModelPrimitive createObject2() {
     return new IoModelPrimitive(
-        new PrimitiveDataType(PrimitiveType.STRING),
+        PrimitiveType.STRING,
         new VariableName("someOtherVariableName"),
         new LinkedHashSet<>(),
         DataBusinessType.ANY);

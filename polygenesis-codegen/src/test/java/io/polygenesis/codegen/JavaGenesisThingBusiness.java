@@ -28,10 +28,8 @@ import io.polygenesis.core.Goal;
 import io.polygenesis.core.ReturnValue;
 import io.polygenesis.core.Thing;
 import io.polygenesis.core.ThingName;
-import io.polygenesis.core.datatype.ClassDataType;
-import io.polygenesis.core.datatype.DataTypeName;
+import io.polygenesis.core.data.ObjectName;
 import io.polygenesis.core.datatype.PackageName;
-import io.polygenesis.core.datatype.PrimitiveDataType;
 import io.polygenesis.core.datatype.PrimitiveType;
 import io.polygenesis.core.iomodel.DataBusinessType;
 import io.polygenesis.core.iomodel.IoModelGroup;
@@ -60,14 +58,13 @@ public class JavaGenesisThingBusiness {
     // ARGUMENTS
     IoModelGroup argumentIoModelGroup =
         new IoModelGroup(
-            new ClassDataType(
-                new DataTypeName("CreateBusinessRequest"),
-                new PackageName("com.oregor.microservice.account.business")));
+            new ObjectName("CreateBusinessRequest"),
+            new PackageName("com.oregor.microservice.account.business"));
 
     // ARGUMENT - NAME
     argumentIoModelGroup.addIoModelPrimitive(
         IoModelPrimitive.of(
-            new PrimitiveDataType(PrimitiveType.STRING),
+            PrimitiveType.STRING,
             new VariableName("name")));
 
     // ARGUMENT - POSTAL ADDRESS
@@ -76,15 +73,14 @@ public class JavaGenesisThingBusiness {
     // RETURN VALUE
     IoModelGroup returnValueIoModelGroup =
         new IoModelGroup(
-            new ClassDataType(
-                new DataTypeName("CreateBusinessResponse"),
-                new PackageName("com.oregor.microservice.account.business")));
+            new ObjectName("CreateBusinessResponse"),
+            new PackageName("com.oregor.microservice.account.business"));
 
     // RETURN VALUE - BUSINESSID
     returnValueIoModelGroup.addIoModelPrimitive(
         IoModelPrimitive.ofDataBusinessType(
             DataBusinessType.THING_IDENTITY,
-            new PrimitiveDataType(PrimitiveType.STRING),
+            PrimitiveType.STRING,
             new VariableName("businessId")));
 
     return new Function(
@@ -103,23 +99,21 @@ public class JavaGenesisThingBusiness {
     // ARGUMENTS
     IoModelGroup argumentIoModelGroup =
         new IoModelGroup(
-            new ClassDataType(
-                new DataTypeName("FetchBusinessRequest"),
-                new PackageName("com.oregor.microservice.account.business")));
+            new ObjectName("FetchBusinessRequest"),
+            new PackageName("com.oregor.microservice.account.business"));
 
     // ARGUMENT - BusinessID
     argumentIoModelGroup.addIoModelPrimitive(
         IoModelPrimitive.ofDataBusinessType(
             DataBusinessType.THING_IDENTITY,
-            new PrimitiveDataType(PrimitiveType.STRING),
+            PrimitiveType.STRING,
             new VariableName("businessId")));
 
     // RETURN VALUE
     IoModelGroup returnValueIoModelGroup =
         new IoModelGroup(
-            new ClassDataType(
-                new DataTypeName("FetchBusinessResponse"),
-                new PackageName("com.oregor.microservice.account.business")));
+            new ObjectName("FetchBusinessResponse"),
+            new PackageName("com.oregor.microservice.account.business"));
 
     return new Function(
         business,
@@ -137,23 +131,21 @@ public class JavaGenesisThingBusiness {
   private static IoModelGroup postalAddress() {
     IoModelGroup postalAddress =
         new IoModelGroup(
-            new ClassDataType(
-                new DataTypeName("PostalAddressDto"),
-                new PackageName("com.oregor.microservice.account.shared")));
+            new ObjectName("PostalAddressDto"),
+            new PackageName("com.oregor.microservice.account.shared"));
 
     postalAddress.addIoModelPrimitive(
         IoModelPrimitive.of(
-            new PrimitiveDataType(PrimitiveType.STRING),
+            PrimitiveType.STRING,
             new VariableName("streetAddress1")));
 
     postalAddress.addIoModelPrimitive(
         IoModelPrimitive.of(
-            new PrimitiveDataType(PrimitiveType.STRING),
+            PrimitiveType.STRING,
             new VariableName("streetAddress2")));
 
     postalAddress.addIoModelPrimitive(
-        IoModelPrimitive.of(
-            new PrimitiveDataType(PrimitiveType.STRING), new VariableName("city")));
+        IoModelPrimitive.of(PrimitiveType.STRING, new VariableName("city")));
 
     return postalAddress;
   }

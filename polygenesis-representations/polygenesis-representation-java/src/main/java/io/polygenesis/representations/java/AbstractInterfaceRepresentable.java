@@ -86,10 +86,10 @@ public abstract class AbstractInterfaceRepresentable<S> implements InterfaceRepr
    * Make canonical object name string.
    *
    * @param packageName the package name
-   * @param dataTypeName the data type name
+   * @param dataType the data type
    * @return the string
    */
-  protected String makeCanonicalObjectName(PackageName packageName, DataTypeName dataTypeName) {
-    return packageName.getText() + "." + TextConverter.toUpperCamel(dataTypeName.getText());
+  protected String makeCanonicalObjectName(PackageName packageName, String dataType) {
+    return packageName.getText() + "." + TextConverter.toUpperCamel(dataType);
   }
 }

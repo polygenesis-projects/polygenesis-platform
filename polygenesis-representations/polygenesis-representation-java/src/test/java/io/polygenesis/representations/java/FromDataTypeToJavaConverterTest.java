@@ -22,7 +22,6 @@ package io.polygenesis.representations.java;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.polygenesis.core.datatype.PrimitiveDataType;
 import io.polygenesis.core.datatype.PrimitiveType;
 import io.polygenesis.core.iomodel.IoModelPrimitive;
 import io.polygenesis.core.iomodel.VariableName;
@@ -36,15 +35,15 @@ public class FromDataTypeToJavaConverterTest {
   @Test
   public void shouldGetCorrectDeclaredVariableType() {
     IoModelPrimitive model =
-        IoModelPrimitive.of(new PrimitiveDataType(PrimitiveType.INTEGER), new VariableName("var"));
+        IoModelPrimitive.of(PrimitiveType.INTEGER, new VariableName("var"));
     assertThat(converter.getDeclaredVariableType(model)).isEqualTo("Integer");
 
     model =
-        IoModelPrimitive.of(new PrimitiveDataType(PrimitiveType.STRING), new VariableName("var"));
+        IoModelPrimitive.of(PrimitiveType.STRING, new VariableName("var"));
     assertThat(converter.getDeclaredVariableType(model)).isEqualTo("String");
 
     model =
-        IoModelPrimitive.of(new PrimitiveDataType(PrimitiveType.BOOLEAN), new VariableName("var"));
+        IoModelPrimitive.of(PrimitiveType.BOOLEAN, new VariableName("var"));
     assertThat(converter.getDeclaredVariableType(model)).isEqualTo("Boolean");
   }
 }

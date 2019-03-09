@@ -50,7 +50,7 @@ public abstract class AbstractReactiveStateTest {
             new FunctionName("createSomeThing"),
             new ReturnValue(
                 new IoModelPrimitive(
-                    new PrimitiveDataType(PrimitiveType.STRING),
+                    PrimitiveType.STRING,
                     new VariableName("response"),
                     new LinkedHashSet<>(),
                     DataBusinessType.ANY)));
@@ -66,7 +66,7 @@ public abstract class AbstractReactiveStateTest {
             new FunctionName("createSomeThing"),
             new ReturnValue(
                 new IoModelPrimitive(
-                    new PrimitiveDataType(PrimitiveType.STRING),
+                    PrimitiveType.STRING,
                     new VariableName("response"),
                     new LinkedHashSet<>(),
                     DataBusinessType.ANY)));

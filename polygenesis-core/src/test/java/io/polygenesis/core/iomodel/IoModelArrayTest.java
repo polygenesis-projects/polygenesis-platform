@@ -33,9 +33,7 @@ public class IoModelArrayTest {
   @Test
   public void shouldInitializeIoModelArray() {
     IoModelArray ioModelArray =
-        new IoModelArray(
-            new ClassDataType(new DataTypeName("SomeClass"), new PackageName("com.dummy")),
-            new VariableName("someVariableName"));
+        new IoModelArray(new VariableName("someVariableName"));
 
     assertThat(ioModelArray).isNotNull();
     assertThat(ioModelArray.getDataType())

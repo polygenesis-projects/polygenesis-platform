@@ -77,7 +77,7 @@ public class ValueObjectClassRepresentable extends AbstractClassRepresentable<Va
 
     constructorRepresentations.add(
         createConstructorWithSettersFromFieldRepresentations(
-            source.getOriginatingIoModelGroup().getDataType().getDataTypeName().getText(),
+            source.getOriginatingIoModelGroup().getDataType(),
             fieldRepresentations));
 
     return constructorRepresentations;
@@ -118,7 +118,7 @@ public class ValueObjectClassRepresentable extends AbstractClassRepresentable<Va
 
     stringBuilder.append(
         TextConverter.toUpperCamelSpaces(
-            source.getIoModelGroup().getDataType().getDataTypeName().getText()));
+            source.getIoModelGroup().getDataType()));
 
     stringBuilder.append(" Value Object.");
 

@@ -107,7 +107,7 @@ public class EndpointMethodRepresentable extends AbstractMethodRepresentable<End
             argument -> {
               if (argument.getModel().isIoModelGroup()
                   && (source.getFunction().getGoal().isCreate()
-                      || source.getFunction().getGoal().isModify())) {
+                  || source.getFunction().getGoal().isModify())) {
                 parameterRepresentations.add(
                     new ParameterRepresentation(
                         fromDataTypeToJavaConverter.getDeclaredVariableType(argument.getModel()),
@@ -128,7 +128,7 @@ public class EndpointMethodRepresentable extends AbstractMethodRepresentable<End
   public String returnValue(Endpoint source, Object... args) {
     // TODO - primitives
     return TextConverter.toUpperCamel(
-        source.getFunction().getReturnValue().getModel().getDataType().getDataTypeName().getText());
+        source.getFunction().getReturnValue().getModel().getDataType());
   }
 
   @Override

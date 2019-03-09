@@ -150,15 +150,13 @@ public class AggregateRootClassRepresentable extends AbstractClassRepresentable<
 
                 IoModelGroup ioModelGroup = optionalIoModelGroup.get();
                 if (!ioModelGroup
-                    .getClassDataType()
-                    .getOptionalPackageName()
-                    .get()
+                    .getPackageName()
                     .equals(source.getPackageName())) {
                   imports.add(
-                      ioModelGroup.getClassDataType().getOptionalPackageName().get().getText()
+                      ioModelGroup.getPackageName().getText()
                           + "."
                           + TextConverter.toUpperCamel(
-                              ioModelGroup.getDataType().getDataTypeName().getText()));
+                          ioModelGroup.getDataType()));
                 }
               }
             });

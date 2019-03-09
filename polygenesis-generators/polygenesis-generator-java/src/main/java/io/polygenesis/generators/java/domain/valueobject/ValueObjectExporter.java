@@ -79,9 +79,7 @@ public class ValueObjectExporter {
         "src/main/java",
         valueObject
             .getIoModelGroup()
-            .getClassDataType()
-            .getOptionalPackageName()
-            .orElseThrow(IllegalArgumentException::new)
+            .getPackageName()
             .toPath()
             .toString(),
         TextConverter.toUpperCamel(valueObject.getVariableName().getText()) + ".java");

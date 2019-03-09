@@ -20,20 +20,17 @@
 
 package io.polygenesis.core.iomodel;
 
-import io.polygenesis.core.datatype.AbstractDataType;
-import io.polygenesis.core.datatype.PrimitiveType;
 import java.util.Objects;
 
 /**
  * This is the base class for {@link IoModelPrimitive}, {@link IoModelGroup}, and {@link
- * IoModelArray}***.
+ * IoModelArray}.
  *
  * @author Christos Tsakostas
  */
 public abstract class IoModel {
 
   private final DataKind dataKind;
-  private final AbstractDataType dataType;
   private final VariableName variableName;
 
   // ===============================================================================================
@@ -46,22 +43,30 @@ public abstract class IoModel {
    * @param dataKind the data kind
    */
   public IoModel(DataKind dataKind) {
-    this(dataKind, null, null);
+    this(dataKind, null);
   }
 
   /**
    * Instantiates a new Io model.
    *
    * @param dataKind the data kind
-   * @param dataType the data type
    * @param variableName the variable name
    */
-  public IoModel(DataKind dataKind, AbstractDataType dataType,
-      VariableName variableName) {
+  public IoModel(DataKind dataKind, VariableName variableName) {
     this.dataKind = dataKind;
-    this.dataType = dataType;
     this.variableName = variableName;
   }
+
+  // ===============================================================================================
+  // ABSTRACT
+  // ===============================================================================================
+
+  /**
+   * Gets data type.
+   *
+   * @return the data type
+   */
+  public abstract String getDataType();
 
   // ===============================================================================================
   // GETTERS
@@ -74,15 +79,6 @@ public abstract class IoModel {
    */
   public DataKind getDataKind() {
     return dataKind;
-  }
-
-  /**
-   * Gets data type.
-   *
-   * @return the data type
-   */
-  public AbstractDataType getDataType() {
-    return dataType;
   }
 
   /**
@@ -104,25 +100,7 @@ public abstract class IoModel {
    * @return the boolean
    */
   public boolean isPrimitive() {
-    if (this instanceof IoModelPrimitive) {
-      return true;
-    }
-
-    if (this instanceof IoModelArray) {
-      return this.isDataTypePrimitive(getDataType());
-    }
-
-    return false;
-  }
-
-  // TODO: move into AbstractDataType
-  private boolean isDataTypePrimitive(AbstractDataType dataType) {
-    try {
-      PrimitiveType.valueOf(dataType.getDataTypeName().getText().toUpperCase());
-      return true;
-    } catch (Exception e) {
-      return false;
-    }
+    return getDataKind().equals(DataKind.PRIMITIVE);
   }
 
   /**
@@ -131,7 +109,7 @@ public abstract class IoModel {
    * @return the boolean
    */
   public boolean isIoModelGroup() {
-    return this instanceof IoModelGroup;
+    return this instanceof IoModelGroup && !(this instanceof IoModelArray);
   }
 
   /**
@@ -169,12 +147,12 @@ public abstract class IoModel {
       return false;
     }
     IoModel ioModel = (IoModel) o;
-    return Objects.equals(dataType, ioModel.dataType) &&
+    return dataKind == ioModel.dataKind &&
         Objects.equals(variableName, ioModel.variableName);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(dataType, variableName);
+    return Objects.hash(dataKind, variableName);
   }
 }

@@ -78,8 +78,7 @@ public class ServiceImplementationMethodQuery extends ServiceImplementationMetho
                 .getRequestDto()
                 .getOriginatingIoModelGroup()
                 .getDataType()
-                .getDataTypeName()
-                .getText()));
+        ));
     stringBuilder.append(", \"");
     stringBuilder.append(
         TextConverter.toUpperCamelSpaces(
@@ -87,8 +86,7 @@ public class ServiceImplementationMethodQuery extends ServiceImplementationMetho
                 .getRequestDto()
                 .getOriginatingIoModelGroup()
                 .getDataType()
-                .getDataTypeName()
-                .getText()));
+        ));
     stringBuilder.append(" is required\");");
     stringBuilder.append("\n");
     stringBuilder.append("\n");
@@ -112,8 +110,7 @@ public class ServiceImplementationMethodQuery extends ServiceImplementationMetho
                 .getRequestDto()
                 .getOriginatingIoModelGroup()
                 .getDataType()
-                .getDataTypeName()
-                .getText());
+        );
 
     stringBuilder.append("\t\t");
     stringBuilder.append("Paginated<");
@@ -155,8 +152,7 @@ public class ServiceImplementationMethodQuery extends ServiceImplementationMetho
                 .getResponseDto()
                 .getOriginatingIoModelGroup()
                 .getDataType()
-                .getDataTypeName()
-                .getText()));
+        ));
     stringBuilder.append("(");
     stringBuilder.append(TextConverter.toLowerCamel(aggregateRoot.getName().getText()));
     stringBuilder.append(");");
@@ -180,9 +176,8 @@ public class ServiceImplementationMethodQuery extends ServiceImplementationMetho
             method
                 .getRequestDto()
                 .getOriginatingIoModelGroup()
-                .getClassDataType()
-                .getDataTypeName()
-                .getText());
+                .getDataType()
+        );
 
     stringBuilder.append("\t\t");
     stringBuilder.append("return new ");
@@ -192,8 +187,7 @@ public class ServiceImplementationMethodQuery extends ServiceImplementationMetho
                 .getResponseDto()
                 .getOriginatingIoModelGroup()
                 .getDataType()
-                .getDataTypeName()
-                .getText()));
+        ));
     stringBuilder.append("(");
     stringBuilder.append("\n");
     stringBuilder.append("\t\t\t\tStreamSupport\n");
@@ -210,8 +204,7 @@ public class ServiceImplementationMethodQuery extends ServiceImplementationMetho
                 .getArrayElementAsOptional()
                 .orElseThrow(IllegalArgumentException::new)
                 .getDataType()
-                .getDataTypeName()
-                .getText()));
+        ));
     stringBuilder.append(")\n");
     stringBuilder.append("\t\t\t\t\t\t.collect(Collectors.toList()),\n");
     stringBuilder.append("\t\t\t\tpaginated.getTotalPages(),\n");

@@ -23,12 +23,11 @@ package io.polygenesis.core.iomodel;
 import static java.util.stream.Collectors.toCollection;
 
 import com.oregor.ddd4j.check.assertion.Assertion;
-import io.polygenesis.core.datatype.ClassDataType;
-import io.polygenesis.core.datatype.PrimitiveDataType;
+import io.polygenesis.core.data.ObjectName;
+import io.polygenesis.core.datatype.PackageName;
 import java.util.LinkedHashSet;
+import java.util.Objects;
 import java.util.Set;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * The type Io model group.
@@ -37,6 +36,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  */
 public class IoModelGroup extends IoModel {
 
+  private final ObjectName objectName;
+  private final PackageName packageName;
   private final Set<IoModel> models;
 
   // ===============================================================================================
@@ -47,41 +48,46 @@ public class IoModelGroup extends IoModel {
    * Instantiates a new Io model group.
    */
   public IoModelGroup() {
-    this(null, null, new LinkedHashSet<>());
+    this(null, null, null, new LinkedHashSet<>());
   }
 
   /**
    * Instantiates a new Io model group.
    *
-   * <p>Variable name is automatically set after class data type name.
-   *
-   * @param dataType the data type
-   */
-  public IoModelGroup(ClassDataType dataType) {
-    this(dataType, new VariableName(dataType.getDataTypeName().getText()), new LinkedHashSet<>());
-  }
-
-  /**
-   * Instantiates a new Io model group.
-   *
-   * @param dataType the data type
    * @param variableName the variable name
    */
-  public IoModelGroup(ClassDataType dataType, VariableName variableName) {
-    this(dataType, variableName, new LinkedHashSet<>());
+  public IoModelGroup(VariableName variableName) {
+    this(null, null, variableName, new LinkedHashSet<>());
   }
 
   /**
    * Instantiates a new Io model group.
    *
-   * @param dataType the data type
-   * @param variableName the variable name
-   * @param models the models
+   * @param objectName the object name
+   * @param packageName the package name
    */
-  private IoModelGroup(ClassDataType dataType,
+  public IoModelGroup(ObjectName objectName, PackageName packageName) {
+    this(objectName, packageName, new VariableName(objectName.getText()), new LinkedHashSet<>());
+  }
+
+  /**
+   * Instantiates a new Io model group.
+   *
+   * @param objectName the object name
+   * @param packageName the package name
+   * @param variableName the variable name
+   */
+  public IoModelGroup(ObjectName objectName, PackageName packageName, VariableName variableName) {
+    this(objectName, packageName, variableName, new LinkedHashSet<>());
+  }
+
+  private IoModelGroup(ObjectName objectName,
+      PackageName packageName,
       VariableName variableName,
       Set<IoModel> models) {
-    super(DataKind.CLASS, dataType, variableName);
+    super(DataKind.CLASS, variableName);
+    this.objectName = objectName;
+    this.packageName = packageName;
     this.models = models;
   }
 
@@ -90,14 +96,15 @@ public class IoModelGroup extends IoModel {
   // ===============================================================================================
 
   /**
-   * With new class data type io model group.
+   * With new object name io model group.
    *
-   * @param dataType the data type
+   * @param objectName the object name
    * @return the io model group
    */
-  public IoModelGroup withNewClassDataType(ClassDataType dataType) {
-    return new IoModelGroup(dataType, getVariableName(), getModels());
+  public IoModelGroup withNewObjectName(ObjectName objectName) {
+    return new IoModelGroup(objectName, getPackageName(), getVariableName(), getModels());
   }
+
 
   /**
    * With new variable name io model group.
@@ -106,7 +113,7 @@ public class IoModelGroup extends IoModel {
    * @return the io model group
    */
   public IoModelGroup withNewVariableName(VariableName variableName) {
-    return new IoModelGroup((ClassDataType) getDataType(), variableName, getModels());
+    return new IoModelGroup(getObjectName(), getPackageName(), variableName, getModels());
   }
 
   // ===============================================================================================
@@ -157,7 +164,8 @@ public class IoModelGroup extends IoModel {
     if (model.isIoModelGroup()) {
       IoModelGroup ioModelGroup =
           new IoModelGroup(
-              ((IoModelGroup) model).getClassDataType(),
+              ((IoModelGroup) model).getObjectName(),
+              ((IoModelGroup) model).getPackageName(),
               model.getVariableName(),
               ((IoModelGroup) model).getModels());
 
@@ -165,7 +173,7 @@ public class IoModelGroup extends IoModel {
     } else if (model.isPrimitive()) {
       IoModelPrimitive ioModelPrimitive =
           new IoModelPrimitive(
-              (PrimitiveDataType) model.getDataType(),
+              ((IoModelPrimitive) model).getPrimitiveType(),
               model.getVariableName(),
               ((IoModelPrimitive) model).getAnnotations(),
               ((IoModelPrimitive) model).getDataBusinessType());
@@ -181,6 +189,24 @@ public class IoModelGroup extends IoModel {
   // ===============================================================================================
 
   /**
+   * Gets object name.
+   *
+   * @return the object name
+   */
+  public ObjectName getObjectName() {
+    return objectName;
+  }
+
+  /**
+   * Gets package name.
+   *
+   * @return the package name
+   */
+  public PackageName getPackageName() {
+    return packageName;
+  }
+
+  /**
    * Gets models.
    *
    * @return the models
@@ -190,21 +216,12 @@ public class IoModelGroup extends IoModel {
   }
 
   // ===============================================================================================
-  // QUERIES
+  // ABSTRACT IMPLEMENTATION
   // ===============================================================================================
 
-  /**
-   * Gets class data type.
-   *
-   * @return the class data type
-   */
-  public ClassDataType getClassDataType() {
-    if (!getDataType().isClass()) {
-      throw new IllegalStateException(
-          String.format(
-              "Datatype=%s is not ClassDataType", getDataType().getDataTypeName().getText()));
-    }
-    return (ClassDataType) getDataType();
+  @Override
+  public String getDataType() {
+    return getObjectName().getText();
   }
 
   // ===============================================================================================
@@ -216,18 +233,20 @@ public class IoModelGroup extends IoModel {
     if (this == o) {
       return true;
     }
-
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-
+    if (!super.equals(o)) {
+      return false;
+    }
     IoModelGroup that = (IoModelGroup) o;
-
-    return new EqualsBuilder().appendSuper(super.equals(o)).append(models, that.models).isEquals();
+    return Objects.equals(objectName, that.objectName) &&
+        Objects.equals(packageName, that.packageName) &&
+        Objects.equals(models, that.models);
   }
 
   @Override
   public int hashCode() {
-    return new HashCodeBuilder(17, 37).appendSuper(super.hashCode()).toHashCode();
+    return Objects.hash(super.hashCode(), objectName, packageName, models);
   }
 }

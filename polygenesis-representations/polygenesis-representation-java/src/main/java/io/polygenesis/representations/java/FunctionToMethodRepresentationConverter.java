@@ -96,8 +96,7 @@ public class FunctionToMethodRepresentationConverter extends AbstractMethodRepre
   @Override
   public String returnValue(Function source, Object... args) {
     // TODO - primitives
-    return TextConverter.toUpperCamel(
-        source.getReturnValue().getModel().getDataType().getDataTypeName().getText());
+    return TextConverter.toUpperCamel(source.getReturnValue().getModel().getDataType());
   }
 
   @Override

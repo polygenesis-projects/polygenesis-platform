@@ -23,10 +23,10 @@ package io.polygenesis.core.iomodel;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.polygenesis.commons.test.AbstractEqualityTest;
+import io.polygenesis.core.data.ObjectName;
 import io.polygenesis.core.datatype.ClassDataType;
 import io.polygenesis.core.datatype.DataTypeName;
 import io.polygenesis.core.datatype.PackageName;
-import io.polygenesis.core.datatype.PrimitiveDataType;
 import io.polygenesis.core.datatype.PrimitiveType;
 import org.junit.Test;
 
@@ -37,7 +37,8 @@ public class IoModelGroupTest extends AbstractEqualityTest<IoModelGroup> {
   public void shouldInitializeIoModelGroup() {
     IoModelGroup ioModelGroup =
         new IoModelGroup(
-            new ClassDataType(new DataTypeName("SomeClass"), new PackageName("com.dummy")),
+            new ObjectName("SomeClass"),
+            new PackageName("com.dummy"),
             new VariableName("someVariableName"));
 
     assertThat(ioModelGroup).isNotNull();
@@ -48,19 +49,19 @@ public class IoModelGroupTest extends AbstractEqualityTest<IoModelGroup> {
     IoModelArray childIoModelArray =
         new IoModelArray(
             ioModelGroup,
-            new ClassDataType(new DataTypeName("SomeClass"), new PackageName("com.dummy")),
             new VariableName("someVariableName"));
     ioModelGroup.addIoModelArray(childIoModelArray);
 
     IoModelGroup childIoModelGroup =
         new IoModelGroup(
-            new ClassDataType(new DataTypeName("SomeClass"), new PackageName("com.dummy")),
+            new ObjectName("SomeClass"),
+            new PackageName("com.dummy"),
             new VariableName("someVariableName"));
     ioModelGroup.addIoModelGroup(childIoModelGroup);
 
     IoModelPrimitive childIoModelPrimitive =
         new IoModelPrimitive(
-            new PrimitiveDataType(PrimitiveType.STRING),
+            PrimitiveType.STRING,
             new VariableName("someVariableName"),
             null,
             DataBusinessType.ANY);
@@ -76,14 +77,16 @@ public class IoModelGroupTest extends AbstractEqualityTest<IoModelGroup> {
   @Override
   public IoModelGroup createObject1() {
     return new IoModelGroup(
-        new ClassDataType(new DataTypeName("SomeClass"), new PackageName("com.dummy")),
+        new ObjectName("SomeClass"),
+        new PackageName("com.dummy"),
         new VariableName("someVariableName"));
   }
 
   @Override
   public IoModelGroup createObject2() {
     return new IoModelGroup(
-        new ClassDataType(new DataTypeName("SomeClass"), new PackageName("com.dummy")),
+        new ObjectName("SomeClass"),
+        new PackageName("com.dummy"),
         new VariableName("someOtherVariableName"));
   }
 }
