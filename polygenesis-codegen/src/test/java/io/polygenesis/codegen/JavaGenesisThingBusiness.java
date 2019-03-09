@@ -66,13 +66,12 @@ public class JavaGenesisThingBusiness {
 
     // ARGUMENT - NAME
     argumentIoModelGroup.addIoModelPrimitive(
-        IoModelPrimitive.ofParent(
-            argumentIoModelGroup,
+        IoModelPrimitive.of(
             new PrimitiveDataType(PrimitiveType.STRING),
             new VariableName("name")));
 
     // ARGUMENT - POSTAL ADDRESS
-    argumentIoModelGroup.addIoModelGroup(postalAddress(argumentIoModelGroup));
+    argumentIoModelGroup.addIoModelGroup(postalAddress());
 
     // RETURN VALUE
     IoModelGroup returnValueIoModelGroup =
@@ -85,7 +84,6 @@ public class JavaGenesisThingBusiness {
     returnValueIoModelGroup.addIoModelPrimitive(
         IoModelPrimitive.ofDataBusinessTypeWithParent(
             DataBusinessType.THING_IDENTITY,
-            returnValueIoModelGroup,
             new PrimitiveDataType(PrimitiveType.STRING),
             new VariableName("businessId")));
 
@@ -113,7 +111,6 @@ public class JavaGenesisThingBusiness {
     argumentIoModelGroup.addIoModelPrimitive(
         IoModelPrimitive.ofDataBusinessTypeWithParent(
             DataBusinessType.THING_IDENTITY,
-            argumentIoModelGroup,
             new PrimitiveDataType(PrimitiveType.STRING),
             new VariableName("businessId")));
 
@@ -137,29 +134,26 @@ public class JavaGenesisThingBusiness {
   // ===============================================================================================
 
   // POSTAL ADDRESS
-  private static IoModelGroup postalAddress(IoModelGroup parent) {
+  private static IoModelGroup postalAddress() {
     IoModelGroup postalAddress =
         new IoModelGroup(
-            parent,
             new ClassDataType(
                 new DataTypeName("PostalAddressDto"),
                 new PackageName("com.oregor.microservice.account.shared")));
 
     postalAddress.addIoModelPrimitive(
-        IoModelPrimitive.ofParent(
-            postalAddress,
+        IoModelPrimitive.of(
             new PrimitiveDataType(PrimitiveType.STRING),
             new VariableName("streetAddress1")));
 
     postalAddress.addIoModelPrimitive(
-        IoModelPrimitive.ofParent(
-            postalAddress,
+        IoModelPrimitive.of(
             new PrimitiveDataType(PrimitiveType.STRING),
             new VariableName("streetAddress2")));
 
     postalAddress.addIoModelPrimitive(
-        IoModelPrimitive.ofParent(
-            postalAddress, new PrimitiveDataType(PrimitiveType.STRING), new VariableName("city")));
+        IoModelPrimitive.of(
+            new PrimitiveDataType(PrimitiveType.STRING), new VariableName("city")));
 
     return postalAddress;
   }

@@ -48,14 +48,12 @@ public class IoModelGroupTest extends AbstractEqualityTest<IoModelGroup> {
     IoModelArray childIoModelArray =
         new IoModelArray(
             ioModelGroup,
-            null,
             new ClassDataType(new DataTypeName("SomeClass"), new PackageName("com.dummy")),
             new VariableName("someVariableName"));
     ioModelGroup.addIoModelArray(childIoModelArray);
 
     IoModelGroup childIoModelGroup =
         new IoModelGroup(
-            ioModelGroup,
             new ClassDataType(new DataTypeName("SomeClass"), new PackageName("com.dummy")),
             new VariableName("someVariableName"));
     ioModelGroup.addIoModelGroup(childIoModelGroup);
@@ -64,7 +62,6 @@ public class IoModelGroupTest extends AbstractEqualityTest<IoModelGroup> {
         new IoModelPrimitive(
             new PrimitiveDataType(PrimitiveType.STRING),
             new VariableName("someVariableName"),
-            ioModelGroup,
             null,
             DataBusinessType.ANY);
     ioModelGroup.addIoModelPrimitive(childIoModelPrimitive);
@@ -74,23 +71,6 @@ public class IoModelGroupTest extends AbstractEqualityTest<IoModelGroup> {
     assertThat(childIoModelArray.isPrimitive()).isFalse();
     assertThat(childIoModelGroup.isPrimitive()).isFalse();
     assertThat(childIoModelPrimitive.isPrimitive()).isTrue();
-  }
-
-  @Test
-  public void shouldInitializeIoModelArrayWithParent() {
-    IoModelGroup parent =
-        new IoModelGroup(
-            new ClassDataType(new DataTypeName("SomeClass"), new PackageName("com.dummy")),
-            new VariableName("someVariableName"));
-
-    IoModelGroup ioModelGroup = new IoModelGroup(parent);
-
-    assertThat(ioModelGroup).isNotNull();
-    assertThat(ioModelGroup.getParent()).isNotNull();
-    assertThat(ioModelGroup.getParent().getDataType())
-        .isEqualTo(new ClassDataType(new DataTypeName("SomeClass"), new PackageName("com.dummy")));
-    assertThat(ioModelGroup.getParent().getVariableName())
-        .isEqualTo(new VariableName("someVariableName"));
   }
 
   @Override

@@ -42,21 +42,4 @@ public class IoModelArrayTest {
         .isEqualTo(new ClassDataType(new DataTypeName("SomeClass"), new PackageName("com.dummy")));
     assertThat(ioModelArray.getVariableName()).isEqualTo(new VariableName("someVariableName"));
   }
-
-  @Test
-  public void shouldInitializeIoModelArrayWithParent() {
-    IoModelGroup parent =
-        new IoModelGroup(
-            new ClassDataType(new DataTypeName("SomeClass"), new PackageName("com.dummy")),
-            new VariableName("someVariableName"));
-
-    IoModelArray ioModelArray = new IoModelArray(parent);
-
-    assertThat(ioModelArray).isNotNull();
-    assertThat(ioModelArray.getParent()).isNotNull();
-    assertThat(ioModelArray.getParent().getDataType())
-        .isEqualTo(new ClassDataType(new DataTypeName("SomeClass"), new PackageName("com.dummy")));
-    assertThat(ioModelArray.getParent().getVariableName())
-        .isEqualTo(new VariableName("someVariableName"));
-  }
 }

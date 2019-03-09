@@ -141,26 +141,22 @@ public class DtoExporterTest {
   private IoModelGroup postalAddress(IoModelGroup parent) {
     IoModelGroup postalAddress =
         new IoModelGroup(
-            parent,
             new ClassDataType(
                 new DataTypeName("PostalAddressDto"),
                 new PackageName("com.oregor.microservice.some.shared")));
 
     postalAddress.addIoModelPrimitive(
-        IoModelPrimitive.ofParent(
-            postalAddress,
+        IoModelPrimitive.of(
             new PrimitiveDataType(PrimitiveType.STRING),
             new VariableName("streetAddress1")));
 
     postalAddress.addIoModelPrimitive(
-        IoModelPrimitive.ofParent(
-            postalAddress,
+        IoModelPrimitive.of(
             new PrimitiveDataType(PrimitiveType.STRING),
             new VariableName("streetAddress2")));
 
     postalAddress.addIoModelPrimitive(
-        IoModelPrimitive.ofParent(
-            postalAddress, new PrimitiveDataType(PrimitiveType.STRING), new VariableName("city")));
+        IoModelPrimitive.of(new PrimitiveDataType(PrimitiveType.STRING), new VariableName("city")));
 
     return postalAddress;
   }

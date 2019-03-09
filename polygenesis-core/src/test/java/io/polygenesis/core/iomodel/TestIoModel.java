@@ -25,15 +25,10 @@ import io.polygenesis.core.datatype.AbstractDataType;
 /** @author Christos Tsakostas */
 class TestIoModel extends IoModel {
 
-  public TestIoModel(IoModelGroup parent) {
-    super(parent);
+  public TestIoModel() {
   }
 
   public TestIoModel(AbstractDataType dataType, VariableName variableName) {
     super(dataType, variableName);
-  }
-
-  public TestIoModel(AbstractDataType dataType, VariableName variableName, IoModelGroup parent) {
-    super(dataType, variableName, parent);
   }
 }

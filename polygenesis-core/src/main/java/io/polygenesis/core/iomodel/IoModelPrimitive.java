@@ -53,51 +53,19 @@ public class IoModelPrimitive extends IoModel {
   }
 
   /**
-   * Of parent io model primitive.
-   *
-   * @param parent the parent
-   * @param primitiveDataType the primitive data type
-   * @param variableName the variable name
-   * @return the io model primitive
-   */
-  public static IoModelPrimitive ofParent(
-      IoModelGroup parent, PrimitiveDataType primitiveDataType, VariableName variableName) {
-    return new IoModelPrimitive(
-        primitiveDataType, variableName, parent, null, DataBusinessType.ANY);
-  }
-
-  /**
-   * Of thing identity.
-   *
-   * @param primitiveDataType the primitive data type
-   * @param variableName the variable name
-   * @return the io model primitive
-   */
-  public static IoModelPrimitive ofThingIdentity(
-      PrimitiveDataType primitiveDataType, VariableName variableName) {
-    IoModelPrimitive ioModelPrimitive =
-        new IoModelPrimitive(
-            primitiveDataType, variableName, null, DataBusinessType.THING_IDENTITY);
-
-    return ioModelPrimitive;
-  }
-
-  /**
    * Of thing identity with parent io model primitive.
    *
    * @param dataBusinessType the data business type
-   * @param parent the parent
    * @param primitiveDataType the primitive data type
    * @param variableName the variable name
    * @return the io model primitive
    */
   public static IoModelPrimitive ofDataBusinessTypeWithParent(
       DataBusinessType dataBusinessType,
-      IoModelGroup parent,
       PrimitiveDataType primitiveDataType,
       VariableName variableName) {
     IoModelPrimitive ioModelPrimitive =
-        new IoModelPrimitive(primitiveDataType, variableName, parent, null, dataBusinessType);
+        new IoModelPrimitive(primitiveDataType, variableName, null, dataBusinessType);
 
     return ioModelPrimitive;
   }
@@ -120,26 +88,6 @@ public class IoModelPrimitive extends IoModel {
       Set<Annotation> annotations,
       DataBusinessType dataBusinessType) {
     super(dataType, variableName);
-    this.annotations = annotations;
-    this.dataBusinessType = dataBusinessType;
-  }
-
-  /**
-   * Instantiates a new Io model primitive.
-   *
-   * @param dataType the data type
-   * @param variableName the variable name
-   * @param parent the parent
-   * @param annotations the annotations
-   * @param dataBusinessType the data business type
-   */
-  public IoModelPrimitive(
-      PrimitiveDataType dataType,
-      VariableName variableName,
-      IoModelGroup parent,
-      Set<Annotation> annotations,
-      DataBusinessType dataBusinessType) {
-    super(dataType, variableName, parent);
     this.annotations = annotations;
     this.dataBusinessType = dataBusinessType;
   }

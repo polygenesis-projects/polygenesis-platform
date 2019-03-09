@@ -120,14 +120,14 @@ public class IoModelDeducer {
         .forEach(
             childRecursiveObject -> {
               if (childRecursiveObject.getStrGenericType() != null) {
-                IoModelArray modelArray = new IoModelArray(modelGroup);
+                IoModelArray modelArray = new IoModelArray();
 
                 fillIoModelGroup(modelArray, childRecursiveObject);
 
                 modelGroup.addIoModelArray(modelArray);
               } else {
                 if (childRecursiveObject.isCustomObject()) {
-                  IoModelGroup modelGroupCustomObject = new IoModelGroup(modelGroup);
+                  IoModelGroup modelGroupCustomObject = new IoModelGroup();
 
                   fillIoModelGroup(modelGroupCustomObject, childRecursiveObject);
 
@@ -139,7 +139,6 @@ public class IoModelDeducer {
                           new PrimitiveDataType(
                               convertToPrimitiveTypeFrom(childRecursiveObject.getStrDataType())),
                           new VariableName(childRecursiveObject.getStrName()),
-                          modelGroup,
                           safeGetAnnotationsFrom(childRecursiveObject),
                           DataBusinessType.ANY);
 

@@ -138,7 +138,6 @@ public class ThingBuilder {
     returnValueIoModelGroup.addIoModelPrimitive(
         IoModelPrimitive.ofDataBusinessTypeWithParent(
             DataBusinessType.THING_IDENTITY,
-            returnValueIoModelGroup,
             new PrimitiveDataType(PrimitiveType.STRING),
             new VariableName(
                 String.format("%sId", TextConverter.toLowerCamel(thing.getName().getText())))));
@@ -182,7 +181,6 @@ public class ThingBuilder {
     argumentIoModelGroup.addIoModelPrimitive(
         IoModelPrimitive.ofDataBusinessTypeWithParent(
             DataBusinessType.THING_IDENTITY,
-            argumentIoModelGroup,
             new PrimitiveDataType(PrimitiveType.STRING),
             new VariableName(
                 String.format("%sId", TextConverter.toLowerCamel(thing.getName().getText())))));
@@ -207,7 +205,6 @@ public class ThingBuilder {
     returnValueIoModelGroup.addIoModelPrimitive(
         IoModelPrimitive.ofDataBusinessTypeWithParent(
             DataBusinessType.THING_IDENTITY,
-            returnValueIoModelGroup,
             new PrimitiveDataType(PrimitiveType.STRING),
             new VariableName(
                 String.format("%sId", TextConverter.toLowerCamel(thing.getName().getText())))));
@@ -252,7 +249,6 @@ public class ThingBuilder {
     argumentIoModelGroup.addIoModelPrimitive(
         IoModelPrimitive.ofDataBusinessTypeWithParent(
             DataBusinessType.THING_IDENTITY,
-            argumentIoModelGroup,
             new PrimitiveDataType(PrimitiveType.STRING),
             new VariableName(
                 String.format("%sId", TextConverter.toLowerCamel(thing.getName().getText())))));
@@ -313,14 +309,12 @@ public class ThingBuilder {
     argumentIoModelGroup.addIoModelPrimitive(
         IoModelPrimitive.ofDataBusinessTypeWithParent(
             DataBusinessType.PAGE_NUMBER,
-            argumentIoModelGroup,
             new PrimitiveDataType(PrimitiveType.INTEGER),
             new VariableName("pageNumber")));
 
     argumentIoModelGroup.addIoModelPrimitive(
         IoModelPrimitive.ofDataBusinessTypeWithParent(
             DataBusinessType.PAGE_SIZE,
-            argumentIoModelGroup,
             new PrimitiveDataType(PrimitiveType.INTEGER),
             new VariableName("pageSize")));
 

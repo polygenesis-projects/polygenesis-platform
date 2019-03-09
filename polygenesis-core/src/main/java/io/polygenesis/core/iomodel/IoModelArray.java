@@ -21,6 +21,7 @@
 package io.polygenesis.core.iomodel;
 
 import io.polygenesis.core.datatype.ClassDataType;
+import java.util.Objects;
 
 /**
  * The type Io model array.
@@ -37,24 +38,9 @@ public class IoModelArray extends IoModelGroup {
 
   /**
    * Instantiates a new Io model array.
-   *
-   * @param parent the parent
    */
-  public IoModelArray(IoModelGroup parent) {
-    super(parent);
+  public IoModelArray() {
     this.arrayElement = null;
-  }
-
-  /**
-   * Instantiates a new Io model array.
-   *
-   * @param arrayElement the array element
-   * @param dataType the data type
-   * @param variableName the variable name
-   */
-  public IoModelArray(IoModel arrayElement, ClassDataType dataType, VariableName variableName) {
-    super(dataType, variableName);
-    this.arrayElement = arrayElement;
   }
 
   /**
@@ -71,17 +57,15 @@ public class IoModelArray extends IoModelGroup {
   /**
    * Instantiates a new Io model array.
    *
-   * @param parent the parent
    * @param arrayElement the array element
    * @param dataType the data type
    * @param variableName the variable name
    */
   public IoModelArray(
-      IoModelGroup parent,
       IoModel arrayElement,
       ClassDataType dataType,
       VariableName variableName) {
-    super(parent, dataType, variableName);
+    super(dataType, variableName);
     this.arrayElement = arrayElement;
   }
 
@@ -102,4 +86,23 @@ public class IoModelArray extends IoModelGroup {
   // OVERRIDES
   // ===============================================================================================
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    if (!super.equals(o)) {
+      return false;
+    }
+    IoModelArray that = (IoModelArray) o;
+    return Objects.equals(arrayElement, that.arrayElement);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(super.hashCode(), arrayElement);
+  }
 }

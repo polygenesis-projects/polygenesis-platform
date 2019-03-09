@@ -22,18 +22,16 @@ package io.polygenesis.core.iomodel;
 
 import io.polygenesis.core.datatype.AbstractDataType;
 import io.polygenesis.core.datatype.PrimitiveType;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
+import java.util.Objects;
 
 /**
  * This is the base class for {@link IoModelPrimitive}, {@link IoModelGroup}, and {@link
- * IoModelArray}.
+ * IoModelArray}*.
  *
  * @author Christos Tsakostas
  */
 public abstract class IoModel {
 
-  private final IoModelGroup parent;
   private final AbstractDataType dataType;
   private final VariableName variableName;
 
@@ -43,13 +41,10 @@ public abstract class IoModel {
 
   /**
    * Instantiates a new Io model.
-   *
-   * @param parent the parent
    */
-  public IoModel(IoModelGroup parent) {
+  public IoModel() {
     this.dataType = null;
     this.variableName = null;
-    this.parent = parent;
   }
 
   /**
@@ -61,20 +56,6 @@ public abstract class IoModel {
   public IoModel(AbstractDataType dataType, VariableName variableName) {
     this.dataType = dataType;
     this.variableName = variableName;
-    this.parent = null;
-  }
-
-  /**
-   * Instantiates a new Io model.
-   *
-   * @param dataType the data type
-   * @param variableName the variable name
-   * @param parent the parent
-   */
-  public IoModel(AbstractDataType dataType, VariableName variableName, IoModelGroup parent) {
-    this.dataType = dataType;
-    this.variableName = variableName;
-    this.parent = parent;
   }
 
   // ===============================================================================================
@@ -97,15 +78,6 @@ public abstract class IoModel {
    */
   public VariableName getVariableName() {
     return variableName;
-  }
-
-  /**
-   * Gets parent.
-   *
-   * @return the parent
-   */
-  public IoModelGroup getParent() {
-    return parent;
   }
 
   // ===============================================================================================
@@ -179,26 +151,16 @@ public abstract class IoModel {
     if (this == o) {
       return true;
     }
-
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-
     IoModel ioModel = (IoModel) o;
-
-    return new EqualsBuilder()
-        .append(dataType, ioModel.dataType)
-        .append(variableName, ioModel.variableName)
-        .append(parent, ioModel.parent)
-        .isEquals();
+    return Objects.equals(dataType, ioModel.dataType) &&
+        Objects.equals(variableName, ioModel.variableName);
   }
 
   @Override
   public int hashCode() {
-    return new HashCodeBuilder(17, 37)
-        .append(dataType)
-        .append(variableName)
-        .append(parent)
-        .toHashCode();
+    return Objects.hash(dataType, variableName);
   }
 }

@@ -35,16 +35,10 @@ public class IoModelTest extends AbstractEqualityTest<TestIoModel> {
 
   @Test
   public void shouldInitializeTestIoModel() {
-    IoModelGroup parent =
-        new IoModelGroup(
-            new ClassDataType(new DataTypeName("SomeClass"), new PackageName("com.dummy")),
-            new VariableName("someVariableName"));
-
     TestIoModel testIoModel =
         new TestIoModel(
             new PrimitiveDataType(PrimitiveType.STRING),
-            new VariableName("someVariableName"),
-            parent);
+            new VariableName("someVariableName"));
 
     assertThat(testIoModel).isNotNull();
     assertThat(testIoModel.getDataType()).isEqualTo(new PrimitiveDataType(PrimitiveType.STRING));

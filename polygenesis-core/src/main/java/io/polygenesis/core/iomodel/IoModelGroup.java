@@ -45,13 +45,8 @@ public class IoModelGroup extends IoModel {
 
   /**
    * Instantiates a new Io model group.
-   *
-   * <p>Used by {@link io.polygenesis.core.deducer.IoModelDeducer} in order to fill the object.
-   *
-   * @param parent the parent
    */
-  public IoModelGroup(IoModelGroup parent) {
-    super(parent);
+  public IoModelGroup() {
     this.models = new LinkedHashSet<>();
   }
 
@@ -63,7 +58,7 @@ public class IoModelGroup extends IoModel {
    * @param dataType the data type
    */
   public IoModelGroup(ClassDataType dataType) {
-    this(dataType, new VariableName(dataType.getDataTypeName().getText()));
+    this(dataType, new VariableName(dataType.getDataTypeName().getText()), new LinkedHashSet<>());
   }
 
   /**
@@ -73,30 +68,7 @@ public class IoModelGroup extends IoModel {
    * @param variableName the variable name
    */
   public IoModelGroup(ClassDataType dataType, VariableName variableName) {
-    super(dataType, variableName);
-    this.models = new LinkedHashSet<>();
-  }
-
-  /**
-   * Instantiates a new Io model group.
-   *
-   * @param parent the parent
-   * @param dataType the data type
-   */
-  public IoModelGroup(IoModelGroup parent, ClassDataType dataType) {
-    this(parent, dataType, new VariableName(dataType.getDataTypeName().getText()));
-  }
-
-  /**
-   * Instantiates a new Io model group.
-   *
-   * @param parent the parent
-   * @param dataType the data type
-   * @param variableName the variable name
-   */
-  public IoModelGroup(IoModelGroup parent, ClassDataType dataType, VariableName variableName) {
-    super(dataType, variableName, parent);
-    this.models = new LinkedHashSet<>();
+    this(dataType, variableName, new LinkedHashSet<>());
   }
 
   /**
@@ -104,12 +76,12 @@ public class IoModelGroup extends IoModel {
    *
    * @param dataType the data type
    * @param variableName the variable name
-   * @param parent the parent
    * @param models the models
    */
-  private IoModelGroup(
-      ClassDataType dataType, VariableName variableName, IoModelGroup parent, Set<IoModel> models) {
-    super(dataType, variableName, parent);
+  private IoModelGroup(ClassDataType dataType,
+      VariableName variableName,
+      Set<IoModel> models) {
+    super(dataType, variableName);
     this.models = models;
   }
 
@@ -124,7 +96,7 @@ public class IoModelGroup extends IoModel {
    * @return the io model group
    */
   public IoModelGroup withNewClassDataType(ClassDataType dataType) {
-    return new IoModelGroup(dataType, getVariableName(), getParent(), getModels());
+    return new IoModelGroup(dataType, getVariableName(), getModels());
   }
 
   /**
@@ -134,7 +106,7 @@ public class IoModelGroup extends IoModel {
    * @return the io model group
    */
   public IoModelGroup withNewVariableName(VariableName variableName) {
-    return new IoModelGroup((ClassDataType) getDataType(), variableName, getParent(), getModels());
+    return new IoModelGroup((ClassDataType) getDataType(), variableName, getModels());
   }
 
   // ===============================================================================================
@@ -149,7 +121,6 @@ public class IoModelGroup extends IoModel {
    */
   public boolean addIoModelPrimitive(IoModelPrimitive model) {
     Assertion.isNotNull(model, "Model Primitive is required");
-    Assertion.isNotNull(model.getParent(), "Model Primitive Parent is required");
     return models.add(model);
   }
 
@@ -161,7 +132,6 @@ public class IoModelGroup extends IoModel {
    */
   public boolean addIoModelGroup(IoModelGroup model) {
     Assertion.isNotNull(model, "Model Group is required");
-    Assertion.isNotNull(model.getParent(), "Model Group Parent is required");
     return models.add(model);
   }
 
@@ -173,7 +143,6 @@ public class IoModelGroup extends IoModel {
    */
   public boolean addIoModelArray(IoModelArray model) {
     Assertion.isNotNull(model, "Array Model is required");
-    Assertion.isNotNull(model.getParent(), "Array Model Parent is required");
     return models.add(model);
   }
 
@@ -190,7 +159,6 @@ public class IoModelGroup extends IoModel {
           new IoModelGroup(
               ((IoModelGroup) model).getClassDataType(),
               model.getVariableName(),
-              this,
               ((IoModelGroup) model).getModels());
 
       models.add(ioModelGroup);
@@ -199,7 +167,6 @@ public class IoModelGroup extends IoModel {
           new IoModelPrimitive(
               (PrimitiveDataType) model.getDataType(),
               model.getVariableName(),
-              this,
               ((IoModelPrimitive) model).getAnnotations(),
               ((IoModelPrimitive) model).getDataBusinessType());
 
