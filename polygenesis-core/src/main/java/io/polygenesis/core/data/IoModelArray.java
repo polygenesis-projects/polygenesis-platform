@@ -20,35 +20,53 @@
 
 package io.polygenesis.core.data;
 
-import io.polygenesis.core.iomodel.DataKind;
-import io.polygenesis.core.iomodel.VariableName;
+import java.util.Objects;
 
 /**
- * The type Array data.
+ * The type Io model array.
  *
  * @author Christos Tsakostas
  */
-public class ArrayData extends Data {
+public class IoModelArray extends IoModel {
 
-  // ===============================================================================================
-  // STATE
-  // ===============================================================================================
-
-  private final Data element;
+  private final IoModel arrayElement;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
+  /** Instantiates a new Io model array. */
+  public IoModelArray() {
+    this(null, null);
+  }
+
   /**
-   * Instantiates a new Array data.
+   * Instantiates a new Io model array.
+   *
+   * @param arrayElement the array element
+   */
+  public IoModelArray(IoModel arrayElement) {
+    this(null, arrayElement);
+  }
+
+  /**
+   * Instantiates a new Io model array.
    *
    * @param variableName the variable name
-   * @param element the element
    */
-  public ArrayData(VariableName variableName, Data element) {
+  public IoModelArray(VariableName variableName) {
+    this(variableName, null);
+  }
+
+  /**
+   * Instantiates a new Io model array.
+   *
+   * @param variableName the variable name
+   * @param arrayElement the array element
+   */
+  public IoModelArray(VariableName variableName, IoModel arrayElement) {
     super(DataKind.ARRAY, variableName);
-    this.element = element;
+    this.arrayElement = arrayElement;
   }
 
   // ===============================================================================================
@@ -56,12 +74,21 @@ public class ArrayData extends Data {
   // ===============================================================================================
 
   /**
-   * Gets element.
+   * Gets array element.
    *
-   * @return the element
+   * @return the array element
    */
-  public Data getElement() {
-    return element;
+  public IoModel getArrayElement() {
+    return arrayElement;
+  }
+
+  // ===============================================================================================
+  // ABSTRACT IMPLEMENTATION
+  // ===============================================================================================
+
+  @Override
+  public String getDataType() {
+    return DataKind.ARRAY.name();
   }
 
   // ===============================================================================================
@@ -69,7 +96,22 @@ public class ArrayData extends Data {
   // ===============================================================================================
 
   @Override
-  public String getDataType() {
-    return DataKind.ARRAY.name();
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    if (!super.equals(o)) {
+      return false;
+    }
+    IoModelArray that = (IoModelArray) o;
+    return Objects.equals(arrayElement, that.arrayElement);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(super.hashCode(), arrayElement);
   }
 }

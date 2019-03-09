@@ -21,7 +21,7 @@
 package io.polygenesis.generators.angular.reactivestate.model;
 
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.iomodel.IoModelGroup;
+import io.polygenesis.core.data.IoModelGroup;
 import io.polygenesis.models.reactivestate.Model;
 import io.polygenesis.representations.commons.FieldRepresentation;
 import io.polygenesis.representations.typescript.FromDataTypeToTypescriptConverter;

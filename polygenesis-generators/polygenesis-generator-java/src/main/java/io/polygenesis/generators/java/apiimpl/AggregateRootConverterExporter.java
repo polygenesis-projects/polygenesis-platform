@@ -89,7 +89,7 @@ public class AggregateRootConverterExporter {
     return Paths.get(
         generationPath.toString(),
         "src/main/java",
-        aggregateRootConverter.getDataType().getOptionalPackageName().get().toPath().toString(),
+        aggregateRootConverter.getPackageName().toPath().toString(),
         TextConverter.toUpperCamel(aggregateRootConverter.getVariableName().getText()) + ".java");
   }
 }

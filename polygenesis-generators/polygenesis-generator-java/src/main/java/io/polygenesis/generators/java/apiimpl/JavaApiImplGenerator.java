@@ -24,7 +24,7 @@ import io.polygenesis.commons.text.Name;
 import io.polygenesis.core.AbstractGenerator;
 import io.polygenesis.core.CoreRegistry;
 import io.polygenesis.core.ModelRepository;
-import io.polygenesis.core.datatype.PackageName;
+import io.polygenesis.core.data.PackageName;
 import io.polygenesis.models.apiimpl.ServiceImplementationModelRepository;
 import io.polygenesis.models.domain.AggregateRoot;
 import io.polygenesis.models.domain.DomainModelRepository;

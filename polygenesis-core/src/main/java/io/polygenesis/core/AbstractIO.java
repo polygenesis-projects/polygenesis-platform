@@ -20,8 +20,8 @@
 
 package io.polygenesis.core;
 
-import io.polygenesis.core.iomodel.IoModel;
-import io.polygenesis.core.iomodel.IoModelGroup;
+import io.polygenesis.core.data.IoModel;
+import io.polygenesis.core.data.IoModelGroup;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 

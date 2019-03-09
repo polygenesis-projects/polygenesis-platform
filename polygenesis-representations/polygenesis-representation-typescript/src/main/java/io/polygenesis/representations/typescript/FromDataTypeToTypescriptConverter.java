@@ -21,8 +21,8 @@
 package io.polygenesis.representations.typescript;
 
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.datatype.PrimitiveType;
-import io.polygenesis.core.iomodel.IoModel;
+import io.polygenesis.core.data.IoModel;
+import io.polygenesis.core.data.PrimitiveType;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -80,6 +80,7 @@ public class FromDataTypeToTypescriptConverter {
 
     dataTypeMap.put(PrimitiveType.BOOLEAN, "boolean");
 
-    dataTypeMap.put(PrimitiveType.ARRAY, "java.util.List");
+    // TODO another map for arrays
+    // dataTypeMap.put(PrimitiveType.ARRAY, "java.util.List");
   }
 }

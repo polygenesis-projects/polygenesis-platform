@@ -22,7 +22,7 @@ package io.polygenesis.generators.java.api;
 
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.datatype.PackageName;
+import io.polygenesis.core.data.PackageName;
 import io.polygenesis.models.api.Dto;
 import io.polygenesis.models.api.Service;
 import java.nio.file.Path;

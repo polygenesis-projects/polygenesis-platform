@@ -22,7 +22,7 @@ package io.polygenesis.models.domain;
 
 import io.polygenesis.core.ModelRepository;
 import io.polygenesis.core.ThingRepository;
-import io.polygenesis.core.datatype.PackageName;
+import io.polygenesis.core.data.PackageName;
 import java.util.Set;
 
 /**

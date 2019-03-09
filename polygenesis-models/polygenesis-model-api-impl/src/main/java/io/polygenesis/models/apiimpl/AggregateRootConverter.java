@@ -20,8 +20,10 @@
 
 package io.polygenesis.models.apiimpl;
 
-import io.polygenesis.core.datatype.ClassDataType;
-import io.polygenesis.core.iomodel.VariableName;
+import com.oregor.ddd4j.check.assertion.Assertion;
+import io.polygenesis.core.data.ObjectName;
+import io.polygenesis.core.data.PackageName;
+import io.polygenesis.core.data.VariableName;
 import java.util.Objects;
 import java.util.Set;
 
@@ -32,7 +34,8 @@ import java.util.Set;
  */
 public class AggregateRootConverter {
 
-  private ClassDataType dataType;
+  private ObjectName objectName;
+  private PackageName packageName;
   private VariableName variableName;
   private Set<ValueObjectFromDto> valueObjectFromDtos;
   private Set<FetchOneDtoFromAggregateRoot> fetchOneDtoFromAggregateRoots;
@@ -45,19 +48,22 @@ public class AggregateRootConverter {
   /**
    * Instantiates a new Aggregate root converter.
    *
-   * @param dataType the data type
+   * @param objectName the object name
+   * @param packageName the package name
    * @param variableName the variable name
    * @param valueObjectFromDtos the value object from dtos
    * @param fetchOneDtoFromAggregateRoots the fetch one dto from aggregate roots
    * @param fetchCollectionDtoFromAggregateRoots the fetch collection dto from aggregate roots
    */
   public AggregateRootConverter(
-      ClassDataType dataType,
+      ObjectName objectName,
+      PackageName packageName,
       VariableName variableName,
       Set<ValueObjectFromDto> valueObjectFromDtos,
       Set<FetchOneDtoFromAggregateRoot> fetchOneDtoFromAggregateRoots,
       Set<FetchCollectionDtoFromAggregateRoot> fetchCollectionDtoFromAggregateRoots) {
-    setDataType(dataType);
+    setObjectName(objectName);
+    setPackageName(packageName);
     setVariableName(variableName);
     setValueObjectFromDtos(valueObjectFromDtos);
     setFetchOneDtoFromAggregateRoots(fetchOneDtoFromAggregateRoots);
@@ -69,12 +75,21 @@ public class AggregateRootConverter {
   // ===============================================================================================
 
   /**
-   * Gets data type.
+   * Gets object name.
    *
-   * @return the data type
+   * @return the object name
    */
-  public ClassDataType getDataType() {
-    return dataType;
+  public ObjectName getObjectName() {
+    return objectName;
+  }
+
+  /**
+   * Gets package name.
+   *
+   * @return the package name
+   */
+  public PackageName getPackageName() {
+    return packageName;
   }
 
   /**
@@ -118,12 +133,23 @@ public class AggregateRootConverter {
   // ===============================================================================================
 
   /**
-   * Sets data type.
+   * Sets object name.
    *
-   * @param dataType the data type
+   * @param objectName the object name
    */
-  private void setDataType(ClassDataType dataType) {
-    this.dataType = dataType;
+  private void setObjectName(ObjectName objectName) {
+    Assertion.isNotNull(objectName, "objectName is required");
+    this.objectName = objectName;
+  }
+
+  /**
+   * Sets package name.
+   *
+   * @param packageName the package name
+   */
+  private void setPackageName(PackageName packageName) {
+    Assertion.isNotNull(packageName, "packageName is required");
+    this.packageName = packageName;
   }
 
   /**
@@ -132,6 +158,7 @@ public class AggregateRootConverter {
    * @param variableName the variable name
    */
   private void setVariableName(VariableName variableName) {
+    Assertion.isNotNull(variableName, "variableName is required");
     this.variableName = variableName;
   }
 
@@ -141,6 +168,7 @@ public class AggregateRootConverter {
    * @param valueObjectFromDtos the value object from dtos
    */
   private void setValueObjectFromDtos(Set<ValueObjectFromDto> valueObjectFromDtos) {
+    Assertion.isNotNull(valueObjectFromDtos, "valueObjectFromDtos is required");
     this.valueObjectFromDtos = valueObjectFromDtos;
   }
 
@@ -151,6 +179,7 @@ public class AggregateRootConverter {
    */
   private void setFetchOneDtoFromAggregateRoots(
       Set<FetchOneDtoFromAggregateRoot> fetchOneDtoFromAggregateRoots) {
+    Assertion.isNotNull(fetchOneDtoFromAggregateRoots, "fetchOneDtoFromAggregateRoots is required");
     this.fetchOneDtoFromAggregateRoots = fetchOneDtoFromAggregateRoots;
   }
 
@@ -161,6 +190,8 @@ public class AggregateRootConverter {
    */
   private void setFetchCollectionDtoFromAggregateRoots(
       Set<FetchCollectionDtoFromAggregateRoot> fetchCollectionDtoFromAggregateRoots) {
+    Assertion.isNotNull(
+        fetchCollectionDtoFromAggregateRoots, "fetchCollectionDtoFromAggregateRoots is required");
     this.fetchCollectionDtoFromAggregateRoots = fetchCollectionDtoFromAggregateRoots;
   }
 
@@ -177,7 +208,8 @@ public class AggregateRootConverter {
       return false;
     }
     AggregateRootConverter that = (AggregateRootConverter) o;
-    return Objects.equals(dataType, that.dataType)
+    return Objects.equals(objectName, that.objectName)
+        && Objects.equals(packageName, that.packageName)
         && Objects.equals(variableName, that.variableName)
         && Objects.equals(valueObjectFromDtos, that.valueObjectFromDtos)
         && Objects.equals(fetchOneDtoFromAggregateRoots, that.fetchOneDtoFromAggregateRoots)
@@ -188,7 +220,8 @@ public class AggregateRootConverter {
   @Override
   public int hashCode() {
     return Objects.hash(
-        dataType,
+        objectName,
+        packageName,
         variableName,
         valueObjectFromDtos,
         fetchOneDtoFromAggregateRoots,

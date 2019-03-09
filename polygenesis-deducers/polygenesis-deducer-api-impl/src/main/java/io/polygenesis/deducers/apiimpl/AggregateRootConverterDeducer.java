@@ -21,10 +21,9 @@
 package io.polygenesis.deducers.apiimpl;
 
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.datatype.ClassDataType;
-import io.polygenesis.core.datatype.DataTypeName;
-import io.polygenesis.core.iomodel.IoModel;
-import io.polygenesis.core.iomodel.VariableName;
+import io.polygenesis.core.data.IoModel;
+import io.polygenesis.core.data.ObjectName;
+import io.polygenesis.core.data.VariableName;
 import io.polygenesis.models.api.Dto;
 import io.polygenesis.models.api.Service;
 import io.polygenesis.models.apiimpl.AggregateRootConverter;
@@ -67,10 +66,8 @@ public class AggregateRootConverterDeducer {
         fetchCollectionDtoFromAggregateRoots, aggregateRoot, services);
 
     return new AggregateRootConverter(
-        new ClassDataType(
-            new DataTypeName(
-                TextConverter.toUpperCamel(aggregateRoot.getName().getText() + "Converter")),
-            aggregateRoot.getPackageName()),
+        new ObjectName(TextConverter.toUpperCamel(aggregateRoot.getName().getText() + "Converter")),
+        aggregateRoot.getPackageName(),
         new VariableName(
             TextConverter.toLowerCamel(aggregateRoot.getName().getText() + "Converter")),
         valueObjectFromDtos,

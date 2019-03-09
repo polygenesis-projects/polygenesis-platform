@@ -170,8 +170,7 @@ public class ServiceImplementationMethodQuery extends ServiceImplementationMetho
     stringBuilder.append("\t\t\t\t\t\t.stream(paginated.getItems().spliterator(), false)\n");
     stringBuilder.append("\t\t\t\t\t\t.map(");
     stringBuilder.append(
-        TextConverter.toLowerCamel(
-            aggregateRootConverter.getDataType().getDataTypeName().getText()));
+        TextConverter.toLowerCamel(aggregateRootConverter.getObjectName().getText()));
     stringBuilder.append("::convertTo");
     stringBuilder.append(
         TextConverter.toUpperCamel(

@@ -18,13 +18,11 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.core.iomodel;
+package io.polygenesis.core.data;
 
 import static java.util.stream.Collectors.toCollection;
 
 import com.oregor.ddd4j.check.assertion.Assertion;
-import io.polygenesis.core.data.ObjectName;
-import io.polygenesis.core.datatype.PackageName;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -84,7 +82,7 @@ public class IoModelGroup extends IoModel {
       PackageName packageName,
       VariableName variableName,
       Set<IoModel> models) {
-    super(DataKind.CLASS, variableName);
+    super(DataKind.OBJECT, variableName);
     this.objectName = objectName;
     this.packageName = packageName;
     this.models = models;

@@ -21,8 +21,8 @@
 package io.polygenesis.deducers.sql;
 
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.iomodel.IoModel;
-import io.polygenesis.core.iomodel.IoModelGroup;
+import io.polygenesis.core.data.IoModel;
+import io.polygenesis.core.data.IoModelGroup;
 import io.polygenesis.models.domain.AbstractProperty;
 import io.polygenesis.models.domain.AggregateRoot;
 import io.polygenesis.models.sql.Column;

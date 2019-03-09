@@ -20,7 +20,7 @@
 
 package io.polygenesis.models.rest;
 
-import io.polygenesis.core.datatype.PackageName;
+import io.polygenesis.core.data.PackageName;
 
 /**
  * The type Rest deducer factory.

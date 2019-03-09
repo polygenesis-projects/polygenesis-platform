@@ -21,9 +21,9 @@
 package io.polygenesis.models.api;
 
 import com.oregor.ddd4j.check.assertion.Assertion;
-import io.polygenesis.core.iomodel.IoModel;
-import io.polygenesis.core.iomodel.IoModelArray;
-import io.polygenesis.core.iomodel.IoModelGroup;
+import io.polygenesis.core.data.IoModel;
+import io.polygenesis.core.data.IoModelArray;
+import io.polygenesis.core.data.IoModelGroup;
 import java.util.Objects;
 import java.util.Optional;
 

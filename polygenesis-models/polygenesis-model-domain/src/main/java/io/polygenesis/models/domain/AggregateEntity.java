@@ -20,8 +20,8 @@
 
 package io.polygenesis.models.domain;
 
-import io.polygenesis.core.iomodel.IoModelGroup;
-import io.polygenesis.core.iomodel.VariableName;
+import io.polygenesis.core.data.IoModelGroup;
+import io.polygenesis.core.data.VariableName;
 
 /**
  * The type Aggregate entity.

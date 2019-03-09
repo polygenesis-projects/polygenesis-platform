@@ -20,51 +20,61 @@
 
 package io.polygenesis.core.data;
 
-import io.polygenesis.core.iomodel.DataBusinessType;
-import io.polygenesis.core.iomodel.DataKind;
-import io.polygenesis.core.iomodel.VariableName;
+import java.util.Objects;
 
 /**
- * The type Data.
+ * This is the base class for {@link IoModelPrimitive}, {@link IoModelGroup}, and {@link
+ * IoModelArray}.
+ *
+ * <p>References:
+ *
+ * <ul>
+ *   <li>https://en.wikibooks.org/wiki/Java_Programming/Primitive_Types
+ *   <li>https://en.wikipedia.org/wiki/Primitive_data_type
+ *   <li>https://docs.oracle.com/javase/tutorial/java/nutsandbolts/datatypes.html
+ * </ul>
  *
  * @author Christos Tsakostas
  */
-public abstract class Data {
-
-  // ===============================================================================================
-  // STATE
-  // ===============================================================================================
+public abstract class IoModel {
 
   private final DataKind dataKind;
   private final VariableName variableName;
-  private final DataBusinessType dataBusinessType;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
-   * Instantiates a new Data.
+   * Instantiates a new Io model.
    *
    * @param dataKind the data kind
-   * @param variableName the variable name
    */
-  public Data(DataKind dataKind, VariableName variableName) {
-    this(dataKind, variableName, DataBusinessType.ANY);
+  public IoModel(DataKind dataKind) {
+    this(dataKind, null);
   }
 
   /**
-   * Instantiates a new Data.
+   * Instantiates a new Io model.
    *
    * @param dataKind the data kind
    * @param variableName the variable name
-   * @param dataBusinessType the data business type
    */
-  public Data(DataKind dataKind, VariableName variableName, DataBusinessType dataBusinessType) {
+  public IoModel(DataKind dataKind, VariableName variableName) {
     this.dataKind = dataKind;
     this.variableName = variableName;
-    this.dataBusinessType = dataBusinessType;
   }
+
+  // ===============================================================================================
+  // ABSTRACT
+  // ===============================================================================================
+
+  /**
+   * Gets data type.
+   *
+   * @return the data type
+   */
+  public abstract String getDataType();
 
   // ===============================================================================================
   // GETTERS
@@ -88,28 +98,68 @@ public abstract class Data {
     return variableName;
   }
 
+  // ===============================================================================================
+  // QUERIES
+  // ===============================================================================================
+
   /**
-   * Gets data business type.
+   * Is primitive.
    *
-   * @return the data business type
+   * @return the boolean
    */
-  public DataBusinessType getDataBusinessType() {
-    return dataBusinessType;
+  public boolean isPrimitive() {
+    return getDataKind().equals(DataKind.PRIMITIVE);
   }
 
-  // ===============================================================================================
-  // ABSTRACT
-  // ===============================================================================================
+  /**
+   * Is io model group boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isIoModelGroup() {
+    return this instanceof IoModelGroup;
+  }
 
   /**
-   * Gets data type.
+   * Is io model array boolean.
    *
-   * @return the data type
+   * @return the boolean
    */
-  public abstract String getDataType();
+  public boolean isIoModelArray() {
+    return this instanceof IoModelArray;
+  }
+
+  /**
+   * Is thing identity boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isThingIdentity() {
+    if (this instanceof IoModelPrimitive) {
+      return ((IoModelPrimitive) this).getThingIdentity();
+    } else {
+      return false;
+    }
+  }
 
   // ===============================================================================================
   // OVERRIDES
   // ===============================================================================================
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    IoModel ioModel = (IoModel) o;
+    return dataKind == ioModel.dataKind && Objects.equals(variableName, ioModel.variableName);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(dataKind, variableName);
+  }
 }

@@ -21,10 +21,10 @@
 package io.polygenesis.models.domain;
 
 import io.polygenesis.commons.keyvalue.KeyValue;
-import io.polygenesis.core.iomodel.IoModel;
-import io.polygenesis.core.iomodel.IoModelGroup;
-import io.polygenesis.core.iomodel.IoModelPrimitive;
-import io.polygenesis.core.iomodel.VariableName;
+import io.polygenesis.core.data.IoModel;
+import io.polygenesis.core.data.IoModelGroup;
+import io.polygenesis.core.data.IoModelPrimitive;
+import io.polygenesis.core.data.VariableName;
 import java.util.Optional;
 
 /**

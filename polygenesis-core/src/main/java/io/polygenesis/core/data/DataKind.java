@@ -18,27 +18,26 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.core.iomodel;
-
-import io.polygenesis.commons.text.AbstractText;
+package io.polygenesis.core.data;
 
 /**
- * The type Variable name.
+ * The enum Data kind.
  *
  * @author Christos Tsakostas
  */
-public class VariableName extends AbstractText {
+public enum DataKind {
+  /** Primitive data kind. */
+  PRIMITIVE,
 
-  // ===============================================================================================
-  // CONSTRUCTOR(S)
-  // ===============================================================================================
+  /** Object data kind. */
+  OBJECT,
 
-  /**
-   * Instantiates a new Variable name.
-   *
-   * @param text the text
-   */
-  public VariableName(String text) {
-    super(text);
-  }
+  /** Interface data kind. */
+  INTERFACE,
+
+  /** Array data kind. */
+  ARRAY,
+
+  /** Map data kind. */
+  MAP;
 }

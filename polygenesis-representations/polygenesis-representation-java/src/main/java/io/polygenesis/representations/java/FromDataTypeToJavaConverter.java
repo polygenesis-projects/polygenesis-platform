@@ -21,7 +21,7 @@
 package io.polygenesis.representations.java;
 
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.datatype.PrimitiveType;
+import io.polygenesis.core.data.PrimitiveType;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -83,6 +83,7 @@ public class FromDataTypeToJavaConverter {
     dataTypeMap.put(PrimitiveType.BOOLEAN, "boolean");
     dataTypeMap.put(PrimitiveType.BOOLEAN, "Boolean");
 
-    dataTypeMap.put(PrimitiveType.ARRAY, "java.util.List");
+    // TODO another map for arrays
+    // dataTypeMap.put(PrimitiveType.ARRAY, "java.util.List");
   }
 }

@@ -22,14 +22,14 @@ package io.polygenesis.models.domain;
 
 import io.polygenesis.core.Function;
 import io.polygenesis.core.Thing;
+import io.polygenesis.core.data.DataBusinessType;
+import io.polygenesis.core.data.DataKind;
+import io.polygenesis.core.data.IoModel;
+import io.polygenesis.core.data.IoModelGroup;
+import io.polygenesis.core.data.IoModelPrimitive;
 import io.polygenesis.core.data.ObjectName;
-import io.polygenesis.core.datatype.PackageName;
-import io.polygenesis.core.iomodel.DataBusinessType;
-import io.polygenesis.core.iomodel.DataKind;
-import io.polygenesis.core.iomodel.IoModel;
-import io.polygenesis.core.iomodel.IoModelGroup;
-import io.polygenesis.core.iomodel.IoModelPrimitive;
-import io.polygenesis.core.iomodel.VariableName;
+import io.polygenesis.core.data.PackageName;
+import io.polygenesis.core.data.VariableName;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -105,7 +105,7 @@ public class AggregateRootPropertyDeducer {
 
   private AbstractProperty makeAbstractProperty(IoModel model) {
     switch (model.getDataKind()) {
-      case CLASS:
+      case OBJECT:
         IoModelGroup originatingIoModelGroup = (IoModelGroup) model;
 
         IoModelGroup newIoModelGroup =

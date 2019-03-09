@@ -22,9 +22,9 @@ package io.polygenesis.representations.java;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.polygenesis.core.datatype.PrimitiveType;
-import io.polygenesis.core.iomodel.IoModelPrimitive;
-import io.polygenesis.core.iomodel.VariableName;
+import io.polygenesis.core.data.IoModelPrimitive;
+import io.polygenesis.core.data.PrimitiveType;
+import io.polygenesis.core.data.VariableName;
 import org.junit.Test;
 
 /** @author Christos Tsakostas */

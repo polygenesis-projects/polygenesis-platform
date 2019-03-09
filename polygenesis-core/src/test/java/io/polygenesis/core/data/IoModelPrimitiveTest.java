@@ -18,12 +18,11 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.core.iomodel;
+package io.polygenesis.core.data;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.polygenesis.commons.test.AbstractEqualityTest;
-import io.polygenesis.core.datatype.PrimitiveType;
 import java.util.LinkedHashSet;
 import org.junit.Test;
 

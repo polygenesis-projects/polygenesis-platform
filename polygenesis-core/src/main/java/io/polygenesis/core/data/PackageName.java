@@ -18,40 +18,37 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.core.datatype;
+package io.polygenesis.core.data;
 
-import io.polygenesis.core.iomodel.DataKind;
-import java.util.Optional;
+import com.oregor.ddd4j.check.assertion.Assertion;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Objects;
+import java.util.regex.Pattern;
 
 /**
- * The type Map data type.
+ * The type Package name.
  *
  * @author Christos Tsakostas
  */
-public class MapDataType extends AbstractDataType {
+public class PackageName {
 
-  private MapType mapType;
-  private AbstractDataType key;
-  private AbstractDataType value;
+  private static final Pattern pattern = Pattern.compile("^(?:\\w+|\\w+\\.\\w+)+$");
+
+  private final String text;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
-   * Instantiates a new Map data type.
+   * Instantiates a new Package name.
    *
-   * @param dataTypeName the data type name
-   * @param mapType the kind of map data type
-   * @param key the key
-   * @param value the value
+   * @param text the text
    */
-  public MapDataType(
-      DataTypeName dataTypeName, MapType mapType, AbstractDataType key, AbstractDataType value) {
-    super(DataKind.MAP, dataTypeName);
-    this.mapType = mapType;
-    this.key = key;
-    this.value = value;
+  public PackageName(String text) {
+    guardText(text);
+    this.text = text;
   }
 
   // ===============================================================================================
@@ -59,30 +56,30 @@ public class MapDataType extends AbstractDataType {
   // ===============================================================================================
 
   /**
-   * Gets kind of map data type.
+   * Gets text.
    *
-   * @return the kind of map data type
+   * @return the text
    */
-  public MapType getMapType() {
-    return mapType;
+  public String getText() {
+    return text;
   }
 
   /**
-   * Gets key.
+   * To path path.
    *
-   * @return the key
+   * @return the path
    */
-  public AbstractDataType getKey() {
-    return key;
+  public Path toPath() {
+    return Paths.get(getText().replaceAll("\\.", "/"));
   }
 
-  /**
-   * Gets value.
-   *
-   * @return the value
-   */
-  public AbstractDataType getValue() {
-    return value;
+  // ===============================================================================================
+  // GUARDS
+  // ===============================================================================================
+
+  private void guardText(String text) {
+    Assertion.isTrue(
+        pattern.matcher(text).matches(), String.format("Invalid package name=%s", text));
   }
 
   // ===============================================================================================
@@ -90,7 +87,19 @@ public class MapDataType extends AbstractDataType {
   // ===============================================================================================
 
   @Override
-  public Optional<PackageName> getOptionalPackageName() {
-    return Optional.empty();
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    PackageName that = (PackageName) o;
+    return Objects.equals(text, that.text);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(text);
   }
 }

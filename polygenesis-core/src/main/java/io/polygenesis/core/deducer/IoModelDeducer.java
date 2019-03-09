@@ -20,15 +20,15 @@
 
 package io.polygenesis.core.deducer;
 
+import io.polygenesis.core.data.DataBusinessType;
+import io.polygenesis.core.data.IoModel;
+import io.polygenesis.core.data.IoModelArray;
+import io.polygenesis.core.data.IoModelGroup;
+import io.polygenesis.core.data.IoModelPrimitive;
 import io.polygenesis.core.data.ObjectName;
-import io.polygenesis.core.datatype.PackageName;
-import io.polygenesis.core.datatype.PrimitiveType;
-import io.polygenesis.core.iomodel.DataBusinessType;
-import io.polygenesis.core.iomodel.IoModel;
-import io.polygenesis.core.iomodel.IoModelArray;
-import io.polygenesis.core.iomodel.IoModelGroup;
-import io.polygenesis.core.iomodel.IoModelPrimitive;
-import io.polygenesis.core.iomodel.VariableName;
+import io.polygenesis.core.data.PackageName;
+import io.polygenesis.core.data.PrimitiveType;
+import io.polygenesis.core.data.VariableName;
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
@@ -68,7 +68,8 @@ public class IoModelDeducer {
    */
   IoModel deduceResponse(RecursiveObject recursiveObject) {
 
-    if (recursiveObject.isGenericInterface()) {
+    if (recursiveObject.isGenericInterface()
+        || recursiveObject.getStrDataType() == "java.util.List") {
       // TODO: check if recursiveObject.getStrGenericType() plays a role?
       // IoModelArray
       return new IoModelArray(new VariableName(recursiveObject.getStrName()));

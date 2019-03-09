@@ -24,9 +24,9 @@ import static java.util.stream.Collectors.toCollection;
 
 import io.polygenesis.core.Argument;
 import io.polygenesis.core.Function;
-import io.polygenesis.core.iomodel.DataBusinessType;
-import io.polygenesis.core.iomodel.IoModelGroup;
-import io.polygenesis.core.iomodel.IoModelPrimitive;
+import io.polygenesis.core.data.DataBusinessType;
+import io.polygenesis.core.data.IoModelGroup;
+import io.polygenesis.core.data.IoModelPrimitive;
 import java.util.LinkedHashSet;
 import java.util.Set;
 

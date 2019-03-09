@@ -18,15 +18,31 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.core.datatype;
+package io.polygenesis.core.data;
 
-/**
- * The enum Kind of map data type.
- *
- * @author Christos Tsakostas
- */
-public enum MapType {
-  HASH_MAP,
-  LINKED_HASH_MAP,
-  TREE_MAP;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+import org.assertj.core.api.Assertions;
+import org.junit.Test;
+
+/** @author Christos Tsakostas */
+public class PackageNameTest {
+
+  @Test
+  public void shouldInitialize() {
+    Assertions.assertThat(new PackageName("com.oregor.ddd4j")).isNotNull();
+    assertThat(new PackageName("com.oregor")).isNotNull();
+    assertThat(new PackageName("com")).isNotNull();
+  }
+
+  @Test
+  public void shouldFail() {
+    assertThatThrownBy(() -> new PackageName("com.oregor.ddd4j."))
+        .isInstanceOf(IllegalArgumentException.class);
+    assertThatThrownBy(() -> new PackageName("com.oregor.ddd4j.."))
+        .isInstanceOf(IllegalArgumentException.class);
+    assertThatThrownBy(() -> new PackageName("com.-.ddd4j"))
+        .isInstanceOf(IllegalArgumentException.class);
+  }
 }

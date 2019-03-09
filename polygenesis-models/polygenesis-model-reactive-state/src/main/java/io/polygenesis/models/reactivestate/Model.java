@@ -21,7 +21,7 @@
 package io.polygenesis.models.reactivestate;
 
 import com.oregor.ddd4j.check.assertion.Assertion;
-import io.polygenesis.core.iomodel.IoModel;
+import io.polygenesis.core.data.IoModel;
 import java.util.Objects;
 
 /**

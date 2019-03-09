@@ -18,26 +18,21 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.core.iomodel;
+package io.polygenesis.core.data;
 
-/**
- * The enum Data kind.
- *
- * @author Christos Tsakostas
- */
-public enum DataKind {
-  /** Primitive data kind. */
-  PRIMITIVE,
+/** @author Christos Tsakostas */
+class TestIoModel extends IoModel {
 
-  /** Class data kind. */
-  CLASS,
+  public TestIoModel() {
+    super(DataKind.OBJECT);
+  }
 
-  /** Interface data kind. */
-  INTERFACE,
+  public TestIoModel(VariableName variableName) {
+    super(DataKind.OBJECT, variableName);
+  }
 
-  /** Array data kind. */
-  ARRAY,
-
-  /** Map data kind. */
-  MAP;
+  @Override
+  public String getDataType() {
+    return PrimitiveType.STRING.name();
+  }
 }

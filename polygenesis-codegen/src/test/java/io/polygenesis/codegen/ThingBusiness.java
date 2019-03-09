@@ -21,11 +21,11 @@
 package io.polygenesis.codegen;
 
 import io.polygenesis.core.Thing;
+import io.polygenesis.core.data.IoModel;
+import io.polygenesis.core.data.IoModelGroup;
 import io.polygenesis.core.dsl.DataBuilder;
 import io.polygenesis.core.dsl.DataGroupBuilder;
 import io.polygenesis.core.dsl.ThingBuilder;
-import io.polygenesis.core.iomodel.IoModel;
-import io.polygenesis.core.iomodel.IoModelGroup;
 import java.util.Set;
 
 /** @author Christos Tsakostas */

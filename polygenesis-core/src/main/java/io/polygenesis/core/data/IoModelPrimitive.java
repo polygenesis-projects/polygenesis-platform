@@ -18,9 +18,8 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.core.iomodel;
+package io.polygenesis.core.data;
 
-import io.polygenesis.core.datatype.PrimitiveType;
 import java.lang.annotation.Annotation;
 import java.util.Set;
 import org.apache.commons.lang3.builder.EqualsBuilder;

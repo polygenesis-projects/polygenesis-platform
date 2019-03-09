@@ -23,7 +23,7 @@ package io.polygenesis.models.api;
 import io.polygenesis.core.Deducer;
 import io.polygenesis.core.ModelRepository;
 import io.polygenesis.core.ThingRepository;
-import io.polygenesis.core.datatype.PackageName;
+import io.polygenesis.core.data.PackageName;
 import java.util.LinkedHashSet;
 import java.util.Set;
 

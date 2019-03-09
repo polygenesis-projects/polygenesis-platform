@@ -27,10 +27,10 @@ import io.polygenesis.core.Goal;
 import io.polygenesis.core.ReturnValue;
 import io.polygenesis.core.Thing;
 import io.polygenesis.core.ThingName;
-import io.polygenesis.core.datatype.PrimitiveType;
-import io.polygenesis.core.iomodel.DataBusinessType;
-import io.polygenesis.core.iomodel.IoModelPrimitive;
-import io.polygenesis.core.iomodel.VariableName;
+import io.polygenesis.core.data.DataBusinessType;
+import io.polygenesis.core.data.IoModelPrimitive;
+import io.polygenesis.core.data.PrimitiveType;
+import io.polygenesis.core.data.VariableName;
 import java.util.LinkedHashSet;
 
 /** @author Christos Tsakostas */

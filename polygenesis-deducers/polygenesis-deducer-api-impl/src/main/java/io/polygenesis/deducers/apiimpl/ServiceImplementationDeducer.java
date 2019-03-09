@@ -53,7 +53,9 @@ public class ServiceImplementationDeducer {
 
     dependencies.add(
         new Dependency(
-            aggregateRootConverter.getDataType(), aggregateRootConverter.getVariableName()));
+            aggregateRootConverter.getObjectName(),
+            aggregateRootConverter.getPackageName(),
+            aggregateRootConverter.getVariableName()));
 
     return new ServiceImplementation(service, dependencies, aggregateRoot, aggregateRootConverter);
   }

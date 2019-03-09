@@ -20,7 +20,7 @@
 
 package io.polygenesis.core;
 
-import io.polygenesis.core.iomodel.IoModel;
+import io.polygenesis.core.data.IoModel;
 
 /**
  * Denotes an Argument of a {@link Function}.

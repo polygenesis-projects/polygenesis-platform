@@ -22,7 +22,7 @@ package io.polygenesis.generators.java.domain;
 
 import io.polygenesis.commons.freemarker.FreemarkerConfig;
 import io.polygenesis.commons.freemarker.FreemarkerService;
-import io.polygenesis.core.datatype.PackageName;
+import io.polygenesis.core.data.PackageName;
 import io.polygenesis.generators.java.domain.aggregateentity.AggregateEntityExporter;
 import io.polygenesis.generators.java.domain.aggregateroot.AggregateRootClassRepresentable;
 import io.polygenesis.generators.java.domain.aggregateroot.AggregateRootExporter;

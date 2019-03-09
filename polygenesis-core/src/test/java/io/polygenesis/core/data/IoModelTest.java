@@ -18,18 +18,35 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.core.iomodel;
+package io.polygenesis.core.data;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import io.polygenesis.commons.test.AbstractEqualityTest;
 import org.junit.Test;
 
 /** @author Christos Tsakostas */
-public class VariableNameTest {
+public class IoModelTest extends AbstractEqualityTest<TestIoModel> {
 
   @Test
-  public void shouldInitialize() {
-    VariableName variableName = new VariableName("asd");
-    assertThat(variableName).isNotNull();
+  public void shouldInitializeTestIoModel() {
+    TestIoModel testIoModel = new TestIoModel(new VariableName("someVariableName"));
+
+    assertThat(testIoModel).isNotNull();
+    assertThat(testIoModel.getDataType()).isEqualTo(PrimitiveType.STRING.name());
+    assertThat(testIoModel.getVariableName()).isEqualTo(new VariableName("someVariableName"));
+  }
+
+  // ===============================================================================================
+  // Equality and Hash
+  // ===============================================================================================
+  @Override
+  public TestIoModel createObject1() {
+    return new TestIoModel(new VariableName("variableName"));
+  }
+
+  @Override
+  public TestIoModel createObject2() {
+    return new TestIoModel(new VariableName("someOtherVariableName"));
   }
 }

@@ -21,8 +21,8 @@
 package io.polygenesis.deducers.sql;
 
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.datatype.PrimitiveType;
-import io.polygenesis.core.iomodel.IoModel;
+import io.polygenesis.core.data.IoModel;
+import io.polygenesis.core.data.PrimitiveType;
 import io.polygenesis.models.sql.ColumnDataType;
 import java.util.HashMap;
 import java.util.Map;

@@ -20,8 +20,10 @@
 
 package io.polygenesis.models.apiimpl;
 
-import io.polygenesis.core.datatype.ClassDataType;
-import io.polygenesis.core.iomodel.VariableName;
+import com.oregor.ddd4j.check.assertion.Assertion;
+import io.polygenesis.core.data.ObjectName;
+import io.polygenesis.core.data.PackageName;
+import io.polygenesis.core.data.VariableName;
 import java.util.Objects;
 
 /**
@@ -31,7 +33,8 @@ import java.util.Objects;
  */
 public class Dependency {
 
-  private ClassDataType dataType;
+  private ObjectName objectName;
+  private PackageName packageName;
   private VariableName variableName;
 
   // ===============================================================================================
@@ -41,11 +44,13 @@ public class Dependency {
   /**
    * Instantiates a new Dependency.
    *
-   * @param dataType the data type
+   * @param objectName the object name
+   * @param packageName the package name
    * @param variableName the variable name
    */
-  public Dependency(ClassDataType dataType, VariableName variableName) {
-    setDataType(dataType);
+  public Dependency(ObjectName objectName, PackageName packageName, VariableName variableName) {
+    setObjectName(objectName);
+    setPackageName(packageName);
     setVariableName(variableName);
   }
 
@@ -54,12 +59,21 @@ public class Dependency {
   // ===============================================================================================
 
   /**
-   * Gets data type.
+   * Gets object name.
    *
-   * @return the data type
+   * @return the object name
    */
-  public ClassDataType getDataType() {
-    return dataType;
+  public ObjectName getObjectName() {
+    return objectName;
+  }
+
+  /**
+   * Gets package name.
+   *
+   * @return the package name
+   */
+  public PackageName getPackageName() {
+    return packageName;
   }
 
   /**
@@ -76,12 +90,23 @@ public class Dependency {
   // ===============================================================================================
 
   /**
-   * Sets data type.
+   * Sets object name.
    *
-   * @param dataType the data type
+   * @param objectName the object name
    */
-  private void setDataType(ClassDataType dataType) {
-    this.dataType = dataType;
+  private void setObjectName(ObjectName objectName) {
+    Assertion.isNotNull(objectName, "objectName is required");
+    this.objectName = objectName;
+  }
+
+  /**
+   * Sets package name.
+   *
+   * @param packageName the package name
+   */
+  private void setPackageName(PackageName packageName) {
+    Assertion.isNotNull(packageName, "packageName is required");
+    this.packageName = packageName;
   }
 
   /**
@@ -90,6 +115,7 @@ public class Dependency {
    * @param variableName the variable name
    */
   private void setVariableName(VariableName variableName) {
+    Assertion.isNotNull(variableName, "variableName is required");
     this.variableName = variableName;
   }
 
@@ -106,12 +132,13 @@ public class Dependency {
       return false;
     }
     Dependency that = (Dependency) o;
-    return Objects.equals(dataType, that.dataType)
+    return Objects.equals(objectName, that.objectName)
+        && Objects.equals(packageName, that.packageName)
         && Objects.equals(variableName, that.variableName);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(dataType, variableName);
+    return Objects.hash(objectName, packageName, variableName);
   }
 }

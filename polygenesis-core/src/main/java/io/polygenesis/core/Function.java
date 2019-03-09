@@ -20,7 +20,7 @@
 
 package io.polygenesis.core;
 
-import io.polygenesis.core.iomodel.IoModelPrimitive;
+import io.polygenesis.core.data.IoModelPrimitive;
 import java.util.Optional;
 import java.util.Set;
 import org.apache.commons.lang3.builder.EqualsBuilder;

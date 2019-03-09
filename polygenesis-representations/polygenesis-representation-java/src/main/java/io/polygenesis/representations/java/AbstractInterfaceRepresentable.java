@@ -21,7 +21,7 @@
 package io.polygenesis.representations.java;
 
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.datatype.PackageName;
+import io.polygenesis.core.data.PackageName;
 
 /**
  * The type Abstract interface representable.

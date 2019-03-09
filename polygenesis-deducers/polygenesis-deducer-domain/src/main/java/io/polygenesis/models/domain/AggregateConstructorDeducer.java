@@ -23,7 +23,7 @@ package io.polygenesis.models.domain;
 import io.polygenesis.annotations.core.GoalType;
 import io.polygenesis.core.Goal;
 import io.polygenesis.core.Thing;
-import io.polygenesis.core.datatype.PackageName;
+import io.polygenesis.core.data.PackageName;
 import java.util.LinkedHashSet;
 import java.util.Set;
 

@@ -21,7 +21,7 @@
 package io.polygenesis.generators.java.apiimpl;
 
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.iomodel.IoModelGroup;
+import io.polygenesis.core.data.IoModelGroup;
 import io.polygenesis.models.api.Method;
 import io.polygenesis.models.api.Service;
 import io.polygenesis.models.apiimpl.ServiceImplementation;
@@ -89,8 +89,7 @@ public class ServiceImplementationClassRepresentable
             dependency ->
                 fieldRepresentations.add(
                     new FieldRepresentation(
-                        TextConverter.toUpperCamel(
-                            dependency.getDataType().getDataTypeName().getText()),
+                        TextConverter.toUpperCamel(dependency.getObjectName().getText()),
                         TextConverter.toLowerCamel(dependency.getVariableName().getText()))));
 
     return fieldRepresentations;

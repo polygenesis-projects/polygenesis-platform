@@ -18,14 +18,23 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.core.datatype;
+package io.polygenesis.core.data;
 
 /**
- * The enum Kind of array data type.
+ * Enumeration containing the primitive types as defined by PolyGenesis.
+ *
+ * <p>Each language defines different primitives. This enumeration tries to support all of the
+ * languages in a generic way.
  *
  * @author Christos Tsakostas
  */
-public enum ArrayType {
-  LIST_ARRAY,
-  LINKED_LIST_ARRAY,
+public enum PrimitiveType {
+  BOOLEAN,
+  DATE,
+  DATETIME,
+  FLOAT,
+  INTEGER,
+  LONG,
+  STRING,
+  VOID
 }

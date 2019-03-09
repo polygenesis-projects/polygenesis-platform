@@ -28,8 +28,8 @@ import io.polygenesis.core.Goal;
 import io.polygenesis.core.ReturnValue;
 import io.polygenesis.core.Thing;
 import io.polygenesis.core.ThingName;
+import io.polygenesis.core.data.IoModelGroup;
 import io.polygenesis.core.data.ObjectName;
-import io.polygenesis.core.iomodel.IoModelGroup;
 import io.polygenesis.models.apiimpl.AggregateRootConverter;
 import io.polygenesis.models.domain.AggregateRoot;
 import io.polygenesis.representations.commons.FieldRepresentation;
@@ -109,7 +109,7 @@ public class AggregateRootConverterClassRepresentable
 
   @Override
   public String packageName(AggregateRootConverter source, Object... args) {
-    return source.getDataType().getOptionalPackageName().get().getText();
+    return source.getPackageName().getText();
   }
 
   @Override
@@ -127,7 +127,7 @@ public class AggregateRootConverterClassRepresentable
                   .getValueObject()
                   .getIoModelGroup()
                   .getPackageName()
-                  .equals(source.getDataType().getOptionalPackageName().get())) {
+                  .equals(source.getPackageName())) {
 
                 StringBuilder stringBuilder = new StringBuilder();
 
@@ -149,7 +149,7 @@ public class AggregateRootConverterClassRepresentable
                   .getDto()
                   .getOriginatingIoModelGroup()
                   .getPackageName()
-                  .equals(source.getDataType().getOptionalPackageName().get())) {
+                  .equals(source.getPackageName())) {
 
                 StringBuilder stringBuilder = new StringBuilder();
 
@@ -188,8 +188,7 @@ public class AggregateRootConverterClassRepresentable
   public String description(AggregateRootConverter source, Object... args) {
     StringBuilder stringBuilder = new StringBuilder();
 
-    stringBuilder.append(
-        TextConverter.toUpperCamelSpaces(source.getDataType().getDataTypeName().getText()));
+    stringBuilder.append(TextConverter.toUpperCamelSpaces(source.getObjectName().getText()));
 
     stringBuilder.append(".");
 
@@ -205,8 +204,7 @@ public class AggregateRootConverterClassRepresentable
   public String simpleObjectName(AggregateRootConverter source, Object... args) {
     StringBuilder stringBuilder = new StringBuilder();
 
-    stringBuilder.append(
-        TextConverter.toUpperCamel(source.getDataType().getDataTypeName().getText()));
+    stringBuilder.append(TextConverter.toUpperCamel(source.getObjectName().getText()));
 
     return stringBuilder.toString();
   }

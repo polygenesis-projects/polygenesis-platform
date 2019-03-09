@@ -31,7 +31,7 @@ import io.polygenesis.core.ModelRepository;
 import io.polygenesis.core.Thing;
 import io.polygenesis.core.ThingRepository;
 import io.polygenesis.core.ThingRepositoryImpl;
-import io.polygenesis.core.datatype.PackageName;
+import io.polygenesis.core.data.PackageName;
 import io.polygenesis.core.test.ThingForTesting;
 import java.util.Arrays;
 import java.util.LinkedHashSet;

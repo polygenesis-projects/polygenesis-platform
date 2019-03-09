@@ -27,9 +27,9 @@ import io.polygenesis.core.FunctionName;
 import io.polygenesis.core.Goal;
 import io.polygenesis.core.Thing;
 import io.polygenesis.core.ThingName;
+import io.polygenesis.core.data.IoModelGroup;
 import io.polygenesis.core.data.ObjectName;
-import io.polygenesis.core.datatype.PackageName;
-import io.polygenesis.core.iomodel.IoModelGroup;
+import io.polygenesis.core.data.PackageName;
 import java.util.LinkedHashSet;
 
 /** @author Christos Tsakostas */

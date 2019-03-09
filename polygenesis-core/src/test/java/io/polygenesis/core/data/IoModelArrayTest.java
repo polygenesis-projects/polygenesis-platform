@@ -18,23 +18,21 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.core.iomodel;
+package io.polygenesis.core.data;
 
-import io.polygenesis.core.datatype.PrimitiveType;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import org.junit.Test;
 
 /** @author Christos Tsakostas */
-class TestIoModel extends IoModel {
+public class IoModelArrayTest {
 
-  public TestIoModel() {
-    super(DataKind.CLASS);
-  }
+  @Test
+  public void shouldInitializeIoModelArray() {
+    IoModelArray ioModelArray = new IoModelArray(new VariableName("someVariableName"));
 
-  public TestIoModel(VariableName variableName) {
-    super(DataKind.CLASS, variableName);
-  }
-
-  @Override
-  public String getDataType() {
-    return PrimitiveType.STRING.name();
+    assertThat(ioModelArray).isNotNull();
+    assertThat(ioModelArray.getDataType()).isEqualTo(DataKind.ARRAY.name());
+    assertThat(ioModelArray.getVariableName()).isEqualTo(new VariableName("someVariableName"));
   }
 }

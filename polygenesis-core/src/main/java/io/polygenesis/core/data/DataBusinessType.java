@@ -18,18 +18,23 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.core.datatype;
+package io.polygenesis.core.data;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import org.junit.Test;
-
-/** @author Christos Tsakostas */
-public class DataTypeNameTest {
-
-  @Test
-  public void shouldInitialize() {
-    DataTypeName dataTypeName = new DataTypeName(PrimitiveType.STRING.name());
-    assertThat(dataTypeName).isNotNull();
-  }
+/**
+ * Encodes business types, which are vital for the code generation process, such as unique ID of an
+ * entity, page size etc.
+ *
+ * @author Christos Tsakostas
+ */
+public enum DataBusinessType {
+  /** Any type of business data, which is not directly relevant to the code generation process. */
+  ANY,
+  /** Denotes a Thing's identity. */
+  THING_IDENTITY,
+  /** Denotes a Tenant's identity. */
+  TENANT_IDENTITY,
+  /** Page number used for fetching collections. */
+  PAGE_NUMBER,
+  /** Page size used for fetching collections. */
+  PAGE_SIZE;
 }

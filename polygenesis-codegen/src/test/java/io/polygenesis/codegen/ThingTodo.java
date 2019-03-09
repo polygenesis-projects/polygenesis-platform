@@ -21,9 +21,9 @@
 package io.polygenesis.codegen;
 
 import io.polygenesis.core.Thing;
+import io.polygenesis.core.data.IoModel;
 import io.polygenesis.core.dsl.DataBuilder;
 import io.polygenesis.core.dsl.ThingBuilder;
-import io.polygenesis.core.iomodel.IoModel;
 import java.util.Set;
 
 /** @author Christos Tsakostas */

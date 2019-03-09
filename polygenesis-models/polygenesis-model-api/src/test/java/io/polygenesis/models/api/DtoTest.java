@@ -23,9 +23,9 @@ package io.polygenesis.models.api;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.polygenesis.commons.test.AbstractEqualityTest;
+import io.polygenesis.core.data.IoModelGroup;
 import io.polygenesis.core.data.ObjectName;
-import io.polygenesis.core.datatype.PackageName;
-import io.polygenesis.core.iomodel.IoModelGroup;
+import io.polygenesis.core.data.PackageName;
 import org.junit.Test;
 
 /** @author Christos Tsakostas */

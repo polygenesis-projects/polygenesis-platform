@@ -23,7 +23,7 @@ package io.polygenesis.core.deducer;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import io.polygenesis.core.datatype.PrimitiveType;
+import io.polygenesis.core.data.PrimitiveType;
 import org.junit.Test;
 
 /** @author Christos Tsakostas */
@@ -41,7 +41,6 @@ public class JavaDataTypeConverterTest {
     assertThat(javaDataTypeConverter.convert("java.lang.Long")).isEqualTo(PrimitiveType.LONG);
     assertThat(javaDataTypeConverter.convert("boolean")).isEqualTo(PrimitiveType.BOOLEAN);
     assertThat(javaDataTypeConverter.convert("java.lang.Boolean")).isEqualTo(PrimitiveType.BOOLEAN);
-    assertThat(javaDataTypeConverter.convert("java.util.List")).isEqualTo(PrimitiveType.ARRAY);
   }
 
   @Test
