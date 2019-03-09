@@ -22,6 +22,7 @@ package io.polygenesis.representations.java;
 
 import static java.util.stream.Collectors.toCollection;
 
+import io.polygenesis.representations.commons.FieldRepresentation;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;

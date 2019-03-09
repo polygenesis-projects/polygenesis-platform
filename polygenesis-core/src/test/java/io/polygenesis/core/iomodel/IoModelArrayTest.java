@@ -34,12 +34,10 @@ public class IoModelArrayTest {
   public void shouldInitializeIoModelArray() {
     IoModelArray ioModelArray =
         new IoModelArray(
-            new GenericTypeName("java.util.list"),
             new ClassDataType(new DataTypeName("SomeClass"), new PackageName("com.dummy")),
             new VariableName("someVariableName"));
 
     assertThat(ioModelArray).isNotNull();
-    assertThat(ioModelArray.getGenericType()).isEqualTo(new GenericTypeName("java.util.list"));
     assertThat(ioModelArray.getDataType())
         .isEqualTo(new ClassDataType(new DataTypeName("SomeClass"), new PackageName("com.dummy")));
     assertThat(ioModelArray.getVariableName()).isEqualTo(new VariableName("someVariableName"));

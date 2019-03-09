@@ -103,6 +103,16 @@ public final class TextConverter {
   }
 
   /**
+   * To lower underscore string.
+   *
+   * @param input the input
+   * @return the string
+   */
+  public static String toLowerUnderscore(String input) {
+    return CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, input);
+  }
+
+  /**
    * To lower camel spaces string.
    *
    * @param input the input

@@ -39,13 +39,11 @@ public class ArrayDataType extends AbstractDataType {
   /**
    * Instantiates a new Array data type.
    *
-   * @param dataTypeName the data type name
    * @param arrayType the kind of array data type
    * @param elementDataType the element data type
    */
-  public ArrayDataType(
-      DataTypeName dataTypeName, ArrayType arrayType, AbstractDataType elementDataType) {
-    super(DataKind.ARRAY, dataTypeName);
+  public ArrayDataType(ArrayType arrayType, AbstractDataType elementDataType) {
+    super(DataKind.ARRAY, new DataTypeName(arrayType.name()));
     this.arrayType = arrayType;
     this.elementDataType = elementDataType;
   }

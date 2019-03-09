@@ -18,6 +18,12 @@
       <artifactId>polygenesis-core</artifactId>
     </dependency>
 
+    <!--POLYGENESIS REPRESENTATION COMMONS-->
+    <dependency>
+      <groupId>io.polygenesis.representations</groupId>
+      <artifactId>polygenesis-representation-commons</artifactId>
+    </dependency>
+
     <!--TEST-->
     <dependency>
       <groupId>io.polygenesis</groupId>

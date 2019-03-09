@@ -37,9 +37,9 @@ import io.polygenesis.generators.java.rest.JavaApiRestGeneratorFactory;
 import io.polygenesis.generators.sql.SqlGeneratorFactory;
 import io.polygenesis.models.api.ApiDeducerFactory;
 import io.polygenesis.models.domain.DomainDeducerFactory;
-import io.polygenesis.models.reactivestate.ReactiveStateRegistry;
+import io.polygenesis.models.reactivestate.ReactiveStateFactory;
 import io.polygenesis.models.rest.RestDeducerFactory;
-import io.polygenesis.models.ui.UiRegistry;
+import io.polygenesis.models.ui.UiDeducerFactory;
 import io.polygenesis.scaffolders.javams.ProjectDescription;
 import io.polygenesis.scaffolders.javams.ScaffolderJavaMicroservice;
 import io.polygenesis.scaffolders.javams.ScaffolderJavaMicroserviceFactory;
@@ -72,6 +72,8 @@ public class OregorDdd4jExampleGenesisTest {
 
   public static final String JAVA_CONTEXT = "example";
 
+  private static final String TABLE_PREFIX = "ddd_";
+
   @Test
   public void shouldGenerateForAnnotationsAndStateDeducer() {
     scaffoldJava();
@@ -97,7 +99,7 @@ public class OregorDdd4jExampleGenesisTest {
     ProjectDescription projectDescription = new ProjectDescription();
 
     projectDescription.setContext(TextConverter.toLowerHyphen("ddd4j-example"));
-    projectDescription.setTablePrefix("ddd_");
+    projectDescription.setTablePrefix(TABLE_PREFIX);
     projectDescription.setGroupId(JAVA_ROOT_PACKAGE);
     projectDescription.setArtifactId("oregor-ddd4j-example");
     projectDescription.setModulePrefix(JAVA_MODULE_PREFIX);
@@ -169,11 +171,12 @@ public class OregorDdd4jExampleGenesisTest {
                         JAVA_EXPORT_PATH,
                         JAVA_PROJECT_FOLDER,
                         JAVA_MODULE_PREFIX + "-secondary-adapters",
-                        JAVA_MODULE_PREFIX + "-persistence-rdbms"))));
+                        JAVA_MODULE_PREFIX + "-persistence-rdbms"),
+                    TABLE_PREFIX)));
 
     genesis.generate(
         new ThingRepositoryImpl(
-            new LinkedHashSet<>(Arrays.asList(ThingBusiness.create(), ThingTodo.create()))),
+            new LinkedHashSet<>(Arrays.asList(ThingTodo.create(), ThingBusiness.create()))),
         deducers,
         generators);
   }
@@ -184,7 +187,9 @@ public class OregorDdd4jExampleGenesisTest {
     Set<Deducer> deducers =
         new LinkedHashSet<>(
             Arrays.asList(
-                ReactiveStateRegistry.getReactiveStateDeducer(), UiRegistry.getUiDeducer()));
+                ApiDeducerFactory.newInstance(new PackageName(JAVA_ROOT_PACKAGE)),
+                ReactiveStateFactory.newInstance(),
+                UiDeducerFactory.newInstance()));
 
     Set<Generator> generators =
         new LinkedHashSet<>(
@@ -192,7 +197,7 @@ public class OregorDdd4jExampleGenesisTest {
 
     genesis.generate(
         new ThingRepositoryImpl(
-            new LinkedHashSet<>(Arrays.asList(ThingBusiness.create(), ThingTodo.create()))),
+            new LinkedHashSet<>(Arrays.asList(ThingTodo.create(), ThingBusiness.create()))),
         deducers,
         generators);
   }

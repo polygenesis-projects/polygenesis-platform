@@ -39,6 +39,7 @@ public class SqlGenerator extends AbstractGenerator {
   // ===============================================================================================
 
   private final ScriptExporter scriptExporter;
+  private final String tablePrefix;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -49,10 +50,25 @@ public class SqlGenerator extends AbstractGenerator {
    *
    * @param generationPath the generation path
    * @param scriptExporter the script exporter
+   * @param tablePrefix the table prefix
    */
-  public SqlGenerator(Path generationPath, ScriptExporter scriptExporter) {
+  public SqlGenerator(Path generationPath, ScriptExporter scriptExporter, String tablePrefix) {
     super(generationPath);
     this.scriptExporter = scriptExporter;
+    this.tablePrefix = tablePrefix;
+  }
+
+  // ===============================================================================================
+  // GETTERS
+  // ===============================================================================================
+
+  /**
+   * Gets table prefix.
+   *
+   * @return the table prefix
+   */
+  public String getTablePrefix() {
+    return tablePrefix;
   }
 
   // ===============================================================================================
@@ -65,6 +81,6 @@ public class SqlGenerator extends AbstractGenerator {
         CoreRegistry.getModelRepositoryResolver()
             .resolve(modelRepositories, SqlModelRepository.class);
 
-    scriptExporter.export(getGenerationPath(), sqlModelRepository);
+    scriptExporter.export(getGenerationPath(), sqlModelRepository, getTablePrefix());
   }
 }

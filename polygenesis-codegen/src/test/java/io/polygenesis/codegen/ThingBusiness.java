@@ -21,18 +21,11 @@
 package io.polygenesis.codegen;
 
 import io.polygenesis.core.Thing;
-import io.polygenesis.core.datatype.ClassDataType;
-import io.polygenesis.core.datatype.DataTypeName;
-import io.polygenesis.core.datatype.PackageName;
-import io.polygenesis.core.datatype.PrimitiveDataType;
-import io.polygenesis.core.datatype.PrimitiveType;
 import io.polygenesis.core.dsl.DataBuilder;
+import io.polygenesis.core.dsl.DataGroupBuilder;
 import io.polygenesis.core.dsl.ThingBuilder;
 import io.polygenesis.core.iomodel.IoModel;
 import io.polygenesis.core.iomodel.IoModelGroup;
-import io.polygenesis.core.iomodel.IoModelPrimitive;
-import io.polygenesis.core.iomodel.VariableName;
-import java.util.LinkedHashSet;
 import java.util.Set;
 
 /** @author Christos Tsakostas */
@@ -60,6 +53,7 @@ public class ThingBusiness {
         .build()
         .withTextProperty("taxId")
         .build()
+        .withGroupData(postalAddress())
         .build();
   }
 
@@ -68,17 +62,12 @@ public class ThingBusiness {
   // ===============================================================================================
 
   private static Set<IoModel> fetchOneData() {
-    Set<IoModel> models = new LinkedHashSet<>();
-
-    // name
-    models.add(
-        IoModelPrimitive.of(new PrimitiveDataType(PrimitiveType.STRING), new VariableName("name")));
-
-    // postal address
-    // TODO
-    // models.add(postalAddress());
-
-    return models;
+    return DataBuilder.create()
+        .withTextProperty("name")
+        .build()
+        .withTextProperty("taxId")
+        .build()
+        .build();
   }
 
   // ===============================================================================================
@@ -86,50 +75,29 @@ public class ThingBusiness {
   // ===============================================================================================
 
   private static Set<IoModel> fetchCollectionData() {
-    Set<IoModel> models = new LinkedHashSet<>();
-
-    // name
-    models.add(
-        IoModelPrimitive.of(new PrimitiveDataType(PrimitiveType.STRING), new VariableName("name")));
-
-    // postal address
-    // TODO
-    // models.add(postalAddress());
-
-    return models;
+    return DataBuilder.create()
+        .withTextProperty("name")
+        .build()
+        .withTextProperty("taxId")
+        .build()
+        .build();
   }
 
   // ===============================================================================================
-  // DTOs
+  // INNER DTOs
   // ===============================================================================================
-
-  // ===============================================================================================
-  // POSTAL ADDRESS
-  // ===============================================================================================
-
   private static IoModelGroup postalAddress() {
-    IoModelGroup postalAddress =
-        new IoModelGroup(
-            new ClassDataType(
-                new DataTypeName("PostalAddressDto"),
-                new PackageName("com.oregor.ddd4j.example.shared")));
 
-    postalAddress.addIoModelPrimitive(
-        IoModelPrimitive.ofParent(
-            postalAddress,
-            new PrimitiveDataType(PrimitiveType.STRING),
-            new VariableName("streetAddress1")));
-
-    postalAddress.addIoModelPrimitive(
-        IoModelPrimitive.ofParent(
-            postalAddress,
-            new PrimitiveDataType(PrimitiveType.STRING),
-            new VariableName("streetAddress2")));
-
-    postalAddress.addIoModelPrimitive(
-        IoModelPrimitive.ofParent(
-            postalAddress, new PrimitiveDataType(PrimitiveType.STRING), new VariableName("city")));
-
-    return postalAddress;
+    return DataGroupBuilder.create("postalAddress")
+        .withGroupData(
+            DataBuilder.create()
+                .withTextProperty("streetAddress1")
+                .build()
+                .withTextProperty("streetAddress2")
+                .build()
+                .withTextProperty("city")
+                .build()
+                .build())
+        .build();
   }
 }

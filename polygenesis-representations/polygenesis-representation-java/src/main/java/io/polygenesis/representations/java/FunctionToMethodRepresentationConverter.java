@@ -22,6 +22,7 @@ package io.polygenesis.representations.java;
 
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.Function;
+import io.polygenesis.representations.commons.ParameterRepresentation;
 import java.util.LinkedHashSet;
 import java.util.Set;
 

@@ -13,6 +13,7 @@
   <artifactId>polygenesis-representations</artifactId>
   <packaging>pom</packaging>
   <modules>
+    <module>polygenesis-representation-commons</module>
     <module>polygenesis-representation-java</module>
     <module>polygenesis-representation-typescript</module>
   </modules>

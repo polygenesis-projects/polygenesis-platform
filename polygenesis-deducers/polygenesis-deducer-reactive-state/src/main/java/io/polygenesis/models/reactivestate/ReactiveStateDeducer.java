@@ -20,11 +20,60 @@
 
 package io.polygenesis.models.reactivestate;
 
+import com.oregor.ddd4j.check.assertion.Assertion;
+import io.polygenesis.core.CoreRegistry;
 import io.polygenesis.core.Deducer;
+import io.polygenesis.core.ModelRepository;
+import io.polygenesis.core.ThingRepository;
+import io.polygenesis.models.api.ServiceModelRepository;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
- * The interface Redux deducer.
+ * The type Redux deducer.
  *
  * @author Christos Tsakostas
  */
-public interface ReactiveStateDeducer extends Deducer<ReactiveStateModelRepository> {}
+public class ReactiveStateDeducer implements Deducer<ReactiveStateModelRepository> {
+
+  private final StoreDeducer storeDeducer;
+
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
+  /**
+   * Instantiates a new Redux deducer.
+   *
+   * @param storeDeducer the store deducer
+   */
+  public ReactiveStateDeducer(StoreDeducer storeDeducer) {
+    Assertion.isNotNull(storeDeducer, "storeDeducer is required");
+    this.storeDeducer = storeDeducer;
+  }
+
+  // ===============================================================================================
+  // OVERRIDES
+  // ===============================================================================================
+
+  @Override
+  public ReactiveStateModelRepository deduce(
+      ThingRepository thingRepository, Set<ModelRepository> modelRepositories) {
+    Set<Store> stores = new LinkedHashSet<>();
+
+    ServiceModelRepository serviceModelRepository =
+        CoreRegistry.getModelRepositoryResolver()
+            .resolve(modelRepositories, ServiceModelRepository.class);
+
+    if (serviceModelRepository.getServices().isEmpty()) {
+      throw new IllegalStateException(String.format("serviceModelRepository cannot be empty."));
+    }
+
+    thingRepository
+        .getThings()
+        .forEach(
+            thing -> stores.add(storeDeducer.deduceStoreFromThing(thing, serviceModelRepository)));
+
+    return new ReactiveStateModelRepository(stores);
+  }
+}

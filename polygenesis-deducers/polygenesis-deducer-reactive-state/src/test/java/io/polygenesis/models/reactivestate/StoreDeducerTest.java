@@ -21,7 +21,9 @@
 package io.polygenesis.models.reactivestate;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 
+import io.polygenesis.models.api.ServiceModelRepository;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -29,19 +31,34 @@ import org.junit.Test;
 public class StoreDeducerTest extends AbstractReactiveStateTest {
 
   private FeatureNameDeducer featureNameDeducer;
-  private ActionDeducer actionDeducer;
+  private ActionGroupDeducer actionGroupDeducer;
+  private EffectGroupDeducer effectGroupDeducer;
+  private ModelDeducer modelDeducer;
+  private ReducerGroupDeducer reducerGroupDeducer;
+  private ServiceModelRepository serviceModelRepository;
   private StoreDeducer storeDeducer;
 
   @Before
   public void setUp() {
     featureNameDeducer = new FeatureNameDeducer();
-    actionDeducer = new ActionDeducer();
-    storeDeducer = new StoreDeducer(featureNameDeducer, actionDeducer);
+    actionGroupDeducer = new ActionGroupDeducer();
+    effectGroupDeducer = new EffectGroupDeducer();
+    modelDeducer = new ModelDeducer();
+    reducerGroupDeducer = new ReducerGroupDeducer();
+    serviceModelRepository = mock(ServiceModelRepository.class);
+
+    storeDeducer =
+        new StoreDeducer(
+            featureNameDeducer,
+            actionGroupDeducer,
+            effectGroupDeducer,
+            modelDeducer,
+            reducerGroupDeducer);
   }
 
   @Test
   public void deduceStoreForThing() {
-    Store store = storeDeducer.deduceStoreFromThing(createThing());
+    Store store = storeDeducer.deduceStoreFromThing(createThing(), serviceModelRepository);
 
     assertThat(store).isNotNull();
   }

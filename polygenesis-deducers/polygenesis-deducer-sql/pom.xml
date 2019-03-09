@@ -12,7 +12,11 @@
   <artifactId>polygenesis-deducer-sql</artifactId>
 
   <dependencies>
-    <!--MODEL-->
+    <!--MODELS-->
+    <dependency>
+      <groupId>io.polygenesis.models</groupId>
+      <artifactId>polygenesis-model-domain</artifactId>
+    </dependency>
     <dependency>
       <groupId>io.polygenesis.models</groupId>
       <artifactId>polygenesis-model-sql</artifactId>

@@ -33,8 +33,6 @@ public final class StoreExporterConstants {
 
   public static final String PATH_NGRX = "ngrx";
 
-  public static final String FTL_ACTION =
-      "polygenesis-angular-generator/ngrx/analytical/action/index.ftl";
   public static final String FTL_REDUCER =
       "polygenesis-angular-generator/ngrx/analytical/reducer/index.ftl";
   public static final String FTL_INDEX_REDUCER =
@@ -43,8 +41,6 @@ public final class StoreExporterConstants {
       "polygenesis-angular-generator/ngrx/shared/effect/index.ftl";
   public static final String FTL_SERVICE =
       "polygenesis-angular-generator/ngrx/shared/service/index.ftl";
-  public static final String FTL_MODEL =
-      "polygenesis-angular-generator/ngrx/shared/model/index.ftl";
   public static final String FTL_MODULE =
       "polygenesis-angular-generator/ngrx/shared/module/index.ftl";
 
@@ -55,11 +51,11 @@ public final class StoreExporterConstants {
   public static final String PATH_SERVICES = "services";
   public static final String PATH_MODELS = "models";
 
-  public static final String POSTFIX_ACTIONS_TS = ".actions.ts";
+  public static final String POSTFIX_ACTIONS_TS = "actions.ts";
   public static final String POSTFIX_REDUCERS_TS = ".reducers.ts";
   public static final String POSTFIX_INDEX_REDUCER_TS = "index.ts";
   public static final String POSTFIX_EFFECTS_TS = ".effects.ts";
   public static final String POSTFIX_SERVICE_TS = ".service.ts";
-  public static final String POSTFIX_MODEL_TS = ".model.ts";
+  public static final String POSTFIX_MODEL_TS = "model.ts";
   public static final String POSTFIX_MODULE_TS = ".module.ts";
 }

@@ -23,6 +23,10 @@ package io.polygenesis.models.reactivestate;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.polygenesis.commons.test.AbstractEqualityTest;
+import io.polygenesis.core.datatype.PrimitiveDataType;
+import io.polygenesis.core.datatype.PrimitiveType;
+import io.polygenesis.core.iomodel.IoModelPrimitive;
+import io.polygenesis.core.iomodel.VariableName;
 import org.junit.Test;
 
 /** @author Christos Tsakostas */
@@ -30,7 +34,13 @@ public class ActionTest extends AbstractEqualityTest<Action> {
 
   @Test
   public void shouldSucceedToInstantiate() {
-    Action action = new Action(ActionType.SUBMIT, new ActionName("xxx"));
+    Action action =
+        new Action(
+            ActionType.SUBMIT,
+            new ActionName("xxx"),
+            new Model(
+                IoModelPrimitive.of(
+                    new PrimitiveDataType(PrimitiveType.STRING), new VariableName("name"))));
 
     assertThat(action).isNotNull();
     assertThat(action.getActionType()).isEqualTo(ActionType.SUBMIT);
@@ -39,11 +49,21 @@ public class ActionTest extends AbstractEqualityTest<Action> {
 
   @Override
   public Action createObject1() {
-    return new Action(ActionType.SUBMIT, new ActionName("xxx"));
+    return new Action(
+        ActionType.SUBMIT,
+        new ActionName("xxx"),
+        new Model(
+            IoModelPrimitive.of(
+                new PrimitiveDataType(PrimitiveType.STRING), new VariableName("name"))));
   }
 
   @Override
   public Action createObject2() {
-    return new Action(ActionType.RESET, new ActionName("xxx"));
+    return new Action(
+        ActionType.RESET,
+        new ActionName("xxx"),
+        new Model(
+            IoModelPrimitive.of(
+                new PrimitiveDataType(PrimitiveType.STRING), new VariableName("name"))));
   }
 }

@@ -21,6 +21,8 @@
 package io.polygenesis.models.reactivestate;
 
 import io.polygenesis.core.Thing;
+import io.polygenesis.models.api.ServiceModelRepository;
+import java.util.Set;
 
 /**
  * The type Store deducer.
@@ -30,15 +32,35 @@ import io.polygenesis.core.Thing;
 public class StoreDeducer {
 
   private FeatureNameDeducer featureNameDeducer;
-  private ActionDeducer actionDeducer;
+  private ActionGroupDeducer actionGroupDeducer;
+  private EffectGroupDeducer effectGroupDeducer;
+  private ModelDeducer modelDeducer;
+  private ReducerGroupDeducer reducerGroupDeducer;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
-  public StoreDeducer(FeatureNameDeducer featureNameDeducer, ActionDeducer actionDeducer) {
+  /**
+   * Instantiates a new Store deducer.
+   *
+   * @param featureNameDeducer the feature name deducer
+   * @param actionGroupDeducer the action group deducer
+   * @param effectGroupDeducer the effect group deducer
+   * @param modelDeducer the model deducer
+   * @param reducerGroupDeducer the reducer group deducer
+   */
+  public StoreDeducer(
+      FeatureNameDeducer featureNameDeducer,
+      ActionGroupDeducer actionGroupDeducer,
+      EffectGroupDeducer effectGroupDeducer,
+      ModelDeducer modelDeducer,
+      ReducerGroupDeducer reducerGroupDeducer) {
     this.featureNameDeducer = featureNameDeducer;
-    this.actionDeducer = actionDeducer;
+    this.actionGroupDeducer = actionGroupDeducer;
+    this.effectGroupDeducer = effectGroupDeducer;
+    this.modelDeducer = modelDeducer;
+    this.reducerGroupDeducer = reducerGroupDeducer;
   }
 
   // ===============================================================================================
@@ -49,9 +71,16 @@ public class StoreDeducer {
    * Deduce {@link Store} from {@link Thing}.
    *
    * @param thing the thing
+   * @param serviceModelRepository the service model repository
    * @return the store
    */
-  public Store deduceStoreFromThing(Thing thing) {
-    return new Store(featureNameDeducer.from(thing), actionDeducer.deduce(thing));
+  public Store deduceStoreFromThing(Thing thing, ServiceModelRepository serviceModelRepository) {
+    Set<ActionGroup> actionGroups = actionGroupDeducer.deduce(thing, serviceModelRepository);
+    Set<EffectGroup> effectGroups = effectGroupDeducer.deduce(thing);
+    Set<Model> models = modelDeducer.deduce(thing, serviceModelRepository);
+    Set<ReducerGroup> reducerGroups = reducerGroupDeducer.deduce(thing);
+
+    return new Store(
+        featureNameDeducer.from(thing), actionGroups, effectGroups, models, reducerGroups);
   }
 }

@@ -25,4 +25,10 @@ package io.polygenesis.models.reactivestate;
  *
  * @author Christos Tsakostas
  */
-public class Effect {}
+public class Effect {
+
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
+}

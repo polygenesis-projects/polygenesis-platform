@@ -28,14 +28,19 @@ import java.util.Set;
 /**
  * Denotes a Reactive State Management Store for a Feature.
  *
- * <p>A Store is a container for {@link Action Actions}, {@link Effect Effects}.
- *
  * @author Christos Tsakostas
  */
 public class Store {
 
+  // ===============================================================================================
+  // STATE
+  // ===============================================================================================
+
   private FeatureName featureName;
-  private Set<Action> actions;
+  private Set<ActionGroup> actionGroups;
+  private Set<EffectGroup> effectGroups;
+  private Set<Model> models;
+  private Set<ReducerGroup> reducerGroups;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -45,11 +50,22 @@ public class Store {
    * Instantiates a new Store.
    *
    * @param featureName the feature name
-   * @param actions the actions
+   * @param actionGroups the action groups
+   * @param effectGroups the effect groups
+   * @param models the models
+   * @param reducerGroups the reducer groups
    */
-  public Store(FeatureName featureName, Set<Action> actions) {
+  public Store(
+      FeatureName featureName,
+      Set<ActionGroup> actionGroups,
+      Set<EffectGroup> effectGroups,
+      Set<Model> models,
+      Set<ReducerGroup> reducerGroups) {
     setFeatureName(featureName);
-    setActions(actions);
+    setActionGroups(actionGroups);
+    setEffectGroups(effectGroups);
+    setModels(models);
+    setReducerGroups(reducerGroups);
   }
 
   // ===============================================================================================
@@ -66,26 +82,93 @@ public class Store {
   }
 
   /**
-   * Gets actions.
+   * Gets action groups.
    *
-   * @return the actions
+   * @return the action groups
    */
-  public Set<Action> getActions() {
-    return actions;
+  public Set<ActionGroup> getActionGroups() {
+    return actionGroups;
+  }
+
+  /**
+   * Gets effect groups.
+   *
+   * @return the effect groups
+   */
+  public Set<EffectGroup> getEffectGroups() {
+    return effectGroups;
+  }
+
+  /**
+   * Gets models.
+   *
+   * @return the models
+   */
+  public Set<Model> getModels() {
+    return models;
+  }
+
+  /**
+   * Gets reducer groups.
+   *
+   * @return the reducer groups
+   */
+  public Set<ReducerGroup> getReducerGroups() {
+    return reducerGroups;
   }
 
   // ===============================================================================================
   // GUARDS
   // ===============================================================================================
 
+  /**
+   * Sets feature name.
+   *
+   * @param featureName the feature name
+   */
   private void setFeatureName(FeatureName featureName) {
     Assertion.isNotNull(featureName, "featureName name is required");
     this.featureName = featureName;
   }
 
-  private void setActions(Set<Action> actions) {
-    Assertion.isNotNull(actions, "actions is required");
-    this.actions = actions;
+  /**
+   * Sets action groups.
+   *
+   * @param actionGroups the action groups
+   */
+  private void setActionGroups(Set<ActionGroup> actionGroups) {
+    Assertion.isNotNull(actionGroups, "actionGroups name is required");
+    this.actionGroups = actionGroups;
+  }
+
+  /**
+   * Sets effect groups.
+   *
+   * @param effectGroups the effect groups
+   */
+  private void setEffectGroups(Set<EffectGroup> effectGroups) {
+    Assertion.isNotNull(effectGroups, "effectGroups name is required");
+    this.effectGroups = effectGroups;
+  }
+
+  /**
+   * Sets models.
+   *
+   * @param models the models
+   */
+  private void setModels(Set<Model> models) {
+    Assertion.isNotNull(models, "models name is required");
+    this.models = models;
+  }
+
+  /**
+   * Sets reducer groups.
+   *
+   * @param reducerGroups the reducer groups
+   */
+  private void setReducerGroups(Set<ReducerGroup> reducerGroups) {
+    Assertion.isNotNull(reducerGroups, "reducerGroups name is required");
+    this.reducerGroups = reducerGroups;
   }
 
   // ===============================================================================================
@@ -101,11 +184,15 @@ public class Store {
       return false;
     }
     Store store = (Store) o;
-    return Objects.equals(featureName, store.featureName) && Objects.equals(actions, store.actions);
+    return Objects.equals(featureName, store.featureName)
+        && Objects.equals(actionGroups, store.actionGroups)
+        && Objects.equals(effectGroups, store.effectGroups)
+        && Objects.equals(models, store.models)
+        && Objects.equals(reducerGroups, store.reducerGroups);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(featureName, actions);
+    return Objects.hash(featureName, actionGroups, effectGroups, models, reducerGroups);
   }
 }

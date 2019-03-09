@@ -49,7 +49,6 @@ public class IoModelGroupTest extends AbstractEqualityTest<IoModelGroup> {
         new IoModelArray(
             ioModelGroup,
             null,
-            new GenericTypeName("java.util.list"),
             new ClassDataType(new DataTypeName("SomeClass"), new PackageName("com.dummy")),
             new VariableName("someVariableName"));
     ioModelGroup.addIoModelArray(childIoModelArray);

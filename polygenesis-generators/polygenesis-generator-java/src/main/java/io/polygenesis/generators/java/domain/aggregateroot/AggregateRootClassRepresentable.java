@@ -27,12 +27,12 @@ import io.polygenesis.models.domain.AbstractProperty;
 import io.polygenesis.models.domain.AggregateRoot;
 import io.polygenesis.models.domain.Primitive;
 import io.polygenesis.models.domain.PropertyType;
+import io.polygenesis.representations.commons.FieldRepresentation;
+import io.polygenesis.representations.commons.ParameterRepresentation;
 import io.polygenesis.representations.java.AbstractClassRepresentable;
 import io.polygenesis.representations.java.ConstructorRepresentation;
-import io.polygenesis.representations.java.FieldRepresentation;
 import io.polygenesis.representations.java.FromDataTypeToJavaConverter;
 import io.polygenesis.representations.java.MethodRepresentation;
-import io.polygenesis.representations.java.ParameterRepresentation;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -75,10 +75,12 @@ public class AggregateRootClassRepresentable extends AbstractClassRepresentable<
               if (optionalIoModelGroup.isPresent()) {
                 if (!property.getPropertyType().equals(PropertyType.AGGREGATE_ROOT_ID)) {
                   IoModelGroup ioModelGroup = optionalIoModelGroup.get();
+
                   fieldRepresentations.add(
                       new FieldRepresentation(
                           fromDataTypeToJavaConverter.getDeclaredVariableType(ioModelGroup),
-                          ioModelGroup.getVariableName().getText()));
+                          ioModelGroup.getVariableName().getText(),
+                          makeAnnotationsForValueObject(ioModelGroup)));
                 }
               } else {
                 if (property instanceof Primitive) {
@@ -142,8 +144,11 @@ public class AggregateRootClassRepresentable extends AbstractClassRepresentable<
             property -> {
               Optional<IoModelGroup> optionalIoModelGroup = property.getIoModelGroupAsOptional();
               if (optionalIoModelGroup.isPresent()) {
-                IoModelGroup ioModelGroup = optionalIoModelGroup.get();
+                imports.add("javax.persistence.Embedded");
+                imports.add("javax.persistence.AttributeOverride");
+                imports.add("javax.persistence.Column");
 
+                IoModelGroup ioModelGroup = optionalIoModelGroup.get();
                 if (!ioModelGroup
                     .getClassDataType()
                     .getOptionalPackageName()
@@ -255,5 +260,44 @@ public class AggregateRootClassRepresentable extends AbstractClassRepresentable<
             });
 
     return parameterRepresentations;
+  }
+
+  /**
+   * Make annotations for value object set.
+   *
+   * @param ioModelGroup the io model group
+   * @return the set
+   */
+  private Set<String> makeAnnotationsForValueObject(IoModelGroup ioModelGroup) {
+    Set<String> annotations = new LinkedHashSet<>();
+    annotations.add("@Embedded");
+
+    ioModelGroup
+        .getModels()
+        .forEach(
+            model -> {
+              if (model.isPrimitive()) {
+                StringBuilder stringBuilder = new StringBuilder();
+
+                stringBuilder.append("@AttributeOverride(\n");
+
+                stringBuilder.append(
+                    String.format(
+                        "\t\t\tname = \"%s\",\n",
+                        TextConverter.toLowerCamel(model.getVariableName().getText())));
+
+                stringBuilder.append(
+                    String.format(
+                        "\t\t\tcolumn = @Column(name = \"%s%s\"))",
+                        TextConverter.toLowerCamel(ioModelGroup.getVariableName().getText()),
+                        TextConverter.toUpperCamel(model.getVariableName().getText())));
+
+                annotations.add(stringBuilder.toString());
+              } else {
+                throw new UnsupportedOperationException();
+              }
+            });
+
+    return annotations;
   }
 }

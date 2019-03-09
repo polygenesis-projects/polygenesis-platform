@@ -12,6 +12,11 @@
   <artifactId>polygenesis-deducer-reactive-state</artifactId>
 
   <dependencies>
+    <!--MODELS-->
+    <dependency>
+      <groupId>io.polygenesis.models</groupId>
+      <artifactId>polygenesis-model-api</artifactId>
+    </dependency>
     <dependency>
       <groupId>io.polygenesis.models</groupId>
       <artifactId>polygenesis-model-reactive-state</artifactId>

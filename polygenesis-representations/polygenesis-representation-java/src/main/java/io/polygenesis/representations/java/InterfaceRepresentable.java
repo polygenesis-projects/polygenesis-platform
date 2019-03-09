@@ -23,7 +23,7 @@ package io.polygenesis.representations.java;
 import java.util.Set;
 
 /**
- * The interface Class representable.
+ * The interface representable.
  *
  * @param <S> the type parameter
  * @author Christos Tsakostas

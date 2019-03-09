@@ -17,47 +17,16 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-
+<#list representation.tables as table >
 -- -------------------------------------------------------------------------------------------------
--- BUSINESS
+-- ${ textConverter.toUpperUnderscore(table.tableName.text) }
 -- -------------------------------------------------------------------------------------------------
 
-CREATE TABLE `ddd_business` (
-  `root_id` BINARY(16) NOT NULL,
-  `tenant_id` BINARY(16) NOT NULL,
-  `name` VARCHAR(100) NULL,
-  `tax_id` VARCHAR(100) NULL,
-  `version` int(11) NOT NULL,
-  PRIMARY KEY (`root_id`, `tenant_id`)
+CREATE TABLE `${ tablePrefix }${ textConverter.toLowerUnderscore(table.tableName.text) }` (
+<#list table.columns as column >
+  `${ textConverter.toLowerUnderscore(column.name) }` ${ column.columnDataType }<#if column.length gt 0>(${ column.length })</#if><#if column.requiredType == "REQUIRED"> NOT NULL</#if>,
+</#list>
+  PRIMARY KEY (<#list table.getPrimaryKeys() as primaryKey>`${ textConverter.toLowerUnderscore(primaryKey.name) }`<#sep>, </#sep></#list>)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- -------------------------------------------------------------------------------------------------
--- TODO
--- -------------------------------------------------------------------------------------------------
-
-CREATE TABLE `ddd_todo` (
-  `root_id` BINARY(16) NOT NULL,
-  `description` VARCHAR(100) NULL,
-  `done` BIT(1) NULL,
-  `version` int(11) NOT NULL,
-  PRIMARY KEY (`root_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
--- -------------------------------------------------------------------------------------------------
--- DOMAIN MESSAGES
--- -------------------------------------------------------------------------------------------------
-
-CREATE TABLE `${ tablePrefix }domain_message` (
-  `id` BINARY(16) NOT NULL,
-  `root_id` BINARY(16) NOT NULL,
-  `tenant_id` BINARY(16) NULL,
-  `stream_version` int(11) NULL,
-  `message_name` VARCHAR(512) NOT NULL,
-  `message_version` int(11) NOT NULL,
-  `message` LONGTEXT NOT NULL,
-  `principal` VARCHAR(100) NULL,
-  `ip_address` VARCHAR(100) NULL,
-  `occurred_on` DATETIME NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+</#list>

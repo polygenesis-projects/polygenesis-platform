@@ -21,7 +21,10 @@
 package io.polygenesis.models.sql;
 
 import com.oregor.ddd4j.check.assertion.Assertion;
+import java.util.LinkedHashSet;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * The type Table.
@@ -31,6 +34,7 @@ import java.util.Objects;
 public class Table {
 
   private TableName tableName;
+  private Set<Column> columns;
   private Boolean multiTenant;
 
   // ===============================================================================================
@@ -41,21 +45,29 @@ public class Table {
    * Instantiates a new Table.
    *
    * @param tableName the table name
-   */
-  public Table(TableName tableName) {
-    setTableName(tableName);
-    setMultiTenant(false);
-  }
-
-  /**
-   * Instantiates a new Table.
-   *
-   * @param tableName the table name
+   * @param columns the columns
    * @param multiTenant the multi tenant
    */
-  public Table(TableName tableName, Boolean multiTenant) {
+  public Table(TableName tableName, Set<Column> columns, Boolean multiTenant) {
     setTableName(tableName);
+    setColumns(columns);
     setMultiTenant(multiTenant);
+  }
+
+  // ===============================================================================================
+  // QUERIES
+  // ===============================================================================================
+
+  /**
+   * Gets primary keys.
+   *
+   * @return the primary keys
+   */
+  public Set<Column> getPrimaryKeys() {
+    return columns
+        .stream()
+        .filter(column -> column.getPrimaryKey())
+        .collect(Collectors.toCollection(LinkedHashSet::new));
   }
 
   // ===============================================================================================
@@ -69,6 +81,15 @@ public class Table {
    */
   public TableName getTableName() {
     return tableName;
+  }
+
+  /**
+   * Gets columns.
+   *
+   * @return the columns
+   */
+  public Set<Column> getColumns() {
+    return columns;
   }
 
   /**
@@ -95,6 +116,15 @@ public class Table {
   }
 
   /**
+   * Sets columns.
+   *
+   * @param columns the columns
+   */
+  private void setColumns(Set<Column> columns) {
+    this.columns = columns;
+  }
+
+  /**
    * Sets multi tenant.
    *
    * @param multiTenant the multi tenant
@@ -110,6 +140,7 @@ public class Table {
 
   @Override
   public boolean equals(Object o) {
+
     if (this == o) {
       return true;
     }
@@ -118,11 +149,12 @@ public class Table {
     }
     Table table = (Table) o;
     return Objects.equals(tableName, table.tableName)
+        && Objects.equals(columns, table.columns)
         && Objects.equals(multiTenant, table.multiTenant);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(tableName, multiTenant);
+    return Objects.hash(tableName, columns, multiTenant);
   }
 }

@@ -20,12 +20,18 @@
 
 package io.polygenesis.deducers.sql;
 
+import io.polygenesis.core.CoreRegistry;
 import io.polygenesis.core.Deducer;
 import io.polygenesis.core.ModelRepository;
 import io.polygenesis.core.ThingRepository;
+import io.polygenesis.models.domain.DomainModelRepository;
+import io.polygenesis.models.sql.Column;
+import io.polygenesis.models.sql.ColumnDataType;
 import io.polygenesis.models.sql.Index;
+import io.polygenesis.models.sql.RequiredType;
 import io.polygenesis.models.sql.SqlModelRepository;
 import io.polygenesis.models.sql.Table;
+import io.polygenesis.models.sql.TableName;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -58,10 +64,6 @@ public class SqlDeducer implements Deducer<SqlModelRepository> {
   }
 
   // ===============================================================================================
-  // GETTERS
-  // ===============================================================================================
-
-  // ===============================================================================================
   // OVERRIDES
   // ===============================================================================================
 
@@ -75,14 +77,57 @@ public class SqlDeducer implements Deducer<SqlModelRepository> {
     Set<Table> tables = new LinkedHashSet<>();
     Set<Index> indices = new LinkedHashSet<>();
 
-    thingRepository
-        .getThings()
+    CoreRegistry.getModelRepositoryResolver()
+        .resolve(modelRepositories, DomainModelRepository.class)
+        .getAggregateRoots()
         .forEach(
-            thing -> {
-              tables.add(tableDeducer.deduce());
+            aggregateRoot -> {
+              tables.addAll(tableDeducer.deduce(aggregateRoot));
               indices.add(indexDeducer.deduce());
             });
 
+    tables.add(createDomainMessageTable());
+
     return new SqlModelRepository(tables, indices);
+  }
+
+  // ===============================================================================================
+  // PRIVATE
+  // ===============================================================================================
+
+  private Table createDomainMessageTable() {
+    Set<Column> columns = new LinkedHashSet<>();
+
+    // Add Message Id
+    columns.add(new Column("id", ColumnDataType.BINARY, 16, RequiredType.REQUIRED, true));
+
+    // Add root_id
+    columns.add(new Column("root_id", ColumnDataType.BINARY, 16, RequiredType.REQUIRED));
+
+    // Add tenant_id
+    columns.add(new Column("tenant_id", ColumnDataType.BINARY, 16, RequiredType.REQUIRED));
+
+    // Add stream_version
+    columns.add(new Column("stream_version", ColumnDataType.INTEGER, 11, RequiredType.OPTIONAL));
+
+    // Add message_name
+    columns.add(new Column("message_name", ColumnDataType.VARCHAR, 512, RequiredType.OPTIONAL));
+
+    // Add message_version
+    columns.add(new Column("message_version", ColumnDataType.INTEGER, 11, RequiredType.REQUIRED));
+
+    // Add message
+    columns.add(new Column("message", ColumnDataType.LONGTEXT, RequiredType.REQUIRED));
+
+    // Add principal
+    columns.add(new Column("principal", ColumnDataType.VARCHAR, 100, RequiredType.OPTIONAL));
+
+    // Add ip_address
+    columns.add(new Column("ip_address", ColumnDataType.VARCHAR, 100, RequiredType.OPTIONAL));
+
+    // Add occurred_on
+    columns.add(new Column("occurred_on", ColumnDataType.DATETIME, RequiredType.OPTIONAL));
+
+    return new Table(new TableName("domain_message"), columns, false);
   }
 }

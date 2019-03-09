@@ -21,10 +21,45 @@
 package io.polygenesis.models.ui;
 
 import io.polygenesis.core.Deducer;
+import io.polygenesis.core.ModelRepository;
+import io.polygenesis.core.ThingRepository;
+import io.polygenesis.models.ui.container.LayoutContainer;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
- * The interface Ui deducer.
+ * The type Ui deducer.
  *
  * @author Christos Tsakostas
  */
-public interface UiDeducer extends Deducer<UiModelRepository> {}
+public class UiDeducer implements Deducer<UiModelRepository> {
+
+  private final FeatureDeducer featureDeducer;
+  private final LayoutDeducer layoutDeducer;
+
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
+  public UiDeducer(FeatureDeducer featureDeducer, LayoutDeducer layoutDeducer) {
+    this.featureDeducer = featureDeducer;
+    this.layoutDeducer = layoutDeducer;
+  }
+
+  // ===============================================================================================
+  // OVERRIDES
+  // ===============================================================================================
+  @Override
+  public UiModelRepository deduce(
+      ThingRepository thingRepository, Set<ModelRepository> modelRepositories) {
+    Set<Feature> features = new LinkedHashSet<>();
+
+    thingRepository
+        .getThings()
+        .forEach(thing -> features.add(featureDeducer.deduceFeatureFromThing(thing)));
+
+    Set<LayoutContainer> layoutContainers = layoutDeducer.deduceLayoutsFromFeatures();
+
+    return new UiModelRepository(features, layoutContainers);
+  }
+}

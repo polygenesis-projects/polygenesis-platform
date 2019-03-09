@@ -22,12 +22,12 @@ package io.polygenesis.generators.java.domain.aggregateroot;
 
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.models.domain.AggregateRoot;
+import io.polygenesis.representations.commons.FieldRepresentation;
+import io.polygenesis.representations.commons.ParameterRepresentation;
 import io.polygenesis.representations.java.AbstractClassRepresentable;
 import io.polygenesis.representations.java.ConstructorRepresentation;
-import io.polygenesis.representations.java.FieldRepresentation;
 import io.polygenesis.representations.java.FromDataTypeToJavaConverter;
 import io.polygenesis.representations.java.MethodRepresentation;
-import io.polygenesis.representations.java.ParameterRepresentation;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;

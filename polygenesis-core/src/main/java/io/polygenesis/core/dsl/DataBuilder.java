@@ -20,11 +20,8 @@
 
 package io.polygenesis.core.dsl;
 
-import io.polygenesis.core.datatype.PrimitiveDataType;
-import io.polygenesis.core.datatype.PrimitiveType;
 import io.polygenesis.core.iomodel.IoModel;
-import io.polygenesis.core.iomodel.IoModelPrimitive;
-import io.polygenesis.core.iomodel.VariableName;
+import io.polygenesis.core.iomodel.IoModelGroup;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -91,17 +88,13 @@ public class DataBuilder {
   }
 
   /**
-   * With string data model builder.
+   * With group data data builder.
    *
-   * @param propertyName the property name
-   * @return the data model builder
+   * @param ioModelGroup the io model group
+   * @return the data builder
    */
-  public final DataBuilder withString(String propertyName) {
-
-    this.models.add(
-        IoModelPrimitive.of(
-            new PrimitiveDataType(PrimitiveType.STRING), new VariableName(propertyName)));
-
+  public final DataBuilder withGroupData(IoModelGroup ioModelGroup) {
+    this.models.add(ioModelGroup);
     return this;
   }
 

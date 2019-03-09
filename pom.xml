@@ -312,6 +312,11 @@
       <!--POLYGENESIS REPRESENTATIONS-->
       <dependency>
         <groupId>io.polygenesis.representations</groupId>
+        <artifactId>polygenesis-representation-commons</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.polygenesis.representations</groupId>
         <artifactId>polygenesis-representation-java</artifactId>
         <version>${project.version}</version>
       </dependency>

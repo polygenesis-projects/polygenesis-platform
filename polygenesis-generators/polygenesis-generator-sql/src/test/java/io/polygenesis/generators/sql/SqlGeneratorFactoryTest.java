@@ -47,7 +47,7 @@ public class SqlGeneratorFactoryTest {
   /** Should create new instance. */
   @Test
   public void shouldCreateNewInstance() {
-    SqlGenerator javaApiGenerator = SqlGeneratorFactory.newInstance(Paths.get("tmp"));
+    SqlGenerator javaApiGenerator = SqlGeneratorFactory.newInstance(Paths.get("tmp"), "pre_");
 
     assertThat(javaApiGenerator).isNotNull();
   }

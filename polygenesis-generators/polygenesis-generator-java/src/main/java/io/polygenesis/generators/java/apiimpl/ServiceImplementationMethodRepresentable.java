@@ -25,10 +25,10 @@ import io.polygenesis.core.Function;
 import io.polygenesis.models.api.Method;
 import io.polygenesis.models.apiimpl.AggregateRootConverter;
 import io.polygenesis.models.domain.AggregateRoot;
+import io.polygenesis.representations.commons.ParameterRepresentation;
 import io.polygenesis.representations.java.AbstractMethodRepresentable;
 import io.polygenesis.representations.java.FromDataTypeToJavaConverter;
 import io.polygenesis.representations.java.MethodType;
-import io.polygenesis.representations.java.ParameterRepresentation;
 import java.util.LinkedHashSet;
 import java.util.Set;
 

@@ -29,14 +29,18 @@ import io.polygenesis.generators.angular.once.OnceExporter;
 import io.polygenesis.generators.angular.once.OnceLandingModuleExporter;
 import io.polygenesis.generators.angular.once.OnceSharedModuleExporter;
 import io.polygenesis.generators.angular.once.OnceSourceRootExporter;
-import io.polygenesis.generators.angular.reactivestate.ActionExporter;
 import io.polygenesis.generators.angular.reactivestate.EffectExporter;
 import io.polygenesis.generators.angular.reactivestate.IndexReducerExporter;
-import io.polygenesis.generators.angular.reactivestate.ModelExporter;
 import io.polygenesis.generators.angular.reactivestate.ModuleExporter;
 import io.polygenesis.generators.angular.reactivestate.ReducerExporter;
 import io.polygenesis.generators.angular.reactivestate.ServiceExporter;
 import io.polygenesis.generators.angular.reactivestate.StoreExporter;
+import io.polygenesis.generators.angular.reactivestate.action.ActionGroupExporter;
+import io.polygenesis.generators.angular.reactivestate.action.ActionGroupRepresentable;
+import io.polygenesis.generators.angular.reactivestate.action.ActionIndexExporter;
+import io.polygenesis.generators.angular.reactivestate.action.ActionIndexRepresentable;
+import io.polygenesis.generators.angular.reactivestate.model.ModelExporter;
+import io.polygenesis.generators.angular.reactivestate.model.ModelRepresentable;
 import io.polygenesis.generators.angular.ui.UiExporter;
 import io.polygenesis.generators.angular.ui.UiModuleExporter;
 import io.polygenesis.generators.angular.ui.container.UiContainerExporter;
@@ -44,6 +48,7 @@ import io.polygenesis.generators.angular.ui.container.UiContainerHtmlExporter;
 import io.polygenesis.generators.angular.ui.container.UiContainerScssExporter;
 import io.polygenesis.generators.angular.ui.container.UiContainerTypescriptExporter;
 import io.polygenesis.generators.angular.ui.container.UiContainerTypescriptSpecExporter;
+import io.polygenesis.representations.typescript.FromDataTypeToTypescriptConverter;
 import java.nio.file.Path;
 
 /**
@@ -64,18 +69,33 @@ public class AngularGeneratorFactory {
   static {
     FreemarkerService freemarkerService =
         new FreemarkerService(FreemarkerConfig.getInstance().getConfiguration());
+    FromDataTypeToTypescriptConverter fromDataTypeToTypescriptConverter =
+        new FromDataTypeToTypescriptConverter();
 
-    ActionExporter actionExporter = new ActionExporter(freemarkerService);
+    ActionGroupRepresentable actionGroupRepresentable =
+        new ActionGroupRepresentable(fromDataTypeToTypescriptConverter);
+    ActionGroupExporter actionGroupExporter =
+        new ActionGroupExporter(freemarkerService, actionGroupRepresentable);
+
+    ActionIndexRepresentable actionIndexRepresentable = new ActionIndexRepresentable();
+    ActionIndexExporter actionIndexExporter =
+        new ActionIndexExporter(freemarkerService, actionIndexRepresentable);
+
     ReducerExporter reducerExporter = new ReducerExporter(freemarkerService);
     IndexReducerExporter indexReducerExporter = new IndexReducerExporter(freemarkerService);
     EffectExporter effectExporter = new EffectExporter(freemarkerService);
     ServiceExporter serviceExporter = new ServiceExporter(freemarkerService);
-    ModelExporter modelExporter = new ModelExporter(freemarkerService);
+
+    ModelRepresentable modelRepresentable =
+        new ModelRepresentable(fromDataTypeToTypescriptConverter);
+    ModelExporter modelExporter = new ModelExporter(freemarkerService, modelRepresentable);
+
     ModuleExporter moduleExporter = new ModuleExporter(freemarkerService);
 
     storeExporter =
         new StoreExporter(
-            actionExporter,
+            actionGroupExporter,
+            actionIndexExporter,
             reducerExporter,
             indexReducerExporter,
             effectExporter,

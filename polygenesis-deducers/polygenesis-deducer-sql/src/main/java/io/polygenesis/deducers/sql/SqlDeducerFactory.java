@@ -38,7 +38,10 @@ public final class SqlDeducerFactory {
   // ===============================================================================================
 
   static {
-    tableDeducer = new TableDeducer();
+    FromDataTypeToSqlColumnConverter fromDataTypeToSqlColumnConverter =
+        new FromDataTypeToSqlColumnConverter();
+
+    tableDeducer = new TableDeducer(fromDataTypeToSqlColumnConverter);
     indexDeducer = new IndexDeducer();
   }
 
