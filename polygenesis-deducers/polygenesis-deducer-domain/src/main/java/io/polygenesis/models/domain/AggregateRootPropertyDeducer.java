@@ -108,27 +108,27 @@ public class AggregateRootPropertyDeducer {
   private AbstractProperty makeAbstractProperty(Data model) {
     switch (model.getDataKind()) {
       case ARRAY:
-        DataArray ioModelArray = (DataArray) model;
-        if (ioModelArray.getArrayElement().isDataPrimitive()) {
-          return makePrimitiveCollection(ioModelArray);
-        } else if (ioModelArray.getArrayElement().isDataGroup()) {
-          return makeValueObjectCollection(ioModelArray);
+        DataArray dataArray = model.getAsDataArray();
+        if (dataArray.getArrayElement().isDataPrimitive()) {
+          return makePrimitiveCollection(dataArray);
+        } else if (dataArray.getArrayElement().isDataGroup()) {
+          return makeValueObjectCollection(dataArray);
         } else {
           throw new IllegalArgumentException();
         }
       case OBJECT:
-        DataGroup originatingIoModelGroup = (DataGroup) model;
+        DataGroup originatingDataGroup = model.getAsDataGroup();
 
-        DataGroup newIoModelGroup =
-            originatingIoModelGroup
+        DataGroup newDataGroup =
+            originatingDataGroup
                 .withNewObjectName(
                     new ObjectName(makeValueObjectVariableName(model.getVariableName())))
                 .withNewVariableName(
                     new VariableName(makeValueObjectVariableName(model.getVariableName())));
 
         return new ValueObject(
-            originatingIoModelGroup,
-            newIoModelGroup,
+            originatingDataGroup,
+            newDataGroup,
             new VariableName(makeValueObjectVariableName(model.getVariableName())));
       case PRIMITIVE:
         return new Primitive((DataPrimitive) model, model.getVariableName());
@@ -142,19 +142,19 @@ public class AggregateRootPropertyDeducer {
   // MAKE PROPERTIES
   // ===============================================================================================
 
-  protected PrimitiveCollection makePrimitiveCollection(DataArray ioModelArray) {
+  protected PrimitiveCollection makePrimitiveCollection(DataArray dataArray) {
     return new PrimitiveCollection(
-        ioModelArray,
-        ioModelArray.getVariableName(),
-        ((DataPrimitive) ioModelArray.getArrayElement()).getPrimitiveType());
+        dataArray,
+        dataArray.getVariableName(),
+        ((DataPrimitive) dataArray.getArrayElement()).getPrimitiveType());
   }
 
-  protected ValueObjectCollection makeValueObjectCollection(DataArray ioModelArray) {
+  protected ValueObjectCollection makeValueObjectCollection(DataArray dataArray) {
     throw new UnsupportedOperationException();
   }
 
   private AggregateRootId makeAggregateRootId(Function function, PackageName rootPackageName) {
-    DataGroup ioModelGroup =
+    DataGroup dataGroup =
         new DataGroup(
             new ObjectName(function.getThing().getName().getText() + "Id"),
             new PackageName(
@@ -164,7 +164,7 @@ public class AggregateRootPropertyDeducer {
                     function.getThing().getName().getText().toLowerCase())));
 
     return new AggregateRootId(
-        ioModelGroup, new VariableName(function.getThing().getName().getText() + "Id"));
+        dataGroup, new VariableName(function.getThing().getName().getText() + "Id"));
   }
 
   // ===============================================================================================

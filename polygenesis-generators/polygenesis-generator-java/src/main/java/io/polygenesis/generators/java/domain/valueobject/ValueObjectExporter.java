@@ -77,7 +77,7 @@ public class ValueObjectExporter {
     return Paths.get(
         generationPath.toString(),
         "src/main/java",
-        valueObject.getIoModelGroup().getPackageName().toPath().toString(),
+        valueObject.getDataGroup().getPackageName().toPath().toString(),
         TextConverter.toUpperCamel(valueObject.getVariableName().getText()) + ".java");
   }
 }

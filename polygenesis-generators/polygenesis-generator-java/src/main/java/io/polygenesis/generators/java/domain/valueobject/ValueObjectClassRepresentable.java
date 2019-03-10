@@ -57,7 +57,7 @@ public class ValueObjectClassRepresentable extends AbstractClassRepresentable<Va
 
   @Override
   public Set<FieldRepresentation> fieldRepresentations(ValueObject source, Object... args) {
-    return fieldRepresentations(source.getIoModelGroup());
+    return fieldRepresentations(source.getDataGroup());
   }
 
   @Override
@@ -77,7 +77,7 @@ public class ValueObjectClassRepresentable extends AbstractClassRepresentable<Va
 
     constructorRepresentations.add(
         createConstructorWithSettersFromFieldRepresentations(
-            source.getOriginatingIoModelGroup().getDataType(), fieldRepresentations));
+            source.getOriginatingDataGroup().getDataType(), fieldRepresentations));
 
     return constructorRepresentations;
   }
@@ -90,14 +90,14 @@ public class ValueObjectClassRepresentable extends AbstractClassRepresentable<Va
 
   @Override
   public String packageName(ValueObject source, Object... args) {
-    return packageName(source.getIoModelGroup());
+    return packageName(source.getDataGroup());
   }
 
   @Override
   public Set<String> imports(ValueObject source, Object... args) {
     Set<String> imports = new LinkedHashSet<>();
 
-    imports.addAll(imports(source.getIoModelGroup()));
+    imports.addAll(imports(source.getDataGroup()));
     imports.add("com.oregor.ddd4j.check.assertion.Assertion");
     imports.add("javax.persistence.Embeddable");
 
@@ -115,7 +115,7 @@ public class ValueObjectClassRepresentable extends AbstractClassRepresentable<Va
 
     stringBuilder.append("The ");
 
-    stringBuilder.append(TextConverter.toUpperCamelSpaces(source.getIoModelGroup().getDataType()));
+    stringBuilder.append(TextConverter.toUpperCamelSpaces(source.getDataGroup().getDataType()));
 
     stringBuilder.append(" Value Object.");
 
@@ -129,11 +129,11 @@ public class ValueObjectClassRepresentable extends AbstractClassRepresentable<Va
 
   @Override
   public String simpleObjectName(ValueObject source, Object... args) {
-    return simpleObjectName(source.getIoModelGroup());
+    return simpleObjectName(source.getDataGroup());
   }
 
   @Override
   public String fullObjectName(ValueObject source, Object... args) {
-    return fullObjectName(source.getIoModelGroup());
+    return fullObjectName(source.getDataGroup());
   }
 }

@@ -83,7 +83,7 @@ public class FunctionTest extends AbstractEqualityTest<Function> {
         new Goal(GoalType.CREATE),
         new FunctionName("functionName"),
         new LinkedHashSet<>(),
-        new ReturnValue(createIoModelPrimitive()));
+        new ReturnValue(createDataPrimitive()));
   }
 
   @Override
@@ -93,7 +93,7 @@ public class FunctionTest extends AbstractEqualityTest<Function> {
         new Goal(GoalType.CREATE),
         new FunctionName("anotherFunctionName"),
         new LinkedHashSet<>(),
-        new ReturnValue(createIoModelPrimitive()));
+        new ReturnValue(createDataPrimitive()));
   }
 
   // ===============================================================================================
@@ -105,7 +105,7 @@ public class FunctionTest extends AbstractEqualityTest<Function> {
         new Thing(new ThingName("thingName")),
         new Goal(GoalType.CREATE),
         new FunctionName("functionName"),
-        new ReturnValue(createIoModelPrimitive()));
+        new ReturnValue(createDataPrimitive()));
   }
 
   private Function createFunctionWithArgumentsAndNoReturnValue() {
@@ -116,7 +116,7 @@ public class FunctionTest extends AbstractEqualityTest<Function> {
         new LinkedHashSet<>());
   }
 
-  private DataPrimitive createIoModelPrimitive() {
+  private DataPrimitive createDataPrimitive() {
     return new DataPrimitive(
         PrimitiveType.STRING,
         new VariableName("variableName"),

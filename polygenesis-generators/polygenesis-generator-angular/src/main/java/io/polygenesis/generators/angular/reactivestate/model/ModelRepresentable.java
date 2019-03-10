@@ -84,9 +84,9 @@ public class ModelRepresentable {
     Set<FieldRepresentation> fieldRepresentations = new LinkedHashSet<>();
 
     if (payloadModel.getModel().isDataGroup()) {
-      DataGroup ioModelGroup = (DataGroup) payloadModel.getModel();
+      DataGroup dataGroup = (DataGroup) payloadModel.getModel();
 
-      ioModelGroup
+      dataGroup
           .getModels()
           .forEach(
               model -> {

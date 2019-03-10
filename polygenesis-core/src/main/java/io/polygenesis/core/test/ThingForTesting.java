@@ -79,20 +79,20 @@ public class ThingForTesting {
             new ObjectName("CreateBusinessRequest"), new PackageName(ROOT_PACKAGE + ".business"));
 
     // name
-    argumentDataGroup.addIoModelPrimitive(
+    argumentDataGroup.addData(
         DataPrimitive.of(PrimitiveType.STRING, new VariableName("name")));
 
     // postal address
-    argumentDataGroup.addIoModelGroup(postalAddress());
+    argumentDataGroup.addData(postalAddress());
 
     // ---------------------------------------------------------------------------------------------
     // RETURN VALUE
     // ---------------------------------------------------------------------------------------------
-    DataGroup returnValueIoModelGroup =
+    DataGroup returnValueDataGroup =
         new DataGroup(
             new ObjectName("CreateBusinessResponse"), new PackageName(ROOT_PACKAGE + ".business"));
 
-    returnValueIoModelGroup.addIoModelPrimitive(
+    returnValueDataGroup.addData(
         DataPrimitive.ofDataBusinessType(
             DataBusinessType.THING_IDENTITY, PrimitiveType.STRING, new VariableName("businessId")));
 
@@ -103,7 +103,7 @@ public class ThingForTesting {
         new Goal(GoalType.CREATE),
         new FunctionName("create"),
         new LinkedHashSet<>(Arrays.asList(new Argument(argumentDataGroup))),
-        new ReturnValue(returnValueIoModelGroup));
+        new ReturnValue(returnValueDataGroup));
   }
 
   // ===============================================================================================
@@ -120,20 +120,20 @@ public class ThingForTesting {
 
     // ---------------------------------------------------------------------------------------------
 
-    argumentDataGroup.addIoModelPrimitive(
+    argumentDataGroup.addData(
         DataPrimitive.ofDataBusinessType(
             DataBusinessType.THING_IDENTITY, PrimitiveType.STRING, new VariableName("businessId")));
 
     // ---------------------------------------------------------------------------------------------
     // RETURN VALUE
     // ---------------------------------------------------------------------------------------------
-    DataGroup returnValueIoModelGroup =
+    DataGroup returnValueDataGroup =
         new DataGroup(
             new ObjectName("FetchBusinessResponse"), new PackageName(ROOT_PACKAGE + ".business"));
 
     // ---------------------------------------------------------------------------------------------
 
-    returnValueIoModelGroup.addIoModelPrimitive(
+    returnValueDataGroup.addData(
         DataPrimitive.of(PrimitiveType.STRING, new VariableName("name")));
 
     // ---------------------------------------------------------------------------------------------
@@ -142,7 +142,7 @@ public class ThingForTesting {
         new Goal(GoalType.FETCH_ONE),
         new FunctionName("fetchOne"),
         new LinkedHashSet<>(Arrays.asList(new Argument(argumentDataGroup))),
-        new ReturnValue(returnValueIoModelGroup));
+        new ReturnValue(returnValueDataGroup));
   }
 
   // ===============================================================================================
@@ -160,21 +160,21 @@ public class ThingForTesting {
 
     // ---------------------------------------------------------------------------------------------
 
-    argumentDataGroup.addIoModelPrimitive(
+    argumentDataGroup.addData(
         DataPrimitive.ofDataBusinessType(
             DataBusinessType.THING_IDENTITY, PrimitiveType.STRING, new VariableName("businessId")));
 
     // ---------------------------------------------------------------------------------------------
     // RETURN VALUE
     // ---------------------------------------------------------------------------------------------
-    DataGroup returnValueIoModelGroup =
+    DataGroup returnValueDataGroup =
         new DataGroup(
             new ObjectName("FetchBusinessCollectionResponse"),
             new PackageName(ROOT_PACKAGE + ".business"));
 
     // ---------------------------------------------------------------------------------------------
 
-    returnValueIoModelGroup.addIoModelPrimitive(
+    returnValueDataGroup.addData(
         DataPrimitive.of(PrimitiveType.STRING, new VariableName("name")));
 
     // ---------------------------------------------------------------------------------------------
@@ -183,7 +183,7 @@ public class ThingForTesting {
         new Goal(GoalType.FETCH_COLLECTION),
         new FunctionName("fetchCollection"),
         new LinkedHashSet<>(Arrays.asList(new Argument(argumentDataGroup))),
-        new ReturnValue(returnValueIoModelGroup));
+        new ReturnValue(returnValueDataGroup));
   }
 
   // ===============================================================================================
@@ -199,7 +199,7 @@ public class ThingForTesting {
             new ObjectName("CreateBusinessRequest1"), new PackageName(ROOT_PACKAGE + ".business"));
 
     // name
-    argumentDataGroup1.addIoModelPrimitive(
+    argumentDataGroup1.addData(
         DataPrimitive.of(PrimitiveType.STRING, new VariableName("name")));
 
     // ---------------------------------------------------------------------------------------------
@@ -210,7 +210,7 @@ public class ThingForTesting {
             new ObjectName("CreateBusinessRequest2"), new PackageName(ROOT_PACKAGE + ".business"));
 
     // name
-    argumentDataGroup2.addIoModelPrimitive(
+    argumentDataGroup2.addData(
         DataPrimitive.of(PrimitiveType.STRING, new VariableName("name")));
 
     // ---------------------------------------------------------------------------------------------
@@ -231,14 +231,14 @@ public class ThingForTesting {
     // ---------------------------------------------------------------------------------------------
     // RETURN VALUE
     // ---------------------------------------------------------------------------------------------
-    DataGroup returnValueIoModelGroup =
+    DataGroup returnValueDataGroup =
         new DataGroup(
             new ObjectName("FetchBusinessCollectionResponse"),
             new PackageName(ROOT_PACKAGE + ".business"));
 
     // ---------------------------------------------------------------------------------------------
 
-    returnValueIoModelGroup.addIoModelPrimitive(
+    returnValueDataGroup.addData(
         DataPrimitive.of(PrimitiveType.STRING, new VariableName("name")));
 
     // ---------------------------------------------------------------------------------------------
@@ -247,7 +247,7 @@ public class ThingForTesting {
         business,
         new Goal(GoalType.CREATE),
         new FunctionName("functionWithNoArguments"),
-        new ReturnValue(returnValueIoModelGroup));
+        new ReturnValue(returnValueDataGroup));
   }
 
   // ===============================================================================================
@@ -258,7 +258,7 @@ public class ThingForTesting {
     // ---------------------------------------------------------------------------------------------
     // PRIMITIVE
     // ---------------------------------------------------------------------------------------------
-    DataPrimitive ioModelPrimitive =
+    DataPrimitive dataPrimitive =
         DataPrimitive.of(PrimitiveType.STRING, new VariableName("name"));
 
     // ---------------------------------------------------------------------------------------------
@@ -267,8 +267,8 @@ public class ThingForTesting {
         business,
         new Goal(GoalType.CREATE),
         new FunctionName("functionWithPrimitives"),
-        new LinkedHashSet<>(Arrays.asList(new Argument(ioModelPrimitive))),
-        new ReturnValue(ioModelPrimitive));
+        new LinkedHashSet<>(Arrays.asList(new Argument(dataPrimitive))),
+        new ReturnValue(dataPrimitive));
   }
 
   // ===============================================================================================
@@ -284,13 +284,13 @@ public class ThingForTesting {
         new DataGroup(
             new ObjectName("PostalAddressDto"), new PackageName("com.oregor.ddd4j.example.shared"));
 
-    postalAddress.addIoModelPrimitive(
+    postalAddress.addData(
         DataPrimitive.of(PrimitiveType.STRING, new VariableName("streetAddress1")));
 
-    postalAddress.addIoModelPrimitive(
+    postalAddress.addData(
         DataPrimitive.of(PrimitiveType.STRING, new VariableName("streetAddress2")));
 
-    postalAddress.addIoModelPrimitive(
+    postalAddress.addData(
         DataPrimitive.of(PrimitiveType.STRING, new VariableName("city")));
 
     return postalAddress;

@@ -93,11 +93,11 @@ public class DtoExporterTest {
     ThingName thingName = new ThingName("someThingName");
     Set<Method> methods = new LinkedHashSet<>();
 
-    DataGroup returnValueIoModelGroup =
+    DataGroup returnValueDataGroup =
         new DataGroup(
             new ObjectName("CreateBusinessResponse"),
             new PackageName("com.oregor.microservice.some.business"));
-    ReturnValue createReturnValue = new ReturnValue(returnValueIoModelGroup);
+    ReturnValue createReturnValue = new ReturnValue(returnValueDataGroup);
 
     Set<Argument> createArguments = new LinkedHashSet<>();
     DataGroup argumentDataGroup =
@@ -106,7 +106,7 @@ public class DtoExporterTest {
             new PackageName("com.oregor.microservice.some.business"));
 
     // postal address
-    argumentDataGroup.addIoModelGroup(postalAddress(argumentDataGroup));
+    argumentDataGroup.addData(postalAddress());
 
     Argument argument = new Argument(argumentDataGroup);
 
@@ -134,19 +134,19 @@ public class DtoExporterTest {
   }
 
   // postalAddress
-  private DataGroup postalAddress(DataGroup parent) {
+  private DataGroup postalAddress() {
     DataGroup postalAddress =
         new DataGroup(
             new ObjectName("PostalAddressDto"),
             new PackageName("com.oregor.microservice.some.shared"));
 
-    postalAddress.addIoModelPrimitive(
+    postalAddress.addData(
         DataPrimitive.of(PrimitiveType.STRING, new VariableName("streetAddress1")));
 
-    postalAddress.addIoModelPrimitive(
+    postalAddress.addData(
         DataPrimitive.of(PrimitiveType.STRING, new VariableName("streetAddress2")));
 
-    postalAddress.addIoModelPrimitive(
+    postalAddress.addData(
         DataPrimitive.of(PrimitiveType.STRING, new VariableName("city")));
 
     return postalAddress;

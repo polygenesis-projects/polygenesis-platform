@@ -35,13 +35,13 @@ public class ArgumentTest extends AbstractEqualityTest<Argument> {
 
   @Test
   public void shouldSucceedToInstantiate() {
-    Argument argument = new Argument(createIoModelPrimitive1());
+    Argument argument = new Argument(createDataPrimitive1());
 
     assertThat(argument).isNotNull();
-    assertThat(argument.getModel()).isEqualTo(createIoModelPrimitive1());
+    assertThat(argument.getModel()).isEqualTo(createDataPrimitive1());
   }
 
-  private DataPrimitive createIoModelPrimitive1() {
+  private DataPrimitive createDataPrimitive1() {
     return new DataPrimitive(
         PrimitiveType.STRING,
         new VariableName("someVariableName"),
@@ -49,7 +49,7 @@ public class ArgumentTest extends AbstractEqualityTest<Argument> {
         DataBusinessType.ANY);
   }
 
-  private DataPrimitive createIoModelPrimitive2() {
+  private DataPrimitive createDataPrimitive2() {
     return new DataPrimitive(
         PrimitiveType.STRING,
         new VariableName("someOtherVariableName"),
@@ -59,11 +59,11 @@ public class ArgumentTest extends AbstractEqualityTest<Argument> {
 
   @Override
   public Argument createObject1() {
-    return new Argument(createIoModelPrimitive1());
+    return new Argument(createDataPrimitive1());
   }
 
   @Override
   public Argument createObject2() {
-    return new Argument(createIoModelPrimitive2());
+    return new Argument(createDataPrimitive2());
   }
 }

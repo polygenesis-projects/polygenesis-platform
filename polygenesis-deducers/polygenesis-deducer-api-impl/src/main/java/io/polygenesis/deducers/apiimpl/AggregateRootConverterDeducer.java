@@ -98,7 +98,7 @@ public class AggregateRootConverterDeducer {
                           .forEach(
                               dto -> {
                                 if (dto.getOriginatingDataGroup()
-                                    .equals(valueObject.getOriginatingIoModelGroup())) {
+                                    .equals(valueObject.getOriginatingDataGroup())) {
                                   valueObjectFromDtos.add(new ValueObjectFromDto(valueObject, dto));
                                 }
                               });
@@ -122,7 +122,7 @@ public class AggregateRootConverterDeducer {
                   method -> {
                     fetchOneDtoFromAggregateRoots.add(
                         new FetchOneDtoFromAggregateRoot(
-                            findDtoInServiceFromIoModelGroup(
+                            findDtoInServiceFromDataGroup(
                                 service,
                                 method.getFunction().getReturnValue().getModel().getAsDataGroup()),
                             aggregateRoot));
@@ -148,7 +148,7 @@ public class AggregateRootConverterDeducer {
                   method -> {
                     fetchCollectionDtoFromAggregateRoots.add(
                         new FetchCollectionDtoFromAggregateRoot(
-                            findDtoInServiceFromIoModelGroup(
+                            findDtoInServiceFromDataGroup(
                                 service,
                                 method
                                     .getResponseDto()
@@ -159,7 +159,7 @@ public class AggregateRootConverterDeducer {
         });
   }
 
-  private Dto findDtoInServiceFromIoModelGroup(Service service, Data dataGroup) {
+  private Dto findDtoInServiceFromDataGroup(Service service, Data dataGroup) {
     return service
         .getDtos()
         .stream()

@@ -28,7 +28,7 @@ import java.util.Objects;
 import java.util.Set;
 
 /**
- * The type Io model group.
+ * The type data group.
  *
  * @author Christos Tsakostas
  */
@@ -42,13 +42,13 @@ public class DataGroup extends Data {
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
-  /** Instantiates a new Io model group. */
+  /** Instantiates a new data group. */
   public DataGroup() {
     this(null, null, null, new LinkedHashSet<>());
   }
 
   /**
-   * Instantiates a new Io model group.
+   * Instantiates a new data group.
    *
    * @param variableName the variable name
    */
@@ -57,7 +57,7 @@ public class DataGroup extends Data {
   }
 
   /**
-   * Instantiates a new Io model group.
+   * Instantiates a new data group.
    *
    * @param objectName the object name
    * @param packageName the package name
@@ -67,7 +67,7 @@ public class DataGroup extends Data {
   }
 
   /**
-   * Instantiates a new Io model group.
+   * Instantiates a new data group.
    *
    * @param objectName the object name
    * @param packageName the package name
@@ -90,20 +90,20 @@ public class DataGroup extends Data {
   // ===============================================================================================
 
   /**
-   * With new object name io model group.
+   * With new object name data group.
    *
    * @param objectName the object name
-   * @return the io model group
+   * @return the data group
    */
   public DataGroup withNewObjectName(ObjectName objectName) {
     return new DataGroup(objectName, getPackageName(), getVariableName(), getModels());
   }
 
   /**
-   * With new variable name io model group.
+   * With new variable name data group.
    *
    * @param variableName the variable name
-   * @return the io model group
+   * @return the data group
    */
   public DataGroup withNewVariableName(VariableName variableName) {
     return new DataGroup(getObjectName(), getPackageName(), variableName, getModels());
@@ -114,71 +114,13 @@ public class DataGroup extends Data {
   // ===============================================================================================
 
   /**
-   * Add io model primitive boolean.
+   * Add data.
    *
-   * @param model the model
-   * @return the boolean
+   * @param data the data
    */
-  public boolean addIoModelPrimitive(DataPrimitive model) {
-    Assertion.isNotNull(model, "Model Primitive is required");
-    return models.add(model);
-  }
-
-  /**
-   * Add io model group boolean.
-   *
-   * @param model the model
-   * @return the boolean
-   */
-  public boolean addIoModelGroup(DataGroup model) {
-    Assertion.isNotNull(model, "Model Group is required");
-    return models.add(model);
-  }
-
-  /**
-   * Add io model array boolean.
-   *
-   * @param model the model
-   * @return the boolean
-   */
-  public boolean addIoModelArray(DataArray model) {
-    Assertion.isNotNull(model, "Array Model is required");
-    return models.add(model);
-  }
-
-  /**
-   * Add io model.
-   *
-   * @param model the model
-   */
-  public void addIoModel(Data model) {
-    Assertion.isNotNull(model, "Model is required");
-
-    if (model.isDataGroup()) {
-      DataGroup ioModelGroup =
-          new DataGroup(
-              ((DataGroup) model).getObjectName(),
-              ((DataGroup) model).getPackageName(),
-              model.getVariableName(),
-              ((DataGroup) model).getModels());
-
-      models.add(ioModelGroup);
-    } else if (model.isDataPrimitive()) {
-      DataPrimitive ioModelPrimitive =
-          new DataPrimitive(
-              ((DataPrimitive) model).getPrimitiveType(),
-              model.getVariableName(),
-              ((DataPrimitive) model).getAnnotations(),
-              ((DataPrimitive) model).getDataBusinessType());
-
-      models.add(ioModelPrimitive);
-    } else if (model.isDataArray()) {
-      DataArray ioModelArray =
-          new DataArray(model.getVariableName(), ((DataArray) model).getArrayElement());
-      models.add(ioModelArray);
-    } else {
-      throw new UnsupportedOperationException();
-    }
+  public void addData(Data data) {
+    Assertion.isNotNull(data, "data is required");
+    models.add(data);
   }
 
   // ===============================================================================================

@@ -220,8 +220,7 @@ public class ServiceImplementationClassRepresentable
         .forEach(
             property -> {
               if (property.getPropertyType().equals(PropertyType.VALUE_OBJECT)) {
-                DataGroup modelGroup =
-                    property.getDataGroupAsOptional().orElseThrow(IllegalAccessError::new);
+                DataGroup modelGroup = property.getData().getAsDataGroup();
 
                 if (modelGroup.getPackageName().equals(aggregateRoot.getPackageName())) {
                   imports.add(

@@ -30,32 +30,32 @@ import org.junit.Test;
 public class DataPrimitiveTest extends AbstractEqualityTest<DataPrimitive> {
 
   @Test
-  public void shouldInitializeIoModelPrimitive() {
-    DataPrimitive ioModelPrimitive = createObject1();
+  public void shouldInitializeDataPrimitive() {
+    DataPrimitive dataPrimitive = createObject1();
 
-    assertThat(ioModelPrimitive).isNotNull();
-    assertThat(ioModelPrimitive.getDataType()).isEqualTo(PrimitiveType.STRING.name());
-    assertThat(ioModelPrimitive.getVariableName()).isEqualTo(new VariableName("someVariableName"));
+    assertThat(dataPrimitive).isNotNull();
+    assertThat(dataPrimitive.getDataType()).isEqualTo(PrimitiveType.STRING.name());
+    assertThat(dataPrimitive.getVariableName()).isEqualTo(new VariableName("someVariableName"));
 
-    assertThat(ioModelPrimitive.getAnnotations()).isNotNull();
-    assertThat(ioModelPrimitive.getAnnotations().size()).isEqualTo(0);
+    assertThat(dataPrimitive.getAnnotations()).isNotNull();
+    assertThat(dataPrimitive.getAnnotations().size()).isEqualTo(0);
 
-    assertThat(ioModelPrimitive.getThingIdentity()).isFalse();
+    assertThat(dataPrimitive.getThingIdentity()).isFalse();
   }
 
   @Test
-  public void shouldInitializeIoModelPrimitiveWithParent() {
-    DataPrimitive ioModelPrimitive =
+  public void shouldInitializeDataPrimitiveWithParent() {
+    DataPrimitive dataPrimitive =
         new DataPrimitive(
             PrimitiveType.STRING,
             new VariableName("someVariableName"),
             new LinkedHashSet<>(),
             DataBusinessType.ANY);
 
-    assertThat(ioModelPrimitive).isNotNull();
+    assertThat(dataPrimitive).isNotNull();
 
-    assertThat(ioModelPrimitive.getAnnotations()).isNotNull();
-    assertThat(ioModelPrimitive.getAnnotations().size()).isEqualTo(0);
+    assertThat(dataPrimitive.getAnnotations()).isNotNull();
+    assertThat(dataPrimitive.getAnnotations().size()).isEqualTo(0);
   }
 
   // ===============================================================================================

@@ -29,12 +29,12 @@ import org.junit.Test;
 public class DataTest extends AbstractEqualityTest<TestData> {
 
   @Test
-  public void shouldInitializeTestIoModel() {
-    TestData testIoModel = new TestData(new VariableName("someVariableName"));
+  public void shouldInitializeTestData() {
+    TestData testData = new TestData(new VariableName("someVariableName"));
 
-    assertThat(testIoModel).isNotNull();
-    assertThat(testIoModel.getDataType()).isEqualTo(PrimitiveType.STRING.name());
-    assertThat(testIoModel.getVariableName()).isEqualTo(new VariableName("someVariableName"));
+    assertThat(testData).isNotNull();
+    assertThat(testData.getDataType()).isEqualTo(PrimitiveType.STRING.name());
+    assertThat(testData.getVariableName()).isEqualTo(new VariableName("someVariableName"));
   }
 
   // ===============================================================================================

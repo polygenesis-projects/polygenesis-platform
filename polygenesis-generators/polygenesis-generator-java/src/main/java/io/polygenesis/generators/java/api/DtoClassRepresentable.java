@@ -144,7 +144,7 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
 
   @Override
   public String packageName(Dto source, Object... args) {
-    // TODO: source.getOriginatingDataGroup() should not be IoMoDelArray
+    // TODO: source.getOriginatingDataGroup() should not be DataArray
     if (source.getOriginatingDataGroup().getPackageName() == null) {
       return null;
     }
@@ -186,13 +186,13 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
         .filter(model -> model.isDataGroup())
         .map(DataGroup.class::cast)
         .forEach(
-            ioModelGroup -> {
-              if (!ioModelGroup
+            dataGroup -> {
+              if (!dataGroup
                   .getPackageName()
                   .equals(source.getOriginatingDataGroup().getPackageName())) {
                 imports.add(
                     makeCanonicalObjectName(
-                        ioModelGroup.getPackageName(), ioModelGroup.getDataType()));
+                        dataGroup.getPackageName(), dataGroup.getDataType()));
               }
             });
 

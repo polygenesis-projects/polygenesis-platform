@@ -80,18 +80,18 @@ public class DataGroupBuilder {
   // ===============================================================================================
 
   /**
-   * Build io model group.
+   * Build data group.
    *
-   * @return the io model group
+   * @return the data group
    */
   public final DataGroup build() {
-    DataGroup ioModelGroup = new DataGroup(new ObjectName(name), new PackageName("com.oregor"));
+    DataGroup dataGroup = new DataGroup(new ObjectName(name), new PackageName("com.oregor"));
 
     models.forEach(
         model -> {
-          ioModelGroup.addIoModel(model);
+          dataGroup.addData(model);
         });
 
-    return ioModelGroup;
+    return dataGroup;
   }
 }

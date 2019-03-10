@@ -50,11 +50,6 @@ public class AggregateEntityCollection extends AbstractProperty {
   // ===============================================================================================
 
   @Override
-  public Optional<DataGroup> getDataGroupAsOptional() {
-    return Optional.empty();
-  }
-
-  @Override
   public Data getData() {
     throw new UnsupportedOperationException();
   }

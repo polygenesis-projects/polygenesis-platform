@@ -21,10 +21,8 @@
 package io.polygenesis.models.domain;
 
 import io.polygenesis.core.data.Data;
-import io.polygenesis.core.data.DataGroup;
 import io.polygenesis.core.data.DataPrimitive;
 import io.polygenesis.core.data.VariableName;
-import java.util.Optional;
 
 /**
  * The type Primitive.
@@ -33,7 +31,7 @@ import java.util.Optional;
  */
 public class Primitive extends AbstractProperty {
 
-  private DataPrimitive ioModelPrimitive;
+  private DataPrimitive dataPrimitive;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -42,12 +40,12 @@ public class Primitive extends AbstractProperty {
   /**
    * Instantiates a new Primitive.
    *
-   * @param ioModelPrimitive the io model primitive
+   * @param dataPrimitive the data primitive
    * @param variableName the variable name
    */
-  public Primitive(DataPrimitive ioModelPrimitive, VariableName variableName) {
+  public Primitive(DataPrimitive dataPrimitive, VariableName variableName) {
     super(PropertyType.PRIMITIVE, variableName);
-    setIoModelPrimitive(ioModelPrimitive);
+    setDataPrimitive(dataPrimitive);
   }
 
   // ===============================================================================================
@@ -55,12 +53,12 @@ public class Primitive extends AbstractProperty {
   // ===============================================================================================
 
   /**
-   * Gets io model primitive.
+   * Gets data primitive.
    *
-   * @return the io model primitive
+   * @return the data primitive
    */
-  public DataPrimitive getIoModelPrimitive() {
-    return ioModelPrimitive;
+  public DataPrimitive getDataPrimitive() {
+    return dataPrimitive;
   }
 
   // ===============================================================================================
@@ -68,12 +66,12 @@ public class Primitive extends AbstractProperty {
   // ===============================================================================================
 
   /**
-   * Sets io model primitive.
+   * Sets data primitive.
    *
-   * @param ioModelPrimitive the io model primitive
+   * @param dataPrimitive the data primitive
    */
-  public void setIoModelPrimitive(DataPrimitive ioModelPrimitive) {
-    this.ioModelPrimitive = ioModelPrimitive;
+  private void setDataPrimitive(DataPrimitive dataPrimitive) {
+    this.dataPrimitive = dataPrimitive;
   }
 
   // ===============================================================================================
@@ -81,13 +79,8 @@ public class Primitive extends AbstractProperty {
   // ===============================================================================================
 
   @Override
-  public Optional<DataGroup> getDataGroupAsOptional() {
-    return Optional.empty();
-  }
-
-  @Override
   public Data getData() {
-    return ioModelPrimitive;
+    return dataPrimitive;
   }
 
   @Override

@@ -35,7 +35,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
- * Deduces the IOModel.
+ * Deduces the Data.
  *
  * @author Christos Tsakostas
  */
@@ -48,7 +48,7 @@ public class DataDeducer {
   // ===============================================================================================
 
   /**
-   * Instantiates a new Io model deducer.
+   * Instantiates a new data deducer.
    *
    * @param javaDataTypeConverter the data type converter
    */
@@ -61,10 +61,10 @@ public class DataDeducer {
   // ===============================================================================================
 
   /**
-   * Deduce response io model.
+   * Deduce response data.
    *
    * @param recursiveObject the recursive object
-   * @return the io model
+   * @return the data
    */
   Data deduceResponse(RecursiveObject recursiveObject) {
 
@@ -97,7 +97,7 @@ public class DataDeducer {
               convertToPackageName(recursiveObject.getStrDataType()),
               new VariableName(recursiveObject.getStrName()));
 
-      this.fillIoModelGroup(modelGroupResponse, recursiveObject);
+      this.fillDataGroup(modelGroupResponse, recursiveObject);
 
       return modelGroupResponse;
     }
@@ -107,26 +107,26 @@ public class DataDeducer {
   // PRIVATE
   // ===============================================================================================
 
-  private void fillIoModelGroup(DataGroup modelGroup, RecursiveObject recursiveObject) {
+  private void fillDataGroup(DataGroup dataGroup, RecursiveObject recursiveObject) {
 
     recursiveObject
         .getChildren()
         .forEach(
             childRecursiveObject -> {
               if (childRecursiveObject.getStrGenericType() != null) {
-                DataArray modelArray = new DataArray();
+                DataArray dataArray = new DataArray();
 
-                // TODO: fillIoModelArray Element
-                // fillIoModelGroup(modelArray, childRecursiveObject);
+                // TODO: fillDataArray Element
+                // fillDataGroup(dataArray, childRecursiveObject);
 
-                modelGroup.addIoModelArray(modelArray);
+                dataGroup.addData(dataArray);
               } else {
                 if (childRecursiveObject.isCustomObject()) {
                   DataGroup modelGroupCustomObject = new DataGroup();
 
-                  fillIoModelGroup(modelGroupCustomObject, childRecursiveObject);
+                  fillDataGroup(modelGroupCustomObject, childRecursiveObject);
 
-                  modelGroup.addIoModelGroup(modelGroupCustomObject);
+                  dataGroup.addData(modelGroupCustomObject);
                 } else {
                   // Should not add primitives for Ignored or automatically set fields.
                   DataPrimitive modelPrimitive =
@@ -136,7 +136,7 @@ public class DataDeducer {
                           safeGetAnnotationsFrom(childRecursiveObject),
                           DataBusinessType.ANY);
 
-                  modelGroup.addIoModelPrimitive(modelPrimitive);
+                  dataGroup.addData(modelPrimitive);
                 }
               }
             });

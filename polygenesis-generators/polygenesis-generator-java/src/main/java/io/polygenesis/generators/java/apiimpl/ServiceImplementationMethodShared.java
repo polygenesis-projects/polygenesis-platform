@@ -82,10 +82,10 @@ public abstract class ServiceImplementationMethodShared {
             .findFirst()
             .orElseThrow(IllegalArgumentException::new);
 
-    Optional<DataPrimitive> optionalIoModelPrimitive =
+    Optional<DataPrimitive> optionalDataPrimitive =
         method.getFunction().retrieveThingIdentityFromArgument(argument);
 
-    if (!optionalIoModelPrimitive.isPresent()) {
+    if (!optionalDataPrimitive.isPresent()) {
       throw new IllegalStateException();
     }
 
@@ -100,7 +100,7 @@ public abstract class ServiceImplementationMethodShared {
     stringBuilder.append(".");
     stringBuilder.append("get");
     stringBuilder.append(
-        TextConverter.toUpperCamel(optionalIoModelPrimitive.get().getVariableName().getText()));
+        TextConverter.toUpperCamel(optionalDataPrimitive.get().getVariableName().getText()));
     stringBuilder.append("()");
     stringBuilder.append(")"); // UUID.fromString
 
@@ -131,7 +131,7 @@ public abstract class ServiceImplementationMethodShared {
     if (returnValue != null) {
       if (returnValue.getModel().isDataGroup()) {
         stringBuilder.append(
-            makeReturnValueForIoModelGroup(returnValue.getModel().getAsDataGroup()));
+            makeReturnValueForDataGroup(returnValue.getModel().getAsDataGroup()));
       } else {
         throw new IllegalStateException(
             String.format(
@@ -144,12 +144,12 @@ public abstract class ServiceImplementationMethodShared {
   }
 
   /**
-   * Make return value for io model group string.
+   * Make return value for data group.
    *
    * @param modelGroup the model group
    * @return the string
    */
-  protected String makeReturnValueForIoModelGroup(DataGroup modelGroup) {
+  protected String makeReturnValueForDataGroup(DataGroup modelGroup) {
     StringBuilder stringBuilder = new StringBuilder();
 
     stringBuilder.append("\t\t");

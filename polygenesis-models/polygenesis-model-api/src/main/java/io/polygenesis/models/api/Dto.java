@@ -49,7 +49,7 @@ public class Dto {
    * Instantiates a new Dto.
    *
    * @param dtoType the dto type
-   * @param originatingDataGroup the originating io model group
+   * @param originatingDataGroup the originating data group
    */
   public Dto(DtoType dtoType, DataGroup originatingDataGroup) {
     setDtoType(dtoType);
@@ -70,9 +70,9 @@ public class Dto {
   }
 
   /**
-   * Gets originating io model group.
+   * Gets originating data group.
    *
-   * @return the originating io model group
+   * @return the originating data group
    */
   public DataGroup getOriginatingDataGroup() {
     return originatingDataGroup;
@@ -93,7 +93,7 @@ public class Dto {
         .stream()
         .filter(model -> model.isDataArray())
         .map(DataArray.class::cast)
-        .map(ioModelArray -> ioModelArray.getArrayElement())
+        .map(dataArray -> dataArray.getArrayElement())
         .findFirst();
 
     // TODO: fix as getOriginatingDataGroup() cannot be DataArray
@@ -119,9 +119,9 @@ public class Dto {
   }
 
   /**
-   * Sets originating io model group.
+   * Sets originating data group.
    *
-   * @param originatingDataGroup the originating io model group
+   * @param originatingDataGroup the originating data group
    */
   private void setOriginatingDataGroup(DataGroup originatingDataGroup) {
     Assertion.isNotNull(originatingDataGroup, "originatingDataGroup is required");

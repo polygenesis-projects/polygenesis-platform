@@ -63,9 +63,9 @@ public class DataArrayBuilder {
   // ===============================================================================================
 
   /**
-   * Build io model group.
+   * Build data group.
    *
-   * @return the io model group
+   * @return the data group
    */
   public final DataArray build() {
     return new DataArray(new VariableName(this.name), this.arrayElement);

@@ -62,20 +62,20 @@ public class JavaGenesisThingBusiness {
             new PackageName("com.oregor.microservice.account.business"));
 
     // ARGUMENT - NAME
-    argumentDataGroup.addIoModelPrimitive(
+    argumentDataGroup.addData(
         DataPrimitive.of(PrimitiveType.STRING, new VariableName("name")));
 
     // ARGUMENT - POSTAL ADDRESS
-    argumentDataGroup.addIoModelGroup(postalAddress());
+    argumentDataGroup.addData(postalAddress());
 
     // RETURN VALUE
-    DataGroup returnValueIoModelGroup =
+    DataGroup returnValueDataGroup =
         new DataGroup(
             new ObjectName("CreateBusinessResponse"),
             new PackageName("com.oregor.microservice.account.business"));
 
     // RETURN VALUE - BUSINESSID
-    returnValueIoModelGroup.addIoModelPrimitive(
+    returnValueDataGroup.addData(
         DataPrimitive.ofDataBusinessType(
             DataBusinessType.THING_IDENTITY, PrimitiveType.STRING, new VariableName("businessId")));
 
@@ -84,7 +84,7 @@ public class JavaGenesisThingBusiness {
         new Goal(GoalType.CREATE),
         new FunctionName("create"),
         new LinkedHashSet<>(Arrays.asList(new Argument(argumentDataGroup))),
-        new ReturnValue(returnValueIoModelGroup));
+        new ReturnValue(returnValueDataGroup));
   }
 
   // ===============================================================================================
@@ -99,12 +99,12 @@ public class JavaGenesisThingBusiness {
             new PackageName("com.oregor.microservice.account.business"));
 
     // ARGUMENT - BusinessID
-    argumentDataGroup.addIoModelPrimitive(
+    argumentDataGroup.addData(
         DataPrimitive.ofDataBusinessType(
             DataBusinessType.THING_IDENTITY, PrimitiveType.STRING, new VariableName("businessId")));
 
     // RETURN VALUE
-    DataGroup returnValueIoModelGroup =
+    DataGroup returnValueDataGroup =
         new DataGroup(
             new ObjectName("FetchBusinessResponse"),
             new PackageName("com.oregor.microservice.account.business"));
@@ -114,7 +114,7 @@ public class JavaGenesisThingBusiness {
         new Goal(GoalType.FETCH_ONE),
         new FunctionName("fetch"),
         new LinkedHashSet<>(Arrays.asList(new Argument(argumentDataGroup))),
-        new ReturnValue(returnValueIoModelGroup));
+        new ReturnValue(returnValueDataGroup));
   }
 
   // ===============================================================================================
@@ -128,13 +128,13 @@ public class JavaGenesisThingBusiness {
             new ObjectName("PostalAddressDto"),
             new PackageName("com.oregor.microservice.account.shared"));
 
-    postalAddress.addIoModelPrimitive(
+    postalAddress.addData(
         DataPrimitive.of(PrimitiveType.STRING, new VariableName("streetAddress1")));
 
-    postalAddress.addIoModelPrimitive(
+    postalAddress.addData(
         DataPrimitive.of(PrimitiveType.STRING, new VariableName("streetAddress2")));
 
-    postalAddress.addIoModelPrimitive(
+    postalAddress.addData(
         DataPrimitive.of(PrimitiveType.STRING, new VariableName("city")));
 
     return postalAddress;

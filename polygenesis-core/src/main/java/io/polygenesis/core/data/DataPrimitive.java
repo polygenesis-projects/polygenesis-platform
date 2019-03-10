@@ -26,7 +26,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
- * The type Io model primitive.
+ * The type data primitive.
  *
  * @author Christos Tsakostas
  */
@@ -45,19 +45,19 @@ public class DataPrimitive extends Data {
    *
    * @param primitiveType the primitive type
    * @param variableName the variable name
-   * @return the io model primitive
+   * @return the data primitive
    */
   public static DataPrimitive of(PrimitiveType primitiveType, VariableName variableName) {
     return new DataPrimitive(primitiveType, variableName, null, DataBusinessType.ANY);
   }
 
   /**
-   * Of thing identity with parent io model primitive.
+   * Of thing identity with parent data primitive.
    *
    * @param dataBusinessType the data business type
    * @param primitiveType the primitive type
    * @param variableName the variable name
-   * @return the io model primitive
+   * @return the data primitive
    */
   public static DataPrimitive ofDataBusinessType(
       DataBusinessType dataBusinessType, PrimitiveType primitiveType, VariableName variableName) {
@@ -70,7 +70,7 @@ public class DataPrimitive extends Data {
   // ===============================================================================================
 
   /**
-   * Instantiates a new Io model primitive.
+   * Instantiates a new data primitive.
    *
    * @param primitiveType the primitive type
    * @param variableName the variable name

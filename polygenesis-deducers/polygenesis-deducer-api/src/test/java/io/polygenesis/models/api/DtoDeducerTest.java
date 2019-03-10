@@ -67,7 +67,7 @@ public class DtoDeducerTest {
   }
 
   @Test
-  public void shouldFailToDeduceRequestDtoForOneArgumentWhichIsNotIoModelGroup() {
+  public void shouldFailToDeduceRequestDtoForOneArgumentWhichIsNotDataGroup() {
     Function function = getThingFunction("functionWithPrimitives");
 
     assertThatThrownBy(() -> dtoDeducer.deduceRequestDto(function))
@@ -97,7 +97,7 @@ public class DtoDeducerTest {
   }
 
   @Test
-  public void shouldFailToDeduceResponseDtoForReturnValueWhichIsNotIoModelGroup() {
+  public void shouldFailToDeduceResponseDtoForReturnValueWhichIsNotDataGroup() {
     Function function = getThingFunction("functionWithPrimitives");
 
     assertThatThrownBy(() -> dtoDeducer.deduceResponseDto(function))

@@ -40,24 +40,24 @@ public class DataGroupTest extends AbstractEqualityTest<DataGroup> {
     assertThat(dataGroup.getDataType()).isEqualTo(new ObjectName("SomeClass").getText());
     assertThat(dataGroup.getVariableName()).isEqualTo(new VariableName("someVariableName"));
 
-    DataArray childIoModelArray = new DataArray(new VariableName("someVariableName"), dataGroup);
-    dataGroup.addIoModelArray(childIoModelArray);
+    DataArray childDataArray = new DataArray(new VariableName("someVariableName"), dataGroup);
+    dataGroup.addData(childDataArray);
 
     DataGroup childDataGroup =
         new DataGroup(
             new ObjectName("SomeClass"),
             new PackageName("com.dummy"),
             new VariableName("someVariableName"));
-    dataGroup.addIoModelGroup(childDataGroup);
+    dataGroup.addData(childDataGroup);
 
     DataPrimitive childDataPrimitive =
         new DataPrimitive(
             PrimitiveType.STRING, new VariableName("someVariableName"), null, DataBusinessType.ANY);
-    dataGroup.addIoModelPrimitive(childDataPrimitive);
+    dataGroup.addData(childDataPrimitive);
 
     assertThat(dataGroup.getModels().size()).isEqualTo(3);
 
-    assertThat(childIoModelArray.isDataPrimitive()).isFalse();
+    assertThat(childDataArray.isDataPrimitive()).isFalse();
     assertThat(childDataGroup.isDataPrimitive()).isFalse();
     assertThat(childDataPrimitive.isDataPrimitive()).isTrue();
   }

@@ -35,13 +35,13 @@ public class ReturnValueTest extends AbstractEqualityTest<ReturnValue> {
 
   @Test
   public void shouldSucceedToInstantiate() {
-    ReturnValue returnValue = new ReturnValue(createIoModelPrimitive1());
+    ReturnValue returnValue = new ReturnValue(createDataPrimitive1());
 
     assertThat(returnValue).isNotNull();
-    assertThat(returnValue.getModel()).isEqualTo(createIoModelPrimitive1());
+    assertThat(returnValue.getModel()).isEqualTo(createDataPrimitive1());
   }
 
-  private DataPrimitive createIoModelPrimitive1() {
+  private DataPrimitive createDataPrimitive1() {
     return new DataPrimitive(
         PrimitiveType.STRING,
         new VariableName("someVariableName"),
@@ -49,7 +49,7 @@ public class ReturnValueTest extends AbstractEqualityTest<ReturnValue> {
         DataBusinessType.ANY);
   }
 
-  private DataPrimitive createIoModelPrimitive2() {
+  private DataPrimitive createDataPrimitive2() {
     return new DataPrimitive(
         PrimitiveType.STRING,
         new VariableName("someOtherVariableName"),
@@ -59,11 +59,11 @@ public class ReturnValueTest extends AbstractEqualityTest<ReturnValue> {
 
   @Override
   public ReturnValue createObject1() {
-    return new ReturnValue(createIoModelPrimitive1());
+    return new ReturnValue(createDataPrimitive1());
   }
 
   @Override
   public ReturnValue createObject2() {
-    return new ReturnValue(createIoModelPrimitive2());
+    return new ReturnValue(createDataPrimitive2());
   }
 }

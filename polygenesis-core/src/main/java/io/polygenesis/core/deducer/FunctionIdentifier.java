@@ -61,7 +61,7 @@ public class FunctionIdentifier {
    *
    * @param methodAnalyzer the method analyzer
    * @param recursiveObjectFiller the recursive object filler
-   * @param dataDeducer the io model deducer
+   * @param dataDeducer the data deducer
    */
   public FunctionIdentifier(
       MethodAnalyzer methodAnalyzer,

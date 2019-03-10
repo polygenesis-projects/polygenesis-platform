@@ -62,13 +62,13 @@ public class ComponentDeducer {
    * @param function the function
    * @return the container
    */
-  public ElementGroup deduceComponentFromIoModel(Feature feature, Function function) {
+  public ElementGroup deduceComponentFromData(Feature feature, Function function) {
     ElementGroup elementGroup =
         new ElementGroup(
             new ElementName(feature.getFeatureName().getText()), new LinkedHashSet<>());
 
     // TODO
-    elementDeducer.deduceElementFromIoModel(feature, function);
+    elementDeducer.deduceElementFromData(feature, function);
 
     return elementGroup;
   }

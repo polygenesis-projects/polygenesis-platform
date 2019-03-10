@@ -92,10 +92,7 @@ public class TableDeducer {
                   break;
                 case VALUE_OBJECT:
                   aggregateRootColumns.addAll(
-                      getColumnsForValueObject(
-                          property
-                              .getDataGroupAsOptional()
-                              .orElseThrow(IllegalArgumentException::new)));
+                      getColumnsForValueObject(property.getData().getAsDataGroup()));
                   break;
                 case VALUE_OBJECT_COLLECTION:
                   allAggregateRootRelatedTables.add(
@@ -131,7 +128,7 @@ public class TableDeducer {
   /**
    * Gets column for primitive.
    *
-   * @param data the io model
+   * @param data the data
    * @return the column for primitive
    */
   private Column getColumnForPrimitive(Data data, String columnPrefix) {
@@ -153,13 +150,13 @@ public class TableDeducer {
   /**
    * Gets columns for value object.
    *
-   * @param ioModelGroup the io model group
+   * @param dataGroup the data group
    * @return the columns for value object
    */
-  private Set<Column> getColumnsForValueObject(DataGroup ioModelGroup) {
+  private Set<Column> getColumnsForValueObject(DataGroup dataGroup) {
     Set<Column> columns = new LinkedHashSet<>();
 
-    ioModelGroup
+    dataGroup
         .getModels()
         .forEach(
             model -> {
@@ -170,7 +167,7 @@ public class TableDeducer {
                         String.format(
                             "%s_",
                             TextConverter.toLowerUnderscore(
-                                ioModelGroup.getVariableName().getText()))));
+                                dataGroup.getVariableName().getText()))));
               } else {
                 throw new IllegalStateException();
               }

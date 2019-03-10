@@ -91,22 +91,22 @@ public class DataBuilder {
   /**
    * With group data data builder.
    *
-   * @param ioModelGroup the io model group
+   * @param dataGroup the data group
    * @return the data builder
    */
-  public final DataBuilder withGroupData(DataGroup ioModelGroup) {
-    this.models.add(ioModelGroup);
+  public final DataBuilder withGroupData(DataGroup dataGroup) {
+    this.models.add(dataGroup);
     return this;
   }
 
   /**
    * With array data data builder.
    *
-   * @param ioModelArray the io model array
+   * @param dataArray the data array
    * @return the data builder
    */
-  public final DataBuilder withArrayData(DataArray ioModelArray) {
-    this.models.add(ioModelArray);
+  public final DataBuilder withArrayData(DataArray dataArray) {
+    this.models.add(dataArray);
     return this;
   }
 

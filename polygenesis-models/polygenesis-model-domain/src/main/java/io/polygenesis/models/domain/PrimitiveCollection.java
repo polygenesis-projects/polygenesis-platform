@@ -23,11 +23,9 @@ package io.polygenesis.models.domain;
 import com.oregor.ddd4j.check.assertion.Assertion;
 import io.polygenesis.core.data.Data;
 import io.polygenesis.core.data.DataArray;
-import io.polygenesis.core.data.DataGroup;
 import io.polygenesis.core.data.PrimitiveType;
 import io.polygenesis.core.data.VariableName;
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * The type Primitive collection.
@@ -40,7 +38,7 @@ public class PrimitiveCollection extends AbstractProperty {
   // STATE
   // ===============================================================================================
 
-  private DataArray originatingIoModel;
+  private DataArray originatingDataArray;
   private PrimitiveType primitiveType;
 
   // ===============================================================================================
@@ -50,14 +48,14 @@ public class PrimitiveCollection extends AbstractProperty {
   /**
    * Instantiates a new Primitive collection.
    *
-   * @param originatingIoModel the originating io model
+   * @param originatingDataArray the originating data array
    * @param variableName the variable name
    * @param primitiveType the primitive type
    */
-  public PrimitiveCollection(
-      DataArray originatingIoModel, VariableName variableName, PrimitiveType primitiveType) {
+  public PrimitiveCollection(DataArray originatingDataArray,
+      VariableName variableName, PrimitiveType primitiveType) {
     super(PropertyType.PRIMITIVE_COLLECTION, variableName);
-    setOriginatingIoModel(originatingIoModel);
+    setOriginatingDataArray(originatingDataArray);
     setPrimitiveType(primitiveType);
   }
 
@@ -66,12 +64,12 @@ public class PrimitiveCollection extends AbstractProperty {
   // ===============================================================================================
 
   /**
-   * Gets originating io model.
+   * Gets originating data array.
    *
-   * @return the originating io model
+   * @return the originating data array
    */
-  public DataArray getOriginatingIoModel() {
-    return originatingIoModel;
+  public DataArray getOriginatingDataArray() {
+    return originatingDataArray;
   }
 
   /**
@@ -88,13 +86,13 @@ public class PrimitiveCollection extends AbstractProperty {
   // ===============================================================================================
 
   /**
-   * Sets originating io model.
+   * Sets originating data array.
    *
-   * @param originatingIoModel the originating io model
+   * @param originatingDataArray the originating data array
    */
-  public void setOriginatingIoModel(DataArray originatingIoModel) {
-    Assertion.isNotNull(originatingIoModel, "originatingIoModel is required");
-    this.originatingIoModel = originatingIoModel;
+  private void setOriginatingDataArray(DataArray originatingDataArray) {
+    Assertion.isNotNull(originatingDataArray, "originatingDataArray is required");
+    this.originatingDataArray = originatingDataArray;
   }
 
   /**
@@ -112,18 +110,13 @@ public class PrimitiveCollection extends AbstractProperty {
   // ===============================================================================================
 
   @Override
-  public Optional<DataGroup> getDataGroupAsOptional() {
-    return Optional.empty();
-  }
-
-  @Override
   public Data getData() {
-    return getOriginatingIoModel();
+    return getOriginatingDataArray();
   }
 
   @Override
   public Data getTypeParameterData() {
-    return getOriginatingIoModel().getArrayElement();
+    return getOriginatingDataArray().getArrayElement();
   }
 
   // ===============================================================================================
@@ -139,11 +132,12 @@ public class PrimitiveCollection extends AbstractProperty {
       return false;
     }
     PrimitiveCollection that = (PrimitiveCollection) o;
-    return primitiveType == that.primitiveType;
+    return Objects.equals(originatingDataArray, that.originatingDataArray) &&
+        primitiveType == that.primitiveType;
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(primitiveType);
+    return Objects.hash(originatingDataArray, primitiveType);
   }
 }

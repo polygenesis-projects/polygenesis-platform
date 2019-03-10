@@ -45,7 +45,7 @@ public abstract class Data {
   // ===============================================================================================
 
   /**
-   * Instantiates a new Io model.
+   * Instantiates a new data.
    *
    * @param dataKind the data kind
    */
@@ -54,7 +54,7 @@ public abstract class Data {
   }
 
   /**
-   * Instantiates a new Io model.
+   * Instantiates a new data.
    *
    * @param dataKind the data kind
    * @param variableName the variable name
@@ -116,11 +116,11 @@ public abstract class Data {
   }
 
   /**
-   * Gets as io model array.
+   * Gets as data array.
    *
-   * @return the as io model array
+   * @return the as data array
    */
-  public DataArray getAsIoModelArray() {
+  public DataArray getAsDataArray() {
     if (isDataArray()) {
       return DataArray.class.cast(this);
     } else {
@@ -139,7 +139,7 @@ public abstract class Data {
   }
 
   /**
-   * Is io model group boolean.
+   * Is data group boolean.
    *
    * @return the boolean
    */
@@ -148,7 +148,7 @@ public abstract class Data {
   }
 
   /**
-   * Is io model array boolean.
+   * Is data array boolean.
    *
    * @return the boolean
    */

@@ -23,7 +23,7 @@ package io.polygenesis.core.data;
 import java.util.Objects;
 
 /**
- * The type Io model array.
+ * The type data array.
  *
  * @author Christos Tsakostas
  */
@@ -35,13 +35,13 @@ public class DataArray extends Data {
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
-  /** Instantiates a new Io model array. */
+  /** Instantiates a new data array. */
   public DataArray() {
     this(null, null);
   }
 
   /**
-   * Instantiates a new Io model array.
+   * Instantiates a new data array.
    *
    * @param arrayElement the array element
    */
@@ -50,7 +50,7 @@ public class DataArray extends Data {
   }
 
   /**
-   * Instantiates a new Io model array.
+   * Instantiates a new data array.
    *
    * @param variableName the variable name
    */
@@ -59,7 +59,7 @@ public class DataArray extends Data {
   }
 
   /**
-   * Instantiates a new Io model array.
+   * Instantiates a new data array.
    *
    * @param variableName the variable name
    * @param arrayElement the array element

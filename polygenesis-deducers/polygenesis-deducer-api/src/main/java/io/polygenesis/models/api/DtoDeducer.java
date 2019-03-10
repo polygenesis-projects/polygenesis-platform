@@ -168,7 +168,7 @@ public class DtoDeducer {
       }
     }
 
-    // Add model group children of ioModelGroup recursively
+    // Add model group children of DataGroup recursively
     dto.getOriginatingDataGroup()
         .getModels()
         .forEach(

@@ -34,7 +34,6 @@ import io.polygenesis.representations.java.ConstructorRepresentation;
 import io.polygenesis.representations.java.FromDataTypeToJavaConverter;
 import io.polygenesis.representations.java.MethodRepresentation;
 import java.util.LinkedHashSet;
-import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -83,8 +82,8 @@ public class AggregateRootClassRepresentable extends AbstractClassRepresentable<
                       new FieldRepresentation(
                           makeVariableDataType(property),
                           makeVariableName(property),
-                          makeAnnotationsForPrimitiveCollection(
-                              source, property.getData().getAsIoModelArray())));
+                          makeAnnotationsForPrimitiveCollection(source,
+                              property.getData().getAsDataArray())));
                   break;
                 case VALUE_OBJECT:
                   fieldRepresentations.add(
@@ -92,9 +91,7 @@ public class AggregateRootClassRepresentable extends AbstractClassRepresentable<
                           makeVariableDataType(property),
                           makeVariableName(property),
                           makeAnnotationsForValueObject(
-                              property
-                                  .getDataGroupAsOptional()
-                                  .orElseThrow(IllegalArgumentException::new))));
+                              property.getData().getAsDataGroup())));
                   break;
                 default:
                   throw new IllegalStateException(
@@ -157,18 +154,17 @@ public class AggregateRootClassRepresentable extends AbstractClassRepresentable<
                 imports.add("javax.persistence.Column");
               }
 
-              Optional<DataGroup> optionalIoModelGroup = property.getDataGroupAsOptional();
-              if (optionalIoModelGroup.isPresent()) {
+              if (property.getData().isDataGroup()) {
                 imports.add("javax.persistence.Embedded");
                 imports.add("javax.persistence.AttributeOverride");
                 imports.add("javax.persistence.Column");
 
-                DataGroup ioModelGroup = optionalIoModelGroup.get();
-                if (!ioModelGroup.getPackageName().equals(source.getPackageName())) {
+                DataGroup dataGroup = property.getData().getAsDataGroup();
+                if (!dataGroup.getPackageName().equals(source.getPackageName())) {
                   imports.add(
-                      ioModelGroup.getPackageName().getText()
+                      dataGroup.getPackageName().getText()
                           + "."
-                          + TextConverter.toUpperCamel(ioModelGroup.getDataType()));
+                          + TextConverter.toUpperCamel(dataGroup.getDataType()));
                 }
               }
             });
@@ -272,14 +268,14 @@ public class AggregateRootClassRepresentable extends AbstractClassRepresentable<
   /**
    * Make annotations for value object set.
    *
-   * @param ioModelGroup the io model group
+   * @param dataGroup the data group
    * @return the set
    */
-  private Set<String> makeAnnotationsForValueObject(DataGroup ioModelGroup) {
+  private Set<String> makeAnnotationsForValueObject(DataGroup dataGroup) {
     Set<String> annotations = new LinkedHashSet<>();
     annotations.add("@Embedded");
 
-    ioModelGroup
+    dataGroup
         .getModels()
         .forEach(
             model -> {
@@ -296,7 +292,7 @@ public class AggregateRootClassRepresentable extends AbstractClassRepresentable<
                 stringBuilder.append(
                     String.format(
                         "\t\t\tcolumn = @Column(name = \"%s%s\"))",
-                        TextConverter.toLowerCamel(ioModelGroup.getVariableName().getText()),
+                        TextConverter.toLowerCamel(dataGroup.getVariableName().getText()),
                         TextConverter.toUpperCamel(model.getVariableName().getText())));
 
                 annotations.add(stringBuilder.toString());
@@ -312,11 +308,11 @@ public class AggregateRootClassRepresentable extends AbstractClassRepresentable<
    * Make annotations for primitive collection set.
    *
    * @param aggregateRoot the aggregate root
-   * @param ioModelArray the io model array
+   * @param dataArray the data array
    * @return the set
    */
   private Set<String> makeAnnotationsForPrimitiveCollection(
-      AggregateRoot aggregateRoot, DataArray ioModelArray) {
+      AggregateRoot aggregateRoot, DataArray dataArray) {
     Set<String> annotations = new LinkedHashSet<>();
 
     annotations.add("@ElementCollection");
@@ -325,7 +321,7 @@ public class AggregateRootClassRepresentable extends AbstractClassRepresentable<
         String.format(
             "%s_%s",
             TextConverter.toLowerUnderscore(aggregateRoot.getName().getText()),
-            TextConverter.toLowerUnderscore(ioModelArray.getVariableName().getText()));
+            TextConverter.toLowerUnderscore(dataArray.getVariableName().getText()));
 
     StringBuilder stringBuilder = new StringBuilder();
     stringBuilder.append("@CollectionTable(\n");
@@ -348,7 +344,7 @@ public class AggregateRootClassRepresentable extends AbstractClassRepresentable<
         String.format(
             "@Column(name = \"%s\")",
             TextConverter.toLowerCamel(
-                ioModelArray.getArrayElement().getVariableName().getText())));
+                dataArray.getArrayElement().getVariableName().getText())));
 
     return annotations;
   }

@@ -28,11 +28,11 @@ import org.junit.Test;
 public class DataArrayTest {
 
   @Test
-  public void shouldInitializeIoModelArray() {
-    DataArray ioModelArray = new DataArray(new VariableName("someVariableName"));
+  public void shouldInitializeDataArray() {
+    DataArray dataArray = new DataArray(new VariableName("someVariableName"));
 
-    assertThat(ioModelArray).isNotNull();
-    assertThat(ioModelArray.getDataType()).isEqualTo(DataKind.ARRAY.name());
-    assertThat(ioModelArray.getVariableName()).isEqualTo(new VariableName("someVariableName"));
+    assertThat(dataArray).isNotNull();
+    assertThat(dataArray.getDataType()).isEqualTo(DataKind.ARRAY.name());
+    assertThat(dataArray.getVariableName()).isEqualTo(new VariableName("someVariableName"));
   }
 }
