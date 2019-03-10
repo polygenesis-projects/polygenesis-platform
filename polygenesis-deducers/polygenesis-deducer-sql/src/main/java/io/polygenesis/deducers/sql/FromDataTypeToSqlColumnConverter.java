@@ -21,7 +21,7 @@
 package io.polygenesis.deducers.sql;
 
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.data.IoModel;
+import io.polygenesis.core.data.Data;
 import io.polygenesis.core.data.PrimitiveType;
 import io.polygenesis.models.sql.ColumnDataType;
 import java.util.HashMap;
@@ -54,7 +54,7 @@ public class FromDataTypeToSqlColumnConverter {
    * @param model the model
    * @return the column data type by
    */
-  public ColumnDataType getColumnDataTypeBy(IoModel model) {
+  public ColumnDataType getColumnDataTypeBy(Data model) {
     if (dataTypeMap.containsKey(model.getDataType())) {
       return dataTypeMap.get(model.getDataType());
     } else {

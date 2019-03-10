@@ -21,8 +21,8 @@
 package io.polygenesis.deducers.sql;
 
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.data.IoModel;
-import io.polygenesis.core.data.IoModelGroup;
+import io.polygenesis.core.data.Data;
+import io.polygenesis.core.data.DataGroup;
 import io.polygenesis.models.domain.AbstractProperty;
 import io.polygenesis.models.domain.AggregateRoot;
 import io.polygenesis.models.sql.Column;
@@ -84,7 +84,7 @@ public class TableDeducer {
                 case AGGREGATE_ROOT_ID:
                   break;
                 case PRIMITIVE:
-                  aggregateRootColumns.add(getColumnForPrimitive(property.getIoModel(), ""));
+                  aggregateRootColumns.add(getColumnForPrimitive(property.getData(), ""));
                   break;
                 case PRIMITIVE_COLLECTION:
                   allAggregateRootRelatedTables.add(
@@ -94,7 +94,7 @@ public class TableDeducer {
                   aggregateRootColumns.addAll(
                       getColumnsForValueObject(
                           property
-                              .getIoModelGroupAsOptional()
+                              .getDataGroupAsOptional()
                               .orElseThrow(IllegalArgumentException::new)));
                   break;
                 case VALUE_OBJECT_COLLECTION:
@@ -131,11 +131,11 @@ public class TableDeducer {
   /**
    * Gets column for primitive.
    *
-   * @param ioModel the io model
+   * @param data the io model
    * @return the column for primitive
    */
-  private Column getColumnForPrimitive(IoModel ioModel, String columnPrefix) {
-    ColumnDataType columnDataType = fromDataTypeToSqlColumnConverter.getColumnDataTypeBy(ioModel);
+  private Column getColumnForPrimitive(Data data, String columnPrefix) {
+    ColumnDataType columnDataType = fromDataTypeToSqlColumnConverter.getColumnDataTypeBy(data);
 
     int length = 100;
 
@@ -144,7 +144,7 @@ public class TableDeducer {
     }
 
     return new Column(
-        String.format("%s%s", columnPrefix, ioModel.getVariableName().getText()),
+        String.format("%s%s", columnPrefix, data.getVariableName().getText()),
         columnDataType,
         length,
         RequiredType.OPTIONAL);
@@ -156,14 +156,14 @@ public class TableDeducer {
    * @param ioModelGroup the io model group
    * @return the columns for value object
    */
-  private Set<Column> getColumnsForValueObject(IoModelGroup ioModelGroup) {
+  private Set<Column> getColumnsForValueObject(DataGroup ioModelGroup) {
     Set<Column> columns = new LinkedHashSet<>();
 
     ioModelGroup
         .getModels()
         .forEach(
             model -> {
-              if (model.isPrimitive()) {
+              if (model.isDataPrimitive()) {
                 columns.add(
                     getColumnForPrimitive(
                         model,
@@ -192,15 +192,14 @@ public class TableDeducer {
 
     addAggregateRootIdInColumnSetWithoutPrimaryKey(columns, aggregateRoot);
 
-    columns.add(getColumnForPrimitive(property.getTypeParameterDataModel(), ""));
+    columns.add(getColumnForPrimitive(property.getTypeParameterData(), ""));
 
     return new Table(
         new TableName(
             String.format(
                 "%s_%s",
                 TextConverter.toLowerUnderscore(aggregateRoot.getName().getText()),
-                TextConverter.toLowerUnderscore(
-                    property.getIoModel().getVariableName().getText()))),
+                TextConverter.toLowerUnderscore(property.getData().getVariableName().getText()))),
         columns,
         aggregateRoot.getMultiTenant());
   }
@@ -221,8 +220,7 @@ public class TableDeducer {
             String.format(
                 "%s_%s",
                 TextConverter.toLowerUnderscore(aggregateRoot.getName().getText()),
-                TextConverter.toLowerUnderscore(
-                    property.getIoModel().getVariableName().getText()))),
+                TextConverter.toLowerUnderscore(property.getData().getVariableName().getText()))),
         columns,
         aggregateRoot.getMultiTenant());
   }

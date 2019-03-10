@@ -21,7 +21,7 @@
 package io.polygenesis.codegen;
 
 import io.polygenesis.core.Thing;
-import io.polygenesis.core.data.IoModel;
+import io.polygenesis.core.data.Data;
 import io.polygenesis.core.dsl.DataBuilder;
 import io.polygenesis.core.dsl.ThingBuilder;
 import java.util.Set;
@@ -45,7 +45,7 @@ public class ThingTodo {
   // DATA
   // ===============================================================================================
 
-  private static Set<IoModel> data() {
+  private static Set<Data> data() {
     return DataBuilder.create()
         .withTextProperty("description")
         .build()

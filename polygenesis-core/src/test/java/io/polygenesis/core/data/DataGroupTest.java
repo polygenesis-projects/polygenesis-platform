@@ -26,54 +26,53 @@ import io.polygenesis.commons.test.AbstractEqualityTest;
 import org.junit.Test;
 
 /** @author Christos Tsakostas */
-public class IoModelGroupTest extends AbstractEqualityTest<IoModelGroup> {
+public class DataGroupTest extends AbstractEqualityTest<DataGroup> {
 
   @Test
-  public void shouldInitializeIoModelGroup() {
-    IoModelGroup ioModelGroup =
-        new IoModelGroup(
+  public void shouldInitializeDataGroup() {
+    DataGroup dataGroup =
+        new DataGroup(
             new ObjectName("SomeClass"),
             new PackageName("com.dummy"),
             new VariableName("someVariableName"));
 
-    assertThat(ioModelGroup).isNotNull();
-    assertThat(ioModelGroup.getDataType()).isEqualTo(new ObjectName("SomeClass").getText());
-    assertThat(ioModelGroup.getVariableName()).isEqualTo(new VariableName("someVariableName"));
+    assertThat(dataGroup).isNotNull();
+    assertThat(dataGroup.getDataType()).isEqualTo(new ObjectName("SomeClass").getText());
+    assertThat(dataGroup.getVariableName()).isEqualTo(new VariableName("someVariableName"));
 
-    IoModelArray childIoModelArray =
-        new IoModelArray(new VariableName("someVariableName"), ioModelGroup);
-    ioModelGroup.addIoModelArray(childIoModelArray);
+    DataArray childIoModelArray = new DataArray(new VariableName("someVariableName"), dataGroup);
+    dataGroup.addIoModelArray(childIoModelArray);
 
-    IoModelGroup childIoModelGroup =
-        new IoModelGroup(
+    DataGroup childDataGroup =
+        new DataGroup(
             new ObjectName("SomeClass"),
             new PackageName("com.dummy"),
             new VariableName("someVariableName"));
-    ioModelGroup.addIoModelGroup(childIoModelGroup);
+    dataGroup.addIoModelGroup(childDataGroup);
 
-    IoModelPrimitive childIoModelPrimitive =
-        new IoModelPrimitive(
+    DataPrimitive childDataPrimitive =
+        new DataPrimitive(
             PrimitiveType.STRING, new VariableName("someVariableName"), null, DataBusinessType.ANY);
-    ioModelGroup.addIoModelPrimitive(childIoModelPrimitive);
+    dataGroup.addIoModelPrimitive(childDataPrimitive);
 
-    assertThat(ioModelGroup.getModels().size()).isEqualTo(3);
+    assertThat(dataGroup.getModels().size()).isEqualTo(3);
 
-    assertThat(childIoModelArray.isPrimitive()).isFalse();
-    assertThat(childIoModelGroup.isPrimitive()).isFalse();
-    assertThat(childIoModelPrimitive.isPrimitive()).isTrue();
+    assertThat(childIoModelArray.isDataPrimitive()).isFalse();
+    assertThat(childDataGroup.isDataPrimitive()).isFalse();
+    assertThat(childDataPrimitive.isDataPrimitive()).isTrue();
   }
 
   @Override
-  public IoModelGroup createObject1() {
-    return new IoModelGroup(
+  public DataGroup createObject1() {
+    return new DataGroup(
         new ObjectName("SomeClass"),
         new PackageName("com.dummy"),
         new VariableName("someVariableName"));
   }
 
   @Override
-  public IoModelGroup createObject2() {
-    return new IoModelGroup(
+  public DataGroup createObject2() {
+    return new DataGroup(
         new ObjectName("SomeClass"),
         new PackageName("com.dummy"),
         new VariableName("someOtherVariableName"));

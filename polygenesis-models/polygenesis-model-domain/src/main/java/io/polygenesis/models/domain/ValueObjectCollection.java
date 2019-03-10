@@ -20,8 +20,8 @@
 
 package io.polygenesis.models.domain;
 
-import io.polygenesis.core.data.IoModel;
-import io.polygenesis.core.data.IoModelGroup;
+import io.polygenesis.core.data.Data;
+import io.polygenesis.core.data.DataGroup;
 import io.polygenesis.core.data.VariableName;
 import java.util.Optional;
 
@@ -50,17 +50,17 @@ public class ValueObjectCollection extends AbstractProperty {
   // ===============================================================================================
 
   @Override
-  public Optional<IoModelGroup> getIoModelGroupAsOptional() {
+  public Optional<DataGroup> getDataGroupAsOptional() {
     return Optional.empty();
   }
 
   @Override
-  public IoModel getIoModel() {
+  public Data getData() {
     throw new UnsupportedOperationException();
   }
 
   @Override
-  public IoModel getTypeParameterDataModel() {
+  public Data getTypeParameterData() {
     throw new UnsupportedOperationException();
   }
 

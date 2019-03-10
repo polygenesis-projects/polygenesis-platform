@@ -30,7 +30,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  *
  * @author Christos Tsakostas
  */
-public class IoModelPrimitive extends IoModel {
+public class DataPrimitive extends Data {
 
   private final PrimitiveType primitiveType;
   private final Set<Annotation> annotations;
@@ -47,8 +47,8 @@ public class IoModelPrimitive extends IoModel {
    * @param variableName the variable name
    * @return the io model primitive
    */
-  public static IoModelPrimitive of(PrimitiveType primitiveType, VariableName variableName) {
-    return new IoModelPrimitive(primitiveType, variableName, null, DataBusinessType.ANY);
+  public static DataPrimitive of(PrimitiveType primitiveType, VariableName variableName) {
+    return new DataPrimitive(primitiveType, variableName, null, DataBusinessType.ANY);
   }
 
   /**
@@ -59,10 +59,10 @@ public class IoModelPrimitive extends IoModel {
    * @param variableName the variable name
    * @return the io model primitive
    */
-  public static IoModelPrimitive ofDataBusinessType(
+  public static DataPrimitive ofDataBusinessType(
       DataBusinessType dataBusinessType, PrimitiveType primitiveType, VariableName variableName) {
 
-    return new IoModelPrimitive(primitiveType, variableName, null, dataBusinessType);
+    return new DataPrimitive(primitiveType, variableName, null, dataBusinessType);
   }
 
   // ===============================================================================================
@@ -77,7 +77,7 @@ public class IoModelPrimitive extends IoModel {
    * @param annotations the annotations
    * @param dataBusinessType the data business type
    */
-  public IoModelPrimitive(
+  public DataPrimitive(
       PrimitiveType primitiveType,
       VariableName variableName,
       Set<Annotation> annotations,
@@ -155,7 +155,7 @@ public class IoModelPrimitive extends IoModel {
       return false;
     }
 
-    IoModelPrimitive that = (IoModelPrimitive) o;
+    DataPrimitive that = (DataPrimitive) o;
 
     return new EqualsBuilder()
         .appendSuper(super.equals(o))

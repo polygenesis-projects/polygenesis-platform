@@ -27,7 +27,7 @@ import io.polygenesis.core.FunctionName;
 import io.polygenesis.core.Goal;
 import io.polygenesis.core.Thing;
 import io.polygenesis.core.ThingName;
-import io.polygenesis.core.data.IoModelGroup;
+import io.polygenesis.core.data.DataGroup;
 import io.polygenesis.core.data.ObjectName;
 import io.polygenesis.core.data.PackageName;
 import java.util.LinkedHashSet;
@@ -40,11 +40,11 @@ public class MethodTest extends AbstractEqualityTest<Method> {
     Dto requestDto =
         new Dto(
             DtoType.API_REQUEST,
-            new IoModelGroup(new ObjectName("asd"), new PackageName("com.oregor")));
+            new DataGroup(new ObjectName("asd"), new PackageName("com.oregor")));
     Dto responseDto =
         new Dto(
             DtoType.API_REQUEST,
-            new IoModelGroup(new ObjectName("xyz"), new PackageName("com.oregor")));
+            new DataGroup(new ObjectName("xyz"), new PackageName("com.oregor")));
 
     Thing thing = new Thing(new ThingName("customer"));
     return new Method(
@@ -59,11 +59,11 @@ public class MethodTest extends AbstractEqualityTest<Method> {
     Dto requestDto =
         new Dto(
             DtoType.API_REQUEST,
-            new IoModelGroup(new ObjectName("asd"), new PackageName("com.oregor")));
+            new DataGroup(new ObjectName("asd"), new PackageName("com.oregor")));
     Dto responseDto =
         new Dto(
             DtoType.API_REQUEST,
-            new IoModelGroup(new ObjectName("xyz"), new PackageName("com.oregor")));
+            new DataGroup(new ObjectName("xyz"), new PackageName("com.oregor")));
 
     Thing thing = new Thing(new ThingName("user"));
     return new Method(

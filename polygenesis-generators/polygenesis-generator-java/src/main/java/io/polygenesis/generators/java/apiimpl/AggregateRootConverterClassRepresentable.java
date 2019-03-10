@@ -28,7 +28,7 @@ import io.polygenesis.core.Goal;
 import io.polygenesis.core.ReturnValue;
 import io.polygenesis.core.Thing;
 import io.polygenesis.core.ThingName;
-import io.polygenesis.core.data.IoModelGroup;
+import io.polygenesis.core.data.DataGroup;
 import io.polygenesis.core.data.ObjectName;
 import io.polygenesis.models.apiimpl.AggregateRootConverter;
 import io.polygenesis.models.domain.AggregateRoot;
@@ -147,7 +147,7 @@ public class AggregateRootConverterClassRepresentable
 
               if (!valueObjectFromDto
                   .getDto()
-                  .getOriginatingIoModelGroup()
+                  .getOriginatingDataGroup()
                   .getPackageName()
                   .equals(source.getPackageName())) {
 
@@ -156,7 +156,7 @@ public class AggregateRootConverterClassRepresentable
                 stringBuilder.append(
                     valueObjectFromDto
                         .getDto()
-                        .getOriginatingIoModelGroup()
+                        .getOriginatingDataGroup()
                         .getPackageName()
                         .getText());
                 stringBuilder.append(".");
@@ -164,7 +164,7 @@ public class AggregateRootConverterClassRepresentable
                     TextConverter.toUpperCamel(
                         valueObjectFromDto
                             .getDto()
-                            .getOriginatingIoModelGroup()
+                            .getOriginatingDataGroup()
                             .getVariableName()
                             .getText()));
 
@@ -240,8 +240,7 @@ public class AggregateRootConverterClassRepresentable
                       new FunctionName("convert"),
                       new LinkedHashSet<>(
                           Arrays.asList(
-                              new Argument(
-                                  valueObjectFromDto.getDto().getOriginatingIoModelGroup()))),
+                              new Argument(valueObjectFromDto.getDto().getOriginatingDataGroup()))),
                       new ReturnValue(valueObjectFromDto.getValueObject().getIoModelGroup()));
 
               functions.add(function);
@@ -268,7 +267,7 @@ public class AggregateRootConverterClassRepresentable
                                   transformAggregateRootToIoModelGroup(
                                       fetchOneDtoFromAggregateRoot.getAggregateRoot())))),
                       new ReturnValue(
-                          fetchOneDtoFromAggregateRoot.getDto().getOriginatingIoModelGroup())));
+                          fetchOneDtoFromAggregateRoot.getDto().getOriginatingDataGroup())));
             });
   }
 
@@ -292,9 +291,7 @@ public class AggregateRootConverterClassRepresentable
                                   transformAggregateRootToIoModelGroup(
                                       fetchCollectionDtoFromAggregateRoot.getAggregateRoot())))),
                       new ReturnValue(
-                          fetchCollectionDtoFromAggregateRoot
-                              .getDto()
-                              .getOriginatingIoModelGroup())));
+                          fetchCollectionDtoFromAggregateRoot.getDto().getOriginatingDataGroup())));
             });
   }
 
@@ -304,15 +301,13 @@ public class AggregateRootConverterClassRepresentable
    * @param aggregateRoot the aggregate root
    * @return the io model group
    */
-  private IoModelGroup transformAggregateRootToIoModelGroup(AggregateRoot aggregateRoot) {
+  private DataGroup transformAggregateRootToIoModelGroup(AggregateRoot aggregateRoot) {
 
-    IoModelGroup ioModelGroup =
-        new IoModelGroup(
+    DataGroup ioModelGroup =
+        new DataGroup(
             new ObjectName(aggregateRoot.getName().getText()), aggregateRoot.getPackageName());
 
-    aggregateRoot
-        .getProperties()
-        .forEach(property -> ioModelGroup.addIoModel(property.getIoModel()));
+    aggregateRoot.getProperties().forEach(property -> ioModelGroup.addIoModel(property.getData()));
 
     return ioModelGroup;
   }

@@ -20,7 +20,8 @@
 
 package io.polygenesis.core;
 
-import io.polygenesis.core.data.IoModelPrimitive;
+import com.oregor.ddd4j.check.assertion.Assertion;
+import io.polygenesis.core.data.DataPrimitive;
 import java.util.Optional;
 import java.util.Set;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -165,14 +166,14 @@ public class Function {
    * @param argument the argument
    * @return the optional
    */
-  public Optional<IoModelPrimitive> retrieveThingIdentityFromArgument(Argument argument) {
-
+  public Optional<DataPrimitive> retrieveThingIdentityFromArgument(Argument argument) {
     return argument
-        .getAsIoModelGroup()
+        .getModel()
+        .getAsDataGroup()
         .getModels()
         .stream()
         .filter(model -> model.isThingIdentity())
-        .map(IoModelPrimitive.class::cast)
+        .map(DataPrimitive.class::cast)
         .findFirst();
   }
 
@@ -180,23 +181,53 @@ public class Function {
   // GUARDS
   // ===============================================================================================
 
+  /**
+   * Sets thing.
+   *
+   * @param thing the thing
+   */
   private void setThing(Thing thing) {
+    Assertion.isNotNull(thing, "thing is required");
     this.thing = thing;
   }
 
+  /**
+   * Sets goal.
+   *
+   * @param goal the goal
+   */
   private void setGoal(Goal goal) {
+    Assertion.isNotNull(goal, "goal is required");
     this.goal = goal;
   }
 
+  /**
+   * Sets name.
+   *
+   * @param name the name
+   */
   private void setName(FunctionName name) {
+    Assertion.isNotNull(name, "name is required");
     this.name = name;
   }
 
+  /**
+   * Sets return value.
+   *
+   * @param returnValue the return value
+   */
   private void setReturnValue(ReturnValue returnValue) {
+    Assertion.isNotNull(returnValue, "returnValue is required");
     this.returnValue = returnValue;
   }
 
+  /**
+   * Sets arguments.
+   *
+   * @param arguments the arguments
+   */
   private void setArguments(Set<Argument> arguments) {
+    Assertion.isNotNull(arguments, "arguments is required");
     this.arguments = arguments;
   }
 

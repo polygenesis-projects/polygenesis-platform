@@ -20,8 +20,8 @@
 
 package io.polygenesis.core.dsl;
 
-import io.polygenesis.core.data.IoModel;
-import io.polygenesis.core.data.IoModelArray;
+import io.polygenesis.core.data.Data;
+import io.polygenesis.core.data.DataArray;
 import io.polygenesis.core.data.VariableName;
 
 /**
@@ -32,13 +32,13 @@ import io.polygenesis.core.data.VariableName;
 public class DataArrayBuilder {
 
   private final String name;
-  private final IoModel arrayElement;
+  private final Data arrayElement;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
-  private DataArrayBuilder(String arrayName, IoModel arrayElement) {
+  private DataArrayBuilder(String arrayName, Data arrayElement) {
     this.name = arrayName;
     this.arrayElement = arrayElement;
   }
@@ -54,7 +54,7 @@ public class DataArrayBuilder {
    * @param arrayElement the array element
    * @return the data array builder
    */
-  public static DataArrayBuilder create(String arrayName, IoModel arrayElement) {
+  public static DataArrayBuilder create(String arrayName, Data arrayElement) {
     return new DataArrayBuilder(arrayName, arrayElement);
   }
 
@@ -67,7 +67,7 @@ public class DataArrayBuilder {
    *
    * @return the io model group
    */
-  public final IoModelArray build() {
-    return new IoModelArray(new VariableName(this.name), this.arrayElement);
+  public final DataArray build() {
+    return new DataArray(new VariableName(this.name), this.arrayElement);
   }
 }

@@ -23,7 +23,7 @@ package io.polygenesis.generators.java.api;
 import static java.util.stream.Collectors.toCollection;
 
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.data.IoModelGroup;
+import io.polygenesis.core.data.DataGroup;
 import io.polygenesis.models.api.Service;
 import io.polygenesis.representations.java.AbstractInterfaceRepresentable;
 import io.polygenesis.representations.java.FromDataTypeToJavaConverter;
@@ -83,9 +83,9 @@ public class ServiceInterfaceRepresentable extends AbstractInterfaceRepresentabl
         .getMethods()
         .forEach(
             method -> {
-              if (method.getFunction().getReturnValue().getModel().isIoModelGroup()) {
-                IoModelGroup ioModelGroup =
-                    (IoModelGroup) method.getFunction().getReturnValue().getModel();
+              if (method.getFunction().getReturnValue().getModel().isDataGroup()) {
+                DataGroup ioModelGroup =
+                    (DataGroup) method.getFunction().getReturnValue().getModel();
 
                 if (!ioModelGroup.getPackageName().equals(source.getPackageName())) {
                   imports.add(
@@ -98,9 +98,9 @@ public class ServiceInterfaceRepresentable extends AbstractInterfaceRepresentabl
                   .getFunction()
                   .getArguments()
                   .stream()
-                  .filter(argument -> argument.getModel().isIoModelGroup())
+                  .filter(argument -> argument.getModel().isDataGroup())
                   .map(argument -> argument.getModel())
-                  .map(IoModelGroup.class::cast)
+                  .map(DataGroup.class::cast)
                   .forEach(
                       ioModelGroup -> {
                         if (!ioModelGroup.getPackageName().equals(source.getPackageName())) {

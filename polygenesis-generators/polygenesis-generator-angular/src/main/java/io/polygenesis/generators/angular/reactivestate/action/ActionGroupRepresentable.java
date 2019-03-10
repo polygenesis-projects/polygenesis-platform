@@ -94,7 +94,7 @@ public class ActionGroupRepresentable {
         .getActions()
         .forEach(
             action -> {
-              if (action.getPayloadModel().getModel().isIoModelGroup()) {
+              if (action.getPayloadModel().getModel().isDataGroup()) {
                 importObjects.put(
                     new LinkedHashSet<>(
                         Arrays.asList(

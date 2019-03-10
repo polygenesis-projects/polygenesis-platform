@@ -20,11 +20,11 @@
 
 package io.polygenesis.core.deducer;
 
+import io.polygenesis.core.data.Data;
+import io.polygenesis.core.data.DataArray;
 import io.polygenesis.core.data.DataBusinessType;
-import io.polygenesis.core.data.IoModel;
-import io.polygenesis.core.data.IoModelArray;
-import io.polygenesis.core.data.IoModelGroup;
-import io.polygenesis.core.data.IoModelPrimitive;
+import io.polygenesis.core.data.DataGroup;
+import io.polygenesis.core.data.DataPrimitive;
 import io.polygenesis.core.data.ObjectName;
 import io.polygenesis.core.data.PackageName;
 import io.polygenesis.core.data.PrimitiveType;
@@ -39,7 +39,7 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class IoModelDeducer {
+public class DataDeducer {
 
   private final JavaDataTypeConverter javaDataTypeConverter;
 
@@ -52,7 +52,7 @@ public class IoModelDeducer {
    *
    * @param javaDataTypeConverter the data type converter
    */
-  public IoModelDeducer(JavaDataTypeConverter javaDataTypeConverter) {
+  public DataDeducer(JavaDataTypeConverter javaDataTypeConverter) {
     this.javaDataTypeConverter = javaDataTypeConverter;
   }
 
@@ -66,33 +66,33 @@ public class IoModelDeducer {
    * @param recursiveObject the recursive object
    * @return the io model
    */
-  IoModel deduceResponse(RecursiveObject recursiveObject) {
+  Data deduceResponse(RecursiveObject recursiveObject) {
 
     if (recursiveObject.isGenericInterface()
         || recursiveObject.getStrDataType() == "java.util.List") {
       // TODO: check if recursiveObject.getStrGenericType() plays a role?
-      // IoModelArray
-      return new IoModelArray(new VariableName(recursiveObject.getStrName()));
+      // DataArray
+      return new DataArray(new VariableName(recursiveObject.getStrName()));
     } else if (!recursiveObject.isCustomObject()) {
-      // IoModelPrimitive
+      // DataPrimitive
       if (recursiveObject.getStrGenericType() != null) {
-        throw new IllegalArgumentException("IoModelPrimitive cannot be Generic");
+        throw new IllegalArgumentException("DataPrimitive cannot be Generic");
       }
 
-      return new IoModelPrimitive(
+      return new DataPrimitive(
           convertToPrimitiveTypeFrom(recursiveObject.getStrDataType()),
           new VariableName(recursiveObject.getStrName()),
           safeGetAnnotationsFrom(recursiveObject),
           DataBusinessType.ANY);
 
     } else {
-      // IoModelGroup
+      // DataGroup
       if (recursiveObject.getStrGenericType() != null) {
         throw new IllegalStateException("Something is wrong! No Generic should be here.");
       }
 
-      IoModelGroup modelGroupResponse =
-          new IoModelGroup(
+      DataGroup modelGroupResponse =
+          new DataGroup(
               convertToObjectNameFrom(recursiveObject.getStrDataType()),
               convertToPackageName(recursiveObject.getStrDataType()),
               new VariableName(recursiveObject.getStrName()));
@@ -107,14 +107,14 @@ public class IoModelDeducer {
   // PRIVATE
   // ===============================================================================================
 
-  private void fillIoModelGroup(IoModelGroup modelGroup, RecursiveObject recursiveObject) {
+  private void fillIoModelGroup(DataGroup modelGroup, RecursiveObject recursiveObject) {
 
     recursiveObject
         .getChildren()
         .forEach(
             childRecursiveObject -> {
               if (childRecursiveObject.getStrGenericType() != null) {
-                IoModelArray modelArray = new IoModelArray();
+                DataArray modelArray = new DataArray();
 
                 // TODO: fillIoModelArray Element
                 // fillIoModelGroup(modelArray, childRecursiveObject);
@@ -122,15 +122,15 @@ public class IoModelDeducer {
                 modelGroup.addIoModelArray(modelArray);
               } else {
                 if (childRecursiveObject.isCustomObject()) {
-                  IoModelGroup modelGroupCustomObject = new IoModelGroup();
+                  DataGroup modelGroupCustomObject = new DataGroup();
 
                   fillIoModelGroup(modelGroupCustomObject, childRecursiveObject);
 
                   modelGroup.addIoModelGroup(modelGroupCustomObject);
                 } else {
                   // Should not add primitives for Ignored or automatically set fields.
-                  IoModelPrimitive modelPrimitive =
-                      new IoModelPrimitive(
+                  DataPrimitive modelPrimitive =
+                      new DataPrimitive(
                           convertToPrimitiveTypeFrom(childRecursiveObject.getStrDataType()),
                           new VariableName(childRecursiveObject.getStrName()),
                           safeGetAnnotationsFrom(childRecursiveObject),

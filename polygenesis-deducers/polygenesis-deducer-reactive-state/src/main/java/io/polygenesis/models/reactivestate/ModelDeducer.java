@@ -55,7 +55,7 @@ public class ModelDeducer {
               .getDtos()
               .forEach(
                   dto -> {
-                    models.add(new Model(dto.getOriginatingIoModelGroup()));
+                    models.add(new Model(dto.getOriginatingDataGroup()));
                   });
         });
 

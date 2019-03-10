@@ -20,19 +20,19 @@
 
 package io.polygenesis.core.data;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import org.junit.Test;
-
 /** @author Christos Tsakostas */
-public class IoModelArrayTest {
+class TestData extends Data {
 
-  @Test
-  public void shouldInitializeIoModelArray() {
-    IoModelArray ioModelArray = new IoModelArray(new VariableName("someVariableName"));
+  public TestData() {
+    super(DataKind.OBJECT);
+  }
 
-    assertThat(ioModelArray).isNotNull();
-    assertThat(ioModelArray.getDataType()).isEqualTo(DataKind.ARRAY.name());
-    assertThat(ioModelArray.getVariableName()).isEqualTo(new VariableName("someVariableName"));
+  public TestData(VariableName variableName) {
+    super(DataKind.OBJECT, variableName);
+  }
+
+  @Override
+  public String getDataType() {
+    return PrimitiveType.STRING.name();
   }
 }

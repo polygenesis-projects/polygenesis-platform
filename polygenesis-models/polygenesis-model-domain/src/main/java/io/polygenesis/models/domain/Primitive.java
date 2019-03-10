@@ -20,9 +20,9 @@
 
 package io.polygenesis.models.domain;
 
-import io.polygenesis.core.data.IoModel;
-import io.polygenesis.core.data.IoModelGroup;
-import io.polygenesis.core.data.IoModelPrimitive;
+import io.polygenesis.core.data.Data;
+import io.polygenesis.core.data.DataGroup;
+import io.polygenesis.core.data.DataPrimitive;
 import io.polygenesis.core.data.VariableName;
 import java.util.Optional;
 
@@ -33,7 +33,7 @@ import java.util.Optional;
  */
 public class Primitive extends AbstractProperty {
 
-  private IoModelPrimitive ioModelPrimitive;
+  private DataPrimitive ioModelPrimitive;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -45,7 +45,7 @@ public class Primitive extends AbstractProperty {
    * @param ioModelPrimitive the io model primitive
    * @param variableName the variable name
    */
-  public Primitive(IoModelPrimitive ioModelPrimitive, VariableName variableName) {
+  public Primitive(DataPrimitive ioModelPrimitive, VariableName variableName) {
     super(PropertyType.PRIMITIVE, variableName);
     setIoModelPrimitive(ioModelPrimitive);
   }
@@ -59,7 +59,7 @@ public class Primitive extends AbstractProperty {
    *
    * @return the io model primitive
    */
-  public IoModelPrimitive getIoModelPrimitive() {
+  public DataPrimitive getIoModelPrimitive() {
     return ioModelPrimitive;
   }
 
@@ -72,7 +72,7 @@ public class Primitive extends AbstractProperty {
    *
    * @param ioModelPrimitive the io model primitive
    */
-  public void setIoModelPrimitive(IoModelPrimitive ioModelPrimitive) {
+  public void setIoModelPrimitive(DataPrimitive ioModelPrimitive) {
     this.ioModelPrimitive = ioModelPrimitive;
   }
 
@@ -81,17 +81,17 @@ public class Primitive extends AbstractProperty {
   // ===============================================================================================
 
   @Override
-  public Optional<IoModelGroup> getIoModelGroupAsOptional() {
+  public Optional<DataGroup> getDataGroupAsOptional() {
     return Optional.empty();
   }
 
   @Override
-  public IoModel getIoModel() {
+  public Data getData() {
     return ioModelPrimitive;
   }
 
   @Override
-  public IoModel getTypeParameterDataModel() {
+  public Data getTypeParameterData() {
     throw new UnsupportedOperationException();
   }
 

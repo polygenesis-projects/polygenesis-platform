@@ -25,7 +25,7 @@ import io.polygenesis.annotations.core.GoalType;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.FunctionName;
 import io.polygenesis.core.Thing;
-import io.polygenesis.core.data.IoModelPrimitive;
+import io.polygenesis.core.data.DataPrimitive;
 import io.polygenesis.core.data.PrimitiveType;
 import io.polygenesis.core.data.VariableName;
 import io.polygenesis.models.api.Service;
@@ -84,14 +84,14 @@ public class ActionGroupDeducer {
                           createAction(
                               method.getFunction().getName(),
                               ActionType.SUBMIT,
-                              new Model(method.getRequestDto().getOriginatingIoModelGroup())));
+                              new Model(method.getRequestDto().getOriginatingDataGroup())));
 
                       // Success
                       actions.add(
                           createAction(
                               method.getFunction().getName(),
                               ActionType.ON_SUCCESS,
-                              new Model(method.getResponseDto().getOriginatingIoModelGroup())));
+                              new Model(method.getResponseDto().getOriginatingDataGroup())));
 
                       // Failure
                       actions.add(
@@ -99,7 +99,7 @@ public class ActionGroupDeducer {
                               method.getFunction().getName(),
                               ActionType.ON_FAILURE,
                               new Model(
-                                  IoModelPrimitive.of(
+                                  DataPrimitive.of(
                                       PrimitiveType.STRING, new VariableName("errorMessage")))));
 
                       actionGroups.add(

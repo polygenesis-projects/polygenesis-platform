@@ -21,9 +21,9 @@
 package io.polygenesis.models.api;
 
 import com.oregor.ddd4j.check.assertion.Assertion;
-import io.polygenesis.core.data.IoModel;
-import io.polygenesis.core.data.IoModelArray;
-import io.polygenesis.core.data.IoModelGroup;
+import io.polygenesis.core.data.Data;
+import io.polygenesis.core.data.DataArray;
+import io.polygenesis.core.data.DataGroup;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -39,7 +39,7 @@ public class Dto {
   // ===============================================================================================
 
   private DtoType dtoType;
-  private IoModelGroup originatingIoModelGroup;
+  private DataGroup originatingDataGroup;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -49,11 +49,11 @@ public class Dto {
    * Instantiates a new Dto.
    *
    * @param dtoType the dto type
-   * @param originatingIoModelGroup the originating io model group
+   * @param originatingDataGroup the originating io model group
    */
-  public Dto(DtoType dtoType, IoModelGroup originatingIoModelGroup) {
+  public Dto(DtoType dtoType, DataGroup originatingDataGroup) {
     setDtoType(dtoType);
-    setOriginatingIoModelGroup(originatingIoModelGroup);
+    setOriginatingDataGroup(originatingDataGroup);
   }
 
   // ===============================================================================================
@@ -74,8 +74,8 @@ public class Dto {
    *
    * @return the originating io model group
    */
-  public IoModelGroup getOriginatingIoModelGroup() {
-    return originatingIoModelGroup;
+  public DataGroup getOriginatingDataGroup() {
+    return originatingDataGroup;
   }
 
   // ===============================================================================================
@@ -87,18 +87,18 @@ public class Dto {
    *
    * @return the array element as optional
    */
-  public Optional<IoModel> getArrayElementAsOptional() {
-    return getOriginatingIoModelGroup()
+  public Optional<Data> getArrayElementAsOptional() {
+    return getOriginatingDataGroup()
         .getModels()
         .stream()
-        .filter(model -> model.isIoModelArray())
-        .map(IoModelArray.class::cast)
+        .filter(model -> model.isDataArray())
+        .map(DataArray.class::cast)
         .map(ioModelArray -> ioModelArray.getArrayElement())
         .findFirst();
 
-    // TODO: fix as getOriginatingIoModelGroup() cannot be IoModelArray
-    //    if (getOriginatingIoModelGroup().isIoModelArray()) {
-    //      return Optional.of(((IoModelArray) getOriginatingIoModelGroup()).getArrayElement());
+    // TODO: fix as getOriginatingDataGroup() cannot be DataArray
+    //    if (getOriginatingDataGroup().isDataArray()) {
+    //      return Optional.of(((DataArray) getOriginatingDataGroup()).getArrayElement());
     //    } else {
     //      return Optional.empty();
     //    }
@@ -121,11 +121,11 @@ public class Dto {
   /**
    * Sets originating io model group.
    *
-   * @param originatingIoModelGroup the originating io model group
+   * @param originatingDataGroup the originating io model group
    */
-  private void setOriginatingIoModelGroup(IoModelGroup originatingIoModelGroup) {
-    Assertion.isNotNull(originatingIoModelGroup, "originatingIoModelGroup is required");
-    this.originatingIoModelGroup = originatingIoModelGroup;
+  private void setOriginatingDataGroup(DataGroup originatingDataGroup) {
+    Assertion.isNotNull(originatingDataGroup, "originatingDataGroup is required");
+    this.originatingDataGroup = originatingDataGroup;
   }
 
   // ===============================================================================================
@@ -141,12 +141,11 @@ public class Dto {
       return false;
     }
     Dto dto = (Dto) o;
-    return dtoType == dto.dtoType
-        && Objects.equals(originatingIoModelGroup, dto.originatingIoModelGroup);
+    return dtoType == dto.dtoType && Objects.equals(originatingDataGroup, dto.originatingDataGroup);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(dtoType, originatingIoModelGroup);
+    return Objects.hash(dtoType, originatingDataGroup);
   }
 }

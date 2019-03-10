@@ -73,12 +73,11 @@ public class ServiceImplementationMethodQuery extends ServiceImplementationMetho
     stringBuilder.append("\t\t");
     stringBuilder.append("Assertion.isNotNull(");
     stringBuilder.append(
-        TextConverter.toLowerCamel(
-            method.getRequestDto().getOriginatingIoModelGroup().getDataType()));
+        TextConverter.toLowerCamel(method.getRequestDto().getOriginatingDataGroup().getDataType()));
     stringBuilder.append(", \"");
     stringBuilder.append(
         TextConverter.toUpperCamelSpaces(
-            method.getRequestDto().getOriginatingIoModelGroup().getDataType()));
+            method.getRequestDto().getOriginatingDataGroup().getDataType()));
     stringBuilder.append(" is required\");");
     stringBuilder.append("\n");
     stringBuilder.append("\n");
@@ -97,8 +96,7 @@ public class ServiceImplementationMethodQuery extends ServiceImplementationMetho
     StringBuilder stringBuilder = new StringBuilder();
 
     String request =
-        TextConverter.toLowerCamel(
-            method.getRequestDto().getOriginatingIoModelGroup().getDataType());
+        TextConverter.toLowerCamel(method.getRequestDto().getOriginatingDataGroup().getDataType());
 
     stringBuilder.append("\t\t");
     stringBuilder.append("Paginated<");
@@ -136,7 +134,7 @@ public class ServiceImplementationMethodQuery extends ServiceImplementationMetho
     stringBuilder.append(".convertTo");
     stringBuilder.append(
         TextConverter.toUpperCamel(
-            method.getResponseDto().getOriginatingIoModelGroup().getDataType()));
+            method.getResponseDto().getOriginatingDataGroup().getDataType()));
     stringBuilder.append("(");
     stringBuilder.append(TextConverter.toLowerCamel(aggregateRoot.getName().getText()));
     stringBuilder.append(");");
@@ -156,14 +154,13 @@ public class ServiceImplementationMethodQuery extends ServiceImplementationMetho
     StringBuilder stringBuilder = new StringBuilder();
 
     String request =
-        TextConverter.toLowerCamel(
-            method.getRequestDto().getOriginatingIoModelGroup().getDataType());
+        TextConverter.toLowerCamel(method.getRequestDto().getOriginatingDataGroup().getDataType());
 
     stringBuilder.append("\t\t");
     stringBuilder.append("return new ");
     stringBuilder.append(
         TextConverter.toUpperCamel(
-            method.getResponseDto().getOriginatingIoModelGroup().getDataType()));
+            method.getResponseDto().getOriginatingDataGroup().getDataType()));
     stringBuilder.append("(");
     stringBuilder.append("\n");
     stringBuilder.append("\t\t\t\tStreamSupport\n");

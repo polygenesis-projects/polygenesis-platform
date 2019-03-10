@@ -23,7 +23,7 @@ package io.polygenesis.representations.java;
 import static java.util.stream.Collectors.toCollection;
 
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.data.IoModelGroup;
+import io.polygenesis.core.data.DataGroup;
 import io.polygenesis.core.data.PackageName;
 import io.polygenesis.representations.commons.FieldRepresentation;
 import io.polygenesis.representations.commons.ParameterRepresentation;
@@ -91,7 +91,7 @@ public abstract class AbstractClassRepresentable<S> implements ClassRepresentabl
    * @param modelGroup the model group
    * @return the string
    */
-  protected String packageName(IoModelGroup modelGroup) {
+  protected String packageName(DataGroup modelGroup) {
     return modelGroup.getPackageName().getText();
   }
 
@@ -101,14 +101,14 @@ public abstract class AbstractClassRepresentable<S> implements ClassRepresentabl
    * @param modelGroup the model group
    * @return the set
    */
-  protected Set<String> imports(IoModelGroup modelGroup) {
+  protected Set<String> imports(DataGroup modelGroup) {
     Set<String> imports = new LinkedHashSet<>();
 
     modelGroup
         .getModels()
         .stream()
-        .filter(model -> model.isIoModelGroup())
-        .map(IoModelGroup.class::cast)
+        .filter(model -> model.isDataGroup())
+        .map(DataGroup.class::cast)
         .filter(model -> !model.getPackageName().equals(modelGroup.getPackageName()))
         .forEach(
             model -> {
@@ -124,7 +124,7 @@ public abstract class AbstractClassRepresentable<S> implements ClassRepresentabl
    * @param modelGroup the model group
    * @return the string
    */
-  protected String simpleObjectName(IoModelGroup modelGroup) {
+  protected String simpleObjectName(DataGroup modelGroup) {
     StringBuilder stringBuilder = new StringBuilder();
 
     stringBuilder.append(TextConverter.toUpperCamel(modelGroup.getDataType()));
@@ -138,7 +138,7 @@ public abstract class AbstractClassRepresentable<S> implements ClassRepresentabl
    * @param modelGroup the model group
    * @return the string
    */
-  protected String fullObjectName(IoModelGroup modelGroup) {
+  protected String fullObjectName(DataGroup modelGroup) {
     return simpleObjectName(modelGroup);
   }
 
@@ -148,7 +148,7 @@ public abstract class AbstractClassRepresentable<S> implements ClassRepresentabl
    * @param modelGroup the model group
    * @return the set
    */
-  protected Set<FieldRepresentation> fieldRepresentations(IoModelGroup modelGroup) {
+  protected Set<FieldRepresentation> fieldRepresentations(DataGroup modelGroup) {
     Set<FieldRepresentation> variables = new LinkedHashSet<>();
 
     modelGroup

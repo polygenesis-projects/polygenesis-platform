@@ -20,8 +20,8 @@
 
 package io.polygenesis.core.dsl;
 
-import io.polygenesis.core.data.IoModel;
-import io.polygenesis.core.data.IoModelGroup;
+import io.polygenesis.core.data.Data;
+import io.polygenesis.core.data.DataGroup;
 import io.polygenesis.core.data.ObjectName;
 import io.polygenesis.core.data.PackageName;
 import java.util.LinkedHashSet;
@@ -35,7 +35,7 @@ import java.util.Set;
 public class DataGroupBuilder {
 
   private final String name;
-  private final Set<IoModel> models;
+  private final Set<Data> models;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -70,7 +70,7 @@ public class DataGroupBuilder {
    * @param models the models
    * @return the data group builder
    */
-  public final DataGroupBuilder withGroupData(Set<IoModel> models) {
+  public final DataGroupBuilder withGroupData(Set<Data> models) {
     this.models.addAll(models);
     return this;
   }
@@ -84,9 +84,8 @@ public class DataGroupBuilder {
    *
    * @return the io model group
    */
-  public final IoModelGroup build() {
-    IoModelGroup ioModelGroup =
-        new IoModelGroup(new ObjectName(name), new PackageName("com.oregor"));
+  public final DataGroup build() {
+    DataGroup ioModelGroup = new DataGroup(new ObjectName(name), new PackageName("com.oregor"));
 
     models.forEach(
         model -> {

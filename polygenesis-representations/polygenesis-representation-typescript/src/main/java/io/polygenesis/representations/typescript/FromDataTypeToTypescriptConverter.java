@@ -21,7 +21,7 @@
 package io.polygenesis.representations.typescript;
 
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.data.IoModel;
+import io.polygenesis.core.data.Data;
 import io.polygenesis.core.data.PrimitiveType;
 import java.util.HashMap;
 import java.util.Map;
@@ -54,7 +54,7 @@ public class FromDataTypeToTypescriptConverter {
    * @param model the model
    * @return the declared variable type
    */
-  public String getDeclaredVariableType(IoModel model) {
+  public String getDeclaredVariableType(Data model) {
     String candidate = TextConverter.toUpperCamel(model.getDataType());
 
     return Stream.of(PrimitiveType.values())

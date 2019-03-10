@@ -20,8 +20,8 @@
 
 package io.polygenesis.models.domain;
 
-import io.polygenesis.core.data.IoModel;
-import io.polygenesis.core.data.IoModelGroup;
+import io.polygenesis.core.data.Data;
+import io.polygenesis.core.data.DataGroup;
 import io.polygenesis.core.data.VariableName;
 import java.util.Objects;
 import java.util.Optional;
@@ -33,7 +33,7 @@ import java.util.Optional;
  */
 public class AggregateRootId extends AbstractProperty {
 
-  private IoModelGroup ioModelGroup;
+  private DataGroup ioModelGroup;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -45,7 +45,7 @@ public class AggregateRootId extends AbstractProperty {
    * @param ioModelGroup the io model group
    * @param variableName the variable name
    */
-  public AggregateRootId(IoModelGroup ioModelGroup, VariableName variableName) {
+  public AggregateRootId(DataGroup ioModelGroup, VariableName variableName) {
     super(PropertyType.AGGREGATE_ROOT_ID, variableName);
     setIoModelGroup(ioModelGroup);
   }
@@ -59,7 +59,7 @@ public class AggregateRootId extends AbstractProperty {
    *
    * @return the io model group
    */
-  public IoModelGroup getIoModelGroup() {
+  public DataGroup getIoModelGroup() {
     return ioModelGroup;
   }
 
@@ -72,7 +72,7 @@ public class AggregateRootId extends AbstractProperty {
    *
    * @param ioModelGroup the io model group
    */
-  public void setIoModelGroup(IoModelGroup ioModelGroup) {
+  public void setIoModelGroup(DataGroup ioModelGroup) {
     this.ioModelGroup = ioModelGroup;
   }
 
@@ -81,17 +81,17 @@ public class AggregateRootId extends AbstractProperty {
   // ===============================================================================================
 
   @Override
-  public Optional<IoModelGroup> getIoModelGroupAsOptional() {
+  public Optional<DataGroup> getDataGroupAsOptional() {
     return Optional.of(ioModelGroup);
   }
 
   @Override
-  public IoModel getIoModel() {
+  public Data getData() {
     return ioModelGroup;
   }
 
   @Override
-  public IoModel getTypeParameterDataModel() {
+  public Data getTypeParameterData() {
     throw new UnsupportedOperationException();
   }
 

@@ -21,9 +21,9 @@
 package io.polygenesis.models.domain;
 
 import com.oregor.ddd4j.check.assertion.Assertion;
-import io.polygenesis.core.data.IoModel;
-import io.polygenesis.core.data.IoModelArray;
-import io.polygenesis.core.data.IoModelGroup;
+import io.polygenesis.core.data.Data;
+import io.polygenesis.core.data.DataArray;
+import io.polygenesis.core.data.DataGroup;
 import io.polygenesis.core.data.PrimitiveType;
 import io.polygenesis.core.data.VariableName;
 import java.util.Objects;
@@ -40,7 +40,7 @@ public class PrimitiveCollection extends AbstractProperty {
   // STATE
   // ===============================================================================================
 
-  private IoModelArray originatingIoModel;
+  private DataArray originatingIoModel;
   private PrimitiveType primitiveType;
 
   // ===============================================================================================
@@ -55,7 +55,7 @@ public class PrimitiveCollection extends AbstractProperty {
    * @param primitiveType the primitive type
    */
   public PrimitiveCollection(
-      IoModelArray originatingIoModel, VariableName variableName, PrimitiveType primitiveType) {
+      DataArray originatingIoModel, VariableName variableName, PrimitiveType primitiveType) {
     super(PropertyType.PRIMITIVE_COLLECTION, variableName);
     setOriginatingIoModel(originatingIoModel);
     setPrimitiveType(primitiveType);
@@ -70,7 +70,7 @@ public class PrimitiveCollection extends AbstractProperty {
    *
    * @return the originating io model
    */
-  public IoModelArray getOriginatingIoModel() {
+  public DataArray getOriginatingIoModel() {
     return originatingIoModel;
   }
 
@@ -92,7 +92,7 @@ public class PrimitiveCollection extends AbstractProperty {
    *
    * @param originatingIoModel the originating io model
    */
-  public void setOriginatingIoModel(IoModelArray originatingIoModel) {
+  public void setOriginatingIoModel(DataArray originatingIoModel) {
     Assertion.isNotNull(originatingIoModel, "originatingIoModel is required");
     this.originatingIoModel = originatingIoModel;
   }
@@ -112,17 +112,17 @@ public class PrimitiveCollection extends AbstractProperty {
   // ===============================================================================================
 
   @Override
-  public Optional<IoModelGroup> getIoModelGroupAsOptional() {
+  public Optional<DataGroup> getDataGroupAsOptional() {
     return Optional.empty();
   }
 
   @Override
-  public IoModel getIoModel() {
+  public Data getData() {
     return getOriginatingIoModel();
   }
 
   @Override
-  public IoModel getTypeParameterDataModel() {
+  public Data getTypeParameterData() {
     return getOriginatingIoModel().getArrayElement();
   }
 

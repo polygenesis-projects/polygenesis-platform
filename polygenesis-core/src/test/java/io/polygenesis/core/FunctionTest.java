@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import io.polygenesis.annotations.core.GoalType;
 import io.polygenesis.commons.test.AbstractEqualityTest;
 import io.polygenesis.core.data.DataBusinessType;
-import io.polygenesis.core.data.IoModelPrimitive;
+import io.polygenesis.core.data.DataPrimitive;
 import io.polygenesis.core.data.PrimitiveType;
 import io.polygenesis.core.data.VariableName;
 import java.util.LinkedHashSet;
@@ -116,8 +116,8 @@ public class FunctionTest extends AbstractEqualityTest<Function> {
         new LinkedHashSet<>());
   }
 
-  private IoModelPrimitive createIoModelPrimitive() {
-    return new IoModelPrimitive(
+  private DataPrimitive createIoModelPrimitive() {
+    return new DataPrimitive(
         PrimitiveType.STRING,
         new VariableName("variableName"),
         new LinkedHashSet<>(),

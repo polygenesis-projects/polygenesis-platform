@@ -21,8 +21,8 @@
 package io.polygenesis.generators.java.domain.aggregateroot;
 
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.data.IoModelArray;
-import io.polygenesis.core.data.IoModelGroup;
+import io.polygenesis.core.data.DataArray;
+import io.polygenesis.core.data.DataGroup;
 import io.polygenesis.core.data.PackageName;
 import io.polygenesis.models.domain.AbstractProperty;
 import io.polygenesis.models.domain.AggregateRoot;
@@ -84,7 +84,7 @@ public class AggregateRootClassRepresentable extends AbstractClassRepresentable<
                           makeVariableDataType(property),
                           makeVariableName(property),
                           makeAnnotationsForPrimitiveCollection(
-                              source, property.getIoModel().getAsIoModelArray())));
+                              source, property.getData().getAsIoModelArray())));
                   break;
                 case VALUE_OBJECT:
                   fieldRepresentations.add(
@@ -93,7 +93,7 @@ public class AggregateRootClassRepresentable extends AbstractClassRepresentable<
                           makeVariableName(property),
                           makeAnnotationsForValueObject(
                               property
-                                  .getIoModelGroupAsOptional()
+                                  .getDataGroupAsOptional()
                                   .orElseThrow(IllegalArgumentException::new))));
                   break;
                 default:
@@ -157,13 +157,13 @@ public class AggregateRootClassRepresentable extends AbstractClassRepresentable<
                 imports.add("javax.persistence.Column");
               }
 
-              Optional<IoModelGroup> optionalIoModelGroup = property.getIoModelGroupAsOptional();
+              Optional<DataGroup> optionalIoModelGroup = property.getDataGroupAsOptional();
               if (optionalIoModelGroup.isPresent()) {
                 imports.add("javax.persistence.Embedded");
                 imports.add("javax.persistence.AttributeOverride");
                 imports.add("javax.persistence.Column");
 
-                IoModelGroup ioModelGroup = optionalIoModelGroup.get();
+                DataGroup ioModelGroup = optionalIoModelGroup.get();
                 if (!ioModelGroup.getPackageName().equals(source.getPackageName())) {
                   imports.add(
                       ioModelGroup.getPackageName().getText()
@@ -275,7 +275,7 @@ public class AggregateRootClassRepresentable extends AbstractClassRepresentable<
    * @param ioModelGroup the io model group
    * @return the set
    */
-  private Set<String> makeAnnotationsForValueObject(IoModelGroup ioModelGroup) {
+  private Set<String> makeAnnotationsForValueObject(DataGroup ioModelGroup) {
     Set<String> annotations = new LinkedHashSet<>();
     annotations.add("@Embedded");
 
@@ -283,7 +283,7 @@ public class AggregateRootClassRepresentable extends AbstractClassRepresentable<
         .getModels()
         .forEach(
             model -> {
-              if (model.isPrimitive()) {
+              if (model.isDataPrimitive()) {
                 StringBuilder stringBuilder = new StringBuilder();
 
                 stringBuilder.append("@AttributeOverride(\n");
@@ -316,7 +316,7 @@ public class AggregateRootClassRepresentable extends AbstractClassRepresentable<
    * @return the set
    */
   private Set<String> makeAnnotationsForPrimitiveCollection(
-      AggregateRoot aggregateRoot, IoModelArray ioModelArray) {
+      AggregateRoot aggregateRoot, DataArray ioModelArray) {
     Set<String> annotations = new LinkedHashSet<>();
 
     annotations.add("@ElementCollection");
@@ -365,10 +365,10 @@ public class AggregateRootClassRepresentable extends AbstractClassRepresentable<
         return String.format(
             "List<%s>",
             fromDataTypeToJavaConverter.getDeclaredVariableType(
-                property.getTypeParameterDataModel().getDataType()));
+                property.getTypeParameterData().getDataType()));
       default:
         return fromDataTypeToJavaConverter.getDeclaredVariableType(
-            property.getIoModel().getDataType());
+            property.getData().getDataType());
     }
   }
 

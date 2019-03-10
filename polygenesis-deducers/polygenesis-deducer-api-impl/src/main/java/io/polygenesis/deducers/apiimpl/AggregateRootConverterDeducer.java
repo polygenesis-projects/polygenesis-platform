@@ -21,7 +21,7 @@
 package io.polygenesis.deducers.apiimpl;
 
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.data.IoModel;
+import io.polygenesis.core.data.Data;
 import io.polygenesis.core.data.ObjectName;
 import io.polygenesis.core.data.VariableName;
 import io.polygenesis.models.api.Dto;
@@ -97,7 +97,7 @@ public class AggregateRootConverterDeducer {
                           .getDtos()
                           .forEach(
                               dto -> {
-                                if (dto.getOriginatingIoModelGroup()
+                                if (dto.getOriginatingDataGroup()
                                     .equals(valueObject.getOriginatingIoModelGroup())) {
                                   valueObjectFromDtos.add(new ValueObjectFromDto(valueObject, dto));
                                 }
@@ -123,7 +123,8 @@ public class AggregateRootConverterDeducer {
                     fetchOneDtoFromAggregateRoots.add(
                         new FetchOneDtoFromAggregateRoot(
                             findDtoInServiceFromIoModelGroup(
-                                service, method.getFunction().getReturnValue().getAsIoModelGroup()),
+                                service,
+                                method.getFunction().getReturnValue().getModel().getAsDataGroup()),
                             aggregateRoot));
                   });
         });
@@ -158,15 +159,15 @@ public class AggregateRootConverterDeducer {
         });
   }
 
-  private Dto findDtoInServiceFromIoModelGroup(Service service, IoModel ioModelGroup) {
+  private Dto findDtoInServiceFromIoModelGroup(Service service, Data dataGroup) {
     return service
         .getDtos()
         .stream()
-        .filter(dto -> dto.getOriginatingIoModelGroup().equals(ioModelGroup))
+        .filter(dto -> dto.getOriginatingDataGroup().equals(dataGroup))
         .findFirst()
         .orElseThrow(
             () ->
                 new IllegalArgumentException(
-                    String.format("Cannot find %s in Service DTOs", ioModelGroup.getDataType())));
+                    String.format("Cannot find %s in Service DTOs", dataGroup.getDataType())));
   }
 }

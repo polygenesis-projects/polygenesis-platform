@@ -32,18 +32,18 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class IoModelGroup extends IoModel {
+public class DataGroup extends Data {
 
   private final ObjectName objectName;
   private final PackageName packageName;
-  private final Set<IoModel> models;
+  private final Set<Data> models;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /** Instantiates a new Io model group. */
-  public IoModelGroup() {
+  public DataGroup() {
     this(null, null, null, new LinkedHashSet<>());
   }
 
@@ -52,7 +52,7 @@ public class IoModelGroup extends IoModel {
    *
    * @param variableName the variable name
    */
-  public IoModelGroup(VariableName variableName) {
+  public DataGroup(VariableName variableName) {
     this(null, null, variableName, new LinkedHashSet<>());
   }
 
@@ -62,7 +62,7 @@ public class IoModelGroup extends IoModel {
    * @param objectName the object name
    * @param packageName the package name
    */
-  public IoModelGroup(ObjectName objectName, PackageName packageName) {
+  public DataGroup(ObjectName objectName, PackageName packageName) {
     this(objectName, packageName, new VariableName(objectName.getText()), new LinkedHashSet<>());
   }
 
@@ -73,15 +73,12 @@ public class IoModelGroup extends IoModel {
    * @param packageName the package name
    * @param variableName the variable name
    */
-  public IoModelGroup(ObjectName objectName, PackageName packageName, VariableName variableName) {
+  public DataGroup(ObjectName objectName, PackageName packageName, VariableName variableName) {
     this(objectName, packageName, variableName, new LinkedHashSet<>());
   }
 
-  private IoModelGroup(
-      ObjectName objectName,
-      PackageName packageName,
-      VariableName variableName,
-      Set<IoModel> models) {
+  private DataGroup(
+      ObjectName objectName, PackageName packageName, VariableName variableName, Set<Data> models) {
     super(DataKind.OBJECT, variableName);
     this.objectName = objectName;
     this.packageName = packageName;
@@ -98,8 +95,8 @@ public class IoModelGroup extends IoModel {
    * @param objectName the object name
    * @return the io model group
    */
-  public IoModelGroup withNewObjectName(ObjectName objectName) {
-    return new IoModelGroup(objectName, getPackageName(), getVariableName(), getModels());
+  public DataGroup withNewObjectName(ObjectName objectName) {
+    return new DataGroup(objectName, getPackageName(), getVariableName(), getModels());
   }
 
   /**
@@ -108,8 +105,8 @@ public class IoModelGroup extends IoModel {
    * @param variableName the variable name
    * @return the io model group
    */
-  public IoModelGroup withNewVariableName(VariableName variableName) {
-    return new IoModelGroup(getObjectName(), getPackageName(), variableName, getModels());
+  public DataGroup withNewVariableName(VariableName variableName) {
+    return new DataGroup(getObjectName(), getPackageName(), variableName, getModels());
   }
 
   // ===============================================================================================
@@ -122,7 +119,7 @@ public class IoModelGroup extends IoModel {
    * @param model the model
    * @return the boolean
    */
-  public boolean addIoModelPrimitive(IoModelPrimitive model) {
+  public boolean addIoModelPrimitive(DataPrimitive model) {
     Assertion.isNotNull(model, "Model Primitive is required");
     return models.add(model);
   }
@@ -133,7 +130,7 @@ public class IoModelGroup extends IoModel {
    * @param model the model
    * @return the boolean
    */
-  public boolean addIoModelGroup(IoModelGroup model) {
+  public boolean addIoModelGroup(DataGroup model) {
     Assertion.isNotNull(model, "Model Group is required");
     return models.add(model);
   }
@@ -144,7 +141,7 @@ public class IoModelGroup extends IoModel {
    * @param model the model
    * @return the boolean
    */
-  public boolean addIoModelArray(IoModelArray model) {
+  public boolean addIoModelArray(DataArray model) {
     Assertion.isNotNull(model, "Array Model is required");
     return models.add(model);
   }
@@ -154,30 +151,30 @@ public class IoModelGroup extends IoModel {
    *
    * @param model the model
    */
-  public void addIoModel(IoModel model) {
+  public void addIoModel(Data model) {
     Assertion.isNotNull(model, "Model is required");
 
-    if (model.isIoModelGroup()) {
-      IoModelGroup ioModelGroup =
-          new IoModelGroup(
-              ((IoModelGroup) model).getObjectName(),
-              ((IoModelGroup) model).getPackageName(),
+    if (model.isDataGroup()) {
+      DataGroup ioModelGroup =
+          new DataGroup(
+              ((DataGroup) model).getObjectName(),
+              ((DataGroup) model).getPackageName(),
               model.getVariableName(),
-              ((IoModelGroup) model).getModels());
+              ((DataGroup) model).getModels());
 
       models.add(ioModelGroup);
-    } else if (model.isPrimitive()) {
-      IoModelPrimitive ioModelPrimitive =
-          new IoModelPrimitive(
-              ((IoModelPrimitive) model).getPrimitiveType(),
+    } else if (model.isDataPrimitive()) {
+      DataPrimitive ioModelPrimitive =
+          new DataPrimitive(
+              ((DataPrimitive) model).getPrimitiveType(),
               model.getVariableName(),
-              ((IoModelPrimitive) model).getAnnotations(),
-              ((IoModelPrimitive) model).getDataBusinessType());
+              ((DataPrimitive) model).getAnnotations(),
+              ((DataPrimitive) model).getDataBusinessType());
 
       models.add(ioModelPrimitive);
-    } else if (model.isIoModelArray()) {
-      IoModelArray ioModelArray =
-          new IoModelArray(model.getVariableName(), ((IoModelArray) model).getArrayElement());
+    } else if (model.isDataArray()) {
+      DataArray ioModelArray =
+          new DataArray(model.getVariableName(), ((DataArray) model).getArrayElement());
       models.add(ioModelArray);
     } else {
       throw new UnsupportedOperationException();
@@ -211,7 +208,7 @@ public class IoModelGroup extends IoModel {
    *
    * @return the models
    */
-  public Set<IoModel> getModels() {
+  public Set<Data> getModels() {
     return models.stream().collect(toCollection(LinkedHashSet::new));
   }
 
@@ -239,7 +236,7 @@ public class IoModelGroup extends IoModel {
     if (!super.equals(o)) {
       return false;
     }
-    IoModelGroup that = (IoModelGroup) o;
+    DataGroup that = (DataGroup) o;
     return Objects.equals(objectName, that.objectName)
         && Objects.equals(packageName, that.packageName);
   }

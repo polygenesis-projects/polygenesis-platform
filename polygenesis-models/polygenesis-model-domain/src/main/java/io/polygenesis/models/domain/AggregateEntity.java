@@ -20,7 +20,7 @@
 
 package io.polygenesis.models.domain;
 
-import io.polygenesis.core.data.IoModelGroup;
+import io.polygenesis.core.data.DataGroup;
 import io.polygenesis.core.data.VariableName;
 
 /**
@@ -42,7 +42,7 @@ public class AggregateEntity extends ValueObject {
    * @param variableName the variable name
    */
   public AggregateEntity(
-      IoModelGroup originatingIoModelGroup, IoModelGroup ioModelGroup, VariableName variableName) {
+      DataGroup originatingIoModelGroup, DataGroup ioModelGroup, VariableName variableName) {
     super(PropertyType.AGGREGATE_ENTITY, originatingIoModelGroup, ioModelGroup, variableName);
   }
 

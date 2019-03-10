@@ -80,8 +80,8 @@ public class DtoExporter {
   // ===============================================================================================
 
   private void export(Path generationPath, Dto dto) {
-    // TODO: getOriginatingIoModelGroup() should not be IoModelArray
-    if (dto.getOriginatingIoModelGroup().isIoModelArray()) {
+    // TODO: getOriginatingDataGroup() should not be DataArray
+    if (dto.getOriginatingDataGroup().isDataArray()) {
       return;
     }
 
@@ -95,12 +95,12 @@ public class DtoExporter {
   }
 
   private Path makeFileName(Path generationPath, Dto dto) {
-    PackageName servicePackageName = dto.getOriginatingIoModelGroup().getPackageName();
+    PackageName servicePackageName = dto.getOriginatingDataGroup().getPackageName();
 
     return Paths.get(
         generationPath.toString(),
         "src/main/java",
         servicePackageName.toPath().toString(),
-        TextConverter.toUpperCamel(dto.getOriginatingIoModelGroup().getDataType()) + ".java");
+        TextConverter.toUpperCamel(dto.getOriginatingDataGroup().getDataType()) + ".java");
   }
 }

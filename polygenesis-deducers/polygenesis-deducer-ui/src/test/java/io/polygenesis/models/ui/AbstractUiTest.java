@@ -28,7 +28,7 @@ import io.polygenesis.core.ReturnValue;
 import io.polygenesis.core.Thing;
 import io.polygenesis.core.ThingName;
 import io.polygenesis.core.data.DataBusinessType;
-import io.polygenesis.core.data.IoModelPrimitive;
+import io.polygenesis.core.data.DataPrimitive;
 import io.polygenesis.core.data.PrimitiveType;
 import io.polygenesis.core.data.VariableName;
 import java.util.LinkedHashSet;
@@ -48,7 +48,7 @@ public abstract class AbstractUiTest {
             new Goal(GoalType.CREATE),
             new FunctionName("createSomeThing"),
             new ReturnValue(
-                new IoModelPrimitive(
+                new DataPrimitive(
                     PrimitiveType.STRING,
                     new VariableName("response"),
                     new LinkedHashSet<>(),
@@ -64,7 +64,7 @@ public abstract class AbstractUiTest {
             new Goal(GoalType.VALIDATE),
             new FunctionName("createSomeThing"),
             new ReturnValue(
-                new IoModelPrimitive(
+                new DataPrimitive(
                     PrimitiveType.STRING,
                     new VariableName("response"),
                     new LinkedHashSet<>(),

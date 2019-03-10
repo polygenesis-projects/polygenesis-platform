@@ -20,8 +20,8 @@
 
 package io.polygenesis.models.domain;
 
-import io.polygenesis.core.data.IoModel;
-import io.polygenesis.core.data.IoModelGroup;
+import io.polygenesis.core.data.Data;
+import io.polygenesis.core.data.DataGroup;
 import io.polygenesis.core.data.VariableName;
 import java.util.Objects;
 import java.util.Optional;
@@ -33,8 +33,8 @@ import java.util.Optional;
  */
 public class ValueObject extends AbstractProperty {
 
-  private IoModelGroup originatingIoModelGroup;
-  private IoModelGroup ioModelGroup;
+  private DataGroup originatingIoModelGroup;
+  private DataGroup ioModelGroup;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -50,8 +50,8 @@ public class ValueObject extends AbstractProperty {
    */
   public ValueObject(
       PropertyType propertyType,
-      IoModelGroup originatingIoModelGroup,
-      IoModelGroup ioModelGroup,
+      DataGroup originatingIoModelGroup,
+      DataGroup ioModelGroup,
       VariableName variableName) {
     super(propertyType, variableName);
     setOriginatingIoModelGroup(originatingIoModelGroup);
@@ -66,7 +66,7 @@ public class ValueObject extends AbstractProperty {
    * @param variableName the variable name
    */
   public ValueObject(
-      IoModelGroup originatingIoModelGroup, IoModelGroup ioModelGroup, VariableName variableName) {
+      DataGroup originatingIoModelGroup, DataGroup ioModelGroup, VariableName variableName) {
     super(PropertyType.VALUE_OBJECT, variableName);
     setOriginatingIoModelGroup(originatingIoModelGroup);
     setIoModelGroup(ioModelGroup);
@@ -81,7 +81,7 @@ public class ValueObject extends AbstractProperty {
    *
    * @return the originating io model group
    */
-  public IoModelGroup getOriginatingIoModelGroup() {
+  public DataGroup getOriginatingIoModelGroup() {
     return originatingIoModelGroup;
   }
 
@@ -90,7 +90,7 @@ public class ValueObject extends AbstractProperty {
    *
    * @return the io model group
    */
-  public IoModelGroup getIoModelGroup() {
+  public DataGroup getIoModelGroup() {
     return ioModelGroup;
   }
 
@@ -103,7 +103,7 @@ public class ValueObject extends AbstractProperty {
    *
    * @param originatingIoModelGroup the originating io model group
    */
-  private void setOriginatingIoModelGroup(IoModelGroup originatingIoModelGroup) {
+  private void setOriginatingIoModelGroup(DataGroup originatingIoModelGroup) {
     this.originatingIoModelGroup = originatingIoModelGroup;
   }
 
@@ -112,7 +112,7 @@ public class ValueObject extends AbstractProperty {
    *
    * @param ioModelGroup the io model group
    */
-  private void setIoModelGroup(IoModelGroup ioModelGroup) {
+  private void setIoModelGroup(DataGroup ioModelGroup) {
     this.ioModelGroup = ioModelGroup;
   }
 
@@ -121,17 +121,17 @@ public class ValueObject extends AbstractProperty {
   // ===============================================================================================
 
   @Override
-  public Optional<IoModelGroup> getIoModelGroupAsOptional() {
+  public Optional<DataGroup> getDataGroupAsOptional() {
     return Optional.of(getIoModelGroup());
   }
 
   @Override
-  public IoModel getIoModel() {
+  public Data getData() {
     return ioModelGroup;
   }
 
   @Override
-  public IoModel getTypeParameterDataModel() {
+  public Data getTypeParameterData() {
     throw new UnsupportedOperationException();
   }
 

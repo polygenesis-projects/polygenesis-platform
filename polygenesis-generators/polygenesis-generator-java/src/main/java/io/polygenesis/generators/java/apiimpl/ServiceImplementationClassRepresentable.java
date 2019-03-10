@@ -21,7 +21,7 @@
 package io.polygenesis.generators.java.apiimpl;
 
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.data.IoModelGroup;
+import io.polygenesis.core.data.DataGroup;
 import io.polygenesis.models.api.Method;
 import io.polygenesis.models.api.Service;
 import io.polygenesis.models.apiimpl.ServiceImplementation;
@@ -220,8 +220,8 @@ public class ServiceImplementationClassRepresentable
         .forEach(
             property -> {
               if (property.getPropertyType().equals(PropertyType.VALUE_OBJECT)) {
-                IoModelGroup modelGroup =
-                    property.getIoModelGroupAsOptional().orElseThrow(IllegalAccessError::new);
+                DataGroup modelGroup =
+                    property.getDataGroupAsOptional().orElseThrow(IllegalAccessError::new);
 
                 if (modelGroup.getPackageName().equals(aggregateRoot.getPackageName())) {
                   imports.add(

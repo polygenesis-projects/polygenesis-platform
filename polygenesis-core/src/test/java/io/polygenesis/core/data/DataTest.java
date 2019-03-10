@@ -26,11 +26,11 @@ import io.polygenesis.commons.test.AbstractEqualityTest;
 import org.junit.Test;
 
 /** @author Christos Tsakostas */
-public class IoModelTest extends AbstractEqualityTest<TestIoModel> {
+public class DataTest extends AbstractEqualityTest<TestData> {
 
   @Test
   public void shouldInitializeTestIoModel() {
-    TestIoModel testIoModel = new TestIoModel(new VariableName("someVariableName"));
+    TestData testIoModel = new TestData(new VariableName("someVariableName"));
 
     assertThat(testIoModel).isNotNull();
     assertThat(testIoModel.getDataType()).isEqualTo(PrimitiveType.STRING.name());
@@ -41,12 +41,12 @@ public class IoModelTest extends AbstractEqualityTest<TestIoModel> {
   // Equality and Hash
   // ===============================================================================================
   @Override
-  public TestIoModel createObject1() {
-    return new TestIoModel(new VariableName("variableName"));
+  public TestData createObject1() {
+    return new TestData(new VariableName("variableName"));
   }
 
   @Override
-  public TestIoModel createObject2() {
-    return new TestIoModel(new VariableName("someOtherVariableName"));
+  public TestData createObject2() {
+    return new TestData(new VariableName("someOtherVariableName"));
   }
 }

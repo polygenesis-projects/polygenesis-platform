@@ -105,7 +105,7 @@ public class EndpointMethodRepresentable extends AbstractMethodRepresentable<End
         .getArguments()
         .forEach(
             argument -> {
-              if (argument.getModel().isIoModelGroup()
+              if (argument.getModel().isDataGroup()
                   && (source.getFunction().getGoal().isCreate()
                       || source.getFunction().getGoal().isModify())) {
                 parameterRepresentations.add(

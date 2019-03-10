@@ -21,7 +21,7 @@
 package io.polygenesis.models.reactivestate;
 
 import com.oregor.ddd4j.check.assertion.Assertion;
-import io.polygenesis.core.data.IoModel;
+import io.polygenesis.core.data.Data;
 import java.util.Objects;
 
 /**
@@ -35,7 +35,7 @@ public class Model {
   // STATE
   // ===============================================================================================
 
-  private IoModel model;
+  private Data model;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -46,7 +46,7 @@ public class Model {
    *
    * @param model the model
    */
-  public Model(IoModel model) {
+  public Model(Data model) {
     setModel(model);
   }
 
@@ -59,7 +59,7 @@ public class Model {
    *
    * @return the model
    */
-  public IoModel getModel() {
+  public Data getModel() {
     return model;
   }
 
@@ -72,7 +72,7 @@ public class Model {
    *
    * @param model the model
    */
-  public void setModel(IoModel model) {
+  public void setModel(Data model) {
     Assertion.isNotNull(model, "model is required");
     this.model = model;
   }

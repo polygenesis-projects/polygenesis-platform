@@ -22,9 +22,9 @@ package io.polygenesis.generators.java.api;
 
 import com.oregor.ddd4j.check.assertion.Assertion;
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.data.IoModel;
-import io.polygenesis.core.data.IoModelArray;
-import io.polygenesis.core.data.IoModelGroup;
+import io.polygenesis.core.data.Data;
+import io.polygenesis.core.data.DataArray;
+import io.polygenesis.core.data.DataGroup;
 import io.polygenesis.models.api.Dto;
 import io.polygenesis.models.api.DtoType;
 import io.polygenesis.representations.commons.FieldRepresentation;
@@ -94,7 +94,7 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
     Set<FieldRepresentation> fieldRepresentations = new LinkedHashSet<>();
 
     source
-        .getOriginatingIoModelGroup()
+        .getOriginatingDataGroup()
         .getModels()
         .forEach(
             model -> {
@@ -114,7 +114,7 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
     // ---------------------------------------------------------------------------------------------
     constructorRepresentations.add(
         createConstructorWithSetters(
-            source.getOriginatingIoModelGroup().getDataType(), new LinkedHashSet<>()));
+            source.getOriginatingDataGroup().getDataType(), new LinkedHashSet<>()));
 
     // ---------------------------------------------------------------------------------------------
     // Create constructor with parameters
@@ -123,7 +123,7 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
 
     constructorRepresentations.add(
         createConstructorWithSettersFromFieldRepresentations(
-            source.getOriginatingIoModelGroup().getDataType(), fieldRepresentations));
+            source.getOriginatingDataGroup().getDataType(), fieldRepresentations));
 
     // ---------------------------------------------------------------------------------------------
     // Create constructor for collection response
@@ -144,18 +144,18 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
 
   @Override
   public String packageName(Dto source, Object... args) {
-    // TODO: source.getOriginatingIoModelGroup() should not be IoMoDelArray
-    if (source.getOriginatingIoModelGroup().getPackageName() == null) {
+    // TODO: source.getOriginatingDataGroup() should not be IoMoDelArray
+    if (source.getOriginatingDataGroup().getPackageName() == null) {
       return null;
     }
 
     Assertion.isNotNull(
-        source.getOriginatingIoModelGroup(), "source.getOriginatingIoModelGroup() is required");
+        source.getOriginatingDataGroup(), "source.getOriginatingDataGroup() is required");
     Assertion.isNotNull(
-        source.getOriginatingIoModelGroup().getPackageName(),
-        "source.getOriginatingIoModelGroup().getPackageName() is required");
+        source.getOriginatingDataGroup().getPackageName(),
+        "source.getOriginatingDataGroup().getPackageName() is required");
 
-    return source.getOriginatingIoModelGroup().getPackageName().getText();
+    return source.getOriginatingDataGroup().getPackageName().getText();
   }
 
   @Override
@@ -172,24 +172,24 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
     }
 
     source
-        .getOriginatingIoModelGroup()
+        .getOriginatingDataGroup()
         .getModels()
         .stream()
-        .filter(model -> model.isIoModelArray())
+        .filter(model -> model.isDataArray())
         .findFirst()
         .ifPresent(model -> imports.add("java.util.List"));
 
     source
-        .getOriginatingIoModelGroup()
+        .getOriginatingDataGroup()
         .getModels()
         .stream()
-        .filter(model -> model.isIoModelGroup())
-        .map(IoModelGroup.class::cast)
+        .filter(model -> model.isDataGroup())
+        .map(DataGroup.class::cast)
         .forEach(
             ioModelGroup -> {
               if (!ioModelGroup
                   .getPackageName()
-                  .equals(source.getOriginatingIoModelGroup().getPackageName())) {
+                  .equals(source.getOriginatingDataGroup().getPackageName())) {
                 imports.add(
                     makeCanonicalObjectName(
                         ioModelGroup.getPackageName(), ioModelGroup.getDataType()));
@@ -211,7 +211,7 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
     stringBuilder.append("The ");
 
     stringBuilder.append(
-        TextConverter.toUpperCamelSpaces(source.getOriginatingIoModelGroup().getDataType()));
+        TextConverter.toUpperCamelSpaces(source.getOriginatingDataGroup().getDataType()));
 
     stringBuilder.append(".");
 
@@ -228,7 +228,7 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
     StringBuilder stringBuilder = new StringBuilder();
 
     stringBuilder.append(
-        TextConverter.toUpperCamel(source.getOriginatingIoModelGroup().getDataType()));
+        TextConverter.toUpperCamel(source.getOriginatingDataGroup().getDataType()));
 
     return stringBuilder.toString();
   }
@@ -277,7 +277,7 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
   private ConstructorRepresentation createConstructorForCollectionResponse(Dto source) {
     Set<ParameterRepresentation> parameterRepresentations = new LinkedHashSet<>();
 
-    IoModel arrayElement =
+    Data arrayElement =
         source.getArrayElementAsOptional().orElseThrow(IllegalArgumentException::new);
 
     parameterRepresentations.add(
@@ -296,7 +296,7 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
     String description =
         String.format(
             "Instantiates a new %s.",
-            TextConverter.toUpperCamelSpaces(source.getOriginatingIoModelGroup().getDataType()));
+            TextConverter.toUpperCamelSpaces(source.getOriginatingDataGroup().getDataType()));
 
     return new ConstructorRepresentation(
         new LinkedHashSet<>(),
@@ -312,12 +312,12 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
    * @param model the model
    * @return the string
    */
-  private String makeVariableDataType(IoModel model) {
-    if (model.isIoModelArray()) {
+  private String makeVariableDataType(Data model) {
+    if (model.isDataArray()) {
       return String.format(
           "List<%s>",
           fromDataTypeToJavaConverter.getDeclaredVariableType(
-              ((IoModelArray) model).getArrayElement().getDataType()));
+              ((DataArray) model).getArrayElement().getDataType()));
     } else {
       return fromDataTypeToJavaConverter.getDeclaredVariableType(model.getDataType());
     }
@@ -329,7 +329,7 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
    * @param model the model
    * @return the string
    */
-  private String makeVariableName(IoModel model) {
+  private String makeVariableName(Data model) {
     return model.getVariableName().getText();
   }
 }

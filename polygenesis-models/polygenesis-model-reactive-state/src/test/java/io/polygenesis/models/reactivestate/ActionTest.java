@@ -23,7 +23,7 @@ package io.polygenesis.models.reactivestate;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.polygenesis.commons.test.AbstractEqualityTest;
-import io.polygenesis.core.data.IoModelPrimitive;
+import io.polygenesis.core.data.DataPrimitive;
 import io.polygenesis.core.data.PrimitiveType;
 import io.polygenesis.core.data.VariableName;
 import org.junit.Test;
@@ -37,7 +37,7 @@ public class ActionTest extends AbstractEqualityTest<Action> {
         new Action(
             ActionType.SUBMIT,
             new ActionName("xxx"),
-            new Model(IoModelPrimitive.of(PrimitiveType.STRING, new VariableName("name"))));
+            new Model(DataPrimitive.of(PrimitiveType.STRING, new VariableName("name"))));
 
     assertThat(action).isNotNull();
     assertThat(action.getActionType()).isEqualTo(ActionType.SUBMIT);
@@ -49,7 +49,7 @@ public class ActionTest extends AbstractEqualityTest<Action> {
     return new Action(
         ActionType.SUBMIT,
         new ActionName("xxx"),
-        new Model(IoModelPrimitive.of(PrimitiveType.STRING, new VariableName("name"))));
+        new Model(DataPrimitive.of(PrimitiveType.STRING, new VariableName("name"))));
   }
 
   @Override
@@ -57,6 +57,6 @@ public class ActionTest extends AbstractEqualityTest<Action> {
     return new Action(
         ActionType.RESET,
         new ActionName("xxx"),
-        new Model(IoModelPrimitive.of(PrimitiveType.STRING, new VariableName("name"))));
+        new Model(DataPrimitive.of(PrimitiveType.STRING, new VariableName("name"))));
   }
 }

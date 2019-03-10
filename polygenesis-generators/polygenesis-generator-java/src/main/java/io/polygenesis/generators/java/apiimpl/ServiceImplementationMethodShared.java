@@ -23,8 +23,8 @@ package io.polygenesis.generators.java.apiimpl;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.Argument;
 import io.polygenesis.core.ReturnValue;
-import io.polygenesis.core.data.IoModelGroup;
-import io.polygenesis.core.data.IoModelPrimitive;
+import io.polygenesis.core.data.DataGroup;
+import io.polygenesis.core.data.DataPrimitive;
 import io.polygenesis.models.api.Method;
 import io.polygenesis.models.domain.AggregateRoot;
 import java.util.Optional;
@@ -82,7 +82,7 @@ public abstract class ServiceImplementationMethodShared {
             .findFirst()
             .orElseThrow(IllegalArgumentException::new);
 
-    Optional<IoModelPrimitive> optionalIoModelPrimitive =
+    Optional<DataPrimitive> optionalIoModelPrimitive =
         method.getFunction().retrieveThingIdentityFromArgument(argument);
 
     if (!optionalIoModelPrimitive.isPresent()) {
@@ -129,8 +129,9 @@ public abstract class ServiceImplementationMethodShared {
 
     ReturnValue returnValue = method.getFunction().getReturnValue();
     if (returnValue != null) {
-      if (returnValue.getModel().isIoModelGroup()) {
-        stringBuilder.append(makeReturnValueForIoModelGroup(returnValue.getAsIoModelGroup()));
+      if (returnValue.getModel().isDataGroup()) {
+        stringBuilder.append(
+            makeReturnValueForIoModelGroup(returnValue.getModel().getAsDataGroup()));
       } else {
         throw new IllegalStateException(
             String.format(
@@ -148,7 +149,7 @@ public abstract class ServiceImplementationMethodShared {
    * @param modelGroup the model group
    * @return the string
    */
-  protected String makeReturnValueForIoModelGroup(IoModelGroup modelGroup) {
+  protected String makeReturnValueForIoModelGroup(DataGroup modelGroup) {
     StringBuilder stringBuilder = new StringBuilder();
 
     stringBuilder.append("\t\t");

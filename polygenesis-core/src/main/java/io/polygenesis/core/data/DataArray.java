@@ -27,16 +27,16 @@ import java.util.Objects;
  *
  * @author Christos Tsakostas
  */
-public class IoModelArray extends IoModel {
+public class DataArray extends Data {
 
-  private final IoModel arrayElement;
+  private final Data arrayElement;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /** Instantiates a new Io model array. */
-  public IoModelArray() {
+  public DataArray() {
     this(null, null);
   }
 
@@ -45,7 +45,7 @@ public class IoModelArray extends IoModel {
    *
    * @param arrayElement the array element
    */
-  public IoModelArray(IoModel arrayElement) {
+  public DataArray(Data arrayElement) {
     this(null, arrayElement);
   }
 
@@ -54,7 +54,7 @@ public class IoModelArray extends IoModel {
    *
    * @param variableName the variable name
    */
-  public IoModelArray(VariableName variableName) {
+  public DataArray(VariableName variableName) {
     this(variableName, null);
   }
 
@@ -64,7 +64,7 @@ public class IoModelArray extends IoModel {
    * @param variableName the variable name
    * @param arrayElement the array element
    */
-  public IoModelArray(VariableName variableName, IoModel arrayElement) {
+  public DataArray(VariableName variableName, Data arrayElement) {
     super(DataKind.ARRAY, variableName);
     this.arrayElement = arrayElement;
   }
@@ -78,7 +78,7 @@ public class IoModelArray extends IoModel {
    *
    * @return the array element
    */
-  public IoModel getArrayElement() {
+  public Data getArrayElement() {
     return arrayElement;
   }
 
@@ -106,7 +106,7 @@ public class IoModelArray extends IoModel {
     if (!super.equals(o)) {
       return false;
     }
-    IoModelArray that = (IoModelArray) o;
+    DataArray that = (DataArray) o;
     return Objects.equals(arrayElement, that.arrayElement);
   }
 

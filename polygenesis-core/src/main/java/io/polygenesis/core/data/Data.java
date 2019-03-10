@@ -23,8 +23,7 @@ package io.polygenesis.core.data;
 import java.util.Objects;
 
 /**
- * This is the base class for {@link IoModelPrimitive}, {@link IoModelGroup}, and {@link
- * IoModelArray}.
+ * This is the base class for {@link DataPrimitive}, {@link DataGroup}, and {@link DataArray}*.
  *
  * <p>References:
  *
@@ -36,7 +35,7 @@ import java.util.Objects;
  *
  * @author Christos Tsakostas
  */
-public abstract class IoModel {
+public abstract class Data {
 
   private final DataKind dataKind;
   private final VariableName variableName;
@@ -50,7 +49,7 @@ public abstract class IoModel {
    *
    * @param dataKind the data kind
    */
-  public IoModel(DataKind dataKind) {
+  public Data(DataKind dataKind) {
     this(dataKind, null);
   }
 
@@ -60,7 +59,7 @@ public abstract class IoModel {
    * @param dataKind the data kind
    * @param variableName the variable name
    */
-  public IoModel(DataKind dataKind, VariableName variableName) {
+  public Data(DataKind dataKind, VariableName variableName) {
     this.dataKind = dataKind;
     this.variableName = variableName;
   }
@@ -103,16 +102,30 @@ public abstract class IoModel {
   // ===============================================================================================
 
   /**
+   * Gets as data group.
+   *
+   * @return the as data group
+   */
+  public DataGroup getAsDataGroup() {
+    if (isDataGroup()) {
+      return (DataGroup) this;
+    } else {
+      throw new IllegalStateException(
+          String.format("Model of type=%s is not a DataGroup", getDataKind().name()));
+    }
+  }
+
+  /**
    * Gets as io model array.
    *
    * @return the as io model array
    */
-  public IoModelArray getAsIoModelArray() {
-    if (this.isIoModelArray()) {
-      return IoModelArray.class.cast(this);
+  public DataArray getAsIoModelArray() {
+    if (isDataArray()) {
+      return DataArray.class.cast(this);
     } else {
       throw new IllegalStateException(
-          String.format("Model %s is not of type IoModelArray.", getDataKind().name()));
+          String.format("Model of type=%s is not a DataArray", getDataKind().name()));
     }
   }
 
@@ -121,7 +134,7 @@ public abstract class IoModel {
    *
    * @return the boolean
    */
-  public boolean isPrimitive() {
+  public boolean isDataPrimitive() {
     return getDataKind().equals(DataKind.PRIMITIVE);
   }
 
@@ -130,8 +143,8 @@ public abstract class IoModel {
    *
    * @return the boolean
    */
-  public boolean isIoModelGroup() {
-    return this instanceof IoModelGroup;
+  public boolean isDataGroup() {
+    return getDataKind().equals(DataKind.OBJECT);
   }
 
   /**
@@ -139,8 +152,8 @@ public abstract class IoModel {
    *
    * @return the boolean
    */
-  public boolean isIoModelArray() {
-    return this instanceof IoModelArray;
+  public boolean isDataArray() {
+    return getDataKind().equals(DataKind.ARRAY);
   }
 
   /**
@@ -149,8 +162,8 @@ public abstract class IoModel {
    * @return the boolean
    */
   public boolean isThingIdentity() {
-    if (this instanceof IoModelPrimitive) {
-      return ((IoModelPrimitive) this).getThingIdentity();
+    if (this instanceof DataPrimitive) {
+      return ((DataPrimitive) this).getThingIdentity();
     } else {
       return false;
     }
@@ -168,8 +181,8 @@ public abstract class IoModel {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    IoModel ioModel = (IoModel) o;
-    return dataKind == ioModel.dataKind && Objects.equals(variableName, ioModel.variableName);
+    Data data = (Data) o;
+    return dataKind == data.dataKind && Objects.equals(variableName, data.variableName);
   }
 
   @Override

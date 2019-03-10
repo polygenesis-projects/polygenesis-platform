@@ -20,8 +20,8 @@
 
 package io.polygenesis.models.domain;
 
-import io.polygenesis.core.data.IoModel;
-import io.polygenesis.core.data.IoModelGroup;
+import io.polygenesis.core.data.Data;
+import io.polygenesis.core.data.DataGroup;
 import io.polygenesis.core.data.VariableName;
 import java.util.Optional;
 
@@ -85,14 +85,14 @@ public abstract class AbstractProperty {
    *
    * @return the io model group as optional
    */
-  public abstract Optional<IoModelGroup> getIoModelGroupAsOptional();
+  public abstract Optional<DataGroup> getDataGroupAsOptional();
 
   /**
    * Gets io model.
    *
    * @return the io model
    */
-  public abstract IoModel getIoModel();
+  public abstract Data getData();
 
   /**
    * Gets data related to type parameter.
@@ -101,7 +101,7 @@ public abstract class AbstractProperty {
    *
    * @return the type parameter data
    */
-  public abstract IoModel getTypeParameterDataModel();
+  public abstract Data getTypeParameterData();
 
   // ===============================================================================================
   // GUARDS

@@ -27,11 +27,11 @@ import java.util.LinkedHashSet;
 import org.junit.Test;
 
 /** @author Christos Tsakostas */
-public class IoModelPrimitiveTest extends AbstractEqualityTest<IoModelPrimitive> {
+public class DataPrimitiveTest extends AbstractEqualityTest<DataPrimitive> {
 
   @Test
   public void shouldInitializeIoModelPrimitive() {
-    IoModelPrimitive ioModelPrimitive = createObject1();
+    DataPrimitive ioModelPrimitive = createObject1();
 
     assertThat(ioModelPrimitive).isNotNull();
     assertThat(ioModelPrimitive.getDataType()).isEqualTo(PrimitiveType.STRING.name());
@@ -45,8 +45,8 @@ public class IoModelPrimitiveTest extends AbstractEqualityTest<IoModelPrimitive>
 
   @Test
   public void shouldInitializeIoModelPrimitiveWithParent() {
-    IoModelPrimitive ioModelPrimitive =
-        new IoModelPrimitive(
+    DataPrimitive ioModelPrimitive =
+        new DataPrimitive(
             PrimitiveType.STRING,
             new VariableName("someVariableName"),
             new LinkedHashSet<>(),
@@ -63,8 +63,8 @@ public class IoModelPrimitiveTest extends AbstractEqualityTest<IoModelPrimitive>
   // ===============================================================================================
 
   @Override
-  public IoModelPrimitive createObject1() {
-    return new IoModelPrimitive(
+  public DataPrimitive createObject1() {
+    return new DataPrimitive(
         PrimitiveType.STRING,
         new VariableName("someVariableName"),
         new LinkedHashSet<>(),
@@ -72,8 +72,8 @@ public class IoModelPrimitiveTest extends AbstractEqualityTest<IoModelPrimitive>
   }
 
   @Override
-  public IoModelPrimitive createObject2() {
-    return new IoModelPrimitive(
+  public DataPrimitive createObject2() {
+    return new DataPrimitive(
         PrimitiveType.STRING,
         new VariableName("someOtherVariableName"),
         new LinkedHashSet<>(),
