@@ -37,7 +37,7 @@ import java.util.Objects;
  */
 public abstract class Data {
 
-  private final DataKind dataKind;
+  private final DataPrimaryType dataPrimaryType;
   private final VariableName variableName;
 
   // ===============================================================================================
@@ -47,20 +47,20 @@ public abstract class Data {
   /**
    * Instantiates a new data.
    *
-   * @param dataKind the data kind
+   * @param dataPrimaryType the data kind
    */
-  public Data(DataKind dataKind) {
-    this(dataKind, null);
+  public Data(DataPrimaryType dataPrimaryType) {
+    this(dataPrimaryType, null);
   }
 
   /**
    * Instantiates a new data.
    *
-   * @param dataKind the data kind
+   * @param dataPrimaryType the data kind
    * @param variableName the variable name
    */
-  public Data(DataKind dataKind, VariableName variableName) {
-    this.dataKind = dataKind;
+  public Data(DataPrimaryType dataPrimaryType, VariableName variableName) {
+    this.dataPrimaryType = dataPrimaryType;
     this.variableName = variableName;
   }
 
@@ -84,8 +84,8 @@ public abstract class Data {
    *
    * @return the data kind
    */
-  public DataKind getDataKind() {
-    return dataKind;
+  public DataPrimaryType getDataPrimaryType() {
+    return dataPrimaryType;
   }
 
   /**
@@ -111,7 +111,7 @@ public abstract class Data {
       return (DataGroup) this;
     } else {
       throw new IllegalStateException(
-          String.format("Model of type=%s is not a DataGroup", getDataKind().name()));
+          String.format("Model of type=%s is not a DataGroup", getDataPrimaryType().name()));
     }
   }
 
@@ -125,7 +125,7 @@ public abstract class Data {
       return DataArray.class.cast(this);
     } else {
       throw new IllegalStateException(
-          String.format("Model of type=%s is not a DataArray", getDataKind().name()));
+          String.format("Model of type=%s is not a DataArray", getDataPrimaryType().name()));
     }
   }
 
@@ -135,7 +135,7 @@ public abstract class Data {
    * @return the boolean
    */
   public boolean isDataPrimitive() {
-    return getDataKind().equals(DataKind.PRIMITIVE);
+    return getDataPrimaryType().equals(DataPrimaryType.PRIMITIVE);
   }
 
   /**
@@ -144,7 +144,7 @@ public abstract class Data {
    * @return the boolean
    */
   public boolean isDataGroup() {
-    return getDataKind().equals(DataKind.OBJECT);
+    return getDataPrimaryType().equals(DataPrimaryType.OBJECT);
   }
 
   /**
@@ -153,7 +153,7 @@ public abstract class Data {
    * @return the boolean
    */
   public boolean isDataArray() {
-    return getDataKind().equals(DataKind.ARRAY);
+    return getDataPrimaryType().equals(DataPrimaryType.ARRAY);
   }
 
   /**
@@ -182,11 +182,11 @@ public abstract class Data {
       return false;
     }
     Data data = (Data) o;
-    return dataKind == data.dataKind && Objects.equals(variableName, data.variableName);
+    return dataPrimaryType == data.dataPrimaryType && Objects.equals(variableName, data.variableName);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(dataKind, variableName);
+    return Objects.hash(dataPrimaryType, variableName);
   }
 }

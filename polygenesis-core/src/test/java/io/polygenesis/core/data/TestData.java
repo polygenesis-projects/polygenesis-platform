@@ -24,11 +24,11 @@ package io.polygenesis.core.data;
 class TestData extends Data {
 
   public TestData() {
-    super(DataKind.OBJECT);
+    super(DataPrimaryType.OBJECT);
   }
 
   public TestData(VariableName variableName) {
-    super(DataKind.OBJECT, variableName);
+    super(DataPrimaryType.OBJECT, variableName);
   }
 
   @Override

@@ -26,7 +26,7 @@ import io.polygenesis.core.data.Data;
 import io.polygenesis.core.data.DataArray;
 import io.polygenesis.core.data.DataBusinessType;
 import io.polygenesis.core.data.DataGroup;
-import io.polygenesis.core.data.DataKind;
+import io.polygenesis.core.data.DataPrimaryType;
 import io.polygenesis.core.data.DataPrimitive;
 import io.polygenesis.core.data.ObjectName;
 import io.polygenesis.core.data.PackageName;
@@ -106,7 +106,7 @@ public class AggregateRootPropertyDeducer {
   // ===============================================================================================
 
   private AbstractProperty makeAbstractProperty(Data model) {
-    switch (model.getDataKind()) {
+    switch (model.getDataPrimaryType()) {
       case ARRAY:
         DataArray dataArray = model.getAsDataArray();
         if (dataArray.getArrayElement().isDataPrimitive()) {
@@ -134,7 +134,7 @@ public class AggregateRootPropertyDeducer {
         return new Primitive((DataPrimitive) model, model.getVariableName());
       default:
         throw new IllegalStateException(
-            String.format("Cannot make AbstractProperty for %s", model.getDataKind()));
+            String.format("Cannot make AbstractProperty for %s", model.getDataPrimaryType()));
     }
   }
 
@@ -186,7 +186,7 @@ public class AggregateRootPropertyDeducer {
   // ===============================================================================================
 
   private boolean isPropertyThingIdentity(Data model) {
-    if (model.getDataKind().equals(DataKind.PRIMITIVE)
+    if (model.getDataPrimaryType().equals(DataPrimaryType.PRIMITIVE)
         && ((DataPrimitive) model).getThingIdentity()) {
       return true;
     }
@@ -194,7 +194,7 @@ public class AggregateRootPropertyDeducer {
   }
 
   private boolean isPropertyPageNumber(Data model) {
-    if (model.getDataKind().equals(DataKind.PRIMITIVE)
+    if (model.getDataPrimaryType().equals(DataPrimaryType.PRIMITIVE)
         && ((DataPrimitive) model).getDataBusinessType().equals(DataBusinessType.PAGE_NUMBER)) {
       return true;
     }
@@ -202,7 +202,7 @@ public class AggregateRootPropertyDeducer {
   }
 
   private boolean isPropertyPageSize(Data model) {
-    if (model.getDataKind().equals(DataKind.PRIMITIVE)
+    if (model.getDataPrimaryType().equals(DataPrimaryType.PRIMITIVE)
         && ((DataPrimitive) model).getDataBusinessType().equals(DataBusinessType.PAGE_SIZE)) {
       return true;
     }

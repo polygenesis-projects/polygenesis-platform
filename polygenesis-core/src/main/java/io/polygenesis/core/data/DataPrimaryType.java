@@ -21,23 +21,17 @@
 package io.polygenesis.core.data;
 
 /**
- * The enum Data kind.
+ * The enum Data primary type.
  *
  * @author Christos Tsakostas
  */
-public enum DataKind {
+public enum DataPrimaryType {
   /** Primitive data kind. */
   PRIMITIVE,
 
   /** Object data kind. */
   OBJECT,
 
-  /** Interface data kind. */
-  INTERFACE,
-
   /** Array data kind. */
-  ARRAY,
-
-  /** Map data kind. */
-  MAP;
+  ARRAY
 }

@@ -114,12 +114,11 @@ public class DataDeducer {
         .forEach(
             childRecursiveObject -> {
               if (childRecursiveObject.getStrGenericType() != null) {
-                DataArray dataArray = new DataArray();
+                DataGroup arrayElement = new DataGroup();
 
-                // TODO: fillDataArray Element
-                // fillDataGroup(dataArray, childRecursiveObject);
+                fillDataGroup(arrayElement, childRecursiveObject);
 
-                dataGroup.addData(dataArray);
+                dataGroup.addData(new DataArray(arrayElement));
               } else {
                 if (childRecursiveObject.isCustomObject()) {
                   DataGroup modelGroupCustomObject = new DataGroup();

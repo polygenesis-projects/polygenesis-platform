@@ -79,7 +79,7 @@ public class DataGroup extends Data {
 
   private DataGroup(
       ObjectName objectName, PackageName packageName, VariableName variableName, Set<Data> models) {
-    super(DataKind.OBJECT, variableName);
+    super(DataPrimaryType.OBJECT, variableName);
     this.objectName = objectName;
     this.packageName = packageName;
     this.models = models;

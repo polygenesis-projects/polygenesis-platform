@@ -82,7 +82,7 @@ public class DataPrimitive extends Data {
       VariableName variableName,
       Set<Annotation> annotations,
       DataBusinessType dataBusinessType) {
-    super(DataKind.PRIMITIVE, variableName);
+    super(DataPrimaryType.PRIMITIVE, variableName);
     this.primitiveType = primitiveType;
     this.annotations = annotations;
     this.dataBusinessType = dataBusinessType;

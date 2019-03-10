@@ -35,11 +35,6 @@ public class DataArray extends Data {
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
-  /** Instantiates a new data array. */
-  public DataArray() {
-    this(null, null);
-  }
-
   /**
    * Instantiates a new data array.
    *
@@ -65,7 +60,7 @@ public class DataArray extends Data {
    * @param arrayElement the array element
    */
   public DataArray(VariableName variableName, Data arrayElement) {
-    super(DataKind.ARRAY, variableName);
+    super(DataPrimaryType.ARRAY, variableName);
     this.arrayElement = arrayElement;
   }
 
@@ -88,7 +83,7 @@ public class DataArray extends Data {
 
   @Override
   public String getDataType() {
-    return DataKind.ARRAY.name();
+    return DataPrimaryType.ARRAY.name();
   }
 
   // ===============================================================================================

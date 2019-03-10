@@ -32,7 +32,7 @@ public class DataArrayTest {
     DataArray dataArray = new DataArray(new VariableName("someVariableName"));
 
     assertThat(dataArray).isNotNull();
-    assertThat(dataArray.getDataType()).isEqualTo(DataKind.ARRAY.name());
+    assertThat(dataArray.getDataType()).isEqualTo(DataPrimaryType.ARRAY.name());
     assertThat(dataArray.getVariableName()).isEqualTo(new VariableName("someVariableName"));
   }
 }
