@@ -21,6 +21,7 @@
 package io.polygenesis.generators.java.domain.aggregateroot;
 
 import io.polygenesis.commons.text.TextConverter;
+import io.polygenesis.core.data.IoModelArray;
 import io.polygenesis.core.data.IoModelGroup;
 import io.polygenesis.core.data.PackageName;
 import io.polygenesis.models.domain.AbstractProperty;
@@ -80,7 +81,10 @@ public class AggregateRootClassRepresentable extends AbstractClassRepresentable<
                 case PRIMITIVE_COLLECTION:
                   fieldRepresentations.add(
                       new FieldRepresentation(
-                          makeVariableDataType(property), makeVariableName(property)));
+                          makeVariableDataType(property),
+                          makeVariableName(property),
+                          makeAnnotationsForPrimitiveCollection(
+                              source, property.getIoModel().getAsIoModelArray())));
                   break;
                 case VALUE_OBJECT:
                   fieldRepresentations.add(
@@ -147,6 +151,10 @@ public class AggregateRootClassRepresentable extends AbstractClassRepresentable<
                   || property.getPropertyType().equals(PropertyType.VALUE_OBJECT_COLLECTION)
                   || property.getPropertyType().equals(PropertyType.AGGREGATE_ENTITY_COLLECTION)) {
                 imports.add("java.util.List");
+                imports.add("javax.persistence.ElementCollection");
+                imports.add("javax.persistence.CollectionTable");
+                imports.add("javax.persistence.JoinColumn");
+                imports.add("javax.persistence.Column");
               }
 
               Optional<IoModelGroup> optionalIoModelGroup = property.getIoModelGroupAsOptional();
@@ -300,7 +308,58 @@ public class AggregateRootClassRepresentable extends AbstractClassRepresentable<
     return annotations;
   }
 
-  protected String makeVariableDataType(AbstractProperty property) {
+  /**
+   * Make annotations for primitive collection set.
+   *
+   * @param aggregateRoot the aggregate root
+   * @param ioModelArray the io model array
+   * @return the set
+   */
+  private Set<String> makeAnnotationsForPrimitiveCollection(
+      AggregateRoot aggregateRoot, IoModelArray ioModelArray) {
+    Set<String> annotations = new LinkedHashSet<>();
+
+    annotations.add("@ElementCollection");
+
+    String tableName =
+        String.format(
+            "%s_%s",
+            TextConverter.toLowerUnderscore(aggregateRoot.getName().getText()),
+            TextConverter.toLowerUnderscore(ioModelArray.getVariableName().getText()));
+
+    StringBuilder stringBuilder = new StringBuilder();
+    stringBuilder.append("@CollectionTable(\n");
+    stringBuilder.append(
+        String.format("\t\t\tname = Constants.DEFAULT_TABLE_PREFIX + \"%s\",\n", tableName));
+    stringBuilder.append(String.format("\t\t\tjoinColumns = {\n"));
+    stringBuilder.append(String.format("\t\t\t\t\t@JoinColumn(name = \"%s\")", "root_id"));
+    if (aggregateRoot.getMultiTenant()) {
+      stringBuilder.append(",\n");
+      stringBuilder.append(String.format("\t\t\t\t\t@JoinColumn(name = \"%s\")\n", "tenant_id"));
+    } else {
+      stringBuilder.append("\n");
+    }
+    stringBuilder.append(String.format("\t\t\t}\n"));
+    stringBuilder.append("\t)");
+
+    annotations.add(stringBuilder.toString());
+
+    annotations.add(
+        String.format(
+            "@Column(name = \"%s\")",
+            TextConverter.toLowerCamel(
+                ioModelArray.getArrayElement().getVariableName().getText())));
+
+    return annotations;
+  }
+
+  /**
+   * Make variable data type string.
+   *
+   * @param property the property
+   * @return the string
+   */
+  private String makeVariableDataType(AbstractProperty property) {
     switch (property.getPropertyType()) {
       case PRIMITIVE_COLLECTION:
         return String.format(
@@ -313,7 +372,13 @@ public class AggregateRootClassRepresentable extends AbstractClassRepresentable<
     }
   }
 
-  protected String makeVariableName(AbstractProperty property) {
+  /**
+   * Make variable name string.
+   *
+   * @param property the property
+   * @return the string
+   */
+  private String makeVariableName(AbstractProperty property) {
     return property.getVariableName().getText();
   }
 }

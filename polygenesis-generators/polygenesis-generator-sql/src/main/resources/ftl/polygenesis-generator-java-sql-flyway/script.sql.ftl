@@ -24,9 +24,11 @@
 
 CREATE TABLE `${ tablePrefix }${ textConverter.toLowerUnderscore(table.tableName.text) }` (
 <#list table.columns as column >
-  `${ textConverter.toLowerUnderscore(column.name) }` ${ column.columnDataType }<#if column.length gt 0>(${ column.length })</#if><#if column.requiredType == "REQUIRED"> NOT NULL</#if>,
+  `${ textConverter.toLowerUnderscore(column.name) }` ${ column.columnDataType }<#if column.length gt 0>(${ column.length })</#if><#if column.requiredType == "REQUIRED"> NOT NULL</#if><#sep>, </#sep><#if !column?has_next><#if table.hasPrimaryKeys() >,</#if></#if>
 </#list>
+<#if table.hasPrimaryKeys() >
   PRIMARY KEY (<#list table.getPrimaryKeys() as primaryKey>`${ textConverter.toLowerUnderscore(primaryKey.name) }`<#sep>, </#sep></#list>)
+</#if>
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 </#list>

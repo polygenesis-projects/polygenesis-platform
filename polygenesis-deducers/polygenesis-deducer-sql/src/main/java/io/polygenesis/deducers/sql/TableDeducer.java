@@ -74,15 +74,7 @@ public class TableDeducer {
 
     Set<Column> aggregateRootColumns = new LinkedHashSet<>();
 
-    // Add Object Id
-    aggregateRootColumns.add(
-        new Column("root_id", ColumnDataType.BINARY, 16, RequiredType.REQUIRED, true));
-
-    if (aggregateRoot.getMultiTenant()) {
-      // Add Tenant Id
-      aggregateRootColumns.add(
-          new Column("tenant_id", ColumnDataType.BINARY, 16, RequiredType.REQUIRED, true));
-    }
+    addAggregateRootIdInColumnSetAsPrimaryKey(aggregateRootColumns, aggregateRoot);
 
     aggregateRoot
         .getProperties()
@@ -198,12 +190,17 @@ public class TableDeducer {
       AggregateRoot aggregateRoot, AbstractProperty property) {
     Set<Column> columns = new LinkedHashSet<>();
 
+    addAggregateRootIdInColumnSetWithoutPrimaryKey(columns, aggregateRoot);
+
+    columns.add(getColumnForPrimitive(property.getTypeParameterDataModel(), ""));
+
     return new Table(
         new TableName(
             String.format(
                 "%s_%s",
-                aggregateRoot.getName().getText(),
-                property.getIoModel().getVariableName().getText())),
+                TextConverter.toLowerUnderscore(aggregateRoot.getName().getText()),
+                TextConverter.toLowerUnderscore(
+                    property.getIoModel().getVariableName().getText()))),
         columns,
         aggregateRoot.getMultiTenant());
   }
@@ -223,9 +220,53 @@ public class TableDeducer {
         new TableName(
             String.format(
                 "%s_%s",
-                aggregateRoot.getName().getText(),
-                property.getIoModel().getVariableName().getText())),
+                TextConverter.toLowerUnderscore(aggregateRoot.getName().getText()),
+                TextConverter.toLowerUnderscore(
+                    property.getIoModel().getVariableName().getText()))),
         columns,
         aggregateRoot.getMultiTenant());
+  }
+
+  /**
+   * Add aggregate root id in column set as primary key.
+   *
+   * @param columns the columns
+   * @param aggregateRoot the aggregate root
+   */
+  private void addAggregateRootIdInColumnSetAsPrimaryKey(
+      Set<Column> columns, AggregateRoot aggregateRoot) {
+    addAggregateRootIdInColumnSet(columns, aggregateRoot, true);
+  }
+
+  /**
+   * Add aggregate root id in column set without primary key.
+   *
+   * @param columns the columns
+   * @param aggregateRoot the aggregate root
+   */
+  private void addAggregateRootIdInColumnSetWithoutPrimaryKey(
+      Set<Column> columns, AggregateRoot aggregateRoot) {
+    addAggregateRootIdInColumnSet(columns, aggregateRoot, false);
+  }
+
+  /**
+   * Add aggregate root id in column set.
+   *
+   * @param columns the columns
+   * @param aggregateRoot the aggregate root
+   * @param addAsPrimaryKey the add as primary key
+   */
+  private void addAggregateRootIdInColumnSet(
+      Set<Column> columns, AggregateRoot aggregateRoot, boolean addAsPrimaryKey) {
+    // Add Object Id
+    columns.add(
+        new Column("root_id", ColumnDataType.BINARY, 16, RequiredType.REQUIRED, addAsPrimaryKey));
+
+    if (aggregateRoot.getMultiTenant()) {
+      // Add Tenant Id
+      columns.add(
+          new Column(
+              "tenant_id", ColumnDataType.BINARY, 16, RequiredType.REQUIRED, addAsPrimaryKey));
+    }
   }
 }

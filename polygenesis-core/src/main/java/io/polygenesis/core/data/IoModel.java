@@ -103,6 +103,20 @@ public abstract class IoModel {
   // ===============================================================================================
 
   /**
+   * Gets as io model array.
+   *
+   * @return the as io model array
+   */
+  public IoModelArray getAsIoModelArray() {
+    if (this.isIoModelArray()) {
+      return IoModelArray.class.cast(this);
+    } else {
+      throw new IllegalStateException(
+          String.format("Model %s is not of type IoModelArray.", getDataKind().name()));
+    }
+  }
+
+  /**
    * Is primitive.
    *
    * @return the boolean
