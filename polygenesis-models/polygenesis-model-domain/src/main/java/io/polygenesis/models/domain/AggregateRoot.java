@@ -20,8 +20,10 @@
 
 package io.polygenesis.models.domain;
 
+import com.oregor.ddd4j.check.assertion.Assertion;
 import io.polygenesis.commons.text.Name;
 import io.polygenesis.core.data.PackageName;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -31,76 +33,167 @@ import java.util.Set;
  */
 public class AggregateRoot {
 
+  // ===============================================================================================
+  // STATIC
+  // ===============================================================================================
+
+  /**
+   * No super class aggregate root.
+   *
+   * @return the aggregate root
+   */
+  public static AggregateRoot noSuperClass() {
+    return new AggregateRoot();
+  }
+
+  // ===============================================================================================
+  // STATE
+  // ===============================================================================================
+
+  private AggregateRoot superclass;
+  private InstantiationType instantiationType;
   private PackageName packageName;
   private Name name;
   private Set<AbstractProperty> properties;
+  private Set<Constructor> constructors;
   private Set<StateMutationMethod> stateMutationMethods;
   private Set<StateQueryMethod> stateQueryMethods;
+  private Set<FactoryMethod> factoryMethods;
   private Persistence persistence;
-  private Set<Constructor> constructors;
   private Boolean multiTenant;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
+  private AggregateRoot() {
+    super();
+  }
+
   /**
-   * Instantiates a new Aggregate root.
+   * Instantiates a new Aggregate root without Persistence, usually for abstract aggregate roots.
    *
+   * @param superclass the superclass
+   * @param instantiationType the instantiation type
    * @param packageName the package name
    * @param name the name
    * @param properties the properties
-   * @param persistence the persistence
    * @param constructors the constructors
+   * @param stateMutationMethods the state mutation methods
+   * @param stateQueryMethods the state query methods
+   * @param factoryMethods the factory methods
+   * @param multiTenant the multi tenant
    */
   public AggregateRoot(
+      AggregateRoot superclass,
+      InstantiationType instantiationType,
       PackageName packageName,
       Name name,
       Set<AbstractProperty> properties,
-      Persistence persistence,
       Set<Constructor> constructors,
+      Set<StateMutationMethod> stateMutationMethods,
+      Set<StateQueryMethod> stateQueryMethods,
+      Set<FactoryMethod> factoryMethods,
       Boolean multiTenant) {
+    setSuperclass(superclass);
+    setInstantiationType(instantiationType);
     setPackageName(packageName);
     setName(name);
     setProperties(properties);
-    setPersistence(persistence);
     setConstructors(constructors);
+    setStateMutationMethods(stateMutationMethods);
+    setStateQueryMethods(stateQueryMethods);
+    setFactoryMethods(factoryMethods);
     setMultiTenant(multiTenant);
   }
 
   /**
    * Instantiates a new Aggregate root.
    *
+   * @param superclass the superclass
+   * @param instantiationType the instantiation type
    * @param packageName the package name
    * @param name the name
    * @param properties the properties
+   * @param constructors the constructors
    * @param stateMutationMethods the state mutation methods
    * @param stateQueryMethods the state query methods
+   * @param factoryMethods the factory methods
    * @param persistence the persistence
-   * @param constructors the constructors
+   * @param multiTenant the multi tenant
    */
   public AggregateRoot(
+      AggregateRoot superclass,
+      InstantiationType instantiationType,
       PackageName packageName,
       Name name,
       Set<AbstractProperty> properties,
+      Set<Constructor> constructors,
       Set<StateMutationMethod> stateMutationMethods,
       Set<StateQueryMethod> stateQueryMethods,
+      Set<FactoryMethod> factoryMethods,
       Persistence persistence,
-      Set<Constructor> constructors,
       Boolean multiTenant) {
+    setSuperclass(superclass);
+    setInstantiationType(instantiationType);
     setPackageName(packageName);
     setName(name);
     setProperties(properties);
+    setConstructors(constructors);
     setStateMutationMethods(stateMutationMethods);
     setStateQueryMethods(stateQueryMethods);
+    setFactoryMethods(factoryMethods);
     setPersistence(persistence);
-    setConstructors(constructors);
     setMultiTenant(multiTenant);
+  }
+
+  // ===============================================================================================
+  // STATE MUTATION
+  // ===============================================================================================
+
+  /**
+   * Change superclass to.
+   *
+   * @param superclass the superclass
+   */
+  public void changeSuperclassTo(AggregateRoot superclass) {
+    setSuperclass(superclass);
+  }
+
+  // ===============================================================================================
+  // QUERIES
+  // ===============================================================================================
+
+  /**
+   * Has superclass boolean.
+   *
+   * @return the boolean
+   */
+  public boolean hasSuperclass() {
+    return getSuperclass().getName() != null;
   }
 
   // ===============================================================================================
   // GETTERS
   // ===============================================================================================
+
+  /**
+   * Gets superclass.
+   *
+   * @return the superclass
+   */
+  public AggregateRoot getSuperclass() {
+    return superclass;
+  }
+
+  /**
+   * Gets instantiation type.
+   *
+   * @return the instantiation type
+   */
+  public InstantiationType getInstantiationType() {
+    return instantiationType;
+  }
 
   /**
    * Gets package name.
@@ -148,6 +241,15 @@ public class AggregateRoot {
   }
 
   /**
+   * Gets factory methods.
+   *
+   * @return the factory methods
+   */
+  public Set<FactoryMethod> getFactoryMethods() {
+    return factoryMethods;
+  }
+
+  /**
    * Gets persistence.
    *
    * @return the persistence
@@ -179,11 +281,32 @@ public class AggregateRoot {
   // ===============================================================================================
 
   /**
+   * Sets superclass.
+   *
+   * @param superclass the superclass
+   */
+  private void setSuperclass(AggregateRoot superclass) {
+    Assertion.isNotNull(superclass, "superclass is required");
+    this.superclass = superclass;
+  }
+
+  /**
+   * Sets instantiation type.
+   *
+   * @param instantiationType the instantiation type
+   */
+  private void setInstantiationType(InstantiationType instantiationType) {
+    Assertion.isNotNull(instantiationType, "instantiationType is required");
+    this.instantiationType = instantiationType;
+  }
+
+  /**
    * Sets package name.
    *
    * @param packageName the package name
    */
   private void setPackageName(PackageName packageName) {
+    Assertion.isNotNull(packageName, "packageName is required");
     this.packageName = packageName;
   }
 
@@ -193,6 +316,7 @@ public class AggregateRoot {
    * @param name the name
    */
   private void setName(Name name) {
+    Assertion.isNotNull(name, "name is required");
     this.name = name;
   }
 
@@ -202,6 +326,7 @@ public class AggregateRoot {
    * @param properties the properties
    */
   private void setProperties(Set<AbstractProperty> properties) {
+    Assertion.isNotNull(properties, "properties is required");
     this.properties = properties;
   }
 
@@ -211,6 +336,7 @@ public class AggregateRoot {
    * @param stateMutationMethods the state mutation methods
    */
   private void setStateMutationMethods(Set<StateMutationMethod> stateMutationMethods) {
+    Assertion.isNotNull(stateMutationMethods, "stateMutationMethods is required");
     this.stateMutationMethods = stateMutationMethods;
   }
 
@@ -220,7 +346,18 @@ public class AggregateRoot {
    * @param stateQueryMethods the state query methods
    */
   private void setStateQueryMethods(Set<StateQueryMethod> stateQueryMethods) {
+    Assertion.isNotNull(stateQueryMethods, "stateQueryMethods is required");
     this.stateQueryMethods = stateQueryMethods;
+  }
+
+  /**
+   * Sets factory methods.
+   *
+   * @param factoryMethods the factory methods
+   */
+  private void setFactoryMethods(Set<FactoryMethod> factoryMethods) {
+    Assertion.isNotNull(factoryMethods, "factoryMethods is required");
+    this.factoryMethods = factoryMethods;
   }
 
   /**
@@ -229,6 +366,7 @@ public class AggregateRoot {
    * @param persistence the persistence
    */
   private void setPersistence(Persistence persistence) {
+    Assertion.isNotNull(persistence, "persistence is required");
     this.persistence = persistence;
   }
 
@@ -238,6 +376,7 @@ public class AggregateRoot {
    * @param constructors the constructors
    */
   private void setConstructors(Set<Constructor> constructors) {
+    Assertion.isNotNull(constructors, "constructors is required");
     this.constructors = constructors;
   }
 
@@ -247,6 +386,49 @@ public class AggregateRoot {
    * @param multiTenant the multi tenant
    */
   private void setMultiTenant(Boolean multiTenant) {
+    Assertion.isNotNull(multiTenant, "multiTenant is required");
     this.multiTenant = multiTenant;
+  }
+
+  // ===============================================================================================
+  // OVERRIDES
+  // ===============================================================================================
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    AggregateRoot that = (AggregateRoot) o;
+    return Objects.equals(superclass, that.superclass)
+        && instantiationType == that.instantiationType
+        && Objects.equals(packageName, that.packageName)
+        && Objects.equals(name, that.name)
+        && Objects.equals(properties, that.properties)
+        && Objects.equals(constructors, that.constructors)
+        && Objects.equals(stateMutationMethods, that.stateMutationMethods)
+        && Objects.equals(stateQueryMethods, that.stateQueryMethods)
+        && Objects.equals(factoryMethods, that.factoryMethods)
+        && Objects.equals(persistence, that.persistence)
+        && Objects.equals(multiTenant, that.multiTenant);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(
+        superclass,
+        instantiationType,
+        packageName,
+        name,
+        properties,
+        constructors,
+        stateMutationMethods,
+        stateQueryMethods,
+        factoryMethods,
+        persistence,
+        multiTenant);
   }
 }

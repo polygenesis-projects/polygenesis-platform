@@ -20,26 +20,25 @@
 
 package io.polygenesis.models.domain;
 
+import io.polygenesis.commons.text.AbstractText;
+
 /**
- * The enum Property type.
+ * The type Generic type parameter.
  *
  * @author Christos Tsakostas
  */
-public enum PropertyType {
-  /** Abstract aggregate root id property type. */
-  ABSTRACT_AGGREGATE_ROOT_ID,
-  /** Aggregate root id property type. */
-  AGGREGATE_ROOT_ID,
-  /** Primitive property type. */
-  PRIMITIVE,
-  /** Primitive collection property type. */
-  PRIMITIVE_COLLECTION,
-  /** Value object property type. */
-  VALUE_OBJECT,
-  /** Value object collection property type. */
-  VALUE_OBJECT_COLLECTION,
-  /** Aggregate entity property type. */
-  AGGREGATE_ENTITY,
-  /** Aggregate entity collection property type. */
-  AGGREGATE_ENTITY_COLLECTION;
+public class GenericTypeParameter extends AbstractText {
+
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
+  /**
+   * Instantiates a new Generic type parameter.
+   *
+   * @param text the text
+   */
+  public GenericTypeParameter(String text) {
+    super(text);
+  }
 }

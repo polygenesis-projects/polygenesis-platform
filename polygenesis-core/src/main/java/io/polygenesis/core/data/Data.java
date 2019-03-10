@@ -102,6 +102,20 @@ public abstract class Data {
   // ===============================================================================================
 
   /**
+   * Gets as data primitive.
+   *
+   * @return the as data primitive
+   */
+  public DataPrimitive getAsDataPrimitive() {
+    if (isDataPrimitive()) {
+      return (DataPrimitive) this;
+    } else {
+      throw new IllegalStateException(
+          String.format("Model of type=%s is not a DataPrimitive", getDataPrimaryType().name()));
+    }
+  }
+
+  /**
    * Gets as data group.
    *
    * @return the as data group

@@ -112,8 +112,13 @@ public class JavaDomainGenerator extends AbstractGenerator {
             aggregateRoot -> {
               aggregateRootExporter.export(
                   getGenerationPath(), aggregateRoot, getRootPackageName());
+
               aggregateRootIdExporter.export(getGenerationPath(), aggregateRoot);
-              persistenceExporter.export(getGenerationPath(), aggregateRoot.getPersistence());
+
+              if (aggregateRoot.getPersistence() != null) {
+                persistenceExporter.export(getGenerationPath(), aggregateRoot.getPersistence());
+              }
+
               domainEventExporter.export(getGenerationPath(), null);
 
               aggregateRoot

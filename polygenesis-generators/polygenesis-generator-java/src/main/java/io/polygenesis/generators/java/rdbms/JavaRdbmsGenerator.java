@@ -129,6 +129,8 @@ public class JavaRdbmsGenerator extends AbstractGenerator {
 
     domainModelRepository
         .getAggregateRoots()
+        .stream()
+        .filter(aggregateRoot -> aggregateRoot.getPersistence() != null)
         .forEach(
             aggregateRoot -> {
               persistenceImplExporter.export(

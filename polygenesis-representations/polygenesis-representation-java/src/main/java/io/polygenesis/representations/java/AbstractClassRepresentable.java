@@ -39,7 +39,7 @@ import java.util.Set;
  */
 public abstract class AbstractClassRepresentable<S> implements ClassRepresentable<S> {
 
-  /** The constant MODIFIER_PUBLIC. */
+  protected static final String MODIFIER_ABSTRACT = "abstract";
   protected static final String MODIFIER_PUBLIC = "public";
 
   // ===============================================================================================
@@ -232,7 +232,7 @@ public abstract class AbstractClassRepresentable<S> implements ClassRepresentabl
     String description = "No-args constructor for persistence frameworks.";
 
     return new ConstructorRepresentation(
-        new LinkedHashSet<>(), description, "private", new LinkedHashSet<>(), "\t\tsuper();");
+        new LinkedHashSet<>(), description, "protected", new LinkedHashSet<>(), "\t\tsuper();");
   }
 
   /**

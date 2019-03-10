@@ -23,9 +23,13 @@ package io.polygenesis.generators.java.domain.aggregateroot;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.data.DataArray;
 import io.polygenesis.core.data.DataGroup;
+import io.polygenesis.core.data.DataPrimitive;
 import io.polygenesis.core.data.PackageName;
+import io.polygenesis.core.data.PrimitiveType;
+import io.polygenesis.models.domain.AbstractAggregateRootId;
 import io.polygenesis.models.domain.AbstractProperty;
 import io.polygenesis.models.domain.AggregateRoot;
+import io.polygenesis.models.domain.InstantiationType;
 import io.polygenesis.models.domain.PropertyType;
 import io.polygenesis.representations.commons.FieldRepresentation;
 import io.polygenesis.representations.commons.ParameterRepresentation;
@@ -38,7 +42,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /**
- * The type Aggregate root class representable.
+ * The type Abstract aggregate root class representable.
  *
  * @author Christos Tsakostas
  */
@@ -49,7 +53,7 @@ public class AggregateRootClassRepresentable extends AbstractClassRepresentable<
   // ===============================================================================================
 
   /**
-   * Instantiates a new Aggregate root class representable.
+   * Instantiates a new Abstract aggregate root class representable.
    *
    * @param fromDataTypeToJavaConverter the from data type to java converter
    */
@@ -71,6 +75,7 @@ public class AggregateRootClassRepresentable extends AbstractClassRepresentable<
             property -> {
               switch (property.getPropertyType()) {
                 case AGGREGATE_ROOT_ID:
+                case ABSTRACT_AGGREGATE_ROOT_ID:
                   break;
                 case PRIMITIVE:
                   fieldRepresentations.add(
@@ -141,6 +146,9 @@ public class AggregateRootClassRepresentable extends AbstractClassRepresentable<
 
     source
         .getProperties()
+        .stream()
+        .filter(
+            property -> !property.getPropertyType().equals(PropertyType.ABSTRACT_AGGREGATE_ROOT_ID))
         .forEach(
             property -> {
               if (property.getPropertyType().equals(PropertyType.PRIMITIVE_COLLECTION)
@@ -151,6 +159,13 @@ public class AggregateRootClassRepresentable extends AbstractClassRepresentable<
                 imports.add("javax.persistence.CollectionTable");
                 imports.add("javax.persistence.JoinColumn");
                 imports.add("javax.persistence.Column");
+              }
+
+              if (property.getData().isDataPrimitive()) {
+                DataPrimitive dataPrimitive = property.getData().getAsDataPrimitive();
+                if (dataPrimitive.getPrimitiveType().equals(PrimitiveType.DATETIME)) {
+                  imports.add("java.time.LocalDateTime");
+                }
               }
 
               if (property.getData().isDataGroup()) {
@@ -169,11 +184,24 @@ public class AggregateRootClassRepresentable extends AbstractClassRepresentable<
             });
 
     // Additional imports
-    imports.add(rootPackageName.getText() + ".Constants");
     imports.add("com.oregor.ddd4j.check.assertion.Assertion");
-    imports.add("com.oregor.ddd4j.core.AggregateRoot");
-    imports.add("javax.persistence.Entity");
-    imports.add("javax.persistence.Table");
+
+    if (source.hasSuperclass()) {
+      imports.add(
+          String.format(
+              "%s.%s",
+              source.getSuperclass().getPackageName().getText(),
+              TextConverter.toUpperCamel(source.getSuperclass().getName().getText())));
+    }
+
+    if (source.getInstantiationType().equals(InstantiationType.NORMAL)) {
+      imports.add(rootPackageName.getText() + ".Constants");
+      imports.add("javax.persistence.Entity");
+      imports.add("javax.persistence.Table");
+    } else {
+      imports.add("com.oregor.ddd4j.core.AggregateRootId");
+      imports.add("javax.persistence.MappedSuperclass");
+    }
 
     return imports;
   }
@@ -182,11 +210,15 @@ public class AggregateRootClassRepresentable extends AbstractClassRepresentable<
   public Set<String> annotations(AggregateRoot source, Object... args) {
     Set<String> annotations = new LinkedHashSet<>();
 
-    annotations.add("@Entity");
-    annotations.add(
-        String.format(
-            "@Table(name = Constants.DEFAULT_TABLE_PREFIX + \"%s\")",
-            TextConverter.toLowerHyphen(source.getName().getText())));
+    if (source.getInstantiationType().equals(InstantiationType.NORMAL)) {
+      annotations.add("@Entity");
+      annotations.add(
+          String.format(
+              "@Table(name = Constants.DEFAULT_TABLE_PREFIX + \"%s\")",
+              TextConverter.toLowerHyphen(source.getName().getText())));
+    } else {
+      annotations.add("@MappedSuperclass");
+    }
 
     return annotations;
   }
@@ -206,7 +238,11 @@ public class AggregateRootClassRepresentable extends AbstractClassRepresentable<
 
   @Override
   public String modifiers(AggregateRoot source, Object... args) {
-    return MODIFIER_PUBLIC;
+    if (source.getInstantiationType().equals(InstantiationType.NORMAL)) {
+      return MODIFIER_PUBLIC;
+    } else {
+      return MODIFIER_PUBLIC + " " + MODIFIER_ABSTRACT;
+    }
   }
 
   @Override
@@ -223,11 +259,26 @@ public class AggregateRootClassRepresentable extends AbstractClassRepresentable<
     StringBuilder stringBuilder = new StringBuilder();
 
     stringBuilder.append(TextConverter.toUpperCamel(source.getName().getText()));
+
+    if (source.getInstantiationType().equals(InstantiationType.ABSTRACT)) {
+      stringBuilder.append("<I extends AggregateRootId>");
+    }
+
     stringBuilder.append(" extends ");
-    stringBuilder.append("AggregateRoot<");
-    stringBuilder.append(TextConverter.toUpperCamel(source.getName().getText()));
-    stringBuilder.append("Id");
-    stringBuilder.append(">");
+    if (source.hasSuperclass()) {
+      stringBuilder.append(TextConverter.toUpperCamel(source.getSuperclass().getName().getText()));
+    } else {
+      throw new IllegalStateException();
+    }
+
+    if (source.getInstantiationType().equals(InstantiationType.ABSTRACT)) {
+      stringBuilder.append("<I>");
+    } else {
+      stringBuilder.append("<");
+      stringBuilder.append(TextConverter.toUpperCamel(source.getName().getText()));
+      stringBuilder.append("Id");
+      stringBuilder.append(">");
+    }
 
     return stringBuilder.toString();
   }
@@ -251,6 +302,12 @@ public class AggregateRootClassRepresentable extends AbstractClassRepresentable<
         .forEach(
             property -> {
               if (property.getPropertyType().equals(PropertyType.AGGREGATE_ROOT_ID)) {
+                parameterRepresentations.add(
+                    new ParameterRepresentation(
+                        makeVariableDataType(property), makeVariableName(property), true));
+              } else if (property
+                  .getPropertyType()
+                  .equals(PropertyType.ABSTRACT_AGGREGATE_ROOT_ID)) {
                 parameterRepresentations.add(
                     new ParameterRepresentation(
                         makeVariableDataType(property), makeVariableName(property), true));
@@ -355,6 +412,8 @@ public class AggregateRootClassRepresentable extends AbstractClassRepresentable<
    */
   private String makeVariableDataType(AbstractProperty property) {
     switch (property.getPropertyType()) {
+      case ABSTRACT_AGGREGATE_ROOT_ID:
+        return ((AbstractAggregateRootId) property).getGenericTypeParameter().getText();
       case PRIMITIVE_COLLECTION:
         return String.format(
             "List<%s>",

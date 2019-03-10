@@ -71,17 +71,11 @@ public class FromDataTypeToJavaConverter {
     dataTypeMap = new HashMap<>();
 
     dataTypeMap.put(PrimitiveType.VOID, "void");
-
     dataTypeMap.put(PrimitiveType.STRING, "String");
-
-    dataTypeMap.put(PrimitiveType.INTEGER, "int");
     dataTypeMap.put(PrimitiveType.INTEGER, "Integer");
-
-    dataTypeMap.put(PrimitiveType.LONG, "long");
-    dataTypeMap.put(PrimitiveType.LONG, "java.lang.Long");
-
-    dataTypeMap.put(PrimitiveType.BOOLEAN, "boolean");
+    dataTypeMap.put(PrimitiveType.LONG, "Long");
     dataTypeMap.put(PrimitiveType.BOOLEAN, "Boolean");
+    dataTypeMap.put(PrimitiveType.DATETIME, "LocalDateTime");
 
     // TODO another map for arrays
     // dataTypeMap.put(PrimitiveType.ARRAY, "java.util.List");

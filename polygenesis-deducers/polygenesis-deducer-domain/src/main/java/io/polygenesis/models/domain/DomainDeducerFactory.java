@@ -63,7 +63,7 @@ public final class DomainDeducerFactory {
    * @param packageName the package name
    * @return the api deducer
    */
-  public static DomainDeducerImpl newInstance(PackageName packageName) {
-    return new DomainDeducerImpl(packageName, aggregateRootDeducer);
+  public static DomainDeducer newInstance(PackageName packageName) {
+    return new DomainDeducer(packageName, aggregateRootDeducer);
   }
 }

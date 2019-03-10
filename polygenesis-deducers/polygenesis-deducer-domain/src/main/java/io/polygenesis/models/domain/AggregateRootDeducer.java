@@ -86,6 +86,10 @@ public class AggregateRootDeducer {
               Set<Constructor> constructors =
                   aggregateConstructorDeducer.deduceFrom(thing, rootPackageName);
 
+              Set<StateMutationMethod> stateMutationMethods = new LinkedHashSet<>();
+              Set<StateQueryMethod> stateQueryMethods = new LinkedHashSet<>();
+              Set<FactoryMethod> factoryMethods = new LinkedHashSet<>();
+
               Persistence persistence =
                   new Persistence(
                       packageName,
@@ -96,11 +100,16 @@ public class AggregateRootDeducer {
 
               aggregateRoots.add(
                   new AggregateRoot(
+                      makeSuperclass(),
+                      InstantiationType.NORMAL,
                       packageName,
                       aggregateRootName,
                       properties,
-                      persistence,
                       constructors,
+                      stateMutationMethods,
+                      stateQueryMethods,
+                      factoryMethods,
+                      persistence,
                       thing.getMultiTenant()));
             });
 
@@ -126,5 +135,24 @@ public class AggregateRootDeducer {
 
   private Name makePersistenceName(Thing thing) {
     return new Name(thing.getName().getText() + "Persistence");
+  }
+
+  /**
+   * Make superclass aggregate root.
+   *
+   * @return the aggregate root
+   */
+  private AggregateRoot makeSuperclass() {
+    return new AggregateRoot(
+        AggregateRoot.noSuperClass(),
+        InstantiationType.ABSTRACT,
+        new PackageName("com.oregor.ddd4j.core"),
+        new Name("AggregateRoot"),
+        new LinkedHashSet<>(),
+        new LinkedHashSet<>(),
+        new LinkedHashSet<>(),
+        new LinkedHashSet<>(),
+        new LinkedHashSet<>(),
+        false);
   }
 }

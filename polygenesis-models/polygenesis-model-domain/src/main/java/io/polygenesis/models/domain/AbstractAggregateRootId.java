@@ -20,65 +20,38 @@
 
 package io.polygenesis.models.domain;
 
-import io.polygenesis.commons.text.Name;
-import io.polygenesis.core.ModelRepository;
-import java.util.Optional;
-import java.util.Set;
+import com.oregor.ddd4j.check.assertion.Assertion;
+import io.polygenesis.core.data.Data;
+import io.polygenesis.core.data.VariableName;
+import java.util.Objects;
 
 /**
- * The type Domain model repository.
+ * The type Abstract aggregate root id.
  *
  * @author Christos Tsakostas
  */
-public class DomainModelRepository implements ModelRepository {
+public class AbstractAggregateRootId extends AbstractProperty {
 
   // ===============================================================================================
   // STATE
   // ===============================================================================================
 
-  private Set<AggregateRoot> aggregateRoots;
+  private GenericTypeParameter genericTypeParameter;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
-   * Instantiates a new Domain model repository.
+   * Instantiates a new Abstract aggregate root id.
    *
-   * @param aggregateRoots the aggregate roots
+   * @param variableName the variable name
+   * @param genericTypeParameter the generic type parameter
    */
-  public DomainModelRepository(Set<AggregateRoot> aggregateRoots) {
-    setAggregateRoots(aggregateRoots);
-  }
-
-  // ===============================================================================================
-  // STATE MUTATION
-  // ===============================================================================================
-
-  /**
-   * Add aggregate root.
-   *
-   * @param aggregateRoot the aggregate root
-   */
-  public void addAggregateRoot(AggregateRoot aggregateRoot) {
-    getAggregateRoots().add(aggregateRoot);
-  }
-
-  // ===============================================================================================
-  // QUERIES
-  // ===============================================================================================
-
-  /**
-   * Gets aggregate root by name.
-   *
-   * @param name the name
-   * @return the aggregate root by name
-   */
-  public Optional<AggregateRoot> getAggregateRootByName(Name name) {
-    return aggregateRoots
-        .stream()
-        .filter(aggregateRoot -> aggregateRoot.getName().equals(name))
-        .findFirst();
+  public AbstractAggregateRootId(
+      VariableName variableName, GenericTypeParameter genericTypeParameter) {
+    super(PropertyType.ABSTRACT_AGGREGATE_ROOT_ID, variableName);
+    setGenericTypeParameter(genericTypeParameter);
   }
 
   // ===============================================================================================
@@ -86,12 +59,12 @@ public class DomainModelRepository implements ModelRepository {
   // ===============================================================================================
 
   /**
-   * Gets aggregate roots.
+   * Gets generic type parameter.
    *
-   * @return the aggregate roots
+   * @return the generic type parameter
    */
-  public Set<AggregateRoot> getAggregateRoots() {
-    return aggregateRoots;
+  public GenericTypeParameter getGenericTypeParameter() {
+    return genericTypeParameter;
   }
 
   // ===============================================================================================
@@ -99,11 +72,47 @@ public class DomainModelRepository implements ModelRepository {
   // ===============================================================================================
 
   /**
-   * Sets aggregate roots.
+   * Sets generic type parameter.
    *
-   * @param aggregateRoots the aggregate roots
+   * @param genericTypeParameter the generic type parameter
    */
-  private void setAggregateRoots(Set<AggregateRoot> aggregateRoots) {
-    this.aggregateRoots = aggregateRoots;
+  private void setGenericTypeParameter(GenericTypeParameter genericTypeParameter) {
+    Assertion.isNotNull(genericTypeParameter, "genericTypeParameter is required");
+    this.genericTypeParameter = genericTypeParameter;
+  }
+
+  // ===============================================================================================
+  // ABSTRACT IMPLEMENTATIONS
+  // ===============================================================================================
+
+  @Override
+  public Data getData() {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public Data getTypeParameterData() {
+    throw new UnsupportedOperationException();
+  }
+
+  // ===============================================================================================
+  // OVERRIDES
+  // ===============================================================================================
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    AbstractAggregateRootId that = (AbstractAggregateRootId) o;
+    return Objects.equals(genericTypeParameter, that.genericTypeParameter);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(genericTypeParameter);
   }
 }

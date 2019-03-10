@@ -48,10 +48,10 @@ public class AggregateRootExporter {
   // ===============================================================================================
 
   /**
-   * Instantiates a new Aggregate root projection exporter.
+   * Instantiates a new Aggregate root exporter.
    *
    * @param freemarkerService the freemarker service
-   * @param aggregateRootClassRepresentable the aggregate root projection converter
+   * @param aggregateRootClassRepresentable the abstract aggregate root class representable
    */
   public AggregateRootExporter(
       FreemarkerService freemarkerService,
@@ -74,6 +74,7 @@ public class AggregateRootExporter {
   public void export(
       Path generationPath, AggregateRoot aggregateRoot, PackageName rootPackageName) {
     Map<String, Object> dataModel = new HashMap<>();
+
     dataModel.put(
         "representation", aggregateRootClassRepresentable.create(aggregateRoot, rootPackageName));
 

@@ -21,25 +21,8 @@
 package io.polygenesis.models.domain;
 
 /**
- * The enum Property type.
+ * The type Factory method.
  *
  * @author Christos Tsakostas
  */
-public enum PropertyType {
-  /** Abstract aggregate root id property type. */
-  ABSTRACT_AGGREGATE_ROOT_ID,
-  /** Aggregate root id property type. */
-  AGGREGATE_ROOT_ID,
-  /** Primitive property type. */
-  PRIMITIVE,
-  /** Primitive collection property type. */
-  PRIMITIVE_COLLECTION,
-  /** Value object property type. */
-  VALUE_OBJECT,
-  /** Value object collection property type. */
-  VALUE_OBJECT_COLLECTION,
-  /** Aggregate entity property type. */
-  AGGREGATE_ENTITY,
-  /** Aggregate entity collection property type. */
-  AGGREGATE_ENTITY_COLLECTION;
-}
+public class FactoryMethod extends AbstractMethod {}
