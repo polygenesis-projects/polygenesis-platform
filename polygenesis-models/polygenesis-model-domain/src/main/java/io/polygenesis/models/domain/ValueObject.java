@@ -117,7 +117,7 @@ public class ValueObject extends AbstractProperty {
   }
 
   // ===============================================================================================
-  // OVERRIDES
+  // ABSTRACT IMPLEMENTATIONS
   // ===============================================================================================
 
   @Override
@@ -129,6 +129,15 @@ public class ValueObject extends AbstractProperty {
   public IoModel getIoModel() {
     return ioModelGroup;
   }
+
+  @Override
+  public IoModel getTypeParameterDataModel() {
+    throw new UnsupportedOperationException();
+  }
+
+  // ===============================================================================================
+  // OVERRIDES
+  // ===============================================================================================
 
   @Override
   public boolean equals(Object o) {

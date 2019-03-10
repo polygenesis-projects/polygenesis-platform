@@ -77,7 +77,7 @@ public class AggregateRootId extends AbstractProperty {
   }
 
   // ===============================================================================================
-  // OVERRIDES
+  // ABSTRACT IMPLEMENTATIONS
   // ===============================================================================================
 
   @Override
@@ -89,6 +89,15 @@ public class AggregateRootId extends AbstractProperty {
   public IoModel getIoModel() {
     return ioModelGroup;
   }
+
+  @Override
+  public IoModel getTypeParameterDataModel() {
+    throw new UnsupportedOperationException();
+  }
+
+  // ===============================================================================================
+  // OVERRIDES
+  // ===============================================================================================
 
   @Override
   public boolean equals(Object o) {

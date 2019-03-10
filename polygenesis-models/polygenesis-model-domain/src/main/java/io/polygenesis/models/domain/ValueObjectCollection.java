@@ -20,7 +20,6 @@
 
 package io.polygenesis.models.domain;
 
-import io.polygenesis.commons.keyvalue.KeyValue;
 import io.polygenesis.core.data.IoModel;
 import io.polygenesis.core.data.IoModelGroup;
 import io.polygenesis.core.data.VariableName;
@@ -47,7 +46,7 @@ public class ValueObjectCollection extends AbstractProperty {
   }
 
   // ===============================================================================================
-  // OVERRIDES
+  // ABSTRACT IMPLEMENTATIONS
   // ===============================================================================================
 
   @Override
@@ -59,4 +58,14 @@ public class ValueObjectCollection extends AbstractProperty {
   public IoModel getIoModel() {
     throw new UnsupportedOperationException();
   }
+
+  @Override
+  public IoModel getTypeParameterDataModel() {
+    throw new UnsupportedOperationException();
+  }
+
+  // ===============================================================================================
+  // OVERRIDES
+  // ===============================================================================================
+
 }

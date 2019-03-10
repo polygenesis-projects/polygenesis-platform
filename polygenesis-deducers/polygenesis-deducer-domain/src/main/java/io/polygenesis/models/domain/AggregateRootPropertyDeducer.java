@@ -143,8 +143,8 @@ public class AggregateRootPropertyDeducer {
 
   protected PrimitiveCollection makePrimitiveCollection(IoModelArray ioModelArray) {
     return new PrimitiveCollection(
-        ioModelArray.getArrayElement(),
-        ioModelArray.getArrayElement().getVariableName(),
+        ioModelArray,
+        ioModelArray.getVariableName(),
         ((IoModelPrimitive) ioModelArray.getArrayElement()).getPrimitiveType());
   }
 

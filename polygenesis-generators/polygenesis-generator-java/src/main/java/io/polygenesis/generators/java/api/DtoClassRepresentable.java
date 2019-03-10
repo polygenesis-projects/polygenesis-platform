@@ -99,10 +99,7 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
         .forEach(
             model -> {
               fieldRepresentations.add(
-                  new FieldRepresentation(
-                      makeVariableDataType(model),
-                      makeVariableName(model)
-                  ));
+                  new FieldRepresentation(makeVariableDataType(model), makeVariableName(model)));
             });
 
     return fieldRepresentations;
@@ -317,13 +314,12 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
    */
   private String makeVariableDataType(IoModel model) {
     if (model.isIoModelArray()) {
-      return String.format("List<%s>", fromDataTypeToJavaConverter.getDeclaredVariableType(
-          ((IoModelArray) model).getArrayElement().getDataType()
-      ));
+      return String.format(
+          "List<%s>",
+          fromDataTypeToJavaConverter.getDeclaredVariableType(
+              ((IoModelArray) model).getArrayElement().getDataType()));
     } else {
-      return fromDataTypeToJavaConverter.getDeclaredVariableType(
-          model.getDataType()
-      );
+      return fromDataTypeToJavaConverter.getDeclaredVariableType(model.getDataType());
     }
   }
 

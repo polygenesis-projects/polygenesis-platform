@@ -90,6 +90,15 @@ public abstract class AbstractProperty {
    */
   public abstract IoModel getIoModel();
 
+  /**
+   * Gets data related to type parameter.
+   *
+   * <p>Applies to collections.
+   *
+   * @return the type parameter data
+   */
+  public abstract IoModel getTypeParameterDataModel();
+
   // ===============================================================================================
   // GUARDS
   // ===============================================================================================

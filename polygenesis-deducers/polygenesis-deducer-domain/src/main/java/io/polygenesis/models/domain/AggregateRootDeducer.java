@@ -77,11 +77,15 @@ public class AggregateRootDeducer {
         .forEach(
             thing -> {
               PackageName packageName = makeAggregateRootPackageName(rootPackageName, thing);
+
               Name aggregateRootName = makeAggregateRootName(thing);
+
               Set<AbstractProperty> properties =
                   aggregateRootPropertyDeducer.deduceFrom(thing, rootPackageName);
+
               Set<Constructor> constructors =
                   aggregateConstructorDeducer.deduceFrom(thing, rootPackageName);
+
               Persistence persistence =
                   new Persistence(
                       packageName,

@@ -77,7 +77,7 @@ public class Primitive extends AbstractProperty {
   }
 
   // ===============================================================================================
-  // OVERRIDES
+  // ABSTRACT IMPLEMENTATIONS
   // ===============================================================================================
 
   @Override
@@ -89,4 +89,13 @@ public class Primitive extends AbstractProperty {
   public IoModel getIoModel() {
     return ioModelPrimitive;
   }
+
+  @Override
+  public IoModel getTypeParameterDataModel() {
+    throw new UnsupportedOperationException();
+  }
+
+  // ===============================================================================================
+  // OVERRIDES
+  // ===============================================================================================
 }

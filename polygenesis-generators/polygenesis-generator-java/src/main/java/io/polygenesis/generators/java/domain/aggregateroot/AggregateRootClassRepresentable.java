@@ -25,8 +25,6 @@ import io.polygenesis.core.data.IoModelGroup;
 import io.polygenesis.core.data.PackageName;
 import io.polygenesis.models.domain.AbstractProperty;
 import io.polygenesis.models.domain.AggregateRoot;
-import io.polygenesis.models.domain.Primitive;
-import io.polygenesis.models.domain.PrimitiveCollection;
 import io.polygenesis.models.domain.PropertyType;
 import io.polygenesis.representations.commons.FieldRepresentation;
 import io.polygenesis.representations.commons.ParameterRepresentation;
@@ -67,42 +65,37 @@ public class AggregateRootClassRepresentable extends AbstractClassRepresentable<
   public Set<FieldRepresentation> fieldRepresentations(AggregateRoot source, Object... args) {
     Set<FieldRepresentation> fieldRepresentations = new LinkedHashSet<>();
 
-    // TODO: refactor the following implementation
     source
         .getProperties()
         .forEach(
             property -> {
-              Optional<IoModelGroup> optionalIoModelGroup = property.getIoModelGroupAsOptional();
-              if (optionalIoModelGroup.isPresent()) {
-                if (!property.getPropertyType().equals(PropertyType.AGGREGATE_ROOT_ID)) {
-                  IoModelGroup ioModelGroup = optionalIoModelGroup.get();
-
+              switch (property.getPropertyType()) {
+                case AGGREGATE_ROOT_ID:
+                  break;
+                case PRIMITIVE:
+                  fieldRepresentations.add(
+                      new FieldRepresentation(
+                          makeVariableDataType(property), makeVariableName(property)));
+                  break;
+                case PRIMITIVE_COLLECTION:
+                  fieldRepresentations.add(
+                      new FieldRepresentation(
+                          makeVariableDataType(property), makeVariableName(property)));
+                  break;
+                case VALUE_OBJECT:
                   fieldRepresentations.add(
                       new FieldRepresentation(
                           makeVariableDataType(property),
                           makeVariableName(property),
-                          makeAnnotationsForValueObject(ioModelGroup)));
-                }
-              } else {
-                if (property instanceof Primitive) {
-                  Primitive primitive = (Primitive) property;
-                  fieldRepresentations.add(
-                      new FieldRepresentation(
-                          makeVariableDataType(property),
-                          makeVariableName(property)
-                      ));
-                } else if (property instanceof PrimitiveCollection) {
-                  fieldRepresentations.add(
-                      new FieldRepresentation(
-                          makeVariableDataType(property),
-                          makeVariableName(property)
-                      ));
-
-                } else {
+                          makeAnnotationsForValueObject(
+                              property
+                                  .getIoModelGroupAsOptional()
+                                  .orElseThrow(IllegalArgumentException::new))));
+                  break;
+                default:
                   throw new IllegalStateException(
-                      String.format("Cannot project variable=%s",
-                          property.getVariableName().getText()));
-                }
+                      String.format(
+                          "Cannot project variable=%s", property.getVariableName().getText()));
               }
             });
 
@@ -257,15 +250,11 @@ public class AggregateRootClassRepresentable extends AbstractClassRepresentable<
               if (property.getPropertyType().equals(PropertyType.AGGREGATE_ROOT_ID)) {
                 parameterRepresentations.add(
                     new ParameterRepresentation(
-                        makeVariableDataType(property),
-                        makeVariableName(property),
-                        true));
+                        makeVariableDataType(property), makeVariableName(property), true));
               } else {
                 parameterRepresentations.add(
                     new ParameterRepresentation(
-                        makeVariableDataType(property),
-                        makeVariableName(property)
-                    ));
+                        makeVariableDataType(property), makeVariableName(property)));
               }
             });
 
@@ -314,13 +303,13 @@ public class AggregateRootClassRepresentable extends AbstractClassRepresentable<
   protected String makeVariableDataType(AbstractProperty property) {
     switch (property.getPropertyType()) {
       case PRIMITIVE_COLLECTION:
-        return String.format("List<%s>", fromDataTypeToJavaConverter.getDeclaredVariableType(
-            property.getIoModel().getDataType()
-        ));
+        return String.format(
+            "List<%s>",
+            fromDataTypeToJavaConverter.getDeclaredVariableType(
+                property.getTypeParameterDataModel().getDataType()));
       default:
         return fromDataTypeToJavaConverter.getDeclaredVariableType(
-            property.getIoModel().getDataType()
-        );
+            property.getIoModel().getDataType());
     }
   }
 
