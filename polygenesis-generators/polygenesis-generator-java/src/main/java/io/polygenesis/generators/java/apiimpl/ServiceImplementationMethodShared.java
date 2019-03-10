@@ -23,8 +23,8 @@ package io.polygenesis.generators.java.apiimpl;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.Argument;
 import io.polygenesis.core.ReturnValue;
-import io.polygenesis.core.iomodel.IoModelGroup;
-import io.polygenesis.core.iomodel.IoModelPrimitive;
+import io.polygenesis.core.data.DataGroup;
+import io.polygenesis.core.data.DataPrimitive;
 import io.polygenesis.models.api.Method;
 import io.polygenesis.models.domain.AggregateRoot;
 import java.util.Optional;
@@ -82,10 +82,10 @@ public abstract class ServiceImplementationMethodShared {
             .findFirst()
             .orElseThrow(IllegalArgumentException::new);
 
-    Optional<IoModelPrimitive> optionalIoModelPrimitive =
+    Optional<DataPrimitive> optionalDataPrimitive =
         method.getFunction().retrieveThingIdentityFromArgument(argument);
 
-    if (!optionalIoModelPrimitive.isPresent()) {
+    if (!optionalDataPrimitive.isPresent()) {
       throw new IllegalStateException();
     }
 
@@ -100,7 +100,7 @@ public abstract class ServiceImplementationMethodShared {
     stringBuilder.append(".");
     stringBuilder.append("get");
     stringBuilder.append(
-        TextConverter.toUpperCamel(optionalIoModelPrimitive.get().getVariableName().getText()));
+        TextConverter.toUpperCamel(optionalDataPrimitive.get().getVariableName().getText()));
     stringBuilder.append("()");
     stringBuilder.append(")"); // UUID.fromString
 
@@ -129,8 +129,8 @@ public abstract class ServiceImplementationMethodShared {
 
     ReturnValue returnValue = method.getFunction().getReturnValue();
     if (returnValue != null) {
-      if (returnValue.getModel().isIoModelGroup()) {
-        stringBuilder.append(makeReturnValueForIoModelGroup(returnValue.getAsIoModelGroup()));
+      if (returnValue.getModel().isDataGroup()) {
+        stringBuilder.append(makeReturnValueForDataGroup(returnValue.getModel().getAsDataGroup()));
       } else {
         throw new IllegalStateException(
             String.format(
@@ -143,23 +143,20 @@ public abstract class ServiceImplementationMethodShared {
   }
 
   /**
-   * Make return value for io model group string.
+   * Make return value for data group.
    *
    * @param modelGroup the model group
    * @return the string
    */
-  protected String makeReturnValueForIoModelGroup(IoModelGroup modelGroup) {
+  protected String makeReturnValueForDataGroup(DataGroup modelGroup) {
     StringBuilder stringBuilder = new StringBuilder();
 
     stringBuilder.append("\t\t");
-    stringBuilder.append(
-        TextConverter.toUpperCamel(modelGroup.getClassDataType().getDataTypeName().getText()));
+    stringBuilder.append(TextConverter.toUpperCamel(modelGroup.getDataType()));
     stringBuilder.append(" ");
-    stringBuilder.append(
-        TextConverter.toLowerCamel(modelGroup.getClassDataType().getDataTypeName().getText()));
+    stringBuilder.append(TextConverter.toLowerCamel(modelGroup.getDataType()));
     stringBuilder.append(" = new ");
-    stringBuilder.append(
-        TextConverter.toUpperCamel(modelGroup.getClassDataType().getDataTypeName().getText()));
+    stringBuilder.append(TextConverter.toUpperCamel(modelGroup.getDataType()));
     stringBuilder.append("();");
     stringBuilder.append("\n");
 
@@ -169,8 +166,7 @@ public abstract class ServiceImplementationMethodShared {
     stringBuilder.append("\t\t");
     stringBuilder.append("return");
     stringBuilder.append(" ");
-    stringBuilder.append(
-        TextConverter.toLowerCamel(modelGroup.getClassDataType().getDataTypeName().getText()));
+    stringBuilder.append(TextConverter.toLowerCamel(modelGroup.getDataType()));
     stringBuilder.append(";");
 
     return stringBuilder.toString();

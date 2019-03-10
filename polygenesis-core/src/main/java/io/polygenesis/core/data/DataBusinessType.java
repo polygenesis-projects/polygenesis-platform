@@ -18,27 +18,23 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.core.iomodel;
-
-import io.polygenesis.commons.text.AbstractText;
+package io.polygenesis.core.data;
 
 /**
- * The type Variable name.
+ * Encodes business types, which are vital for the code generation process, such as unique ID of an
+ * entity, page size etc.
  *
  * @author Christos Tsakostas
  */
-public class VariableName extends AbstractText {
-
-  // ===============================================================================================
-  // CONSTRUCTOR(S)
-  // ===============================================================================================
-
-  /**
-   * Instantiates a new Variable name.
-   *
-   * @param text the text
-   */
-  public VariableName(String text) {
-    super(text);
-  }
+public enum DataBusinessType {
+  /** Any type of business data, which is not directly relevant to the code generation process. */
+  ANY,
+  /** Denotes a Thing's identity. */
+  THING_IDENTITY,
+  /** Denotes a Tenant's identity. */
+  TENANT_IDENTITY,
+  /** Page number used for fetching collections. */
+  PAGE_NUMBER,
+  /** Page size used for fetching collections. */
+  PAGE_SIZE;
 }

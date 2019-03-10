@@ -28,7 +28,7 @@ import static org.mockito.Mockito.verify;
 
 import io.polygenesis.commons.text.Name;
 import io.polygenesis.core.ModelRepository;
-import io.polygenesis.core.datatype.PackageName;
+import io.polygenesis.core.data.PackageName;
 import io.polygenesis.models.rest.Resource;
 import io.polygenesis.models.rest.RestModelRepository;
 import java.nio.file.Path;

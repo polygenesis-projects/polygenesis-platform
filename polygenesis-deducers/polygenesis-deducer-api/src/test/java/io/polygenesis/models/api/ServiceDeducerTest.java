@@ -25,7 +25,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
 import io.polygenesis.core.Thing;
-import io.polygenesis.core.datatype.PackageName;
+import io.polygenesis.core.data.PackageName;
 import io.polygenesis.core.test.ThingForTesting;
 import java.util.Arrays;
 import java.util.LinkedHashSet;

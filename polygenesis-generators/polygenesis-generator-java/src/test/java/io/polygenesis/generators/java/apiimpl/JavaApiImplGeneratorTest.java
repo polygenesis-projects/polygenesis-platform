@@ -30,7 +30,7 @@ import static org.mockito.Mockito.verify;
 import io.polygenesis.commons.text.Name;
 import io.polygenesis.core.ModelRepository;
 import io.polygenesis.core.ThingName;
-import io.polygenesis.core.datatype.PackageName;
+import io.polygenesis.core.data.PackageName;
 import io.polygenesis.models.api.Service;
 import io.polygenesis.models.api.ServiceModelRepository;
 import io.polygenesis.models.apiimpl.AggregateRootConverter;

@@ -23,11 +23,10 @@ package io.polygenesis.core;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.polygenesis.commons.test.AbstractEqualityTest;
-import io.polygenesis.core.datatype.PrimitiveDataType;
-import io.polygenesis.core.datatype.PrimitiveType;
-import io.polygenesis.core.iomodel.DataBusinessType;
-import io.polygenesis.core.iomodel.IoModelPrimitive;
-import io.polygenesis.core.iomodel.VariableName;
+import io.polygenesis.core.data.DataBusinessType;
+import io.polygenesis.core.data.DataPrimitive;
+import io.polygenesis.core.data.PrimitiveType;
+import io.polygenesis.core.data.VariableName;
 import java.util.LinkedHashSet;
 import org.junit.Test;
 
@@ -36,23 +35,23 @@ public class ReturnValueTest extends AbstractEqualityTest<ReturnValue> {
 
   @Test
   public void shouldSucceedToInstantiate() {
-    ReturnValue returnValue = new ReturnValue(createIoModelPrimitive1());
+    ReturnValue returnValue = new ReturnValue(createDataPrimitive1());
 
     assertThat(returnValue).isNotNull();
-    assertThat(returnValue.getModel()).isEqualTo(createIoModelPrimitive1());
+    assertThat(returnValue.getModel()).isEqualTo(createDataPrimitive1());
   }
 
-  private IoModelPrimitive createIoModelPrimitive1() {
-    return new IoModelPrimitive(
-        new PrimitiveDataType(PrimitiveType.STRING),
+  private DataPrimitive createDataPrimitive1() {
+    return new DataPrimitive(
+        PrimitiveType.STRING,
         new VariableName("someVariableName"),
         new LinkedHashSet<>(),
         DataBusinessType.ANY);
   }
 
-  private IoModelPrimitive createIoModelPrimitive2() {
-    return new IoModelPrimitive(
-        new PrimitiveDataType(PrimitiveType.STRING),
+  private DataPrimitive createDataPrimitive2() {
+    return new DataPrimitive(
+        PrimitiveType.STRING,
         new VariableName("someOtherVariableName"),
         new LinkedHashSet<>(),
         DataBusinessType.ANY);
@@ -60,11 +59,11 @@ public class ReturnValueTest extends AbstractEqualityTest<ReturnValue> {
 
   @Override
   public ReturnValue createObject1() {
-    return new ReturnValue(createIoModelPrimitive1());
+    return new ReturnValue(createDataPrimitive1());
   }
 
   @Override
   public ReturnValue createObject2() {
-    return new ReturnValue(createIoModelPrimitive2());
+    return new ReturnValue(createDataPrimitive2());
   }
 }

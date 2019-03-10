@@ -22,10 +22,9 @@ package io.polygenesis.representations.java;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.polygenesis.core.datatype.PrimitiveDataType;
-import io.polygenesis.core.datatype.PrimitiveType;
-import io.polygenesis.core.iomodel.IoModelPrimitive;
-import io.polygenesis.core.iomodel.VariableName;
+import io.polygenesis.core.data.DataPrimitive;
+import io.polygenesis.core.data.PrimitiveType;
+import io.polygenesis.core.data.VariableName;
 import org.junit.Test;
 
 /** @author Christos Tsakostas */
@@ -35,16 +34,13 @@ public class FromDataTypeToJavaConverterTest {
 
   @Test
   public void shouldGetCorrectDeclaredVariableType() {
-    IoModelPrimitive model =
-        IoModelPrimitive.of(new PrimitiveDataType(PrimitiveType.INTEGER), new VariableName("var"));
-    assertThat(converter.getDeclaredVariableType(model)).isEqualTo("Integer");
+    DataPrimitive model = DataPrimitive.of(PrimitiveType.INTEGER, new VariableName("var"));
+    assertThat(converter.getDeclaredVariableType(model.getDataType())).isEqualTo("Integer");
 
-    model =
-        IoModelPrimitive.of(new PrimitiveDataType(PrimitiveType.STRING), new VariableName("var"));
-    assertThat(converter.getDeclaredVariableType(model)).isEqualTo("String");
+    model = DataPrimitive.of(PrimitiveType.STRING, new VariableName("var"));
+    assertThat(converter.getDeclaredVariableType(model.getDataType())).isEqualTo("String");
 
-    model =
-        IoModelPrimitive.of(new PrimitiveDataType(PrimitiveType.BOOLEAN), new VariableName("var"));
-    assertThat(converter.getDeclaredVariableType(model)).isEqualTo("Boolean");
+    model = DataPrimitive.of(PrimitiveType.BOOLEAN, new VariableName("var"));
+    assertThat(converter.getDeclaredVariableType(model.getDataType())).isEqualTo("Boolean");
   }
 }

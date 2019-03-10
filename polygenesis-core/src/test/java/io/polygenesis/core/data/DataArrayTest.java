@@ -18,15 +18,21 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.core.datatype;
+package io.polygenesis.core.data;
 
-/**
- * The enum Kind of map data type.
- *
- * @author Christos Tsakostas
- */
-public enum MapType {
-  HASH_MAP,
-  LINKED_HASH_MAP,
-  TREE_MAP;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import org.junit.Test;
+
+/** @author Christos Tsakostas */
+public class DataArrayTest {
+
+  @Test
+  public void shouldInitializeDataArray() {
+    DataArray dataArray = new DataArray(new VariableName("someVariableName"));
+
+    assertThat(dataArray).isNotNull();
+    assertThat(dataArray.getDataType()).isEqualTo(DataPrimaryType.ARRAY.name());
+    assertThat(dataArray.getVariableName()).isEqualTo(new VariableName("someVariableName"));
+  }
 }

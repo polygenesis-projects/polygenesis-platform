@@ -23,6 +23,7 @@ package io.polygenesis.generators.java.api;
 import static java.util.stream.Collectors.toCollection;
 
 import io.polygenesis.commons.text.TextConverter;
+import io.polygenesis.core.data.DataGroup;
 import io.polygenesis.models.api.Service;
 import io.polygenesis.representations.java.AbstractInterfaceRepresentable;
 import io.polygenesis.representations.java.FromDataTypeToJavaConverter;
@@ -82,41 +83,30 @@ public class ServiceInterfaceRepresentable extends AbstractInterfaceRepresentabl
         .getMethods()
         .forEach(
             method -> {
-              method
-                  .getFunction()
-                  .getReturnValue()
-                  .getModel()
-                  .getDataType()
-                  .getOptionalPackageName()
-                  .filter(packageName -> !packageName.equals(source.getPackageName()))
-                  .ifPresent(
-                      packageName ->
-                          imports.add(
-                              makeCanonicalObjectName(
-                                  packageName,
-                                  method
-                                      .getFunction()
-                                      .getReturnValue()
-                                      .getModel()
-                                      .getDataType()
-                                      .getDataTypeName())));
+              if (method.getFunction().getReturnValue().getModel().isDataGroup()) {
+                DataGroup dataGroup =
+                    method.getFunction().getReturnValue().getModel().getAsDataGroup();
+
+                if (!dataGroup.getPackageName().equals(source.getPackageName())) {
+                  imports.add(
+                      makeCanonicalObjectName(dataGroup.getPackageName(), dataGroup.getDataType()));
+                }
+              }
 
               method
                   .getFunction()
                   .getArguments()
+                  .stream()
+                  .filter(argument -> argument.getModel().isDataGroup())
+                  .map(argument -> argument.getModel())
+                  .map(DataGroup.class::cast)
                   .forEach(
-                      argument -> {
-                        argument
-                            .getModel()
-                            .getDataType()
-                            .getOptionalPackageName()
-                            .filter(packageName -> !packageName.equals(source.getPackageName()))
-                            .ifPresent(
-                                packageName ->
-                                    imports.add(
-                                        makeCanonicalObjectName(
-                                            packageName,
-                                            argument.getModel().getDataType().getDataTypeName())));
+                      dataGroup -> {
+                        if (!dataGroup.getPackageName().equals(source.getPackageName())) {
+                          imports.add(
+                              makeCanonicalObjectName(
+                                  dataGroup.getPackageName(), dataGroup.getDataType()));
+                        }
                       });
             });
 

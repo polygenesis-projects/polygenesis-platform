@@ -28,15 +28,13 @@ import io.polygenesis.core.Goal;
 import io.polygenesis.core.ReturnValue;
 import io.polygenesis.core.Thing;
 import io.polygenesis.core.ThingName;
-import io.polygenesis.core.datatype.ClassDataType;
-import io.polygenesis.core.datatype.DataTypeName;
-import io.polygenesis.core.datatype.PackageName;
-import io.polygenesis.core.datatype.PrimitiveDataType;
-import io.polygenesis.core.datatype.PrimitiveType;
-import io.polygenesis.core.iomodel.DataBusinessType;
-import io.polygenesis.core.iomodel.IoModelGroup;
-import io.polygenesis.core.iomodel.IoModelPrimitive;
-import io.polygenesis.core.iomodel.VariableName;
+import io.polygenesis.core.data.DataBusinessType;
+import io.polygenesis.core.data.DataGroup;
+import io.polygenesis.core.data.DataPrimitive;
+import io.polygenesis.core.data.ObjectName;
+import io.polygenesis.core.data.PackageName;
+import io.polygenesis.core.data.PrimitiveType;
+import io.polygenesis.core.data.VariableName;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 
@@ -76,37 +74,26 @@ public class ThingForTesting {
     // ---------------------------------------------------------------------------------------------
     // ARGUMENTS
     // ---------------------------------------------------------------------------------------------
-    IoModelGroup argumentIoModelGroup =
-        new IoModelGroup(
-            new ClassDataType(
-                new DataTypeName("CreateBusinessRequest"),
-                new PackageName(ROOT_PACKAGE + ".business")));
+    DataGroup argumentDataGroup =
+        new DataGroup(
+            new ObjectName("CreateBusinessRequest"), new PackageName(ROOT_PACKAGE + ".business"));
 
     // name
-    argumentIoModelGroup.addIoModelPrimitive(
-        IoModelPrimitive.ofParent(
-            argumentIoModelGroup,
-            new PrimitiveDataType(PrimitiveType.STRING),
-            new VariableName("name")));
+    argumentDataGroup.addData(DataPrimitive.of(PrimitiveType.STRING, new VariableName("name")));
 
     // postal address
-    argumentIoModelGroup.addIoModelGroup(postalAddress(argumentIoModelGroup));
+    argumentDataGroup.addData(postalAddress());
 
     // ---------------------------------------------------------------------------------------------
     // RETURN VALUE
     // ---------------------------------------------------------------------------------------------
-    IoModelGroup returnValueIoModelGroup =
-        new IoModelGroup(
-            new ClassDataType(
-                new DataTypeName("CreateBusinessResponse"),
-                new PackageName(ROOT_PACKAGE + ".business")));
+    DataGroup returnValueDataGroup =
+        new DataGroup(
+            new ObjectName("CreateBusinessResponse"), new PackageName(ROOT_PACKAGE + ".business"));
 
-    returnValueIoModelGroup.addIoModelPrimitive(
-        IoModelPrimitive.ofDataBusinessTypeWithParent(
-            DataBusinessType.THING_IDENTITY,
-            returnValueIoModelGroup,
-            new PrimitiveDataType(PrimitiveType.STRING),
-            new VariableName("businessId")));
+    returnValueDataGroup.addData(
+        DataPrimitive.ofDataBusinessType(
+            DataBusinessType.THING_IDENTITY, PrimitiveType.STRING, new VariableName("businessId")));
 
     // ---------------------------------------------------------------------------------------------
 
@@ -114,8 +101,8 @@ public class ThingForTesting {
         business,
         new Goal(GoalType.CREATE),
         new FunctionName("create"),
-        new LinkedHashSet<>(Arrays.asList(new Argument(argumentIoModelGroup))),
-        new ReturnValue(returnValueIoModelGroup));
+        new LinkedHashSet<>(Arrays.asList(new Argument(argumentDataGroup))),
+        new ReturnValue(returnValueDataGroup));
   }
 
   // ===============================================================================================
@@ -126,45 +113,34 @@ public class ThingForTesting {
     // ---------------------------------------------------------------------------------------------
     // ARGUMENTS
     // ---------------------------------------------------------------------------------------------
-    IoModelGroup argumentIoModelGroup =
-        new IoModelGroup(
-            new ClassDataType(
-                new DataTypeName("FetchBusinessRequest"),
-                new PackageName(ROOT_PACKAGE + ".business")));
+    DataGroup argumentDataGroup =
+        new DataGroup(
+            new ObjectName("FetchBusinessRequest"), new PackageName(ROOT_PACKAGE + ".business"));
 
     // ---------------------------------------------------------------------------------------------
 
-    argumentIoModelGroup.addIoModelPrimitive(
-        IoModelPrimitive.ofDataBusinessTypeWithParent(
-            DataBusinessType.THING_IDENTITY,
-            argumentIoModelGroup,
-            new PrimitiveDataType(PrimitiveType.STRING),
-            new VariableName("businessId")));
+    argumentDataGroup.addData(
+        DataPrimitive.ofDataBusinessType(
+            DataBusinessType.THING_IDENTITY, PrimitiveType.STRING, new VariableName("businessId")));
 
     // ---------------------------------------------------------------------------------------------
     // RETURN VALUE
     // ---------------------------------------------------------------------------------------------
-    IoModelGroup returnValueIoModelGroup =
-        new IoModelGroup(
-            new ClassDataType(
-                new DataTypeName("FetchBusinessResponse"),
-                new PackageName(ROOT_PACKAGE + ".business")));
+    DataGroup returnValueDataGroup =
+        new DataGroup(
+            new ObjectName("FetchBusinessResponse"), new PackageName(ROOT_PACKAGE + ".business"));
 
     // ---------------------------------------------------------------------------------------------
 
-    returnValueIoModelGroup.addIoModelPrimitive(
-        IoModelPrimitive.ofParent(
-            returnValueIoModelGroup,
-            new PrimitiveDataType(PrimitiveType.STRING),
-            new VariableName("name")));
+    returnValueDataGroup.addData(DataPrimitive.of(PrimitiveType.STRING, new VariableName("name")));
 
     // ---------------------------------------------------------------------------------------------
     return new Function(
         business,
         new Goal(GoalType.FETCH_ONE),
         new FunctionName("fetchOne"),
-        new LinkedHashSet<>(Arrays.asList(new Argument(argumentIoModelGroup))),
-        new ReturnValue(returnValueIoModelGroup));
+        new LinkedHashSet<>(Arrays.asList(new Argument(argumentDataGroup))),
+        new ReturnValue(returnValueDataGroup));
   }
 
   // ===============================================================================================
@@ -175,45 +151,36 @@ public class ThingForTesting {
     // ---------------------------------------------------------------------------------------------
     // ARGUMENTS
     // ---------------------------------------------------------------------------------------------
-    IoModelGroup argumentIoModelGroup =
-        new IoModelGroup(
-            new ClassDataType(
-                new DataTypeName("FetchBusinessCollectionRequest"),
-                new PackageName(ROOT_PACKAGE + ".business")));
+    DataGroup argumentDataGroup =
+        new DataGroup(
+            new ObjectName("FetchBusinessCollectionRequest"),
+            new PackageName(ROOT_PACKAGE + ".business"));
 
     // ---------------------------------------------------------------------------------------------
 
-    argumentIoModelGroup.addIoModelPrimitive(
-        IoModelPrimitive.ofDataBusinessTypeWithParent(
-            DataBusinessType.THING_IDENTITY,
-            argumentIoModelGroup,
-            new PrimitiveDataType(PrimitiveType.STRING),
-            new VariableName("businessId")));
+    argumentDataGroup.addData(
+        DataPrimitive.ofDataBusinessType(
+            DataBusinessType.THING_IDENTITY, PrimitiveType.STRING, new VariableName("businessId")));
 
     // ---------------------------------------------------------------------------------------------
     // RETURN VALUE
     // ---------------------------------------------------------------------------------------------
-    IoModelGroup returnValueIoModelGroup =
-        new IoModelGroup(
-            new ClassDataType(
-                new DataTypeName("FetchBusinessCollectionResponse"),
-                new PackageName(ROOT_PACKAGE + ".business")));
+    DataGroup returnValueDataGroup =
+        new DataGroup(
+            new ObjectName("FetchBusinessCollectionResponse"),
+            new PackageName(ROOT_PACKAGE + ".business"));
 
     // ---------------------------------------------------------------------------------------------
 
-    returnValueIoModelGroup.addIoModelPrimitive(
-        IoModelPrimitive.ofParent(
-            returnValueIoModelGroup,
-            new PrimitiveDataType(PrimitiveType.STRING),
-            new VariableName("name")));
+    returnValueDataGroup.addData(DataPrimitive.of(PrimitiveType.STRING, new VariableName("name")));
 
     // ---------------------------------------------------------------------------------------------
     return new Function(
         business,
         new Goal(GoalType.FETCH_COLLECTION),
         new FunctionName("fetchCollection"),
-        new LinkedHashSet<>(Arrays.asList(new Argument(argumentIoModelGroup))),
-        new ReturnValue(returnValueIoModelGroup));
+        new LinkedHashSet<>(Arrays.asList(new Argument(argumentDataGroup))),
+        new ReturnValue(returnValueDataGroup));
   }
 
   // ===============================================================================================
@@ -224,34 +191,22 @@ public class ThingForTesting {
     // ---------------------------------------------------------------------------------------------
     // ARGUMENTS - 1
     // ---------------------------------------------------------------------------------------------
-    IoModelGroup argumentIoModelGroup1 =
-        new IoModelGroup(
-            new ClassDataType(
-                new DataTypeName("CreateBusinessRequest1"),
-                new PackageName(ROOT_PACKAGE + ".business")));
+    DataGroup argumentDataGroup1 =
+        new DataGroup(
+            new ObjectName("CreateBusinessRequest1"), new PackageName(ROOT_PACKAGE + ".business"));
 
     // name
-    argumentIoModelGroup1.addIoModelPrimitive(
-        IoModelPrimitive.ofParent(
-            argumentIoModelGroup1,
-            new PrimitiveDataType(PrimitiveType.STRING),
-            new VariableName("name")));
+    argumentDataGroup1.addData(DataPrimitive.of(PrimitiveType.STRING, new VariableName("name")));
 
     // ---------------------------------------------------------------------------------------------
     // ARGUMENTS - 2
     // ---------------------------------------------------------------------------------------------
-    IoModelGroup argumentIoModelGroup2 =
-        new IoModelGroup(
-            new ClassDataType(
-                new DataTypeName("CreateBusinessRequest2"),
-                new PackageName(ROOT_PACKAGE + ".business")));
+    DataGroup argumentDataGroup2 =
+        new DataGroup(
+            new ObjectName("CreateBusinessRequest2"), new PackageName(ROOT_PACKAGE + ".business"));
 
     // name
-    argumentIoModelGroup2.addIoModelPrimitive(
-        IoModelPrimitive.ofParent(
-            argumentIoModelGroup1,
-            new PrimitiveDataType(PrimitiveType.STRING),
-            new VariableName("name")));
+    argumentDataGroup2.addData(DataPrimitive.of(PrimitiveType.STRING, new VariableName("name")));
 
     // ---------------------------------------------------------------------------------------------
 
@@ -260,8 +215,7 @@ public class ThingForTesting {
         new Goal(GoalType.CREATE),
         new FunctionName("functionWithNoReturnValueAndManyArguments"),
         new LinkedHashSet<>(
-            Arrays.asList(
-                new Argument(argumentIoModelGroup1), new Argument(argumentIoModelGroup2))));
+            Arrays.asList(new Argument(argumentDataGroup1), new Argument(argumentDataGroup2))));
   }
 
   // ===============================================================================================
@@ -272,19 +226,14 @@ public class ThingForTesting {
     // ---------------------------------------------------------------------------------------------
     // RETURN VALUE
     // ---------------------------------------------------------------------------------------------
-    IoModelGroup returnValueIoModelGroup =
-        new IoModelGroup(
-            new ClassDataType(
-                new DataTypeName("FetchBusinessCollectionResponse"),
-                new PackageName(ROOT_PACKAGE + ".business")));
+    DataGroup returnValueDataGroup =
+        new DataGroup(
+            new ObjectName("FetchBusinessCollectionResponse"),
+            new PackageName(ROOT_PACKAGE + ".business"));
 
     // ---------------------------------------------------------------------------------------------
 
-    returnValueIoModelGroup.addIoModelPrimitive(
-        IoModelPrimitive.ofParent(
-            returnValueIoModelGroup,
-            new PrimitiveDataType(PrimitiveType.STRING),
-            new VariableName("name")));
+    returnValueDataGroup.addData(DataPrimitive.of(PrimitiveType.STRING, new VariableName("name")));
 
     // ---------------------------------------------------------------------------------------------
 
@@ -292,7 +241,7 @@ public class ThingForTesting {
         business,
         new Goal(GoalType.CREATE),
         new FunctionName("functionWithNoArguments"),
-        new ReturnValue(returnValueIoModelGroup));
+        new ReturnValue(returnValueDataGroup));
   }
 
   // ===============================================================================================
@@ -303,8 +252,7 @@ public class ThingForTesting {
     // ---------------------------------------------------------------------------------------------
     // PRIMITIVE
     // ---------------------------------------------------------------------------------------------
-    IoModelPrimitive ioModelPrimitive =
-        IoModelPrimitive.of(new PrimitiveDataType(PrimitiveType.STRING), new VariableName("name"));
+    DataPrimitive dataPrimitive = DataPrimitive.of(PrimitiveType.STRING, new VariableName("name"));
 
     // ---------------------------------------------------------------------------------------------
 
@@ -312,8 +260,8 @@ public class ThingForTesting {
         business,
         new Goal(GoalType.CREATE),
         new FunctionName("functionWithPrimitives"),
-        new LinkedHashSet<>(Arrays.asList(new Argument(ioModelPrimitive))),
-        new ReturnValue(ioModelPrimitive));
+        new LinkedHashSet<>(Arrays.asList(new Argument(dataPrimitive))),
+        new ReturnValue(dataPrimitive));
   }
 
   // ===============================================================================================
@@ -324,29 +272,18 @@ public class ThingForTesting {
   // POSTAL ADDRESS
   // ===============================================================================================
 
-  private static IoModelGroup postalAddress(IoModelGroup parent) {
-    IoModelGroup postalAddress =
-        new IoModelGroup(
-            parent,
-            new ClassDataType(
-                new DataTypeName("PostalAddressDto"),
-                new PackageName("com.oregor.ddd4j.example.shared")));
+  private static DataGroup postalAddress() {
+    DataGroup postalAddress =
+        new DataGroup(
+            new ObjectName("PostalAddressDto"), new PackageName("com.oregor.ddd4j.example.shared"));
 
-    postalAddress.addIoModelPrimitive(
-        IoModelPrimitive.ofParent(
-            postalAddress,
-            new PrimitiveDataType(PrimitiveType.STRING),
-            new VariableName("streetAddress1")));
+    postalAddress.addData(
+        DataPrimitive.of(PrimitiveType.STRING, new VariableName("streetAddress1")));
 
-    postalAddress.addIoModelPrimitive(
-        IoModelPrimitive.ofParent(
-            postalAddress,
-            new PrimitiveDataType(PrimitiveType.STRING),
-            new VariableName("streetAddress2")));
+    postalAddress.addData(
+        DataPrimitive.of(PrimitiveType.STRING, new VariableName("streetAddress2")));
 
-    postalAddress.addIoModelPrimitive(
-        IoModelPrimitive.ofParent(
-            postalAddress, new PrimitiveDataType(PrimitiveType.STRING), new VariableName("city")));
+    postalAddress.addData(DataPrimitive.of(PrimitiveType.STRING, new VariableName("city")));
 
     return postalAddress;
   }

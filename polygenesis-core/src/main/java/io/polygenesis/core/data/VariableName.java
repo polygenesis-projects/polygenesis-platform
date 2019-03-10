@@ -18,18 +18,27 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.core.iomodel;
+package io.polygenesis.core.data;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import io.polygenesis.commons.text.AbstractText;
 
-import org.junit.Test;
+/**
+ * The type Variable name.
+ *
+ * @author Christos Tsakostas
+ */
+public class VariableName extends AbstractText {
 
-/** @author Christos Tsakostas */
-public class VariableNameTest {
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
 
-  @Test
-  public void shouldInitialize() {
-    VariableName variableName = new VariableName("asd");
-    assertThat(variableName).isNotNull();
+  /**
+   * Instantiates a new Variable name.
+   *
+   * @param text the text
+   */
+  public VariableName(String text) {
+    super(text);
   }
 }

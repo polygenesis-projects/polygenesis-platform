@@ -24,10 +24,10 @@ import static java.util.stream.Collectors.toCollection;
 
 import io.polygenesis.core.Argument;
 import io.polygenesis.core.Function;
-import io.polygenesis.core.iomodel.DataBusinessType;
-import io.polygenesis.core.iomodel.IoModelArray;
-import io.polygenesis.core.iomodel.IoModelGroup;
-import io.polygenesis.core.iomodel.IoModelPrimitive;
+import io.polygenesis.core.data.Data;
+import io.polygenesis.core.data.DataBusinessType;
+import io.polygenesis.core.data.DataGroup;
+import io.polygenesis.core.data.DataPrimitive;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -67,10 +67,10 @@ public class DtoDeducer {
     Argument argument =
         function.getArguments().stream().findFirst().orElseThrow(IllegalArgumentException::new);
 
-    if (!argument.getModel().isIoModelGroup()) {
+    if (!argument.getModel().isDataGroup()) {
       throw new IllegalArgumentException(
           String.format(
-              "Argument model must be IoModelGroup. Thing name=%s, function=%s",
+              "Argument model must be DataGroup. Thing name=%s, function=%s",
               function.getThing().getName().getText(), function.getName().getText()));
     }
 
@@ -83,7 +83,7 @@ public class DtoDeducer {
       dtoType = DtoType.API_REQUEST;
     }
 
-    Dto dto = new Dto(dtoType, argument.getAsIoModelGroup());
+    Dto dto = new Dto(dtoType, argument.getModel().getAsDataGroup());
 
     makeAssertionsForRequestDto(dto, function);
 
@@ -105,10 +105,10 @@ public class DtoDeducer {
               function.getThing().getName().getText(), function.getName().getText()));
     }
 
-    if (!function.getReturnValue().getModel().isIoModelGroup()) {
+    if (!function.getReturnValue().getModel().isDataGroup()) {
       throw new IllegalArgumentException(
           String.format(
-              "ReturnValue model must be IoModelGroup. Thing name=%s, function=%s",
+              "ReturnValue model must be DataGroup. Thing name=%s, function=%s",
               function.getThing().getName().getText(), function.getName().getText()));
     }
 
@@ -121,7 +121,7 @@ public class DtoDeducer {
       dtoType = DtoType.API_RESPONSE;
     }
 
-    Dto dto = new Dto(dtoType, function.getReturnValue().getAsIoModelGroup());
+    Dto dto = new Dto(dtoType, function.getReturnValue().getModel().getAsDataGroup());
 
     makeAssertionsForResponseDto(dto, function);
 
@@ -161,26 +161,26 @@ public class DtoDeducer {
   private void addDto(Set<Dto> dtos, Dto dto) {
     dtos.add(dto);
 
-    if (dto.getOriginatingIoModelGroup().isIoModelArray()) {
-      IoModelArray ioModelArray = (IoModelArray) dto.getOriginatingIoModelGroup();
-      if (ioModelArray.getArrayElement().isIoModelGroup()) {
-        addDto(
-            dtos,
-            new Dto(DtoType.COLLECTION_RECORD, (IoModelGroup) ioModelArray.getArrayElement()));
+    if (dto.getArrayElementAsOptional().isPresent()) {
+      Data arrayElement = dto.getArrayElementAsOptional().get();
+      if (arrayElement.isDataGroup()) {
+        addDto(dtos, new Dto(DtoType.COLLECTION_RECORD, (DataGroup) arrayElement));
       }
     }
 
-    // Add model group children of ioModelGroup recursively
-    dto.getOriginatingIoModelGroup()
+    // Add model group children of DataGroup recursively
+    dto.getOriginatingDataGroup()
         .getModels()
         .forEach(
             model -> {
-              if (model.isIoModelGroup() || model.isIoModelArray()) {
+              // TODO
+              // if (model.isDataGroup() || model.isDataArray()) {
+              if (model.isDataGroup()) {
                 if (dto.getDtoType().equals(DtoType.API_COLLECTION_REQUEST)
                     || dto.getDtoType().equals(DtoType.API_PAGED_COLLECTION_REQUEST)) {
-                  addDto(dtos, new Dto(DtoType.COLLECTION_RECORD, (IoModelGroup) model));
+                  addDto(dtos, new Dto(DtoType.COLLECTION_RECORD, (DataGroup) model));
                 } else {
-                  addDto(dtos, new Dto(DtoType.INTERNAL, (IoModelGroup) model));
+                  addDto(dtos, new Dto(DtoType.INTERNAL, (DataGroup) model));
                 }
               }
             });
@@ -225,12 +225,12 @@ public class DtoDeducer {
   private void assertThatDtoHasOneDataBusinessTypeOf(
       Dto dto, Function function, DataBusinessType dataBusinessType) {
 
-    Set<IoModelPrimitive> modelPrimitives =
-        dto.getOriginatingIoModelGroup()
+    Set<DataPrimitive> modelPrimitives =
+        dto.getOriginatingDataGroup()
             .getModels()
             .stream()
-            .filter(model -> model.isPrimitive())
-            .map(IoModelPrimitive.class::cast)
+            .filter(model -> model.isDataPrimitive())
+            .map(DataPrimitive.class::cast)
             .filter(model -> model.getDataBusinessType().equals(dataBusinessType))
             .collect(toCollection(LinkedHashSet::new));
 

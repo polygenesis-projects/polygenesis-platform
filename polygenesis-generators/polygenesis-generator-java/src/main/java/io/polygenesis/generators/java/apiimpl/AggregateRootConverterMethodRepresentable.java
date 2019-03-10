@@ -68,13 +68,14 @@ public class AggregateRootConverterMethodRepresentable
     stringBuilder.append("\t\treturn new ");
     stringBuilder.append(
         TextConverter.toUpperCamel(
-            source.getReturnValue().getAsIoModelGroup().getDataType().getDataTypeName().getText()));
+            source.getReturnValue().getModel().getAsDataGroup().getDataType()));
     stringBuilder.append("(\n");
 
     stringBuilder.append(
         source
             .getReturnValue()
-            .getAsIoModelGroup()
+            .getModel()
+            .getAsDataGroup()
             .getModels()
             .stream()
             .map(

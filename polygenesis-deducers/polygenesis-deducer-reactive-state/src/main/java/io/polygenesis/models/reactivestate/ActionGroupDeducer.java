@@ -25,10 +25,9 @@ import io.polygenesis.annotations.core.GoalType;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.FunctionName;
 import io.polygenesis.core.Thing;
-import io.polygenesis.core.datatype.PrimitiveDataType;
-import io.polygenesis.core.datatype.PrimitiveType;
-import io.polygenesis.core.iomodel.IoModelPrimitive;
-import io.polygenesis.core.iomodel.VariableName;
+import io.polygenesis.core.data.DataPrimitive;
+import io.polygenesis.core.data.PrimitiveType;
+import io.polygenesis.core.data.VariableName;
 import io.polygenesis.models.api.Service;
 import io.polygenesis.models.api.ServiceModelRepository;
 import java.util.Arrays;
@@ -85,14 +84,14 @@ public class ActionGroupDeducer {
                           createAction(
                               method.getFunction().getName(),
                               ActionType.SUBMIT,
-                              new Model(method.getRequestDto().getOriginatingIoModelGroup())));
+                              new Model(method.getRequestDto().getOriginatingDataGroup())));
 
                       // Success
                       actions.add(
                           createAction(
                               method.getFunction().getName(),
                               ActionType.ON_SUCCESS,
-                              new Model(method.getResponseDto().getOriginatingIoModelGroup())));
+                              new Model(method.getResponseDto().getOriginatingDataGroup())));
 
                       // Failure
                       actions.add(
@@ -100,9 +99,8 @@ public class ActionGroupDeducer {
                               method.getFunction().getName(),
                               ActionType.ON_FAILURE,
                               new Model(
-                                  IoModelPrimitive.of(
-                                      new PrimitiveDataType(PrimitiveType.STRING),
-                                      new VariableName("errorMessage")))));
+                                  DataPrimitive.of(
+                                      PrimitiveType.STRING, new VariableName("errorMessage")))));
 
                       actionGroups.add(
                           new ActionGroup(

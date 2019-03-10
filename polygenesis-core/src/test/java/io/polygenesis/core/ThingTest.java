@@ -24,11 +24,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import io.polygenesis.annotations.core.GoalType;
 import io.polygenesis.commons.test.AbstractEqualityTest;
-import io.polygenesis.core.datatype.PrimitiveDataType;
-import io.polygenesis.core.datatype.PrimitiveType;
-import io.polygenesis.core.iomodel.DataBusinessType;
-import io.polygenesis.core.iomodel.IoModelPrimitive;
-import io.polygenesis.core.iomodel.VariableName;
+import io.polygenesis.core.data.DataBusinessType;
+import io.polygenesis.core.data.DataPrimitive;
+import io.polygenesis.core.data.PrimitiveType;
+import io.polygenesis.core.data.VariableName;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import org.junit.Test;
@@ -75,7 +74,7 @@ public class ThingTest extends AbstractEqualityTest<Thing> {
         new Goal(GoalType.MODIFY),
         new FunctionName("functionName"),
         new LinkedHashSet<>(),
-        new ReturnValue(createIoModelPrimitive()));
+        new ReturnValue(createDataPrimitive()));
   }
 
   private Function createGoal2() {
@@ -84,7 +83,7 @@ public class ThingTest extends AbstractEqualityTest<Thing> {
         new Goal(GoalType.MODIFY),
         new FunctionName("anotherFunctionName"),
         new LinkedHashSet<>(),
-        new ReturnValue(createIoModelPrimitive()));
+        new ReturnValue(createDataPrimitive()));
   }
 
   private Function createGoal3() {
@@ -93,12 +92,12 @@ public class ThingTest extends AbstractEqualityTest<Thing> {
         new Goal(GoalType.MODIFY),
         new FunctionName("someAnotherNewFunctionName"),
         new LinkedHashSet<>(),
-        new ReturnValue(createIoModelPrimitive()));
+        new ReturnValue(createDataPrimitive()));
   }
 
-  private IoModelPrimitive createIoModelPrimitive() {
-    return new IoModelPrimitive(
-        new PrimitiveDataType(PrimitiveType.STRING),
+  private DataPrimitive createDataPrimitive() {
+    return new DataPrimitive(
+        PrimitiveType.STRING,
         new VariableName("variableName"),
         new LinkedHashSet<>(),
         DataBusinessType.ANY);

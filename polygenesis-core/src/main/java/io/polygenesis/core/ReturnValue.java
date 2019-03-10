@@ -20,7 +20,7 @@
 
 package io.polygenesis.core;
 
-import io.polygenesis.core.iomodel.IoModel;
+import io.polygenesis.core.data.Data;
 
 /**
  * Denotes an Return Value of a {@link Function}.
@@ -38,7 +38,7 @@ public class ReturnValue extends AbstractIO {
    *
    * @param model the model
    */
-  public ReturnValue(IoModel model) {
+  public ReturnValue(Data model) {
     super(model);
   }
 }

@@ -21,11 +21,11 @@
 package io.polygenesis.generators.java.domain.aggregateroot;
 
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.datatype.PackageName;
-import io.polygenesis.core.iomodel.IoModelGroup;
+import io.polygenesis.core.data.DataArray;
+import io.polygenesis.core.data.DataGroup;
+import io.polygenesis.core.data.PackageName;
 import io.polygenesis.models.domain.AbstractProperty;
 import io.polygenesis.models.domain.AggregateRoot;
-import io.polygenesis.models.domain.Primitive;
 import io.polygenesis.models.domain.PropertyType;
 import io.polygenesis.representations.commons.FieldRepresentation;
 import io.polygenesis.representations.commons.ParameterRepresentation;
@@ -34,7 +34,6 @@ import io.polygenesis.representations.java.ConstructorRepresentation;
 import io.polygenesis.representations.java.FromDataTypeToJavaConverter;
 import io.polygenesis.representations.java.MethodRepresentation;
 import java.util.LinkedHashSet;
-import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -66,35 +65,37 @@ public class AggregateRootClassRepresentable extends AbstractClassRepresentable<
   public Set<FieldRepresentation> fieldRepresentations(AggregateRoot source, Object... args) {
     Set<FieldRepresentation> fieldRepresentations = new LinkedHashSet<>();
 
-    // TODO: refactor the following implementation
     source
         .getProperties()
         .forEach(
             property -> {
-              Optional<IoModelGroup> optionalIoModelGroup = property.getIoModelGroupAsOptional();
-              if (optionalIoModelGroup.isPresent()) {
-                if (!property.getPropertyType().equals(PropertyType.AGGREGATE_ROOT_ID)) {
-                  IoModelGroup ioModelGroup = optionalIoModelGroup.get();
-
+              switch (property.getPropertyType()) {
+                case AGGREGATE_ROOT_ID:
+                  break;
+                case PRIMITIVE:
                   fieldRepresentations.add(
                       new FieldRepresentation(
-                          fromDataTypeToJavaConverter.getDeclaredVariableType(ioModelGroup),
-                          ioModelGroup.getVariableName().getText(),
-                          makeAnnotationsForValueObject(ioModelGroup)));
-                }
-              } else {
-                if (property instanceof Primitive) {
-                  Primitive primitive = (Primitive) property;
+                          makeVariableDataType(property), makeVariableName(property)));
+                  break;
+                case PRIMITIVE_COLLECTION:
                   fieldRepresentations.add(
                       new FieldRepresentation(
-                          fromDataTypeToJavaConverter.getDeclaredVariableType(
-                              primitive.getIoModelPrimitive()),
-                          primitive.getVariableName().getText()));
-                } else {
+                          makeVariableDataType(property),
+                          makeVariableName(property),
+                          makeAnnotationsForPrimitiveCollection(
+                              source, property.getData().getAsDataArray())));
+                  break;
+                case VALUE_OBJECT:
+                  fieldRepresentations.add(
+                      new FieldRepresentation(
+                          makeVariableDataType(property),
+                          makeVariableName(property),
+                          makeAnnotationsForValueObject(property.getData().getAsDataGroup())));
+                  break;
+                default:
                   throw new IllegalStateException(
                       String.format(
                           "Cannot project variable=%s", property.getVariableName().getText()));
-                }
               }
             });
 
@@ -142,23 +143,27 @@ public class AggregateRootClassRepresentable extends AbstractClassRepresentable<
         .getProperties()
         .forEach(
             property -> {
-              Optional<IoModelGroup> optionalIoModelGroup = property.getIoModelGroupAsOptional();
-              if (optionalIoModelGroup.isPresent()) {
+              if (property.getPropertyType().equals(PropertyType.PRIMITIVE_COLLECTION)
+                  || property.getPropertyType().equals(PropertyType.VALUE_OBJECT_COLLECTION)
+                  || property.getPropertyType().equals(PropertyType.AGGREGATE_ENTITY_COLLECTION)) {
+                imports.add("java.util.List");
+                imports.add("javax.persistence.ElementCollection");
+                imports.add("javax.persistence.CollectionTable");
+                imports.add("javax.persistence.JoinColumn");
+                imports.add("javax.persistence.Column");
+              }
+
+              if (property.getData().isDataGroup()) {
                 imports.add("javax.persistence.Embedded");
                 imports.add("javax.persistence.AttributeOverride");
                 imports.add("javax.persistence.Column");
 
-                IoModelGroup ioModelGroup = optionalIoModelGroup.get();
-                if (!ioModelGroup
-                    .getClassDataType()
-                    .getOptionalPackageName()
-                    .get()
-                    .equals(source.getPackageName())) {
+                DataGroup dataGroup = property.getData().getAsDataGroup();
+                if (!dataGroup.getPackageName().equals(source.getPackageName())) {
                   imports.add(
-                      ioModelGroup.getClassDataType().getOptionalPackageName().get().getText()
+                      dataGroup.getPackageName().getText()
                           + "."
-                          + TextConverter.toUpperCamel(
-                              ioModelGroup.getDataType().getDataTypeName().getText()));
+                          + TextConverter.toUpperCamel(dataGroup.getDataType()));
                 }
               }
             });
@@ -248,14 +253,11 @@ public class AggregateRootClassRepresentable extends AbstractClassRepresentable<
               if (property.getPropertyType().equals(PropertyType.AGGREGATE_ROOT_ID)) {
                 parameterRepresentations.add(
                     new ParameterRepresentation(
-                        property.getAsKeyValue().getKey().toString(),
-                        property.getAsKeyValue().getValue().toString(),
-                        true));
+                        makeVariableDataType(property), makeVariableName(property), true));
               } else {
                 parameterRepresentations.add(
                     new ParameterRepresentation(
-                        property.getAsKeyValue().getKey().toString(),
-                        property.getAsKeyValue().getValue().toString()));
+                        makeVariableDataType(property), makeVariableName(property)));
               }
             });
 
@@ -265,18 +267,18 @@ public class AggregateRootClassRepresentable extends AbstractClassRepresentable<
   /**
    * Make annotations for value object set.
    *
-   * @param ioModelGroup the io model group
+   * @param dataGroup the data group
    * @return the set
    */
-  private Set<String> makeAnnotationsForValueObject(IoModelGroup ioModelGroup) {
+  private Set<String> makeAnnotationsForValueObject(DataGroup dataGroup) {
     Set<String> annotations = new LinkedHashSet<>();
     annotations.add("@Embedded");
 
-    ioModelGroup
+    dataGroup
         .getModels()
         .forEach(
             model -> {
-              if (model.isPrimitive()) {
+              if (model.isDataPrimitive()) {
                 StringBuilder stringBuilder = new StringBuilder();
 
                 stringBuilder.append("@AttributeOverride(\n");
@@ -289,7 +291,7 @@ public class AggregateRootClassRepresentable extends AbstractClassRepresentable<
                 stringBuilder.append(
                     String.format(
                         "\t\t\tcolumn = @Column(name = \"%s%s\"))",
-                        TextConverter.toLowerCamel(ioModelGroup.getVariableName().getText()),
+                        TextConverter.toLowerCamel(dataGroup.getVariableName().getText()),
                         TextConverter.toUpperCamel(model.getVariableName().getText())));
 
                 annotations.add(stringBuilder.toString());
@@ -299,5 +301,78 @@ public class AggregateRootClassRepresentable extends AbstractClassRepresentable<
             });
 
     return annotations;
+  }
+
+  /**
+   * Make annotations for primitive collection set.
+   *
+   * @param aggregateRoot the aggregate root
+   * @param dataArray the data array
+   * @return the set
+   */
+  private Set<String> makeAnnotationsForPrimitiveCollection(
+      AggregateRoot aggregateRoot, DataArray dataArray) {
+    Set<String> annotations = new LinkedHashSet<>();
+
+    annotations.add("@ElementCollection");
+
+    String tableName =
+        String.format(
+            "%s_%s",
+            TextConverter.toLowerUnderscore(aggregateRoot.getName().getText()),
+            TextConverter.toLowerUnderscore(dataArray.getVariableName().getText()));
+
+    StringBuilder stringBuilder = new StringBuilder();
+    stringBuilder.append("@CollectionTable(\n");
+    stringBuilder.append(
+        String.format("\t\t\tname = Constants.DEFAULT_TABLE_PREFIX + \"%s\",\n", tableName));
+    stringBuilder.append(String.format("\t\t\tjoinColumns = {\n"));
+    stringBuilder.append(String.format("\t\t\t\t\t@JoinColumn(name = \"%s\")", "root_id"));
+    if (aggregateRoot.getMultiTenant()) {
+      stringBuilder.append(",\n");
+      stringBuilder.append(String.format("\t\t\t\t\t@JoinColumn(name = \"%s\")\n", "tenant_id"));
+    } else {
+      stringBuilder.append("\n");
+    }
+    stringBuilder.append(String.format("\t\t\t}\n"));
+    stringBuilder.append("\t)");
+
+    annotations.add(stringBuilder.toString());
+
+    annotations.add(
+        String.format(
+            "@Column(name = \"%s\")",
+            TextConverter.toLowerCamel(dataArray.getArrayElement().getVariableName().getText())));
+
+    return annotations;
+  }
+
+  /**
+   * Make variable data type string.
+   *
+   * @param property the property
+   * @return the string
+   */
+  private String makeVariableDataType(AbstractProperty property) {
+    switch (property.getPropertyType()) {
+      case PRIMITIVE_COLLECTION:
+        return String.format(
+            "List<%s>",
+            fromDataTypeToJavaConverter.getDeclaredVariableType(
+                property.getTypeParameterData().getDataType()));
+      default:
+        return fromDataTypeToJavaConverter.getDeclaredVariableType(
+            property.getData().getDataType());
+    }
+  }
+
+  /**
+   * Make variable name string.
+   *
+   * @param property the property
+   * @return the string
+   */
+  private String makeVariableName(AbstractProperty property) {
+    return property.getVariableName().getText();
   }
 }

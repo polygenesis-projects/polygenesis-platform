@@ -20,7 +20,7 @@
 
 package io.polygenesis.core.deducer;
 
-import io.polygenesis.core.datatype.PrimitiveType;
+import io.polygenesis.core.data.PrimitiveType;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -79,6 +79,7 @@ public class JavaDataTypeConverter {
     dataTypeMap.put("boolean", PrimitiveType.BOOLEAN);
     dataTypeMap.put("java.lang.Boolean", PrimitiveType.BOOLEAN);
 
-    dataTypeMap.put("java.util.List", PrimitiveType.ARRAY);
+    // TODO another map for arrays
+    // dataTypeMap.put("java.util.List", PrimitiveType.ARRAY);
   }
 }

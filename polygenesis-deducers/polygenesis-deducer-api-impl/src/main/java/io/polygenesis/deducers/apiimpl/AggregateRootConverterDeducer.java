@@ -21,10 +21,9 @@
 package io.polygenesis.deducers.apiimpl;
 
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.datatype.ClassDataType;
-import io.polygenesis.core.datatype.DataTypeName;
-import io.polygenesis.core.iomodel.IoModel;
-import io.polygenesis.core.iomodel.VariableName;
+import io.polygenesis.core.data.Data;
+import io.polygenesis.core.data.ObjectName;
+import io.polygenesis.core.data.VariableName;
 import io.polygenesis.models.api.Dto;
 import io.polygenesis.models.api.Service;
 import io.polygenesis.models.apiimpl.AggregateRootConverter;
@@ -67,10 +66,8 @@ public class AggregateRootConverterDeducer {
         fetchCollectionDtoFromAggregateRoots, aggregateRoot, services);
 
     return new AggregateRootConverter(
-        new ClassDataType(
-            new DataTypeName(
-                TextConverter.toUpperCamel(aggregateRoot.getName().getText() + "Converter")),
-            aggregateRoot.getPackageName()),
+        new ObjectName(TextConverter.toUpperCamel(aggregateRoot.getName().getText() + "Converter")),
+        aggregateRoot.getPackageName(),
         new VariableName(
             TextConverter.toLowerCamel(aggregateRoot.getName().getText() + "Converter")),
         valueObjectFromDtos,
@@ -86,6 +83,7 @@ public class AggregateRootConverterDeducer {
       Set<ValueObjectFromDto> valueObjectFromDtos,
       AggregateRoot aggregateRoot,
       Set<Service> services) {
+
     aggregateRoot
         .getProperties()
         .forEach(
@@ -99,8 +97,8 @@ public class AggregateRootConverterDeducer {
                           .getDtos()
                           .forEach(
                               dto -> {
-                                if (dto.getOriginatingIoModelGroup()
-                                    .equals(valueObject.getOriginatingIoModelGroup())) {
+                                if (dto.getOriginatingDataGroup()
+                                    .equals(valueObject.getOriginatingDataGroup())) {
                                   valueObjectFromDtos.add(new ValueObjectFromDto(valueObject, dto));
                                 }
                               });
@@ -124,8 +122,9 @@ public class AggregateRootConverterDeducer {
                   method -> {
                     fetchOneDtoFromAggregateRoots.add(
                         new FetchOneDtoFromAggregateRoot(
-                            findDtoInServiceFromIoModelGroup(
-                                service, method.getFunction().getReturnValue().getAsIoModelGroup()),
+                            findDtoInServiceFromDataGroup(
+                                service,
+                                method.getFunction().getReturnValue().getModel().getAsDataGroup()),
                             aggregateRoot));
                   });
         });
@@ -149,7 +148,7 @@ public class AggregateRootConverterDeducer {
                   method -> {
                     fetchCollectionDtoFromAggregateRoots.add(
                         new FetchCollectionDtoFromAggregateRoot(
-                            findDtoInServiceFromIoModelGroup(
+                            findDtoInServiceFromDataGroup(
                                 service,
                                 method
                                     .getResponseDto()
@@ -160,12 +159,15 @@ public class AggregateRootConverterDeducer {
         });
   }
 
-  private Dto findDtoInServiceFromIoModelGroup(Service service, IoModel ioModelGroup) {
+  private Dto findDtoInServiceFromDataGroup(Service service, Data dataGroup) {
     return service
         .getDtos()
         .stream()
-        .filter(dto -> dto.getOriginatingIoModelGroup().equals(ioModelGroup))
+        .filter(dto -> dto.getOriginatingDataGroup().equals(dataGroup))
         .findFirst()
-        .orElseThrow(IllegalArgumentException::new);
+        .orElseThrow(
+            () ->
+                new IllegalArgumentException(
+                    String.format("Cannot find %s in Service DTOs", dataGroup.getDataType())));
   }
 }

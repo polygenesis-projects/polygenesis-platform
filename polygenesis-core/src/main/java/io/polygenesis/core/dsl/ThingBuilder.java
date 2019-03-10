@@ -29,17 +29,15 @@ import io.polygenesis.core.Goal;
 import io.polygenesis.core.ReturnValue;
 import io.polygenesis.core.Thing;
 import io.polygenesis.core.ThingName;
-import io.polygenesis.core.datatype.ClassDataType;
-import io.polygenesis.core.datatype.DataTypeName;
-import io.polygenesis.core.datatype.PackageName;
-import io.polygenesis.core.datatype.PrimitiveDataType;
-import io.polygenesis.core.datatype.PrimitiveType;
-import io.polygenesis.core.iomodel.DataBusinessType;
-import io.polygenesis.core.iomodel.IoModel;
-import io.polygenesis.core.iomodel.IoModelArray;
-import io.polygenesis.core.iomodel.IoModelGroup;
-import io.polygenesis.core.iomodel.IoModelPrimitive;
-import io.polygenesis.core.iomodel.VariableName;
+import io.polygenesis.core.data.Data;
+import io.polygenesis.core.data.DataArray;
+import io.polygenesis.core.data.DataBusinessType;
+import io.polygenesis.core.data.DataGroup;
+import io.polygenesis.core.data.DataPrimitive;
+import io.polygenesis.core.data.ObjectName;
+import io.polygenesis.core.data.PackageName;
+import io.polygenesis.core.data.PrimitiveType;
+import io.polygenesis.core.data.VariableName;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -105,41 +103,38 @@ public class ThingBuilder {
    * @param models the models
    * @return the thing builder
    */
-  public final ThingBuilder withFunctionCreate(Set<IoModel> models) {
+  public final ThingBuilder withFunctionCreate(Set<Data> models) {
 
     // ---------------------------------------------------------------------------------------------
     // ARGUMENTS
     // ---------------------------------------------------------------------------------------------
-    IoModelGroup argumentIoModelGroup =
-        new IoModelGroup(
-            new ClassDataType(
-                new DataTypeName(
-                    String.format(
-                        "Create%sRequest", TextConverter.toUpperCamel(thing.getName().getText()))),
-                this.packageName));
+    DataGroup argumentDataGroup =
+        new DataGroup(
+            new ObjectName(
+                String.format(
+                    "Create%sRequest", TextConverter.toUpperCamel(thing.getName().getText()))),
+            this.packageName);
 
     // ---------------------------------------------------------------------------------------------
-    models.forEach(model -> argumentIoModelGroup.addIoModel(model));
+    models.forEach(model -> argumentDataGroup.addData(model));
     // ---------------------------------------------------------------------------------------------
 
     // ---------------------------------------------------------------------------------------------
     // RETURN VALUE
     // ---------------------------------------------------------------------------------------------
-    IoModelGroup returnValueIoModelGroup =
-        new IoModelGroup(
-            new ClassDataType(
-                new DataTypeName(
-                    String.format(
-                        "Create%sResponse", TextConverter.toUpperCamel(thing.getName().getText()))),
-                this.packageName));
+    DataGroup returnValueDataGroup =
+        new DataGroup(
+            new ObjectName(
+                String.format(
+                    "Create%sResponse", TextConverter.toUpperCamel(thing.getName().getText()))),
+            this.packageName);
 
     // ---------------------------------------------------------------------------------------------
 
-    returnValueIoModelGroup.addIoModelPrimitive(
-        IoModelPrimitive.ofDataBusinessTypeWithParent(
+    returnValueDataGroup.addData(
+        DataPrimitive.ofDataBusinessType(
             DataBusinessType.THING_IDENTITY,
-            returnValueIoModelGroup,
-            new PrimitiveDataType(PrimitiveType.STRING),
+            PrimitiveType.STRING,
             new VariableName(
                 String.format("%sId", TextConverter.toLowerCamel(thing.getName().getText())))));
 
@@ -152,8 +147,8 @@ public class ThingBuilder {
             thing,
             new Goal(GoalType.CREATE),
             new FunctionName("create"),
-            new LinkedHashSet<>(Arrays.asList(new Argument(argumentIoModelGroup))),
-            new ReturnValue(returnValueIoModelGroup));
+            new LinkedHashSet<>(Arrays.asList(new Argument(argumentDataGroup))),
+            new ReturnValue(returnValueDataGroup));
 
     this.thing.appendFunction(function);
     return this;
@@ -165,50 +160,46 @@ public class ThingBuilder {
    * @param models the models
    * @return the thing builder
    */
-  public final ThingBuilder withFunctionModify(Set<IoModel> models) {
+  public final ThingBuilder withFunctionModify(Set<Data> models) {
 
     // ---------------------------------------------------------------------------------------------
     // ARGUMENTS
     // ---------------------------------------------------------------------------------------------
-    IoModelGroup argumentIoModelGroup =
-        new IoModelGroup(
-            new ClassDataType(
-                new DataTypeName(
-                    String.format(
-                        "Modify%sRequest", TextConverter.toUpperCamel(thing.getName().getText()))),
-                this.packageName));
+    DataGroup argumentDataGroup =
+        new DataGroup(
+            new ObjectName(
+                String.format(
+                    "Modify%sRequest", TextConverter.toUpperCamel(thing.getName().getText()))),
+            this.packageName);
 
     // ---------------------------------------------------------------------------------------------
-    argumentIoModelGroup.addIoModelPrimitive(
-        IoModelPrimitive.ofDataBusinessTypeWithParent(
+    argumentDataGroup.addData(
+        DataPrimitive.ofDataBusinessType(
             DataBusinessType.THING_IDENTITY,
-            argumentIoModelGroup,
-            new PrimitiveDataType(PrimitiveType.STRING),
+            PrimitiveType.STRING,
             new VariableName(
                 String.format("%sId", TextConverter.toLowerCamel(thing.getName().getText())))));
 
     // ---------------------------------------------------------------------------------------------
-    models.forEach(model -> argumentIoModelGroup.addIoModel(model));
+    models.forEach(model -> argumentDataGroup.addData(model));
     // ---------------------------------------------------------------------------------------------
 
     // ---------------------------------------------------------------------------------------------
     // RETURN VALUE
     // ---------------------------------------------------------------------------------------------
-    IoModelGroup returnValueIoModelGroup =
-        new IoModelGroup(
-            new ClassDataType(
-                new DataTypeName(
-                    String.format(
-                        "Modify%sResponse", TextConverter.toUpperCamel(thing.getName().getText()))),
-                this.packageName));
+    DataGroup returnValueDataGroup =
+        new DataGroup(
+            new ObjectName(
+                String.format(
+                    "Modify%sResponse", TextConverter.toUpperCamel(thing.getName().getText()))),
+            this.packageName);
 
     // ---------------------------------------------------------------------------------------------
 
-    returnValueIoModelGroup.addIoModelPrimitive(
-        IoModelPrimitive.ofDataBusinessTypeWithParent(
+    returnValueDataGroup.addData(
+        DataPrimitive.ofDataBusinessType(
             DataBusinessType.THING_IDENTITY,
-            returnValueIoModelGroup,
-            new PrimitiveDataType(PrimitiveType.STRING),
+            PrimitiveType.STRING,
             new VariableName(
                 String.format("%sId", TextConverter.toLowerCamel(thing.getName().getText())))));
 
@@ -221,8 +212,8 @@ public class ThingBuilder {
             thing,
             new Goal(GoalType.MODIFY),
             new FunctionName("modify"),
-            new LinkedHashSet<>(Arrays.asList(new Argument(argumentIoModelGroup))),
-            new ReturnValue(returnValueIoModelGroup));
+            new LinkedHashSet<>(Arrays.asList(new Argument(argumentDataGroup))),
+            new ReturnValue(returnValueDataGroup));
 
     this.thing.appendFunction(function);
     return this;
@@ -234,42 +225,39 @@ public class ThingBuilder {
    * @param models the models
    * @return the thing builder
    */
-  public final ThingBuilder withFunctionFetchOne(Set<IoModel> models) {
+  public final ThingBuilder withFunctionFetchOne(Set<Data> models) {
 
     // ---------------------------------------------------------------------------------------------
     // ARGUMENTS
     // ---------------------------------------------------------------------------------------------
-    IoModelGroup argumentIoModelGroup =
-        new IoModelGroup(
-            new ClassDataType(
-                new DataTypeName(
-                    String.format(
-                        "Fetch%sRequest", TextConverter.toUpperCamel(thing.getName().getText()))),
-                this.packageName));
+    DataGroup argumentDataGroup =
+        new DataGroup(
+            new ObjectName(
+                String.format(
+                    "Fetch%sRequest", TextConverter.toUpperCamel(thing.getName().getText()))),
+            this.packageName);
 
     // ---------------------------------------------------------------------------------------------
 
-    argumentIoModelGroup.addIoModelPrimitive(
-        IoModelPrimitive.ofDataBusinessTypeWithParent(
+    argumentDataGroup.addData(
+        DataPrimitive.ofDataBusinessType(
             DataBusinessType.THING_IDENTITY,
-            argumentIoModelGroup,
-            new PrimitiveDataType(PrimitiveType.STRING),
+            PrimitiveType.STRING,
             new VariableName(
                 String.format("%sId", TextConverter.toLowerCamel(thing.getName().getText())))));
 
     // ---------------------------------------------------------------------------------------------
     // RETURN VALUE
     // ---------------------------------------------------------------------------------------------
-    IoModelGroup returnValueIoModelGroup =
-        new IoModelGroup(
-            new ClassDataType(
-                new DataTypeName(
-                    String.format(
-                        "Fetch%sResponse", TextConverter.toUpperCamel(thing.getName().getText()))),
-                this.packageName));
+    DataGroup returnValueDataGroup =
+        new DataGroup(
+            new ObjectName(
+                String.format(
+                    "Fetch%sResponse", TextConverter.toUpperCamel(thing.getName().getText()))),
+            this.packageName);
 
     // ---------------------------------------------------------------------------------------------
-    models.forEach(model -> returnValueIoModelGroup.addIoModel(model));
+    models.forEach(model -> returnValueDataGroup.addData(model));
     // ---------------------------------------------------------------------------------------------
 
     // ---------------------------------------------------------------------------------------------
@@ -281,8 +269,8 @@ public class ThingBuilder {
             thing,
             new Goal(GoalType.FETCH_ONE),
             new FunctionName("fetch"),
-            new LinkedHashSet<>(Arrays.asList(new Argument(argumentIoModelGroup))),
-            new ReturnValue(returnValueIoModelGroup));
+            new LinkedHashSet<>(Arrays.asList(new Argument(argumentDataGroup))),
+            new ReturnValue(returnValueDataGroup));
 
     this.thing.appendFunction(function);
     return this;
@@ -294,35 +282,28 @@ public class ThingBuilder {
    * @param models the models
    * @return the thing builder
    */
-  public final ThingBuilder withFunctionFetchPagedCollection(Set<IoModel> models) {
+  public final ThingBuilder withFunctionFetchPagedCollection(Set<Data> models) {
 
     // ---------------------------------------------------------------------------------------------
     // ARGUMENTS
     // ---------------------------------------------------------------------------------------------
-    IoModelGroup argumentIoModelGroup =
-        new IoModelGroup(
-            new ClassDataType(
-                new DataTypeName(
-                    String.format(
-                        "Fetch%sCollectionRequest",
-                        TextConverter.toUpperCamel(thing.getName().getText()))),
-                this.packageName));
+    DataGroup argumentDataGroup =
+        new DataGroup(
+            new ObjectName(
+                String.format(
+                    "Fetch%sCollectionRequest",
+                    TextConverter.toUpperCamel(thing.getName().getText()))),
+            this.packageName);
 
     // ---------------------------------------------------------------------------------------------
 
-    argumentIoModelGroup.addIoModelPrimitive(
-        IoModelPrimitive.ofDataBusinessTypeWithParent(
-            DataBusinessType.PAGE_NUMBER,
-            argumentIoModelGroup,
-            new PrimitiveDataType(PrimitiveType.INTEGER),
-            new VariableName("pageNumber")));
+    argumentDataGroup.addData(
+        DataPrimitive.ofDataBusinessType(
+            DataBusinessType.PAGE_NUMBER, PrimitiveType.INTEGER, new VariableName("pageNumber")));
 
-    argumentIoModelGroup.addIoModelPrimitive(
-        IoModelPrimitive.ofDataBusinessTypeWithParent(
-            DataBusinessType.PAGE_SIZE,
-            argumentIoModelGroup,
-            new PrimitiveDataType(PrimitiveType.INTEGER),
-            new VariableName("pageSize")));
+    argumentDataGroup.addData(
+        DataPrimitive.ofDataBusinessType(
+            DataBusinessType.PAGE_SIZE, PrimitiveType.INTEGER, new VariableName("pageSize")));
 
     // ---------------------------------------------------------------------------------------------
     // RETURN VALUE
@@ -330,24 +311,23 @@ public class ThingBuilder {
     String arrayElementDataTypeAndVariableName =
         String.format("%sCollectionRecord", TextConverter.toUpperCamel(thing.getName().getText()));
 
-    IoModelGroup arrayElement =
-        new IoModelGroup(
-            new ClassDataType(
-                new DataTypeName(arrayElementDataTypeAndVariableName), this.packageName));
+    DataGroup arrayElement =
+        new DataGroup(new ObjectName(arrayElementDataTypeAndVariableName), this.packageName);
 
     // ---------------------------------------------------------------------------------------------
-    models.forEach(model -> arrayElement.addIoModel(model));
+    models.forEach(model -> arrayElement.addData(model));
     // ---------------------------------------------------------------------------------------------
 
     String arrayDataTypeAndVariableName =
         String.format(
             "Fetch%sCollectionResponse", TextConverter.toUpperCamel(thing.getName().getText()));
 
-    IoModelArray returnValueIoModelGroup =
-        new IoModelArray(
-            arrayElement,
-            new ClassDataType(new DataTypeName(arrayDataTypeAndVariableName), this.packageName),
-            new VariableName(arrayDataTypeAndVariableName));
+    DataArray dataArray = new DataArray(new VariableName("someArray"), arrayElement);
+
+    DataGroup dataGroupReturnValue =
+        new DataGroup(new ObjectName(arrayDataTypeAndVariableName), this.packageName);
+
+    dataGroupReturnValue.addData(dataArray);
 
     // ---------------------------------------------------------------------------------------------
     // FUNCTION
@@ -358,8 +338,8 @@ public class ThingBuilder {
             thing,
             new Goal(GoalType.FETCH_PAGED_COLLECTION),
             new FunctionName("fetchCollection"),
-            new LinkedHashSet<>(Arrays.asList(new Argument(argumentIoModelGroup))),
-            new ReturnValue(returnValueIoModelGroup));
+            new LinkedHashSet<>(Arrays.asList(new Argument(argumentDataGroup))),
+            new ReturnValue(dataGroupReturnValue));
 
     this.thing.appendFunction(function);
     return this;

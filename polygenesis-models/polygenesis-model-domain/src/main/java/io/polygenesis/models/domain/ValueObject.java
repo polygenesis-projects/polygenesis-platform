@@ -20,12 +20,10 @@
 
 package io.polygenesis.models.domain;
 
-import io.polygenesis.commons.keyvalue.KeyValue;
-import io.polygenesis.core.iomodel.IoModel;
-import io.polygenesis.core.iomodel.IoModelGroup;
-import io.polygenesis.core.iomodel.VariableName;
+import io.polygenesis.core.data.Data;
+import io.polygenesis.core.data.DataGroup;
+import io.polygenesis.core.data.VariableName;
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * The type Value object.
@@ -34,8 +32,8 @@ import java.util.Optional;
  */
 public class ValueObject extends AbstractProperty {
 
-  private IoModelGroup originatingIoModelGroup;
-  private IoModelGroup ioModelGroup;
+  private DataGroup originatingDataGroup;
+  private DataGroup dataGroup;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -45,32 +43,32 @@ public class ValueObject extends AbstractProperty {
    * Instantiates a new Value object.
    *
    * @param propertyType the property type
-   * @param originatingIoModelGroup the originating io model group
-   * @param ioModelGroup the io model group
+   * @param originatingDataGroup the originating data group
+   * @param dataGroup the data group
    * @param variableName the variable name
    */
   public ValueObject(
       PropertyType propertyType,
-      IoModelGroup originatingIoModelGroup,
-      IoModelGroup ioModelGroup,
+      DataGroup originatingDataGroup,
+      DataGroup dataGroup,
       VariableName variableName) {
     super(propertyType, variableName);
-    setOriginatingIoModelGroup(originatingIoModelGroup);
-    setIoModelGroup(ioModelGroup);
+    setOriginatingDataGroup(originatingDataGroup);
+    setDataGroup(dataGroup);
   }
 
   /**
    * Instantiates a new Value object.
    *
-   * @param originatingIoModelGroup the originating io model group
-   * @param ioModelGroup the io model group
+   * @param originatingDataGroup the originating data group
+   * @param dataGroup the data group
    * @param variableName the variable name
    */
   public ValueObject(
-      IoModelGroup originatingIoModelGroup, IoModelGroup ioModelGroup, VariableName variableName) {
+      DataGroup originatingDataGroup, DataGroup dataGroup, VariableName variableName) {
     super(PropertyType.VALUE_OBJECT, variableName);
-    setOriginatingIoModelGroup(originatingIoModelGroup);
-    setIoModelGroup(ioModelGroup);
+    setOriginatingDataGroup(originatingDataGroup);
+    setDataGroup(dataGroup);
   }
 
   // ===============================================================================================
@@ -78,21 +76,21 @@ public class ValueObject extends AbstractProperty {
   // ===============================================================================================
 
   /**
-   * Gets originating io model group.
+   * Gets originating data group.
    *
-   * @return the originating io model group
+   * @return the originating data group
    */
-  public IoModelGroup getOriginatingIoModelGroup() {
-    return originatingIoModelGroup;
+  public DataGroup getOriginatingDataGroup() {
+    return originatingDataGroup;
   }
 
   /**
-   * Gets io model group.
+   * Gets data group.
    *
-   * @return the io model group
+   * @return the data group
    */
-  public IoModelGroup getIoModelGroup() {
-    return ioModelGroup;
+  public DataGroup getDataGroup() {
+    return dataGroup;
   }
 
   // ===============================================================================================
@@ -100,43 +98,40 @@ public class ValueObject extends AbstractProperty {
   // ===============================================================================================
 
   /**
-   * Sets originating io model group.
+   * Sets originating data group.
    *
-   * @param originatingIoModelGroup the originating io model group
+   * @param originatingDataGroup the originating data group
    */
-  private void setOriginatingIoModelGroup(IoModelGroup originatingIoModelGroup) {
-    this.originatingIoModelGroup = originatingIoModelGroup;
+  private void setOriginatingDataGroup(DataGroup originatingDataGroup) {
+    this.originatingDataGroup = originatingDataGroup;
   }
 
   /**
-   * Sets io model group.
+   * Sets data group.
    *
-   * @param ioModelGroup the io model group
+   * @param dataGroup the data group
    */
-  private void setIoModelGroup(IoModelGroup ioModelGroup) {
-    this.ioModelGroup = ioModelGroup;
+  private void setDataGroup(DataGroup dataGroup) {
+    this.dataGroup = dataGroup;
+  }
+
+  // ===============================================================================================
+  // ABSTRACT IMPLEMENTATIONS
+  // ===============================================================================================
+
+  @Override
+  public Data getData() {
+    return dataGroup;
+  }
+
+  @Override
+  public Data getTypeParameterData() {
+    throw new UnsupportedOperationException();
   }
 
   // ===============================================================================================
   // OVERRIDES
   // ===============================================================================================
-
-  @Override
-  public Optional<IoModelGroup> getIoModelGroupAsOptional() {
-    return Optional.of(getIoModelGroup());
-  }
-
-  @Override
-  public IoModel getIoModel() {
-    return ioModelGroup;
-  }
-
-  @Override
-  public KeyValue getAsKeyValue() {
-    return new KeyValue(
-        getIoModelGroup().getClassDataType().getDataTypeName().getText(),
-        getVariableName().getText());
-  }
 
   @Override
   public boolean equals(Object o) {
@@ -147,12 +142,12 @@ public class ValueObject extends AbstractProperty {
       return false;
     }
     ValueObject that = (ValueObject) o;
-    return Objects.equals(originatingIoModelGroup, that.originatingIoModelGroup)
-        && Objects.equals(ioModelGroup, that.ioModelGroup);
+    return Objects.equals(originatingDataGroup, that.originatingDataGroup)
+        && Objects.equals(dataGroup, that.dataGroup);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(originatingIoModelGroup, ioModelGroup);
+    return Objects.hash(originatingDataGroup, dataGroup);
   }
 }

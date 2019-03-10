@@ -20,81 +20,48 @@
 
 package io.polygenesis.core.data;
 
-import io.polygenesis.core.datatype.DataKind;
-import io.polygenesis.core.iomodel.DataBusinessType;
-import io.polygenesis.core.iomodel.VariableName;
+import java.util.Objects;
 
 /**
- * The type Data.
+ * This is the base class for {@link DataPrimitive}, {@link DataGroup}, and {@link DataArray}*.
+ *
+ * <p>References:
+ *
+ * <ul>
+ *   <li>https://en.wikibooks.org/wiki/Java_Programming/Primitive_Types
+ *   <li>https://en.wikipedia.org/wiki/Primitive_data_type
+ *   <li>https://docs.oracle.com/javase/tutorial/java/nutsandbolts/datatypes.html
+ * </ul>
  *
  * @author Christos Tsakostas
  */
 public abstract class Data {
 
-  // ===============================================================================================
-  // STATE
-  // ===============================================================================================
-
-  private final DataKind dataKind;
+  private final DataPrimaryType dataPrimaryType;
   private final VariableName variableName;
-  private final DataBusinessType dataBusinessType;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
-   * Instantiates a new Data.
+   * Instantiates a new data.
    *
-   * @param dataKind the data kind
-   * @param variableName the variable name
+   * @param dataPrimaryType the data kind
    */
-  public Data(DataKind dataKind, VariableName variableName) {
-    this(dataKind, variableName, DataBusinessType.ANY);
+  public Data(DataPrimaryType dataPrimaryType) {
+    this(dataPrimaryType, null);
   }
 
   /**
-   * Instantiates a new Data.
+   * Instantiates a new data.
    *
-   * @param dataKind the data kind
+   * @param dataPrimaryType the data kind
    * @param variableName the variable name
-   * @param dataBusinessType the data business type
    */
-  public Data(DataKind dataKind, VariableName variableName, DataBusinessType dataBusinessType) {
-    this.dataKind = dataKind;
+  public Data(DataPrimaryType dataPrimaryType, VariableName variableName) {
+    this.dataPrimaryType = dataPrimaryType;
     this.variableName = variableName;
-    this.dataBusinessType = dataBusinessType;
-  }
-
-  // ===============================================================================================
-  // GETTERS
-  // ===============================================================================================
-
-  /**
-   * Gets data kind.
-   *
-   * @return the data kind
-   */
-  public DataKind getDataKind() {
-    return dataKind;
-  }
-
-  /**
-   * Gets variable name.
-   *
-   * @return the variable name
-   */
-  public VariableName getVariableName() {
-    return variableName;
-  }
-
-  /**
-   * Gets data business type.
-   *
-   * @return the data business type
-   */
-  public DataBusinessType getDataBusinessType() {
-    return dataBusinessType;
   }
 
   // ===============================================================================================
@@ -109,7 +76,118 @@ public abstract class Data {
   public abstract String getDataType();
 
   // ===============================================================================================
+  // GETTERS
+  // ===============================================================================================
+
+  /**
+   * Gets data kind.
+   *
+   * @return the data kind
+   */
+  public DataPrimaryType getDataPrimaryType() {
+    return dataPrimaryType;
+  }
+
+  /**
+   * Gets variable name.
+   *
+   * @return the variable name
+   */
+  public VariableName getVariableName() {
+    return variableName;
+  }
+
+  // ===============================================================================================
+  // QUERIES
+  // ===============================================================================================
+
+  /**
+   * Gets as data group.
+   *
+   * @return the as data group
+   */
+  public DataGroup getAsDataGroup() {
+    if (isDataGroup()) {
+      return (DataGroup) this;
+    } else {
+      throw new IllegalStateException(
+          String.format("Model of type=%s is not a DataGroup", getDataPrimaryType().name()));
+    }
+  }
+
+  /**
+   * Gets as data array.
+   *
+   * @return the as data array
+   */
+  public DataArray getAsDataArray() {
+    if (isDataArray()) {
+      return DataArray.class.cast(this);
+    } else {
+      throw new IllegalStateException(
+          String.format("Model of type=%s is not a DataArray", getDataPrimaryType().name()));
+    }
+  }
+
+  /**
+   * Is primitive.
+   *
+   * @return the boolean
+   */
+  public boolean isDataPrimitive() {
+    return getDataPrimaryType().equals(DataPrimaryType.PRIMITIVE);
+  }
+
+  /**
+   * Is data group boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isDataGroup() {
+    return getDataPrimaryType().equals(DataPrimaryType.OBJECT);
+  }
+
+  /**
+   * Is data array boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isDataArray() {
+    return getDataPrimaryType().equals(DataPrimaryType.ARRAY);
+  }
+
+  /**
+   * Is thing identity boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isThingIdentity() {
+    if (this instanceof DataPrimitive) {
+      return ((DataPrimitive) this).getThingIdentity();
+    } else {
+      return false;
+    }
+  }
+
+  // ===============================================================================================
   // OVERRIDES
   // ===============================================================================================
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Data data = (Data) o;
+    return dataPrimaryType == data.dataPrimaryType
+        && Objects.equals(variableName, data.variableName);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(dataPrimaryType, variableName);
+  }
 }

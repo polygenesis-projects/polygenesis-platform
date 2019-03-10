@@ -18,22 +18,18 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.core.iomodel;
+package io.polygenesis.core.data;
 
-import io.polygenesis.core.datatype.AbstractDataType;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import org.junit.Test;
 
 /** @author Christos Tsakostas */
-class TestIoModel extends IoModel {
+public class VariableNameTest {
 
-  public TestIoModel(IoModelGroup parent) {
-    super(parent);
-  }
-
-  public TestIoModel(AbstractDataType dataType, VariableName variableName) {
-    super(dataType, variableName);
-  }
-
-  public TestIoModel(AbstractDataType dataType, VariableName variableName, IoModelGroup parent) {
-    super(dataType, variableName, parent);
+  @Test
+  public void shouldInitialize() {
+    VariableName variableName = new VariableName("asd");
+    assertThat(variableName).isNotNull();
   }
 }

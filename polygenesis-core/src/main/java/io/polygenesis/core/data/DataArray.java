@@ -20,35 +20,48 @@
 
 package io.polygenesis.core.data;
 
-import io.polygenesis.core.datatype.DataKind;
-import io.polygenesis.core.iomodel.VariableName;
+import java.util.Objects;
 
 /**
- * The type Array data.
+ * The type data array.
  *
  * @author Christos Tsakostas
  */
-public class ArrayData extends Data {
+public class DataArray extends Data {
 
-  // ===============================================================================================
-  // STATE
-  // ===============================================================================================
-
-  private final Data element;
+  private final Data arrayElement;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
-   * Instantiates a new Array data.
+   * Instantiates a new data array.
+   *
+   * @param arrayElement the array element
+   */
+  public DataArray(Data arrayElement) {
+    this(null, arrayElement);
+  }
+
+  /**
+   * Instantiates a new data array.
    *
    * @param variableName the variable name
-   * @param element the element
    */
-  public ArrayData(VariableName variableName, Data element) {
-    super(DataKind.ARRAY, variableName);
-    this.element = element;
+  public DataArray(VariableName variableName) {
+    this(variableName, null);
+  }
+
+  /**
+   * Instantiates a new data array.
+   *
+   * @param variableName the variable name
+   * @param arrayElement the array element
+   */
+  public DataArray(VariableName variableName, Data arrayElement) {
+    super(DataPrimaryType.ARRAY, variableName);
+    this.arrayElement = arrayElement;
   }
 
   // ===============================================================================================
@@ -56,12 +69,21 @@ public class ArrayData extends Data {
   // ===============================================================================================
 
   /**
-   * Gets element.
+   * Gets array element.
    *
-   * @return the element
+   * @return the array element
    */
-  public Data getElement() {
-    return element;
+  public Data getArrayElement() {
+    return arrayElement;
+  }
+
+  // ===============================================================================================
+  // ABSTRACT IMPLEMENTATION
+  // ===============================================================================================
+
+  @Override
+  public String getDataType() {
+    return DataPrimaryType.ARRAY.name();
   }
 
   // ===============================================================================================
@@ -69,7 +91,22 @@ public class ArrayData extends Data {
   // ===============================================================================================
 
   @Override
-  public String getDataType() {
-    return DataKind.ARRAY.name();
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    if (!super.equals(o)) {
+      return false;
+    }
+    DataArray that = (DataArray) o;
+    return Objects.equals(arrayElement, that.arrayElement);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(super.hashCode(), arrayElement);
   }
 }

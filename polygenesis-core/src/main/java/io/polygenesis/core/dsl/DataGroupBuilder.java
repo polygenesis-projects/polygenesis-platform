@@ -20,23 +20,22 @@
 
 package io.polygenesis.core.dsl;
 
-import io.polygenesis.core.datatype.ClassDataType;
-import io.polygenesis.core.datatype.DataTypeName;
-import io.polygenesis.core.datatype.PackageName;
-import io.polygenesis.core.iomodel.IoModel;
-import io.polygenesis.core.iomodel.IoModelGroup;
+import io.polygenesis.core.data.Data;
+import io.polygenesis.core.data.DataGroup;
+import io.polygenesis.core.data.ObjectName;
+import io.polygenesis.core.data.PackageName;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
- * The type Data model builder.
+ * The type Data group builder.
  *
  * @author Christos Tsakostas
  */
 public class DataGroupBuilder {
 
   private final String name;
-  private final Set<IoModel> models;
+  private final Set<Data> models;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -71,7 +70,7 @@ public class DataGroupBuilder {
    * @param models the models
    * @return the data group builder
    */
-  public final DataGroupBuilder withGroupData(Set<IoModel> models) {
+  public final DataGroupBuilder withGroupData(Set<Data> models) {
     this.models.addAll(models);
     return this;
   }
@@ -81,19 +80,18 @@ public class DataGroupBuilder {
   // ===============================================================================================
 
   /**
-   * Build io model group.
+   * Build data group.
    *
-   * @return the io model group
+   * @return the data group
    */
-  public final IoModelGroup build() {
-    IoModelGroup ioModelGroup =
-        new IoModelGroup(new ClassDataType(new DataTypeName(name), new PackageName("com.oregor")));
+  public final DataGroup build() {
+    DataGroup dataGroup = new DataGroup(new ObjectName(name), new PackageName("com.oregor"));
 
     models.forEach(
         model -> {
-          ioModelGroup.addIoModel(model);
+          dataGroup.addData(model);
         });
 
-    return ioModelGroup;
+    return dataGroup;
   }
 }

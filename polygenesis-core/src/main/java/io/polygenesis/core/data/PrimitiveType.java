@@ -18,18 +18,23 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.core.datatype;
+package io.polygenesis.core.data;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import org.junit.Test;
-
-/** @author Christos Tsakostas */
-public class DataTypeNameTest {
-
-  @Test
-  public void shouldInitialize() {
-    DataTypeName dataTypeName = new DataTypeName(PrimitiveType.STRING.name());
-    assertThat(dataTypeName).isNotNull();
-  }
+/**
+ * Enumeration containing the primitive types as defined by PolyGenesis.
+ *
+ * <p>Each language defines different primitives. This enumeration tries to support all of the
+ * languages in a generic way.
+ *
+ * @author Christos Tsakostas
+ */
+public enum PrimitiveType {
+  BOOLEAN,
+  DATE,
+  DATETIME,
+  FLOAT,
+  INTEGER,
+  LONG,
+  STRING,
+  VOID
 }

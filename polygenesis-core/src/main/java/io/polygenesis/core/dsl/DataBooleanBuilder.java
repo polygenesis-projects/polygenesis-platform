@@ -20,10 +20,9 @@
 
 package io.polygenesis.core.dsl;
 
-import io.polygenesis.core.datatype.PrimitiveDataType;
-import io.polygenesis.core.datatype.PrimitiveType;
-import io.polygenesis.core.iomodel.IoModelPrimitive;
-import io.polygenesis.core.iomodel.VariableName;
+import io.polygenesis.core.data.DataPrimitive;
+import io.polygenesis.core.data.PrimitiveType;
+import io.polygenesis.core.data.VariableName;
 
 /**
  * The type Data boolean builder.
@@ -32,7 +31,7 @@ import io.polygenesis.core.iomodel.VariableName;
  */
 public class DataBooleanBuilder {
 
-  private final IoModelPrimitive model;
+  private final DataPrimitive model;
 
   // Keep a back reference to the DataBuilder.
   private final DataBuilder dataBuilder;
@@ -43,9 +42,7 @@ public class DataBooleanBuilder {
 
   private DataBooleanBuilder(DataBuilder dataBuilder, String propertyName) {
     this.dataBuilder = dataBuilder;
-    model =
-        IoModelPrimitive.of(
-            new PrimitiveDataType(PrimitiveType.BOOLEAN), new VariableName(propertyName));
+    model = DataPrimitive.of(PrimitiveType.BOOLEAN, new VariableName(propertyName));
   }
 
   // ===============================================================================================
@@ -76,7 +73,7 @@ public class DataBooleanBuilder {
    *
    * @return the model
    */
-  final IoModelPrimitive getModel() {
+  final DataPrimitive getModel() {
     return model;
   }
 

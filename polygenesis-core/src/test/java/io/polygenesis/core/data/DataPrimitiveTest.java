@@ -18,30 +18,52 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.core;
+package io.polygenesis.core.data;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.polygenesis.commons.test.AbstractEqualityTest;
-import io.polygenesis.core.data.DataBusinessType;
-import io.polygenesis.core.data.DataPrimitive;
-import io.polygenesis.core.data.PrimitiveType;
-import io.polygenesis.core.data.VariableName;
 import java.util.LinkedHashSet;
 import org.junit.Test;
 
 /** @author Christos Tsakostas */
-public class ArgumentTest extends AbstractEqualityTest<Argument> {
+public class DataPrimitiveTest extends AbstractEqualityTest<DataPrimitive> {
 
   @Test
-  public void shouldSucceedToInstantiate() {
-    Argument argument = new Argument(createDataPrimitive1());
+  public void shouldInitializeDataPrimitive() {
+    DataPrimitive dataPrimitive = createObject1();
 
-    assertThat(argument).isNotNull();
-    assertThat(argument.getModel()).isEqualTo(createDataPrimitive1());
+    assertThat(dataPrimitive).isNotNull();
+    assertThat(dataPrimitive.getDataType()).isEqualTo(PrimitiveType.STRING.name());
+    assertThat(dataPrimitive.getVariableName()).isEqualTo(new VariableName("someVariableName"));
+
+    assertThat(dataPrimitive.getAnnotations()).isNotNull();
+    assertThat(dataPrimitive.getAnnotations().size()).isEqualTo(0);
+
+    assertThat(dataPrimitive.getThingIdentity()).isFalse();
   }
 
-  private DataPrimitive createDataPrimitive1() {
+  @Test
+  public void shouldInitializeDataPrimitiveWithParent() {
+    DataPrimitive dataPrimitive =
+        new DataPrimitive(
+            PrimitiveType.STRING,
+            new VariableName("someVariableName"),
+            new LinkedHashSet<>(),
+            DataBusinessType.ANY);
+
+    assertThat(dataPrimitive).isNotNull();
+
+    assertThat(dataPrimitive.getAnnotations()).isNotNull();
+    assertThat(dataPrimitive.getAnnotations().size()).isEqualTo(0);
+  }
+
+  // ===============================================================================================
+  // Equality and Hash
+  // ===============================================================================================
+
+  @Override
+  public DataPrimitive createObject1() {
     return new DataPrimitive(
         PrimitiveType.STRING,
         new VariableName("someVariableName"),
@@ -49,21 +71,12 @@ public class ArgumentTest extends AbstractEqualityTest<Argument> {
         DataBusinessType.ANY);
   }
 
-  private DataPrimitive createDataPrimitive2() {
+  @Override
+  public DataPrimitive createObject2() {
     return new DataPrimitive(
         PrimitiveType.STRING,
         new VariableName("someOtherVariableName"),
         new LinkedHashSet<>(),
         DataBusinessType.ANY);
-  }
-
-  @Override
-  public Argument createObject1() {
-    return new Argument(createDataPrimitive1());
-  }
-
-  @Override
-  public Argument createObject2() {
-    return new Argument(createDataPrimitive2());
   }
 }

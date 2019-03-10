@@ -24,7 +24,7 @@ import io.polygenesis.commons.text.Name;
 import io.polygenesis.core.Deducer;
 import io.polygenesis.core.Generator;
 import io.polygenesis.core.ThingRepositoryImpl;
-import io.polygenesis.core.datatype.PackageName;
+import io.polygenesis.core.data.PackageName;
 import io.polygenesis.deducers.apiimpl.ApiImplDeducerFactory;
 import io.polygenesis.generators.java.api.JavaApiGeneratorFactory;
 import io.polygenesis.generators.java.apiimpl.JavaApiImplGeneratorFactory;

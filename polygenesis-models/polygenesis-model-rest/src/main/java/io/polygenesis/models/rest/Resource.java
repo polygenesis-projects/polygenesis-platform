@@ -21,7 +21,7 @@
 package io.polygenesis.models.rest;
 
 import io.polygenesis.commons.text.Name;
-import io.polygenesis.core.datatype.PackageName;
+import io.polygenesis.core.data.PackageName;
 import io.polygenesis.models.api.Service;
 import java.util.Set;
 

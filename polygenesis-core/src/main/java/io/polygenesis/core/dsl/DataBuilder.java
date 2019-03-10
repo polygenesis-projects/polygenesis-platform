@@ -20,8 +20,9 @@
 
 package io.polygenesis.core.dsl;
 
-import io.polygenesis.core.iomodel.IoModel;
-import io.polygenesis.core.iomodel.IoModelGroup;
+import io.polygenesis.core.data.Data;
+import io.polygenesis.core.data.DataArray;
+import io.polygenesis.core.data.DataGroup;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -32,7 +33,7 @@ import java.util.Set;
  */
 public class DataBuilder {
 
-  private final Set<IoModel> models;
+  private final Set<Data> models;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -90,11 +91,22 @@ public class DataBuilder {
   /**
    * With group data data builder.
    *
-   * @param ioModelGroup the io model group
+   * @param dataGroup the data group
    * @return the data builder
    */
-  public final DataBuilder withGroupData(IoModelGroup ioModelGroup) {
-    this.models.add(ioModelGroup);
+  public final DataBuilder withGroupData(DataGroup dataGroup) {
+    this.models.add(dataGroup);
+    return this;
+  }
+
+  /**
+   * With array data data builder.
+   *
+   * @param dataArray the data array
+   * @return the data builder
+   */
+  public final DataBuilder withArrayData(DataArray dataArray) {
+    this.models.add(dataArray);
     return this;
   }
 
@@ -107,7 +119,7 @@ public class DataBuilder {
    *
    * @return the set
    */
-  public final Set<IoModel> build() {
+  public final Set<Data> build() {
     return models;
   }
 }

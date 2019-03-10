@@ -20,8 +20,8 @@
 
 package io.polygenesis.models.domain;
 
-import io.polygenesis.core.iomodel.IoModelGroup;
-import io.polygenesis.core.iomodel.VariableName;
+import io.polygenesis.core.data.DataGroup;
+import io.polygenesis.core.data.VariableName;
 
 /**
  * The type Aggregate entity.
@@ -37,13 +37,13 @@ public class AggregateEntity extends ValueObject {
   /**
    * Instantiates a new Aggregate entity.
    *
-   * @param originatingIoModelGroup the originating io model group
-   * @param ioModelGroup the io model group
+   * @param originatingDataGroup the originating data group
+   * @param dataGroup the data group
    * @param variableName the variable name
    */
   public AggregateEntity(
-      IoModelGroup originatingIoModelGroup, IoModelGroup ioModelGroup, VariableName variableName) {
-    super(PropertyType.AGGREGATE_ENTITY, originatingIoModelGroup, ioModelGroup, variableName);
+      DataGroup originatingDataGroup, DataGroup dataGroup, VariableName variableName) {
+    super(PropertyType.AGGREGATE_ENTITY, originatingDataGroup, dataGroup, variableName);
   }
 
   // ===============================================================================================

@@ -20,7 +20,7 @@
 
 package io.polygenesis.core;
 
-import io.polygenesis.core.iomodel.IoModel;
+import io.polygenesis.core.data.Data;
 
 /**
  * Denotes an Argument of a {@link Function}.
@@ -38,7 +38,7 @@ public class Argument extends AbstractIO {
    *
    * @param model the model
    */
-  public Argument(IoModel model) {
+  public Argument(Data model) {
     super(model);
   }
 }

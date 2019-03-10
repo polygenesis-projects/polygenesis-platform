@@ -70,6 +70,15 @@ public class Table {
         .collect(Collectors.toCollection(LinkedHashSet::new));
   }
 
+  /**
+   * Has primary keys boolean.
+   *
+   * @return the boolean
+   */
+  public boolean hasPrimaryKeys() {
+    return columns.stream().anyMatch(column -> column.getPrimaryKey());
+  }
+
   // ===============================================================================================
   // GETTERS
   // ===============================================================================================

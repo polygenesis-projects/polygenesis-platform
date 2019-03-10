@@ -22,7 +22,7 @@ package io.polygenesis.generators.java.api;
 
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.datatype.PackageName;
+import io.polygenesis.core.data.PackageName;
 import io.polygenesis.models.api.Dto;
 import io.polygenesis.models.api.Service;
 import java.nio.file.Path;
@@ -80,6 +80,11 @@ public class DtoExporter {
   // ===============================================================================================
 
   private void export(Path generationPath, Dto dto) {
+    // TODO: getOriginatingDataGroup() should not be DataArray
+    if (dto.getOriginatingDataGroup().isDataArray()) {
+      return;
+    }
+
     Map<String, Object> dataModel = new HashMap<>();
     dataModel.put("representation", dtoClassRepresentable.create(dto));
 
@@ -90,18 +95,12 @@ public class DtoExporter {
   }
 
   private Path makeFileName(Path generationPath, Dto dto) {
-    PackageName servicePackageName =
-        dto.getOriginatingIoModelGroup()
-            .getDataType()
-            .getOptionalPackageName()
-            .orElseThrow(IllegalArgumentException::new);
+    PackageName servicePackageName = dto.getOriginatingDataGroup().getPackageName();
 
     return Paths.get(
         generationPath.toString(),
         "src/main/java",
         servicePackageName.toPath().toString(),
-        TextConverter.toUpperCamel(
-                dto.getOriginatingIoModelGroup().getDataType().getDataTypeName().getText())
-            + ".java");
+        TextConverter.toUpperCamel(dto.getOriginatingDataGroup().getDataType()) + ".java");
   }
 }

@@ -20,12 +20,10 @@
 
 package io.polygenesis.models.domain;
 
-import io.polygenesis.commons.keyvalue.KeyValue;
-import io.polygenesis.core.iomodel.IoModel;
-import io.polygenesis.core.iomodel.IoModelGroup;
-import io.polygenesis.core.iomodel.VariableName;
+import io.polygenesis.core.data.Data;
+import io.polygenesis.core.data.DataGroup;
+import io.polygenesis.core.data.VariableName;
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * The type Aggregate root id.
@@ -34,7 +32,7 @@ import java.util.Optional;
  */
 public class AggregateRootId extends AbstractProperty {
 
-  private IoModelGroup ioModelGroup;
+  private DataGroup dataGroup;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -43,12 +41,12 @@ public class AggregateRootId extends AbstractProperty {
   /**
    * Instantiates a new Aggregate root id.
    *
-   * @param ioModelGroup the io model group
+   * @param dataGroup the data group
    * @param variableName the variable name
    */
-  public AggregateRootId(IoModelGroup ioModelGroup, VariableName variableName) {
+  public AggregateRootId(DataGroup dataGroup, VariableName variableName) {
     super(PropertyType.AGGREGATE_ROOT_ID, variableName);
-    setIoModelGroup(ioModelGroup);
+    setDataGroup(dataGroup);
   }
 
   // ===============================================================================================
@@ -56,12 +54,12 @@ public class AggregateRootId extends AbstractProperty {
   // ===============================================================================================
 
   /**
-   * Gets io model group.
+   * Gets data group.
    *
-   * @return the io model group
+   * @return the data group
    */
-  public IoModelGroup getIoModelGroup() {
-    return ioModelGroup;
+  public DataGroup getDataGroup() {
+    return dataGroup;
   }
 
   // ===============================================================================================
@@ -69,34 +67,31 @@ public class AggregateRootId extends AbstractProperty {
   // ===============================================================================================
 
   /**
-   * Sets io model group.
+   * Sets data group.
    *
-   * @param ioModelGroup the io model group
+   * @param dataGroup the data group
    */
-  public void setIoModelGroup(IoModelGroup ioModelGroup) {
-    this.ioModelGroup = ioModelGroup;
+  private void setDataGroup(DataGroup dataGroup) {
+    this.dataGroup = dataGroup;
+  }
+
+  // ===============================================================================================
+  // ABSTRACT IMPLEMENTATIONS
+  // ===============================================================================================
+
+  @Override
+  public Data getData() {
+    return dataGroup;
+  }
+
+  @Override
+  public Data getTypeParameterData() {
+    throw new UnsupportedOperationException();
   }
 
   // ===============================================================================================
   // OVERRIDES
   // ===============================================================================================
-
-  @Override
-  public Optional<IoModelGroup> getIoModelGroupAsOptional() {
-    return Optional.of(ioModelGroup);
-  }
-
-  @Override
-  public IoModel getIoModel() {
-    return ioModelGroup;
-  }
-
-  @Override
-  public KeyValue getAsKeyValue() {
-    return new KeyValue(
-        getIoModelGroup().getClassDataType().getDataTypeName().getText(),
-        getVariableName().getText());
-  }
 
   @Override
   public boolean equals(Object o) {
@@ -107,11 +102,11 @@ public class AggregateRootId extends AbstractProperty {
       return false;
     }
     AggregateRootId that = (AggregateRootId) o;
-    return Objects.equals(ioModelGroup, that.ioModelGroup);
+    return Objects.equals(dataGroup, that.dataGroup);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(ioModelGroup);
+    return Objects.hash(dataGroup);
   }
 }

@@ -20,11 +20,8 @@
 
 package io.polygenesis.models.domain;
 
-import io.polygenesis.commons.keyvalue.KeyValue;
-import io.polygenesis.core.iomodel.IoModel;
-import io.polygenesis.core.iomodel.IoModelGroup;
-import io.polygenesis.core.iomodel.VariableName;
-import java.util.Optional;
+import io.polygenesis.core.data.Data;
+import io.polygenesis.core.data.VariableName;
 
 /**
  * The type Abstract property.
@@ -74,29 +71,28 @@ public abstract class AbstractProperty {
   }
 
   // ===============================================================================================
+  // QUERIES
+  // ===============================================================================================
+
+  // ===============================================================================================
   // ABSTRACT
   // ===============================================================================================
 
   /**
-   * Gets io model group as optional.
+   * Gets data.
    *
-   * @return the io model group as optional
+   * @return the data
    */
-  public abstract Optional<IoModelGroup> getIoModelGroupAsOptional();
+  public abstract Data getData();
 
   /**
-   * Gets io model.
+   * Gets data related to type parameter.
    *
-   * @return the io model
-   */
-  public abstract IoModel getIoModel();
-
-  /**
-   * Gets as key value.
+   * <p>Applies only to collections.
    *
-   * @return the as key value
+   * @return the type parameter data
    */
-  public abstract KeyValue getAsKeyValue();
+  public abstract Data getTypeParameterData();
 
   // ===============================================================================================
   // GUARDS

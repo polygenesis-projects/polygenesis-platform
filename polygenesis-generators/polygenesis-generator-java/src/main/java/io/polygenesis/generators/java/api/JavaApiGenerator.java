@@ -48,7 +48,7 @@ public class JavaApiGenerator extends AbstractGenerator {
    *
    * @param generationPath the generation path
    * @param serviceExporter the service exporter
-   * @param dtoExporter the io model group exporter
+   * @param dtoExporter the data group exporter
    */
   public JavaApiGenerator(
       Path generationPath, ServiceExporter serviceExporter, DtoExporter dtoExporter) {

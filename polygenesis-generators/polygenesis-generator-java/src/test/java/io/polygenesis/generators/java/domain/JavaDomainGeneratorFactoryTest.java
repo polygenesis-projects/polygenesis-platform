@@ -22,7 +22,7 @@ package io.polygenesis.generators.java.domain;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import io.polygenesis.core.datatype.PackageName;
+import io.polygenesis.core.data.PackageName;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Paths;

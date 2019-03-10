@@ -20,11 +20,8 @@
 
 package io.polygenesis.models.domain;
 
-import io.polygenesis.commons.keyvalue.KeyValue;
-import io.polygenesis.core.iomodel.IoModel;
-import io.polygenesis.core.iomodel.IoModelGroup;
-import io.polygenesis.core.iomodel.VariableName;
-import java.util.Optional;
+import io.polygenesis.core.data.Data;
+import io.polygenesis.core.data.VariableName;
 
 /**
  * The type Value object collection.
@@ -47,21 +44,21 @@ public class ValueObjectCollection extends AbstractProperty {
   }
 
   // ===============================================================================================
-  // OVERRIDES
+  // ABSTRACT IMPLEMENTATIONS
   // ===============================================================================================
 
   @Override
-  public Optional<IoModelGroup> getIoModelGroupAsOptional() {
-    return Optional.empty();
-  }
-
-  @Override
-  public IoModel getIoModel() {
+  public Data getData() {
     throw new UnsupportedOperationException();
   }
 
   @Override
-  public KeyValue getAsKeyValue() {
+  public Data getTypeParameterData() {
     throw new UnsupportedOperationException();
   }
+
+  // ===============================================================================================
+  // OVERRIDES
+  // ===============================================================================================
+
 }

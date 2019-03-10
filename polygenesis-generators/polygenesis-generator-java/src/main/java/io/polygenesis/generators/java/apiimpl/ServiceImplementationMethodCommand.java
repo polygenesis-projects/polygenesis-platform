@@ -151,6 +151,8 @@ public class ServiceImplementationMethodCommand extends ServiceImplementationMet
         return fillAggregateRootId(aggregateRoot);
       case PRIMITIVE:
         return fillPrimitiveProperty(property, argument);
+      case PRIMITIVE_COLLECTION:
+        return fillPrimitiveCollectionProperty(property, argument);
       case VALUE_OBJECT:
         return fillValueObjectProperty(
             argument, findValueObjectFromDto(property, aggregateRootConverter));
@@ -180,6 +182,19 @@ public class ServiceImplementationMethodCommand extends ServiceImplementationMet
         .orElseThrow(IllegalArgumentException::new);
   }
 
+  private String fillPrimitiveCollectionProperty(AbstractProperty property, Argument argument) {
+    StringBuilder stringBuilder = new StringBuilder();
+
+    stringBuilder.append(
+        TextConverter.toLowerCamel(argument.getModel().getVariableName().getText()));
+    stringBuilder.append(".");
+    stringBuilder.append("get");
+    stringBuilder.append(TextConverter.toUpperCamel(property.getVariableName().getText()));
+    stringBuilder.append("()");
+
+    return stringBuilder.toString();
+  }
+
   private String fillPrimitiveProperty(AbstractProperty property, Argument argument) {
     StringBuilder stringBuilder = new StringBuilder();
 
@@ -205,12 +220,7 @@ public class ServiceImplementationMethodCommand extends ServiceImplementationMet
     stringBuilder.append("get");
     stringBuilder.append(
         TextConverter.toUpperCamel(
-            valueObjectFromDto
-                .getDto()
-                .getOriginatingIoModelGroup()
-                .getClassDataType()
-                .getDataTypeName()
-                .getText()));
+            valueObjectFromDto.getDto().getOriginatingDataGroup().getDataType()));
     stringBuilder.append("()");
     stringBuilder.append(")");
 

@@ -50,7 +50,7 @@ public class FunctionIdentifier {
 
   private final MethodAnalyzer methodAnalyzer;
   private final RecursiveObjectFiller recursiveObjectFiller;
-  private final IoModelDeducer ioModelDeducer;
+  private final DataDeducer dataDeducer;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -61,15 +61,15 @@ public class FunctionIdentifier {
    *
    * @param methodAnalyzer the method analyzer
    * @param recursiveObjectFiller the recursive object filler
-   * @param ioModelDeducer the io model deducer
+   * @param dataDeducer the data deducer
    */
   public FunctionIdentifier(
       MethodAnalyzer methodAnalyzer,
       RecursiveObjectFiller recursiveObjectFiller,
-      IoModelDeducer ioModelDeducer) {
+      DataDeducer dataDeducer) {
     this.methodAnalyzer = methodAnalyzer;
     this.recursiveObjectFiller = recursiveObjectFiller;
-    this.ioModelDeducer = ioModelDeducer;
+    this.dataDeducer = dataDeducer;
   }
 
   // ===============================================================================================
@@ -129,7 +129,7 @@ public class FunctionIdentifier {
                 methodOutputDescriptor.getClazz(),
                 null);
 
-        ReturnValue returnValue = new ReturnValue(ioModelDeducer.deduceResponse(output));
+        ReturnValue returnValue = new ReturnValue(dataDeducer.deduceResponse(output));
 
         // =========================================================================================
         // METHOD INPUTS
@@ -151,7 +151,7 @@ public class FunctionIdentifier {
                   null);
 
           LOG.info("{}", input);
-          arguments.add(new Argument(ioModelDeducer.deduceResponse(input)));
+          arguments.add(new Argument(dataDeducer.deduceResponse(input)));
         }
 
         Function function =

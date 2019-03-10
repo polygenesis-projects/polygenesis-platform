@@ -20,47 +20,33 @@
 
 package io.polygenesis.core.data;
 
-import io.polygenesis.core.datatype.DataKind;
-import io.polygenesis.core.datatype.PrimitiveType;
-import io.polygenesis.core.iomodel.DataBusinessType;
-import io.polygenesis.core.iomodel.VariableName;
+import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * The type String data.
- *
- * @author Christos Tsakostas
- */
-public class StringData extends PrimitiveData {
+import io.polygenesis.commons.test.AbstractEqualityTest;
+import org.junit.Test;
 
-  // ===============================================================================================
-  // CONSTRUCTOR(S)
-  // ===============================================================================================
+/** @author Christos Tsakostas */
+public class DataTest extends AbstractEqualityTest<TestData> {
 
-  /**
-   * Instantiates a new String data.
-   *
-   * @param variableName the variable name
-   */
-  public StringData(VariableName variableName) {
-    super(variableName, PrimitiveType.STRING);
-  }
+  @Test
+  public void shouldInitializeTestData() {
+    TestData testData = new TestData(new VariableName("someVariableName"));
 
-  /**
-   * Instantiates a new String data.
-   *
-   * @param variableName the variable name
-   * @param dataBusinessType the data business type
-   */
-  public StringData(VariableName variableName, DataBusinessType dataBusinessType) {
-    super(variableName, dataBusinessType, PrimitiveType.STRING);
+    assertThat(testData).isNotNull();
+    assertThat(testData.getDataType()).isEqualTo(PrimitiveType.STRING.name());
+    assertThat(testData.getVariableName()).isEqualTo(new VariableName("someVariableName"));
   }
 
   // ===============================================================================================
-  // OVERRIDES
+  // Equality and Hash
   // ===============================================================================================
+  @Override
+  public TestData createObject1() {
+    return new TestData(new VariableName("variableName"));
+  }
 
   @Override
-  public String getDataType() {
-    return String.format("%s_$s", DataKind.PRIMITIVE.name(), PrimitiveType.STRING.name());
+  public TestData createObject2() {
+    return new TestData(new VariableName("someOtherVariableName"));
   }
 }

@@ -24,7 +24,7 @@ import io.polygenesis.commons.text.Name;
 import io.polygenesis.core.Function;
 import io.polygenesis.core.Thing;
 import io.polygenesis.core.ThingRepository;
-import io.polygenesis.core.datatype.PackageName;
+import io.polygenesis.core.data.PackageName;
 import io.polygenesis.models.api.Service;
 import io.polygenesis.models.api.ServiceModelRepository;
 import java.util.LinkedHashSet;

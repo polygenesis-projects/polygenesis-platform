@@ -20,28 +20,26 @@
 
 package io.polygenesis.core.deducer;
 
-import io.polygenesis.core.datatype.ClassDataType;
-import io.polygenesis.core.datatype.DataTypeName;
-import io.polygenesis.core.datatype.PackageName;
-import io.polygenesis.core.datatype.PrimitiveDataType;
-import io.polygenesis.core.datatype.PrimitiveType;
-import io.polygenesis.core.iomodel.DataBusinessType;
-import io.polygenesis.core.iomodel.IoModel;
-import io.polygenesis.core.iomodel.IoModelArray;
-import io.polygenesis.core.iomodel.IoModelGroup;
-import io.polygenesis.core.iomodel.IoModelPrimitive;
-import io.polygenesis.core.iomodel.VariableName;
+import io.polygenesis.core.data.Data;
+import io.polygenesis.core.data.DataArray;
+import io.polygenesis.core.data.DataBusinessType;
+import io.polygenesis.core.data.DataGroup;
+import io.polygenesis.core.data.DataPrimitive;
+import io.polygenesis.core.data.ObjectName;
+import io.polygenesis.core.data.PackageName;
+import io.polygenesis.core.data.PrimitiveType;
+import io.polygenesis.core.data.VariableName;
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
- * Deduces the IOModel.
+ * Deduces the Data.
  *
  * @author Christos Tsakostas
  */
-public class IoModelDeducer {
+public class DataDeducer {
 
   private final JavaDataTypeConverter javaDataTypeConverter;
 
@@ -50,11 +48,11 @@ public class IoModelDeducer {
   // ===============================================================================================
 
   /**
-   * Instantiates a new Io model deducer.
+   * Instantiates a new data deducer.
    *
    * @param javaDataTypeConverter the data type converter
    */
-  public IoModelDeducer(JavaDataTypeConverter javaDataTypeConverter) {
+  public DataDeducer(JavaDataTypeConverter javaDataTypeConverter) {
     this.javaDataTypeConverter = javaDataTypeConverter;
   }
 
@@ -63,47 +61,43 @@ public class IoModelDeducer {
   // ===============================================================================================
 
   /**
-   * Deduce response io model.
+   * Deduce response data.
    *
    * @param recursiveObject the recursive object
-   * @return the io model
+   * @return the data
    */
-  IoModel deduceResponse(RecursiveObject recursiveObject) {
+  Data deduceResponse(RecursiveObject recursiveObject) {
 
-    if (recursiveObject.isGenericInterface()) {
+    if (recursiveObject.isGenericInterface()
+        || recursiveObject.getStrDataType() == "java.util.List") {
       // TODO: check if recursiveObject.getStrGenericType() plays a role?
-      // IoModelArray
-      return new IoModelArray(
-          new ClassDataType(
-              convertToDataTypeNameFrom(recursiveObject.getStrDataType()),
-              convertToPackageName(recursiveObject.getStrDataType())),
-          new VariableName(recursiveObject.getStrName()));
+      // DataArray
+      return new DataArray(new VariableName(recursiveObject.getStrName()));
     } else if (!recursiveObject.isCustomObject()) {
-      // IoModelPrimitive
+      // DataPrimitive
       if (recursiveObject.getStrGenericType() != null) {
-        throw new IllegalArgumentException("IoModelPrimitive cannot be Generic");
+        throw new IllegalArgumentException("DataPrimitive cannot be Generic");
       }
 
-      return new IoModelPrimitive(
-          new PrimitiveDataType(convertToPrimitiveTypeFrom(recursiveObject.getStrDataType())),
+      return new DataPrimitive(
+          convertToPrimitiveTypeFrom(recursiveObject.getStrDataType()),
           new VariableName(recursiveObject.getStrName()),
           safeGetAnnotationsFrom(recursiveObject),
           DataBusinessType.ANY);
 
     } else {
-      // IoModelGroup
+      // DataGroup
       if (recursiveObject.getStrGenericType() != null) {
         throw new IllegalStateException("Something is wrong! No Generic should be here.");
       }
 
-      IoModelGroup modelGroupResponse =
-          new IoModelGroup(
-              new ClassDataType(
-                  convertToDataTypeNameFrom(recursiveObject.getStrDataType()),
-                  convertToPackageName(recursiveObject.getStrDataType())),
+      DataGroup modelGroupResponse =
+          new DataGroup(
+              convertToObjectNameFrom(recursiveObject.getStrDataType()),
+              convertToPackageName(recursiveObject.getStrDataType()),
               new VariableName(recursiveObject.getStrName()));
 
-      this.fillIoModelGroup(modelGroupResponse, recursiveObject);
+      this.fillDataGroup(modelGroupResponse, recursiveObject);
 
       return modelGroupResponse;
     }
@@ -113,37 +107,35 @@ public class IoModelDeducer {
   // PRIVATE
   // ===============================================================================================
 
-  private void fillIoModelGroup(IoModelGroup modelGroup, RecursiveObject recursiveObject) {
+  private void fillDataGroup(DataGroup dataGroup, RecursiveObject recursiveObject) {
 
     recursiveObject
         .getChildren()
         .forEach(
             childRecursiveObject -> {
               if (childRecursiveObject.getStrGenericType() != null) {
-                IoModelArray modelArray = new IoModelArray(modelGroup);
+                DataGroup arrayElement = new DataGroup();
 
-                fillIoModelGroup(modelArray, childRecursiveObject);
+                fillDataGroup(arrayElement, childRecursiveObject);
 
-                modelGroup.addIoModelArray(modelArray);
+                dataGroup.addData(new DataArray(arrayElement));
               } else {
                 if (childRecursiveObject.isCustomObject()) {
-                  IoModelGroup modelGroupCustomObject = new IoModelGroup(modelGroup);
+                  DataGroup modelGroupCustomObject = new DataGroup();
 
-                  fillIoModelGroup(modelGroupCustomObject, childRecursiveObject);
+                  fillDataGroup(modelGroupCustomObject, childRecursiveObject);
 
-                  modelGroup.addIoModelGroup(modelGroupCustomObject);
+                  dataGroup.addData(modelGroupCustomObject);
                 } else {
                   // Should not add primitives for Ignored or automatically set fields.
-                  IoModelPrimitive modelPrimitive =
-                      new IoModelPrimitive(
-                          new PrimitiveDataType(
-                              convertToPrimitiveTypeFrom(childRecursiveObject.getStrDataType())),
+                  DataPrimitive modelPrimitive =
+                      new DataPrimitive(
+                          convertToPrimitiveTypeFrom(childRecursiveObject.getStrDataType()),
                           new VariableName(childRecursiveObject.getStrName()),
-                          modelGroup,
                           safeGetAnnotationsFrom(childRecursiveObject),
                           DataBusinessType.ANY);
 
-                  modelGroup.addIoModelPrimitive(modelPrimitive);
+                  dataGroup.addData(modelPrimitive);
                 }
               }
             });
@@ -157,14 +149,14 @@ public class IoModelDeducer {
     }
   }
 
-  private DataTypeName convertToDataTypeNameFrom(String strDataType) {
+  private ObjectName convertToObjectNameFrom(String strDataType) {
     // TODO - maybe there is a better check?
     int index = strDataType.lastIndexOf('.');
     if (index > 0) {
-      return new DataTypeName(strDataType.substring(index + 1));
+      return new ObjectName(strDataType.substring(index + 1));
     }
 
-    return new DataTypeName(javaDataTypeConverter.convert(strDataType).name());
+    return new ObjectName(javaDataTypeConverter.convert(strDataType).name());
   }
 
   private PrimitiveType convertToPrimitiveTypeFrom(String strDataType) {

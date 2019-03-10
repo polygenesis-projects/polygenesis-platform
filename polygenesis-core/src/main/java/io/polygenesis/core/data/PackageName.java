@@ -18,98 +18,68 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.core.datatype;
+package io.polygenesis.core.data;
 
+import com.oregor.ddd4j.check.assertion.Assertion;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Objects;
-import java.util.Optional;
+import java.util.regex.Pattern;
 
 /**
- * The Data type.
- *
- * <p>References:
- *
- * <ul>
- *   <li>https://en.wikibooks.org/wiki/Java_Programming/Primitive_Types
- *   <li>https://en.wikipedia.org/wiki/Primitive_data_type
- *   <li>https://docs.oracle.com/javase/tutorial/java/nutsandbolts/datatypes.html
- * </ul>
+ * The type Package name.
  *
  * @author Christos Tsakostas
  */
-public abstract class AbstractDataType {
+public class PackageName {
 
-  private final DataKind dataKind;
+  private static final Pattern pattern = Pattern.compile("^(?:\\w+|\\w+\\.\\w+)+$");
 
-  /** Name such as: int, BigDecimal, CreateCustomerRequest etc. */
-  private final DataTypeName dataTypeName;
+  private final String text;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
-   * Instantiates a new Abstract data type.
+   * Instantiates a new Package name.
    *
-   * @param dataKind the data type
-   * @param dataTypeName the data type name
+   * @param text the text
    */
-  public AbstractDataType(DataKind dataKind, DataTypeName dataTypeName) {
-    this.dataKind = dataKind;
-    this.dataTypeName = dataTypeName;
+  public PackageName(String text) {
+    guardText(text);
+    this.text = text;
   }
-
-  /**
-   * Gets optional package name.
-   *
-   * @return the optional package name
-   */
-  // ===============================================================================================
-  // ABSTRACT
-  // ===============================================================================================
-  public abstract Optional<PackageName> getOptionalPackageName();
 
   // ===============================================================================================
   // GETTERS
   // ===============================================================================================
 
   /**
-   * Gets data type name.
+   * Gets text.
    *
-   * @return the data type name
+   * @return the text
    */
-  public DataTypeName getDataTypeName() {
-    return dataTypeName;
+  public String getText() {
+    return text;
   }
 
   /**
-   * Gets data kind.
+   * To path path.
    *
-   * @return the data kind
+   * @return the path
    */
-  public DataKind getDataKind() {
-    return dataKind;
+  public Path toPath() {
+    return Paths.get(getText().replaceAll("\\.", "/"));
   }
 
   // ===============================================================================================
-  // QUERIES
+  // GUARDS
   // ===============================================================================================
 
-  /**
-   * Is primitive boolean.
-   *
-   * @return the boolean
-   */
-  public boolean isPrimitive() {
-    return dataKind.equals(DataKind.PRIMITIVE);
-  }
-
-  /**
-   * Is class boolean.
-   *
-   * @return the boolean
-   */
-  public boolean isClass() {
-    return dataKind.equals(DataKind.CLASS);
+  private void guardText(String text) {
+    Assertion.isTrue(
+        pattern.matcher(text).matches(), String.format("Invalid package name=%s", text));
   }
 
   // ===============================================================================================
@@ -124,12 +94,12 @@ public abstract class AbstractDataType {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    AbstractDataType that = (AbstractDataType) o;
-    return Objects.equals(dataTypeName, that.dataTypeName);
+    PackageName that = (PackageName) o;
+    return Objects.equals(text, that.text);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(dataTypeName);
+    return Objects.hash(text);
   }
 }

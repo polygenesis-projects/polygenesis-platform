@@ -23,9 +23,8 @@ package io.polygenesis.representations.java;
 import static java.util.stream.Collectors.toCollection;
 
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.datatype.DataTypeName;
-import io.polygenesis.core.datatype.PackageName;
-import io.polygenesis.core.iomodel.IoModelGroup;
+import io.polygenesis.core.data.DataGroup;
+import io.polygenesis.core.data.PackageName;
 import io.polygenesis.representations.commons.FieldRepresentation;
 import io.polygenesis.representations.commons.ParameterRepresentation;
 import java.util.Arrays;
@@ -92,12 +91,8 @@ public abstract class AbstractClassRepresentable<S> implements ClassRepresentabl
    * @param modelGroup the model group
    * @return the string
    */
-  protected String packageName(IoModelGroup modelGroup) {
-    return modelGroup
-        .getDataType()
-        .getOptionalPackageName()
-        .map(packageName -> packageName.getText())
-        .orElseThrow(() -> new IllegalArgumentException());
+  protected String packageName(DataGroup modelGroup) {
+    return modelGroup.getPackageName().getText();
   }
 
   /**
@@ -106,25 +101,18 @@ public abstract class AbstractClassRepresentable<S> implements ClassRepresentabl
    * @param modelGroup the model group
    * @return the set
    */
-  protected Set<String> imports(IoModelGroup modelGroup) {
+  protected Set<String> imports(DataGroup modelGroup) {
     Set<String> imports = new LinkedHashSet<>();
 
     modelGroup
         .getModels()
+        .stream()
+        .filter(model -> model.isDataGroup())
+        .map(DataGroup.class::cast)
+        .filter(model -> !model.getPackageName().equals(modelGroup.getPackageName()))
         .forEach(
             model -> {
-              model
-                  .getDataType()
-                  .getOptionalPackageName()
-                  .filter(
-                      packageName ->
-                          !packageName.equals(
-                              modelGroup.getDataType().getOptionalPackageName().get()))
-                  .ifPresent(
-                      packageName ->
-                          imports.add(
-                              makeCanonicalObjectName(
-                                  packageName, model.getDataType().getDataTypeName())));
+              imports.add(makeCanonicalObjectName(model.getPackageName(), model.getDataType()));
             });
 
     return imports;
@@ -136,11 +124,10 @@ public abstract class AbstractClassRepresentable<S> implements ClassRepresentabl
    * @param modelGroup the model group
    * @return the string
    */
-  protected String simpleObjectName(IoModelGroup modelGroup) {
+  protected String simpleObjectName(DataGroup modelGroup) {
     StringBuilder stringBuilder = new StringBuilder();
 
-    stringBuilder.append(
-        TextConverter.toUpperCamel(modelGroup.getDataType().getDataTypeName().getText()));
+    stringBuilder.append(TextConverter.toUpperCamel(modelGroup.getDataType()));
 
     return stringBuilder.toString();
   }
@@ -151,7 +138,7 @@ public abstract class AbstractClassRepresentable<S> implements ClassRepresentabl
    * @param modelGroup the model group
    * @return the string
    */
-  protected String fullObjectName(IoModelGroup modelGroup) {
+  protected String fullObjectName(DataGroup modelGroup) {
     return simpleObjectName(modelGroup);
   }
 
@@ -161,7 +148,7 @@ public abstract class AbstractClassRepresentable<S> implements ClassRepresentabl
    * @param modelGroup the model group
    * @return the set
    */
-  protected Set<FieldRepresentation> fieldRepresentations(IoModelGroup modelGroup) {
+  protected Set<FieldRepresentation> fieldRepresentations(DataGroup modelGroup) {
     Set<FieldRepresentation> variables = new LinkedHashSet<>();
 
     modelGroup
@@ -170,7 +157,7 @@ public abstract class AbstractClassRepresentable<S> implements ClassRepresentabl
             model -> {
               variables.add(
                   new FieldRepresentation(
-                      fromDataTypeToJavaConverter.getDeclaredVariableType(model),
+                      fromDataTypeToJavaConverter.getDeclaredVariableType(model.getDataType()),
                       model.getVariableName().getText()));
             });
 
@@ -359,11 +346,11 @@ public abstract class AbstractClassRepresentable<S> implements ClassRepresentabl
    * Make canonical object name string.
    *
    * @param packageName the package name
-   * @param dataTypeName the data type name
+   * @param dataType the data type
    * @return the string
    */
-  protected String makeCanonicalObjectName(PackageName packageName, DataTypeName dataTypeName) {
-    return packageName.getText() + "." + TextConverter.toUpperCamel(dataTypeName.getText());
+  protected String makeCanonicalObjectName(PackageName packageName, String dataType) {
+    return packageName.getText() + "." + TextConverter.toUpperCamel(dataType);
   }
 
   // ===============================================================================================

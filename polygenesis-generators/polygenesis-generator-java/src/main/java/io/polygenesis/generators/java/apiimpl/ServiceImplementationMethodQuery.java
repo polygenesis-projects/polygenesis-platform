@@ -73,22 +73,11 @@ public class ServiceImplementationMethodQuery extends ServiceImplementationMetho
     stringBuilder.append("\t\t");
     stringBuilder.append("Assertion.isNotNull(");
     stringBuilder.append(
-        TextConverter.toLowerCamel(
-            method
-                .getRequestDto()
-                .getOriginatingIoModelGroup()
-                .getDataType()
-                .getDataTypeName()
-                .getText()));
+        TextConverter.toLowerCamel(method.getRequestDto().getOriginatingDataGroup().getDataType()));
     stringBuilder.append(", \"");
     stringBuilder.append(
         TextConverter.toUpperCamelSpaces(
-            method
-                .getRequestDto()
-                .getOriginatingIoModelGroup()
-                .getDataType()
-                .getDataTypeName()
-                .getText()));
+            method.getRequestDto().getOriginatingDataGroup().getDataType()));
     stringBuilder.append(" is required\");");
     stringBuilder.append("\n");
     stringBuilder.append("\n");
@@ -107,13 +96,7 @@ public class ServiceImplementationMethodQuery extends ServiceImplementationMetho
     StringBuilder stringBuilder = new StringBuilder();
 
     String request =
-        TextConverter.toLowerCamel(
-            method
-                .getRequestDto()
-                .getOriginatingIoModelGroup()
-                .getDataType()
-                .getDataTypeName()
-                .getText());
+        TextConverter.toLowerCamel(method.getRequestDto().getOriginatingDataGroup().getDataType());
 
     stringBuilder.append("\t\t");
     stringBuilder.append("Paginated<");
@@ -151,12 +134,7 @@ public class ServiceImplementationMethodQuery extends ServiceImplementationMetho
     stringBuilder.append(".convertTo");
     stringBuilder.append(
         TextConverter.toUpperCamel(
-            method
-                .getResponseDto()
-                .getOriginatingIoModelGroup()
-                .getDataType()
-                .getDataTypeName()
-                .getText()));
+            method.getResponseDto().getOriginatingDataGroup().getDataType()));
     stringBuilder.append("(");
     stringBuilder.append(TextConverter.toLowerCamel(aggregateRoot.getName().getText()));
     stringBuilder.append(");");
@@ -176,32 +154,20 @@ public class ServiceImplementationMethodQuery extends ServiceImplementationMetho
     StringBuilder stringBuilder = new StringBuilder();
 
     String request =
-        TextConverter.toLowerCamel(
-            method
-                .getRequestDto()
-                .getOriginatingIoModelGroup()
-                .getClassDataType()
-                .getDataTypeName()
-                .getText());
+        TextConverter.toLowerCamel(method.getRequestDto().getOriginatingDataGroup().getDataType());
 
     stringBuilder.append("\t\t");
     stringBuilder.append("return new ");
     stringBuilder.append(
         TextConverter.toUpperCamel(
-            method
-                .getResponseDto()
-                .getOriginatingIoModelGroup()
-                .getDataType()
-                .getDataTypeName()
-                .getText()));
+            method.getResponseDto().getOriginatingDataGroup().getDataType()));
     stringBuilder.append("(");
     stringBuilder.append("\n");
     stringBuilder.append("\t\t\t\tStreamSupport\n");
     stringBuilder.append("\t\t\t\t\t\t.stream(paginated.getItems().spliterator(), false)\n");
     stringBuilder.append("\t\t\t\t\t\t.map(");
     stringBuilder.append(
-        TextConverter.toLowerCamel(
-            aggregateRootConverter.getDataType().getDataTypeName().getText()));
+        TextConverter.toLowerCamel(aggregateRootConverter.getObjectName().getText()));
     stringBuilder.append("::convertTo");
     stringBuilder.append(
         TextConverter.toUpperCamel(
@@ -209,9 +175,7 @@ public class ServiceImplementationMethodQuery extends ServiceImplementationMetho
                 .getResponseDto()
                 .getArrayElementAsOptional()
                 .orElseThrow(IllegalArgumentException::new)
-                .getDataType()
-                .getDataTypeName()
-                .getText()));
+                .getDataType()));
     stringBuilder.append(")\n");
     stringBuilder.append("\t\t\t\t\t\t.collect(Collectors.toList()),\n");
     stringBuilder.append("\t\t\t\tpaginated.getTotalPages(),\n");

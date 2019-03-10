@@ -18,26 +18,31 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.core.datatype;
+package io.polygenesis.core.data;
 
-/**
- * The enum Data kind.
- *
- * @author Christos Tsakostas
- */
-public enum DataKind {
-  /** Primitive data kind. */
-  PRIMITIVE,
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-  /** Class data kind. */
-  CLASS,
+import org.assertj.core.api.Assertions;
+import org.junit.Test;
 
-  /** Interface data kind. */
-  INTERFACE,
+/** @author Christos Tsakostas */
+public class PackageNameTest {
 
-  /** Array data kind. */
-  ARRAY,
+  @Test
+  public void shouldInitialize() {
+    Assertions.assertThat(new PackageName("com.oregor.ddd4j")).isNotNull();
+    assertThat(new PackageName("com.oregor")).isNotNull();
+    assertThat(new PackageName("com")).isNotNull();
+  }
 
-  /** Map data kind. */
-  MAP;
+  @Test
+  public void shouldFail() {
+    assertThatThrownBy(() -> new PackageName("com.oregor.ddd4j."))
+        .isInstanceOf(IllegalArgumentException.class);
+    assertThatThrownBy(() -> new PackageName("com.oregor.ddd4j.."))
+        .isInstanceOf(IllegalArgumentException.class);
+    assertThatThrownBy(() -> new PackageName("com.-.ddd4j"))
+        .isInstanceOf(IllegalArgumentException.class);
+  }
 }

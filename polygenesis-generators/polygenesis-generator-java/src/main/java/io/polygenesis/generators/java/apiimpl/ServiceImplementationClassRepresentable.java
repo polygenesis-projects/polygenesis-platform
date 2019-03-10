@@ -21,8 +21,7 @@
 package io.polygenesis.generators.java.apiimpl;
 
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.datatype.PackageName;
-import io.polygenesis.core.iomodel.IoModelGroup;
+import io.polygenesis.core.data.DataGroup;
 import io.polygenesis.models.api.Method;
 import io.polygenesis.models.api.Service;
 import io.polygenesis.models.apiimpl.ServiceImplementation;
@@ -90,8 +89,7 @@ public class ServiceImplementationClassRepresentable
             dependency ->
                 fieldRepresentations.add(
                     new FieldRepresentation(
-                        TextConverter.toUpperCamel(
-                            dependency.getDataType().getDataTypeName().getText()),
+                        TextConverter.toUpperCamel(dependency.getObjectName().getText()),
                         TextConverter.toLowerCamel(dependency.getVariableName().getText()))));
 
     return fieldRepresentations;
@@ -222,16 +220,13 @@ public class ServiceImplementationClassRepresentable
         .forEach(
             property -> {
               if (property.getPropertyType().equals(PropertyType.VALUE_OBJECT)) {
-                IoModelGroup modelGroup = property.getIoModelGroupAsOptional().get();
-                Optional<PackageName> optionalPackageName =
-                    modelGroup.getClassDataType().getOptionalPackageName();
-                if (optionalPackageName.isPresent()
-                    && !optionalPackageName.get().equals(aggregateRoot.getPackageName())) {
+                DataGroup modelGroup = property.getData().getAsDataGroup();
+
+                if (modelGroup.getPackageName().equals(aggregateRoot.getPackageName())) {
                   imports.add(
-                      optionalPackageName.get().getText()
+                      modelGroup.getPackageName().getText()
                           + "."
-                          + TextConverter.toUpperCamel(
-                              modelGroup.getClassDataType().getDataTypeName().getText()));
+                          + TextConverter.toUpperCamel(modelGroup.getDataType()));
                 }
               }
             });

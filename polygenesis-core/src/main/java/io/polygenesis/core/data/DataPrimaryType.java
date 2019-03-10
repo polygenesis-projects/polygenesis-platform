@@ -18,23 +18,20 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.core.iomodel;
+package io.polygenesis.core.data;
 
 /**
- * Encodes business types, which are vital for the code generation process, such as unique ID of an
- * entity, page size etc.
+ * The enum Data primary type.
  *
  * @author Christos Tsakostas
  */
-public enum DataBusinessType {
-  /** Any type of business data, which is not directly relevant to the code generation process. */
-  ANY,
-  /** Denotes a Thing's identity. */
-  THING_IDENTITY,
-  /** Denotes a Tenant's identity. */
-  TENANT_IDENTITY,
-  /** Page number used for fetching collections. */
-  PAGE_NUMBER,
-  /** Page size used for fetching collections. */
-  PAGE_SIZE;
+public enum DataPrimaryType {
+  /** Primitive data kind. */
+  PRIMITIVE,
+
+  /** Object data kind. */
+  OBJECT,
+
+  /** Array data kind. */
+  ARRAY
 }

@@ -23,7 +23,7 @@ package io.polygenesis.generators.java.domain;
 import io.polygenesis.core.AbstractGenerator;
 import io.polygenesis.core.CoreRegistry;
 import io.polygenesis.core.ModelRepository;
-import io.polygenesis.core.datatype.PackageName;
+import io.polygenesis.core.data.PackageName;
 import io.polygenesis.generators.java.domain.aggregateentity.AggregateEntityExporter;
 import io.polygenesis.generators.java.domain.aggregateroot.AggregateRootExporter;
 import io.polygenesis.generators.java.domain.aggregateroot.AggregateRootIdExporter;

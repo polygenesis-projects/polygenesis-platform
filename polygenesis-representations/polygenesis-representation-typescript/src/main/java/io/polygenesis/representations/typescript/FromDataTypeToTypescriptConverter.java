@@ -21,8 +21,8 @@
 package io.polygenesis.representations.typescript;
 
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.datatype.PrimitiveType;
-import io.polygenesis.core.iomodel.IoModel;
+import io.polygenesis.core.data.Data;
+import io.polygenesis.core.data.PrimitiveType;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -54,8 +54,8 @@ public class FromDataTypeToTypescriptConverter {
    * @param model the model
    * @return the declared variable type
    */
-  public String getDeclaredVariableType(IoModel model) {
-    String candidate = TextConverter.toUpperCamel(model.getDataType().getDataTypeName().getText());
+  public String getDeclaredVariableType(Data model) {
+    String candidate = TextConverter.toUpperCamel(model.getDataType());
 
     return Stream.of(PrimitiveType.values())
         .filter(value -> value.name().equals(candidate.toUpperCase()))
@@ -80,6 +80,7 @@ public class FromDataTypeToTypescriptConverter {
 
     dataTypeMap.put(PrimitiveType.BOOLEAN, "boolean");
 
-    dataTypeMap.put(PrimitiveType.ARRAY, "java.util.List");
+    // TODO another map for arrays
+    // dataTypeMap.put(PrimitiveType.ARRAY, "java.util.List");
   }
 }

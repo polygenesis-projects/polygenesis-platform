@@ -18,64 +18,56 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.core.datatype;
+package io.polygenesis.core.dsl;
 
-import java.util.Optional;
+import io.polygenesis.core.data.Data;
+import io.polygenesis.core.data.DataArray;
+import io.polygenesis.core.data.VariableName;
 
 /**
- * The type Array data type.
+ * The type Data array builder.
  *
  * @author Christos Tsakostas
  */
-public class ArrayDataType extends AbstractDataType {
+public class DataArrayBuilder {
 
-  private ArrayType arrayType;
-  private AbstractDataType elementDataType;
+  private final String name;
+  private final Data arrayElement;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
-  /**
-   * Instantiates a new Array data type.
-   *
-   * @param arrayType the kind of array data type
-   * @param elementDataType the element data type
-   */
-  public ArrayDataType(ArrayType arrayType, AbstractDataType elementDataType) {
-    super(DataKind.ARRAY, new DataTypeName(arrayType.name()));
-    this.arrayType = arrayType;
-    this.elementDataType = elementDataType;
+  private DataArrayBuilder(String arrayName, Data arrayElement) {
+    this.name = arrayName;
+    this.arrayElement = arrayElement;
   }
 
   // ===============================================================================================
-  // GETTERS
+  // START
   // ===============================================================================================
 
   /**
-   * Gets element data type.
+   * Create data array builder.
    *
-   * @return the element data type
+   * @param arrayName the array name
+   * @param arrayElement the array element
+   * @return the data array builder
    */
-  public AbstractDataType getElementDataType() {
-    return elementDataType;
+  public static DataArrayBuilder create(String arrayName, Data arrayElement) {
+    return new DataArrayBuilder(arrayName, arrayElement);
   }
+
+  // ===============================================================================================
+  // END
+  // ===============================================================================================
 
   /**
-   * Gets kind of array data type.
+   * Build data group.
    *
-   * @return the kind of array data type
+   * @return the data group
    */
-  public ArrayType getArrayType() {
-    return arrayType;
-  }
-
-  // ===============================================================================================
-  // OVERRIDES
-  // ===============================================================================================
-
-  @Override
-  public Optional<PackageName> getOptionalPackageName() {
-    return Optional.empty();
+  public final DataArray build() {
+    return new DataArray(new VariableName(this.name), this.arrayElement);
   }
 }

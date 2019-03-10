@@ -22,7 +22,7 @@ package io.polygenesis.generators.java.rdbms;
 
 import io.polygenesis.commons.text.Name;
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.datatype.PackageName;
+import io.polygenesis.core.data.PackageName;
 import io.polygenesis.models.domain.Persistence;
 import io.polygenesis.representations.commons.FieldRepresentation;
 import io.polygenesis.representations.commons.ParameterRepresentation;

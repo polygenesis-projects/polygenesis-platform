@@ -22,15 +22,15 @@ package io.polygenesis.models.domain;
 
 import io.polygenesis.core.Function;
 import io.polygenesis.core.Thing;
-import io.polygenesis.core.datatype.ClassDataType;
-import io.polygenesis.core.datatype.DataKind;
-import io.polygenesis.core.datatype.DataTypeName;
-import io.polygenesis.core.datatype.PackageName;
-import io.polygenesis.core.iomodel.DataBusinessType;
-import io.polygenesis.core.iomodel.IoModel;
-import io.polygenesis.core.iomodel.IoModelGroup;
-import io.polygenesis.core.iomodel.IoModelPrimitive;
-import io.polygenesis.core.iomodel.VariableName;
+import io.polygenesis.core.data.Data;
+import io.polygenesis.core.data.DataArray;
+import io.polygenesis.core.data.DataBusinessType;
+import io.polygenesis.core.data.DataGroup;
+import io.polygenesis.core.data.DataPrimaryType;
+import io.polygenesis.core.data.DataPrimitive;
+import io.polygenesis.core.data.ObjectName;
+import io.polygenesis.core.data.PackageName;
+import io.polygenesis.core.data.VariableName;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -79,9 +79,10 @@ public class AggregateRootPropertyDeducer {
         .getArguments()
         .forEach(
             argument -> {
-              if (argument.getModel().isIoModelGroup()) {
+              if (argument.getModel().isDataGroup()) {
                 argument
-                    .getAsIoModelGroup()
+                    .getModel()
+                    .getAsDataGroup()
                     .getModels()
                     .forEach(
                         model -> {
@@ -104,31 +105,71 @@ public class AggregateRootPropertyDeducer {
   // PRIVATE
   // ===============================================================================================
 
-  private AbstractProperty makeAbstractProperty(IoModel model) {
-    switch (model.getDataType().getDataKind()) {
-      case CLASS:
-        IoModelGroup originatingIoModelGroup = (IoModelGroup) model;
+  private AbstractProperty makeAbstractProperty(Data model) {
+    switch (model.getDataPrimaryType()) {
+      case ARRAY:
+        DataArray dataArray = model.getAsDataArray();
+        if (dataArray.getArrayElement().isDataPrimitive()) {
+          return makePrimitiveCollection(dataArray);
+        } else if (dataArray.getArrayElement().isDataGroup()) {
+          return makeValueObjectCollection(dataArray);
+        } else {
+          throw new IllegalArgumentException();
+        }
+      case OBJECT:
+        DataGroup originatingDataGroup = model.getAsDataGroup();
 
-        IoModelGroup newIoModelGroup =
-            originatingIoModelGroup
-                .withNewClassDataType(
-                    originatingIoModelGroup
-                        .getClassDataType()
-                        .changeDataTypeNameTo(
-                            new DataTypeName(makeValueObjectVariableName(model.getVariableName()))))
+        DataGroup newDataGroup =
+            originatingDataGroup
+                .withNewObjectName(
+                    new ObjectName(makeValueObjectVariableName(model.getVariableName())))
                 .withNewVariableName(
                     new VariableName(makeValueObjectVariableName(model.getVariableName())));
 
         return new ValueObject(
-            originatingIoModelGroup,
-            newIoModelGroup,
+            originatingDataGroup,
+            newDataGroup,
             new VariableName(makeValueObjectVariableName(model.getVariableName())));
       case PRIMITIVE:
-        return new Primitive((IoModelPrimitive) model, model.getVariableName());
+        return new Primitive((DataPrimitive) model, model.getVariableName());
       default:
-        throw new IllegalStateException();
+        throw new IllegalStateException(
+            String.format("Cannot make AbstractProperty for %s", model.getDataPrimaryType()));
     }
   }
+
+  // ===============================================================================================
+  // MAKE PROPERTIES
+  // ===============================================================================================
+
+  protected PrimitiveCollection makePrimitiveCollection(DataArray dataArray) {
+    return new PrimitiveCollection(
+        dataArray,
+        dataArray.getVariableName(),
+        ((DataPrimitive) dataArray.getArrayElement()).getPrimitiveType());
+  }
+
+  protected ValueObjectCollection makeValueObjectCollection(DataArray dataArray) {
+    throw new UnsupportedOperationException();
+  }
+
+  private AggregateRootId makeAggregateRootId(Function function, PackageName rootPackageName) {
+    DataGroup dataGroup =
+        new DataGroup(
+            new ObjectName(function.getThing().getName().getText() + "Id"),
+            new PackageName(
+                String.format(
+                    "%s.%s",
+                    rootPackageName.getText(),
+                    function.getThing().getName().getText().toLowerCase())));
+
+    return new AggregateRootId(
+        dataGroup, new VariableName(function.getThing().getName().getText() + "Id"));
+  }
+
+  // ===============================================================================================
+  // HELPER
+  // ===============================================================================================
 
   private String makeValueObjectVariableName(VariableName variableName) {
     String text = variableName.getText();
@@ -140,40 +181,29 @@ public class AggregateRootPropertyDeducer {
     }
   }
 
-  private AggregateRootId makeAggregateRootId(Function function, PackageName rootPackageName) {
-    IoModelGroup ioModelGroup =
-        new IoModelGroup(
-            new ClassDataType(
-                new DataTypeName(function.getThing().getName().getText() + "Id"),
-                new PackageName(
-                    String.format(
-                        "%s.%s",
-                        rootPackageName.getText(),
-                        function.getThing().getName().getText().toLowerCase()))));
+  // ===============================================================================================
+  // QUERIES
+  // ===============================================================================================
 
-    return new AggregateRootId(
-        ioModelGroup, new VariableName(function.getThing().getName().getText() + "Id"));
-  }
-
-  private boolean isPropertyThingIdentity(IoModel model) {
-    if (model.getDataType().getDataKind().equals(DataKind.PRIMITIVE)
-        && ((IoModelPrimitive) model).getThingIdentity()) {
+  private boolean isPropertyThingIdentity(Data model) {
+    if (model.getDataPrimaryType().equals(DataPrimaryType.PRIMITIVE)
+        && ((DataPrimitive) model).getThingIdentity()) {
       return true;
     }
     return false;
   }
 
-  private boolean isPropertyPageNumber(IoModel model) {
-    if (model.getDataType().getDataKind().equals(DataKind.PRIMITIVE)
-        && ((IoModelPrimitive) model).getDataBusinessType().equals(DataBusinessType.PAGE_NUMBER)) {
+  private boolean isPropertyPageNumber(Data model) {
+    if (model.getDataPrimaryType().equals(DataPrimaryType.PRIMITIVE)
+        && ((DataPrimitive) model).getDataBusinessType().equals(DataBusinessType.PAGE_NUMBER)) {
       return true;
     }
     return false;
   }
 
-  private boolean isPropertyPageSize(IoModel model) {
-    if (model.getDataType().getDataKind().equals(DataKind.PRIMITIVE)
-        && ((IoModelPrimitive) model).getDataBusinessType().equals(DataBusinessType.PAGE_SIZE)) {
+  private boolean isPropertyPageSize(Data model) {
+    if (model.getDataPrimaryType().equals(DataPrimaryType.PRIMITIVE)
+        && ((DataPrimitive) model).getDataBusinessType().equals(DataBusinessType.PAGE_SIZE)) {
       return true;
     }
     return false;

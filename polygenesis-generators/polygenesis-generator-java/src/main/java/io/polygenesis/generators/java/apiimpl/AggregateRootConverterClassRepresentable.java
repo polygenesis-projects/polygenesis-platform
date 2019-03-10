@@ -28,9 +28,8 @@ import io.polygenesis.core.Goal;
 import io.polygenesis.core.ReturnValue;
 import io.polygenesis.core.Thing;
 import io.polygenesis.core.ThingName;
-import io.polygenesis.core.datatype.ClassDataType;
-import io.polygenesis.core.datatype.DataTypeName;
-import io.polygenesis.core.iomodel.IoModelGroup;
+import io.polygenesis.core.data.DataGroup;
+import io.polygenesis.core.data.ObjectName;
 import io.polygenesis.models.apiimpl.AggregateRootConverter;
 import io.polygenesis.models.domain.AggregateRoot;
 import io.polygenesis.representations.commons.FieldRepresentation;
@@ -110,7 +109,7 @@ public class AggregateRootConverterClassRepresentable
 
   @Override
   public String packageName(AggregateRootConverter source, Object... args) {
-    return source.getDataType().getOptionalPackageName().get().getText();
+    return source.getPackageName().getText();
   }
 
   @Override
@@ -126,22 +125,14 @@ public class AggregateRootConverterClassRepresentable
             valueObjectFromDto -> {
               if (!valueObjectFromDto
                   .getValueObject()
-                  .getIoModelGroup()
-                  .getClassDataType()
-                  .getOptionalPackageName()
-                  .get()
-                  .equals(source.getDataType().getOptionalPackageName().get())) {
+                  .getDataGroup()
+                  .getPackageName()
+                  .equals(source.getPackageName())) {
 
                 StringBuilder stringBuilder = new StringBuilder();
 
                 stringBuilder.append(
-                    valueObjectFromDto
-                        .getValueObject()
-                        .getIoModelGroup()
-                        .getClassDataType()
-                        .getOptionalPackageName()
-                        .get()
-                        .getText());
+                    valueObjectFromDto.getValueObject().getDataGroup().getPackageName().getText());
                 stringBuilder.append(".");
                 stringBuilder.append(
                     TextConverter.toUpperCamel(
@@ -152,28 +143,24 @@ public class AggregateRootConverterClassRepresentable
 
               if (!valueObjectFromDto
                   .getDto()
-                  .getOriginatingIoModelGroup()
-                  .getClassDataType()
-                  .getOptionalPackageName()
-                  .get()
-                  .equals(source.getDataType().getOptionalPackageName().get())) {
+                  .getOriginatingDataGroup()
+                  .getPackageName()
+                  .equals(source.getPackageName())) {
 
                 StringBuilder stringBuilder = new StringBuilder();
 
                 stringBuilder.append(
                     valueObjectFromDto
                         .getDto()
-                        .getOriginatingIoModelGroup()
-                        .getClassDataType()
-                        .getOptionalPackageName()
-                        .get()
+                        .getOriginatingDataGroup()
+                        .getPackageName()
                         .getText());
                 stringBuilder.append(".");
                 stringBuilder.append(
                     TextConverter.toUpperCamel(
                         valueObjectFromDto
                             .getDto()
-                            .getOriginatingIoModelGroup()
+                            .getOriginatingDataGroup()
                             .getVariableName()
                             .getText()));
 
@@ -197,8 +184,7 @@ public class AggregateRootConverterClassRepresentable
   public String description(AggregateRootConverter source, Object... args) {
     StringBuilder stringBuilder = new StringBuilder();
 
-    stringBuilder.append(
-        TextConverter.toUpperCamelSpaces(source.getDataType().getDataTypeName().getText()));
+    stringBuilder.append(TextConverter.toUpperCamelSpaces(source.getObjectName().getText()));
 
     stringBuilder.append(".");
 
@@ -214,8 +200,7 @@ public class AggregateRootConverterClassRepresentable
   public String simpleObjectName(AggregateRootConverter source, Object... args) {
     StringBuilder stringBuilder = new StringBuilder();
 
-    stringBuilder.append(
-        TextConverter.toUpperCamel(source.getDataType().getDataTypeName().getText()));
+    stringBuilder.append(TextConverter.toUpperCamel(source.getObjectName().getText()));
 
     return stringBuilder.toString();
   }
@@ -251,9 +236,8 @@ public class AggregateRootConverterClassRepresentable
                       new FunctionName("convert"),
                       new LinkedHashSet<>(
                           Arrays.asList(
-                              new Argument(
-                                  valueObjectFromDto.getDto().getOriginatingIoModelGroup()))),
-                      new ReturnValue(valueObjectFromDto.getValueObject().getIoModelGroup()));
+                              new Argument(valueObjectFromDto.getDto().getOriginatingDataGroup()))),
+                      new ReturnValue(valueObjectFromDto.getValueObject().getDataGroup()));
 
               functions.add(function);
             });
@@ -276,10 +260,10 @@ public class AggregateRootConverterClassRepresentable
                       new LinkedHashSet<>(
                           Arrays.asList(
                               new Argument(
-                                  transformAggregateRootToIoModelGroup(
+                                  transformAggregateRootToDataGroup(
                                       fetchOneDtoFromAggregateRoot.getAggregateRoot())))),
                       new ReturnValue(
-                          fetchOneDtoFromAggregateRoot.getDto().getOriginatingIoModelGroup())));
+                          fetchOneDtoFromAggregateRoot.getDto().getOriginatingDataGroup())));
             });
   }
 
@@ -300,34 +284,28 @@ public class AggregateRootConverterClassRepresentable
                       new LinkedHashSet<>(
                           Arrays.asList(
                               new Argument(
-                                  transformAggregateRootToIoModelGroup(
+                                  transformAggregateRootToDataGroup(
                                       fetchCollectionDtoFromAggregateRoot.getAggregateRoot())))),
                       new ReturnValue(
-                          fetchCollectionDtoFromAggregateRoot
-                              .getDto()
-                              .getOriginatingIoModelGroup())));
+                          fetchCollectionDtoFromAggregateRoot.getDto().getOriginatingDataGroup())));
             });
   }
 
   /**
-   * Transform aggregate root to io model group io model group.
+   * Transform aggregate root to data group data group.
    *
    * @param aggregateRoot the aggregate root
-   * @return the io model group
+   * @return the data group
    */
-  private IoModelGroup transformAggregateRootToIoModelGroup(AggregateRoot aggregateRoot) {
+  private DataGroup transformAggregateRootToDataGroup(AggregateRoot aggregateRoot) {
 
-    IoModelGroup ioModelGroup =
-        new IoModelGroup(
-            new ClassDataType(
-                new DataTypeName(aggregateRoot.getName().getText()),
-                aggregateRoot.getPackageName()));
+    DataGroup dataGroup =
+        new DataGroup(
+            new ObjectName(aggregateRoot.getName().getText()), aggregateRoot.getPackageName());
 
-    aggregateRoot
-        .getProperties()
-        .forEach(property -> ioModelGroup.addIoModel(property.getIoModel()));
+    aggregateRoot.getProperties().forEach(property -> dataGroup.addData(property.getData()));
 
-    return ioModelGroup;
+    return dataGroup;
   }
 
   /**
@@ -347,9 +325,7 @@ public class AggregateRootConverterClassRepresentable
         goal,
         new FunctionName(
             String.format(
-                "convertTo%s",
-                TextConverter.toUpperCamel(
-                    returnValue.getModel().getDataType().getDataTypeName().getText()))),
+                "convertTo%s", TextConverter.toUpperCamel(returnValue.getModel().getDataType()))),
         arguments,
         returnValue);
   }

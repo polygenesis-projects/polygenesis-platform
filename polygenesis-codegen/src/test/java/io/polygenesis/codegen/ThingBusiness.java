@@ -21,11 +21,16 @@
 package io.polygenesis.codegen;
 
 import io.polygenesis.core.Thing;
+import io.polygenesis.core.data.Data;
+import io.polygenesis.core.data.DataArray;
+import io.polygenesis.core.data.DataGroup;
+import io.polygenesis.core.data.DataPrimitive;
+import io.polygenesis.core.data.PrimitiveType;
+import io.polygenesis.core.data.VariableName;
+import io.polygenesis.core.dsl.DataArrayBuilder;
 import io.polygenesis.core.dsl.DataBuilder;
 import io.polygenesis.core.dsl.DataGroupBuilder;
 import io.polygenesis.core.dsl.ThingBuilder;
-import io.polygenesis.core.iomodel.IoModel;
-import io.polygenesis.core.iomodel.IoModelGroup;
 import java.util.Set;
 
 /** @author Christos Tsakostas */
@@ -46,7 +51,7 @@ public class ThingBusiness {
   // DATA CREATE
   // ===============================================================================================
 
-  private static Set<IoModel> createData() {
+  private static Set<Data> createData() {
 
     return DataBuilder.create()
         .withTextProperty("name")
@@ -54,6 +59,7 @@ public class ThingBusiness {
         .withTextProperty("taxId")
         .build()
         .withGroupData(postalAddress())
+        .withArrayData(emailAddresses())
         .build();
   }
 
@@ -61,7 +67,7 @@ public class ThingBusiness {
   // DATA FETCH ONE
   // ===============================================================================================
 
-  private static Set<IoModel> fetchOneData() {
+  private static Set<Data> fetchOneData() {
     return DataBuilder.create()
         .withTextProperty("name")
         .build()
@@ -74,7 +80,7 @@ public class ThingBusiness {
   // DATA FETCH COLLECTION
   // ===============================================================================================
 
-  private static Set<IoModel> fetchCollectionData() {
+  private static Set<Data> fetchCollectionData() {
     return DataBuilder.create()
         .withTextProperty("name")
         .build()
@@ -86,7 +92,7 @@ public class ThingBusiness {
   // ===============================================================================================
   // INNER DTOs
   // ===============================================================================================
-  private static IoModelGroup postalAddress() {
+  private static DataGroup postalAddress() {
 
     return DataGroupBuilder.create("postalAddress")
         .withGroupData(
@@ -99,5 +105,11 @@ public class ThingBusiness {
                 .build()
                 .build())
         .build();
+  }
+
+  private static DataArray emailAddresses() {
+    Data arrayElement = DataPrimitive.of(PrimitiveType.STRING, new VariableName("emailAddress"));
+
+    return DataArrayBuilder.create("emailAddresses", arrayElement).build();
   }
 }

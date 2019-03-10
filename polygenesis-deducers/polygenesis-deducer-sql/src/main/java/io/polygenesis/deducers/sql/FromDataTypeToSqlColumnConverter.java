@@ -21,8 +21,8 @@
 package io.polygenesis.deducers.sql;
 
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.datatype.PrimitiveType;
-import io.polygenesis.core.iomodel.IoModel;
+import io.polygenesis.core.data.Data;
+import io.polygenesis.core.data.PrimitiveType;
 import io.polygenesis.models.sql.ColumnDataType;
 import java.util.HashMap;
 import java.util.Map;
@@ -54,16 +54,14 @@ public class FromDataTypeToSqlColumnConverter {
    * @param model the model
    * @return the column data type by
    */
-  public ColumnDataType getColumnDataTypeBy(IoModel model) {
-    if (dataTypeMap.containsKey(
-        TextConverter.toUpperUnderscore(model.getDataType().getDataTypeName().getText()))) {
-      return dataTypeMap.get(
-          TextConverter.toUpperUnderscore(model.getDataType().getDataTypeName().getText()));
+  public ColumnDataType getColumnDataTypeBy(Data model) {
+    if (dataTypeMap.containsKey(model.getDataType())) {
+      return dataTypeMap.get(model.getDataType());
     } else {
       throw new IllegalArgumentException(
           String.format(
               "Cannot get ColumnDataType for primitive data type=%s",
-              TextConverter.toUpperCamel(model.getDataType().getDataTypeName().getText())));
+              TextConverter.toUpperCamel(model.getDataType())));
     }
   }
 

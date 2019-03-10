@@ -20,9 +20,8 @@
 
 package io.polygenesis.core;
 
-import io.polygenesis.core.iomodel.IoModel;
-import io.polygenesis.core.iomodel.IoModelArray;
-import io.polygenesis.core.iomodel.IoModelGroup;
+import com.oregor.ddd4j.check.assertion.Assertion;
+import io.polygenesis.core.data.Data;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -33,7 +32,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  */
 abstract class AbstractIO {
 
-  private IoModel model;
+  private Data model;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -44,7 +43,7 @@ abstract class AbstractIO {
    *
    * @param model the model
    */
-  AbstractIO(IoModel model) {
+  AbstractIO(Data model) {
     setModel(model);
   }
 
@@ -57,36 +56,16 @@ abstract class AbstractIO {
    *
    * @return the model
    */
-  public IoModel getModel() {
+  public Data getModel() {
     return model;
-  }
-
-  // ===============================================================================================
-  // QUERIES
-  // ===============================================================================================
-
-  /**
-   * Gets as io model group.
-   *
-   * @return the as io model group
-   */
-  public IoModelGroup getAsIoModelGroup() {
-    if (model.isIoModelArray()) {
-      return (IoModelArray) model;
-    }
-
-    if (model.isIoModelGroup()) {
-      return (IoModelGroup) model;
-    } else {
-      throw new IllegalStateException("Model is not IoModelGroup");
-    }
   }
 
   // ===============================================================================================
   // GUARDS
   // ===============================================================================================
 
-  private void setModel(IoModel model) {
+  private void setModel(Data model) {
+    Assertion.isNotNull(model, "data is required");
     this.model = model;
   }
 

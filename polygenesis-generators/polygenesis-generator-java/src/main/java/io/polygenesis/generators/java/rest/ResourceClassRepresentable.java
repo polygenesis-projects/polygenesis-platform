@@ -23,7 +23,7 @@ package io.polygenesis.generators.java.rest;
 import static java.util.stream.Collectors.toCollection;
 
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.datatype.PackageName;
+import io.polygenesis.core.data.PackageName;
 import io.polygenesis.models.rest.HttpMethod;
 import io.polygenesis.models.rest.Resource;
 import io.polygenesis.representations.commons.FieldRepresentation;

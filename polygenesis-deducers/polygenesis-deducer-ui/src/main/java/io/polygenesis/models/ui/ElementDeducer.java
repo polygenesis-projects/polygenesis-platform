@@ -43,13 +43,13 @@ public class ElementDeducer {
   // ===============================================================================================
 
   /**
-   * Deduce element from io model abstract element.
+   * Deduce element from data.
    *
    * @param feature the feature
    * @param function the function
    * @return the abstract element
    */
-  public AbstractElement deduceElementFromIoModel(Feature feature, Function function) {
+  public AbstractElement deduceElementFromData(Feature feature, Function function) {
     return null;
   }
 

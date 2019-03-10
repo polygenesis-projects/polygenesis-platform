@@ -35,14 +35,12 @@ import io.polygenesis.core.Goal;
 import io.polygenesis.core.ReturnValue;
 import io.polygenesis.core.Thing;
 import io.polygenesis.core.ThingName;
-import io.polygenesis.core.datatype.ClassDataType;
-import io.polygenesis.core.datatype.DataTypeName;
-import io.polygenesis.core.datatype.PackageName;
-import io.polygenesis.core.datatype.PrimitiveDataType;
-import io.polygenesis.core.datatype.PrimitiveType;
-import io.polygenesis.core.iomodel.IoModelGroup;
-import io.polygenesis.core.iomodel.IoModelPrimitive;
-import io.polygenesis.core.iomodel.VariableName;
+import io.polygenesis.core.data.DataGroup;
+import io.polygenesis.core.data.DataPrimitive;
+import io.polygenesis.core.data.ObjectName;
+import io.polygenesis.core.data.PackageName;
+import io.polygenesis.core.data.PrimitiveType;
+import io.polygenesis.core.data.VariableName;
 import io.polygenesis.models.api.Dto;
 import io.polygenesis.models.api.DtoType;
 import io.polygenesis.models.api.Method;
@@ -95,38 +93,36 @@ public class DtoExporterTest {
     ThingName thingName = new ThingName("someThingName");
     Set<Method> methods = new LinkedHashSet<>();
 
-    IoModelGroup returnValueIoModelGroup =
-        new IoModelGroup(
-            new ClassDataType(
-                new DataTypeName("CreateBusinessResponse"),
-                new PackageName("com.oregor.microservice.some.business")));
-    ReturnValue createReturnValue = new ReturnValue(returnValueIoModelGroup);
+    DataGroup returnValueDataGroup =
+        new DataGroup(
+            new ObjectName("CreateBusinessResponse"),
+            new PackageName("com.oregor.microservice.some.business"));
+    ReturnValue createReturnValue = new ReturnValue(returnValueDataGroup);
 
     Set<Argument> createArguments = new LinkedHashSet<>();
-    IoModelGroup argumentIoModelGroup =
-        new IoModelGroup(
-            new ClassDataType(
-                new DataTypeName("CreateBusinessRequest"),
-                new PackageName("com.oregor.microservice.some.business")));
+    DataGroup argumentDataGroup =
+        new DataGroup(
+            new ObjectName("CreateBusinessRequest"),
+            new PackageName("com.oregor.microservice.some.business"));
 
     // postal address
-    argumentIoModelGroup.addIoModelGroup(postalAddress(argumentIoModelGroup));
+    argumentDataGroup.addData(postalAddress());
 
-    Argument argument = new Argument(argumentIoModelGroup);
+    Argument argument = new Argument(argumentDataGroup);
 
     createArguments.add(argument);
 
     Method createMethod =
         new Method(
             makeFunctionCreate(),
-            new Dto(DtoType.API_REQUEST, argument.getAsIoModelGroup()),
-            new Dto(DtoType.API_RESPONSE, createReturnValue.getAsIoModelGroup()));
+            new Dto(DtoType.API_REQUEST, argument.getModel().getAsDataGroup()),
+            new Dto(DtoType.API_RESPONSE, createReturnValue.getModel().getAsDataGroup()));
 
     methods.add(createMethod);
 
     Set<Dto> dtos = new LinkedHashSet<>();
-    dtos.add(new Dto(DtoType.API_REQUEST, argument.getAsIoModelGroup()));
-    dtos.add(new Dto(DtoType.API_RESPONSE, createReturnValue.getAsIoModelGroup()));
+    dtos.add(new Dto(DtoType.API_REQUEST, argument.getModel().getAsDataGroup()));
+    dtos.add(new Dto(DtoType.API_RESPONSE, createReturnValue.getModel().getAsDataGroup()));
 
     return new Service(
         new PackageName("com.oregor"),
@@ -138,29 +134,19 @@ public class DtoExporterTest {
   }
 
   // postalAddress
-  private IoModelGroup postalAddress(IoModelGroup parent) {
-    IoModelGroup postalAddress =
-        new IoModelGroup(
-            parent,
-            new ClassDataType(
-                new DataTypeName("PostalAddressDto"),
-                new PackageName("com.oregor.microservice.some.shared")));
+  private DataGroup postalAddress() {
+    DataGroup postalAddress =
+        new DataGroup(
+            new ObjectName("PostalAddressDto"),
+            new PackageName("com.oregor.microservice.some.shared"));
 
-    postalAddress.addIoModelPrimitive(
-        IoModelPrimitive.ofParent(
-            postalAddress,
-            new PrimitiveDataType(PrimitiveType.STRING),
-            new VariableName("streetAddress1")));
+    postalAddress.addData(
+        DataPrimitive.of(PrimitiveType.STRING, new VariableName("streetAddress1")));
 
-    postalAddress.addIoModelPrimitive(
-        IoModelPrimitive.ofParent(
-            postalAddress,
-            new PrimitiveDataType(PrimitiveType.STRING),
-            new VariableName("streetAddress2")));
+    postalAddress.addData(
+        DataPrimitive.of(PrimitiveType.STRING, new VariableName("streetAddress2")));
 
-    postalAddress.addIoModelPrimitive(
-        IoModelPrimitive.ofParent(
-            postalAddress, new PrimitiveDataType(PrimitiveType.STRING), new VariableName("city")));
+    postalAddress.addData(DataPrimitive.of(PrimitiveType.STRING, new VariableName("city")));
 
     return postalAddress;
   }
@@ -168,9 +154,7 @@ public class DtoExporterTest {
   private Function makeFunctionCreate() {
     Thing thing = new Thing(new ThingName("customer"));
     ReturnValue returnValue =
-        new ReturnValue(
-            IoModelPrimitive.of(
-                new PrimitiveDataType(PrimitiveType.STRING), new VariableName("someRet")));
+        new ReturnValue(DataPrimitive.of(PrimitiveType.STRING, new VariableName("someRet")));
     return new Function(
         thing,
         new Goal(GoalType.CREATE),

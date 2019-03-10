@@ -18,21 +18,21 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.core.iomodel;
+package io.polygenesis.core.data;
 
-import io.polygenesis.core.datatype.PrimitiveDataType;
 import java.lang.annotation.Annotation;
 import java.util.Set;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
- * The type Io model primitive.
+ * The type data primitive.
  *
  * @author Christos Tsakostas
  */
-public class IoModelPrimitive extends IoModel {
+public class DataPrimitive extends Data {
 
+  private final PrimitiveType primitiveType;
   private final Set<Annotation> annotations;
   private final DataBusinessType dataBusinessType;
 
@@ -43,63 +43,26 @@ public class IoModelPrimitive extends IoModel {
   /**
    * Of.
    *
-   * @param primitiveDataType the primitive data type
+   * @param primitiveType the primitive type
    * @param variableName the variable name
-   * @return the io model primitive
+   * @return the data primitive
    */
-  public static IoModelPrimitive of(
-      PrimitiveDataType primitiveDataType, VariableName variableName) {
-    return new IoModelPrimitive(primitiveDataType, variableName, null, DataBusinessType.ANY);
+  public static DataPrimitive of(PrimitiveType primitiveType, VariableName variableName) {
+    return new DataPrimitive(primitiveType, variableName, null, DataBusinessType.ANY);
   }
 
   /**
-   * Of parent io model primitive.
-   *
-   * @param parent the parent
-   * @param primitiveDataType the primitive data type
-   * @param variableName the variable name
-   * @return the io model primitive
-   */
-  public static IoModelPrimitive ofParent(
-      IoModelGroup parent, PrimitiveDataType primitiveDataType, VariableName variableName) {
-    return new IoModelPrimitive(
-        primitiveDataType, variableName, parent, null, DataBusinessType.ANY);
-  }
-
-  /**
-   * Of thing identity.
-   *
-   * @param primitiveDataType the primitive data type
-   * @param variableName the variable name
-   * @return the io model primitive
-   */
-  public static IoModelPrimitive ofThingIdentity(
-      PrimitiveDataType primitiveDataType, VariableName variableName) {
-    IoModelPrimitive ioModelPrimitive =
-        new IoModelPrimitive(
-            primitiveDataType, variableName, null, DataBusinessType.THING_IDENTITY);
-
-    return ioModelPrimitive;
-  }
-
-  /**
-   * Of thing identity with parent io model primitive.
+   * Of thing identity with parent data primitive.
    *
    * @param dataBusinessType the data business type
-   * @param parent the parent
-   * @param primitiveDataType the primitive data type
+   * @param primitiveType the primitive type
    * @param variableName the variable name
-   * @return the io model primitive
+   * @return the data primitive
    */
-  public static IoModelPrimitive ofDataBusinessTypeWithParent(
-      DataBusinessType dataBusinessType,
-      IoModelGroup parent,
-      PrimitiveDataType primitiveDataType,
-      VariableName variableName) {
-    IoModelPrimitive ioModelPrimitive =
-        new IoModelPrimitive(primitiveDataType, variableName, parent, null, dataBusinessType);
+  public static DataPrimitive ofDataBusinessType(
+      DataBusinessType dataBusinessType, PrimitiveType primitiveType, VariableName variableName) {
 
-    return ioModelPrimitive;
+    return new DataPrimitive(primitiveType, variableName, null, dataBusinessType);
   }
 
   // ===============================================================================================
@@ -107,39 +70,20 @@ public class IoModelPrimitive extends IoModel {
   // ===============================================================================================
 
   /**
-   * Instantiates a new Io model primitive.
+   * Instantiates a new data primitive.
    *
-   * @param dataType the data type
+   * @param primitiveType the primitive type
    * @param variableName the variable name
    * @param annotations the annotations
    * @param dataBusinessType the data business type
    */
-  public IoModelPrimitive(
-      PrimitiveDataType dataType,
+  public DataPrimitive(
+      PrimitiveType primitiveType,
       VariableName variableName,
       Set<Annotation> annotations,
       DataBusinessType dataBusinessType) {
-    super(dataType, variableName);
-    this.annotations = annotations;
-    this.dataBusinessType = dataBusinessType;
-  }
-
-  /**
-   * Instantiates a new Io model primitive.
-   *
-   * @param dataType the data type
-   * @param variableName the variable name
-   * @param parent the parent
-   * @param annotations the annotations
-   * @param dataBusinessType the data business type
-   */
-  public IoModelPrimitive(
-      PrimitiveDataType dataType,
-      VariableName variableName,
-      IoModelGroup parent,
-      Set<Annotation> annotations,
-      DataBusinessType dataBusinessType) {
-    super(dataType, variableName, parent);
+    super(DataPrimaryType.PRIMITIVE, variableName);
+    this.primitiveType = primitiveType;
     this.annotations = annotations;
     this.dataBusinessType = dataBusinessType;
   }
@@ -147,6 +91,15 @@ public class IoModelPrimitive extends IoModel {
   // ===============================================================================================
   // GETTERS
   // ===============================================================================================
+
+  /**
+   * Gets primitive type.
+   *
+   * @return the primitive type
+   */
+  public PrimitiveType getPrimitiveType() {
+    return primitiveType;
+  }
 
   /**
    * Get annotations.
@@ -180,6 +133,15 @@ public class IoModelPrimitive extends IoModel {
   }
 
   // ===============================================================================================
+  // ABSTRACT IMPLEMENTATION
+  // ===============================================================================================
+
+  @Override
+  public String getDataType() {
+    return getPrimitiveType().name();
+  }
+
+  // ===============================================================================================
   // OVERRIDES
   // ===============================================================================================
 
@@ -193,7 +155,7 @@ public class IoModelPrimitive extends IoModel {
       return false;
     }
 
-    IoModelPrimitive that = (IoModelPrimitive) o;
+    DataPrimitive that = (DataPrimitive) o;
 
     return new EqualsBuilder()
         .appendSuper(super.equals(o))

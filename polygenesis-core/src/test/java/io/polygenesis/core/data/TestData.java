@@ -20,36 +20,19 @@
 
 package io.polygenesis.core.data;
 
-import io.polygenesis.core.datatype.DataKind;
-import io.polygenesis.core.datatype.PrimitiveType;
-import io.polygenesis.core.iomodel.VariableName;
+/** @author Christos Tsakostas */
+class TestData extends Data {
 
-/**
- * The type Boolean data.
- *
- * @author Christos Tsakostas
- */
-public class BooleanData extends PrimitiveData {
-
-  // ===============================================================================================
-  // CONSTRUCTOR(S)
-  // ===============================================================================================
-
-  /**
-   * Instantiates a new Boolean data.
-   *
-   * @param variableName the variable name
-   */
-  public BooleanData(VariableName variableName) {
-    super(variableName, PrimitiveType.BOOLEAN);
+  public TestData() {
+    super(DataPrimaryType.OBJECT);
   }
 
-  // ===============================================================================================
-  // OVERRIDES
-  // ===============================================================================================
+  public TestData(VariableName variableName) {
+    super(DataPrimaryType.OBJECT, variableName);
+  }
 
   @Override
   public String getDataType() {
-    return String.format("%s_$s", DataKind.PRIMITIVE.name(), PrimitiveType.BOOLEAN.name());
+    return PrimitiveType.STRING.name();
   }
 }
