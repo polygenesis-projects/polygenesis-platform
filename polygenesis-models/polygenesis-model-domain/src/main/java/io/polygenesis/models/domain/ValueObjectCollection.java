@@ -21,9 +21,7 @@
 package io.polygenesis.models.domain;
 
 import io.polygenesis.core.data.Data;
-import io.polygenesis.core.data.DataGroup;
 import io.polygenesis.core.data.VariableName;
-import java.util.Optional;
 
 /**
  * The type Value object collection.

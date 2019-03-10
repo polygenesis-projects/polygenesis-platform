@@ -62,8 +62,7 @@ public class JavaGenesisThingBusiness {
             new PackageName("com.oregor.microservice.account.business"));
 
     // ARGUMENT - NAME
-    argumentDataGroup.addData(
-        DataPrimitive.of(PrimitiveType.STRING, new VariableName("name")));
+    argumentDataGroup.addData(DataPrimitive.of(PrimitiveType.STRING, new VariableName("name")));
 
     // ARGUMENT - POSTAL ADDRESS
     argumentDataGroup.addData(postalAddress());
@@ -134,8 +133,7 @@ public class JavaGenesisThingBusiness {
     postalAddress.addData(
         DataPrimitive.of(PrimitiveType.STRING, new VariableName("streetAddress2")));
 
-    postalAddress.addData(
-        DataPrimitive.of(PrimitiveType.STRING, new VariableName("city")));
+    postalAddress.addData(DataPrimitive.of(PrimitiveType.STRING, new VariableName("city")));
 
     return postalAddress;
   }

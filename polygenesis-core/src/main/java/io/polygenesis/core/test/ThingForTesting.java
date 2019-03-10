@@ -79,8 +79,7 @@ public class ThingForTesting {
             new ObjectName("CreateBusinessRequest"), new PackageName(ROOT_PACKAGE + ".business"));
 
     // name
-    argumentDataGroup.addData(
-        DataPrimitive.of(PrimitiveType.STRING, new VariableName("name")));
+    argumentDataGroup.addData(DataPrimitive.of(PrimitiveType.STRING, new VariableName("name")));
 
     // postal address
     argumentDataGroup.addData(postalAddress());
@@ -133,8 +132,7 @@ public class ThingForTesting {
 
     // ---------------------------------------------------------------------------------------------
 
-    returnValueDataGroup.addData(
-        DataPrimitive.of(PrimitiveType.STRING, new VariableName("name")));
+    returnValueDataGroup.addData(DataPrimitive.of(PrimitiveType.STRING, new VariableName("name")));
 
     // ---------------------------------------------------------------------------------------------
     return new Function(
@@ -174,8 +172,7 @@ public class ThingForTesting {
 
     // ---------------------------------------------------------------------------------------------
 
-    returnValueDataGroup.addData(
-        DataPrimitive.of(PrimitiveType.STRING, new VariableName("name")));
+    returnValueDataGroup.addData(DataPrimitive.of(PrimitiveType.STRING, new VariableName("name")));
 
     // ---------------------------------------------------------------------------------------------
     return new Function(
@@ -199,8 +196,7 @@ public class ThingForTesting {
             new ObjectName("CreateBusinessRequest1"), new PackageName(ROOT_PACKAGE + ".business"));
 
     // name
-    argumentDataGroup1.addData(
-        DataPrimitive.of(PrimitiveType.STRING, new VariableName("name")));
+    argumentDataGroup1.addData(DataPrimitive.of(PrimitiveType.STRING, new VariableName("name")));
 
     // ---------------------------------------------------------------------------------------------
     // ARGUMENTS - 2
@@ -210,8 +206,7 @@ public class ThingForTesting {
             new ObjectName("CreateBusinessRequest2"), new PackageName(ROOT_PACKAGE + ".business"));
 
     // name
-    argumentDataGroup2.addData(
-        DataPrimitive.of(PrimitiveType.STRING, new VariableName("name")));
+    argumentDataGroup2.addData(DataPrimitive.of(PrimitiveType.STRING, new VariableName("name")));
 
     // ---------------------------------------------------------------------------------------------
 
@@ -238,8 +233,7 @@ public class ThingForTesting {
 
     // ---------------------------------------------------------------------------------------------
 
-    returnValueDataGroup.addData(
-        DataPrimitive.of(PrimitiveType.STRING, new VariableName("name")));
+    returnValueDataGroup.addData(DataPrimitive.of(PrimitiveType.STRING, new VariableName("name")));
 
     // ---------------------------------------------------------------------------------------------
 
@@ -258,8 +252,7 @@ public class ThingForTesting {
     // ---------------------------------------------------------------------------------------------
     // PRIMITIVE
     // ---------------------------------------------------------------------------------------------
-    DataPrimitive dataPrimitive =
-        DataPrimitive.of(PrimitiveType.STRING, new VariableName("name"));
+    DataPrimitive dataPrimitive = DataPrimitive.of(PrimitiveType.STRING, new VariableName("name"));
 
     // ---------------------------------------------------------------------------------------------
 
@@ -290,8 +283,7 @@ public class ThingForTesting {
     postalAddress.addData(
         DataPrimitive.of(PrimitiveType.STRING, new VariableName("streetAddress2")));
 
-    postalAddress.addData(
-        DataPrimitive.of(PrimitiveType.STRING, new VariableName("city")));
+    postalAddress.addData(DataPrimitive.of(PrimitiveType.STRING, new VariableName("city")));
 
     return postalAddress;
   }

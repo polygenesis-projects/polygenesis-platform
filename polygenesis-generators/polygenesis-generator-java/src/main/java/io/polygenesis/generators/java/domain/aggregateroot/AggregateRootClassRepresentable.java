@@ -82,16 +82,15 @@ public class AggregateRootClassRepresentable extends AbstractClassRepresentable<
                       new FieldRepresentation(
                           makeVariableDataType(property),
                           makeVariableName(property),
-                          makeAnnotationsForPrimitiveCollection(source,
-                              property.getData().getAsDataArray())));
+                          makeAnnotationsForPrimitiveCollection(
+                              source, property.getData().getAsDataArray())));
                   break;
                 case VALUE_OBJECT:
                   fieldRepresentations.add(
                       new FieldRepresentation(
                           makeVariableDataType(property),
                           makeVariableName(property),
-                          makeAnnotationsForValueObject(
-                              property.getData().getAsDataGroup())));
+                          makeAnnotationsForValueObject(property.getData().getAsDataGroup())));
                   break;
                 default:
                   throw new IllegalStateException(
@@ -343,8 +342,7 @@ public class AggregateRootClassRepresentable extends AbstractClassRepresentable<
     annotations.add(
         String.format(
             "@Column(name = \"%s\")",
-            TextConverter.toLowerCamel(
-                dataArray.getArrayElement().getVariableName().getText())));
+            TextConverter.toLowerCamel(dataArray.getArrayElement().getVariableName().getText())));
 
     return annotations;
   }

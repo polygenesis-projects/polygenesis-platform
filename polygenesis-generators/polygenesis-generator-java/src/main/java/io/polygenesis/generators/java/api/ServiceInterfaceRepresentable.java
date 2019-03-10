@@ -84,12 +84,12 @@ public class ServiceInterfaceRepresentable extends AbstractInterfaceRepresentabl
         .forEach(
             method -> {
               if (method.getFunction().getReturnValue().getModel().isDataGroup()) {
-                DataGroup dataGroup = method.getFunction().getReturnValue().getModel().getAsDataGroup();
+                DataGroup dataGroup =
+                    method.getFunction().getReturnValue().getModel().getAsDataGroup();
 
                 if (!dataGroup.getPackageName().equals(source.getPackageName())) {
                   imports.add(
-                      makeCanonicalObjectName(
-                          dataGroup.getPackageName(), dataGroup.getDataType()));
+                      makeCanonicalObjectName(dataGroup.getPackageName(), dataGroup.getDataType()));
                 }
               }
 

@@ -88,7 +88,7 @@ public abstract class AbstractProperty {
   /**
    * Gets data related to type parameter.
    *
-   * <p>Applies only to collections.</p>
+   * <p>Applies only to collections.
    *
    * @return the type parameter data
    */

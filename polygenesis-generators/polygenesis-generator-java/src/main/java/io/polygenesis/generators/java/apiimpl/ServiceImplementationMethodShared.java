@@ -130,8 +130,7 @@ public abstract class ServiceImplementationMethodShared {
     ReturnValue returnValue = method.getFunction().getReturnValue();
     if (returnValue != null) {
       if (returnValue.getModel().isDataGroup()) {
-        stringBuilder.append(
-            makeReturnValueForDataGroup(returnValue.getModel().getAsDataGroup()));
+        stringBuilder.append(makeReturnValueForDataGroup(returnValue.getModel().getAsDataGroup()));
       } else {
         throw new IllegalStateException(
             String.format(

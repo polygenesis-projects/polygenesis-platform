@@ -146,8 +146,7 @@ public class DtoExporterTest {
     postalAddress.addData(
         DataPrimitive.of(PrimitiveType.STRING, new VariableName("streetAddress2")));
 
-    postalAddress.addData(
-        DataPrimitive.of(PrimitiveType.STRING, new VariableName("city")));
+    postalAddress.addData(DataPrimitive.of(PrimitiveType.STRING, new VariableName("city")));
 
     return postalAddress;
   }

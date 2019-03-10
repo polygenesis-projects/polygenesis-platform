@@ -191,8 +191,7 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
                   .getPackageName()
                   .equals(source.getOriginatingDataGroup().getPackageName())) {
                 imports.add(
-                    makeCanonicalObjectName(
-                        dataGroup.getPackageName(), dataGroup.getDataType()));
+                    makeCanonicalObjectName(dataGroup.getPackageName(), dataGroup.getDataType()));
               }
             });
 

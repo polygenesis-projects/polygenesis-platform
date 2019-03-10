@@ -41,9 +41,8 @@ public class AggregateEntity extends ValueObject {
    * @param dataGroup the data group
    * @param variableName the variable name
    */
-  public AggregateEntity(DataGroup originatingDataGroup,
-      DataGroup dataGroup,
-      VariableName variableName) {
+  public AggregateEntity(
+      DataGroup originatingDataGroup, DataGroup dataGroup, VariableName variableName) {
     super(PropertyType.AGGREGATE_ENTITY, originatingDataGroup, dataGroup, variableName);
   }
 

@@ -52,8 +52,8 @@ public class PrimitiveCollection extends AbstractProperty {
    * @param variableName the variable name
    * @param primitiveType the primitive type
    */
-  public PrimitiveCollection(DataArray originatingDataArray,
-      VariableName variableName, PrimitiveType primitiveType) {
+  public PrimitiveCollection(
+      DataArray originatingDataArray, VariableName variableName, PrimitiveType primitiveType) {
     super(PropertyType.PRIMITIVE_COLLECTION, variableName);
     setOriginatingDataArray(originatingDataArray);
     setPrimitiveType(primitiveType);
@@ -132,8 +132,8 @@ public class PrimitiveCollection extends AbstractProperty {
       return false;
     }
     PrimitiveCollection that = (PrimitiveCollection) o;
-    return Objects.equals(originatingDataArray, that.originatingDataArray) &&
-        primitiveType == that.primitiveType;
+    return Objects.equals(originatingDataArray, that.originatingDataArray)
+        && primitiveType == that.primitiveType;
   }
 
   @Override

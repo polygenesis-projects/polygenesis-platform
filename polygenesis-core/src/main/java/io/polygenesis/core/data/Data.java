@@ -182,7 +182,8 @@ public abstract class Data {
       return false;
     }
     Data data = (Data) o;
-    return dataPrimaryType == data.dataPrimaryType && Objects.equals(variableName, data.variableName);
+    return dataPrimaryType == data.dataPrimaryType
+        && Objects.equals(variableName, data.variableName);
   }
 
   @Override

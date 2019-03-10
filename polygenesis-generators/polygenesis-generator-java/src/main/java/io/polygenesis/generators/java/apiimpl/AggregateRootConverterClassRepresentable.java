@@ -132,11 +132,7 @@ public class AggregateRootConverterClassRepresentable
                 StringBuilder stringBuilder = new StringBuilder();
 
                 stringBuilder.append(
-                    valueObjectFromDto
-                        .getValueObject()
-                        .getDataGroup()
-                        .getPackageName()
-                        .getText());
+                    valueObjectFromDto.getValueObject().getDataGroup().getPackageName().getText());
                 stringBuilder.append(".");
                 stringBuilder.append(
                     TextConverter.toUpperCamel(
