@@ -20,15 +20,9 @@
 
 package io.polygenesis.core.data;
 
-/** @author Christos Tsakostas */
-class TestData extends Data {
-
-  public TestData(VariableName variableName) {
-    super(DataPrimaryType.PRIMITIVE, DataSource.user(), variableName, DataBusinessType.ANY);
-  }
-
-  @Override
-  public String getDataType() {
-    return PrimitiveType.STRING.name();
-  }
-}
+/**
+ * The type Data validator.
+ *
+ * @author Christos Tsakostas
+ */
+public class DataValidator {}

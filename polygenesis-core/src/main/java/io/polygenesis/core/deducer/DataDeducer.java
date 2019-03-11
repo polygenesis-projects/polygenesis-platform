@@ -25,6 +25,7 @@ import io.polygenesis.core.data.DataArray;
 import io.polygenesis.core.data.DataBusinessType;
 import io.polygenesis.core.data.DataGroup;
 import io.polygenesis.core.data.DataPrimitive;
+import io.polygenesis.core.data.DataSource;
 import io.polygenesis.core.data.ObjectName;
 import io.polygenesis.core.data.PackageName;
 import io.polygenesis.core.data.PrimitiveType;
@@ -80,10 +81,11 @@ public class DataDeducer {
       }
 
       return new DataPrimitive(
-          convertToPrimitiveTypeFrom(recursiveObject.getStrDataType()),
+          DataSource.user(),
           new VariableName(recursiveObject.getStrName()),
-          safeGetAnnotationsFrom(recursiveObject),
-          DataBusinessType.ANY);
+          DataBusinessType.ANY,
+          convertToPrimitiveTypeFrom(recursiveObject.getStrDataType()),
+          safeGetAnnotationsFrom(recursiveObject));
 
     } else {
       // DataGroup
@@ -130,10 +132,11 @@ public class DataDeducer {
                   // Should not add primitives for Ignored or automatically set fields.
                   DataPrimitive modelPrimitive =
                       new DataPrimitive(
-                          convertToPrimitiveTypeFrom(childRecursiveObject.getStrDataType()),
+                          DataSource.user(),
                           new VariableName(childRecursiveObject.getStrName()),
-                          safeGetAnnotationsFrom(childRecursiveObject),
-                          DataBusinessType.ANY);
+                          DataBusinessType.ANY,
+                          convertToPrimitiveTypeFrom(childRecursiveObject.getStrDataType()),
+                          safeGetAnnotationsFrom(childRecursiveObject));
 
                   dataGroup.addData(modelPrimitive);
                 }

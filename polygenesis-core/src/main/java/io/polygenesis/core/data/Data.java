@@ -38,30 +38,31 @@ import java.util.Objects;
 public abstract class Data {
 
   private final DataPrimaryType dataPrimaryType;
+  private final DataSource dataSource;
   private final VariableName variableName;
+  private final DataBusinessType dataBusinessType;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
-   * Instantiates a new data.
+   * Instantiates a new Data.
    *
-   * @param dataPrimaryType the data kind
-   */
-  public Data(DataPrimaryType dataPrimaryType) {
-    this(dataPrimaryType, null);
-  }
-
-  /**
-   * Instantiates a new data.
-   *
-   * @param dataPrimaryType the data kind
+   * @param dataPrimaryType the data primary type
+   * @param dataSource the data source
    * @param variableName the variable name
+   * @param dataBusinessType the data business type
    */
-  public Data(DataPrimaryType dataPrimaryType, VariableName variableName) {
+  public Data(
+      DataPrimaryType dataPrimaryType,
+      DataSource dataSource,
+      VariableName variableName,
+      DataBusinessType dataBusinessType) {
     this.dataPrimaryType = dataPrimaryType;
+    this.dataSource = dataSource;
     this.variableName = variableName;
+    this.dataBusinessType = dataBusinessType;
   }
 
   // ===============================================================================================
@@ -80,12 +81,21 @@ public abstract class Data {
   // ===============================================================================================
 
   /**
-   * Gets data kind.
+   * Gets data primary type.
    *
-   * @return the data kind
+   * @return the data primary type
    */
   public DataPrimaryType getDataPrimaryType() {
     return dataPrimaryType;
+  }
+
+  /**
+   * Gets data source.
+   *
+   * @return the data source
+   */
+  public DataSource getDataSource() {
+    return dataSource;
   }
 
   /**
@@ -95,6 +105,15 @@ public abstract class Data {
    */
   public VariableName getVariableName() {
     return variableName;
+  }
+
+  /**
+   * Gets data business type.
+   *
+   * @return the data business type
+   */
+  public DataBusinessType getDataBusinessType() {
+    return dataBusinessType;
   }
 
   // ===============================================================================================
@@ -184,6 +203,10 @@ public abstract class Data {
   }
 
   // ===============================================================================================
+  // GUARDS
+  // ===============================================================================================
+
+  // ===============================================================================================
   // OVERRIDES
   // ===============================================================================================
 
@@ -197,11 +220,13 @@ public abstract class Data {
     }
     Data data = (Data) o;
     return dataPrimaryType == data.dataPrimaryType
+        && Objects.equals(dataSource, data.dataSource)
+        && dataBusinessType == data.dataBusinessType
         && Objects.equals(variableName, data.variableName);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(dataPrimaryType, variableName);
+    return Objects.hash(dataPrimaryType, dataSource, dataBusinessType, variableName);
   }
 }
