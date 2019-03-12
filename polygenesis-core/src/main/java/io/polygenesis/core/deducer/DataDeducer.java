@@ -26,6 +26,7 @@ import io.polygenesis.core.data.DataBusinessType;
 import io.polygenesis.core.data.DataGroup;
 import io.polygenesis.core.data.DataPrimitive;
 import io.polygenesis.core.data.DataSource;
+import io.polygenesis.core.data.DataValidator;
 import io.polygenesis.core.data.ObjectName;
 import io.polygenesis.core.data.PackageName;
 import io.polygenesis.core.data.PrimitiveType;
@@ -84,6 +85,7 @@ public class DataDeducer {
           DataSource.user(),
           new VariableName(recursiveObject.getStrName()),
           DataBusinessType.ANY,
+          DataValidator.empty(),
           convertToPrimitiveTypeFrom(recursiveObject.getStrDataType()),
           safeGetAnnotationsFrom(recursiveObject));
 
@@ -135,6 +137,7 @@ public class DataDeducer {
                           DataSource.user(),
                           new VariableName(childRecursiveObject.getStrName()),
                           DataBusinessType.ANY,
+                          DataValidator.empty(),
                           convertToPrimitiveTypeFrom(childRecursiveObject.getStrDataType()),
                           safeGetAnnotationsFrom(childRecursiveObject));
 

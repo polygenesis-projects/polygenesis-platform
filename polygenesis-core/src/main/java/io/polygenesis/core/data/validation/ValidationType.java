@@ -18,22 +18,16 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.core.data;
+package io.polygenesis.core.data.validation;
 
-/** @author Christos Tsakostas */
-class TestData extends Data {
-
-  public TestData(VariableName variableName) {
-    super(
-        DataPrimaryType.PRIMITIVE,
-        DataSource.user(),
-        variableName,
-        DataBusinessType.ANY,
-        DataValidator.empty());
-  }
-
-  @Override
-  public String getDataType() {
-    return PrimitiveType.STRING.name();
-  }
+/**
+ * The enum Validation type.
+ *
+ * @author Christos Tsakostas
+ */
+public enum ValidationType {
+  /** Required validation type. */
+  REQUIRED,
+  MINIMUM_LENGTH,
+  MAXIMUM_LENGTH
 }

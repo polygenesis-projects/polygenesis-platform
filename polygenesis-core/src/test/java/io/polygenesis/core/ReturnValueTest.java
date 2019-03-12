@@ -26,6 +26,7 @@ import io.polygenesis.commons.test.AbstractEqualityTest;
 import io.polygenesis.core.data.DataBusinessType;
 import io.polygenesis.core.data.DataPrimitive;
 import io.polygenesis.core.data.DataSource;
+import io.polygenesis.core.data.DataValidator;
 import io.polygenesis.core.data.PrimitiveType;
 import io.polygenesis.core.data.VariableName;
 import java.util.LinkedHashSet;
@@ -47,6 +48,7 @@ public class ReturnValueTest extends AbstractEqualityTest<ReturnValue> {
         DataSource.user(),
         new VariableName("someVariableName"),
         DataBusinessType.ANY,
+        DataValidator.empty(),
         PrimitiveType.STRING,
         new LinkedHashSet<>());
   }
@@ -56,6 +58,7 @@ public class ReturnValueTest extends AbstractEqualityTest<ReturnValue> {
         DataSource.user(),
         new VariableName("someOtherVariableName"),
         DataBusinessType.ANY,
+        DataValidator.empty(),
         PrimitiveType.STRING,
         new LinkedHashSet<>());
   }

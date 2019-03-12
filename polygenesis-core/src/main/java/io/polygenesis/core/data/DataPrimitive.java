@@ -47,7 +47,12 @@ public class DataPrimitive extends Data {
    */
   public static DataPrimitive of(PrimitiveType primitiveType, VariableName variableName) {
     return new DataPrimitive(
-        DataSource.user(), variableName, DataBusinessType.ANY, primitiveType, null);
+        DataSource.user(),
+        variableName,
+        DataBusinessType.ANY,
+        DataValidator.empty(),
+        primitiveType,
+        null);
   }
 
   /**
@@ -61,7 +66,12 @@ public class DataPrimitive extends Data {
   public static DataPrimitive ofDataBusinessType(
       DataBusinessType dataBusinessType, PrimitiveType primitiveType, VariableName variableName) {
     return new DataPrimitive(
-        DataSource.user(), variableName, dataBusinessType, primitiveType, null);
+        DataSource.user(),
+        variableName,
+        dataBusinessType,
+        DataValidator.empty(),
+        primitiveType,
+        null);
   }
 
   // ===============================================================================================
@@ -81,7 +91,13 @@ public class DataPrimitive extends Data {
       VariableName variableName,
       Set<Annotation> annotations,
       DataBusinessType dataBusinessType) {
-    this(DataSource.user(), variableName, dataBusinessType, primitiveType, annotations);
+    this(
+        DataSource.user(),
+        variableName,
+        dataBusinessType,
+        DataValidator.empty(),
+        primitiveType,
+        annotations);
   }
 
   /**
@@ -97,9 +113,10 @@ public class DataPrimitive extends Data {
       DataSource dataSource,
       VariableName variableName,
       DataBusinessType dataBusinessType,
+      DataValidator dataValidator,
       PrimitiveType primitiveType,
       Set<Annotation> annotations) {
-    super(DataPrimaryType.PRIMITIVE, dataSource, variableName, dataBusinessType);
+    super(DataPrimaryType.PRIMITIVE, dataSource, variableName, dataBusinessType, dataValidator);
     this.primitiveType = primitiveType;
     this.annotations = annotations;
   }

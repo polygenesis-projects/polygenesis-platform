@@ -37,10 +37,15 @@ import java.util.Objects;
  */
 public abstract class Data {
 
+  // ===============================================================================================
+  // STATE
+  // ===============================================================================================
+
   private final DataPrimaryType dataPrimaryType;
   private final DataSource dataSource;
   private final VariableName variableName;
   private final DataBusinessType dataBusinessType;
+  private final DataValidator dataValidator;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -53,16 +58,19 @@ public abstract class Data {
    * @param dataSource the data source
    * @param variableName the variable name
    * @param dataBusinessType the data business type
+   * @param dataValidator the data validator
    */
   public Data(
       DataPrimaryType dataPrimaryType,
       DataSource dataSource,
       VariableName variableName,
-      DataBusinessType dataBusinessType) {
+      DataBusinessType dataBusinessType,
+      DataValidator dataValidator) {
     this.dataPrimaryType = dataPrimaryType;
     this.dataSource = dataSource;
     this.variableName = variableName;
     this.dataBusinessType = dataBusinessType;
+    this.dataValidator = dataValidator;
   }
 
   // ===============================================================================================
@@ -114,6 +122,15 @@ public abstract class Data {
    */
   public DataBusinessType getDataBusinessType() {
     return dataBusinessType;
+  }
+
+  /**
+   * Gets data validator.
+   *
+   * @return the data validator
+   */
+  public DataValidator getDataValidator() {
+    return dataValidator;
   }
 
   // ===============================================================================================
@@ -221,12 +238,13 @@ public abstract class Data {
     Data data = (Data) o;
     return dataPrimaryType == data.dataPrimaryType
         && Objects.equals(dataSource, data.dataSource)
+        && Objects.equals(variableName, data.variableName)
         && dataBusinessType == data.dataBusinessType
-        && Objects.equals(variableName, data.variableName);
+        && Objects.equals(dataValidator, data.dataValidator);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(dataPrimaryType, dataSource, dataBusinessType, variableName);
+    return Objects.hash(dataPrimaryType, dataSource, variableName, dataBusinessType, dataValidator);
   }
 }

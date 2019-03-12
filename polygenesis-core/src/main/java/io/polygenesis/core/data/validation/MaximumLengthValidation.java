@@ -18,64 +18,32 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.core.data;
+package io.polygenesis.core.data.validation;
 
-import io.polygenesis.core.data.validation.MaximumLengthValidation;
-import io.polygenesis.core.data.validation.RequiredValidation;
-import io.polygenesis.core.data.validation.Validation;
-import java.util.Arrays;
-import java.util.LinkedHashSet;
+import com.oregor.ddd4j.check.assertion.Assertion;
 import java.util.Objects;
-import java.util.Set;
 
-/**
- * The type Data validator.
- *
- * @author Christos Tsakostas
- */
-public class DataValidator {
-
-  // ===============================================================================================
-  // STATIC
-  // ===============================================================================================
-
-  /**
-   * Empty data validator.
-   *
-   * @return the data validator
-   */
-  public static DataValidator empty() {
-    return new DataValidator(new LinkedHashSet<>());
-  }
-
-  /**
-   * Default for string data validator.
-   *
-   * @return the data validator
-   */
-  public static DataValidator defaultForString() {
-    return new DataValidator(
-        new LinkedHashSet<>(
-            Arrays.asList(new RequiredValidation(), new MaximumLengthValidation(100))));
-  }
+/** The type Maximum length validation. */
+public class MaximumLengthValidation extends Validation {
 
   // ===============================================================================================
   // STATE
   // ===============================================================================================
 
-  private Set<Validation> validations;
+  private Integer maximumLength;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
-   * Instantiates a new Data validator.
+   * Instantiates a new Maximum length validation.
    *
-   * @param validations the validations
+   * @param maximumLength the maximum length
    */
-  public DataValidator(Set<Validation> validations) {
-    setValidations(validations);
+  public MaximumLengthValidation(Integer maximumLength) {
+    super(ValidationType.MAXIMUM_LENGTH);
+    setMaximumLength(maximumLength);
   }
 
   // ===============================================================================================
@@ -83,12 +51,12 @@ public class DataValidator {
   // ===============================================================================================
 
   /**
-   * Gets validations.
+   * Gets maximum length.
    *
-   * @return the validations
+   * @return the maximum length
    */
-  public Set<Validation> getValidations() {
-    return validations;
+  public Integer getMaximumLength() {
+    return maximumLength;
   }
 
   // ===============================================================================================
@@ -96,12 +64,13 @@ public class DataValidator {
   // ===============================================================================================
 
   /**
-   * Sets validations.
+   * Sets maximum length.
    *
-   * @param validations the validations
+   * @param maximumLength the maximum length
    */
-  private void setValidations(Set<Validation> validations) {
-    this.validations = validations;
+  public void setMaximumLength(Integer maximumLength) {
+    Assertion.isNotNull(maximumLength, "maximumLength is required");
+    this.maximumLength = maximumLength;
   }
 
   // ===============================================================================================
@@ -116,12 +85,15 @@ public class DataValidator {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    DataValidator that = (DataValidator) o;
-    return Objects.equals(validations, that.validations);
+    if (!super.equals(o)) {
+      return false;
+    }
+    MaximumLengthValidation that = (MaximumLengthValidation) o;
+    return Objects.equals(maximumLength, that.maximumLength);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(validations);
+    return Objects.hash(super.hashCode(), maximumLength);
   }
 }

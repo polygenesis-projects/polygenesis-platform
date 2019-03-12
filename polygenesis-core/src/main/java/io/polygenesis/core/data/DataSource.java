@@ -35,39 +35,28 @@ public class DataSource {
   // ===============================================================================================
 
   /**
-   * User data source.
+   * Data input is provided by user.
    *
    * @return the data source
    */
   public static DataSource user() {
-    return new DataSource(null, null);
+    return new DataSource(null);
   }
 
   /**
-   * User data source.
-   *
-   * @param dataValidator the data validator
-   * @return the data source
-   */
-  public static DataSource user(DataValidator dataValidator) {
-    return new DataSource(dataValidator, null);
-  }
-
-  /**
-   * Function data source.
+   * Data input is provided by the return value of a function.
    *
    * @param function the function
    * @return the data source
    */
   public static DataSource function(Function function) {
-    return new DataSource(null, function);
+    return new DataSource(function);
   }
 
   // ===============================================================================================
   // STATE
   // ===============================================================================================
 
-  private final DataValidator dataValidator;
   private final Function function;
 
   // ===============================================================================================
@@ -77,11 +66,9 @@ public class DataSource {
   /**
    * Instantiates a new Data source.
    *
-   * @param dataValidator the data validator
    * @param function the function
    */
-  public DataSource(DataValidator dataValidator, Function function) {
-    this.dataValidator = dataValidator;
+  public DataSource(Function function) {
     this.function = function;
   }
 
@@ -112,15 +99,6 @@ public class DataSource {
   // ===============================================================================================
 
   /**
-   * Gets data validator.
-   *
-   * @return the data validator
-   */
-  public DataValidator getDataValidator() {
-    return dataValidator;
-  }
-
-  /**
    * Gets function.
    *
    * @return the function
@@ -146,12 +124,11 @@ public class DataSource {
       return false;
     }
     DataSource that = (DataSource) o;
-    return Objects.equals(dataValidator, that.dataValidator)
-        && Objects.equals(function, that.function);
+    return Objects.equals(function, that.function);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(dataValidator, function);
+    return Objects.hash(function);
   }
 }

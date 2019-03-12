@@ -41,7 +41,7 @@ public class DataArray extends Data {
    * @param arrayElement the array element
    */
   public DataArray(Data arrayElement) {
-    this(DataSource.user(), null, DataBusinessType.ANY, arrayElement);
+    this(DataSource.user(), null, DataBusinessType.ANY, DataValidator.empty(), arrayElement);
   }
 
   /**
@@ -50,7 +50,7 @@ public class DataArray extends Data {
    * @param variableName the variable name
    */
   public DataArray(VariableName variableName) {
-    this(DataSource.user(), variableName, DataBusinessType.ANY, null);
+    this(DataSource.user(), variableName, DataBusinessType.ANY, DataValidator.empty(), null);
   }
 
   /**
@@ -60,7 +60,8 @@ public class DataArray extends Data {
    * @param arrayElement the array element
    */
   public DataArray(VariableName variableName, Data arrayElement) {
-    this(DataSource.user(), variableName, DataBusinessType.ANY, arrayElement);
+    this(
+        DataSource.user(), variableName, DataBusinessType.ANY, DataValidator.empty(), arrayElement);
   }
 
   /**
@@ -75,8 +76,9 @@ public class DataArray extends Data {
       DataSource dataSource,
       VariableName variableName,
       DataBusinessType dataBusinessType,
+      DataValidator dataValidator,
       Data arrayElement) {
-    super(DataPrimaryType.ARRAY, dataSource, variableName, dataBusinessType);
+    super(DataPrimaryType.ARRAY, dataSource, variableName, dataBusinessType, dataValidator);
     this.arrayElement = arrayElement;
   }
 

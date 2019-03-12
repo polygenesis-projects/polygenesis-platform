@@ -18,64 +18,35 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.core.data;
+package io.polygenesis.core.data.validation;
 
-import io.polygenesis.core.data.validation.MaximumLengthValidation;
-import io.polygenesis.core.data.validation.RequiredValidation;
-import io.polygenesis.core.data.validation.Validation;
-import java.util.Arrays;
-import java.util.LinkedHashSet;
+import com.oregor.ddd4j.check.assertion.Assertion;
 import java.util.Objects;
-import java.util.Set;
 
 /**
- * The type Data validator.
+ * The type Validation.
  *
  * @author Christos Tsakostas
  */
-public class DataValidator {
-
-  // ===============================================================================================
-  // STATIC
-  // ===============================================================================================
-
-  /**
-   * Empty data validator.
-   *
-   * @return the data validator
-   */
-  public static DataValidator empty() {
-    return new DataValidator(new LinkedHashSet<>());
-  }
-
-  /**
-   * Default for string data validator.
-   *
-   * @return the data validator
-   */
-  public static DataValidator defaultForString() {
-    return new DataValidator(
-        new LinkedHashSet<>(
-            Arrays.asList(new RequiredValidation(), new MaximumLengthValidation(100))));
-  }
+public abstract class Validation {
 
   // ===============================================================================================
   // STATE
   // ===============================================================================================
 
-  private Set<Validation> validations;
+  private ValidationType validationType;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
-   * Instantiates a new Data validator.
+   * Instantiates a new Validation.
    *
-   * @param validations the validations
+   * @param validationType the validation type
    */
-  public DataValidator(Set<Validation> validations) {
-    setValidations(validations);
+  protected Validation(ValidationType validationType) {
+    setValidationType(validationType);
   }
 
   // ===============================================================================================
@@ -83,12 +54,12 @@ public class DataValidator {
   // ===============================================================================================
 
   /**
-   * Gets validations.
+   * Gets validation type.
    *
-   * @return the validations
+   * @return the validation type
    */
-  public Set<Validation> getValidations() {
-    return validations;
+  public ValidationType getValidationType() {
+    return validationType;
   }
 
   // ===============================================================================================
@@ -96,12 +67,13 @@ public class DataValidator {
   // ===============================================================================================
 
   /**
-   * Sets validations.
+   * Sets validation type.
    *
-   * @param validations the validations
+   * @param validationType the validation type
    */
-  private void setValidations(Set<Validation> validations) {
-    this.validations = validations;
+  public void setValidationType(ValidationType validationType) {
+    Assertion.isNotNull(validationType, "validationType is required");
+    this.validationType = validationType;
   }
 
   // ===============================================================================================
@@ -110,18 +82,19 @@ public class DataValidator {
 
   @Override
   public boolean equals(Object o) {
+
     if (this == o) {
       return true;
     }
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    DataValidator that = (DataValidator) o;
-    return Objects.equals(validations, that.validations);
+    Validation that = (Validation) o;
+    return validationType == that.validationType;
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(validations);
+    return Objects.hash(validationType);
   }
 }

@@ -18,22 +18,21 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.core.data;
+package io.polygenesis.core.data.validation;
 
-/** @author Christos Tsakostas */
-class TestData extends Data {
+/**
+ * The type Required validation.
+ *
+ * @author Christos Tsakostas
+ */
+public class RequiredValidation extends Validation {
 
-  public TestData(VariableName variableName) {
-    super(
-        DataPrimaryType.PRIMITIVE,
-        DataSource.user(),
-        variableName,
-        DataBusinessType.ANY,
-        DataValidator.empty());
-  }
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
 
-  @Override
-  public String getDataType() {
-    return PrimitiveType.STRING.name();
+  /** Instantiates a new Required validation. */
+  public RequiredValidation() {
+    super(ValidationType.REQUIRED);
   }
 }

@@ -44,7 +44,14 @@ public class DataGroup extends Data {
 
   /** Instantiates a new data group. */
   public DataGroup() {
-    this(DataSource.user(), null, DataBusinessType.ANY, null, null, new LinkedHashSet<>());
+    this(
+        DataSource.user(),
+        null,
+        DataBusinessType.ANY,
+        DataValidator.empty(),
+        null,
+        null,
+        new LinkedHashSet<>());
   }
 
   /**
@@ -53,7 +60,14 @@ public class DataGroup extends Data {
    * @param variableName the variable name
    */
   public DataGroup(VariableName variableName) {
-    this(DataSource.user(), variableName, DataBusinessType.ANY, null, null, new LinkedHashSet<>());
+    this(
+        DataSource.user(),
+        variableName,
+        DataBusinessType.ANY,
+        DataValidator.empty(),
+        null,
+        null,
+        new LinkedHashSet<>());
   }
 
   /**
@@ -67,6 +81,7 @@ public class DataGroup extends Data {
         DataSource.user(),
         new VariableName(objectName.getText()),
         DataBusinessType.ANY,
+        DataValidator.empty(),
         objectName,
         packageName,
         new LinkedHashSet<>());
@@ -84,6 +99,7 @@ public class DataGroup extends Data {
         DataSource.user(),
         variableName,
         DataBusinessType.ANY,
+        DataValidator.empty(),
         objectName,
         packageName,
         new LinkedHashSet<>());
@@ -103,10 +119,11 @@ public class DataGroup extends Data {
       DataSource dataSource,
       VariableName variableName,
       DataBusinessType dataBusinessType,
+      DataValidator dataValidator,
       ObjectName objectName,
       PackageName packageName,
       Set<Data> models) {
-    super(DataPrimaryType.OBJECT, dataSource, variableName, dataBusinessType);
+    super(DataPrimaryType.OBJECT, dataSource, variableName, dataBusinessType, dataValidator);
     this.objectName = objectName;
     this.packageName = packageName;
     this.models = models;
@@ -127,6 +144,7 @@ public class DataGroup extends Data {
         getDataSource(),
         getVariableName(),
         getDataBusinessType(),
+        getDataValidator(),
         objectName,
         getPackageName(),
         getModels());
@@ -143,6 +161,7 @@ public class DataGroup extends Data {
         getDataSource(),
         variableName,
         getDataBusinessType(),
+        getDataValidator(),
         getObjectName(),
         getPackageName(),
         getModels());

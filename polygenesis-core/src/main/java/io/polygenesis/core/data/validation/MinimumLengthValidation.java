@@ -18,64 +18,36 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.core.data;
+package io.polygenesis.core.data.validation;
 
-import io.polygenesis.core.data.validation.MaximumLengthValidation;
-import io.polygenesis.core.data.validation.RequiredValidation;
-import io.polygenesis.core.data.validation.Validation;
-import java.util.Arrays;
-import java.util.LinkedHashSet;
+import com.oregor.ddd4j.check.assertion.Assertion;
 import java.util.Objects;
-import java.util.Set;
 
 /**
- * The type Data validator.
+ * The type Minimum length validation.
  *
  * @author Christos Tsakostas
  */
-public class DataValidator {
-
-  // ===============================================================================================
-  // STATIC
-  // ===============================================================================================
-
-  /**
-   * Empty data validator.
-   *
-   * @return the data validator
-   */
-  public static DataValidator empty() {
-    return new DataValidator(new LinkedHashSet<>());
-  }
-
-  /**
-   * Default for string data validator.
-   *
-   * @return the data validator
-   */
-  public static DataValidator defaultForString() {
-    return new DataValidator(
-        new LinkedHashSet<>(
-            Arrays.asList(new RequiredValidation(), new MaximumLengthValidation(100))));
-  }
+public class MinimumLengthValidation extends Validation {
 
   // ===============================================================================================
   // STATE
   // ===============================================================================================
 
-  private Set<Validation> validations;
+  private Integer minimumLength;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
-   * Instantiates a new Data validator.
+   * Instantiates a new Minimum length validation.
    *
-   * @param validations the validations
+   * @param minimumLength the minimum length
    */
-  public DataValidator(Set<Validation> validations) {
-    setValidations(validations);
+  public MinimumLengthValidation(Integer minimumLength) {
+    super(ValidationType.MINIMUM_LENGTH);
+    setMinimumLength(minimumLength);
   }
 
   // ===============================================================================================
@@ -83,12 +55,12 @@ public class DataValidator {
   // ===============================================================================================
 
   /**
-   * Gets validations.
+   * Gets minimum length.
    *
-   * @return the validations
+   * @return the minimum length
    */
-  public Set<Validation> getValidations() {
-    return validations;
+  public Integer getMinimumLength() {
+    return minimumLength;
   }
 
   // ===============================================================================================
@@ -96,12 +68,13 @@ public class DataValidator {
   // ===============================================================================================
 
   /**
-   * Sets validations.
+   * Sets minimum length.
    *
-   * @param validations the validations
+   * @param minimumLength the minimum length
    */
-  private void setValidations(Set<Validation> validations) {
-    this.validations = validations;
+  public void setMinimumLength(Integer minimumLength) {
+    Assertion.isNotNull(minimumLength, "minimumLength is required");
+    this.minimumLength = minimumLength;
   }
 
   // ===============================================================================================
@@ -116,12 +89,15 @@ public class DataValidator {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    DataValidator that = (DataValidator) o;
-    return Objects.equals(validations, that.validations);
+    if (!super.equals(o)) {
+      return false;
+    }
+    MinimumLengthValidation that = (MinimumLengthValidation) o;
+    return Objects.equals(minimumLength, that.minimumLength);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(validations);
+    return Objects.hash(super.hashCode(), minimumLength);
   }
 }
