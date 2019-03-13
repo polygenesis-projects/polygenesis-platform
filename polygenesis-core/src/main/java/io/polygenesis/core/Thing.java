@@ -40,15 +40,13 @@ import java.util.Set;
  */
 public class Thing {
 
-  /** The name of a {@link Thing}. */
-  private ThingName name;
-
-  /** Optionally a {@link Thing} may be the child of another {@link Thing} acting as the parent. */
-  private Thing parent;
-
+  private ThingScopeType thingScopeType;
+  private ThingBusinessType thingBusinessType;
+  private ThingName thingName;
+  private Set<ThingProperty> thingProperties;
   private Set<Function> functions;
-
   private Boolean multiTenant;
+  private Set<Thing> children;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -60,9 +58,12 @@ public class Thing {
    * @param thingName the thing name
    */
   public Thing(ThingName thingName) {
-    setName(thingName);
-    setFunctions(new LinkedHashSet<>());
-    setMultiTenant(false);
+    this(
+        ThingScopeType.ACROSS_LAYERS,
+        ThingBusinessType.ANY,
+        thingName,
+        new LinkedHashSet<>(),
+        false);
   }
 
   /**
@@ -72,9 +73,12 @@ public class Thing {
    * @param multiTenant the multi tenant
    */
   public Thing(ThingName thingName, Boolean multiTenant) {
-    setName(thingName);
-    setFunctions(new LinkedHashSet<>());
-    setMultiTenant(multiTenant);
+    this(
+        ThingScopeType.ACROSS_LAYERS,
+        ThingBusinessType.ANY,
+        thingName,
+        new LinkedHashSet<>(),
+        multiTenant);
   }
 
   /**
@@ -84,67 +88,111 @@ public class Thing {
    * @param parentThing the parent thing
    */
   public Thing(ThingName thingName, Thing parentThing) {
-    setName(thingName);
-    setParent(parentThing);
+    this(
+        ThingScopeType.ACROSS_LAYERS,
+        ThingBusinessType.ANY,
+        thingName,
+        new LinkedHashSet<>(),
+        parentThing.getMultiTenant());
+  }
+
+  /**
+   * Instantiates a new Thing.
+   *
+   * @param thingScopeType the thing scope type
+   * @param thingBusinessType the thing business type
+   * @param thingName the name
+   * @param thingProperties the thing properties
+   * @param multiTenant the multi tenant
+   */
+  public Thing(
+      ThingScopeType thingScopeType,
+      ThingBusinessType thingBusinessType,
+      ThingName thingName,
+      Set<ThingProperty> thingProperties,
+      Boolean multiTenant) {
+    setThingScopeType(thingScopeType);
+    setThingBusinessType(thingBusinessType);
+    setThingName(thingName);
+    setThingProperties(thingProperties);
     setFunctions(new LinkedHashSet<>());
-    setMultiTenant(parentThing.getMultiTenant());
+    setMultiTenant(multiTenant);
+    setChildren(new LinkedHashSet<>());
   }
 
   // ===============================================================================================
-  // APPENDERS
+  // STATE MUTATION
   // ===============================================================================================
 
   /**
-   * Append function.
+   * Add function.
    *
    * @param function the function
    */
-  public void appendFunction(Function function) {
+  public void addFunction(Function function) {
     this.functions.add(function);
   }
 
   /**
-   * Append functions.
+   * Add functions.
    *
    * @param functions the functions
    */
-  public void appendFunctions(Set<Function> functions) {
+  public void addFunctions(Set<Function> functions) {
     this.functions.addAll(functions);
+  }
+
+  /**
+   * Add child.
+   *
+   * @param thing the thing
+   */
+  public void addChild(Thing thing) {
+    getChildren().add(thing);
   }
 
   // ===============================================================================================
   // QUERIES
   // ===============================================================================================
 
-  /**
-   * Is domain service thing boolean.
-   *
-   * @return the boolean
-   */
-  public boolean isDomainServiceThing() {
-    return getFunctions().stream().anyMatch(function -> function.getGoal().isDomainServiceMethod());
-  }
-
   // ===============================================================================================
   // GETTERS
   // ===============================================================================================
 
   /**
-   * Gets name.
+   * Gets thing type.
    *
-   * @return the name
+   * @return the thing type
    */
-  public ThingName getName() {
-    return name;
+  public ThingScopeType getThingScopeType() {
+    return thingScopeType;
   }
 
   /**
-   * Gets parent.
+   * Gets thing business type.
    *
-   * @return the parent
+   * @return the thing business type
    */
-  public Thing getParent() {
-    return parent;
+  public ThingBusinessType getThingBusinessType() {
+    return thingBusinessType;
+  }
+
+  /**
+   * Gets thing name.
+   *
+   * @return the thing name
+   */
+  public ThingName getThingName() {
+    return thingName;
+  }
+
+  /**
+   * Gets thing properties.
+   *
+   * @return the thing properties
+   */
+  public Set<ThingProperty> getThingProperties() {
+    return thingProperties;
   }
 
   /**
@@ -165,26 +213,57 @@ public class Thing {
     return multiTenant;
   }
 
+  /**
+   * Gets children.
+   *
+   * @return the children
+   */
+  public Set<Thing> getChildren() {
+    return children;
+  }
+
   // ===============================================================================================
   // GUARDS
   // ===============================================================================================
 
   /**
-   * Sets name.
+   * Sets thing type.
    *
-   * @param name the name
+   * @param thingScopeType the thing type
    */
-  private void setName(ThingName name) {
-    this.name = name;
+  private void setThingScopeType(ThingScopeType thingScopeType) {
+    Assertion.isNotNull(thingScopeType, "thingScopeType is required");
+    this.thingScopeType = thingScopeType;
   }
 
   /**
-   * Sets parent.
+   * Sets thing business type.
    *
-   * @param parent the parent
+   * @param thingBusinessType the thing business type
    */
-  private void setParent(Thing parent) {
-    this.parent = parent;
+  private void setThingBusinessType(ThingBusinessType thingBusinessType) {
+    Assertion.isNotNull(thingBusinessType, "thingBusinessType is required");
+    this.thingBusinessType = thingBusinessType;
+  }
+
+  /**
+   * Sets name.
+   *
+   * @param thingName the name
+   */
+  private void setThingName(ThingName thingName) {
+    Assertion.isNotNull(thingName, "thingName is required");
+    this.thingName = thingName;
+  }
+
+  /**
+   * Sets thing properties.
+   *
+   * @param thingProperties the thing properties
+   */
+  private void setThingProperties(Set<ThingProperty> thingProperties) {
+    Assertion.isNotNull(thingProperties, "thingProperties is required");
+    this.thingProperties = thingProperties;
   }
 
   /**
@@ -193,6 +272,7 @@ public class Thing {
    * @param functions the functions
    */
   private void setFunctions(Set<Function> functions) {
+    Assertion.isNotNull(functions, "functions is required");
     this.functions = functions;
   }
 
@@ -204,6 +284,16 @@ public class Thing {
   private void setMultiTenant(Boolean multiTenant) {
     Assertion.isNotNull(multiTenant, "multiTenant is required");
     this.multiTenant = multiTenant;
+  }
+
+  /**
+   * Sets children.
+   *
+   * @param children the children
+   */
+  private void setChildren(Set<Thing> children) {
+    Assertion.isNotNull(children, "children is required");
+    this.children = children;
   }
 
   // ===============================================================================================
@@ -219,13 +309,17 @@ public class Thing {
       return false;
     }
     Thing thing = (Thing) o;
-    return Objects.equals(name, thing.name)
-        && Objects.equals(parent, thing.parent)
-        && Objects.equals(multiTenant, thing.multiTenant);
+    return thingScopeType == thing.thingScopeType
+        && thingBusinessType == thing.thingBusinessType
+        && Objects.equals(thingName, thing.thingName)
+        && Objects.equals(thingProperties, thing.thingProperties)
+        && Objects.equals(multiTenant, thing.multiTenant)
+        && Objects.equals(children, thing.children);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, parent, multiTenant);
+    return Objects.hash(
+        thingScopeType, thingBusinessType, thingName, thingProperties, multiTenant, children);
   }
 }

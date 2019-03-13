@@ -120,10 +120,12 @@ public class AggregateRootClassRepresentable extends AbstractClassRepresentable<
     // ---------------------------------------------------------------------------------------------
     // Create constructor with parameters
     // ---------------------------------------------------------------------------------------------
-    constructorRepresentations.add(
-        createConstructorWithSetters(
-            source.getName().getText(),
-            makeConstructorParameterRepresentation(source.getProperties())));
+    if (!source.getProperties().isEmpty()) {
+      constructorRepresentations.add(
+          createConstructorWithSetters(
+              source.getName().getText(),
+              makeConstructorParameterRepresentation(source.getProperties())));
+    }
 
     return constructorRepresentations;
   }

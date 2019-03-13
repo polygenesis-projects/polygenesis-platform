@@ -28,6 +28,7 @@ import io.polygenesis.core.FunctionName;
 import io.polygenesis.core.Goal;
 import io.polygenesis.core.ReturnValue;
 import io.polygenesis.core.Thing;
+import io.polygenesis.core.ThingBuilder;
 import io.polygenesis.core.ThingName;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -111,7 +112,10 @@ public class FunctionIdentifier {
   private Optional<Function> identifyGoalInMethod(Thing thing, Method method) {
     GFunction annotationGFunction = AnnotationUtils.findAnnotation(method, GFunction.class);
     if (annotationGFunction != null) {
-      Thing thingToExamine = new Thing(new ThingName(annotationGFunction.thingName()));
+      Thing thingToExamine =
+          new ThingBuilder()
+              .setThingName(new ThingName(annotationGFunction.thingName()))
+              .createThing();
 
       if (thing.equals(thingToExamine)) {
 

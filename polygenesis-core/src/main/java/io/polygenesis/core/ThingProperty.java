@@ -18,47 +18,27 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.models.reactivestate;
+package io.polygenesis.core;
 
-import io.polygenesis.core.Thing;
-import io.polygenesis.models.api.Service;
-import io.polygenesis.models.api.ServiceModelRepository;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import io.polygenesis.core.data.Data;
 
 /**
- * The type Model deducer.
+ * The type Thing property.
  *
  * @author Christos Tsakostas
  */
-public class ModelDeducer {
+public class ThingProperty extends AbstractDataContainer {
 
   // ===============================================================================================
-  // FUNCTIONALITY
+  // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
-   * Deduce set.
+   * Instantiates a new Thing property.
    *
-   * @param thing the thing
-   * @param serviceModelRepository the service model repository
-   * @return the set
+   * @param data the data
    */
-  public Set<Model> deduce(Thing thing, ServiceModelRepository serviceModelRepository) {
-    Set<Model> models = new LinkedHashSet<>();
-
-    Set<Service> services = serviceModelRepository.getServicesBy(thing.getThingName());
-
-    services.forEach(
-        service -> {
-          service
-              .getDtos()
-              .forEach(
-                  dto -> {
-                    models.add(new Model(dto.getOriginatingDataGroup()));
-                  });
-        });
-
-    return models;
+  public ThingProperty(Data data) {
+    super(data);
   }
 }

@@ -23,6 +23,7 @@ package io.polygenesis.models.domain;
 import io.polygenesis.commons.text.Name;
 import io.polygenesis.core.Thing;
 import io.polygenesis.core.ThingRepository;
+import io.polygenesis.core.ThingScopeType;
 import io.polygenesis.core.data.PackageName;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -73,44 +74,17 @@ public class AggregateRootDeducer {
     Set<AggregateRoot> aggregateRoots = new LinkedHashSet<>();
 
     thingRepository
+        .getAbstractDomainAggregateRootThings()
+        .forEach(
+            thing -> {
+              aggregateRoots.add(makeAggregateRoot(thing, rootPackageName));
+            });
+
+    thingRepository
         .getApiThings()
         .forEach(
             thing -> {
-              PackageName packageName = makeAggregateRootPackageName(rootPackageName, thing);
-
-              Name aggregateRootName = makeAggregateRootName(thing);
-
-              Set<AbstractProperty> properties =
-                  aggregateRootPropertyDeducer.deduceFrom(thing, rootPackageName);
-
-              Set<Constructor> constructors =
-                  aggregateConstructorDeducer.deduceFrom(thing, rootPackageName);
-
-              Set<StateMutationMethod> stateMutationMethods = new LinkedHashSet<>();
-              Set<StateQueryMethod> stateQueryMethods = new LinkedHashSet<>();
-              Set<FactoryMethod> factoryMethods = new LinkedHashSet<>();
-
-              Persistence persistence =
-                  new Persistence(
-                      packageName,
-                      makePersistenceName(thing),
-                      aggregateRootName,
-                      makeAggregateRootIdName(thing),
-                      thing.getMultiTenant());
-
-              aggregateRoots.add(
-                  new AggregateRoot(
-                      makeSuperclass(),
-                      InstantiationType.NORMAL,
-                      packageName,
-                      aggregateRootName,
-                      properties,
-                      constructors,
-                      stateMutationMethods,
-                      stateQueryMethods,
-                      factoryMethods,
-                      persistence,
-                      thing.getMultiTenant()));
+              aggregateRoots.add(makeAggregateRoot(thing, rootPackageName));
             });
 
     return aggregateRoots;
@@ -121,6 +95,51 @@ public class AggregateRootDeducer {
   // ===============================================================================================
 
   /**
+   * Make aggregate root aggregate root.
+   *
+   * @param thing the thing
+   * @param rootPackageName the root package name
+   * @return the aggregate root
+   */
+  protected AggregateRoot makeAggregateRoot(Thing thing, PackageName rootPackageName) {
+    PackageName packageName = makeAggregateRootPackageName(rootPackageName, thing);
+
+    Name aggregateRootName = makeAggregateRootName(thing);
+
+    Set<AbstractProperty> properties =
+        aggregateRootPropertyDeducer.deduceFrom(thing, rootPackageName);
+
+    Set<Constructor> constructors = aggregateConstructorDeducer.deduceFrom(thing, rootPackageName);
+
+    Set<StateMutationMethod> stateMutationMethods = new LinkedHashSet<>();
+    Set<StateQueryMethod> stateQueryMethods = new LinkedHashSet<>();
+    Set<FactoryMethod> factoryMethods = new LinkedHashSet<>();
+
+    Persistence persistence =
+        new Persistence(
+            packageName,
+            makePersistenceName(thing),
+            aggregateRootName,
+            makeAggregateRootIdName(thing),
+            thing.getMultiTenant());
+
+    return new AggregateRoot(
+        makeSuperclass(),
+        thing.getThingScopeType().equals(ThingScopeType.ABSTRACT_DOMAIN_AGGREGATE_ROOT)
+            ? InstantiationType.ABSTRACT
+            : InstantiationType.NORMAL,
+        packageName,
+        aggregateRootName,
+        properties,
+        constructors,
+        stateMutationMethods,
+        stateQueryMethods,
+        factoryMethods,
+        persistence,
+        thing.getMultiTenant());
+  }
+
+  /**
    * Make aggregate root package name package name.
    *
    * @param rootPackageName the root package name
@@ -129,7 +148,7 @@ public class AggregateRootDeducer {
    */
   private PackageName makeAggregateRootPackageName(PackageName rootPackageName, Thing thing) {
     return new PackageName(
-        rootPackageName.getText() + "." + thing.getName().getText().toLowerCase());
+        rootPackageName.getText() + "." + thing.getThingName().getText().toLowerCase());
   }
 
   /**
@@ -139,7 +158,7 @@ public class AggregateRootDeducer {
    * @return the name
    */
   private Name makeAggregateRootName(Thing thing) {
-    return new Name(thing.getName().getText());
+    return new Name(thing.getThingName().getText());
   }
 
   /**
@@ -149,7 +168,7 @@ public class AggregateRootDeducer {
    * @return the name
    */
   private Name makeAggregateRootIdName(Thing thing) {
-    return new Name(thing.getName().getText() + "Id");
+    return new Name(thing.getThingName().getText() + "Id");
   }
 
   /**
@@ -159,7 +178,7 @@ public class AggregateRootDeducer {
    * @return the name
    */
   private Name makePersistenceName(Thing thing) {
-    return new Name(thing.getName().getText() + "Persistence");
+    return new Name(thing.getThingName().getText() + "Persistence");
   }
 
   /**

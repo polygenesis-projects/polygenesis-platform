@@ -78,7 +78,7 @@ public class ThingRepositoryTest {
   private Set<Thing> createThings() {
     Set<Thing> things = new LinkedHashSet<>();
 
-    Thing someThing = new Thing(new ThingName("someThing"));
+    Thing someThing = new ThingBuilder().setThingName(new ThingName("someThing")).createThing();
 
     Function someFunction =
         new Function(
@@ -87,7 +87,7 @@ public class ThingRepositoryTest {
             new FunctionName("someFunction"),
             new LinkedHashSet<>());
 
-    someThing.appendFunction(someFunction);
+    someThing.addFunction(someFunction);
 
     things.add(someThing);
     return things;

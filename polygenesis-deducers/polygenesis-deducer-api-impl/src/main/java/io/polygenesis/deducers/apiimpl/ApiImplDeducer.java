@@ -84,18 +84,19 @@ public class ApiImplDeducer implements Deducer<ServiceImplementationModelReposit
         .forEach(
             thing -> {
               Optional<AggregateRoot> optionalAggregateRoot =
-                  domainModelRepository.getAggregateRootByName(new Name(thing.getName().getText()));
+                  domainModelRepository.getAggregateRootByName(
+                      new Name(thing.getThingName().getText()));
 
               if (optionalAggregateRoot.isPresent()) {
                 AggregateRootConverter aggregateRootConverter =
                     aggregateRootConverterDeducer.deduce(
                         optionalAggregateRoot.get(),
-                        serviceModelRepository.getServicesBy(thing.getName()));
+                        serviceModelRepository.getServicesBy(thing.getThingName()));
 
                 aggregateRootConverters.add(aggregateRootConverter);
 
                 serviceModelRepository
-                    .getServicesBy(thing.getName())
+                    .getServicesBy(thing.getThingName())
                     .forEach(
                         service ->
                             serviceImplementations.add(

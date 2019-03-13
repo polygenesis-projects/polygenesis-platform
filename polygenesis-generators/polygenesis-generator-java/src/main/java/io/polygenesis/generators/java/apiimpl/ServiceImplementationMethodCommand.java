@@ -186,7 +186,7 @@ public class ServiceImplementationMethodCommand extends ServiceImplementationMet
     StringBuilder stringBuilder = new StringBuilder();
 
     stringBuilder.append(
-        TextConverter.toLowerCamel(argument.getModel().getVariableName().getText()));
+        TextConverter.toLowerCamel(argument.getData().getVariableName().getText()));
     stringBuilder.append(".");
     stringBuilder.append("get");
     stringBuilder.append(TextConverter.toUpperCamel(property.getVariableName().getText()));
@@ -199,7 +199,7 @@ public class ServiceImplementationMethodCommand extends ServiceImplementationMet
     StringBuilder stringBuilder = new StringBuilder();
 
     stringBuilder.append(
-        TextConverter.toLowerCamel(argument.getModel().getVariableName().getText()));
+        TextConverter.toLowerCamel(argument.getData().getVariableName().getText()));
     stringBuilder.append(".");
     stringBuilder.append("get");
     stringBuilder.append(TextConverter.toUpperCamel(property.getVariableName().getText()));
@@ -214,7 +214,7 @@ public class ServiceImplementationMethodCommand extends ServiceImplementationMet
     stringBuilder.append("businessConverter.convert(");
 
     stringBuilder.append(
-        TextConverter.toLowerCamel(argument.getModel().getVariableName().getText()));
+        TextConverter.toLowerCamel(argument.getData().getVariableName().getText()));
 
     stringBuilder.append(".");
     stringBuilder.append("get");

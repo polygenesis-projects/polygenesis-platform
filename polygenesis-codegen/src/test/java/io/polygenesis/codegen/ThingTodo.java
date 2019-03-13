@@ -23,7 +23,7 @@ package io.polygenesis.codegen;
 import io.polygenesis.core.Thing;
 import io.polygenesis.core.data.Data;
 import io.polygenesis.core.dsl.DataBuilder;
-import io.polygenesis.core.dsl.ThingBuilder;
+import io.polygenesis.core.dsl.ExperimentalThingBuilder;
 import java.util.Set;
 
 /** @author Christos Tsakostas */
@@ -31,7 +31,7 @@ public class ThingTodo {
 
   public static Thing create() {
     Thing business =
-        ThingBuilder.create("todo", OregorDdd4jExampleGenesisTest.JAVA_ROOT_PACKAGE)
+        ExperimentalThingBuilder.create("todo", OregorDdd4jExampleGenesisTest.JAVA_ROOT_PACKAGE)
             .withFunctionCreate(data())
             .withFunctionModify(data())
             .withFunctionFetchOne(data())

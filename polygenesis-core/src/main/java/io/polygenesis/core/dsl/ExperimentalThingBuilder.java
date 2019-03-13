@@ -28,6 +28,7 @@ import io.polygenesis.core.FunctionName;
 import io.polygenesis.core.Goal;
 import io.polygenesis.core.ReturnValue;
 import io.polygenesis.core.Thing;
+import io.polygenesis.core.ThingBuilder;
 import io.polygenesis.core.ThingName;
 import io.polygenesis.core.data.Data;
 import io.polygenesis.core.data.DataArray;
@@ -47,7 +48,7 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class ThingBuilder {
+public class ExperimentalThingBuilder {
 
   private final Thing thing;
   private final PackageName packageName;
@@ -56,8 +57,12 @@ public class ThingBuilder {
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
-  private ThingBuilder(String thingName, String rootPackageName, Boolean multiTenant) {
-    this.thing = new Thing(new ThingName(thingName), multiTenant);
+  private ExperimentalThingBuilder(String thingName, String rootPackageName, Boolean multiTenant) {
+    this.thing =
+        new ThingBuilder()
+            .setThingName(new ThingName(thingName))
+            .setMultiTenant(multiTenant)
+            .createThing();
     this.packageName =
         new PackageName(String.format("%s.%s", rootPackageName, thingName.toLowerCase()));
   }
@@ -73,8 +78,8 @@ public class ThingBuilder {
    * @param rootPackageName the root package name
    * @return the thing builder
    */
-  public static ThingBuilder create(String thingName, String rootPackageName) {
-    return new ThingBuilder(thingName, rootPackageName, false);
+  public static ExperimentalThingBuilder create(String thingName, String rootPackageName) {
+    return new ExperimentalThingBuilder(thingName, rootPackageName, false);
   }
 
   /**
@@ -84,8 +89,9 @@ public class ThingBuilder {
    * @param rootPackageName the root package name
    * @return the thing builder
    */
-  public static ThingBuilder createMultiTenant(String thingName, String rootPackageName) {
-    return new ThingBuilder(thingName, rootPackageName, true);
+  public static ExperimentalThingBuilder createMultiTenant(
+      String thingName, String rootPackageName) {
+    return new ExperimentalThingBuilder(thingName, rootPackageName, true);
   }
 
   /**
@@ -103,7 +109,7 @@ public class ThingBuilder {
    * @param models the models
    * @return the thing builder
    */
-  public final ThingBuilder withFunctionCreate(Set<Data> models) {
+  public final ExperimentalThingBuilder withFunctionCreate(Set<Data> models) {
 
     // ---------------------------------------------------------------------------------------------
     // ARGUMENTS
@@ -112,7 +118,7 @@ public class ThingBuilder {
         new DataGroup(
             new ObjectName(
                 String.format(
-                    "Create%sRequest", TextConverter.toUpperCamel(thing.getName().getText()))),
+                    "Create%sRequest", TextConverter.toUpperCamel(thing.getThingName().getText()))),
             this.packageName);
 
     // ---------------------------------------------------------------------------------------------
@@ -126,7 +132,8 @@ public class ThingBuilder {
         new DataGroup(
             new ObjectName(
                 String.format(
-                    "Create%sResponse", TextConverter.toUpperCamel(thing.getName().getText()))),
+                    "Create%sResponse",
+                    TextConverter.toUpperCamel(thing.getThingName().getText()))),
             this.packageName);
 
     // ---------------------------------------------------------------------------------------------
@@ -136,7 +143,8 @@ public class ThingBuilder {
             DataBusinessType.THING_IDENTITY,
             PrimitiveType.STRING,
             new VariableName(
-                String.format("%sId", TextConverter.toLowerCamel(thing.getName().getText())))));
+                String.format(
+                    "%sId", TextConverter.toLowerCamel(thing.getThingName().getText())))));
 
     // ---------------------------------------------------------------------------------------------
     // FUNCTION
@@ -150,7 +158,7 @@ public class ThingBuilder {
             new LinkedHashSet<>(Arrays.asList(new Argument(argumentDataGroup))),
             new ReturnValue(returnValueDataGroup));
 
-    this.thing.appendFunction(function);
+    this.thing.addFunction(function);
     return this;
   }
 
@@ -160,7 +168,7 @@ public class ThingBuilder {
    * @param models the models
    * @return the thing builder
    */
-  public final ThingBuilder withFunctionModify(Set<Data> models) {
+  public final ExperimentalThingBuilder withFunctionModify(Set<Data> models) {
 
     // ---------------------------------------------------------------------------------------------
     // ARGUMENTS
@@ -169,7 +177,7 @@ public class ThingBuilder {
         new DataGroup(
             new ObjectName(
                 String.format(
-                    "Modify%sRequest", TextConverter.toUpperCamel(thing.getName().getText()))),
+                    "Modify%sRequest", TextConverter.toUpperCamel(thing.getThingName().getText()))),
             this.packageName);
 
     // ---------------------------------------------------------------------------------------------
@@ -178,7 +186,8 @@ public class ThingBuilder {
             DataBusinessType.THING_IDENTITY,
             PrimitiveType.STRING,
             new VariableName(
-                String.format("%sId", TextConverter.toLowerCamel(thing.getName().getText())))));
+                String.format(
+                    "%sId", TextConverter.toLowerCamel(thing.getThingName().getText())))));
 
     // ---------------------------------------------------------------------------------------------
     models.forEach(model -> argumentDataGroup.addData(model));
@@ -191,7 +200,8 @@ public class ThingBuilder {
         new DataGroup(
             new ObjectName(
                 String.format(
-                    "Modify%sResponse", TextConverter.toUpperCamel(thing.getName().getText()))),
+                    "Modify%sResponse",
+                    TextConverter.toUpperCamel(thing.getThingName().getText()))),
             this.packageName);
 
     // ---------------------------------------------------------------------------------------------
@@ -201,7 +211,8 @@ public class ThingBuilder {
             DataBusinessType.THING_IDENTITY,
             PrimitiveType.STRING,
             new VariableName(
-                String.format("%sId", TextConverter.toLowerCamel(thing.getName().getText())))));
+                String.format(
+                    "%sId", TextConverter.toLowerCamel(thing.getThingName().getText())))));
 
     // ---------------------------------------------------------------------------------------------
     // FUNCTION
@@ -215,7 +226,7 @@ public class ThingBuilder {
             new LinkedHashSet<>(Arrays.asList(new Argument(argumentDataGroup))),
             new ReturnValue(returnValueDataGroup));
 
-    this.thing.appendFunction(function);
+    this.thing.addFunction(function);
     return this;
   }
 
@@ -225,7 +236,7 @@ public class ThingBuilder {
    * @param models the models
    * @return the thing builder
    */
-  public final ThingBuilder withFunctionFetchOne(Set<Data> models) {
+  public final ExperimentalThingBuilder withFunctionFetchOne(Set<Data> models) {
 
     // ---------------------------------------------------------------------------------------------
     // ARGUMENTS
@@ -234,7 +245,7 @@ public class ThingBuilder {
         new DataGroup(
             new ObjectName(
                 String.format(
-                    "Fetch%sRequest", TextConverter.toUpperCamel(thing.getName().getText()))),
+                    "Fetch%sRequest", TextConverter.toUpperCamel(thing.getThingName().getText()))),
             this.packageName);
 
     // ---------------------------------------------------------------------------------------------
@@ -244,7 +255,8 @@ public class ThingBuilder {
             DataBusinessType.THING_IDENTITY,
             PrimitiveType.STRING,
             new VariableName(
-                String.format("%sId", TextConverter.toLowerCamel(thing.getName().getText())))));
+                String.format(
+                    "%sId", TextConverter.toLowerCamel(thing.getThingName().getText())))));
 
     // ---------------------------------------------------------------------------------------------
     // RETURN VALUE
@@ -253,7 +265,7 @@ public class ThingBuilder {
         new DataGroup(
             new ObjectName(
                 String.format(
-                    "Fetch%sResponse", TextConverter.toUpperCamel(thing.getName().getText()))),
+                    "Fetch%sResponse", TextConverter.toUpperCamel(thing.getThingName().getText()))),
             this.packageName);
 
     // ---------------------------------------------------------------------------------------------
@@ -272,7 +284,7 @@ public class ThingBuilder {
             new LinkedHashSet<>(Arrays.asList(new Argument(argumentDataGroup))),
             new ReturnValue(returnValueDataGroup));
 
-    this.thing.appendFunction(function);
+    this.thing.addFunction(function);
     return this;
   }
 
@@ -282,7 +294,7 @@ public class ThingBuilder {
    * @param models the models
    * @return the thing builder
    */
-  public final ThingBuilder withFunctionFetchPagedCollection(Set<Data> models) {
+  public final ExperimentalThingBuilder withFunctionFetchPagedCollection(Set<Data> models) {
 
     // ---------------------------------------------------------------------------------------------
     // ARGUMENTS
@@ -292,7 +304,7 @@ public class ThingBuilder {
             new ObjectName(
                 String.format(
                     "Fetch%sCollectionRequest",
-                    TextConverter.toUpperCamel(thing.getName().getText()))),
+                    TextConverter.toUpperCamel(thing.getThingName().getText()))),
             this.packageName);
 
     // ---------------------------------------------------------------------------------------------
@@ -309,7 +321,8 @@ public class ThingBuilder {
     // RETURN VALUE
     // ---------------------------------------------------------------------------------------------
     String arrayElementDataTypeAndVariableName =
-        String.format("%sCollectionRecord", TextConverter.toUpperCamel(thing.getName().getText()));
+        String.format(
+            "%sCollectionRecord", TextConverter.toUpperCamel(thing.getThingName().getText()));
 
     DataGroup arrayElement =
         new DataGroup(new ObjectName(arrayElementDataTypeAndVariableName), this.packageName);
@@ -320,7 +333,8 @@ public class ThingBuilder {
 
     String arrayDataTypeAndVariableName =
         String.format(
-            "Fetch%sCollectionResponse", TextConverter.toUpperCamel(thing.getName().getText()));
+            "Fetch%sCollectionResponse",
+            TextConverter.toUpperCamel(thing.getThingName().getText()));
 
     DataArray dataArray = new DataArray(new VariableName("someArray"), arrayElement);
 
@@ -341,7 +355,7 @@ public class ThingBuilder {
             new LinkedHashSet<>(Arrays.asList(new Argument(argumentDataGroup))),
             new ReturnValue(dataGroupReturnValue));
 
-    this.thing.appendFunction(function);
+    this.thing.addFunction(function);
     return this;
   }
 

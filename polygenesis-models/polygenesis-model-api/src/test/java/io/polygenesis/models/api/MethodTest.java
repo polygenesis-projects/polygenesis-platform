@@ -26,6 +26,7 @@ import io.polygenesis.core.Function;
 import io.polygenesis.core.FunctionName;
 import io.polygenesis.core.Goal;
 import io.polygenesis.core.Thing;
+import io.polygenesis.core.ThingBuilder;
 import io.polygenesis.core.ThingName;
 import io.polygenesis.core.data.DataGroup;
 import io.polygenesis.core.data.ObjectName;
@@ -46,7 +47,7 @@ public class MethodTest extends AbstractEqualityTest<Method> {
             DtoType.API_REQUEST,
             new DataGroup(new ObjectName("xyz"), new PackageName("com.oregor")));
 
-    Thing thing = new Thing(new ThingName("customer"));
+    Thing thing = new ThingBuilder().setThingName(new ThingName("customer")).createThing();
     return new Method(
         new Function(
             thing, new Goal(GoalType.CREATE), new FunctionName("create"), new LinkedHashSet<>()),
@@ -65,7 +66,7 @@ public class MethodTest extends AbstractEqualityTest<Method> {
             DtoType.API_REQUEST,
             new DataGroup(new ObjectName("xyz"), new PackageName("com.oregor")));
 
-    Thing thing = new Thing(new ThingName("user"));
+    Thing thing = new ThingBuilder().setThingName(new ThingName("user")).createThing();
     return new Method(
         new Function(
             thing, new Goal(GoalType.CREATE), new FunctionName("create"), new LinkedHashSet<>()),

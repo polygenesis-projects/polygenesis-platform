@@ -124,7 +124,7 @@ public class AggregateRootConverterDeducer {
                         new FetchOneDtoFromAggregateRoot(
                             findDtoInServiceFromDataGroup(
                                 service,
-                                method.getFunction().getReturnValue().getModel().getAsDataGroup()),
+                                method.getFunction().getReturnValue().getData().getAsDataGroup()),
                             aggregateRoot));
                   });
         });

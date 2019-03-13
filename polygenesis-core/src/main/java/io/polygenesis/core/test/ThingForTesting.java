@@ -27,6 +27,7 @@ import io.polygenesis.core.FunctionName;
 import io.polygenesis.core.Goal;
 import io.polygenesis.core.ReturnValue;
 import io.polygenesis.core.Thing;
+import io.polygenesis.core.ThingBuilder;
 import io.polygenesis.core.ThingName;
 import io.polygenesis.core.data.DataBusinessType;
 import io.polygenesis.core.data.DataGroup;
@@ -53,15 +54,15 @@ public class ThingForTesting {
    * @return the thing
    */
   public static Thing create() {
-    Thing business = new Thing(new ThingName("business"));
+    Thing business = new ThingBuilder().setThingName(new ThingName("business")).createThing();
 
-    business.appendFunction(functionCreate(business));
-    business.appendFunction(functionFetchOne(business));
-    business.appendFunction(functionFetchCollection(business));
+    business.addFunction(functionCreate(business));
+    business.addFunction(functionFetchOne(business));
+    business.addFunction(functionFetchCollection(business));
 
-    business.appendFunction(functionWithNoReturnValueAndManyArguments(business));
-    business.appendFunction(functionWithNoArguments(business));
-    business.appendFunction(functionWithPrimitives(business));
+    business.addFunction(functionWithNoReturnValueAndManyArguments(business));
+    business.addFunction(functionWithNoArguments(business));
+    business.addFunction(functionWithPrimitives(business));
 
     return business;
   }

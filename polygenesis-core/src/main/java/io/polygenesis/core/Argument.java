@@ -27,7 +27,7 @@ import io.polygenesis.core.data.Data;
  *
  * @author Christos Tsakostas
  */
-public class Argument extends AbstractIO {
+public class Argument extends AbstractDataContainer {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -36,9 +36,9 @@ public class Argument extends AbstractIO {
   /**
    * Instantiates a new Argument.
    *
-   * @param model the model
+   * @param data the data
    */
-  public Argument(Data model) {
-    super(model);
+  public Argument(Data data) {
+    super(data);
   }
 }

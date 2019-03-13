@@ -81,14 +81,13 @@ public class DomainServiceDeducer implements Deducer<DomainServiceRepository> {
             thing -> {
               DomainService domainService =
                   new DomainService(
-                      new ObjectName(thing.getName().getText()),
+                      new ObjectName(thing.getThingName().getText()),
                       new PackageName(
                           String.format("%s.%s", getRootPackageName().getText(), "service")));
 
               thing
                   .getFunctions()
                   .stream()
-                  .filter(function -> function.getGoal().isDomainServiceMethod())
                   .forEach(function -> domainService.appendFunction(function));
 
               domainServices.add(domainService);

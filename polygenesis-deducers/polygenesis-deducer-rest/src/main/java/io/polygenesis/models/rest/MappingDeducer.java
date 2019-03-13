@@ -92,9 +92,10 @@ public class MappingDeducer {
             Arrays.asList(
                 new PathConstant(
                     TextConverter.toLowerHyphen(
-                        TextConverter.toPlural(function.getThing().getName().getText()))),
+                        TextConverter.toPlural(function.getThing().getThingName().getText()))),
                 new PathVariable(
-                    TextConverter.toLowerCamel(function.getThing().getName().getText() + "Id")))));
+                    TextConverter.toLowerCamel(
+                        function.getThing().getThingName().getText() + "Id")))));
   }
 
   private Mapping getMappingForGetFetchCollection(Function function) {
@@ -103,7 +104,7 @@ public class MappingDeducer {
             Arrays.asList(
                 new PathConstant(
                     TextConverter.toLowerHyphen(
-                        TextConverter.toPlural(function.getThing().getName().getText()))))));
+                        TextConverter.toPlural(function.getThing().getThingName().getText()))))));
   }
 
   // ===============================================================================================
@@ -116,7 +117,7 @@ public class MappingDeducer {
             Arrays.asList(
                 new PathConstant(
                     TextConverter.toLowerHyphen(
-                        TextConverter.toPlural(function.getThing().getName().getText()))))));
+                        TextConverter.toPlural(function.getThing().getThingName().getText()))))));
   }
 
   // ===============================================================================================
@@ -129,9 +130,10 @@ public class MappingDeducer {
             Arrays.asList(
                 new PathConstant(
                     TextConverter.toLowerHyphen(
-                        TextConverter.toPlural(function.getThing().getName().getText()))),
+                        TextConverter.toPlural(function.getThing().getThingName().getText()))),
                 new PathVariable(
-                    TextConverter.toLowerCamel(function.getThing().getName().getText() + "Id")))));
+                    TextConverter.toLowerCamel(
+                        function.getThing().getThingName().getText() + "Id")))));
   }
 
   // ===============================================================================================
@@ -144,8 +146,9 @@ public class MappingDeducer {
             Arrays.asList(
                 new PathConstant(
                     TextConverter.toLowerHyphen(
-                        TextConverter.toPlural(function.getThing().getName().getText()))),
+                        TextConverter.toPlural(function.getThing().getThingName().getText()))),
                 new PathVariable(
-                    TextConverter.toLowerCamel(function.getThing().getName().getText() + "Id")))));
+                    TextConverter.toLowerCamel(
+                        function.getThing().getThingName().getText() + "Id")))));
   }
 }

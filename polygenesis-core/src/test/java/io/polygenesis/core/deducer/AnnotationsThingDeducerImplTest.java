@@ -104,7 +104,8 @@ public class AnnotationsThingDeducerImplTest {
   // ===============================================================================================
   private void assertionsForGoalCalculation(Thing someThing) {
     Optional<Function> optionalGoalCalculation =
-        repository.getThingFunction(someThing.getName(), new FunctionName("calculateSomeThing"));
+        repository.getThingFunction(
+            someThing.getThingName(), new FunctionName("calculateSomeThing"));
 
     if (!optionalGoalCalculation.isPresent()) {
       throw new IllegalStateException();

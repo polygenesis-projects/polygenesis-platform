@@ -27,6 +27,7 @@ import io.polygenesis.core.FunctionName;
 import io.polygenesis.core.Goal;
 import io.polygenesis.core.ReturnValue;
 import io.polygenesis.core.Thing;
+import io.polygenesis.core.ThingBuilder;
 import io.polygenesis.core.ThingName;
 import io.polygenesis.core.data.DataGroup;
 import io.polygenesis.core.data.ObjectName;
@@ -226,7 +227,8 @@ public class AggregateRootConverterClassRepresentable
         .getValueObjectFromDtos()
         .forEach(
             valueObjectFromDto -> {
-              Thing thing = new Thing(new ThingName("Converter"));
+              Thing thing =
+                  new ThingBuilder().setThingName(new ThingName("Converter")).createThing();
               Goal goal = new Goal("CONVERT");
 
               Function function =
@@ -317,7 +319,7 @@ public class AggregateRootConverterClassRepresentable
    */
   private Function makeFunction(Set<Argument> arguments, ReturnValue returnValue) {
 
-    Thing thing = new Thing(new ThingName("Converter"));
+    Thing thing = new ThingBuilder().setThingName(new ThingName("Converter")).createThing();
     Goal goal = new Goal("CONVERT");
 
     return new Function(
@@ -325,7 +327,7 @@ public class AggregateRootConverterClassRepresentable
         goal,
         new FunctionName(
             String.format(
-                "convertTo%s", TextConverter.toUpperCamel(returnValue.getModel().getDataType()))),
+                "convertTo%s", TextConverter.toUpperCamel(returnValue.getData().getDataType()))),
         arguments,
         returnValue);
   }

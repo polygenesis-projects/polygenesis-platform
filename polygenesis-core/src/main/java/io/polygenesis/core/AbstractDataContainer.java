@@ -22,29 +22,28 @@ package io.polygenesis.core;
 
 import com.oregor.ddd4j.check.assertion.Assertion;
 import io.polygenesis.core.data.Data;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
+import java.util.Objects;
 
 /**
- * The base class for Function Input and Output.
+ * The base class for Function Input / Output and Thing Properties.
  *
  * @author Christos Tsakostas
  */
-abstract class AbstractIO {
+abstract class AbstractDataContainer {
 
-  private Data model;
+  private Data data;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
-   * Instantiates a new Argument.
+   * Instantiates a new Abstract data container.
    *
-   * @param model the model
+   * @param data the data
    */
-  AbstractIO(Data model) {
-    setModel(model);
+  AbstractDataContainer(Data data) {
+    setData(data);
   }
 
   // ===============================================================================================
@@ -52,21 +51,26 @@ abstract class AbstractIO {
   // ===============================================================================================
 
   /**
-   * Gets model.
+   * Gets data.
    *
-   * @return the model
+   * @return the data
    */
-  public Data getModel() {
-    return model;
+  public Data getData() {
+    return data;
   }
 
   // ===============================================================================================
   // GUARDS
   // ===============================================================================================
 
-  private void setModel(Data model) {
-    Assertion.isNotNull(model, "data is required");
-    this.model = model;
+  /**
+   * Sets data.
+   *
+   * @param data the data
+   */
+  private void setData(Data data) {
+    Assertion.isNotNull(data, "data is required");
+    this.data = data;
   }
 
   // ===============================================================================================
@@ -78,18 +82,15 @@ abstract class AbstractIO {
     if (this == o) {
       return true;
     }
-
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-
-    AbstractIO argument = (AbstractIO) o;
-
-    return new EqualsBuilder().append(model, argument.model).isEquals();
+    AbstractDataContainer that = (AbstractDataContainer) o;
+    return Objects.equals(data, that.data);
   }
 
   @Override
   public int hashCode() {
-    return new HashCodeBuilder(17, 37).append(model).toHashCode();
+    return Objects.hash(data);
   }
 }

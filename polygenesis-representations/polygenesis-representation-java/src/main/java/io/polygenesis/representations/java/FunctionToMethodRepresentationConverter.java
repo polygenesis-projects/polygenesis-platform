@@ -87,8 +87,8 @@ public class FunctionToMethodRepresentationConverter extends AbstractMethodRepre
               parameterRepresentations.add(
                   new ParameterRepresentation(
                       fromDataTypeToJavaConverter.getDeclaredVariableType(
-                          argument.getModel().getDataType()),
-                      argument.getModel().getVariableName().getText()));
+                          argument.getData().getDataType()),
+                      argument.getData().getVariableName().getText()));
             });
 
     return parameterRepresentations;
@@ -97,7 +97,7 @@ public class FunctionToMethodRepresentationConverter extends AbstractMethodRepre
   @Override
   public String returnValue(Function source, Object... args) {
     // TODO - primitives
-    return TextConverter.toUpperCamel(source.getReturnValue().getModel().getDataType());
+    return TextConverter.toUpperCamel(source.getReturnValue().getData().getDataType());
   }
 
   @Override

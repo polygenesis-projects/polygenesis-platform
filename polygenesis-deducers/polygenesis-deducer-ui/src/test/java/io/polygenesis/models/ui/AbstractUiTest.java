@@ -26,6 +26,7 @@ import io.polygenesis.core.FunctionName;
 import io.polygenesis.core.Goal;
 import io.polygenesis.core.ReturnValue;
 import io.polygenesis.core.Thing;
+import io.polygenesis.core.ThingBuilder;
 import io.polygenesis.core.ThingName;
 import io.polygenesis.core.data.DataBusinessType;
 import io.polygenesis.core.data.DataPrimitive;
@@ -37,7 +38,7 @@ import java.util.LinkedHashSet;
 public abstract class AbstractUiTest {
 
   protected Thing createThing() {
-    Thing thing = new Thing(new ThingName("someThing"));
+    Thing thing = new ThingBuilder().setThingName(new ThingName("someThing")).createThing();
 
     // =============================================================================================
     // CREATE
@@ -53,7 +54,7 @@ public abstract class AbstractUiTest {
                     new VariableName("response"),
                     new LinkedHashSet<>(),
                     DataBusinessType.ANY)));
-    thing.appendFunction(createFunction);
+    thing.addFunction(createFunction);
 
     // =============================================================================================
     // CUSTOM GOAL
@@ -69,7 +70,7 @@ public abstract class AbstractUiTest {
                     new VariableName("response"),
                     new LinkedHashSet<>(),
                     DataBusinessType.ANY)));
-    thing.appendFunction(customGoalFunction);
+    thing.addFunction(customGoalFunction);
 
     return thing;
   }

@@ -96,7 +96,7 @@ public abstract class ServiceImplementationMethodShared {
     stringBuilder.append("(");
     stringBuilder.append("UUID.fromString(");
     stringBuilder.append(
-        TextConverter.toLowerCamel(argument.getModel().getVariableName().getText()));
+        TextConverter.toLowerCamel(argument.getData().getVariableName().getText()));
     stringBuilder.append(".");
     stringBuilder.append("get");
     stringBuilder.append(
@@ -107,7 +107,7 @@ public abstract class ServiceImplementationMethodShared {
     if (aggregateRoot.getMultiTenant()) {
       stringBuilder.append(", UUID.fromString(");
       stringBuilder.append(
-          TextConverter.toLowerCamel(argument.getModel().getVariableName().getText()));
+          TextConverter.toLowerCamel(argument.getData().getVariableName().getText()));
       stringBuilder.append(".");
       stringBuilder.append("getTenantId()");
       stringBuilder.append(")"); // UUID.fromString
@@ -129,8 +129,8 @@ public abstract class ServiceImplementationMethodShared {
 
     ReturnValue returnValue = method.getFunction().getReturnValue();
     if (returnValue != null) {
-      if (returnValue.getModel().isDataGroup()) {
-        stringBuilder.append(makeReturnValueForDataGroup(returnValue.getModel().getAsDataGroup()));
+      if (returnValue.getData().isDataGroup()) {
+        stringBuilder.append(makeReturnValueForDataGroup(returnValue.getData().getAsDataGroup()));
       } else {
         throw new IllegalStateException(
             String.format(

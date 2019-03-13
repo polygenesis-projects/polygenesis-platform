@@ -18,25 +18,20 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.models.ui;
-
-import io.polygenesis.commons.valueobjects.FeatureName;
-import io.polygenesis.core.Thing;
+package io.polygenesis.core;
 
 /**
- * Deduces a {@link FeatureName} provided a {@link Thing}.
+ * The enum Thing Scope Type.
  *
  * @author Christos Tsakostas
  */
-public class FeatureNameDeducer {
-
-  /**
-   * Feature deduction.
-   *
-   * @param thing the thing
-   * @return the feature
-   */
-  public FeatureName from(Thing thing) {
-    return new FeatureName(thing.getThingName().getText());
-  }
+public enum ThingScopeType {
+  /** Abstract domain aggregate root thing scope type. */
+  ABSTRACT_DOMAIN_AGGREGATE_ROOT,
+  /** Across layers thing scope type. */
+  ACROSS_LAYERS,
+  /** Domain service thing scope type. */
+  DOMAIN_SERVICE,
+  /** User interface thing scope type. */
+  USER_INTERFACE,
 }

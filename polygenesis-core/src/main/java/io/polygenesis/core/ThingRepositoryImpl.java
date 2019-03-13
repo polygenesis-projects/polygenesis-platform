@@ -58,7 +58,7 @@ public class ThingRepositoryImpl implements ThingRepository {
   public Set<Thing> getApiThings() {
     return things
         .stream()
-        .filter(thing -> !thing.isDomainServiceThing())
+        .filter(thing -> thing.getThingScopeType().equals(ThingScopeType.ACROSS_LAYERS))
         .collect(Collectors.toCollection(LinkedHashSet::new));
   }
 
@@ -66,13 +66,23 @@ public class ThingRepositoryImpl implements ThingRepository {
   public Set<Thing> getDomainServiceThings() {
     return things
         .stream()
-        .filter(thing -> thing.isDomainServiceThing())
+        .filter(thing -> thing.getThingScopeType().equals(ThingScopeType.DOMAIN_SERVICE))
+        .collect(Collectors.toCollection(LinkedHashSet::new));
+  }
+
+  @Override
+  public Set<Thing> getAbstractDomainAggregateRootThings() {
+    return things
+        .stream()
+        .filter(
+            thing ->
+                thing.getThingScopeType().equals(ThingScopeType.ABSTRACT_DOMAIN_AGGREGATE_ROOT))
         .collect(Collectors.toCollection(LinkedHashSet::new));
   }
 
   @Override
   public Optional<Thing> getThingByName(ThingName thingName) {
-    return things.stream().filter(thing -> thing.getName().equals(thingName)).findFirst();
+    return things.stream().filter(thing -> thing.getThingName().equals(thingName)).findFirst();
   }
 
   @Override

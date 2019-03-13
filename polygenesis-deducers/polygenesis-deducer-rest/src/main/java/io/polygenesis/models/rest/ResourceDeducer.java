@@ -84,7 +84,7 @@ public class ResourceDeducer {
                         makeResourcePackageName(rootPackageName, thing),
                         makeResourceName(thing),
                         makeEndpoints(thing, serviceModelRepository),
-                        serviceModelRepository.getServicesBy(thing.getName()))));
+                        serviceModelRepository.getServicesBy(thing.getThingName()))));
 
     return resources;
   }
@@ -95,11 +95,11 @@ public class ResourceDeducer {
 
   private PackageName makeResourcePackageName(PackageName rootPackageName, Thing thing) {
     return new PackageName(
-        rootPackageName.getText() + "." + thing.getName().getText().toLowerCase());
+        rootPackageName.getText() + "." + thing.getThingName().getText().toLowerCase());
   }
 
   private Name makeResourceName(Thing thing) {
-    return new Name(thing.getName().getText());
+    return new Name(thing.getThingName().getText());
   }
 
   private Set<Endpoint> makeEndpoints(Thing thing, ServiceModelRepository serviceModelRepository) {
@@ -128,7 +128,7 @@ public class ResourceDeducer {
 
     Optional<Service> optionalService =
         serviceModelRepository
-            .getServicesBy(function.getThing().getName())
+            .getServicesBy(function.getThing().getThingName())
             .stream()
             .filter(service -> service.contains(function))
             .findFirst();

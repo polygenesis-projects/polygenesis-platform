@@ -40,7 +40,7 @@ public class ReturnValueTest extends AbstractEqualityTest<ReturnValue> {
     ReturnValue returnValue = new ReturnValue(createDataPrimitive1());
 
     assertThat(returnValue).isNotNull();
-    assertThat(returnValue.getModel()).isEqualTo(createDataPrimitive1());
+    assertThat(returnValue.getData()).isEqualTo(createDataPrimitive1());
   }
 
   private DataPrimitive createDataPrimitive1() {

@@ -30,7 +30,7 @@ import io.polygenesis.core.data.VariableName;
 import io.polygenesis.core.dsl.DataArrayBuilder;
 import io.polygenesis.core.dsl.DataBuilder;
 import io.polygenesis.core.dsl.DataGroupBuilder;
-import io.polygenesis.core.dsl.ThingBuilder;
+import io.polygenesis.core.dsl.ExperimentalThingBuilder;
 import java.util.Set;
 
 /** @author Christos Tsakostas */
@@ -38,7 +38,8 @@ public class ThingBusiness {
 
   public static Thing create() {
     Thing business =
-        ThingBuilder.createMultiTenant("business", OregorDdd4jExampleGenesisTest.JAVA_ROOT_PACKAGE)
+        ExperimentalThingBuilder.createMultiTenant(
+                "business", OregorDdd4jExampleGenesisTest.JAVA_ROOT_PACKAGE)
             .withFunctionCreate(createData())
             .withFunctionFetchOne(fetchOneData())
             .withFunctionFetchPagedCollection(fetchCollectionData())

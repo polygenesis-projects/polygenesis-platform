@@ -18,25 +18,22 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.models.ui;
-
-import io.polygenesis.commons.valueobjects.FeatureName;
-import io.polygenesis.core.Thing;
+package io.polygenesis.core;
 
 /**
- * Deduces a {@link FeatureName} provided a {@link Thing}.
+ * The enum Thing business type.
  *
  * @author Christos Tsakostas
  */
-public class FeatureNameDeducer {
-
-  /**
-   * Feature deduction.
-   *
-   * @param thing the thing
-   * @return the feature
-   */
-  public FeatureName from(Thing thing) {
-    return new FeatureName(thing.getThingName().getText());
-  }
+public enum ThingBusinessType {
+  /** Any thing business type. */
+  ANY,
+  /** User thing business type. */
+  USER,
+  /** Tenant thing business type. */
+  TENANT,
+  /** Login thing business type. */
+  LOGIN,
+  /** Register thing business type. */
+  REGISTER
 }

@@ -54,24 +54,24 @@ public class DtoDeducer {
       throw new IllegalArgumentException(
           String.format(
               "Api Functions must have one argument. Thing name=%s, function=%s",
-              function.getThing().getName().getText(), function.getName().getText()));
+              function.getThing().getThingName().getText(), function.getName().getText()));
     }
 
     if (function.getArguments().size() > 1) {
       throw new IllegalArgumentException(
           String.format(
               "Only one argument is currently supported. Thing name=%s, function=%s",
-              function.getThing().getName().getText(), function.getName().getText()));
+              function.getThing().getThingName().getText(), function.getName().getText()));
     }
 
     Argument argument =
         function.getArguments().stream().findFirst().orElseThrow(IllegalArgumentException::new);
 
-    if (!argument.getModel().isDataGroup()) {
+    if (!argument.getData().isDataGroup()) {
       throw new IllegalArgumentException(
           String.format(
               "Argument model must be DataGroup. Thing name=%s, function=%s",
-              function.getThing().getName().getText(), function.getName().getText()));
+              function.getThing().getThingName().getText(), function.getName().getText()));
     }
 
     DtoType dtoType;
@@ -83,7 +83,7 @@ public class DtoDeducer {
       dtoType = DtoType.API_REQUEST;
     }
 
-    Dto dto = new Dto(dtoType, argument.getModel().getAsDataGroup());
+    Dto dto = new Dto(dtoType, argument.getData().getAsDataGroup());
 
     makeAssertionsForRequestDto(dto, function);
 
@@ -102,14 +102,14 @@ public class DtoDeducer {
       throw new IllegalArgumentException(
           String.format(
               "Api Functions must have return value. Thing name=%s, function=%s",
-              function.getThing().getName().getText(), function.getName().getText()));
+              function.getThing().getThingName().getText(), function.getName().getText()));
     }
 
-    if (!function.getReturnValue().getModel().isDataGroup()) {
+    if (!function.getReturnValue().getData().isDataGroup()) {
       throw new IllegalArgumentException(
           String.format(
               "ReturnValue model must be DataGroup. Thing name=%s, function=%s",
-              function.getThing().getName().getText(), function.getName().getText()));
+              function.getThing().getThingName().getText(), function.getName().getText()));
     }
 
     DtoType dtoType;
@@ -121,7 +121,7 @@ public class DtoDeducer {
       dtoType = DtoType.API_RESPONSE;
     }
 
-    Dto dto = new Dto(dtoType, function.getReturnValue().getModel().getAsDataGroup());
+    Dto dto = new Dto(dtoType, function.getReturnValue().getData().getAsDataGroup());
 
     makeAssertionsForResponseDto(dto, function);
 
@@ -239,7 +239,7 @@ public class DtoDeducer {
           String.format(
               "No %s found in Request Dto. Thing name=%s, function=%s",
               dataBusinessType.name(),
-              function.getThing().getName().getText(),
+              function.getThing().getThingName().getText(),
               function.getName().getText()));
     }
 
@@ -248,7 +248,7 @@ public class DtoDeducer {
           String.format(
               "More than one %s found in Request Dto. Thing name=%s, function=%s",
               dataBusinessType.name(),
-              function.getThing().getName().getText(),
+              function.getThing().getThingName().getText(),
               function.getName().getText()));
     }
   }

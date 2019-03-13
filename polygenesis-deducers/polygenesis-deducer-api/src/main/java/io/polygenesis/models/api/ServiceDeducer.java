@@ -83,22 +83,22 @@ public class ServiceDeducer {
     if (!commandMethods.isEmpty()) {
       services.add(
           new Service(
-              makeServicePackageName(rootPackageName, thing.getName()),
-              makeCommandServiceName(thing.getName()),
+              makeServicePackageName(rootPackageName, thing.getThingName()),
+              makeCommandServiceName(thing.getThingName()),
               commandMethods,
               CqsType.COMMAND,
-              thing.getName(),
+              thing.getThingName(),
               dtos));
     }
 
     if (!queryMethods.isEmpty()) {
       services.add(
           new Service(
-              makeServicePackageName(rootPackageName, thing.getName()),
-              makeQueryServiceName(thing.getName()),
+              makeServicePackageName(rootPackageName, thing.getThingName()),
+              makeQueryServiceName(thing.getThingName()),
               queryMethods,
               CqsType.QUERY,
-              thing.getName(),
+              thing.getThingName(),
               dtos));
     }
 

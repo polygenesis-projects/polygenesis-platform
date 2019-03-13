@@ -27,6 +27,7 @@ import io.polygenesis.core.FunctionName;
 import io.polygenesis.core.Goal;
 import io.polygenesis.core.ReturnValue;
 import io.polygenesis.core.Thing;
+import io.polygenesis.core.ThingBuilder;
 import io.polygenesis.core.ThingName;
 import io.polygenesis.core.data.DataBusinessType;
 import io.polygenesis.core.data.DataGroup;
@@ -42,10 +43,10 @@ import java.util.LinkedHashSet;
 public class JavaGenesisThingBusiness {
 
   public static Thing create() {
-    Thing business = new Thing(new ThingName("business"));
+    Thing business = new ThingBuilder().setThingName(new ThingName("business")).createThing();
 
-    business.appendFunction(functionCreate(business));
-    business.appendFunction(functionFetchDetail(business));
+    business.addFunction(functionCreate(business));
+    business.addFunction(functionFetchDetail(business));
 
     return business;
   }

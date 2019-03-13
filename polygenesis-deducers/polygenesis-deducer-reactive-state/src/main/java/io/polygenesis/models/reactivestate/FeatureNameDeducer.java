@@ -38,6 +38,6 @@ public class FeatureNameDeducer {
    * @return the feature
    */
   public FeatureName from(Thing thing) {
-    return new FeatureName(TextConverter.toLowerCamel(thing.getName().getText()));
+    return new FeatureName(TextConverter.toLowerCamel(thing.getThingName().getText()));
   }
 }

@@ -73,7 +73,8 @@ public class AggregateConstructorDeducer {
             function -> {
               constructors.add(
                   new Constructor(
-                      aggregateRootPropertyDeducer.deduceFrom(function, rootPackageName)));
+                      aggregateRootPropertyDeducer.deduceFromFunctionArguments(
+                          function, rootPackageName)));
             });
 
     return constructors;

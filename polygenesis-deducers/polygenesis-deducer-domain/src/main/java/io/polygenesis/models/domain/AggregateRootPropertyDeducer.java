@@ -22,6 +22,7 @@ package io.polygenesis.models.domain;
 
 import io.polygenesis.core.Function;
 import io.polygenesis.core.Thing;
+import io.polygenesis.core.ThingScopeType;
 import io.polygenesis.core.data.Data;
 import io.polygenesis.core.data.DataArray;
 import io.polygenesis.core.data.DataBusinessType;
@@ -49,14 +50,44 @@ public class AggregateRootPropertyDeducer {
    * Deduce from Thing.
    *
    * @param thing the thing
+   * @param rootPackageName the root package name
    * @return the set
    */
   public Set<AbstractProperty> deduceFrom(Thing thing, PackageName rootPackageName) {
     Set<AbstractProperty> properties = new LinkedHashSet<>();
 
+    if (thing.getThingProperties().isEmpty()) {
+      thing
+          .getFunctions()
+          .forEach(
+              function ->
+                  properties.addAll(deduceFromFunctionArguments(function, rootPackageName)));
+    } else {
+      properties.addAll(deduceFromThingProperties(thing, rootPackageName));
+    }
+
+    return properties;
+  }
+
+  /**
+   * Deduce from thing properties set.
+   *
+   * @param thing the thing
+   * @param rootPackageName the root package name
+   * @return the set
+   */
+  public Set<AbstractProperty> deduceFromThingProperties(Thing thing, PackageName rootPackageName) {
+    Set<AbstractProperty> properties = new LinkedHashSet<>();
+
     thing
-        .getFunctions()
-        .forEach(function -> properties.addAll(deduceFrom(function, rootPackageName)));
+        .getThingProperties()
+        .stream()
+        .map(thingProperty -> thingProperty.getData())
+        .forEach(
+            data -> {
+              // TODO: check if more restrictions are required here
+              properties.add(makeAbstractProperty(data));
+            });
 
     return properties;
   }
@@ -65,38 +96,46 @@ public class AggregateRootPropertyDeducer {
    * Deduce from Function.
    *
    * @param function the function
+   * @param rootPackageName the root package name
    * @return the set
    */
-  public Set<AbstractProperty> deduceFrom(Function function, PackageName rootPackageName) {
+  protected Set<AbstractProperty> deduceFromFunctionArguments(
+      Function function, PackageName rootPackageName) {
     Set<AbstractProperty> properties = new LinkedHashSet<>();
 
-    // Add Aggregate Root ID
-    if (function.getGoal().isCreate()) {
+    // Add Aggregate Root ID if the thing is not abstract
+    if (!function
+            .getThing()
+            .getThingScopeType()
+            .equals(ThingScopeType.ABSTRACT_DOMAIN_AGGREGATE_ROOT)
+        && function.getGoal().isCreate()) {
       properties.add(makeAggregateRootId(function, rootPackageName));
     }
 
-    function
-        .getArguments()
-        .forEach(
-            argument -> {
-              if (argument.getModel().isDataGroup()) {
-                argument
-                    .getModel()
-                    .getAsDataGroup()
-                    .getModels()
-                    .forEach(
-                        model -> {
-                          if (!isPropertyThingIdentity(model)
-                              && !isPropertyPageNumber(model)
-                              && !isPropertyPageSize(model)) {
-                            properties.add(makeAbstractProperty(model));
-                          }
-                        });
+    if (function.getArguments() != null) {
+      function
+          .getArguments()
+          .forEach(
+              argument -> {
+                if (argument.getData().isDataGroup()) {
+                  argument
+                      .getData()
+                      .getAsDataGroup()
+                      .getModels()
+                      .forEach(
+                          model -> {
+                            if (!isPropertyThingIdentity(model)
+                                && !isPropertyPageNumber(model)
+                                && !isPropertyPageSize(model)) {
+                              properties.add(makeAbstractProperty(model));
+                            }
+                          });
 
-              } else {
-                throw new IllegalStateException();
-              }
-            });
+                } else {
+                  throw new IllegalStateException();
+                }
+              });
+    }
 
     return properties;
   }
@@ -142,6 +181,12 @@ public class AggregateRootPropertyDeducer {
   // MAKE PROPERTIES
   // ===============================================================================================
 
+  /**
+   * Make primitive collection primitive collection.
+   *
+   * @param dataArray the data array
+   * @return the primitive collection
+   */
   protected PrimitiveCollection makePrimitiveCollection(DataArray dataArray) {
     return new PrimitiveCollection(
         dataArray,
@@ -149,6 +194,12 @@ public class AggregateRootPropertyDeducer {
         ((DataPrimitive) dataArray.getArrayElement()).getPrimitiveType());
   }
 
+  /**
+   * Make value object collection value object collection.
+   *
+   * @param dataArray the data array
+   * @return the value object collection
+   */
   protected ValueObjectCollection makeValueObjectCollection(DataArray dataArray) {
     throw new UnsupportedOperationException();
   }
@@ -156,15 +207,15 @@ public class AggregateRootPropertyDeducer {
   private AggregateRootId makeAggregateRootId(Function function, PackageName rootPackageName) {
     DataGroup dataGroup =
         new DataGroup(
-            new ObjectName(function.getThing().getName().getText() + "Id"),
+            new ObjectName(function.getThing().getThingName().getText() + "Id"),
             new PackageName(
                 String.format(
                     "%s.%s",
                     rootPackageName.getText(),
-                    function.getThing().getName().getText().toLowerCase())));
+                    function.getThing().getThingName().getText().toLowerCase())));
 
     return new AggregateRootId(
-        dataGroup, new VariableName(function.getThing().getName().getText() + "Id"));
+        dataGroup, new VariableName(function.getThing().getThingName().getText() + "Id"));
   }
 
   // ===============================================================================================

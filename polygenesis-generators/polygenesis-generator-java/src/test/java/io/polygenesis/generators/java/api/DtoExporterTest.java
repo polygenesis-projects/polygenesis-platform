@@ -34,6 +34,7 @@ import io.polygenesis.core.FunctionName;
 import io.polygenesis.core.Goal;
 import io.polygenesis.core.ReturnValue;
 import io.polygenesis.core.Thing;
+import io.polygenesis.core.ThingBuilder;
 import io.polygenesis.core.ThingName;
 import io.polygenesis.core.data.DataGroup;
 import io.polygenesis.core.data.DataPrimitive;
@@ -115,14 +116,14 @@ public class DtoExporterTest {
     Method createMethod =
         new Method(
             makeFunctionCreate(),
-            new Dto(DtoType.API_REQUEST, argument.getModel().getAsDataGroup()),
-            new Dto(DtoType.API_RESPONSE, createReturnValue.getModel().getAsDataGroup()));
+            new Dto(DtoType.API_REQUEST, argument.getData().getAsDataGroup()),
+            new Dto(DtoType.API_RESPONSE, createReturnValue.getData().getAsDataGroup()));
 
     methods.add(createMethod);
 
     Set<Dto> dtos = new LinkedHashSet<>();
-    dtos.add(new Dto(DtoType.API_REQUEST, argument.getModel().getAsDataGroup()));
-    dtos.add(new Dto(DtoType.API_RESPONSE, createReturnValue.getModel().getAsDataGroup()));
+    dtos.add(new Dto(DtoType.API_REQUEST, argument.getData().getAsDataGroup()));
+    dtos.add(new Dto(DtoType.API_RESPONSE, createReturnValue.getData().getAsDataGroup()));
 
     return new Service(
         new PackageName("com.oregor"),
@@ -152,7 +153,7 @@ public class DtoExporterTest {
   }
 
   private Function makeFunctionCreate() {
-    Thing thing = new Thing(new ThingName("customer"));
+    Thing thing = new ThingBuilder().setThingName(new ThingName("customer")).createThing();
     ReturnValue returnValue =
         new ReturnValue(DataPrimitive.of(PrimitiveType.STRING, new VariableName("someRet")));
     return new Function(
