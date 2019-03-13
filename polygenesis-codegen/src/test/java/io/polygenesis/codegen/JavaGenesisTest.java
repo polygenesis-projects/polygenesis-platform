@@ -33,6 +33,7 @@ import io.polygenesis.generators.java.rdbms.JavaRdbmsGeneratorFactory;
 import io.polygenesis.generators.java.rest.JavaApiRestGeneratorFactory;
 import io.polygenesis.models.api.ApiDeducerFactory;
 import io.polygenesis.models.domain.DomainDeducerFactory;
+import io.polygenesis.models.domain.DomainServiceDeducerFactory;
 import io.polygenesis.models.rest.RestDeducerFactory;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -54,6 +55,7 @@ public class JavaGenesisTest {
             Arrays.asList(
                 ApiDeducerFactory.newInstance(rootPackageName),
                 DomainDeducerFactory.newInstance(rootPackageName),
+                DomainServiceDeducerFactory.newInstance(rootPackageName),
                 ApiImplDeducerFactory.newInstance(rootPackageName),
                 RestDeducerFactory.newInstance(rootPackageName)));
 

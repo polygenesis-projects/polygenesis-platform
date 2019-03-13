@@ -10,6 +10,7 @@
     <module>${ projectDescription.modulePrefix }-api-impl</module>
     <module>${ projectDescription.modulePrefix }-app</module>
     <module>${ projectDescription.modulePrefix }-domain-model</module>
+    <module>${ projectDescription.modulePrefix }-domain-services-impl</module>
     <module>${ projectDescription.modulePrefix }-primary-adapters</module>
     <module>${ projectDescription.modulePrefix }-secondary-adapters</module>
 </#if>
@@ -135,7 +136,7 @@
   <dependencyManagement>
     <dependencies>
 <#if projectDescription.microservice>
-      <!-- API -->
+      <!--API-->
       <dependency>
         <groupId>${ projectDescription.groupId }</groupId>
         <artifactId>${ projectDescription.modulePrefix }-api</artifactId>
@@ -144,7 +145,7 @@
         </#noparse>
       </dependency>
 
-      <!-- API IMPL -->
+      <!--API IMPLEMENTATION-->
       <dependency>
         <groupId>${ projectDescription.groupId }</groupId>
         <artifactId>${ projectDescription.modulePrefix }-api-impl</artifactId>
@@ -153,7 +154,7 @@
         </#noparse>
       </dependency>
 
-      <!-- DOMAIN MODEL -->
+      <!--DOMAIN MODEL-->
       <dependency>
         <groupId>${ projectDescription.groupId }</groupId>
         <artifactId>${ projectDescription.modulePrefix }-domain-model</artifactId>
@@ -162,11 +163,20 @@
         </#noparse>
       </dependency>
 
+      <!--DOMAIN SERVICES IMPLEMENTATION-->
+      <dependency>
+        <groupId>${ projectDescription.groupId }</groupId>
+        <artifactId>${ projectDescription.modulePrefix }-domain-services-impl</artifactId>
+        <#noparse>
+          <version>${project.version}</version>
+        </#noparse>
+      </dependency>
+
       <!-- ===================================================================================== -->
       <!-- PRIMARY ADAPTERS                                                                      -->
       <!-- ===================================================================================== -->
 
-      <!-- REST SPRING -->
+      <!--REST SPRING-->
       <dependency>
         <groupId>${ projectDescription.groupId }.${ projectDescription.modulePrefix }-primary-adapters</groupId>
         <artifactId>${ projectDescription.modulePrefix }-rest-spring</artifactId>
@@ -175,7 +185,7 @@
         </#noparse>
       </dependency>
 
-      <!-- SUBSCRIBER ACTIVEMQ -->
+      <!--SUBSCRIBER ACTIVEMQ-->
       <dependency>
         <groupId>${ projectDescription.groupId }.${ projectDescription.modulePrefix }-primary-adapters</groupId>
         <artifactId>${ projectDescription.modulePrefix }-subscriber-activemq</artifactId>
@@ -188,7 +198,7 @@
       <!-- SECONDARY ADAPTERS                                                                    -->
       <!-- ===================================================================================== -->
 
-      <!-- PERSISTENCE RDBMS -->
+      <!--PERSISTENCE RDBMS-->
       <dependency>
         <groupId>${ projectDescription.groupId }.${ projectDescription.modulePrefix }-secondary-adapters</groupId>
         <artifactId>${ projectDescription.modulePrefix }-persistence-rdbms</artifactId>
@@ -197,7 +207,7 @@
         </#noparse>
       </dependency>
 
-      <!-- PUBLISHER ACTIVEMQ -->
+      <!--PUBLISHER ACTIVEMQ-->
       <dependency>
         <groupId>${ projectDescription.groupId }.${ projectDescription.modulePrefix }-secondary-adapters</groupId>
         <artifactId>${ projectDescription.modulePrefix }-publisher-activemq</artifactId>

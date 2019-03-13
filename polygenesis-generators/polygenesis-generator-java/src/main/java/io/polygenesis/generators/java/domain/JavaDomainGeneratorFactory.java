@@ -31,6 +31,8 @@ import io.polygenesis.generators.java.domain.aggregateroot.AggregateRootIdExport
 import io.polygenesis.generators.java.domain.domainevent.DomainEventExporter;
 import io.polygenesis.generators.java.domain.persistence.PersistenceExporter;
 import io.polygenesis.generators.java.domain.persistence.PersistenceInterfaceRepresentable;
+import io.polygenesis.generators.java.domain.service.DomainServiceExporter;
+import io.polygenesis.generators.java.domain.service.DomainServiceInterfaceRepresentable;
 import io.polygenesis.generators.java.domain.valueobject.ValueObjectClassRepresentable;
 import io.polygenesis.generators.java.domain.valueobject.ValueObjectExporter;
 import io.polygenesis.representations.java.FromDataTypeToJavaConverter;
@@ -53,6 +55,7 @@ public final class JavaDomainGeneratorFactory {
   private static ValueObjectExporter valueObjectExporter;
   private static DomainEventExporter domainEventExporter;
   private static PersistenceExporter persistenceExporter;
+  private static DomainServiceExporter domainServiceExporter;
 
   // ===============================================================================================
   // STATIC INITIALIZATION OF DEPENDENCIES
@@ -94,6 +97,13 @@ public final class JavaDomainGeneratorFactory {
 
     persistenceExporter =
         new PersistenceExporter(freemarkerService, persistenceInterfaceRepresentable);
+
+    DomainServiceInterfaceRepresentable domainServiceInterfaceRepresentable =
+        new DomainServiceInterfaceRepresentable(
+            fromDataTypeToJavaConverter, functionToMethodRepresentationConverter);
+
+    domainServiceExporter =
+        new DomainServiceExporter(freemarkerService, domainServiceInterfaceRepresentable);
   }
 
   // ===============================================================================================
@@ -123,6 +133,7 @@ public final class JavaDomainGeneratorFactory {
         aggregateEntityExporter,
         valueObjectExporter,
         domainEventExporter,
-        persistenceExporter);
+        persistenceExporter,
+        domainServiceExporter);
   }
 }

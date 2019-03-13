@@ -195,7 +195,7 @@ public class AggregateRootPropertyDeducer {
 
   private boolean isPropertyPageNumber(Data model) {
     if (model.getDataPrimaryType().equals(DataPrimaryType.PRIMITIVE)
-        && ((DataPrimitive) model).getDataBusinessType().equals(DataBusinessType.PAGE_NUMBER)) {
+        && model.getDataBusinessType().equals(DataBusinessType.PAGE_NUMBER)) {
       return true;
     }
     return false;
@@ -203,7 +203,7 @@ public class AggregateRootPropertyDeducer {
 
   private boolean isPropertyPageSize(Data model) {
     if (model.getDataPrimaryType().equals(DataPrimaryType.PRIMITIVE)
-        && ((DataPrimitive) model).getDataBusinessType().equals(DataBusinessType.PAGE_SIZE)) {
+        && model.getDataBusinessType().equals(DataBusinessType.PAGE_SIZE)) {
       return true;
     }
     return false;

@@ -70,7 +70,7 @@ public class SqlDeducer implements Deducer<SqlModelRepository> {
   @Override
   public SqlModelRepository deduce(
       ThingRepository thingRepository, Set<ModelRepository> modelRepositories) {
-    if (thingRepository.getThings().isEmpty()) {
+    if (thingRepository.getApiThings().isEmpty()) {
       throw new IllegalArgumentException("thingRepository cannot be empty");
     }
 

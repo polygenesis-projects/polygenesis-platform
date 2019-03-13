@@ -18,76 +18,63 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.models.api;
+package io.polygenesis.generators.java.domainserviceimpl;
 
-import io.polygenesis.core.Deducer;
-import io.polygenesis.core.ModelRepository;
-import io.polygenesis.core.ThingRepository;
-import io.polygenesis.core.data.PackageName;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import io.polygenesis.commons.freemarker.FreemarkerConfig;
+import io.polygenesis.commons.freemarker.FreemarkerService;
+import io.polygenesis.representations.java.FromDataTypeToJavaConverter;
+import java.nio.file.Path;
 
 /**
- * The type Api deducer.
+ * The type Domain service implementation generator factory.
  *
  * @author Christos Tsakostas
  */
-public class ApiDeducer implements Deducer<ServiceModelRepository> {
+public final class DomainServiceImplementationGeneratorFactory {
 
   // ===============================================================================================
   // DEPENDENCIES
   // ===============================================================================================
-  private final PackageName rootPackageName;
-  private final ServiceDeducer serviceDeducer;
+  private static final DomainServiceImplementationExporter domainServiceImplementationExporter;
+
+  // ===============================================================================================
+  // STATIC INITIALIZATION OF DEPENDENCIES
+  // ===============================================================================================
+
+  static {
+    FreemarkerService freemarkerService =
+        new FreemarkerService(FreemarkerConfig.getInstance().getConfiguration());
+
+    FromDataTypeToJavaConverter fromDataTypeToJavaConverter = new FromDataTypeToJavaConverter();
+
+    DomainServiceImplementationClassRepresentable domainServiceImplementationClassRepresentable =
+        new DomainServiceImplementationClassRepresentable(fromDataTypeToJavaConverter);
+
+    domainServiceImplementationExporter =
+        new DomainServiceImplementationExporter(
+            freemarkerService, domainServiceImplementationClassRepresentable);
+  }
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
-  /**
-   * Instantiates a new Api deducer.
-   *
-   * @param rootPackageName the package name
-   * @param serviceDeducer the service deducer
-   */
-  public ApiDeducer(PackageName rootPackageName, ServiceDeducer serviceDeducer) {
-    this.rootPackageName = rootPackageName;
-    this.serviceDeducer = serviceDeducer;
+  private DomainServiceImplementationGeneratorFactory() {
+    throw new IllegalStateException("Utility class");
   }
 
   // ===============================================================================================
-  // GETTERS
+  // NEW INSTANCE
   // ===============================================================================================
 
   /**
-   * Gets package name.
+   * New instance domain service implementation generator.
    *
-   * @return the package name
+   * @param generationPath the generation path
+   * @return the domain service implementation generator
    */
-  public PackageName getRootPackageName() {
-    return rootPackageName;
-  }
-
-  // ===============================================================================================
-  // OVERRIDES
-  // ===============================================================================================
-
-  @Override
-  public ServiceModelRepository deduce(
-      ThingRepository thingRepository, Set<ModelRepository> modelRepositories) {
-    if (thingRepository.getApiThings().isEmpty()) {
-      throw new IllegalArgumentException("thingRepository cannot be empty");
-    }
-
-    Set<Service> services = new LinkedHashSet<>();
-
-    thingRepository
-        .getApiThings()
-        .forEach(
-            thing -> {
-              services.addAll(serviceDeducer.deduceFrom(thing, getRootPackageName()));
-            });
-
-    return new ServiceModelRepository(services);
+  public static DomainServiceImplementationGenerator newInstance(Path generationPath) {
+    return new DomainServiceImplementationGenerator(
+        generationPath, domainServiceImplementationExporter);
   }
 }

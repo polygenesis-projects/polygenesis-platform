@@ -18,46 +18,29 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.core;
+package io.polygenesis.models.domain;
 
-import java.util.Optional;
-import java.util.Set;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-/**
- * The interface Thing repository.
- *
- * @author Christos Tsakostas
- */
-public interface ThingRepository extends ModelRepository {
+import io.polygenesis.core.data.PackageName;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import org.junit.Test;
 
-  /**
-   * Gets api things.
-   *
-   * @return the api things
-   */
-  Set<Thing> getApiThings();
+/** @author Christos Tsakostas */
+public class DomainServiceDeducerFactoryTest {
 
-  /**
-   * Gets domain service things.
-   *
-   * @return the domain service things
-   */
-  Set<Thing> getDomainServiceThings();
+  @Test
+  public void shouldFailToInstantiate() throws NoSuchMethodException {
+    Constructor<DomainServiceDeducerFactory> constructor =
+        DomainServiceDeducerFactory.class.getDeclaredConstructor();
+    constructor.setAccessible(true);
+    assertThatThrownBy(constructor::newInstance).isInstanceOf(InvocationTargetException.class);
+  }
 
-  /**
-   * Gets thing by name.
-   *
-   * @param thingName the thing name
-   * @return the thing by name
-   */
-  Optional<Thing> getThingByName(ThingName thingName);
-
-  /**
-   * Gets a thing's function.
-   *
-   * @param thingName the thing name
-   * @param functionName the function name
-   * @return the thing function
-   */
-  Optional<Function> getThingFunction(ThingName thingName, FunctionName functionName);
+  @Test
+  public void shouldCreateNewInstance() {
+    assertThat(DomainServiceDeducerFactory.newInstance(new PackageName("com.oregor"))).isNotNull();
+  }
 }

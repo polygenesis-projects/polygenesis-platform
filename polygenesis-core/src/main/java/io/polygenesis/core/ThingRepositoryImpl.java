@@ -21,8 +21,10 @@
 package io.polygenesis.core;
 
 import com.oregor.ddd4j.check.assertion.Assertion;
+import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * In-memory repository for Things.
@@ -52,19 +54,27 @@ public class ThingRepositoryImpl implements ThingRepository {
   // QUERIES
   // ===============================================================================================
 
-  /** {@inheritDoc} */
   @Override
-  public Set<Thing> getThings() {
-    return things;
+  public Set<Thing> getApiThings() {
+    return things
+        .stream()
+        .filter(thing -> !thing.isDomainServiceThing())
+        .collect(Collectors.toCollection(LinkedHashSet::new));
   }
 
-  /** {@inheritDoc} */
+  @Override
+  public Set<Thing> getDomainServiceThings() {
+    return things
+        .stream()
+        .filter(thing -> thing.isDomainServiceThing())
+        .collect(Collectors.toCollection(LinkedHashSet::new));
+  }
+
   @Override
   public Optional<Thing> getThingByName(ThingName thingName) {
     return things.stream().filter(thing -> thing.getName().equals(thingName)).findFirst();
   }
 
-  /** {@inheritDoc} */
   @Override
   public Optional<Function> getThingFunction(ThingName thingName, FunctionName functionName) {
     Optional<Thing> optionalThing = getThingByName(thingName);

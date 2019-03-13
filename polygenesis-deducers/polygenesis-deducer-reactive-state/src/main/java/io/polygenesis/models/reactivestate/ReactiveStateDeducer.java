@@ -70,7 +70,7 @@ public class ReactiveStateDeducer implements Deducer<ReactiveStateModelRepositor
     }
 
     thingRepository
-        .getThings()
+        .getApiThings()
         .forEach(
             thing -> stores.add(storeDeducer.deduceStoreFromThing(thing, serviceModelRepository)));
 

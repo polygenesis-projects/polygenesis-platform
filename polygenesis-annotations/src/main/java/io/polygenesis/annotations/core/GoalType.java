@@ -54,7 +54,13 @@ public enum GoalType {
 
   SYNCHRONIZE(CqsType.SUPPORTIVE),
 
-  VALIDATE(CqsType.SUPPORTIVE);
+  VALIDATE(CqsType.SUPPORTIVE),
+
+  // ===============================================================================================
+  // DOMAIN SERVICE METHOD
+  // ===============================================================================================
+
+  DOMAIN_SERVICE_METHOD(CqsType.SUPPORTIVE);
 
   // ===============================================================================================
   // PRIVATE

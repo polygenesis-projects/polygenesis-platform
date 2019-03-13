@@ -135,4 +135,8 @@ public class Goal extends AbstractText {
     return TextConverter.toUpperUnderscore(getText())
         .equals(GoalType.FETCH_PAGED_COLLECTION.name());
   }
+
+  public boolean isDomainServiceMethod() {
+    return TextConverter.toUpperUnderscore(getText()).equals(GoalType.DOMAIN_SERVICE_METHOD.name());
+  }
 }

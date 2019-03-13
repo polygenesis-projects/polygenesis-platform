@@ -18,41 +18,30 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.models.api;
+package io.polygenesis.models.domain;
 
-import io.polygenesis.core.Deducer;
-import io.polygenesis.core.ModelRepository;
-import io.polygenesis.core.ThingRepository;
 import io.polygenesis.core.data.PackageName;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 /**
- * The type Api deducer.
+ * The type Domain service deducer factory.
  *
  * @author Christos Tsakostas
  */
-public class ApiDeducer implements Deducer<ServiceModelRepository> {
+public final class DomainServiceDeducerFactory {
 
   // ===============================================================================================
   // DEPENDENCIES
   // ===============================================================================================
-  private final PackageName rootPackageName;
-  private final ServiceDeducer serviceDeducer;
+
+  // ===============================================================================================
+  // STATIC INITIALIZATION OF DEPENDENCIES
+  // ===============================================================================================
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
-
-  /**
-   * Instantiates a new Api deducer.
-   *
-   * @param rootPackageName the package name
-   * @param serviceDeducer the service deducer
-   */
-  public ApiDeducer(PackageName rootPackageName, ServiceDeducer serviceDeducer) {
-    this.rootPackageName = rootPackageName;
-    this.serviceDeducer = serviceDeducer;
+  private DomainServiceDeducerFactory() {
+    throw new IllegalStateException("Utility class");
   }
 
   // ===============================================================================================
@@ -60,34 +49,12 @@ public class ApiDeducer implements Deducer<ServiceModelRepository> {
   // ===============================================================================================
 
   /**
-   * Gets package name.
+   * New instance domain service deducer.
    *
-   * @return the package name
+   * @param packageName the package name
+   * @return the domain service deducer
    */
-  public PackageName getRootPackageName() {
-    return rootPackageName;
-  }
-
-  // ===============================================================================================
-  // OVERRIDES
-  // ===============================================================================================
-
-  @Override
-  public ServiceModelRepository deduce(
-      ThingRepository thingRepository, Set<ModelRepository> modelRepositories) {
-    if (thingRepository.getApiThings().isEmpty()) {
-      throw new IllegalArgumentException("thingRepository cannot be empty");
-    }
-
-    Set<Service> services = new LinkedHashSet<>();
-
-    thingRepository
-        .getApiThings()
-        .forEach(
-            thing -> {
-              services.addAll(serviceDeducer.deduceFrom(thing, getRootPackageName()));
-            });
-
-    return new ServiceModelRepository(services);
+  public static DomainServiceDeducer newInstance(PackageName packageName) {
+    return new DomainServiceDeducer(packageName);
   }
 }

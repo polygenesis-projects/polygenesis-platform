@@ -35,6 +35,7 @@ public class ScaffolderJavaMicroservice implements Scaffolder {
   private final MavenSettingsScaffolder mavenSettingsScaffolder;
   private final RootScaffolder rootScaffolder;
   private final DomainModelScaffolder domainModelScaffolder;
+  private final DomainServicesScaffolder domainServicesScaffolder;
   private final ApiScaffolder apiScaffolder;
   private final ApiImplScaffolder apiImplScaffolder;
   private final PrimaryAdaptersScaffolder primaryAdaptersScaffolder;
@@ -52,6 +53,7 @@ public class ScaffolderJavaMicroservice implements Scaffolder {
    * @param mavenSettingsScaffolder the maven settings scaffolder
    * @param rootScaffolder the root scaffolder
    * @param domainModelScaffolder the domain model scaffolder
+   * @param domainServicesScaffolder the domain services scaffolder
    * @param apiScaffolder the api scaffolder
    * @param apiImplScaffolder the api impl scaffolder
    * @param primaryAdaptersScaffolder the primary adapters scaffolder
@@ -63,6 +65,7 @@ public class ScaffolderJavaMicroservice implements Scaffolder {
       MavenSettingsScaffolder mavenSettingsScaffolder,
       RootScaffolder rootScaffolder,
       DomainModelScaffolder domainModelScaffolder,
+      DomainServicesScaffolder domainServicesScaffolder,
       ApiScaffolder apiScaffolder,
       ApiImplScaffolder apiImplScaffolder,
       PrimaryAdaptersScaffolder primaryAdaptersScaffolder,
@@ -72,6 +75,7 @@ public class ScaffolderJavaMicroservice implements Scaffolder {
     this.mavenSettingsScaffolder = mavenSettingsScaffolder;
     this.rootScaffolder = rootScaffolder;
     this.domainModelScaffolder = domainModelScaffolder;
+    this.domainServicesScaffolder = domainServicesScaffolder;
     this.apiScaffolder = apiScaffolder;
     this.apiImplScaffolder = apiImplScaffolder;
     this.primaryAdaptersScaffolder = primaryAdaptersScaffolder;
@@ -100,6 +104,7 @@ public class ScaffolderJavaMicroservice implements Scaffolder {
 
     if (projectDescription.isMicroservice()) {
       domainModelScaffolder.scaffold(generationPath, projectDescription, dataModel);
+      domainServicesScaffolder.scaffold(generationPath, projectDescription, dataModel);
       apiScaffolder.scaffold(generationPath, projectDescription, dataModel);
       apiImplScaffolder.scaffold(generationPath, projectDescription, dataModel);
       primaryAdaptersScaffolder.scaffold(generationPath, projectDescription, dataModel);

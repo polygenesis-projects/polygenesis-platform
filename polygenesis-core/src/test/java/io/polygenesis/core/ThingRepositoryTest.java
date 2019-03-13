@@ -35,7 +35,7 @@ public class ThingRepositoryTest {
     ThingRepository repository = new ThingRepositoryImpl(new LinkedHashSet<>());
 
     assertThat(repository).isNotNull();
-    assertThat(repository.getThings().size()).isEqualTo(0);
+    assertThat(repository.getApiThings().size()).isEqualTo(0);
   }
 
   @Test

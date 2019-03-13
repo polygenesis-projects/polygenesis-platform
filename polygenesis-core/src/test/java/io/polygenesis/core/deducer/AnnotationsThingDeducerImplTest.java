@@ -80,8 +80,8 @@ public class AnnotationsThingDeducerImplTest {
     // BASIC ASSERTIONS
     // =============================================================================================
     assertThat(repository).isNotNull();
-    assertThat(repository.getThings()).isNotNull();
-    assertThat(repository.getThings().size()).isEqualTo(1);
+    assertThat(repository.getApiThings()).isNotNull();
+    assertThat(repository.getApiThings().size()).isEqualTo(1);
     assertThat(repository.getThingByName(new ThingName("someThing"))).isPresent();
 
     // =============================================================================================

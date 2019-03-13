@@ -80,7 +80,7 @@ public class ApiImplDeducer implements Deducer<ServiceImplementationModelReposit
     Set<AggregateRootConverter> aggregateRootConverters = new LinkedHashSet<>();
 
     thingRepository
-        .getThings()
+        .getApiThings()
         .forEach(
             thing -> {
               Optional<AggregateRoot> optionalAggregateRoot =

@@ -73,7 +73,7 @@ public class AggregateRootDeducer {
     Set<AggregateRoot> aggregateRoots = new LinkedHashSet<>();
 
     thingRepository
-        .getThings()
+        .getApiThings()
         .forEach(
             thing -> {
               PackageName packageName = makeAggregateRootPackageName(rootPackageName, thing);
@@ -117,22 +117,47 @@ public class AggregateRootDeducer {
   }
 
   // ===============================================================================================
-  // FUNCTIONALITY
+  // PRIVATE
   // ===============================================================================================
 
+  /**
+   * Make aggregate root package name package name.
+   *
+   * @param rootPackageName the root package name
+   * @param thing the thing
+   * @return the package name
+   */
   private PackageName makeAggregateRootPackageName(PackageName rootPackageName, Thing thing) {
     return new PackageName(
         rootPackageName.getText() + "." + thing.getName().getText().toLowerCase());
   }
 
+  /**
+   * Make aggregate root name name.
+   *
+   * @param thing the thing
+   * @return the name
+   */
   private Name makeAggregateRootName(Thing thing) {
     return new Name(thing.getName().getText());
   }
 
+  /**
+   * Make aggregate root id name name.
+   *
+   * @param thing the thing
+   * @return the name
+   */
   private Name makeAggregateRootIdName(Thing thing) {
     return new Name(thing.getName().getText() + "Id");
   }
 
+  /**
+   * Make persistence name name.
+   *
+   * @param thing the thing
+   * @return the name
+   */
   private Name makePersistenceName(Thing thing) {
     return new Name(thing.getName().getText() + "Persistence");
   }

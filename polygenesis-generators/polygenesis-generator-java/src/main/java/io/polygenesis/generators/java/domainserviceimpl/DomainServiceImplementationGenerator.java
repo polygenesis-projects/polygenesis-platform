@@ -18,76 +18,57 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.models.api;
+package io.polygenesis.generators.java.domainserviceimpl;
 
-import io.polygenesis.core.Deducer;
+import io.polygenesis.core.AbstractGenerator;
+import io.polygenesis.core.CoreRegistry;
 import io.polygenesis.core.ModelRepository;
-import io.polygenesis.core.ThingRepository;
-import io.polygenesis.core.data.PackageName;
-import java.util.LinkedHashSet;
+import io.polygenesis.models.domain.DomainServiceRepository;
+import java.nio.file.Path;
 import java.util.Set;
 
 /**
- * The type Api deducer.
+ * The type Java api rest generator.
  *
  * @author Christos Tsakostas
  */
-public class ApiDeducer implements Deducer<ServiceModelRepository> {
+public class DomainServiceImplementationGenerator extends AbstractGenerator {
 
-  // ===============================================================================================
-  // DEPENDENCIES
-  // ===============================================================================================
-  private final PackageName rootPackageName;
-  private final ServiceDeducer serviceDeducer;
+  private final DomainServiceImplementationExporter domainServiceImplementationExporter;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
-   * Instantiates a new Api deducer.
+   * Instantiates a new Domain service implementation generator.
    *
-   * @param rootPackageName the package name
-   * @param serviceDeducer the service deducer
+   * @param generationPath the generation path
+   * @param domainServiceImplementationExporter the domain service implementation exporter
    */
-  public ApiDeducer(PackageName rootPackageName, ServiceDeducer serviceDeducer) {
-    this.rootPackageName = rootPackageName;
-    this.serviceDeducer = serviceDeducer;
+  public DomainServiceImplementationGenerator(
+      Path generationPath,
+      DomainServiceImplementationExporter domainServiceImplementationExporter) {
+    super(generationPath);
+    this.domainServiceImplementationExporter = domainServiceImplementationExporter;
   }
 
   // ===============================================================================================
   // GETTERS
   // ===============================================================================================
 
-  /**
-   * Gets package name.
-   *
-   * @return the package name
-   */
-  public PackageName getRootPackageName() {
-    return rootPackageName;
-  }
-
   // ===============================================================================================
   // OVERRIDES
   // ===============================================================================================
 
   @Override
-  public ServiceModelRepository deduce(
-      ThingRepository thingRepository, Set<ModelRepository> modelRepositories) {
-    if (thingRepository.getApiThings().isEmpty()) {
-      throw new IllegalArgumentException("thingRepository cannot be empty");
-    }
-
-    Set<Service> services = new LinkedHashSet<>();
-
-    thingRepository
-        .getApiThings()
+  public void generate(Set<ModelRepository> modelRepositories) {
+    CoreRegistry.getModelRepositoryResolver()
+        .resolve(modelRepositories, DomainServiceRepository.class)
+        .getDomainServices()
         .forEach(
-            thing -> {
-              services.addAll(serviceDeducer.deduceFrom(thing, getRootPackageName()));
+            domainService -> {
+              domainServiceImplementationExporter.export(getGenerationPath(), domainService);
             });
-
-    return new ServiceModelRepository(services);
   }
 }

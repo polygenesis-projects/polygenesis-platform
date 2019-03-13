@@ -18,80 +18,48 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.core;
+package io.polygenesis.models.domain;
 
 import com.oregor.ddd4j.check.assertion.Assertion;
+import io.polygenesis.core.Function;
+import io.polygenesis.core.data.ObjectName;
+import io.polygenesis.core.data.PackageName;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 
 /**
- * {@link Thing} is defined as a concept or an entity on or for which a {@link Goal} is defined.
- * Most commonly, the names of the domain business concepts will be defined as things, being
- * concrete entities or more abstract concepts.
- *
- * <p>Therefore, a {@link Thing} can be anything that makes sense to code generation.
- *
- * <p>Example of concrete business concepts: Customer, User, LoginContext etc.
- *
- * <p>Example of more abstract concepts: Sum calculation etc.
+ * The type Domain service.
  *
  * @author Christos Tsakostas
  */
-public class Thing {
+public class DomainService {
 
-  /** The name of a {@link Thing}. */
-  private ThingName name;
-
-  /** Optionally a {@link Thing} may be the child of another {@link Thing} acting as the parent. */
-  private Thing parent;
-
+  // ===============================================================================================
+  // STATE
+  // ===============================================================================================
+  private ObjectName objectName;
+  private PackageName packageName;
   private Set<Function> functions;
-
-  private Boolean multiTenant;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
-   * Instantiates a new Thing.
+   * Instantiates a new Domain service.
    *
-   * @param thingName the thing name
+   * @param objectName the object name
+   * @param packageName the package name
    */
-  public Thing(ThingName thingName) {
-    setName(thingName);
+  public DomainService(ObjectName objectName, PackageName packageName) {
+    setObjectName(objectName);
+    setPackageName(packageName);
     setFunctions(new LinkedHashSet<>());
-    setMultiTenant(false);
-  }
-
-  /**
-   * Instantiates a new Thing.
-   *
-   * @param thingName the thing name
-   * @param multiTenant the multi tenant
-   */
-  public Thing(ThingName thingName, Boolean multiTenant) {
-    setName(thingName);
-    setFunctions(new LinkedHashSet<>());
-    setMultiTenant(multiTenant);
-  }
-
-  /**
-   * Instantiates a new Thing with parent.
-   *
-   * @param thingName the thing name
-   * @param parentThing the parent thing
-   */
-  public Thing(ThingName thingName, Thing parentThing) {
-    setName(thingName);
-    setParent(parentThing);
-    setFunctions(new LinkedHashSet<>());
-    setMultiTenant(parentThing.getMultiTenant());
   }
 
   // ===============================================================================================
-  // APPENDERS
+  // STATE MUTATION
   // ===============================================================================================
 
   /**
@@ -100,51 +68,33 @@ public class Thing {
    * @param function the function
    */
   public void appendFunction(Function function) {
-    this.functions.add(function);
-  }
-
-  /**
-   * Append functions.
-   *
-   * @param functions the functions
-   */
-  public void appendFunctions(Set<Function> functions) {
-    this.functions.addAll(functions);
+    getFunctions().add(function);
   }
 
   // ===============================================================================================
   // QUERIES
   // ===============================================================================================
 
-  /**
-   * Is domain service thing boolean.
-   *
-   * @return the boolean
-   */
-  public boolean isDomainServiceThing() {
-    return getFunctions().stream().anyMatch(function -> function.getGoal().isDomainServiceMethod());
-  }
-
   // ===============================================================================================
   // GETTERS
   // ===============================================================================================
 
   /**
-   * Gets name.
+   * Gets object name.
    *
-   * @return the name
+   * @return the object name
    */
-  public ThingName getName() {
-    return name;
+  public ObjectName getObjectName() {
+    return objectName;
   }
 
   /**
-   * Gets parent.
+   * Gets package name.
    *
-   * @return the parent
+   * @return the package name
    */
-  public Thing getParent() {
-    return parent;
+  public PackageName getPackageName() {
+    return packageName;
   }
 
   /**
@@ -156,35 +106,28 @@ public class Thing {
     return functions;
   }
 
-  /**
-   * Gets multi tenant.
-   *
-   * @return the multi tenant
-   */
-  public Boolean getMultiTenant() {
-    return multiTenant;
-  }
-
   // ===============================================================================================
   // GUARDS
   // ===============================================================================================
 
   /**
-   * Sets name.
+   * Sets object name.
    *
-   * @param name the name
+   * @param objectName the object name
    */
-  private void setName(ThingName name) {
-    this.name = name;
+  private void setObjectName(ObjectName objectName) {
+    Assertion.isNotNull(objectName, "objectName is required");
+    this.objectName = objectName;
   }
 
   /**
-   * Sets parent.
+   * Sets package name.
    *
-   * @param parent the parent
+   * @param packageName the package name
    */
-  private void setParent(Thing parent) {
-    this.parent = parent;
+  private void setPackageName(PackageName packageName) {
+    Assertion.isNotNull(packageName, "packageName is required");
+    this.packageName = packageName;
   }
 
   /**
@@ -192,18 +135,9 @@ public class Thing {
    *
    * @param functions the functions
    */
-  private void setFunctions(Set<Function> functions) {
+  public void setFunctions(Set<Function> functions) {
+    Assertion.isNotNull(functions, "functions is required");
     this.functions = functions;
-  }
-
-  /**
-   * Sets multi tenant.
-   *
-   * @param multiTenant the multi tenant
-   */
-  private void setMultiTenant(Boolean multiTenant) {
-    Assertion.isNotNull(multiTenant, "multiTenant is required");
-    this.multiTenant = multiTenant;
   }
 
   // ===============================================================================================
@@ -218,14 +152,14 @@ public class Thing {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Thing thing = (Thing) o;
-    return Objects.equals(name, thing.name)
-        && Objects.equals(parent, thing.parent)
-        && Objects.equals(multiTenant, thing.multiTenant);
+    DomainService that = (DomainService) o;
+    return Objects.equals(objectName, that.objectName)
+        && Objects.equals(packageName, that.packageName)
+        && Objects.equals(functions, that.functions);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, parent, multiTenant);
+    return Objects.hash(objectName, packageName, functions);
   }
 }

@@ -18,48 +18,56 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.models.ui;
+package io.polygenesis.scaffolders.javams;
 
-import io.polygenesis.core.Deducer;
-import io.polygenesis.core.ModelRepository;
-import io.polygenesis.core.ThingRepository;
-import io.polygenesis.models.ui.container.LayoutContainer;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import io.polygenesis.commons.freemarker.FreemarkerService;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Map;
 
 /**
- * The type Ui deducer.
+ * The type Domain services scaffolder.
  *
  * @author Christos Tsakostas
  */
-public class UiDeducer implements Deducer<UiModelRepository> {
-
-  private final FeatureDeducer featureDeducer;
-  private final LayoutDeducer layoutDeducer;
+public class DomainServicesScaffolder extends AbstractScaffolder {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
-  public UiDeducer(FeatureDeducer featureDeducer, LayoutDeducer layoutDeducer) {
-    this.featureDeducer = featureDeducer;
-    this.layoutDeducer = layoutDeducer;
+  /**
+   * Instantiates a new Domain services scaffolder.
+   *
+   * @param freemarkerService the freemarker service
+   */
+  public DomainServicesScaffolder(FreemarkerService freemarkerService) {
+    super(freemarkerService);
   }
 
   // ===============================================================================================
-  // OVERRIDES
+  // BEHAVIOUR
   // ===============================================================================================
+
   @Override
-  public UiModelRepository deduce(
-      ThingRepository thingRepository, Set<ModelRepository> modelRepositories) {
-    Set<Feature> features = new LinkedHashSet<>();
+  public void scaffold(
+      Path generationPath, ProjectDescription projectDescription, Map<String, Object> dataModel) {
 
-    thingRepository
-        .getApiThings()
-        .forEach(thing -> features.add(featureDeducer.deduceFeatureFromThing(thing)));
+    Path modulePath =
+        Paths.get(
+            generationPath.toString(),
+            projectDescription.getModulePrefix() + "-domain-services-impl");
 
-    Set<LayoutContainer> layoutContainers = layoutDeducer.deduceLayoutsFromFeatures();
+    ensureSources(modulePath, projectDescription);
 
-    return new UiModelRepository(features, layoutContainers);
+    exportDomainMavenPomXml(modulePath, dataModel);
+  }
+
+  private void exportDomainMavenPomXml(Path modulePath, Map<String, Object> dataModel) {
+
+    freemarkerService.export(
+        dataModel,
+        "polygenesis-scaffolder-java-microservice/domain-services-impl/pom.xml.ftl",
+        Paths.get(modulePath.toString(), "pom.xml"));
   }
 }

@@ -37,6 +37,7 @@ import io.polygenesis.generators.java.rest.JavaApiRestGeneratorFactory;
 import io.polygenesis.generators.sql.SqlGeneratorFactory;
 import io.polygenesis.models.api.ApiDeducerFactory;
 import io.polygenesis.models.domain.DomainDeducerFactory;
+import io.polygenesis.models.domain.DomainServiceDeducerFactory;
 import io.polygenesis.models.reactivestate.ReactiveStateFactory;
 import io.polygenesis.models.rest.RestDeducerFactory;
 import io.polygenesis.models.ui.UiDeducerFactory;
@@ -131,6 +132,7 @@ public class OregorDdd4jExampleGenesisTest {
             Arrays.asList(
                 ApiDeducerFactory.newInstance(new PackageName(JAVA_ROOT_PACKAGE)),
                 DomainDeducerFactory.newInstance(new PackageName(JAVA_ROOT_PACKAGE)),
+                DomainServiceDeducerFactory.newInstance(new PackageName(JAVA_ROOT_PACKAGE)),
                 ApiImplDeducerFactory.newInstance(new PackageName(JAVA_ROOT_PACKAGE)),
                 RestDeducerFactory.newInstance(new PackageName(JAVA_ROOT_PACKAGE)),
                 SqlDeducerFactory.newInstance()));

@@ -76,7 +76,7 @@ public class ResourceDeducer {
     Set<Resource> resources = new LinkedHashSet<>();
 
     thingRepository
-        .getThings()
+        .getApiThings()
         .forEach(
             thing ->
                 resources.add(

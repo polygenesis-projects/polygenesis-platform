@@ -18,76 +18,70 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.models.api;
+package io.polygenesis.models.domain;
 
-import io.polygenesis.core.Deducer;
+import com.oregor.ddd4j.check.assertion.Assertion;
 import io.polygenesis.core.ModelRepository;
-import io.polygenesis.core.ThingRepository;
-import io.polygenesis.core.data.PackageName;
-import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
- * The type Api deducer.
+ * The type Domain service repository.
  *
  * @author Christos Tsakostas
  */
-public class ApiDeducer implements Deducer<ServiceModelRepository> {
+public class DomainServiceRepository implements ModelRepository {
 
   // ===============================================================================================
-  // DEPENDENCIES
+  // STATE
   // ===============================================================================================
-  private final PackageName rootPackageName;
-  private final ServiceDeducer serviceDeducer;
+
+  private Set<DomainService> domainServices;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
-   * Instantiates a new Api deducer.
+   * Instantiates a new Domain service repository.
    *
-   * @param rootPackageName the package name
-   * @param serviceDeducer the service deducer
+   * @param domainServices the domain services
    */
-  public ApiDeducer(PackageName rootPackageName, ServiceDeducer serviceDeducer) {
-    this.rootPackageName = rootPackageName;
-    this.serviceDeducer = serviceDeducer;
+  public DomainServiceRepository(Set<DomainService> domainServices) {
+    setDomainServices(domainServices);
   }
+
+  // ===============================================================================================
+  // STATE MUTATION
+  // ===============================================================================================
+
+  // ===============================================================================================
+  // QUERIES
+  // ===============================================================================================
 
   // ===============================================================================================
   // GETTERS
   // ===============================================================================================
 
   /**
-   * Gets package name.
+   * Gets domain services.
    *
-   * @return the package name
+   * @return the domain services
    */
-  public PackageName getRootPackageName() {
-    return rootPackageName;
+  public Set<DomainService> getDomainServices() {
+    return domainServices;
   }
 
   // ===============================================================================================
-  // OVERRIDES
+  // GUARDS
   // ===============================================================================================
 
-  @Override
-  public ServiceModelRepository deduce(
-      ThingRepository thingRepository, Set<ModelRepository> modelRepositories) {
-    if (thingRepository.getApiThings().isEmpty()) {
-      throw new IllegalArgumentException("thingRepository cannot be empty");
-    }
-
-    Set<Service> services = new LinkedHashSet<>();
-
-    thingRepository
-        .getApiThings()
-        .forEach(
-            thing -> {
-              services.addAll(serviceDeducer.deduceFrom(thing, getRootPackageName()));
-            });
-
-    return new ServiceModelRepository(services);
+  /**
+   * Sets domain services.
+   *
+   * @param domainServices the domain services
+   */
+  private void setDomainServices(Set<DomainService> domainServices) {
+    Assertion.isNotNull(domainServices, "domainServices is required");
+    this.domainServices = domainServices;
   }
 }
