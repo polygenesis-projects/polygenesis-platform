@@ -21,36 +21,20 @@
 package io.polygenesis.codegen;
 
 import io.polygenesis.core.Thing;
-import io.polygenesis.core.data.Data;
-import io.polygenesis.core.dsl.DataBuilder;
-import io.polygenesis.core.dsl.ExperimentalThingBuilder;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
-/** @author Christos Tsakostas */
-public class ThingTodo {
+/** The type Oregor ddd 4 j things. */
+public class OregorDdd4jThings {
 
-  public static Thing create(String rootPackageName) {
-    Thing business =
-        ExperimentalThingBuilder.create("todo", rootPackageName)
-            .withFunctionCreate(data())
-            .withFunctionModify(data())
-            .withFunctionFetchOne(data())
-            .withFunctionFetchPagedCollection(data())
-            .get();
-
-    return business;
-  }
-
-  // ===============================================================================================
-  // DATA
-  // ===============================================================================================
-
-  private static Set<Data> data() {
-    return DataBuilder.create()
-        .withTextProperty("description")
-        .build()
-        .withBooleanProperty("done")
-        .build()
-        .build();
+  /**
+   * Get set.
+   *
+   * @param rootPackageName the root package name
+   * @return the set
+   */
+  public static Set<Thing> get(String rootPackageName) {
+    return new LinkedHashSet<>(Arrays.asList(ThingTodo.create(rootPackageName)));
   }
 }

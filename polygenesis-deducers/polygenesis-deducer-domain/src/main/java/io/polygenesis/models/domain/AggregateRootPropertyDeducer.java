@@ -76,7 +76,8 @@ public class AggregateRootPropertyDeducer {
    * @param rootPackageName the root package name
    * @return the set
    */
-  public Set<AbstractProperty> deduceFromThingProperties(Thing thing, PackageName rootPackageName) {
+  protected Set<AbstractProperty> deduceFromThingProperties(
+      Thing thing, PackageName rootPackageName) {
     Set<AbstractProperty> properties = new LinkedHashSet<>();
 
     thing
