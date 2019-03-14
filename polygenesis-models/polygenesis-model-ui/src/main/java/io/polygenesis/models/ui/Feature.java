@@ -21,19 +21,21 @@
 package io.polygenesis.models.ui;
 
 import com.oregor.ddd4j.check.assertion.Assertion;
+import io.polygenesis.commons.valueobjects.ContextName;
 import io.polygenesis.commons.valueobjects.FeatureName;
 import io.polygenesis.models.ui.container.AbstractContainer;
 import java.util.Set;
 
 /**
  * Encapsulates all of the UI models related to a Feature. A Feature is equivalent to a {@link
- * io.polygenesis.core.Thing}** from the core model.
+ * io.polygenesis.core.Thing} from the core model.
  *
  * @author Christos Tsakostas
  * @see io.polygenesis.core.Thing
  */
 public class Feature {
 
+  private ContextName contextName;
   private FeatureName featureName;
   private Set<AbstractContainer> containers;
 
@@ -42,12 +44,15 @@ public class Feature {
   // ===============================================================================================
 
   /**
-   * Instantiates a new Feature ui.
+   * Instantiates a new Feature.
    *
+   * @param contextName the context name
    * @param featureName the feature name
    * @param containers the containers
    */
-  public Feature(FeatureName featureName, Set<AbstractContainer> containers) {
+  public Feature(
+      ContextName contextName, FeatureName featureName, Set<AbstractContainer> containers) {
+    setContextName(contextName);
     setFeatureName(featureName);
     setContainers(containers);
   }
@@ -55,6 +60,15 @@ public class Feature {
   // ===============================================================================================
   // GETTERS
   // ===============================================================================================
+
+  /**
+   * Gets context name.
+   *
+   * @return the context name
+   */
+  public ContextName getContextName() {
+    return contextName;
+  }
 
   /**
    * Gets feature name.
@@ -79,6 +93,16 @@ public class Feature {
   // ===============================================================================================
 
   /**
+   * Sets context name.
+   *
+   * @param contextName the context name
+   */
+  public void setContextName(ContextName contextName) {
+    Assertion.isNotNull(contextName, "contextName is required");
+    this.contextName = contextName;
+  }
+
+  /**
    * Sets feature name.
    *
    * @param featureName the feature name
@@ -94,6 +118,7 @@ public class Feature {
    * @param containers the containers
    */
   private void setContainers(Set<AbstractContainer> containers) {
+    Assertion.isNotNull(containers, "containers is required");
     this.containers = containers;
   }
 }

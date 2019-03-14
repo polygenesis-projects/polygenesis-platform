@@ -21,6 +21,7 @@
 package io.polygenesis.models.ui;
 
 import com.oregor.ddd4j.check.assertion.Assertion;
+import io.polygenesis.commons.valueobjects.ContextName;
 import io.polygenesis.core.Thing;
 import io.polygenesis.models.ui.container.AbstractContainer;
 import java.util.LinkedHashSet;
@@ -64,7 +65,8 @@ public class FeatureDeducer {
    */
   public Feature deduceFeatureFromThing(Thing thing) {
     Set<AbstractContainer> containers = new LinkedHashSet<>();
-    Feature feature = new Feature(featureNameDeducer.from(thing), containers);
+    Feature feature =
+        new Feature(new ContextName("someContext"), featureNameDeducer.from(thing), containers);
 
     thing
         .getFunctions()

@@ -47,7 +47,7 @@ public class OnceSharedModuleExporter {
   // ===============================================================================================
   // OUTPUT FILES
   // ===============================================================================================
-  private static final String FOLDER_MODULE = "shared";
+  private static final String SHARED_MODULE_FOLDER = "shared";
 
   private static final String FILE_APP_SHARED_MODULE_TS = "shared/shared.module.ts";
 
@@ -110,7 +110,8 @@ public class OnceSharedModuleExporter {
     Map<String, Object> dataModel = new HashMap<>();
     dataModel.put("layout", layout);
 
-    uiContainerExporter.exportLayoutContainer(generationPath, FOLDER_MODULE, layout);
+    uiContainerExporter.exportLayoutContainer(
+        generationPath, Paths.get(SHARED_MODULE_FOLDER), layout);
 
     exportComponentsFromLayout(generationPath, layout.getTop());
   }
@@ -125,6 +126,7 @@ public class OnceSharedModuleExporter {
       return;
     }
 
-    uiContainerExporter.exportComponentContainer(generationPath, FOLDER_MODULE, container);
+    uiContainerExporter.exportComponentContainer(
+        generationPath, Paths.get(SHARED_MODULE_FOLDER), container);
   }
 }

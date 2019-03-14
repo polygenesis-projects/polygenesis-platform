@@ -65,10 +65,14 @@ public class UiModuleExporter {
    * @param dataModel the data model
    */
   public void exportModule(Path generationPathApp, Feature feature, Map<String, Object> dataModel) {
-    Path modulePath =
+
+    Path contextFeaturePath =
         Paths.get(
-            generationPathApp.toString(),
+            TextConverter.toLowerHyphen(feature.getContextName().getText()),
             TextConverter.toLowerHyphen(feature.getFeatureName().getText()));
+
+    Path modulePath = Paths.get(generationPathApp.toString(), contextFeaturePath.toString());
+
     PathService.ensurePath(modulePath);
 
     freemarkerService.export(
