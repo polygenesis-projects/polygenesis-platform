@@ -30,7 +30,7 @@ import java.util.Set;
  */
 public class Mapping {
 
-  private Set<AbstractPathContent> pathContents;
+  private Set<PathContent> pathContents;
 
   // ===============================================================================================
   // CONSTRUCTORS
@@ -41,7 +41,7 @@ public class Mapping {
    *
    * @param pathContents the path contents
    */
-  public Mapping(Set<AbstractPathContent> pathContents) {
+  public Mapping(Set<PathContent> pathContents) {
     setPathContents(pathContents);
   }
 
@@ -54,7 +54,7 @@ public class Mapping {
    *
    * @return the path contents
    */
-  public Set<AbstractPathContent> getPathContents() {
+  public Set<PathContent> getPathContents() {
     return pathContents;
   }
 
@@ -67,7 +67,7 @@ public class Mapping {
    *
    * @param pathContents the path contents
    */
-  private void setPathContents(Set<AbstractPathContent> pathContents) {
+  private void setPathContents(Set<PathContent> pathContents) {
     this.pathContents = pathContents;
   }
 

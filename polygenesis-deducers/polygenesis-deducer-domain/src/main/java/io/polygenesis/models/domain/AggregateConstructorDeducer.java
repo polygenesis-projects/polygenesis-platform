@@ -20,10 +20,8 @@
 
 package io.polygenesis.models.domain;
 
-import io.polygenesis.annotations.core.GoalType;
-import io.polygenesis.core.Goal;
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.Thing;
-import io.polygenesis.core.data.PackageName;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -68,7 +66,7 @@ public class AggregateConstructorDeducer {
     thing
         .getFunctions()
         .stream()
-        .filter(function -> function.getGoal().equals(new Goal(GoalType.CREATE)))
+        .filter(function -> function.getGoal().isCreate())
         .forEach(
             function -> {
               constructors.add(

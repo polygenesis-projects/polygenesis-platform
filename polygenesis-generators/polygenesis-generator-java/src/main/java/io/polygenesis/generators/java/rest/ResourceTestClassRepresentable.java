@@ -72,7 +72,7 @@ public class ResourceTestClassRepresentable extends ResourceClassRepresentable {
 
     stringBuilder.append("Test for the Spring REST Controller for ");
 
-    stringBuilder.append(TextConverter.toUpperCamelSpaces(source.getName().getText()));
+    stringBuilder.append(TextConverter.toUpperCamelSpaces(source.getObjectName().getText()));
 
     stringBuilder.append(" Services.");
 
@@ -83,7 +83,7 @@ public class ResourceTestClassRepresentable extends ResourceClassRepresentable {
   public String simpleObjectName(Resource source, Object... args) {
     StringBuilder stringBuilder = new StringBuilder();
 
-    stringBuilder.append(TextConverter.toLowerCamel(source.getName().getText()));
+    stringBuilder.append(TextConverter.toLowerCamel(source.getObjectName().getText()));
     stringBuilder.append("RestServiceTest");
 
     return stringBuilder.toString();
@@ -93,7 +93,7 @@ public class ResourceTestClassRepresentable extends ResourceClassRepresentable {
   public String fullObjectName(Resource source, Object... args) {
     StringBuilder stringBuilder = new StringBuilder();
 
-    stringBuilder.append(TextConverter.toUpperCamel(source.getName().getText()));
+    stringBuilder.append(TextConverter.toUpperCamel(source.getObjectName().getText()));
     stringBuilder.append("RestServiceTest");
 
     return stringBuilder.toString();

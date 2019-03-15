@@ -22,11 +22,14 @@ package io.polygenesis.models.api;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.Function;
 import io.polygenesis.core.test.ThingForTesting;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,21 +37,26 @@ import org.junit.Test;
 /** @author Christos Tsakostas */
 public class ServiceMethodDeducerTest {
 
+  private PackageName rootPackageName;
   private DtoDeducer dtoDeducer;
   private ServiceMethodDeducer serviceMethodDeducer;
 
   @Before
   public void setUp() {
+    rootPackageName = new PackageName("com.oregor");
     dtoDeducer = mock(DtoDeducer.class);
     serviceMethodDeducer = new ServiceMethodDeducer(dtoDeducer);
 
-    given(dtoDeducer.deduceRequestDto(any(Function.class))).willReturn(mock(Dto.class));
-    given(dtoDeducer.deduceResponseDto(any(Function.class))).willReturn(mock(Dto.class));
+    given(dtoDeducer.deduceRequestDto(any(Function.class), eq(rootPackageName)))
+        .willReturn(mock(Dto.class));
+    given(dtoDeducer.deduceResponseDto(any(Function.class), eq(rootPackageName)))
+        .willReturn(mock(Dto.class));
   }
 
   @Test
   public void shouldDeduceCommandMethods() {
-    Set<Method> methods = serviceMethodDeducer.deduceCommandMethods(ThingForTesting.create());
+    Set<Method> methods = new LinkedHashSet<>();
+    serviceMethodDeducer.deduceCommandMethods(methods, ThingForTesting.create(), rootPackageName);
 
     assertThat(methods).isNotNull();
     assertThat(methods.size()).isEqualTo(4);
@@ -56,7 +64,8 @@ public class ServiceMethodDeducerTest {
 
   @Test
   public void shouldDeduceQueryMethods() {
-    Set<Method> methods = serviceMethodDeducer.deduceQueryMethods(ThingForTesting.create());
+    Set<Method> methods = new LinkedHashSet<>();
+    serviceMethodDeducer.deduceQueryMethods(methods, ThingForTesting.create(), rootPackageName);
 
     assertThat(methods).isNotNull();
     assertThat(methods.size()).isEqualTo(2);

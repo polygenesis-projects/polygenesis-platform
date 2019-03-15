@@ -85,6 +85,6 @@ public class PersistenceExporter {
         generationPath.toString(),
         "src/main/java",
         persistence.getPackageName().toPath().toString(),
-        TextConverter.toUpperCamel(persistence.getName().getText()) + ".java");
+        TextConverter.toUpperCamel(persistence.getObjectName().getText()) + ".java");
   }
 }

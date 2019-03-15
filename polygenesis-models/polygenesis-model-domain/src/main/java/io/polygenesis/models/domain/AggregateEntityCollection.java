@@ -20,15 +20,23 @@
 
 package io.polygenesis.models.domain;
 
+import com.oregor.ddd4j.check.assertion.Assertion;
 import io.polygenesis.core.data.Data;
-import io.polygenesis.core.data.VariableName;
+import io.polygenesis.core.data.DataArray;
+import java.util.Objects;
 
 /**
  * The type Aggregate entity collection.
  *
  * @author Christos Tsakostas
  */
-public class AggregateEntityCollection extends AbstractProperty {
+public class AggregateEntityCollection extends BaseProperty<DataArray> {
+
+  // ===============================================================================================
+  // STATE
+  // ===============================================================================================
+
+  private AggregateEntity aggregateEntity;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -37,10 +45,39 @@ public class AggregateEntityCollection extends AbstractProperty {
   /**
    * Instantiates a new Aggregate entity collection.
    *
-   * @param variableName the variable name
+   * @param data the data
+   * @param aggregateEntity the aggregate entity
    */
-  public AggregateEntityCollection(VariableName variableName) {
-    super(PropertyType.AGGREGATE_ENTITY_COLLECTION, variableName);
+  public AggregateEntityCollection(DataArray data, AggregateEntity aggregateEntity) {
+    super(PropertyType.AGGREGATE_ENTITY_COLLECTION, data);
+    setAggregateEntity(aggregateEntity);
+  }
+
+  // ===============================================================================================
+  // GETTERS
+  // ===============================================================================================
+
+  /**
+   * Gets aggregate entity.
+   *
+   * @return the aggregate entity
+   */
+  public AggregateEntity getAggregateEntity() {
+    return aggregateEntity;
+  }
+
+  // ===============================================================================================
+  // GUARDS
+  // ===============================================================================================
+
+  /**
+   * Sets aggregate entity.
+   *
+   * @param aggregateEntity the aggregate entity
+   */
+  private void setAggregateEntity(AggregateEntity aggregateEntity) {
+    Assertion.isNotNull(aggregateEntity, "aggregateEntity is required");
+    this.aggregateEntity = aggregateEntity;
   }
 
   // ===============================================================================================
@@ -48,17 +85,31 @@ public class AggregateEntityCollection extends AbstractProperty {
   // ===============================================================================================
 
   @Override
-  public Data getData() {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
   public Data getTypeParameterData() {
-    throw new UnsupportedOperationException();
+    return getData().getArrayElement();
   }
 
   // ===============================================================================================
   // OVERRIDES
   // ===============================================================================================
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    if (!super.equals(o)) {
+      return false;
+    }
+    AggregateEntityCollection that = (AggregateEntityCollection) o;
+    return Objects.equals(aggregateEntity, that.aggregateEntity);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(super.hashCode(), aggregateEntity);
+  }
 }

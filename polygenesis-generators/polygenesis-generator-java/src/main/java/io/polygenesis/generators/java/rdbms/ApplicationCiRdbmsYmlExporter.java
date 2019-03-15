@@ -18,91 +18,59 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.models.rest;
+package io.polygenesis.generators.java.rdbms;
 
-import java.util.Objects;
+import io.polygenesis.commons.freemarker.FreemarkerService;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * The type Abstract path content.
+ * The type Application ci rdbms yml exporter.
  *
  * @author Christos Tsakostas
  */
-public class AbstractPathContent {
-
-  private PathContentType pathContentType;
-  private String content;
+public class ApplicationCiRdbmsYmlExporter {
 
   // ===============================================================================================
-  // CONSTRUCTORS
+  // DEPENDENCIES
   // ===============================================================================================
-
-  public AbstractPathContent(PathContentType pathContentType, String content) {
-    setPathContentType(pathContentType);
-    setContent(content);
-  }
+  private final FreemarkerService freemarkerService;
 
   // ===============================================================================================
-  // GETTERS
+  // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
-   * Gets path content type.
+   * Instantiates a new Application ci rdbms yml exporter.
    *
-   * @return the path content type
+   * @param freemarkerService the freemarker service
    */
-  public PathContentType getPathContentType() {
-    return pathContentType;
-  }
-
-  /**
-   * Gets content.
-   *
-   * @return the content
-   */
-  public String getContent() {
-    return content;
+  public ApplicationCiRdbmsYmlExporter(FreemarkerService freemarkerService) {
+    this.freemarkerService = freemarkerService;
   }
 
   // ===============================================================================================
-  // GUARDS
+  // FUNCTIONALITY
   // ===============================================================================================
 
   /**
-   * Sets path content type.
+   * Export.
    *
-   * @param pathContentType the path content type
+   * @param generationPath the generation path
    */
-  private void setPathContentType(PathContentType pathContentType) {
-    this.pathContentType = pathContentType;
+  public void export(Path generationPath) {
+    Map<String, Object> dataModel = new HashMap<>();
+
+    freemarkerService.export(
+        dataModel,
+        "polygenesis-generator-java-persistence-rdbms/application-ci-rdbms.yml.ftl",
+        makeFileName(generationPath));
   }
 
-  /**
-   * Sets content.
-   *
-   * @param content the content
-   */
-  private void setContent(String content) {
-    this.content = content;
-  }
+  private Path makeFileName(Path generationPath) {
 
-  // ===============================================================================================
-  // OVERRIDES
-  // ===============================================================================================
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    AbstractPathContent that = (AbstractPathContent) o;
-    return pathContentType == that.pathContentType && Objects.equals(content, that.content);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(pathContentType, content);
+    return Paths.get(generationPath.toString(), "src/test/resources", "application-ci-rdbms.yml");
   }
 }

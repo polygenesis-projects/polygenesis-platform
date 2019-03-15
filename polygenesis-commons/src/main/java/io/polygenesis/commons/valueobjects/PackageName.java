@@ -18,7 +18,7 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.core.data;
+package io.polygenesis.commons.valueobjects;
 
 import com.oregor.ddd4j.check.assertion.Assertion;
 import java.nio.file.Path;

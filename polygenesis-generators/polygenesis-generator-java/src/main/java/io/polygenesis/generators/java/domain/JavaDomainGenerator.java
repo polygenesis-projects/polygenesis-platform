@@ -20,11 +20,12 @@
 
 package io.polygenesis.generators.java.domain;
 
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.AbstractGenerator;
 import io.polygenesis.core.CoreRegistry;
 import io.polygenesis.core.ModelRepository;
-import io.polygenesis.core.data.PackageName;
 import io.polygenesis.generators.java.domain.aggregateentity.AggregateEntityExporter;
+import io.polygenesis.generators.java.domain.aggregateentity.AggregateEntityIdExporter;
 import io.polygenesis.generators.java.domain.aggregateroot.AggregateRootExporter;
 import io.polygenesis.generators.java.domain.aggregateroot.AggregateRootIdExporter;
 import io.polygenesis.generators.java.domain.domainevent.DomainEventExporter;
@@ -32,8 +33,11 @@ import io.polygenesis.generators.java.domain.persistence.PersistenceExporter;
 import io.polygenesis.generators.java.domain.service.DomainServiceExporter;
 import io.polygenesis.generators.java.domain.valueobject.ValueObjectExporter;
 import io.polygenesis.models.domain.AggregateEntity;
+import io.polygenesis.models.domain.AggregateEntityCollection;
+import io.polygenesis.models.domain.AggregateRootPersistable;
 import io.polygenesis.models.domain.DomainModelRepository;
 import io.polygenesis.models.domain.DomainServiceRepository;
+import io.polygenesis.models.domain.PropertyType;
 import io.polygenesis.models.domain.ValueObject;
 import java.nio.file.Path;
 import java.util.Set;
@@ -49,6 +53,7 @@ public class JavaDomainGenerator extends AbstractGenerator {
   private final AggregateRootExporter aggregateRootExporter;
   private final AggregateRootIdExporter aggregateRootIdExporter;
   private final AggregateEntityExporter aggregateEntityExporter;
+  private final AggregateEntityIdExporter aggregateEntityIdExporter;
   private final ValueObjectExporter valueObjectExporter;
   private final DomainEventExporter domainEventExporter;
   private final PersistenceExporter persistenceExporter;
@@ -66,6 +71,7 @@ public class JavaDomainGenerator extends AbstractGenerator {
    * @param aggregateRootExporter the aggregate root exporter
    * @param aggregateRootIdExporter the aggregate root id exporter
    * @param aggregateEntityExporter the aggregate entity exporter
+   * @param aggregateEntityIdExporter the aggregate entity id exporter
    * @param valueObjectExporter the value object exporter
    * @param domainEventExporter the domain event exporter
    * @param persistenceExporter the persistence exporter
@@ -77,6 +83,7 @@ public class JavaDomainGenerator extends AbstractGenerator {
       AggregateRootExporter aggregateRootExporter,
       AggregateRootIdExporter aggregateRootIdExporter,
       AggregateEntityExporter aggregateEntityExporter,
+      AggregateEntityIdExporter aggregateEntityIdExporter,
       ValueObjectExporter valueObjectExporter,
       DomainEventExporter domainEventExporter,
       PersistenceExporter persistenceExporter,
@@ -86,6 +93,7 @@ public class JavaDomainGenerator extends AbstractGenerator {
     this.aggregateRootExporter = aggregateRootExporter;
     this.aggregateRootIdExporter = aggregateRootIdExporter;
     this.aggregateEntityExporter = aggregateEntityExporter;
+    this.aggregateEntityIdExporter = aggregateEntityIdExporter;
     this.valueObjectExporter = valueObjectExporter;
     this.domainEventExporter = domainEventExporter;
     this.persistenceExporter = persistenceExporter;
@@ -121,11 +129,53 @@ public class JavaDomainGenerator extends AbstractGenerator {
 
               aggregateRootIdExporter.export(getGenerationPath(), aggregateRoot);
 
-              if (aggregateRoot.getPersistence() != null) {
-                persistenceExporter.export(getGenerationPath(), aggregateRoot.getPersistence());
+              if (aggregateRoot instanceof AggregateRootPersistable) {
+                persistenceExporter.export(
+                    getGenerationPath(),
+                    ((AggregateRootPersistable) aggregateRoot).getPersistence());
               }
 
               domainEventExporter.export(getGenerationPath(), null);
+
+              // Aggregate Entities
+              aggregateRoot
+                  .getProperties()
+                  .stream()
+                  .filter(
+                      property -> property.getPropertyType().equals(PropertyType.AGGREGATE_ENTITY))
+                  .forEach(
+                      property -> {
+                        AggregateEntity aggregateEntity = (AggregateEntity) property;
+                        aggregateEntityIdExporter.export(getGenerationPath(), aggregateEntity);
+
+                        aggregateEntityExporter.export(
+                            getGenerationPath(),
+                            (AggregateEntity) property,
+                            getRootPackageName(),
+                            aggregateRoot);
+                      });
+
+              // Aggregate Entities From Collections
+              aggregateRoot
+                  .getProperties()
+                  .stream()
+                  .filter(
+                      property ->
+                          property
+                              .getPropertyType()
+                              .equals(PropertyType.AGGREGATE_ENTITY_COLLECTION))
+                  .forEach(
+                      property -> {
+                        AggregateEntity aggregateEntity =
+                            ((AggregateEntityCollection) property).getAggregateEntity();
+                        aggregateEntityIdExporter.export(getGenerationPath(), aggregateEntity);
+
+                        aggregateEntityExporter.export(
+                            getGenerationPath(),
+                            aggregateEntity,
+                            getRootPackageName(),
+                            aggregateRoot);
+                      });
 
               aggregateRoot
                   .getProperties()
@@ -133,9 +183,6 @@ public class JavaDomainGenerator extends AbstractGenerator {
                       property -> {
                         if (property instanceof ValueObject) {
                           valueObjectExporter.export(getGenerationPath(), (ValueObject) property);
-                        } else if (property instanceof AggregateEntity) {
-                          aggregateEntityExporter.export(
-                              getGenerationPath(), (AggregateEntity) property);
                         }
                       });
             });

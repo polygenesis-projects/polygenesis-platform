@@ -25,7 +25,7 @@ package io.polygenesis.models.rest;
  *
  * @author Christos Tsakostas
  */
-public class PathVariable extends AbstractPathContent {
+public class PathVariable extends PathContent {
 
   // ===============================================================================================
   // CONSTRUCTORS

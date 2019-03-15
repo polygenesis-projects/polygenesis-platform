@@ -21,7 +21,7 @@
 package io.polygenesis.generators.java.rdbms;
 
 import io.polygenesis.commons.freemarker.FreemarkerService;
-import io.polygenesis.core.data.PackageName;
+import io.polygenesis.commons.valueobjects.PackageName;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;

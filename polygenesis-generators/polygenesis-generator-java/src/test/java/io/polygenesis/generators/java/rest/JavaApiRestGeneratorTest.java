@@ -26,9 +26,9 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-import io.polygenesis.commons.text.Name;
+import io.polygenesis.commons.valueobjects.ObjectName;
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.ModelRepository;
-import io.polygenesis.core.data.PackageName;
 import io.polygenesis.models.rest.Resource;
 import io.polygenesis.models.rest.RestModelRepository;
 import java.nio.file.Path;
@@ -48,7 +48,7 @@ public class JavaApiRestGeneratorTest {
 
   private Path generationPath;
   private PackageName rootPackageName;
-  private Name contextName;
+  private ObjectName contextName;
   private ResourceExporter resourceExporter;
   private ResourceTestExporter resourceTestExporter;
   private RestConstantsProjectionExporter restConstantsProjectionExporter;
@@ -59,7 +59,7 @@ public class JavaApiRestGeneratorTest {
   public void setUp() {
     generationPath = Paths.get("tmp");
     rootPackageName = new PackageName("com.oregor");
-    contextName = new Name("someContext");
+    contextName = new ObjectName("someContext");
     resourceExporter = mock(ResourceExporter.class);
     resourceTestExporter = mock(ResourceTestExporter.class);
     restConstantsProjectionExporter = mock(RestConstantsProjectionExporter.class);

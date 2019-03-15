@@ -90,6 +90,6 @@ public class AggregateRootIdExporter {
         generationPath.toString(),
         "src/main/java",
         aggregateRoot.getPackageName().toPath().toString(),
-        TextConverter.toUpperCamel(aggregateRoot.getName().getText()) + "Id.java");
+        TextConverter.toUpperCamel(aggregateRoot.getObjectName().getText()) + "Id.java");
   }
 }

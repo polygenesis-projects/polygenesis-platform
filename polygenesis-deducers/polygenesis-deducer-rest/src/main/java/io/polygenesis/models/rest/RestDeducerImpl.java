@@ -20,10 +20,10 @@
 
 package io.polygenesis.models.rest;
 
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.CoreRegistry;
 import io.polygenesis.core.ModelRepository;
 import io.polygenesis.core.ThingRepository;
-import io.polygenesis.core.data.PackageName;
 import io.polygenesis.models.api.ServiceModelRepository;
 import java.util.Set;
 

@@ -28,6 +28,6 @@ package io.polygenesis.models.domain;
 public enum InstantiationType {
   /** Abstract instantiation type. */
   ABSTRACT,
-  /** Normal instantiation type. */
-  NORMAL
+  /** Concrete instantiation type. */
+  CONCRETE
 }

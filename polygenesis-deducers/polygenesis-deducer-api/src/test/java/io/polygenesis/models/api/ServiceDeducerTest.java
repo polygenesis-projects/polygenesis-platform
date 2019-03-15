@@ -21,14 +21,11 @@
 package io.polygenesis.models.api;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.Thing;
-import io.polygenesis.core.data.PackageName;
 import io.polygenesis.core.test.ThingForTesting;
-import java.util.Arrays;
-import java.util.LinkedHashSet;
 import java.util.Set;
 import org.junit.Before;
 import org.junit.Test;
@@ -51,18 +48,10 @@ public class ServiceDeducerTest {
 
   @Test
   public void shouldDeduceFromThing() {
-    Method methodCommand = mock(Method.class);
-    given(serviceMethodDeducer.deduceCommandMethods(thing))
-        .willReturn(new LinkedHashSet<>(Arrays.asList(methodCommand)));
-
-    Method methodQuery = mock(Method.class);
-    given(serviceMethodDeducer.deduceQueryMethods(thing))
-        .willReturn(new LinkedHashSet<>(Arrays.asList(methodQuery)));
-
     Set<Service> services =
         serviceDeducer.deduceFrom(thing, new PackageName(ThingForTesting.ROOT_PACKAGE));
 
     assertThat(services).isNotNull();
-    assertThat(services.size()).isEqualTo(2);
+    assertThat(services.size()).isEqualTo(0);
   }
 }

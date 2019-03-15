@@ -25,4 +25,4 @@ package io.polygenesis.models.domain;
  *
  * @author Christos Tsakostas
  */
-public class FactoryMethod extends AbstractMethod {}
+public class FactoryMethod extends BaseMethod {}

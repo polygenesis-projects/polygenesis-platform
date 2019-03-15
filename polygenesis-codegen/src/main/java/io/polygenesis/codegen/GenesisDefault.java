@@ -20,10 +20,10 @@
 
 package io.polygenesis.codegen;
 
-import io.polygenesis.commons.text.Name;
+import io.polygenesis.commons.valueobjects.ObjectName;
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.Deducer;
 import io.polygenesis.core.Generator;
-import io.polygenesis.core.data.PackageName;
 import io.polygenesis.deducers.apiimpl.ApiImplDeducerFactory;
 import io.polygenesis.deducers.sql.SqlDeducerFactory;
 import io.polygenesis.generators.angular.AngularGeneratorFactory;
@@ -104,7 +104,7 @@ public class GenesisDefault {
                     modulePrefix + "-primary-adapters",
                     modulePrefix + "-rest-spring"),
                 packageName,
-                new Name(context)),
+                new ObjectName(context)),
             JavaRdbmsGeneratorFactory.newInstance(
                 Paths.get(
                     exportPath,
@@ -112,7 +112,7 @@ public class GenesisDefault {
                     modulePrefix + "-secondary-adapters",
                     modulePrefix + "-persistence-rdbms"),
                 packageName,
-                new Name(context)),
+                new ObjectName(context)),
             JavaDomainGeneratorFactory.newInstance(
                 Paths.get(exportPath, projectFolder, modulePrefix + "-domain-model"), packageName),
             DomainServiceImplementationGeneratorFactory.newInstance(

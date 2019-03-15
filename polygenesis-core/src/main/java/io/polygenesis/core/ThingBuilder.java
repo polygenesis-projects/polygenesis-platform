@@ -20,7 +20,9 @@
 
 package io.polygenesis.core;
 
+import io.polygenesis.commons.valueobjects.ContextName;
 import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -30,11 +32,51 @@ import java.util.Set;
  */
 public class ThingBuilder {
 
+  // ===============================================================================================
+  // STATIC
+  // ===============================================================================================
+
+  /**
+   * Prepare thing builder.
+   *
+   * @return the thing builder
+   */
+  public static ThingBuilder generic() {
+    return new ThingBuilder();
+  }
+
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
+  private ThingBuilder() {
+    super();
+  }
+
+  // ===============================================================================================
+  // STATE
+  // ===============================================================================================
+
+  private String contextName;
   private ThingName thingName;
   private ThingScopeType thingScopeType = ThingScopeType.ACROSS_LAYERS;
   private ThingBusinessType thingBusinessType = ThingBusinessType.ANY;
   private Set<ThingProperty> thingProperties = new LinkedHashSet<>();
   private Boolean multiTenant = false;
+  private Thing parentThing;
+
+  // ===============================================================================================
+  // SETTERS
+  // ===============================================================================================
+
+  /**
+   * Sets context name.
+   *
+   * @param contextName the context name
+   */
+  public void setContextName(String contextName) {
+    this.contextName = contextName;
+  }
 
   /**
    * Sets thing name.
@@ -92,11 +134,33 @@ public class ThingBuilder {
   }
 
   /**
+   * Sets parent thing.
+   *
+   * @param parentThing the parent thing
+   * @return the parent thing
+   */
+  public ThingBuilder setParentThing(Thing parentThing) {
+    this.parentThing = parentThing;
+    return this;
+  }
+
+  // ===============================================================================================
+  // CREATION
+  // ===============================================================================================
+
+  /**
    * Create thing thing.
    *
    * @return the thing
    */
   public Thing createThing() {
-    return new Thing(thingScopeType, thingBusinessType, thingName, thingProperties, multiTenant);
+    return new Thing(
+        thingScopeType,
+        thingBusinessType,
+        contextName != null ? new ContextName(contextName) : ContextName.defaultContext(),
+        thingName,
+        thingProperties,
+        multiTenant,
+        parentThing != null ? Optional.of(parentThing) : Optional.empty());
   }
 }

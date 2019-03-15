@@ -27,8 +27,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 import io.polygenesis.commons.freemarker.FreemarkerService;
-import io.polygenesis.commons.text.Name;
-import io.polygenesis.core.data.PackageName;
+import io.polygenesis.commons.valueobjects.ObjectName;
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.models.rest.Resource;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -65,7 +65,7 @@ public class ResourceExporterTest {
   @Test
   public void shouldExport() {
     given(resource.getPackageName()).willReturn(new PackageName("com.oregor"));
-    given(resource.getName()).willReturn(new Name("someResource"));
+    given(resource.getObjectName()).willReturn(new ObjectName("someResource"));
 
     resourceExporter.export(generationPath, resource, rootPackageName);
 

@@ -115,4 +115,18 @@ ${ representation.modifiers }<#if representation.modifiers != ""> </#if>class ${
     </#sep>
   </#list>
 </#if>
+<#if representation.getTests()?size gt 0>
+
+  // ===============================================================================================
+  // TEST CASES
+  // ===============================================================================================
+
+  <#list representation.getTests() as method>
+    <@printMethod method>
+    </@printMethod>
+    <#sep>
+
+    </#sep>
+  </#list>
+</#if>
 }

@@ -23,6 +23,7 @@ package io.polygenesis.models.rest;
 import io.polygenesis.annotations.core.GoalType;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.Function;
+import io.polygenesis.core.Thing;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -42,6 +43,7 @@ public class MappingDeducer {
    * Deduce from set.
    *
    * @param function the function
+   * @param httpMethod the http method
    * @return the set
    */
   public Set<Mapping> deduceFrom(Function function, HttpMethod httpMethod) {
@@ -52,103 +54,97 @@ public class MappingDeducer {
         mappings.add(getMappingForGet(function));
         break;
       case POST:
-        mappings.add(getMappingForPost(function));
+        mappings.add(getMappingForResource(function.getThing()));
         break;
       case PUT:
-        mappings.add(getMappingForPut(function));
-        break;
       case DELETE:
-        mappings.add(getMappingForDelete(function));
+        mappings.add(getMappingForResourceWithId(function.getThing()));
         break;
       default:
-        break;
+        throw new UnsupportedOperationException();
     }
 
     return mappings;
   }
 
   // ===============================================================================================
-  // PRIVATE - GET
+  // PRIVATE
   // ===============================================================================================
 
+  /**
+   * Gets mapping for get.
+   *
+   * @param function the function
+   * @return the mapping for get
+   */
   private Mapping getMappingForGet(Function function) {
     String goalType = TextConverter.toUpperUnderscore(function.getGoal().getText());
 
     if (goalType.equals(GoalType.FETCH_ONE.name())) {
-      return getMappingForGetFetchOne(function);
-    } else if (goalType.equals(GoalType.FETCH_COLLECTION.name())) {
-      return getMappingForGetFetchCollection(function);
-    } else if (goalType.equals(GoalType.FETCH_PAGED_COLLECTION.name())) {
-      return getMappingForGetFetchCollection(function);
+      return getMappingForResourceWithId(function.getThing());
+    } else if (goalType.equals(GoalType.FETCH_COLLECTION.name())
+        || goalType.equals(GoalType.FETCH_PAGED_COLLECTION.name())) {
+      return getMappingForResource(function.getThing());
     } else {
       throw new IllegalStateException(
           String.format("Cannot deduce REST mapping for=%s", function.getGoal().getText()));
     }
   }
 
-  private Mapping getMappingForGetFetchOne(Function function) {
-    return new Mapping(
+  /**
+   * Gets mapping for resource with id.
+   *
+   * @param thing the thing
+   * @return the mapping for resource with id
+   */
+  private Mapping getMappingForResourceWithId(Thing thing) {
+    Set<PathContent> pathContents = new LinkedHashSet<>();
+
+    fillParentPathContent(pathContents, thing);
+
+    pathContents.addAll(
         new LinkedHashSet<>(
             Arrays.asList(
                 new PathConstant(
                     TextConverter.toLowerHyphen(
-                        TextConverter.toPlural(function.getThing().getThingName().getText()))),
+                        TextConverter.toPlural(thing.getThingName().getText()))),
                 new PathVariable(
-                    TextConverter.toLowerCamel(
-                        function.getThing().getThingName().getText() + "Id")))));
+                    TextConverter.toLowerCamel(thing.getThingName().getText() + "Id")))));
+
+    return new Mapping(pathContents);
   }
 
-  private Mapping getMappingForGetFetchCollection(Function function) {
-    return new Mapping(
+  /**
+   * Gets mapping for resource.
+   *
+   * @param thing the thing
+   * @return the mapping for resource
+   */
+  private Mapping getMappingForResource(Thing thing) {
+    Set<PathContent> pathContents = new LinkedHashSet<>();
+
+    fillParentPathContent(pathContents, thing);
+
+    pathContents.addAll(
         new LinkedHashSet<>(
             Arrays.asList(
                 new PathConstant(
                     TextConverter.toLowerHyphen(
-                        TextConverter.toPlural(function.getThing().getThingName().getText()))))));
+                        TextConverter.toPlural(thing.getThingName().getText()))))));
+
+    return new Mapping(pathContents);
   }
 
-  // ===============================================================================================
-  // PRIVATE - POST
-  // ===============================================================================================
-
-  private Mapping getMappingForPost(Function function) {
-    return new Mapping(
-        new LinkedHashSet<>(
-            Arrays.asList(
-                new PathConstant(
-                    TextConverter.toLowerHyphen(
-                        TextConverter.toPlural(function.getThing().getThingName().getText()))))));
-  }
-
-  // ===============================================================================================
-  // PRIVATE - PUT
-  // ===============================================================================================
-
-  private Mapping getMappingForPut(Function function) {
-    return new Mapping(
-        new LinkedHashSet<>(
-            Arrays.asList(
-                new PathConstant(
-                    TextConverter.toLowerHyphen(
-                        TextConverter.toPlural(function.getThing().getThingName().getText()))),
-                new PathVariable(
-                    TextConverter.toLowerCamel(
-                        function.getThing().getThingName().getText() + "Id")))));
-  }
-
-  // ===============================================================================================
-  // PRIVATE - DELETE
-  // ===============================================================================================
-
-  private Mapping getMappingForDelete(Function function) {
-    return new Mapping(
-        new LinkedHashSet<>(
-            Arrays.asList(
-                new PathConstant(
-                    TextConverter.toLowerHyphen(
-                        TextConverter.toPlural(function.getThing().getThingName().getText()))),
-                new PathVariable(
-                    TextConverter.toLowerCamel(
-                        function.getThing().getThingName().getText() + "Id")))));
+  /**
+   * Fill parent path content.
+   *
+   * @param pathContents the path contents
+   * @param thing the thing
+   */
+  private void fillParentPathContent(Set<PathContent> pathContents, Thing thing) {
+    if (thing.getOptionalParent().isPresent()) {
+      pathContents.addAll(
+          getMappingForResourceWithId(thing.getOptionalParent().get()).getPathContents());
+    }
   }
 }

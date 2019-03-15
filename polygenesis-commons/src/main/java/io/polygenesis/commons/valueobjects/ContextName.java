@@ -32,6 +32,19 @@ import io.polygenesis.commons.text.AbstractText;
 public class ContextName extends AbstractText {
 
   // ===============================================================================================
+  // STATIC
+  // ===============================================================================================
+
+  /**
+   * Default context context name.
+   *
+   * @return the context name
+   */
+  public static ContextName defaultContext() {
+    return new ContextName("defaultContext");
+  }
+
+  // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 

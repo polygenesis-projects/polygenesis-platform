@@ -21,8 +21,8 @@
 package io.polygenesis.models.apiimpl;
 
 import com.oregor.ddd4j.check.assertion.Assertion;
-import io.polygenesis.core.data.ObjectName;
-import io.polygenesis.core.data.PackageName;
+import io.polygenesis.commons.valueobjects.ObjectName;
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.data.VariableName;
 import java.util.Objects;
 import java.util.Set;

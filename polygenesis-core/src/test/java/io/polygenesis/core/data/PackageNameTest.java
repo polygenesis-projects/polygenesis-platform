@@ -23,6 +23,7 @@ package io.polygenesis.core.data;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import io.polygenesis.commons.valueobjects.PackageName;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 

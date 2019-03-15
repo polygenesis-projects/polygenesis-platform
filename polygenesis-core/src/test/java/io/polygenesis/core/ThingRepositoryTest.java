@@ -78,7 +78,7 @@ public class ThingRepositoryTest {
   private Set<Thing> createThings() {
     Set<Thing> things = new LinkedHashSet<>();
 
-    Thing someThing = new ThingBuilder().setThingName(new ThingName("someThing")).createThing();
+    Thing someThing = ThingBuilder.generic().setThingName(new ThingName("someThing")).createThing();
 
     Function someFunction =
         new Function(

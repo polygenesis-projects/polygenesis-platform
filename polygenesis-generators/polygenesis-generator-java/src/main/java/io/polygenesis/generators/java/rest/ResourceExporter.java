@@ -22,7 +22,7 @@ package io.polygenesis.generators.java.rest;
 
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.data.PackageName;
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.models.rest.Resource;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -79,6 +79,6 @@ public class ResourceExporter {
         generationPath.toString(),
         "src/main/java",
         resource.getPackageName().toPath().toString(),
-        TextConverter.toUpperCamel(resource.getName().getText()) + "RestService.java");
+        TextConverter.toUpperCamel(resource.getObjectName().getText()) + "RestService.java");
   }
 }

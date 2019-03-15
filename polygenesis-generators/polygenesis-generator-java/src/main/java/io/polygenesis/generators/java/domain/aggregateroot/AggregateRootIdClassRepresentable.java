@@ -80,7 +80,7 @@ public class AggregateRootIdClassRepresentable extends AbstractClassRepresentabl
     if (source.getMultiTenant()) {
       constructorRepresentations.add(
           createConstructorWithImplementation(
-              source.getName().getText(),
+              source.getObjectName().getText(),
               new LinkedHashSet<>(
                   Arrays.asList(
                       new ParameterRepresentation("UUID", "rootId"),
@@ -89,7 +89,7 @@ public class AggregateRootIdClassRepresentable extends AbstractClassRepresentabl
     } else {
       constructorRepresentations.add(
           createConstructorWithImplementation(
-              source.getName().getText(),
+              source.getObjectName().getText(),
               new LinkedHashSet<>(Arrays.asList(new ParameterRepresentation("UUID", "rootId"))),
               "\t\tsuper(rootId);"));
     }
@@ -134,7 +134,7 @@ public class AggregateRootIdClassRepresentable extends AbstractClassRepresentabl
 
     stringBuilder.append("The ");
 
-    stringBuilder.append(TextConverter.toUpperCamelSpaces(source.getName().getText()));
+    stringBuilder.append(TextConverter.toUpperCamelSpaces(source.getObjectName().getText()));
 
     stringBuilder.append(" Aggregate Root Id.");
 
@@ -150,7 +150,7 @@ public class AggregateRootIdClassRepresentable extends AbstractClassRepresentabl
   public String simpleObjectName(AggregateRoot source, Object... args) {
     StringBuilder stringBuilder = new StringBuilder();
 
-    stringBuilder.append(TextConverter.toLowerCamel(source.getName().getText()));
+    stringBuilder.append(TextConverter.toLowerCamel(source.getObjectName().getText()));
     stringBuilder.append("Id");
 
     return stringBuilder.toString();
@@ -160,7 +160,7 @@ public class AggregateRootIdClassRepresentable extends AbstractClassRepresentabl
   public String fullObjectName(AggregateRoot source, Object... args) {
     StringBuilder stringBuilder = new StringBuilder();
 
-    stringBuilder.append(TextConverter.toUpperCamel(source.getName().getText()));
+    stringBuilder.append(TextConverter.toUpperCamel(source.getObjectName().getText()));
     stringBuilder.append("Id");
     stringBuilder.append(" extends ");
 

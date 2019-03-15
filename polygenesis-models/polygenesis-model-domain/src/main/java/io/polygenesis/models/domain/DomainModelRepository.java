@@ -20,7 +20,7 @@
 
 package io.polygenesis.models.domain;
 
-import io.polygenesis.commons.text.Name;
+import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.core.ModelRepository;
 import java.util.Optional;
 import java.util.Set;
@@ -71,13 +71,13 @@ public class DomainModelRepository implements ModelRepository {
   /**
    * Gets aggregate root by name.
    *
-   * @param name the name
+   * @param objectName the name
    * @return the aggregate root by name
    */
-  public Optional<AggregateRoot> getAggregateRootByName(Name name) {
+  public Optional<AggregateRoot> getAggregateRootByName(ObjectName objectName) {
     return aggregateRoots
         .stream()
-        .filter(aggregateRoot -> aggregateRoot.getName().equals(name))
+        .filter(aggregateRoot -> aggregateRoot.getObjectName().equals(objectName))
         .findFirst();
   }
 

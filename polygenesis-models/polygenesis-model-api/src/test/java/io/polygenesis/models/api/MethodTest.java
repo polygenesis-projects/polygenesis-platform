@@ -22,6 +22,8 @@ package io.polygenesis.models.api;
 
 import io.polygenesis.annotations.core.GoalType;
 import io.polygenesis.commons.test.AbstractEqualityTest;
+import io.polygenesis.commons.valueobjects.ObjectName;
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.Function;
 import io.polygenesis.core.FunctionName;
 import io.polygenesis.core.Goal;
@@ -29,8 +31,6 @@ import io.polygenesis.core.Thing;
 import io.polygenesis.core.ThingBuilder;
 import io.polygenesis.core.ThingName;
 import io.polygenesis.core.data.DataGroup;
-import io.polygenesis.core.data.ObjectName;
-import io.polygenesis.core.data.PackageName;
 import java.util.LinkedHashSet;
 
 /** @author Christos Tsakostas */
@@ -41,13 +41,19 @@ public class MethodTest extends AbstractEqualityTest<Method> {
     Dto requestDto =
         new Dto(
             DtoType.API_REQUEST,
+            new ObjectName("asd"),
+            new PackageName("com.oregor"),
+            new LinkedHashSet<>(),
             new DataGroup(new ObjectName("asd"), new PackageName("com.oregor")));
     Dto responseDto =
         new Dto(
             DtoType.API_REQUEST,
+            new ObjectName("xyz"),
+            new PackageName("com.oregor"),
+            new LinkedHashSet<>(),
             new DataGroup(new ObjectName("xyz"), new PackageName("com.oregor")));
 
-    Thing thing = new ThingBuilder().setThingName(new ThingName("customer")).createThing();
+    Thing thing = ThingBuilder.generic().setThingName(new ThingName("customer")).createThing();
     return new Method(
         new Function(
             thing, new Goal(GoalType.CREATE), new FunctionName("create"), new LinkedHashSet<>()),
@@ -60,13 +66,19 @@ public class MethodTest extends AbstractEqualityTest<Method> {
     Dto requestDto =
         new Dto(
             DtoType.API_REQUEST,
+            new ObjectName("asd"),
+            new PackageName("com.oregor"),
+            new LinkedHashSet<>(),
             new DataGroup(new ObjectName("asd"), new PackageName("com.oregor")));
     Dto responseDto =
         new Dto(
             DtoType.API_REQUEST,
+            new ObjectName("xyz"),
+            new PackageName("com.oregor"),
+            new LinkedHashSet<>(),
             new DataGroup(new ObjectName("xyz"), new PackageName("com.oregor")));
 
-    Thing thing = new ThingBuilder().setThingName(new ThingName("user")).createThing();
+    Thing thing = ThingBuilder.generic().setThingName(new ThingName("user")).createThing();
     return new Method(
         new Function(
             thing, new Goal(GoalType.CREATE), new FunctionName("create"), new LinkedHashSet<>()),

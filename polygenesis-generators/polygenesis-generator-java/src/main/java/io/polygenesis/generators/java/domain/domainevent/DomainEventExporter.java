@@ -84,6 +84,6 @@ public class DomainEventExporter {
         generationPath.toString(),
         "src/main/java",
         domainEvent.getPackageName().toPath().toString(),
-        TextConverter.toUpperCamel(domainEvent.getName().getText()) + ".java");
+        TextConverter.toUpperCamel(domainEvent.getObjectName().getText()) + ".java");
   }
 }

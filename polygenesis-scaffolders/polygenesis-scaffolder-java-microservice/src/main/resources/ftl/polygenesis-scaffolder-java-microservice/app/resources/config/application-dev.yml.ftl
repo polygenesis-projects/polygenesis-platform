@@ -32,10 +32,13 @@ spring-config:
       max-connections: 10
   datasource:
     url: jdbc:mysql://localhost:3306/${ projectDescription.context }-dev?useLegacyDatetimeCode=false&characterEncoding=utf8
-    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
     username: ${ projectDescription.context }-dev
     password: ${ projectDescription.context }-dev
   jpa:
+    hibernate.ddl-auto: validate
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
+        jdbc:
+          time_zone: UTC

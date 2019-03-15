@@ -113,7 +113,7 @@ public class FunctionIdentifier {
     GFunction annotationGFunction = AnnotationUtils.findAnnotation(method, GFunction.class);
     if (annotationGFunction != null) {
       Thing thingToExamine =
-          new ThingBuilder()
+          ThingBuilder.generic()
               .setThingName(new ThingName(annotationGFunction.thingName()))
               .createThing();
 

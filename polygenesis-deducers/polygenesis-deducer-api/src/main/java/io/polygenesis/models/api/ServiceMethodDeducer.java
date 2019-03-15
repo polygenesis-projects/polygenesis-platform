@@ -20,8 +20,8 @@
 
 package io.polygenesis.models.api;
 
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.Thing;
-import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
@@ -55,14 +55,13 @@ public class ServiceMethodDeducer {
   // ===============================================================================================
 
   /**
-   * Deduce command methods set.
+   * Deduce command methods.
    *
+   * @param methods the methods
    * @param thing the thing
-   * @return the set
+   * @param rootPackageName the root package name
    */
-  public Set<Method> deduceCommandMethods(Thing thing) {
-    Set<Method> methods = new LinkedHashSet<>();
-
+  public void deduceCommandMethods(Set<Method> methods, Thing thing, PackageName rootPackageName) {
     thing
         .getFunctions()
         .stream()
@@ -72,20 +71,18 @@ public class ServiceMethodDeducer {
                 methods.add(
                     new Method(
                         function,
-                        dtoDeducer.deduceRequestDto(function),
-                        dtoDeducer.deduceResponseDto(function))));
-
-    return methods;
+                        dtoDeducer.deduceRequestDto(function, rootPackageName),
+                        dtoDeducer.deduceResponseDto(function, rootPackageName))));
   }
 
   /**
-   * Deduce query methods set.
+   * Deduce query methods.
    *
+   * @param methods the methods
    * @param thing the thing
-   * @return the set
+   * @param rootPackageName the root package name
    */
-  public Set<Method> deduceQueryMethods(Thing thing) {
-    Set<Method> methods = new LinkedHashSet<>();
+  public void deduceQueryMethods(Set<Method> methods, Thing thing, PackageName rootPackageName) {
 
     thing
         .getFunctions()
@@ -96,9 +93,7 @@ public class ServiceMethodDeducer {
                 methods.add(
                     new Method(
                         function,
-                        dtoDeducer.deduceRequestDto(function),
-                        dtoDeducer.deduceResponseDto(function))));
-
-    return methods;
+                        dtoDeducer.deduceRequestDto(function, rootPackageName),
+                        dtoDeducer.deduceResponseDto(function, rootPackageName))));
   }
 }

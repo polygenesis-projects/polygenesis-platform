@@ -27,11 +27,11 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.ModelRepository;
 import io.polygenesis.core.Thing;
 import io.polygenesis.core.ThingRepository;
 import io.polygenesis.core.ThingRepositoryImpl;
-import io.polygenesis.core.data.PackageName;
 import io.polygenesis.core.test.ThingForTesting;
 import java.util.Arrays;
 import java.util.LinkedHashSet;

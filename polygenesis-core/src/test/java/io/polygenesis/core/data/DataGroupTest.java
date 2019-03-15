@@ -23,6 +23,8 @@ package io.polygenesis.core.data;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.polygenesis.commons.test.AbstractEqualityTest;
+import io.polygenesis.commons.valueobjects.ObjectName;
+import io.polygenesis.commons.valueobjects.PackageName;
 import org.junit.Test;
 
 /** @author Christos Tsakostas */

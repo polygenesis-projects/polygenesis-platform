@@ -25,4 +25,4 @@ package io.polygenesis.models.domain;
  *
  * @author Christos Tsakostas
  */
-public class StateQueryMethod extends AbstractMethod {}
+public class StateQueryMethod extends BaseMethod {}

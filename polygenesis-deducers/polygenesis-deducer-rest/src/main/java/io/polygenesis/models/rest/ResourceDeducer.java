@@ -20,11 +20,11 @@
 
 package io.polygenesis.models.rest;
 
-import io.polygenesis.commons.text.Name;
+import io.polygenesis.commons.valueobjects.ObjectName;
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.Function;
 import io.polygenesis.core.Thing;
 import io.polygenesis.core.ThingRepository;
-import io.polygenesis.core.data.PackageName;
 import io.polygenesis.models.api.Service;
 import io.polygenesis.models.api.ServiceModelRepository;
 import java.util.LinkedHashSet;
@@ -78,13 +78,18 @@ public class ResourceDeducer {
     thingRepository
         .getApiThings()
         .forEach(
-            thing ->
-                resources.add(
-                    new Resource(
-                        makeResourcePackageName(rootPackageName, thing),
-                        makeResourceName(thing),
-                        makeEndpoints(thing, serviceModelRepository),
-                        serviceModelRepository.getServicesBy(thing.getThingName()))));
+            thing -> {
+              Set<Endpoint> endpoints = new LinkedHashSet<>();
+
+              fillEndpoints(endpoints, thing, serviceModelRepository);
+
+              resources.add(
+                  new Resource(
+                      thing.makePackageName(rootPackageName, thing),
+                      new ObjectName(thing.getThingName().getText()),
+                      endpoints,
+                      serviceModelRepository.getServicesBy(thing.getThingName())));
+            });
 
     return resources;
   }
@@ -93,33 +98,52 @@ public class ResourceDeducer {
   // PRIVATE
   // ===============================================================================================
 
-  private PackageName makeResourcePackageName(PackageName rootPackageName, Thing thing) {
-    return new PackageName(
-        rootPackageName.getText() + "." + thing.getThingName().getText().toLowerCase());
-  }
-
-  private Name makeResourceName(Thing thing) {
-    return new Name(thing.getThingName().getText());
-  }
-
-  private Set<Endpoint> makeEndpoints(Thing thing, ServiceModelRepository serviceModelRepository) {
-    Set<Endpoint> endpoints = new LinkedHashSet<>();
-
+  /**
+   * Fill endpoints.
+   *
+   * @param endpoints the endpoints
+   * @param thing the thing
+   * @param serviceModelRepository the service model repository
+   */
+  private void fillEndpoints(
+      Set<Endpoint> endpoints, Thing thing, ServiceModelRepository serviceModelRepository) {
     thing
         .getFunctions()
         .forEach(
-            function -> {
-              Optional<Endpoint> optionalEndpoint =
-                  endpointDeducer.deduceFromFunction(
-                      function, getServiceFor(function, serviceModelRepository));
-              if (optionalEndpoint.isPresent()) {
-                endpoints.add(optionalEndpoint.get());
-              }
-            });
+            function ->
+                fillEndpointForFunction(
+                    endpoints, function, getServiceFor(function, serviceModelRepository)));
 
-    return endpoints;
+    // TODO: must implement service has function first!
+    //    thing.getChildren()
+    //        .forEach(thingChild -> fillEndpoints(endpoints, thingChild, serviceModelRepository));
+    //
+    //    thing.getVirtualChildren()
+    //        .forEach(thingChild -> fillEndpoints(endpoints, thingChild, serviceModelRepository));
   }
 
+  /**
+   * Fill endpoint for function.
+   *
+   * @param endpoints the endpoints
+   * @param function the function
+   * @param service the service
+   */
+  private void fillEndpointForFunction(
+      Set<Endpoint> endpoints, Function function, Service service) {
+    Optional<Endpoint> optionalEndpoint = endpointDeducer.deduceFromFunction(function, service);
+    if (optionalEndpoint.isPresent()) {
+      endpoints.add(optionalEndpoint.get());
+    }
+  }
+
+  /**
+   * Gets service for.
+   *
+   * @param function the function
+   * @param serviceModelRepository the service model repository
+   * @return the service for
+   */
   private Service getServiceFor(Function function, ServiceModelRepository serviceModelRepository) {
     if (serviceModelRepository.getServices().isEmpty()) {
       throw new IllegalStateException(

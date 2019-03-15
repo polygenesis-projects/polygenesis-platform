@@ -22,8 +22,11 @@ package io.polygenesis.generators.java.domain;
 
 import io.polygenesis.commons.freemarker.FreemarkerConfig;
 import io.polygenesis.commons.freemarker.FreemarkerService;
-import io.polygenesis.core.data.PackageName;
+import io.polygenesis.commons.valueobjects.PackageName;
+import io.polygenesis.generators.java.domain.aggregateentity.AggregateEntityClassRepresentable;
 import io.polygenesis.generators.java.domain.aggregateentity.AggregateEntityExporter;
+import io.polygenesis.generators.java.domain.aggregateentity.AggregateEntityIdClassRepresentable;
+import io.polygenesis.generators.java.domain.aggregateentity.AggregateEntityIdExporter;
 import io.polygenesis.generators.java.domain.aggregateroot.AggregateRootClassRepresentable;
 import io.polygenesis.generators.java.domain.aggregateroot.AggregateRootExporter;
 import io.polygenesis.generators.java.domain.aggregateroot.AggregateRootIdClassRepresentable;
@@ -52,6 +55,7 @@ public final class JavaDomainGeneratorFactory {
   private static AggregateRootExporter aggregateRootExporter;
   private static AggregateRootIdExporter aggregateRootIdExporter;
   private static AggregateEntityExporter aggregateEntityExporter;
+  private static AggregateEntityIdExporter aggregateEntityIdExporter;
   private static ValueObjectExporter valueObjectExporter;
   private static DomainEventExporter domainEventExporter;
   private static PersistenceExporter persistenceExporter;
@@ -79,7 +83,15 @@ public final class JavaDomainGeneratorFactory {
     aggregateRootIdExporter =
         new AggregateRootIdExporter(freemarkerService, aggregateRootIdClassRepresentable);
 
-    aggregateEntityExporter = new AggregateEntityExporter(freemarkerService);
+    AggregateEntityClassRepresentable aggregateEntityClassRepresentable =
+        new AggregateEntityClassRepresentable(fromDataTypeToJavaConverter);
+    aggregateEntityExporter =
+        new AggregateEntityExporter(freemarkerService, aggregateEntityClassRepresentable);
+
+    AggregateEntityIdClassRepresentable aggregateEntityIdClassRepresentable =
+        new AggregateEntityIdClassRepresentable(fromDataTypeToJavaConverter);
+    aggregateEntityIdExporter =
+        new AggregateEntityIdExporter(freemarkerService, aggregateEntityIdClassRepresentable);
 
     ValueObjectClassRepresentable valueObjectClassRepresentable =
         new ValueObjectClassRepresentable(fromDataTypeToJavaConverter);
@@ -131,6 +143,7 @@ public final class JavaDomainGeneratorFactory {
         aggregateRootExporter,
         aggregateRootIdExporter,
         aggregateEntityExporter,
+        aggregateEntityIdExporter,
         valueObjectExporter,
         domainEventExporter,
         persistenceExporter,

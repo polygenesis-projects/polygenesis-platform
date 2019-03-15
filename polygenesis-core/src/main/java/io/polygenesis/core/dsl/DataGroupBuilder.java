@@ -20,10 +20,10 @@
 
 package io.polygenesis.core.dsl;
 
+import io.polygenesis.commons.valueobjects.ObjectName;
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.data.Data;
 import io.polygenesis.core.data.DataGroup;
-import io.polygenesis.core.data.ObjectName;
-import io.polygenesis.core.data.PackageName;
 import java.util.LinkedHashSet;
 import java.util.Set;
 

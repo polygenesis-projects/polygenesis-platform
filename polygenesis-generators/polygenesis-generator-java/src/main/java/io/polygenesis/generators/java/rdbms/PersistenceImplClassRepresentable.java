@@ -20,9 +20,9 @@
 
 package io.polygenesis.generators.java.rdbms;
 
-import io.polygenesis.commons.text.Name;
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.data.PackageName;
+import io.polygenesis.commons.valueobjects.ObjectName;
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.models.domain.Persistence;
 import io.polygenesis.representations.commons.FieldRepresentation;
 import io.polygenesis.representations.commons.ParameterRepresentation;
@@ -68,12 +68,13 @@ public class PersistenceImplClassRepresentable extends AbstractClassRepresentabl
   @Override
   public Set<ConstructorRepresentation> constructorRepresentations(
       Persistence source, Object... args) {
-    Name contextName = (Name) args[1];
+    ObjectName contextName = (ObjectName) args[1];
     Set<ParameterRepresentation> parameterRepresentations = new LinkedHashSet<>();
 
     parameterRepresentations.add(
         new ParameterRepresentation(
-            TextConverter.toUpperCamel(source.getAggregateRootName().getText()) + "Repository",
+            TextConverter.toUpperCamel(source.getAggregateRootObjectName().getText())
+                + "Repository",
             "repository"));
 
     parameterRepresentations.add(
@@ -88,7 +89,7 @@ public class PersistenceImplClassRepresentable extends AbstractClassRepresentabl
 
     StringBuilder stringBuilder = new StringBuilder();
     stringBuilder.append("The ");
-    stringBuilder.append(TextConverter.toUpperCamelSpaces(source.getName().getText()));
+    stringBuilder.append(TextConverter.toUpperCamelSpaces(source.getObjectName().getText()));
     stringBuilder.append(" Implementation.");
 
     ConstructorRepresentation constructorRepresentation =
@@ -115,7 +116,7 @@ public class PersistenceImplClassRepresentable extends AbstractClassRepresentabl
   @Override
   public Set<String> imports(Persistence source, Object... args) {
     PackageName rootPackageName = (PackageName) args[0];
-    Name contextName = (Name) args[1];
+    ObjectName contextName = (ObjectName) args[1];
 
     Set<String> imports = new TreeSet<>();
 
@@ -146,7 +147,7 @@ public class PersistenceImplClassRepresentable extends AbstractClassRepresentabl
 
     stringBuilder.append("The ");
 
-    stringBuilder.append(TextConverter.toUpperCamelSpaces(source.getName().getText()));
+    stringBuilder.append(TextConverter.toUpperCamelSpaces(source.getObjectName().getText()));
 
     stringBuilder.append(" Implementation.");
 
@@ -162,7 +163,7 @@ public class PersistenceImplClassRepresentable extends AbstractClassRepresentabl
   public String simpleObjectName(Persistence source, Object... args) {
     StringBuilder stringBuilder = new StringBuilder();
 
-    stringBuilder.append(TextConverter.toLowerCamel(source.getName().getText()));
+    stringBuilder.append(TextConverter.toLowerCamel(source.getObjectName().getText()));
     stringBuilder.append("Impl");
 
     return stringBuilder.toString();
@@ -172,7 +173,7 @@ public class PersistenceImplClassRepresentable extends AbstractClassRepresentabl
   public String fullObjectName(Persistence source, Object... args) {
     StringBuilder stringBuilder = new StringBuilder();
 
-    stringBuilder.append(TextConverter.toUpperCamel(source.getName().getText()));
+    stringBuilder.append(TextConverter.toUpperCamel(source.getObjectName().getText()));
     stringBuilder.append("Impl");
 
     if (source.getMultiTenant()) {
@@ -181,16 +182,18 @@ public class PersistenceImplClassRepresentable extends AbstractClassRepresentabl
       stringBuilder.append("\n\t\textends AbstractJpaPersistence<");
     }
 
-    Name contextName = (Name) args[1];
+    ObjectName contextName = (ObjectName) args[1];
     String context = TextConverter.toUpperCamel(contextName.getText());
 
     stringBuilder.append(
-        "\n\t\t" + TextConverter.toUpperCamel(source.getAggregateRootName().getText()) + ",");
+        "\n\t\t" + TextConverter.toUpperCamel(source.getAggregateRootObjectName().getText()) + ",");
     stringBuilder.append(
-        "\n\t\t" + TextConverter.toUpperCamel(source.getAggregateRootName().getText()) + "Id,");
+        "\n\t\t"
+            + TextConverter.toUpperCamel(source.getAggregateRootObjectName().getText())
+            + "Id,");
     stringBuilder.append("\n\t\t" + context + "DomainMessageData>");
     stringBuilder.append("\n\t\timplements ");
-    stringBuilder.append(TextConverter.toUpperCamel(source.getName().getText()));
+    stringBuilder.append(TextConverter.toUpperCamel(source.getObjectName().getText()));
 
     return stringBuilder.toString();
   }

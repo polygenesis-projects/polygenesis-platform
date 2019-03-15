@@ -38,7 +38,7 @@ import java.util.LinkedHashSet;
 public abstract class AbstractReactiveStateTest {
 
   protected Thing createThing() {
-    Thing thing = new ThingBuilder().setThingName(new ThingName("someThing")).createThing();
+    Thing thing = ThingBuilder.generic().setThingName(new ThingName("someThing")).createThing();
 
     // =============================================================================================
     // CREATE

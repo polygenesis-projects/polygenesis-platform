@@ -47,16 +47,16 @@ public abstract class ServiceImplementationMethodShared {
     StringBuilder stringBuilder = new StringBuilder();
 
     stringBuilder.append("\t\t");
-    stringBuilder.append(TextConverter.toUpperCamelSpaces(aggregateRoot.getName().getText()));
+    stringBuilder.append(TextConverter.toUpperCamel(aggregateRoot.getObjectName().getText()));
     stringBuilder.append(" ");
-    stringBuilder.append(TextConverter.toLowerCamel(aggregateRoot.getName().getText()));
+    stringBuilder.append(TextConverter.toLowerCamel(aggregateRoot.getObjectName().getText()));
     stringBuilder.append(" = ");
-    stringBuilder.append(TextConverter.toLowerCamel(aggregateRoot.getName().getText()));
+    stringBuilder.append(TextConverter.toLowerCamel(aggregateRoot.getObjectName().getText()));
     stringBuilder.append("Persistence");
     stringBuilder.append(".restore(");
     stringBuilder.append(constructNewAggregateRootIdFromArgument(method, aggregateRoot));
     stringBuilder.append(").orElseThrow(() -> new IllegalArgumentException(\"Cannot restore ");
-    stringBuilder.append(TextConverter.toUpperCamelSpaces(aggregateRoot.getName().getText()));
+    stringBuilder.append(TextConverter.toUpperCamel(aggregateRoot.getObjectName().getText()));
     stringBuilder.append("\"));");
     stringBuilder.append("\n");
 
@@ -91,7 +91,7 @@ public abstract class ServiceImplementationMethodShared {
 
     stringBuilder.append("new");
     stringBuilder.append(" ");
-    stringBuilder.append(TextConverter.toUpperCamel(aggregateRoot.getName().getText()));
+    stringBuilder.append(TextConverter.toUpperCamel(aggregateRoot.getObjectName().getText()));
     stringBuilder.append("Id");
     stringBuilder.append("(");
     stringBuilder.append("UUID.fromString(");

@@ -21,8 +21,11 @@
 package io.polygenesis.core;
 
 import com.oregor.ddd4j.check.assertion.Assertion;
+import io.polygenesis.commons.valueobjects.ContextName;
+import io.polygenesis.commons.valueobjects.PackageName;
 import java.util.LinkedHashSet;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -42,11 +45,14 @@ public class Thing {
 
   private ThingScopeType thingScopeType;
   private ThingBusinessType thingBusinessType;
+  private ContextName contextName;
   private ThingName thingName;
   private Set<ThingProperty> thingProperties;
   private Set<Function> functions;
   private Boolean multiTenant;
   private Set<Thing> children;
+  private Set<Thing> virtualChildren;
+  private Optional<Thing> optionalParent;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -61,9 +67,11 @@ public class Thing {
     this(
         ThingScopeType.ACROSS_LAYERS,
         ThingBusinessType.ANY,
+        ContextName.defaultContext(),
         thingName,
         new LinkedHashSet<>(),
-        false);
+        false,
+        Optional.empty());
   }
 
   /**
@@ -76,9 +84,11 @@ public class Thing {
     this(
         ThingScopeType.ACROSS_LAYERS,
         ThingBusinessType.ANY,
+        ContextName.defaultContext(),
         thingName,
         new LinkedHashSet<>(),
-        multiTenant);
+        multiTenant,
+        Optional.empty());
   }
 
   /**
@@ -91,9 +101,11 @@ public class Thing {
     this(
         ThingScopeType.ACROSS_LAYERS,
         ThingBusinessType.ANY,
+        ContextName.defaultContext(),
         thingName,
         new LinkedHashSet<>(),
-        parentThing.getMultiTenant());
+        parentThing.getMultiTenant(),
+        Optional.empty());
   }
 
   /**
@@ -101,6 +113,7 @@ public class Thing {
    *
    * @param thingScopeType the thing scope type
    * @param thingBusinessType the thing business type
+   * @param contextName the context name
    * @param thingName the name
    * @param thingProperties the thing properties
    * @param multiTenant the multi tenant
@@ -108,21 +121,35 @@ public class Thing {
   public Thing(
       ThingScopeType thingScopeType,
       ThingBusinessType thingBusinessType,
+      ContextName contextName,
       ThingName thingName,
       Set<ThingProperty> thingProperties,
-      Boolean multiTenant) {
+      Boolean multiTenant,
+      Optional<Thing> optionalParent) {
     setThingScopeType(thingScopeType);
     setThingBusinessType(thingBusinessType);
+    setContextName(contextName);
     setThingName(thingName);
     setThingProperties(thingProperties);
     setFunctions(new LinkedHashSet<>());
     setMultiTenant(multiTenant);
     setChildren(new LinkedHashSet<>());
+    setVirtualChildren(new LinkedHashSet<>());
+    setOptionalParent(optionalParent);
   }
 
   // ===============================================================================================
   // STATE MUTATION
   // ===============================================================================================
+
+  /**
+   * Assign thing properties.
+   *
+   * @param thingProperties the thing properties
+   */
+  public void assignThingProperties(Set<ThingProperty> thingProperties) {
+    setThingProperties(thingProperties);
+  }
 
   /**
    * Add function.
@@ -148,12 +175,64 @@ public class Thing {
    * @param thing the thing
    */
   public void addChild(Thing thing) {
+    Assertion.isTrue(
+        thing
+            .getOptionalParent()
+            .orElseThrow(
+                () ->
+                    new IllegalArgumentException(
+                        String.format(
+                            "The parent of %s is not set", thing.getThingName().getText())))
+            .equals(this),
+        String.format(
+            "The parent of %s is not set equal to %s",
+            thing.getThingName().getText(), getThingName().getText()));
+
     getChildren().add(thing);
   }
 
+  /**
+   * Add virtual child.
+   *
+   * @param thing the thing
+   */
+  public void addVirtualChild(Thing thing) {
+    Assertion.isTrue(
+        thing
+            .getOptionalParent()
+            .orElseThrow(
+                () ->
+                    new IllegalArgumentException(
+                        String.format(
+                            "The parent of %s is not set", thing.getThingName().getText())))
+            .equals(this),
+        String.format(
+            "The parent of %s is not set equal to %s",
+            thing.getThingName().getText(), getThingName().getText()));
+
+    getVirtualChildren().add(thing);
+  }
+
   // ===============================================================================================
-  // QUERIES
+  // FACTORY
   // ===============================================================================================
+
+  /**
+   * Make package name package name.
+   *
+   * @param rootPackageName the root package name
+   * @param thing the thing
+   * @return the package name
+   */
+  public PackageName makePackageName(PackageName rootPackageName, Thing thing) {
+    if (thing.getOptionalParent().isPresent()) {
+      return makePackageName(rootPackageName, thing.getOptionalParent().get());
+    }
+
+    return new PackageName(
+        String.format(
+            "%s.%s", rootPackageName.getText(), thing.getThingName().getText().toLowerCase()));
+  }
 
   // ===============================================================================================
   // GETTERS
@@ -175,6 +254,15 @@ public class Thing {
    */
   public ThingBusinessType getThingBusinessType() {
     return thingBusinessType;
+  }
+
+  /**
+   * Gets context name.
+   *
+   * @return the context name
+   */
+  public ContextName getContextName() {
+    return contextName;
   }
 
   /**
@@ -222,6 +310,24 @@ public class Thing {
     return children;
   }
 
+  /**
+   * Gets virtual children.
+   *
+   * @return the virtual children
+   */
+  public Set<Thing> getVirtualChildren() {
+    return virtualChildren;
+  }
+
+  /**
+   * Gets optional parent.
+   *
+   * @return the optional parent
+   */
+  public Optional<Thing> getOptionalParent() {
+    return optionalParent;
+  }
+
   // ===============================================================================================
   // GUARDS
   // ===============================================================================================
@@ -244,6 +350,15 @@ public class Thing {
   private void setThingBusinessType(ThingBusinessType thingBusinessType) {
     Assertion.isNotNull(thingBusinessType, "thingBusinessType is required");
     this.thingBusinessType = thingBusinessType;
+  }
+
+  /**
+   * Sets context name.
+   *
+   * @param contextName the context name
+   */
+  private void setContextName(ContextName contextName) {
+    this.contextName = contextName;
   }
 
   /**
@@ -296,6 +411,26 @@ public class Thing {
     this.children = children;
   }
 
+  /**
+   * Sets virtual children.
+   *
+   * @param virtualChildren the virtual children
+   */
+  private void setVirtualChildren(Set<Thing> virtualChildren) {
+    Assertion.isNotNull(virtualChildren, "virtualChildren is required");
+    this.virtualChildren = virtualChildren;
+  }
+
+  /**
+   * Sets optional parent.
+   *
+   * @param optionalParent the optional parent
+   */
+  private void setOptionalParent(Optional<Thing> optionalParent) {
+    Assertion.isNotNull(optionalParent, "optionalParent is required");
+    this.optionalParent = optionalParent;
+  }
+
   // ===============================================================================================
   // OVERRIDES
   // ===============================================================================================
@@ -311,15 +446,24 @@ public class Thing {
     Thing thing = (Thing) o;
     return thingScopeType == thing.thingScopeType
         && thingBusinessType == thing.thingBusinessType
+        && Objects.equals(contextName, thing.contextName)
         && Objects.equals(thingName, thing.thingName)
         && Objects.equals(thingProperties, thing.thingProperties)
         && Objects.equals(multiTenant, thing.multiTenant)
-        && Objects.equals(children, thing.children);
+        && Objects.equals(children, thing.children)
+        && Objects.equals(virtualChildren, thing.virtualChildren);
   }
 
   @Override
   public int hashCode() {
     return Objects.hash(
-        thingScopeType, thingBusinessType, thingName, thingProperties, multiTenant, children);
+        thingScopeType,
+        thingBusinessType,
+        contextName,
+        thingName,
+        thingProperties,
+        multiTenant,
+        children,
+        virtualChildren);
   }
 }

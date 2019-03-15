@@ -22,6 +22,7 @@ package io.polygenesis.models.api;
 
 import static java.util.stream.Collectors.toCollection;
 
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.Argument;
 import io.polygenesis.core.Function;
 import io.polygenesis.core.data.Data;
@@ -46,9 +47,10 @@ public class DtoDeducer {
    * Deduce request dto dto.
    *
    * @param function the function
+   * @param rootPackageName the root package name
    * @return the dto
    */
-  public Dto deduceRequestDto(Function function) {
+  public Dto deduceRequestDto(Function function, PackageName rootPackageName) {
 
     if (function.getArguments() == null || function.getArguments().isEmpty()) {
       throw new IllegalArgumentException(
@@ -83,7 +85,13 @@ public class DtoDeducer {
       dtoType = DtoType.API_REQUEST;
     }
 
-    Dto dto = new Dto(dtoType, argument.getData().getAsDataGroup());
+    Dto dto =
+        new Dto(
+            dtoType,
+            argument.getData().getAsDataGroup().getObjectName(),
+            function.getThing().makePackageName(rootPackageName, function.getThing()),
+            argument.getData().getAsDataGroup().getModels(),
+            argument.getData().getAsDataGroup());
 
     makeAssertionsForRequestDto(dto, function);
 
@@ -94,9 +102,10 @@ public class DtoDeducer {
    * Deduce response dto dto.
    *
    * @param function the function
+   * @param rootPackageName the root package name
    * @return the dto
    */
-  public Dto deduceResponseDto(Function function) {
+  public Dto deduceResponseDto(Function function, PackageName rootPackageName) {
 
     if (function.getReturnValue() == null) {
       throw new IllegalArgumentException(
@@ -121,7 +130,13 @@ public class DtoDeducer {
       dtoType = DtoType.API_RESPONSE;
     }
 
-    Dto dto = new Dto(dtoType, function.getReturnValue().getData().getAsDataGroup());
+    Dto dto =
+        new Dto(
+            dtoType,
+            function.getReturnValue().getData().getAsDataGroup().getObjectName(),
+            function.getThing().makePackageName(rootPackageName, function.getThing()),
+            function.getReturnValue().getData().getAsDataGroup().getModels(),
+            function.getReturnValue().getData().getAsDataGroup());
 
     makeAssertionsForResponseDto(dto, function);
 
@@ -132,17 +147,18 @@ public class DtoDeducer {
    * Deduce set.
    *
    * @param methods the methods
+   * @param rootPackageName the root package name
    * @return the set
    */
-  public Set<Dto> deduceAllDtosInMethods(Set<Method> methods) {
+  public Set<Dto> deduceAllDtosInMethods(Set<Method> methods, PackageName rootPackageName) {
     Set<Dto> dtos = new LinkedHashSet<>();
 
     methods
         .stream()
         .forEach(
             method -> {
-              addDto(dtos, method.getRequestDto());
-              addDto(dtos, method.getResponseDto());
+              addDto(dtos, method.getRequestDto(), rootPackageName);
+              addDto(dtos, method.getResponseDto(), rootPackageName);
             });
 
     return dtos;
@@ -158,13 +174,21 @@ public class DtoDeducer {
    * @param dtos the dtos
    * @param dto the dto
    */
-  private void addDto(Set<Dto> dtos, Dto dto) {
+  private void addDto(Set<Dto> dtos, Dto dto, PackageName rootPackageName) {
     dtos.add(dto);
 
     if (dto.getArrayElementAsOptional().isPresent()) {
       Data arrayElement = dto.getArrayElementAsOptional().get();
       if (arrayElement.isDataGroup()) {
-        addDto(dtos, new Dto(DtoType.COLLECTION_RECORD, (DataGroup) arrayElement));
+        addDto(
+            dtos,
+            new Dto(
+                DtoType.COLLECTION_RECORD,
+                arrayElement.getAsDataGroup().getObjectName(),
+                dto.getPackageName(),
+                arrayElement.getAsDataGroup().getModels(),
+                (DataGroup) arrayElement),
+            rootPackageName);
       }
     }
 
@@ -176,12 +200,23 @@ public class DtoDeducer {
               // TODO
               // if (model.isDataGroup() || model.isDataArray()) {
               if (model.isDataGroup()) {
+                DtoType dtoType;
                 if (dto.getDtoType().equals(DtoType.API_COLLECTION_REQUEST)
                     || dto.getDtoType().equals(DtoType.API_PAGED_COLLECTION_REQUEST)) {
-                  addDto(dtos, new Dto(DtoType.COLLECTION_RECORD, (DataGroup) model));
+                  dtoType = DtoType.COLLECTION_RECORD;
                 } else {
-                  addDto(dtos, new Dto(DtoType.INTERNAL, (DataGroup) model));
+                  dtoType = DtoType.INTERNAL;
                 }
+
+                addDto(
+                    dtos,
+                    new Dto(
+                        dtoType,
+                        model.getAsDataGroup().getObjectName(),
+                        dto.getPackageName(),
+                        model.getAsDataGroup().getModels(),
+                        model.getAsDataGroup()),
+                    rootPackageName);
               }
             });
   }

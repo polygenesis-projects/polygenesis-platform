@@ -22,6 +22,8 @@ package io.polygenesis.core.dsl;
 
 import io.polygenesis.annotations.core.GoalType;
 import io.polygenesis.commons.text.TextConverter;
+import io.polygenesis.commons.valueobjects.ObjectName;
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.Argument;
 import io.polygenesis.core.Function;
 import io.polygenesis.core.FunctionName;
@@ -35,8 +37,6 @@ import io.polygenesis.core.data.DataArray;
 import io.polygenesis.core.data.DataBusinessType;
 import io.polygenesis.core.data.DataGroup;
 import io.polygenesis.core.data.DataPrimitive;
-import io.polygenesis.core.data.ObjectName;
-import io.polygenesis.core.data.PackageName;
 import io.polygenesis.core.data.PrimitiveType;
 import io.polygenesis.core.data.VariableName;
 import java.util.Arrays;
@@ -57,14 +57,20 @@ public class ExperimentalThingBuilder {
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
-  private ExperimentalThingBuilder(String thingName, String rootPackageName, Boolean multiTenant) {
+  private ExperimentalThingBuilder(
+      String thingName, String parentThingName, String rootPackageName, Boolean multiTenant) {
     this.thing =
-        new ThingBuilder()
+        ThingBuilder.generic()
             .setThingName(new ThingName(thingName))
             .setMultiTenant(multiTenant)
             .createThing();
+
     this.packageName =
-        new PackageName(String.format("%s.%s", rootPackageName, thingName.toLowerCase()));
+        new PackageName(
+            String.format(
+                "%s.%s",
+                rootPackageName,
+                parentThingName != null ? parentThingName.toLowerCase() : thingName.toLowerCase()));
   }
 
   // ===============================================================================================
@@ -79,7 +85,20 @@ public class ExperimentalThingBuilder {
    * @return the thing builder
    */
   public static ExperimentalThingBuilder create(String thingName, String rootPackageName) {
-    return new ExperimentalThingBuilder(thingName, rootPackageName, false);
+    return new ExperimentalThingBuilder(thingName, null, rootPackageName, false);
+  }
+
+  /**
+   * Create with parant experimental thing builder.
+   *
+   * @param thingName the thing name
+   * @param parentThingName the parent thing name
+   * @param rootPackageName the root package name
+   * @return the experimental thing builder
+   */
+  public static ExperimentalThingBuilder createWithParant(
+      String thingName, String parentThingName, String rootPackageName) {
+    return new ExperimentalThingBuilder(thingName, parentThingName, rootPackageName, false);
   }
 
   /**
@@ -91,7 +110,7 @@ public class ExperimentalThingBuilder {
    */
   public static ExperimentalThingBuilder createMultiTenant(
       String thingName, String rootPackageName) {
-    return new ExperimentalThingBuilder(thingName, rootPackageName, true);
+    return new ExperimentalThingBuilder(thingName, null, rootPackageName, true);
   }
 
   /**

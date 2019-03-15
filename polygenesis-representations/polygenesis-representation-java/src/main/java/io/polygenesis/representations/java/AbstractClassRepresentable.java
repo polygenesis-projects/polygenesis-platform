@@ -23,8 +23,8 @@ package io.polygenesis.representations.java;
 import static java.util.stream.Collectors.toCollection;
 
 import io.polygenesis.commons.text.TextConverter;
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.data.DataGroup;
-import io.polygenesis.core.data.PackageName;
 import io.polygenesis.representations.commons.FieldRepresentation;
 import io.polygenesis.representations.commons.ParameterRepresentation;
 import java.util.Arrays;

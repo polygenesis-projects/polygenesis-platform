@@ -23,6 +23,7 @@ package io.polygenesis.models.api;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.Function;
 import io.polygenesis.core.FunctionName;
 import io.polygenesis.core.Thing;
@@ -33,11 +34,13 @@ import org.junit.Test;
 /** @author Christos Tsakostas */
 public class DtoDeducerTest {
 
+  private PackageName rootPackageName;
   private Thing thing;
   private DtoDeducer dtoDeducer;
 
   @Before
   public void setUp() {
+    rootPackageName = new PackageName("com.oregor");
     thing = ThingForTesting.create();
     dtoDeducer = new DtoDeducer();
   }
@@ -46,7 +49,7 @@ public class DtoDeducerTest {
   public void shouldSuccessfullyDeduceRequestDto() {
     Function function = getThingFunction("create");
 
-    Dto dtoRequest = dtoDeducer.deduceRequestDto(function);
+    Dto dtoRequest = dtoDeducer.deduceRequestDto(function, rootPackageName);
     assertThat(dtoRequest).isNotNull();
   }
 
@@ -54,7 +57,7 @@ public class DtoDeducerTest {
   public void shouldFailToDeduceRequestDtoForNoArguments() {
     Function function = getThingFunction("functionWithNoArguments");
 
-    assertThatThrownBy(() -> dtoDeducer.deduceRequestDto(function))
+    assertThatThrownBy(() -> dtoDeducer.deduceRequestDto(function, rootPackageName))
         .isInstanceOf(IllegalArgumentException.class);
   }
 
@@ -62,7 +65,7 @@ public class DtoDeducerTest {
   public void shouldFailToDeduceRequestDtoForMoreThanOneArguments() {
     Function function = getThingFunction("functionWithNoReturnValueAndManyArguments");
 
-    assertThatThrownBy(() -> dtoDeducer.deduceRequestDto(function))
+    assertThatThrownBy(() -> dtoDeducer.deduceRequestDto(function, rootPackageName))
         .isInstanceOf(IllegalArgumentException.class);
   }
 
@@ -70,7 +73,7 @@ public class DtoDeducerTest {
   public void shouldFailToDeduceRequestDtoForOneArgumentWhichIsNotDataGroup() {
     Function function = getThingFunction("functionWithPrimitives");
 
-    assertThatThrownBy(() -> dtoDeducer.deduceRequestDto(function))
+    assertThatThrownBy(() -> dtoDeducer.deduceRequestDto(function, rootPackageName))
         .isInstanceOf(IllegalArgumentException.class);
   }
 
@@ -84,7 +87,7 @@ public class DtoDeducerTest {
             .findFirst()
             .orElseThrow(IllegalArgumentException::new);
 
-    Dto dtoResponse = dtoDeducer.deduceResponseDto(function);
+    Dto dtoResponse = dtoDeducer.deduceResponseDto(function, rootPackageName);
     assertThat(dtoResponse).isNotNull();
   }
 
@@ -92,7 +95,7 @@ public class DtoDeducerTest {
   public void shouldFailToDeduceResponseDtoForNullReturnValue() {
     Function function = getThingFunction("functionWithNoReturnValueAndManyArguments");
 
-    assertThatThrownBy(() -> dtoDeducer.deduceResponseDto(function))
+    assertThatThrownBy(() -> dtoDeducer.deduceResponseDto(function, rootPackageName))
         .isInstanceOf(IllegalArgumentException.class);
   }
 
@@ -100,7 +103,7 @@ public class DtoDeducerTest {
   public void shouldFailToDeduceResponseDtoForReturnValueWhichIsNotDataGroup() {
     Function function = getThingFunction("functionWithPrimitives");
 
-    assertThatThrownBy(() -> dtoDeducer.deduceResponseDto(function))
+    assertThatThrownBy(() -> dtoDeducer.deduceResponseDto(function, rootPackageName))
         .isInstanceOf(IllegalArgumentException.class);
   }
 

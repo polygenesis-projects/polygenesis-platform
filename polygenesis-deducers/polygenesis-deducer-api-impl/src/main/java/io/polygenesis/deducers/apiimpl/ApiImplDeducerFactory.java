@@ -20,7 +20,7 @@
 
 package io.polygenesis.deducers.apiimpl;
 
-import io.polygenesis.core.data.PackageName;
+import io.polygenesis.commons.valueobjects.PackageName;
 
 /**
  * The type Api impl deducer factory.

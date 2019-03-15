@@ -20,7 +20,7 @@
 
 package io.polygenesis.models.domain;
 
-import io.polygenesis.core.data.PackageName;
+import io.polygenesis.commons.valueobjects.PackageName;
 
 /**
  * The type Domain service deducer factory.

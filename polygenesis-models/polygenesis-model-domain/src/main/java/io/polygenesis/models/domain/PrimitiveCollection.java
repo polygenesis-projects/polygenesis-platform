@@ -20,26 +20,15 @@
 
 package io.polygenesis.models.domain;
 
-import com.oregor.ddd4j.check.assertion.Assertion;
 import io.polygenesis.core.data.Data;
 import io.polygenesis.core.data.DataArray;
-import io.polygenesis.core.data.PrimitiveType;
-import io.polygenesis.core.data.VariableName;
-import java.util.Objects;
 
 /**
  * The type Primitive collection.
  *
  * @author Christos Tsakostas
  */
-public class PrimitiveCollection extends AbstractProperty {
-
-  // ===============================================================================================
-  // STATE
-  // ===============================================================================================
-
-  private DataArray originatingDataArray;
-  private PrimitiveType primitiveType;
+public class PrimitiveCollection extends BaseProperty<DataArray> {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -48,61 +37,10 @@ public class PrimitiveCollection extends AbstractProperty {
   /**
    * Instantiates a new Primitive collection.
    *
-   * @param originatingDataArray the originating data array
-   * @param variableName the variable name
-   * @param primitiveType the primitive type
+   * @param data the data
    */
-  public PrimitiveCollection(
-      DataArray originatingDataArray, VariableName variableName, PrimitiveType primitiveType) {
-    super(PropertyType.PRIMITIVE_COLLECTION, variableName);
-    setOriginatingDataArray(originatingDataArray);
-    setPrimitiveType(primitiveType);
-  }
-
-  // ===============================================================================================
-  // GETTERS
-  // ===============================================================================================
-
-  /**
-   * Gets originating data array.
-   *
-   * @return the originating data array
-   */
-  public DataArray getOriginatingDataArray() {
-    return originatingDataArray;
-  }
-
-  /**
-   * Gets primitive type.
-   *
-   * @return the primitive type
-   */
-  public PrimitiveType getPrimitiveType() {
-    return primitiveType;
-  }
-
-  // ===============================================================================================
-  // GUARDS
-  // ===============================================================================================
-
-  /**
-   * Sets originating data array.
-   *
-   * @param originatingDataArray the originating data array
-   */
-  private void setOriginatingDataArray(DataArray originatingDataArray) {
-    Assertion.isNotNull(originatingDataArray, "originatingDataArray is required");
-    this.originatingDataArray = originatingDataArray;
-  }
-
-  /**
-   * Sets primitive type.
-   *
-   * @param primitiveType the primitive type
-   */
-  private void setPrimitiveType(PrimitiveType primitiveType) {
-    Assertion.isNotNull(primitiveType, "primitiveType is required");
-    this.primitiveType = primitiveType;
+  public PrimitiveCollection(DataArray data) {
+    super(PropertyType.PRIMITIVE_COLLECTION, data);
   }
 
   // ===============================================================================================
@@ -110,34 +48,7 @@ public class PrimitiveCollection extends AbstractProperty {
   // ===============================================================================================
 
   @Override
-  public Data getData() {
-    return getOriginatingDataArray();
-  }
-
-  @Override
   public Data getTypeParameterData() {
-    return getOriginatingDataArray().getArrayElement();
-  }
-
-  // ===============================================================================================
-  // OVERRIDES
-  // ===============================================================================================
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    PrimitiveCollection that = (PrimitiveCollection) o;
-    return Objects.equals(originatingDataArray, that.originatingDataArray)
-        && primitiveType == that.primitiveType;
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(originatingDataArray, primitiveType);
+    return getData().getArrayElement();
   }
 }

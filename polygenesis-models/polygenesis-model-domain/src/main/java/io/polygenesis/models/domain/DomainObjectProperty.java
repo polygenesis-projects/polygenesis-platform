@@ -18,27 +18,38 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.core.data;
+package io.polygenesis.models.domain;
 
-import io.polygenesis.commons.text.AbstractText;
+import io.polygenesis.core.data.Data;
 
 /**
- * The type Object name.
+ * The interface DomainObjectProperty.
  *
+ * @param <T> the type parameter
  * @author Christos Tsakostas
  */
-public class ObjectName extends AbstractText {
-
-  // ===============================================================================================
-  // CONSTRUCTOR(S)
-  // ===============================================================================================
+public interface DomainObjectProperty<T extends Data> {
 
   /**
-   * Instantiates a new Object name.
+   * Gets property type.
    *
-   * @param text the text
+   * @return the property type
    */
-  public ObjectName(String text) {
-    super(text);
-  }
+  PropertyType getPropertyType();
+
+  /**
+   * Gets data.
+   *
+   * @return the data
+   */
+  T getData();
+
+  /**
+   * Gets data related to type parameter.
+   *
+   * <p>Applies only to collections.
+   *
+   * @return the type parameter data
+   */
+  Data getTypeParameterData();
 }

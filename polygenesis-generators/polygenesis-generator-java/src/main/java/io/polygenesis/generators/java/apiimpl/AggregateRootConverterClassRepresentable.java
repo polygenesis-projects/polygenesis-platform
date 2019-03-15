@@ -21,6 +21,7 @@
 package io.polygenesis.generators.java.apiimpl;
 
 import io.polygenesis.commons.text.TextConverter;
+import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.core.Argument;
 import io.polygenesis.core.Function;
 import io.polygenesis.core.FunctionName;
@@ -30,7 +31,6 @@ import io.polygenesis.core.Thing;
 import io.polygenesis.core.ThingBuilder;
 import io.polygenesis.core.ThingName;
 import io.polygenesis.core.data.DataGroup;
-import io.polygenesis.core.data.ObjectName;
 import io.polygenesis.models.apiimpl.AggregateRootConverter;
 import io.polygenesis.models.domain.AggregateRoot;
 import io.polygenesis.representations.commons.FieldRepresentation;
@@ -126,18 +126,18 @@ public class AggregateRootConverterClassRepresentable
             valueObjectFromDto -> {
               if (!valueObjectFromDto
                   .getValueObject()
-                  .getDataGroup()
+                  .getData()
                   .getPackageName()
                   .equals(source.getPackageName())) {
 
                 StringBuilder stringBuilder = new StringBuilder();
 
                 stringBuilder.append(
-                    valueObjectFromDto.getValueObject().getDataGroup().getPackageName().getText());
+                    valueObjectFromDto.getValueObject().getData().getPackageName().getText());
                 stringBuilder.append(".");
                 stringBuilder.append(
                     TextConverter.toUpperCamel(
-                        valueObjectFromDto.getValueObject().getVariableName().getText()));
+                        valueObjectFromDto.getValueObject().getData().getVariableName().getText()));
 
                 imports.add(stringBuilder.toString());
               }
@@ -228,7 +228,7 @@ public class AggregateRootConverterClassRepresentable
         .forEach(
             valueObjectFromDto -> {
               Thing thing =
-                  new ThingBuilder().setThingName(new ThingName("Converter")).createThing();
+                  ThingBuilder.generic().setThingName(new ThingName("Converter")).createThing();
               Goal goal = new Goal("CONVERT");
 
               Function function =
@@ -239,7 +239,7 @@ public class AggregateRootConverterClassRepresentable
                       new LinkedHashSet<>(
                           Arrays.asList(
                               new Argument(valueObjectFromDto.getDto().getOriginatingDataGroup()))),
-                      new ReturnValue(valueObjectFromDto.getValueObject().getDataGroup()));
+                      new ReturnValue(valueObjectFromDto.getValueObject().getData()));
 
               functions.add(function);
             });
@@ -303,7 +303,8 @@ public class AggregateRootConverterClassRepresentable
 
     DataGroup dataGroup =
         new DataGroup(
-            new ObjectName(aggregateRoot.getName().getText()), aggregateRoot.getPackageName());
+            new ObjectName(aggregateRoot.getObjectName().getText()),
+            aggregateRoot.getPackageName());
 
     aggregateRoot.getProperties().forEach(property -> dataGroup.addData(property.getData()));
 
@@ -319,7 +320,7 @@ public class AggregateRootConverterClassRepresentable
    */
   private Function makeFunction(Set<Argument> arguments, ReturnValue returnValue) {
 
-    Thing thing = new ThingBuilder().setThingName(new ThingName("Converter")).createThing();
+    Thing thing = ThingBuilder.generic().setThingName(new ThingName("Converter")).createThing();
     Goal goal = new Goal("CONVERT");
 
     return new Function(

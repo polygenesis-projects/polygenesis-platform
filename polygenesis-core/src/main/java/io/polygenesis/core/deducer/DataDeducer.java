@@ -20,6 +20,8 @@
 
 package io.polygenesis.core.deducer;
 
+import io.polygenesis.commons.valueobjects.ObjectName;
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.data.Data;
 import io.polygenesis.core.data.DataArray;
 import io.polygenesis.core.data.DataBusinessType;
@@ -27,8 +29,6 @@ import io.polygenesis.core.data.DataGroup;
 import io.polygenesis.core.data.DataPrimitive;
 import io.polygenesis.core.data.DataSource;
 import io.polygenesis.core.data.DataValidator;
-import io.polygenesis.core.data.ObjectName;
-import io.polygenesis.core.data.PackageName;
 import io.polygenesis.core.data.PrimitiveType;
 import io.polygenesis.core.data.VariableName;
 import java.lang.annotation.Annotation;

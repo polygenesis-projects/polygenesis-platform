@@ -20,18 +20,17 @@
 
 package io.polygenesis.models.domain;
 
-import io.polygenesis.commons.text.Name;
-import io.polygenesis.core.data.PackageName;
+import io.polygenesis.commons.valueobjects.ObjectName;
+import io.polygenesis.commons.valueobjects.PackageName;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * The type Domain event.
  *
  * @author Christos Tsakostas
  */
-public class DomainEvent {
-
-  private PackageName packageName;
-  private Name name;
+public class DomainEvent extends BaseDomainObject<DomainEvent> {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -40,55 +39,33 @@ public class DomainEvent {
   /**
    * Instantiates a new Domain event.
    *
+   * @param instantiationType the instantiation type
+   * @param optionalSuperClass the optional super class
+   * @param objectName the object name
    * @param packageName the package name
-   * @param name the name
+   * @param properties the properties
+   * @param constructors the constructors
    */
-  public DomainEvent(PackageName packageName, Name name) {
-    setPackageName(packageName);
-    setName(name);
+  public DomainEvent(
+      InstantiationType instantiationType,
+      Optional<DomainEvent> optionalSuperClass,
+      ObjectName objectName,
+      PackageName packageName,
+      Set<DomainObjectProperty> properties,
+      Set<Constructor> constructors,
+      Boolean multiTenant) {
+    super(
+        DomainObjectType.DOMAIN_EVENT,
+        instantiationType,
+        optionalSuperClass,
+        objectName,
+        packageName,
+        properties,
+        constructors,
+        multiTenant);
   }
 
   // ===============================================================================================
-  // GETTERS
+  // IMPLEMENTATIONS
   // ===============================================================================================
-
-  /**
-   * Gets package name.
-   *
-   * @return the package name
-   */
-  public PackageName getPackageName() {
-    return packageName;
-  }
-
-  /**
-   * Gets name.
-   *
-   * @return the name
-   */
-  public Name getName() {
-    return name;
-  }
-
-  // ===============================================================================================
-  // GUARDS
-  // ===============================================================================================
-
-  /**
-   * Sets package name.
-   *
-   * @param packageName the package name
-   */
-  private void setPackageName(PackageName packageName) {
-    this.packageName = packageName;
-  }
-
-  /**
-   * Sets name.
-   *
-   * @param name the name
-   */
-  private void setName(Name name) {
-    this.name = name;
-  }
 }

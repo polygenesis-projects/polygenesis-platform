@@ -83,7 +83,7 @@ public class ThingScanner {
     GFunction annotationGFunction = AnnotationUtils.findAnnotation(method, GFunction.class);
     if (annotationGFunction != null) {
       Thing thing =
-          new ThingBuilder()
+          ThingBuilder.generic()
               .setThingName(new ThingName(annotationGFunction.thingName()))
               .createThing();
       return Optional.of(thing);

@@ -20,7 +20,7 @@
 
 package io.polygenesis.models.domain;
 
-import io.polygenesis.core.data.PackageName;
+import io.polygenesis.commons.valueobjects.PackageName;
 
 /**
  * The type Domain deducer factory.
@@ -39,11 +39,20 @@ public final class DomainDeducerFactory {
   // ===============================================================================================
 
   static {
-    AggregateRootPropertyDeducer aggregateRootPropertyDeducer = new AggregateRootPropertyDeducer();
+    AggregateEntityPropertyDeducer aggregateEntityPropertyDeducer =
+        new AggregateEntityPropertyDeducer();
+
+    AggregateEntityDeducer aggregateEntityDeducer =
+        new AggregateEntityDeducer(aggregateEntityPropertyDeducer);
+
+    AggregateRootPropertyDeducer aggregateRootPropertyDeducer =
+        new AggregateRootPropertyDeducer(aggregateEntityDeducer);
+
     AggregateConstructorDeducer aggregateConstructorDeducer =
         new AggregateConstructorDeducer(aggregateRootPropertyDeducer);
+
     aggregateRootDeducer =
-        new AggregateRootDeducer(aggregateRootPropertyDeducer, aggregateConstructorDeducer);
+        new AggregateRootDeducer(aggregateConstructorDeducer, aggregateRootPropertyDeducer);
   }
 
   // ===============================================================================================

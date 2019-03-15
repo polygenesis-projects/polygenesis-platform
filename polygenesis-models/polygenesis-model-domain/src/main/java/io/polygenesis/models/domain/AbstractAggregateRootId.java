@@ -22,7 +22,7 @@ package io.polygenesis.models.domain;
 
 import com.oregor.ddd4j.check.assertion.Assertion;
 import io.polygenesis.core.data.Data;
-import io.polygenesis.core.data.VariableName;
+import io.polygenesis.core.data.DataGroup;
 import java.util.Objects;
 
 /**
@@ -30,7 +30,7 @@ import java.util.Objects;
  *
  * @author Christos Tsakostas
  */
-public class AbstractAggregateRootId extends AbstractProperty {
+public class AbstractAggregateRootId extends BaseProperty<DataGroup> {
 
   // ===============================================================================================
   // STATE
@@ -45,12 +45,11 @@ public class AbstractAggregateRootId extends AbstractProperty {
   /**
    * Instantiates a new Abstract aggregate root id.
    *
-   * @param variableName the variable name
+   * @param data the data
    * @param genericTypeParameter the generic type parameter
    */
-  public AbstractAggregateRootId(
-      VariableName variableName, GenericTypeParameter genericTypeParameter) {
-    super(PropertyType.ABSTRACT_AGGREGATE_ROOT_ID, variableName);
+  public AbstractAggregateRootId(DataGroup data, GenericTypeParameter genericTypeParameter) {
+    super(PropertyType.ABSTRACT_AGGREGATE_ROOT_ID, data);
     setGenericTypeParameter(genericTypeParameter);
   }
 
@@ -86,11 +85,6 @@ public class AbstractAggregateRootId extends AbstractProperty {
   // ===============================================================================================
 
   @Override
-  public Data getData() {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
   public Data getTypeParameterData() {
     throw new UnsupportedOperationException();
   }
@@ -107,12 +101,15 @@ public class AbstractAggregateRootId extends AbstractProperty {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
+    if (!super.equals(o)) {
+      return false;
+    }
     AbstractAggregateRootId that = (AbstractAggregateRootId) o;
     return Objects.equals(genericTypeParameter, that.genericTypeParameter);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(genericTypeParameter);
+    return Objects.hash(super.hashCode(), genericTypeParameter);
   }
 }

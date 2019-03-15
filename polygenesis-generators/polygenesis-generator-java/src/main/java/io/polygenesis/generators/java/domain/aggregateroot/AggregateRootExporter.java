@@ -22,7 +22,7 @@ package io.polygenesis.generators.java.domain.aggregateroot;
 
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.data.PackageName;
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.models.domain.AggregateRoot;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -90,6 +90,6 @@ public class AggregateRootExporter {
         generationPath.toString(),
         "src/main/java",
         aggregateRoot.getPackageName().toPath().toString(),
-        TextConverter.toUpperCamel(aggregateRoot.getName().getText()) + ".java");
+        TextConverter.toUpperCamel(aggregateRoot.getObjectName().getText()) + ".java");
   }
 }

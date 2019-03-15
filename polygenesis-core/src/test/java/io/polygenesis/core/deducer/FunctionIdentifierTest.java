@@ -60,7 +60,8 @@ public class FunctionIdentifierTest {
   @Ignore
   @Test
   public void shouldReturnOneGoalWithCustomName() {
-    Thing thing = new ThingBuilder().setThingName(new ThingName("someFancyThing")).createThing();
+    Thing thing =
+        ThingBuilder.generic().setThingName(new ThingName("someFancyThing")).createThing();
     Set<Class<?>> classes = new LinkedHashSet<>();
     classes.add(AnnotatedInterface.class);
 

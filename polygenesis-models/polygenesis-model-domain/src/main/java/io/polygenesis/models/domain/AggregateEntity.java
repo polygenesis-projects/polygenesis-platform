@@ -20,15 +20,25 @@
 
 package io.polygenesis.models.domain;
 
+import io.polygenesis.commons.valueobjects.ObjectName;
+import io.polygenesis.commons.valueobjects.PackageName;
+import io.polygenesis.core.data.Data;
+import io.polygenesis.core.data.DataBusinessType;
 import io.polygenesis.core.data.DataGroup;
+import io.polygenesis.core.data.DataSource;
+import io.polygenesis.core.data.DataValidator;
 import io.polygenesis.core.data.VariableName;
+import java.util.LinkedHashSet;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * The type Aggregate entity.
  *
  * @author Christos Tsakostas
  */
-public class AggregateEntity extends ValueObject {
+public class AggregateEntity extends BaseDomainObject<AggregateEntity>
+    implements DomainObjectProperty<DataGroup> {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -37,13 +47,30 @@ public class AggregateEntity extends ValueObject {
   /**
    * Instantiates a new Aggregate entity.
    *
-   * @param originatingDataGroup the originating data group
-   * @param dataGroup the data group
-   * @param variableName the variable name
+   * @param instantiationType the instantiation type
+   * @param optionalSuperClass the optional super class
+   * @param objectName the object name
+   * @param packageName the package name
+   * @param properties the properties
+   * @param constructors the constructors
    */
   public AggregateEntity(
-      DataGroup originatingDataGroup, DataGroup dataGroup, VariableName variableName) {
-    super(PropertyType.AGGREGATE_ENTITY, originatingDataGroup, dataGroup, variableName);
+      InstantiationType instantiationType,
+      Optional<AggregateEntity> optionalSuperClass,
+      ObjectName objectName,
+      PackageName packageName,
+      Set<DomainObjectProperty> properties,
+      Set<Constructor> constructors,
+      Boolean multiTenant) {
+    super(
+        DomainObjectType.AGGREGATE_ENTITY,
+        instantiationType,
+        optionalSuperClass,
+        objectName,
+        packageName,
+        properties,
+        constructors,
+        multiTenant);
   }
 
   // ===============================================================================================
@@ -54,4 +81,31 @@ public class AggregateEntity extends ValueObject {
   // GUARDS
   // ===============================================================================================
 
+  // ===============================================================================================
+  // IMPLEMENTATIONS
+  // ===============================================================================================
+
+  @Override
+  public PropertyType getPropertyType() {
+    return PropertyType.AGGREGATE_ENTITY;
+  }
+
+  @Override
+  public DataGroup getData() {
+    Set<Data> models = new LinkedHashSet<>();
+
+    return new DataGroup(
+        DataSource.user(),
+        new VariableName(getObjectName().getText()),
+        DataBusinessType.ANY,
+        DataValidator.empty(),
+        getObjectName(),
+        getPackageName(),
+        models);
+  }
+
+  @Override
+  public Data getTypeParameterData() {
+    throw new UnsupportedOperationException();
+  }
 }

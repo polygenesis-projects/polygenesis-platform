@@ -23,6 +23,8 @@ package io.polygenesis.core.data;
 import static java.util.stream.Collectors.toCollection;
 
 import com.oregor.ddd4j.check.assertion.Assertion;
+import io.polygenesis.commons.valueobjects.ObjectName;
+import io.polygenesis.commons.valueobjects.PackageName;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;

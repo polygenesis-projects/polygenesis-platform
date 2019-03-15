@@ -20,11 +20,12 @@
 
 package io.polygenesis.generators.java.rdbms;
 
-import io.polygenesis.commons.text.Name;
+import io.polygenesis.commons.valueobjects.ObjectName;
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.AbstractGenerator;
 import io.polygenesis.core.CoreRegistry;
 import io.polygenesis.core.ModelRepository;
-import io.polygenesis.core.data.PackageName;
+import io.polygenesis.models.domain.AggregateRootPersistable;
 import io.polygenesis.models.domain.DomainModelRepository;
 import java.nio.file.Path;
 import java.util.Set;
@@ -37,16 +38,16 @@ import java.util.Set;
 public class JavaRdbmsGenerator extends AbstractGenerator {
 
   private final PackageName rootPackageName;
-  private final Name contextName;
+  private final ObjectName contextName;
   private final DomainMessageDataExporter domainMessageDataExporter;
   private final DomainMessageDataConverterExporter domainMessageDataConverterExporter;
   private final DomainMessageDataRepositoryExporter domainMessageDataRepositoryExporter;
   private final PersistenceImplExporter persistenceImplExporter;
+  private final PersistenceImplTestExporter persistenceImplTestExporter;
   private final SpringDataRepositoryExporter springDataRepositoryExporter;
   private final RdbmsTestExporter rdbmsTestExporter;
   private final RdbmsTestConfigExporter rdbmsTestConfigExporter;
-
-  private DomainModelRepository domainModelRepository;
+  private final ApplicationCiRdbmsYmlExporter applicationCiRdbmsYmlExporter;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -62,21 +63,25 @@ public class JavaRdbmsGenerator extends AbstractGenerator {
    * @param domainMessageDataConverterExporter the domain message data converter exporter
    * @param domainMessageDataRepositoryExporter the domain message data repository exporter
    * @param persistenceImplExporter the persistence impl exporter
+   * @param persistenceImplTestExporter the persistence impl test exporter
    * @param springDataRepositoryExporter the spring data repository exporter
    * @param rdbmsTestExporter the rdbms test exporter
    * @param rdbmsTestConfigExporter the rdbms test config exporter
+   * @param applicationCiRdbmsYmlExporter the application ci rdbms yml exporter
    */
   public JavaRdbmsGenerator(
       Path generationPath,
       PackageName rootPackageName,
-      Name contextName,
+      ObjectName contextName,
       DomainMessageDataExporter domainMessageDataExporter,
       DomainMessageDataConverterExporter domainMessageDataConverterExporter,
       DomainMessageDataRepositoryExporter domainMessageDataRepositoryExporter,
       PersistenceImplExporter persistenceImplExporter,
+      PersistenceImplTestExporter persistenceImplTestExporter,
       SpringDataRepositoryExporter springDataRepositoryExporter,
       RdbmsTestExporter rdbmsTestExporter,
-      RdbmsTestConfigExporter rdbmsTestConfigExporter) {
+      RdbmsTestConfigExporter rdbmsTestConfigExporter,
+      ApplicationCiRdbmsYmlExporter applicationCiRdbmsYmlExporter) {
     super(generationPath);
     this.rootPackageName = rootPackageName;
     this.contextName = contextName;
@@ -84,9 +89,11 @@ public class JavaRdbmsGenerator extends AbstractGenerator {
     this.domainMessageDataConverterExporter = domainMessageDataConverterExporter;
     this.domainMessageDataRepositoryExporter = domainMessageDataRepositoryExporter;
     this.persistenceImplExporter = persistenceImplExporter;
+    this.persistenceImplTestExporter = persistenceImplTestExporter;
     this.springDataRepositoryExporter = springDataRepositoryExporter;
     this.rdbmsTestExporter = rdbmsTestExporter;
     this.rdbmsTestConfigExporter = rdbmsTestConfigExporter;
+    this.applicationCiRdbmsYmlExporter = applicationCiRdbmsYmlExporter;
   }
 
   // ===============================================================================================
@@ -107,7 +114,7 @@ public class JavaRdbmsGenerator extends AbstractGenerator {
    *
    * @return the context name
    */
-  public Name getContextName() {
+  public ObjectName getContextName() {
     return contextName;
   }
 
@@ -117,8 +124,6 @@ public class JavaRdbmsGenerator extends AbstractGenerator {
 
   @Override
   public void generate(Set<ModelRepository> modelRepositories) {
-    initializeModelRepositories(modelRepositories);
-
     domainMessageDataExporter.export(getGenerationPath(), getRootPackageName(), getContextName());
     domainMessageDataConverterExporter.export(
         getGenerationPath(), getRootPackageName(), getContextName());
@@ -126,11 +131,14 @@ public class JavaRdbmsGenerator extends AbstractGenerator {
         getGenerationPath(), getRootPackageName(), getContextName());
     rdbmsTestExporter.export(getGenerationPath(), getRootPackageName());
     rdbmsTestConfigExporter.export(getGenerationPath(), getRootPackageName());
+    applicationCiRdbmsYmlExporter.export(getGenerationPath());
 
-    domainModelRepository
+    CoreRegistry.getModelRepositoryResolver()
+        .resolve(modelRepositories, DomainModelRepository.class)
         .getAggregateRoots()
         .stream()
-        .filter(aggregateRoot -> aggregateRoot.getPersistence() != null)
+        .filter(aggregateRoot -> aggregateRoot instanceof AggregateRootPersistable)
+        .map(AggregateRootPersistable.class::cast)
         .forEach(
             aggregateRoot -> {
               persistenceImplExporter.export(
@@ -139,19 +147,14 @@ public class JavaRdbmsGenerator extends AbstractGenerator {
                   getRootPackageName(),
                   getContextName());
 
+              persistenceImplTestExporter.export(
+                  getGenerationPath(),
+                  aggregateRoot.getPersistence(),
+                  getRootPackageName(),
+                  getContextName());
+
               springDataRepositoryExporter.export(
                   getGenerationPath(), aggregateRoot.getPersistence());
             });
-  }
-
-  /**
-   * Initialize model repositories.
-   *
-   * @param modelRepositories the model repositories
-   */
-  private void initializeModelRepositories(Set<ModelRepository> modelRepositories) {
-    domainModelRepository =
-        CoreRegistry.getModelRepositoryResolver()
-            .resolve(modelRepositories, DomainModelRepository.class);
   }
 }

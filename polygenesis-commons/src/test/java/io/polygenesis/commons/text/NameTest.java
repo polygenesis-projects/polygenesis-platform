@@ -24,14 +24,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import io.polygenesis.commons.test.AbstractEqualityTest;
+import io.polygenesis.commons.valueobjects.ObjectName;
 import org.junit.Test;
 
 /** @author Christos Tsakostas */
-public class NameTest extends AbstractEqualityTest<Name> {
+public class NameTest extends AbstractEqualityTest<ObjectName> {
 
   @Test
   public void shouldSucceedToInstantiate() {
-    Name bame = new Name("abc");
+    ObjectName bame = new ObjectName("abc");
 
     assertThat(bame).isNotNull();
     assertThat(bame.getText()).isEqualTo("abc");
@@ -39,21 +40,21 @@ public class NameTest extends AbstractEqualityTest<Name> {
 
   @Test
   public void shouldSucceedForAllUpperCase() {
-    Name bame = new Name("CUSTOMER");
+    ObjectName bame = new ObjectName("CUSTOMER");
 
     assertThat(bame.getText()).isEqualTo("customer");
   }
 
   @Test
   public void shouldConvertUnderscoreToLowerCamel() {
-    Name bame = new Name("hello_world");
+    ObjectName bame = new ObjectName("hello_world");
 
     assertThat(bame.getText()).isEqualTo("helloWorld");
   }
 
   @Test
   public void shouldSucceedForPackageName() {
-    Name bame = new Name("com.oregor.CreateUserRequest");
+    ObjectName bame = new ObjectName("com.oregor.CreateUserRequest");
 
     assertThat(bame.getOriginal()).isEqualTo("com.oregor.CreateUserRequest");
     assertThat(bame.getText()).isEqualTo("createUserRequest");
@@ -61,24 +62,24 @@ public class NameTest extends AbstractEqualityTest<Name> {
 
   @Test
   public void shouldFailToInstantiateForNullInput() {
-    assertThatThrownBy(() -> new Name(null)).isInstanceOf(IllegalArgumentException.class);
+    assertThatThrownBy(() -> new ObjectName(null)).isInstanceOf(IllegalArgumentException.class);
   }
 
   @Test
   public void shouldFailToInstantiateForEmptyInput() {
-    assertThatThrownBy(() -> new Name("")).isInstanceOf(IllegalArgumentException.class);
+    assertThatThrownBy(() -> new ObjectName("")).isInstanceOf(IllegalArgumentException.class);
   }
 
   // ===============================================================================================
   // Equality and Hash
   // ===============================================================================================
   @Override
-  public Name createObject1() {
-    return new Name("xxx");
+  public ObjectName createObject1() {
+    return new ObjectName("xxx");
   }
 
   @Override
-  public Name createObject2() {
-    return new Name("yyy");
+  public ObjectName createObject2() {
+    return new ObjectName("yyy");
   }
 }

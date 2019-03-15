@@ -37,7 +37,7 @@ public class ThingTest extends AbstractEqualityTest<Thing> {
 
   @Test
   public void shouldCreateThingWithName() {
-    Thing thing = new ThingBuilder().setThingName(new ThingName("someThingName")).createThing();
+    Thing thing = ThingBuilder.generic().setThingName(new ThingName("someThingName")).createThing();
 
     assertThat(thing).isNotNull();
 
@@ -59,7 +59,7 @@ public class ThingTest extends AbstractEqualityTest<Thing> {
 
   private Function createFunction1() {
     return new Function(
-        new ThingBuilder().setThingName(new ThingName("thingName")).createThing(),
+        ThingBuilder.generic().setThingName(new ThingName("thingName")).createThing(),
         new Goal(GoalType.MODIFY),
         new FunctionName("functionName"),
         new LinkedHashSet<>(),
@@ -68,7 +68,7 @@ public class ThingTest extends AbstractEqualityTest<Thing> {
 
   private Function createFunction2() {
     return new Function(
-        new ThingBuilder().setThingName(new ThingName("thingName")).createThing(),
+        ThingBuilder.generic().setThingName(new ThingName("thingName")).createThing(),
         new Goal(GoalType.MODIFY),
         new FunctionName("anotherFunctionName"),
         new LinkedHashSet<>(),
@@ -77,7 +77,7 @@ public class ThingTest extends AbstractEqualityTest<Thing> {
 
   private Function createFunction3() {
     return new Function(
-        new ThingBuilder().setThingName(new ThingName("thingName")).createThing(),
+        ThingBuilder.generic().setThingName(new ThingName("thingName")).createThing(),
         new Goal(GoalType.MODIFY),
         new FunctionName("someAnotherNewFunctionName"),
         new LinkedHashSet<>(),
@@ -97,11 +97,11 @@ public class ThingTest extends AbstractEqualityTest<Thing> {
   // ===============================================================================================
   @Override
   public Thing createObject1() {
-    return new ThingBuilder().setThingName(new ThingName("xxx")).createThing();
+    return ThingBuilder.generic().setThingName(new ThingName("xxx")).createThing();
   }
 
   @Override
   public Thing createObject2() {
-    return new ThingBuilder().setThingName(new ThingName("yyy")).createThing();
+    return ThingBuilder.generic().setThingName(new ThingName("yyy")).createThing();
   }
 }

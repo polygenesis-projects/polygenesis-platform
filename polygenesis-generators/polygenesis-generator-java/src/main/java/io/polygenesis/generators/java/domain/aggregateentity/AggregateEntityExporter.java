@@ -22,7 +22,9 @@ package io.polygenesis.generators.java.domain.aggregateentity;
 
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.text.TextConverter;
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.models.domain.AggregateEntity;
+import io.polygenesis.models.domain.AggregateRoot;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -40,6 +42,7 @@ public class AggregateEntityExporter {
   // ===============================================================================================
 
   private final FreemarkerService freemarkerService;
+  private final AggregateEntityClassRepresentable aggregateEntityClassRepresentable;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -49,9 +52,13 @@ public class AggregateEntityExporter {
    * Instantiates a new Aggregate entity exporter.
    *
    * @param freemarkerService the freemarker service
+   * @param aggregateEntityClassRepresentable the aggregate entity class representable
    */
-  public AggregateEntityExporter(FreemarkerService freemarkerService) {
+  public AggregateEntityExporter(
+      FreemarkerService freemarkerService,
+      AggregateEntityClassRepresentable aggregateEntityClassRepresentable) {
     this.freemarkerService = freemarkerService;
+    this.aggregateEntityClassRepresentable = aggregateEntityClassRepresentable;
   }
 
   // ===============================================================================================
@@ -63,14 +70,22 @@ public class AggregateEntityExporter {
    *
    * @param generationPath the generation path
    * @param aggregateEntity the aggregate entity
+   * @param rootPackageName the root package name
+   * @param aggregateRoot the aggregate root
    */
-  public void export(Path generationPath, AggregateEntity aggregateEntity) {
+  public void export(
+      Path generationPath,
+      AggregateEntity aggregateEntity,
+      PackageName rootPackageName,
+      AggregateRoot aggregateRoot) {
     Map<String, Object> dataModel = new HashMap<>();
-    dataModel.put("aggregateEntity", aggregateEntity);
+    dataModel.put(
+        "representation",
+        aggregateEntityClassRepresentable.create(aggregateEntity, rootPackageName, aggregateRoot));
 
     freemarkerService.export(
         dataModel,
-        "polygenesis-generator-java-domain/AggregateEntity.java.ftl",
+        "polygenesis-representation-java/Class.java.ftl",
         makeFileName(generationPath, aggregateEntity));
   }
 
@@ -79,7 +94,7 @@ public class AggregateEntityExporter {
     return Paths.get(
         generationPath.toString(),
         "src/main/java",
-        aggregateEntity.getDataGroup().getPackageName().toPath().toString(),
-        TextConverter.toUpperCamel(aggregateEntity.getVariableName().getText()) + ".java");
+        aggregateEntity.getPackageName().toPath().toString(),
+        TextConverter.toUpperCamel(aggregateEntity.getObjectName().getText()) + ".java");
   }
 }

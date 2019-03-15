@@ -20,11 +20,11 @@
 
 package io.polygenesis.generators.java.apiimpl;
 
-import io.polygenesis.commons.text.Name;
+import io.polygenesis.commons.valueobjects.ObjectName;
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.AbstractGenerator;
 import io.polygenesis.core.CoreRegistry;
 import io.polygenesis.core.ModelRepository;
-import io.polygenesis.core.data.PackageName;
 import io.polygenesis.models.apiimpl.ServiceImplementationModelRepository;
 import io.polygenesis.models.domain.AggregateRoot;
 import io.polygenesis.models.domain.DomainModelRepository;
@@ -107,7 +107,7 @@ public class JavaApiImplGenerator extends AbstractGenerator {
             serviceImplementation -> {
               Optional<AggregateRoot> optionalAggregateRoot =
                   domainModelRepository.getAggregateRootByName(
-                      new Name(serviceImplementation.getService().getThingName().getText()));
+                      new ObjectName(serviceImplementation.getService().getThingName().getText()));
 
               if (!optionalAggregateRoot.isPresent()) {
                 throw new IllegalStateException(

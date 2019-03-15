@@ -20,6 +20,8 @@
 
 package io.polygenesis.models.domain;
 
+import io.polygenesis.commons.valueobjects.ObjectName;
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.Function;
 import io.polygenesis.core.Thing;
 import io.polygenesis.core.ThingScopeType;
@@ -27,10 +29,7 @@ import io.polygenesis.core.data.Data;
 import io.polygenesis.core.data.DataArray;
 import io.polygenesis.core.data.DataBusinessType;
 import io.polygenesis.core.data.DataGroup;
-import io.polygenesis.core.data.DataPrimaryType;
 import io.polygenesis.core.data.DataPrimitive;
-import io.polygenesis.core.data.ObjectName;
-import io.polygenesis.core.data.PackageName;
 import io.polygenesis.core.data.VariableName;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -43,6 +42,20 @@ import java.util.Set;
 public class AggregateRootPropertyDeducer {
 
   // ===============================================================================================
+  // DEPENDENCIES
+  // ===============================================================================================
+
+  private final AggregateEntityDeducer aggregateEntityDeducer;
+
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
+  public AggregateRootPropertyDeducer(AggregateEntityDeducer aggregateEntityDeducer) {
+    this.aggregateEntityDeducer = aggregateEntityDeducer;
+  }
+
+  // ===============================================================================================
   // FUNCTIONALITY
   // ===============================================================================================
 
@@ -53,8 +66,8 @@ public class AggregateRootPropertyDeducer {
    * @param rootPackageName the root package name
    * @return the set
    */
-  public Set<AbstractProperty> deduceFrom(Thing thing, PackageName rootPackageName) {
-    Set<AbstractProperty> properties = new LinkedHashSet<>();
+  public Set<DomainObjectProperty> deduceFrom(Thing thing, PackageName rootPackageName) {
+    Set<DomainObjectProperty> properties = new LinkedHashSet<>();
 
     if (thing.getThingProperties().isEmpty()) {
       thing
@@ -63,35 +76,18 @@ public class AggregateRootPropertyDeducer {
               function ->
                   properties.addAll(deduceFromFunctionArguments(function, rootPackageName)));
     } else {
-      properties.addAll(deduceFromThingProperties(thing, rootPackageName));
+      properties.addAll(deduceFromThingProperties(thing));
     }
 
-    return properties;
-  }
-
-  /**
-   * Deduce from thing properties set.
-   *
-   * @param thing the thing
-   * @param rootPackageName the root package name
-   * @return the set
-   */
-  protected Set<AbstractProperty> deduceFromThingProperties(
-      Thing thing, PackageName rootPackageName) {
-    Set<AbstractProperty> properties = new LinkedHashSet<>();
-
-    thing
-        .getThingProperties()
-        .stream()
-        .map(thingProperty -> thingProperty.getData())
-        .forEach(
-            data -> {
-              // TODO: check if more restrictions are required here
-              properties.add(makeAbstractProperty(data));
-            });
+    properties.addAll(
+        aggregateEntityDeducer.deduceAggregateEntityCollections(thing, rootPackageName));
 
     return properties;
   }
+
+  // ===============================================================================================
+  // PROTECTED
+  // ===============================================================================================
 
   /**
    * Deduce from Function.
@@ -100,9 +96,9 @@ public class AggregateRootPropertyDeducer {
    * @param rootPackageName the root package name
    * @return the set
    */
-  protected Set<AbstractProperty> deduceFromFunctionArguments(
+  protected Set<DomainObjectProperty> deduceFromFunctionArguments(
       Function function, PackageName rootPackageName) {
-    Set<AbstractProperty> properties = new LinkedHashSet<>();
+    Set<DomainObjectProperty> properties = new LinkedHashSet<>();
 
     // Add Aggregate Root ID if the thing is not abstract
     if (!function
@@ -145,7 +141,29 @@ public class AggregateRootPropertyDeducer {
   // PRIVATE
   // ===============================================================================================
 
-  private AbstractProperty makeAbstractProperty(Data model) {
+  /**
+   * Deduce from thing properties set.
+   *
+   * @param thing the thing
+   * @return the set
+   */
+  private Set<DomainObjectProperty> deduceFromThingProperties(Thing thing) {
+    Set<DomainObjectProperty> properties = new LinkedHashSet<>();
+
+    thing
+        .getThingProperties()
+        .stream()
+        .map(thingProperty -> thingProperty.getData())
+        .forEach(
+            data -> {
+              // TODO: check if more restrictions are required here
+              properties.add(makeAbstractProperty(data));
+            });
+
+    return properties;
+  }
+
+  private DomainObjectProperty makeAbstractProperty(Data model) {
     switch (model.getDataPrimaryType()) {
       case ARRAY:
         DataArray dataArray = model.getAsDataArray();
@@ -166,15 +184,12 @@ public class AggregateRootPropertyDeducer {
                 .withNewVariableName(
                     new VariableName(makeValueObjectVariableName(model.getVariableName())));
 
-        return new ValueObject(
-            originatingDataGroup,
-            newDataGroup,
-            new VariableName(makeValueObjectVariableName(model.getVariableName())));
+        return new ValueObject(newDataGroup, originatingDataGroup);
       case PRIMITIVE:
-        return new Primitive((DataPrimitive) model, model.getVariableName());
+        return new Primitive(model.getAsDataPrimitive());
       default:
         throw new IllegalStateException(
-            String.format("Cannot make AbstractProperty for %s", model.getDataPrimaryType()));
+            String.format("Cannot make DomainObjectProperty for %s", model.getDataPrimaryType()));
     }
   }
 
@@ -189,10 +204,7 @@ public class AggregateRootPropertyDeducer {
    * @return the primitive collection
    */
   protected PrimitiveCollection makePrimitiveCollection(DataArray dataArray) {
-    return new PrimitiveCollection(
-        dataArray,
-        dataArray.getVariableName(),
-        ((DataPrimitive) dataArray.getArrayElement()).getPrimitiveType());
+    return new PrimitiveCollection(dataArray);
   }
 
   /**
@@ -209,14 +221,9 @@ public class AggregateRootPropertyDeducer {
     DataGroup dataGroup =
         new DataGroup(
             new ObjectName(function.getThing().getThingName().getText() + "Id"),
-            new PackageName(
-                String.format(
-                    "%s.%s",
-                    rootPackageName.getText(),
-                    function.getThing().getThingName().getText().toLowerCase())));
+            function.getThing().makePackageName(rootPackageName, function.getThing()));
 
-    return new AggregateRootId(
-        dataGroup, new VariableName(function.getThing().getThingName().getText() + "Id"));
+    return new AggregateRootId(dataGroup);
   }
 
   // ===============================================================================================
@@ -238,15 +245,14 @@ public class AggregateRootPropertyDeducer {
   // ===============================================================================================
 
   private boolean isPropertyThingIdentity(Data model) {
-    if (model.getDataPrimaryType().equals(DataPrimaryType.PRIMITIVE)
-        && ((DataPrimitive) model).getThingIdentity()) {
+    if (model.isDataPrimitive() && ((DataPrimitive) model).getThingIdentity()) {
       return true;
     }
     return false;
   }
 
   private boolean isPropertyPageNumber(Data model) {
-    if (model.getDataPrimaryType().equals(DataPrimaryType.PRIMITIVE)
+    if (model.isDataPrimitive()
         && model.getDataBusinessType().equals(DataBusinessType.PAGE_NUMBER)) {
       return true;
     }
@@ -254,8 +260,7 @@ public class AggregateRootPropertyDeducer {
   }
 
   private boolean isPropertyPageSize(Data model) {
-    if (model.getDataPrimaryType().equals(DataPrimaryType.PRIMITIVE)
-        && model.getDataBusinessType().equals(DataBusinessType.PAGE_SIZE)) {
+    if (model.isDataPrimitive() && model.getDataBusinessType().equals(DataBusinessType.PAGE_SIZE)) {
       return true;
     }
     return false;
