@@ -29,7 +29,7 @@ import javax.persistence.Table;
 /**
  * The type Context domain message data.
  *
- * @author PolyGenesis
+ * @author ${ authorService.getAuthor() }
  */
 @Entity
 @Table(name = Constants.DEFAULT_TABLE_PREFIX + "domain_message")

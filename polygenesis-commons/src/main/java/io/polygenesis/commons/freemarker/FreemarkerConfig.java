@@ -69,6 +69,7 @@ public class FreemarkerConfig {
     configuration.setWrapUncheckedExceptions(true);
 
     setTextConverter(configuration);
+    setAuthorService(configuration);
   }
 
   // ===============================================================================================
@@ -87,6 +88,12 @@ public class FreemarkerConfig {
   // ===============================================================================================
   // PRIVATE
   // ===============================================================================================
+
+  /**
+   * Sets text converter.
+   *
+   * @param configuration the configuration
+   */
   private void setTextConverter(Configuration configuration) {
     BeansWrapper wrapper = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_28).build();
     TemplateHashModel staticModels = wrapper.getStaticModels();
@@ -94,6 +101,24 @@ public class FreemarkerConfig {
       TemplateHashModel templateHashModelTextConverter =
           (TemplateHashModel) staticModels.get("io.polygenesis.commons.text.TextConverter");
       configuration.setSharedVariable("textConverter", templateHashModelTextConverter);
+    } catch (TemplateModelException e) {
+      throw new IllegalStateException(e.getMessage(), e);
+    }
+  }
+
+  /**
+   * Sets author service.
+   *
+   * @param configuration the configuration
+   */
+  private void setAuthorService(Configuration configuration) {
+    BeansWrapper wrapper = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_28).build();
+    TemplateHashModel staticModels = wrapper.getStaticModels();
+    try {
+      TemplateHashModel templateHashModelTextConverter =
+          (TemplateHashModel)
+              staticModels.get("io.polygenesis.commons.freemarker.FreemarkerAuthorService");
+      configuration.setSharedVariable("authorService", templateHashModelTextConverter);
     } catch (TemplateModelException e) {
       throw new IllegalStateException(e.getMessage(), e);
     }

@@ -58,8 +58,7 @@ public class ThingRepositoryImpl implements ThingRepository {
   public Set<Thing> getApiThings() {
     return things
         .stream()
-        .filter(thing -> thing.getThingScopeType().equals(ThingScopeType.LAYERS_ALL)
-            || thing.getThingScopeType().equals(ThingScopeType.LAYERS_REST))
+        .filter(thing -> thing.getLayerTypes().contains(ThingLayerType.API))
         .collect(Collectors.toCollection(LinkedHashSet::new));
   }
 
@@ -75,10 +74,7 @@ public class ThingRepositoryImpl implements ThingRepository {
   public Set<Thing> getDomainModelThings() {
     return things
         .stream()
-        .filter(
-            thing ->
-                thing.getThingScopeType().equals(ThingScopeType.ABSTRACT_DOMAIN_AGGREGATE_ROOT)
-                    || thing.getThingScopeType().equals(ThingScopeType.LAYERS_ALL))
+        .filter(thing -> thing.getLayerTypes().contains(ThingLayerType.DOMAIN))
         .collect(Collectors.toCollection(LinkedHashSet::new));
   }
 
@@ -100,12 +96,37 @@ public class ThingRepositoryImpl implements ThingRepository {
                 .findFirst());
   }
 
+  @Override
+  public Boolean isVirtualChild(Thing thingToCheck) {
+    return things
+        .stream()
+        .flatMap(thing -> thing.getVirtualChildren().stream())
+        .filter(thing -> thing.equals(thingToCheck))
+        .anyMatch(thing -> thing != null);
+  }
+
   // ===============================================================================================
   // GUARDS
   // ===============================================================================================
 
   private void setThings(Set<Thing> things) {
     Assertion.isNotNull(things, "things is required");
-    this.things = things;
+    Set<Thing> thingsAll = new LinkedHashSet<>();
+
+    things.forEach(
+        thing -> {
+          fillThings(thingsAll, thing);
+        });
+
+    this.things = thingsAll;
+  }
+
+  private void fillThings(Set<Thing> thingsAll, Thing thing) {
+    thingsAll.add(thing);
+
+    thing.getChildren().forEach(thingChild -> fillThings(thingsAll, thingChild));
+    thing
+        .getVirtualChildren()
+        .forEach(thingVirtualChild -> fillThings(thingsAll, thingVirtualChild));
   }
 }

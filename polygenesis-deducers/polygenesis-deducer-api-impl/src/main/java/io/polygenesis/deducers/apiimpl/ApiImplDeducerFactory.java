@@ -33,7 +33,7 @@ public class ApiImplDeducerFactory {
   // DEPENDENCIES
   // ===============================================================================================
 
-  private static final AggregateRootConverterDeducer aggregateRootConverterDeducer;
+  private static final DomainObjectConverterDeducer domainObjectConverterDeducer;
   private static final ServiceImplementationDeducer serviceImplementationDeducer;
 
   // ===============================================================================================
@@ -41,8 +41,13 @@ public class ApiImplDeducerFactory {
   // ===============================================================================================
 
   static {
-    aggregateRootConverterDeducer = new AggregateRootConverterDeducer();
-    serviceImplementationDeducer = new ServiceImplementationDeducer();
+    domainObjectConverterDeducer = new DomainObjectConverterDeducer();
+
+    ServiceMethodImplementationDeducer serviceMethodImplementationDeducer =
+        new ServiceMethodImplementationDeducer();
+
+    serviceImplementationDeducer =
+        new ServiceImplementationDeducer(serviceMethodImplementationDeducer);
   }
 
   // ===============================================================================================
@@ -63,6 +68,6 @@ public class ApiImplDeducerFactory {
    * @return the api impl deducer
    */
   public static ApiImplDeducer newInstance(PackageName packageName) {
-    return new ApiImplDeducer(aggregateRootConverterDeducer, serviceImplementationDeducer);
+    return new ApiImplDeducer(domainObjectConverterDeducer, serviceImplementationDeducer);
   }
 }

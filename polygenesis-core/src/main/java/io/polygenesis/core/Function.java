@@ -22,6 +22,7 @@ package io.polygenesis.core;
 
 import com.oregor.ddd4j.check.assertion.Assertion;
 import io.polygenesis.core.data.DataPrimitive;
+import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -77,6 +78,7 @@ public class Function {
   public Function(Thing thing, Goal goal, FunctionName name, ReturnValue returnValue) {
     this(thing, goal, name);
     setReturnValue(returnValue);
+    setArguments(new LinkedHashSet<>());
   }
 
   /**

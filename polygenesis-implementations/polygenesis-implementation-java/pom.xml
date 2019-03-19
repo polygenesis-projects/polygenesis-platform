@@ -18,6 +18,24 @@
       <artifactId>polygenesis-representation-java</artifactId>
     </dependency>
 
+    <!--MODELS-->
+    <dependency>
+      <groupId>io.polygenesis.models</groupId>
+      <artifactId>polygenesis-model-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.polygenesis.models</groupId>
+      <artifactId>polygenesis-model-api-impl</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.polygenesis.models</groupId>
+      <artifactId>polygenesis-model-rest</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.polygenesis.models</groupId>
+      <artifactId>polygenesis-model-domain</artifactId>
+    </dependency>
+
     <!--TEST-->
     <dependency>
       <groupId>io.polygenesis</groupId>

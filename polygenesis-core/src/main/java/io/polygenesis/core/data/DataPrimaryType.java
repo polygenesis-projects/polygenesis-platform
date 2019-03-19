@@ -33,5 +33,8 @@ public enum DataPrimaryType {
   OBJECT,
 
   /** Array data kind. */
-  ARRAY
+  ARRAY,
+
+  /** Map data primary type. */
+  MAP
 }

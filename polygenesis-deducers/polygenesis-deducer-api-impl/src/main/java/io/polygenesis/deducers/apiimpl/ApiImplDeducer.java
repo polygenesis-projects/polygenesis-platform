@@ -27,12 +27,15 @@ import io.polygenesis.core.ModelRepository;
 import io.polygenesis.core.Thing;
 import io.polygenesis.core.ThingRepository;
 import io.polygenesis.models.api.ServiceModelRepository;
-import io.polygenesis.models.apiimpl.AggregateRootConverter;
+import io.polygenesis.models.apiimpl.DomainObjectConverter;
 import io.polygenesis.models.apiimpl.ServiceImplementation;
 import io.polygenesis.models.apiimpl.ServiceImplementationModelRepository;
-import io.polygenesis.models.domain.AggregateRoot;
+import io.polygenesis.models.domain.AggregateEntityCollection;
+import io.polygenesis.models.domain.BaseDomainObject;
 import io.polygenesis.models.domain.DomainModelRepository;
+import io.polygenesis.models.domain.PropertyType;
 import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -46,7 +49,7 @@ public class ApiImplDeducer implements Deducer<ServiceImplementationModelReposit
   // DEPENDENCIES
   // ===============================================================================================
 
-  private final AggregateRootConverterDeducer aggregateRootConverterDeducer;
+  private final DomainObjectConverterDeducer domainObjectConverterDeducer;
   private final ServiceImplementationDeducer serviceImplementationDeducer;
 
   // ===============================================================================================
@@ -56,13 +59,13 @@ public class ApiImplDeducer implements Deducer<ServiceImplementationModelReposit
   /**
    * Instantiates a new Api impl deducer.
    *
-   * @param aggregateRootConverterDeducer the aggregate root converter deducer
+   * @param domainObjectConverterDeducer the aggregate root converter deducer
    * @param serviceImplementationDeducer the service implementation deducer
    */
   public ApiImplDeducer(
-      AggregateRootConverterDeducer aggregateRootConverterDeducer,
+      DomainObjectConverterDeducer domainObjectConverterDeducer,
       ServiceImplementationDeducer serviceImplementationDeducer) {
-    this.aggregateRootConverterDeducer = aggregateRootConverterDeducer;
+    this.domainObjectConverterDeducer = domainObjectConverterDeducer;
     this.serviceImplementationDeducer = serviceImplementationDeducer;
   }
 
@@ -74,18 +77,46 @@ public class ApiImplDeducer implements Deducer<ServiceImplementationModelReposit
   public ServiceImplementationModelRepository deduce(
       ThingRepository thingRepository, Set<ModelRepository> modelRepositories) {
 
-    Set<ServiceImplementation> serviceImplementations = new LinkedHashSet<>();
-    Set<AggregateRootConverter> aggregateRootConverters = new LinkedHashSet<>();
+    ServiceModelRepository serviceModelRepository =
+        CoreRegistry.getModelRepositoryResolver()
+            .resolve(modelRepositories, ServiceModelRepository.class);
 
+    Set<DomainObjectConverter> domainObjectConverters = new LinkedHashSet<>();
     thingRepository
         .getApiThings()
         .forEach(
-            thing ->
-                fillServiceImplementationsAndConverters(
-                    serviceImplementations, aggregateRootConverters, modelRepositories, thing));
+            thing -> {
+              Optional<BaseDomainObject> optionalDomainObject =
+                  getOptionalDomainObject(thing, modelRepositories);
 
-    return new ServiceImplementationModelRepository(
-        serviceImplementations, aggregateRootConverters);
+              if (optionalDomainObject.isPresent()) {
+                domainObjectConverters.add(
+                    domainObjectConverterDeducer.deduce(
+                        optionalDomainObject.get(),
+                        serviceModelRepository.getServicesBy(thing.getThingName())));
+              }
+            });
+
+    Set<ServiceImplementation> serviceImplementations = new LinkedHashSet<>();
+    serviceModelRepository
+        .getServices()
+        .forEach(
+            service -> {
+              Optional<DomainObjectConverter> optionalDomainObjectConverter =
+                  getOptionalDomainObjectConverter(
+                      domainObjectConverters, new ObjectName(service.getThingName().getText()));
+
+              DomainObjectConverter domainObjectConverter = optionalDomainObjectConverter.get();
+              if (optionalDomainObjectConverter.isPresent()) {
+                serviceImplementations.add(
+                    serviceImplementationDeducer.deduce(
+                        service, domainObjectConverter.getDomainObject(), domainObjectConverter));
+              } else {
+                serviceImplementations.add(serviceImplementationDeducer.deduce(service));
+              }
+            });
+
+    return new ServiceImplementationModelRepository(serviceImplementations, domainObjectConverters);
   }
 
   // ===============================================================================================
@@ -93,60 +124,70 @@ public class ApiImplDeducer implements Deducer<ServiceImplementationModelReposit
   // ===============================================================================================
 
   /**
-   * Fill service implementations and converters.
+   * Gets optional domain object converter.
    *
-   * @param serviceImplementations the service implementations
-   * @param aggregateRootConverters the aggregate root converters
-   * @param modelRepositories the model repositories
-   * @param thing the thing
+   * @param domainObjectConverters the domain object converters
+   * @param domainObjectName the domain object name
+   * @return the optional domain object converter
    */
-  protected void fillServiceImplementationsAndConverters(
-      Set<ServiceImplementation> serviceImplementations,
-      Set<AggregateRootConverter> aggregateRootConverters,
-      Set<ModelRepository> modelRepositories,
-      Thing thing) {
-    ServiceModelRepository serviceModelRepository =
-        CoreRegistry.getModelRepositoryResolver()
-            .resolve(modelRepositories, ServiceModelRepository.class);
+  private Optional<DomainObjectConverter> getOptionalDomainObjectConverter(
+      Set<DomainObjectConverter> domainObjectConverters, ObjectName domainObjectName) {
+    return domainObjectConverters
+        .stream()
+        .filter(
+            domainObjectConverter ->
+                domainObjectConverter.getDomainObject().getObjectName().equals(domainObjectName))
+        .findFirst();
+  }
 
+  /**
+   * Gets optional domain object.
+   *
+   * @param thing the thing
+   * @param modelRepositories the model repositories
+   * @return the optional domain object
+   */
+  private Optional<BaseDomainObject> getOptionalDomainObject(
+      Thing thing, Set<ModelRepository> modelRepositories) {
     DomainModelRepository domainModelRepository =
         CoreRegistry.getModelRepositoryResolver()
             .resolve(modelRepositories, DomainModelRepository.class);
 
-    AggregateRoot aggregateRoot =
+    ObjectName objectName = new ObjectName(thing.getThingName().getText());
+
+    Optional<BaseDomainObject> optionalBaseDomainObject =
         domainModelRepository
-            .getAggregateRootByName(new ObjectName(thing.getThingName().getText()))
-            .orElseThrow(IllegalArgumentException::new);
+            .getAggregateRoots()
+            .stream()
+            .filter(aggregateRoot -> aggregateRoot.getObjectName().equals(objectName))
+            .map(aggregateRoot -> (BaseDomainObject) aggregateRoot)
+            .findFirst();
 
-    AggregateRootConverter aggregateRootConverter =
-        aggregateRootConverterDeducer.deduce(
-            aggregateRoot, serviceModelRepository.getServicesBy(thing.getThingName()));
+    if (optionalBaseDomainObject.isPresent()) {
+      return optionalBaseDomainObject;
+    }
 
-    aggregateRootConverters.add(aggregateRootConverter);
+    Optional<AggregateEntityCollection> optionalAggregateEntityCollection =
+        domainModelRepository
+            .getAggregateRoots()
+            .stream()
+            .flatMap(aggregateRoot -> aggregateRoot.getProperties().stream())
+            .filter(
+                property ->
+                    property.getPropertyType().equals(PropertyType.AGGREGATE_ENTITY_COLLECTION))
+            .map(AggregateEntityCollection.class::cast)
+            .filter(
+                aggregateEntityCollection ->
+                    aggregateEntityCollection
+                        .getAggregateEntity()
+                        .getObjectName()
+                        .equals(objectName))
+            .findFirst();
 
-    serviceModelRepository
-        .getServicesBy(thing.getThingName())
-        .forEach(
-            service ->
-                serviceImplementations.add(
-                    serviceImplementationDeducer.deduce(
-                        service, aggregateRoot, aggregateRootConverter)));
+    if (optionalAggregateEntityCollection.isPresent()) {
+      return Optional.of(optionalAggregateEntityCollection.get().getAggregateEntity());
+    }
 
-    thing
-        .getVirtualChildren()
-        .forEach(
-            thingVirtualChild ->
-                fillServiceImplementationsAndConverters(
-                    serviceImplementations,
-                    aggregateRootConverters,
-                    modelRepositories,
-                    thingVirtualChild));
-
-    // TODO
-    //    thing.getChildren()
-    //        .forEach(
-    //            thingChild -> fillServiceImplementationsAndConverters(serviceImplementations,
-    //                aggregateRootConverters, modelRepositories, thingChild));
-
+    return Optional.empty();
   }
 }

@@ -87,45 +87,39 @@ public class ServiceDeducer {
    * @param rootPackageName the root package name
    */
   private void fillServices(Set<Service> services, Thing thing, PackageName rootPackageName) {
-    Set<Method> commandMethods = new LinkedHashSet<>();
-    Set<Method> queryMethods = new LinkedHashSet<>();
+    Set<ServiceMethod> commandServiceMethods = new LinkedHashSet<>();
+    Set<ServiceMethod> queryServiceMethods = new LinkedHashSet<>();
 
-    serviceMethodDeducer.deduceCommandMethods(commandMethods, thing, rootPackageName);
-    serviceMethodDeducer.deduceQueryMethods(queryMethods, thing, rootPackageName);
+    serviceMethodDeducer.deduceCommandMethods(commandServiceMethods, thing, rootPackageName);
+    serviceMethodDeducer.deduceQueryMethods(queryServiceMethods, thing, rootPackageName);
 
-    Set<Method> allMethods = new LinkedHashSet<>();
-    allMethods.addAll(commandMethods);
-    allMethods.addAll(queryMethods);
+    Set<ServiceMethod> allServiceMethods = new LinkedHashSet<>();
+    allServiceMethods.addAll(commandServiceMethods);
+    allServiceMethods.addAll(queryServiceMethods);
 
-    Set<Dto> dtos = dtoDeducer.deduceAllDtosInMethods(allMethods, rootPackageName);
+    Set<Dto> dtos = dtoDeducer.deduceAllDtosInMethods(allServiceMethods, rootPackageName);
 
-    if (!commandMethods.isEmpty()) {
+    if (!commandServiceMethods.isEmpty()) {
       services.add(
           new Service(
               thing.makePackageName(rootPackageName, thing),
               makeCommandServiceName(thing.getThingName()),
-              commandMethods,
+              commandServiceMethods,
               CqsType.COMMAND,
               thing.getThingName(),
               dtos));
     }
 
-    if (!queryMethods.isEmpty()) {
+    if (!queryServiceMethods.isEmpty()) {
       services.add(
           new Service(
               thing.makePackageName(rootPackageName, thing),
               makeQueryServiceName(thing.getThingName()),
-              queryMethods,
+              queryServiceMethods,
               CqsType.QUERY,
               thing.getThingName(),
               dtos));
     }
-
-    thing.getChildren().forEach(thingChild -> fillServices(services, thingChild, rootPackageName));
-
-    thing
-        .getVirtualChildren()
-        .forEach(thingVirtualChild -> fillServices(services, thingVirtualChild, rootPackageName));
   }
 
   private ServiceName makeCommandServiceName(ThingName thingName) {

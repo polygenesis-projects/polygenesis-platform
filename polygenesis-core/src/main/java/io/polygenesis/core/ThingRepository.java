@@ -44,7 +44,6 @@ public interface ThingRepository extends ModelRepository {
    */
   Set<Thing> getDomainServiceThings();
 
-
   /**
    * Gets domain model things.
    *
@@ -68,4 +67,12 @@ public interface ThingRepository extends ModelRepository {
    * @return the thing function
    */
   Optional<Function> getThingFunction(ThingName thingName, FunctionName functionName);
+
+  /**
+   * Is virtual child boolean.
+   *
+   * @param thingToCheck the thing to check
+   * @return the boolean
+   */
+  Boolean isVirtualChild(Thing thingToCheck);
 }

@@ -28,7 +28,7 @@ import ${ import };
 /**
  * ${ projection.description }
  *
- * @author PolyGenesis
+ * @author ${ authorService.getAuthor() }
  */
 @Entity
 @Table(name = Constants.DEFAULT_TABLE_PREFIX + "${ textConverter.toLowerHyphen(projection.objectName) }")

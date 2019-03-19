@@ -29,7 +29,8 @@ import io.polygenesis.commons.valueobjects.PackageName;
  * @param <S> the type parameter
  * @author Christos Tsakostas
  */
-public abstract class AbstractInterfaceRepresentable<S> implements InterfaceRepresentable<S> {
+public abstract class AbstractInterfaceRepresentable<S> extends AbstractRepresentable
+    implements InterfaceRepresentable<S> {
 
   /** The constant MODIFIER_PUBLIC. */
   protected static final String MODIFIER_PUBLIC = "public";
@@ -38,8 +39,6 @@ public abstract class AbstractInterfaceRepresentable<S> implements InterfaceRepr
   // DEPENDENCIES
   // ===============================================================================================
 
-  /** The From data type to java converter. */
-  protected final FromDataTypeToJavaConverter fromDataTypeToJavaConverter;
   /** The Function to method representation converter. */
   protected final FunctionToMethodRepresentationConverter functionToMethodRepresentationConverter;
 
@@ -56,7 +55,7 @@ public abstract class AbstractInterfaceRepresentable<S> implements InterfaceRepr
   public AbstractInterfaceRepresentable(
       FromDataTypeToJavaConverter fromDataTypeToJavaConverter,
       FunctionToMethodRepresentationConverter functionToMethodRepresentationConverter) {
-    this.fromDataTypeToJavaConverter = fromDataTypeToJavaConverter;
+    super(fromDataTypeToJavaConverter);
     this.functionToMethodRepresentationConverter = functionToMethodRepresentationConverter;
   }
 

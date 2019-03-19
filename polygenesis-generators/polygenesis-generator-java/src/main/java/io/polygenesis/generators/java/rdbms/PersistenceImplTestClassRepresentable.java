@@ -28,7 +28,7 @@ import io.polygenesis.representations.java.AbstractClassRepresentable;
 import io.polygenesis.representations.java.ConstructorRepresentation;
 import io.polygenesis.representations.java.FromDataTypeToJavaConverter;
 import io.polygenesis.representations.java.MethodRepresentation;
-import io.polygenesis.representations.java.MethodType;
+import io.polygenesis.representations.java.MethodRepresentationType;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -86,7 +86,8 @@ public class PersistenceImplTestClassRepresentable extends AbstractClassRepresen
 
     MethodRepresentation methodRepresentation =
         new MethodRepresentation(
-            MethodType.TEST,
+            MethodRepresentationType.TEST,
+            new LinkedHashSet<>(),
             new LinkedHashSet<>(Arrays.asList("@Test")),
             "Should store and restore aggregate root.",
             MODIFIER_PUBLIC,

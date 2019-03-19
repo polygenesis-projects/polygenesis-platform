@@ -31,7 +31,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 /**
  * The type Rdbms test config.
  *
- * @author PolyGenesis
+ * @author ${ authorService.getAuthor() }
  */
 @SpringBootConfiguration
 @EnableAutoConfiguration

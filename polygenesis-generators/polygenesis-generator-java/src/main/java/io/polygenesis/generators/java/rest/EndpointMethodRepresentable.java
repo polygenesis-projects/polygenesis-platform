@@ -21,13 +21,14 @@
 package io.polygenesis.generators.java.rest;
 
 import io.polygenesis.commons.text.TextConverter;
+import io.polygenesis.core.data.PrimitiveType;
 import io.polygenesis.models.rest.Endpoint;
 import io.polygenesis.models.rest.HttpMethod;
 import io.polygenesis.models.rest.PathContentType;
 import io.polygenesis.representations.commons.ParameterRepresentation;
 import io.polygenesis.representations.java.AbstractMethodRepresentable;
 import io.polygenesis.representations.java.FromDataTypeToJavaConverter;
-import io.polygenesis.representations.java.MethodType;
+import io.polygenesis.representations.java.MethodRepresentationType;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -72,8 +73,15 @@ public class EndpointMethodRepresentable extends AbstractMethodRepresentable<End
   // ===============================================================================================
 
   @Override
-  public MethodType methodType(Endpoint source, Object... args) {
-    return MethodType.ANY;
+  public MethodRepresentationType methodType(Endpoint source, Object... args) {
+    return MethodRepresentationType.ANY;
+  }
+
+  @Override
+  public Set<String> imports(Endpoint source, Object... args) {
+    Set<String> imports = new LinkedHashSet<>();
+
+    return imports;
   }
 
   @Override
@@ -83,7 +91,14 @@ public class EndpointMethodRepresentable extends AbstractMethodRepresentable<End
 
   @Override
   public String description(Endpoint source, Object... args) {
-    return "Some description here please.";
+    StringBuilder stringBuilder = new StringBuilder();
+
+    stringBuilder.append("REST Endpoint for ");
+    stringBuilder.append(
+        TextConverter.toUpperCamelSpaces(source.getFunction().getName().getText()));
+    stringBuilder.append(".");
+
+    return stringBuilder.toString();
   }
 
   @Override
@@ -128,9 +143,11 @@ public class EndpointMethodRepresentable extends AbstractMethodRepresentable<End
 
   @Override
   public String returnValue(Endpoint source, Object... args) {
-    // TODO - primitives
-    return TextConverter.toUpperCamel(
-        source.getFunction().getReturnValue().getData().getDataType());
+    if (source.getFunction().getReturnValue() != null) {
+      return makeVariableDataType(source.getFunction().getReturnValue().getData());
+    } else {
+      return fromDataTypeToJavaConverter.getDeclaredVariableType(PrimitiveType.VOID.name());
+    }
   }
 
   @Override
@@ -138,8 +155,10 @@ public class EndpointMethodRepresentable extends AbstractMethodRepresentable<End
     StringBuilder stringBuilder = new StringBuilder();
 
     stringBuilder.append("\t\t");
-    stringBuilder.append("return");
-    stringBuilder.append(" ");
+    if (source.getFunction().getReturnValue() != null) {
+      stringBuilder.append("return");
+      stringBuilder.append(" ");
+    }
     stringBuilder.append(
         TextConverter.toLowerCamel(source.getService().getServiceName().getText()));
     stringBuilder.append(".");
@@ -179,6 +198,13 @@ public class EndpointMethodRepresentable extends AbstractMethodRepresentable<End
                                   ? pathContent.getContent()
                                   : "{" + pathContent.getContent() + "}")
                       .collect(Collectors.joining("/")));
+
+              if (endpoint.getHttpMethod().equals(HttpMethod.PUT)) {
+                stringBuilder.append("/");
+                stringBuilder.append(
+                    TextConverter.toLowerHyphen(endpoint.getFunction().getName().getText()));
+              }
+
               stringBuilder.append("\"");
             });
 

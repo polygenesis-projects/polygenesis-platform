@@ -44,8 +44,8 @@ import io.polygenesis.core.data.PrimitiveType;
 import io.polygenesis.core.data.VariableName;
 import io.polygenesis.models.api.Dto;
 import io.polygenesis.models.api.DtoType;
-import io.polygenesis.models.api.Method;
 import io.polygenesis.models.api.Service;
+import io.polygenesis.models.api.ServiceMethod;
 import io.polygenesis.models.api.ServiceName;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -92,7 +92,7 @@ public class DtoExporterTest {
 
   private Service makeService() {
     ThingName thingName = new ThingName("someThingName");
-    Set<Method> methods = new LinkedHashSet<>();
+    Set<ServiceMethod> serviceMethods = new LinkedHashSet<>();
 
     DataGroup returnValueDataGroup =
         new DataGroup(
@@ -113,23 +113,25 @@ public class DtoExporterTest {
 
     createArguments.add(argument);
 
-    Method createMethod =
-        new Method(
+    ServiceMethod createServiceMethod =
+        new ServiceMethod(
             makeFunctionCreate(),
             new Dto(
                 DtoType.API_REQUEST,
                 new ObjectName("CreateBusinessResponse"),
                 new PackageName("com.oregor.microservice.some.business"),
                 new LinkedHashSet<>(),
-                argument.getData().getAsDataGroup()),
+                argument.getData().getAsDataGroup(),
+                false),
             new Dto(
                 DtoType.API_RESPONSE,
                 new ObjectName("CreateBusinessResponse"),
                 new PackageName("com.oregor.microservice.some.business"),
                 new LinkedHashSet<>(),
-                createReturnValue.getData().getAsDataGroup()));
+                createReturnValue.getData().getAsDataGroup(),
+                false));
 
-    methods.add(createMethod);
+    serviceMethods.add(createServiceMethod);
 
     Set<Dto> dtos = new LinkedHashSet<>();
     dtos.add(
@@ -138,19 +140,21 @@ public class DtoExporterTest {
             new ObjectName("CreateBusinessResponse"),
             new PackageName("com.oregor.microservice.some.business"),
             new LinkedHashSet<>(),
-            argument.getData().getAsDataGroup()));
+            argument.getData().getAsDataGroup(),
+            false));
     dtos.add(
         new Dto(
             DtoType.API_RESPONSE,
             new ObjectName("CreateBusinessResponse"),
             new PackageName("com.oregor.microservice.some.business"),
             new LinkedHashSet<>(),
-            createReturnValue.getData().getAsDataGroup()));
+            createReturnValue.getData().getAsDataGroup(),
+            false));
 
     return new Service(
         new PackageName("com.oregor"),
         new ServiceName("someServiceName"),
-        methods,
+        serviceMethods,
         CqsType.COMMAND,
         thingName,
         dtos);

@@ -65,12 +65,17 @@ public class ScaffolderJavaMicroserviceFactory {
 
     PrimaryAdapterRestScaffolder primaryAdapterRestScaffolder =
         new PrimaryAdapterRestScaffolder(freemarkerService);
+    PrimaryAdapterRestClientScaffolder primaryAdapterRestClientScaffolder =
+        new PrimaryAdapterRestClientScaffolder(freemarkerService);
     PrimaryAdapterSubscriberScaffolder primaryAdapterSubscriberScaffolder =
         new PrimaryAdapterSubscriberScaffolder(freemarkerService);
 
     primaryAdaptersScaffolder =
         new PrimaryAdaptersScaffolder(
-            freemarkerService, primaryAdapterRestScaffolder, primaryAdapterSubscriberScaffolder);
+            freemarkerService,
+            primaryAdapterRestScaffolder,
+            primaryAdapterRestClientScaffolder,
+            primaryAdapterSubscriberScaffolder);
 
     SecondaryAdapterRdbmsScaffolder secondaryAdapterRdbmsScaffolder =
         new SecondaryAdapterRdbmsScaffolder(freemarkerService);

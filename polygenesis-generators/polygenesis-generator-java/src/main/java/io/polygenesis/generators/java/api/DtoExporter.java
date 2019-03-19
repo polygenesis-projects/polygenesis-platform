@@ -70,8 +70,14 @@ public class DtoExporter {
    * @param service the service
    */
   public void export(Path generationPath, Service service) {
-
-    service.getDtos().forEach(dto -> export(generationPath, dto));
+    service
+        .getDtos()
+        .forEach(
+            dto -> {
+              if (!dto.getVirtual()) {
+                export(generationPath, dto);
+              }
+            });
   }
 
   // ===============================================================================================
@@ -98,6 +104,6 @@ public class DtoExporter {
         generationPath.toString(),
         "src/main/java",
         dto.getPackageName().toPath().toString(),
-        TextConverter.toUpperCamel(dto.getOriginatingDataGroup().getDataType()) + ".java");
+        TextConverter.toUpperCamel(dto.getObjectName().getText()) + ".java");
   }
 }

@@ -20,8 +20,9 @@
 
 package io.polygenesis.models.apiimpl;
 
+import com.oregor.ddd4j.check.assertion.Assertion;
 import io.polygenesis.models.api.Service;
-import io.polygenesis.models.domain.AggregateRoot;
+import io.polygenesis.models.domain.BaseDomainObject;
 import java.util.Objects;
 import java.util.Set;
 
@@ -33,9 +34,10 @@ import java.util.Set;
 public class ServiceImplementation {
 
   private Service service;
-  private Set<Dependency> dependencies;
-  private AggregateRoot aggregateRoot;
-  private AggregateRootConverter aggregateRootConverter;
+  private Set<ServiceDependency> dependencies;
+  private Set<BaseDomainObject<?>> aggregateRoots;
+  private Set<DomainObjectConverter> domainObjectConverters;
+  private Set<ServiceMethodImplementation> serviceMethodImplementations;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -46,18 +48,37 @@ public class ServiceImplementation {
    *
    * @param service the service
    * @param dependencies the dependencies
-   * @param aggregateRoot the aggregate root
-   * @param aggregateRootConverter the aggregate root converter
+   * @param aggregateRoots the aggregate roots
+   * @param domainObjectConverters the aggregate root converters
+   * @param serviceMethodImplementations the service method implementations
    */
   public ServiceImplementation(
       Service service,
-      Set<Dependency> dependencies,
-      AggregateRoot aggregateRoot,
-      AggregateRootConverter aggregateRootConverter) {
+      Set<ServiceDependency> dependencies,
+      Set<BaseDomainObject<?>> aggregateRoots,
+      Set<DomainObjectConverter> domainObjectConverters,
+      Set<ServiceMethodImplementation> serviceMethodImplementations) {
     setService(service);
     setDependencies(dependencies);
-    setAggregateRoot(aggregateRoot);
-    setAggregateRootConverter(aggregateRootConverter);
+    setAggregateRoots(aggregateRoots);
+    setDomainObjectConverters(domainObjectConverters);
+    setServiceMethodImplementations(serviceMethodImplementations);
+  }
+
+  // ===============================================================================================
+  // QUERIES
+  // ===============================================================================================
+
+  /**
+   * Domain object converter domain object converter.
+   *
+   * @return the domain object converter
+   */
+  public DomainObjectConverter domainObjectConverter() {
+    return domainObjectConverters
+        .stream()
+        .findFirst()
+        .orElseThrow(() -> new IllegalArgumentException());
   }
 
   // ===============================================================================================
@@ -78,26 +99,35 @@ public class ServiceImplementation {
    *
    * @return the dependencies
    */
-  public Set<Dependency> getDependencies() {
+  public Set<ServiceDependency> getDependencies() {
     return dependencies;
   }
 
   /**
-   * Gets aggregate root.
+   * Gets aggregate roots.
    *
-   * @return the aggregate root
+   * @return the aggregate roots
    */
-  public AggregateRoot getAggregateRoot() {
-    return aggregateRoot;
+  public Set<BaseDomainObject<?>> getAggregateRoots() {
+    return aggregateRoots;
   }
 
   /**
-   * Gets aggregate root converter.
+   * Gets aggregate root converters.
    *
-   * @return the aggregate root converter
+   * @return the aggregate root converters
    */
-  public AggregateRootConverter getAggregateRootConverter() {
-    return aggregateRootConverter;
+  public Set<DomainObjectConverter> getDomainObjectConverters() {
+    return domainObjectConverters;
+  }
+
+  /**
+   * Gets service method implementations.
+   *
+   * @return the service method implementations
+   */
+  public Set<ServiceMethodImplementation> getServiceMethodImplementations() {
+    return serviceMethodImplementations;
   }
 
   // ===============================================================================================
@@ -110,6 +140,7 @@ public class ServiceImplementation {
    * @param service the service
    */
   private void setService(Service service) {
+    Assertion.isNotNull(service, "service is required");
     this.service = service;
   }
 
@@ -118,26 +149,40 @@ public class ServiceImplementation {
    *
    * @param dependencies the dependencies
    */
-  private void setDependencies(Set<Dependency> dependencies) {
+  private void setDependencies(Set<ServiceDependency> dependencies) {
+    Assertion.isNotNull(dependencies, "dependencies is required");
     this.dependencies = dependencies;
   }
 
   /**
-   * Sets aggregate root.
+   * Sets aggregate roots.
    *
-   * @param aggregateRoot the aggregate root
+   * @param aggregateRoots the aggregate roots
    */
-  private void setAggregateRoot(AggregateRoot aggregateRoot) {
-    this.aggregateRoot = aggregateRoot;
+  private void setAggregateRoots(Set<BaseDomainObject<?>> aggregateRoots) {
+    Assertion.isNotNull(aggregateRoots, "aggregateRoots is required");
+    this.aggregateRoots = aggregateRoots;
   }
 
   /**
-   * Sets aggregate root converter.
+   * Sets aggregate root converters.
    *
-   * @param aggregateRootConverter the aggregate root converter
+   * @param domainObjectConverters the aggregate root converters
    */
-  private void setAggregateRootConverter(AggregateRootConverter aggregateRootConverter) {
-    this.aggregateRootConverter = aggregateRootConverter;
+  private void setDomainObjectConverters(Set<DomainObjectConverter> domainObjectConverters) {
+    Assertion.isNotNull(domainObjectConverters, "domainObjectConverters is required");
+    this.domainObjectConverters = domainObjectConverters;
+  }
+
+  /**
+   * Sets service method implementations.
+   *
+   * @param serviceMethodImplementations the service method implementations
+   */
+  private void setServiceMethodImplementations(
+      Set<ServiceMethodImplementation> serviceMethodImplementations) {
+    Assertion.isNotNull(serviceMethodImplementations, "serviceMethodImplementations is required");
+    this.serviceMethodImplementations = serviceMethodImplementations;
   }
 
   // ===============================================================================================
@@ -155,12 +200,18 @@ public class ServiceImplementation {
     ServiceImplementation that = (ServiceImplementation) o;
     return Objects.equals(service, that.service)
         && Objects.equals(dependencies, that.dependencies)
-        && Objects.equals(aggregateRoot, that.aggregateRoot)
-        && Objects.equals(aggregateRootConverter, that.aggregateRootConverter);
+        && Objects.equals(aggregateRoots, that.aggregateRoots)
+        && Objects.equals(domainObjectConverters, that.domainObjectConverters)
+        && Objects.equals(serviceMethodImplementations, that.serviceMethodImplementations);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(service, dependencies, aggregateRoot, aggregateRootConverter);
+    return Objects.hash(
+        service,
+        dependencies,
+        aggregateRoots,
+        domainObjectConverters,
+        serviceMethodImplementations);
   }
 }

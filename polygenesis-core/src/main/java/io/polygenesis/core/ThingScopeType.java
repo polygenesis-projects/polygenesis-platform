@@ -26,9 +26,8 @@ package io.polygenesis.core;
  * @author Christos Tsakostas
  */
 public enum ThingScopeType {
-  LAYERS_ALL,
-  LAYERS_REST,
-  ABSTRACT_DOMAIN_AGGREGATE_ROOT,
+  DOMAIN_ABSTRACT_AGGREGATE_ROOT,
+  DOMAIN_AGGREGATE_ROOT,
+  DOMAIN_AGGREGATE_ENTITY,
   DOMAIN_SERVICE,
-  USER_INTERFACE,
 }

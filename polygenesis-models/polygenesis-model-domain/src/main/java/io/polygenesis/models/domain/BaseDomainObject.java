@@ -62,6 +62,7 @@ public abstract class BaseDomainObject<T> {
    * @param packageName the package name
    * @param properties the properties
    * @param constructors the constructors
+   * @param multiTenant the multi tenant
    */
   public BaseDomainObject(
       DomainObjectType domainObjectType,
@@ -102,6 +103,15 @@ public abstract class BaseDomainObject<T> {
    */
   public T getSuperClass() {
     return getOptionalSuperClass().orElseThrow(IllegalStateException::new);
+  }
+
+  /**
+   * Gets optional persistence.
+   *
+   * @return the optional persistence
+   */
+  public Optional<Persistence> getOptionalPersistence() {
+    return Optional.empty();
   }
 
   // ===============================================================================================

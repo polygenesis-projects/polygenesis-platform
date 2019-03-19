@@ -37,17 +37,13 @@ import java.util.Set;
  * @param <S> the type parameter
  * @author Christos Tsakostas
  */
-public abstract class AbstractClassRepresentable<S> implements ClassRepresentable<S> {
+public abstract class AbstractClassRepresentable<S> extends AbstractRepresentable
+    implements ClassRepresentable<S> {
 
+  /** The constant MODIFIER_ABSTRACT. */
   protected static final String MODIFIER_ABSTRACT = "abstract";
+  /** The constant MODIFIER_PUBLIC. */
   protected static final String MODIFIER_PUBLIC = "public";
-
-  // ===============================================================================================
-  // DEPENDENCIES
-  // ===============================================================================================
-
-  /** The From data type to java converter. */
-  protected final FromDataTypeToJavaConverter fromDataTypeToJavaConverter;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -59,7 +55,7 @@ public abstract class AbstractClassRepresentable<S> implements ClassRepresentabl
    * @param fromDataTypeToJavaConverter the from data type to java converter
    */
   public AbstractClassRepresentable(FromDataTypeToJavaConverter fromDataTypeToJavaConverter) {
-    this.fromDataTypeToJavaConverter = fromDataTypeToJavaConverter;
+    super(fromDataTypeToJavaConverter);
   }
 
   // ===============================================================================================
@@ -310,7 +306,8 @@ public abstract class AbstractClassRepresentable<S> implements ClassRepresentabl
    */
   protected MethodRepresentation createGetterMethod(FieldRepresentation fieldRepresentation) {
     return new MethodRepresentation(
-        MethodType.GETTER,
+        MethodRepresentationType.GETTER,
+        new LinkedHashSet<>(),
         new LinkedHashSet<>(),
         String.format(
             "Gets the %s.",
@@ -329,7 +326,7 @@ public abstract class AbstractClassRepresentable<S> implements ClassRepresentabl
    * @return the method representation
    */
   protected MethodRepresentation createGuardMethod(FieldRepresentation fieldRepresentation) {
-    return createSetterOrGuardMethod(fieldRepresentation, MethodType.GUARD);
+    return createSetterOrGuardMethod(fieldRepresentation, MethodRepresentationType.GUARD);
   }
 
   /**
@@ -339,7 +336,7 @@ public abstract class AbstractClassRepresentable<S> implements ClassRepresentabl
    * @return the method representation
    */
   protected MethodRepresentation createSetterMethod(FieldRepresentation fieldRepresentation) {
-    return createSetterOrGuardMethod(fieldRepresentation, MethodType.SETTER);
+    return createSetterOrGuardMethod(fieldRepresentation, MethodRepresentationType.SETTER);
   }
 
   /**
@@ -361,13 +358,13 @@ public abstract class AbstractClassRepresentable<S> implements ClassRepresentabl
    * Create setter or guard method method representation.
    *
    * @param fieldRepresentation the field representation
-   * @param methodType the method type
+   * @param methodRepresentationType the method type
    * @return the method representation
    */
   private MethodRepresentation createSetterOrGuardMethod(
-      FieldRepresentation fieldRepresentation, MethodType methodType) {
+      FieldRepresentation fieldRepresentation, MethodRepresentationType methodRepresentationType) {
     String modifiers;
-    switch (methodType) {
+    switch (methodRepresentationType) {
       case GUARD:
         modifiers = "private";
         break;
@@ -380,7 +377,7 @@ public abstract class AbstractClassRepresentable<S> implements ClassRepresentabl
 
     StringBuilder stringBuilder = new StringBuilder();
 
-    if (methodType.equals(MethodType.GUARD)) {
+    if (methodRepresentationType.equals(MethodRepresentationType.GUARD)) {
       stringBuilder.append("\t\t");
       stringBuilder.append("Assertion.isNotNull(");
       stringBuilder.append(fieldRepresentation.getVariableName());
@@ -407,7 +404,8 @@ public abstract class AbstractClassRepresentable<S> implements ClassRepresentabl
                     fieldRepresentation.getDataType(), fieldRepresentation.getVariableName())));
 
     return new MethodRepresentation(
-        methodType,
+        methodRepresentationType,
+        new LinkedHashSet<>(),
         new LinkedHashSet<>(),
         String.format(
             "Sets the %s.",

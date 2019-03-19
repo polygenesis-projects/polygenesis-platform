@@ -448,4 +448,29 @@ public class ProjectDescription {
   public void setLayers(Set<Layer> layers) {
     this.layers = layers;
   }
+
+  // ===============================================================================================
+  // QUERIES
+  // ===============================================================================================
+
+  /**
+   * Has primary adapters boolean.
+   *
+   * @return the boolean
+   */
+  public boolean hasPrimaryAdapters() {
+    return layers.contains(Layer.PRIMARY_ADAPTER_REST_SPRING)
+        || layers.contains(Layer.PRIMARY_ADAPTER_REST_CLIENT_SPRING)
+        || layers.contains(Layer.PRIMARY_ADAPTER_SUBSCRIBER_ACTIVEMQ);
+  }
+
+  /**
+   * Has secondary adapters boolean.
+   *
+   * @return the boolean
+   */
+  public boolean hasSecondaryAdapters() {
+    return layers.contains(Layer.SECONDARY_ADAPTER_PERSISTENCE_SPRING_DATA_JPA)
+        || layers.contains(Layer.SECONDARY_ADAPTER_PUBLISHER_ACTIVEMQ);
+  }
 }

@@ -23,6 +23,7 @@ package io.polygenesis.core;
 import com.oregor.ddd4j.check.assertion.Assertion;
 import io.polygenesis.commons.valueobjects.ContextName;
 import io.polygenesis.commons.valueobjects.PackageName;
+import java.util.EnumSet;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Optional;
@@ -53,6 +54,7 @@ public class Thing {
   private Set<Thing> children;
   private Set<Thing> virtualChildren;
   private Optional<Thing> optionalParent;
+  private Set<ThingLayerType> layerTypes;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -65,13 +67,14 @@ public class Thing {
    */
   public Thing(ThingName thingName) {
     this(
-        ThingScopeType.LAYERS_ALL,
+        ThingScopeType.DOMAIN_AGGREGATE_ROOT,
         ThingBusinessType.ANY,
         ContextName.defaultContext(),
         thingName,
         new LinkedHashSet<>(),
         false,
-        Optional.empty());
+        Optional.empty(),
+        allLayers());
   }
 
   /**
@@ -82,13 +85,14 @@ public class Thing {
    */
   public Thing(ThingName thingName, Boolean multiTenant) {
     this(
-        ThingScopeType.LAYERS_ALL,
+        ThingScopeType.DOMAIN_AGGREGATE_ROOT,
         ThingBusinessType.ANY,
         ContextName.defaultContext(),
         thingName,
         new LinkedHashSet<>(),
         multiTenant,
-        Optional.empty());
+        Optional.empty(),
+        allLayers());
   }
 
   /**
@@ -99,13 +103,14 @@ public class Thing {
    */
   public Thing(ThingName thingName, Thing parentThing) {
     this(
-        ThingScopeType.LAYERS_ALL,
+        ThingScopeType.DOMAIN_AGGREGATE_ROOT,
         ThingBusinessType.ANY,
         ContextName.defaultContext(),
         thingName,
         new LinkedHashSet<>(),
         parentThing.getMultiTenant(),
-        Optional.empty());
+        Optional.empty(),
+        allLayers());
   }
 
   /**
@@ -117,6 +122,8 @@ public class Thing {
    * @param thingName the name
    * @param thingProperties the thing properties
    * @param multiTenant the multi tenant
+   * @param optionalParent the optional parent
+   * @param layerTypes the layer types
    */
   public Thing(
       ThingScopeType thingScopeType,
@@ -125,7 +132,8 @@ public class Thing {
       ThingName thingName,
       Set<ThingProperty> thingProperties,
       Boolean multiTenant,
-      Optional<Thing> optionalParent) {
+      Optional<Thing> optionalParent,
+      Set<ThingLayerType> layerTypes) {
     setThingScopeType(thingScopeType);
     setThingBusinessType(thingBusinessType);
     setContextName(contextName);
@@ -136,6 +144,7 @@ public class Thing {
     setChildren(new LinkedHashSet<>());
     setVirtualChildren(new LinkedHashSet<>());
     setOptionalParent(optionalParent);
+    setLayerTypes(layerTypes);
   }
 
   // ===============================================================================================
@@ -328,6 +337,15 @@ public class Thing {
     return optionalParent;
   }
 
+  /**
+   * Gets layer types.
+   *
+   * @return the layer types
+   */
+  public Set<ThingLayerType> getLayerTypes() {
+    return layerTypes;
+  }
+
   // ===============================================================================================
   // GUARDS
   // ===============================================================================================
@@ -431,6 +449,29 @@ public class Thing {
     this.optionalParent = optionalParent;
   }
 
+  /**
+   * Sets layer types.
+   *
+   * @param layerTypes the layer types
+   */
+  private void setLayerTypes(Set<ThingLayerType> layerTypes) {
+    Assertion.isNotNull(layerTypes, "layerTypes is required");
+    this.layerTypes = layerTypes;
+  }
+
+  // ===============================================================================================
+  // INITIALIZATION METHODS
+  // ===============================================================================================
+
+  /**
+   * All layers set.
+   *
+   * @return the set
+   */
+  public static Set<ThingLayerType> allLayers() {
+    return EnumSet.allOf(ThingLayerType.class);
+  }
+
   // ===============================================================================================
   // OVERRIDES
   // ===============================================================================================
@@ -451,7 +492,8 @@ public class Thing {
         && Objects.equals(thingProperties, thing.thingProperties)
         && Objects.equals(multiTenant, thing.multiTenant)
         && Objects.equals(children, thing.children)
-        && Objects.equals(virtualChildren, thing.virtualChildren);
+        && Objects.equals(virtualChildren, thing.virtualChildren)
+        && Objects.equals(layerTypes, thing.layerTypes);
   }
 
   @Override
@@ -464,6 +506,7 @@ public class Thing {
         thingProperties,
         multiTenant,
         children,
-        virtualChildren);
+        virtualChildren,
+        layerTypes);
   }
 }

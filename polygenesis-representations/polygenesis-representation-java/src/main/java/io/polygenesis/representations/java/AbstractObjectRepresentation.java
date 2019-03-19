@@ -20,6 +20,7 @@
 
 package io.polygenesis.representations.java;
 
+import com.oregor.ddd4j.check.assertion.Assertion;
 import java.util.Objects;
 import java.util.Set;
 
@@ -154,7 +155,7 @@ public class AbstractObjectRepresentation {
    *
    * @param packageName the package name
    */
-  public void setPackageName(String packageName) {
+  private void setPackageName(String packageName) {
     this.packageName = packageName;
   }
 
@@ -163,7 +164,8 @@ public class AbstractObjectRepresentation {
    *
    * @param imports the imports
    */
-  public void setImports(Set<String> imports) {
+  private void setImports(Set<String> imports) {
+    Assertion.isNotNull(imports, "imports is required");
     this.imports = imports;
   }
 
@@ -172,7 +174,7 @@ public class AbstractObjectRepresentation {
    *
    * @param annotations the annotations
    */
-  public void setAnnotations(Set<String> annotations) {
+  private void setAnnotations(Set<String> annotations) {
     this.annotations = annotations;
   }
 
@@ -181,7 +183,7 @@ public class AbstractObjectRepresentation {
    *
    * @param description the description
    */
-  public void setDescription(String description) {
+  private void setDescription(String description) {
     this.description = description;
   }
 
@@ -190,7 +192,7 @@ public class AbstractObjectRepresentation {
    *
    * @param modifiers the modifiers
    */
-  public void setModifiers(String modifiers) {
+  private void setModifiers(String modifiers) {
     this.modifiers = modifiers;
   }
 
@@ -199,7 +201,7 @@ public class AbstractObjectRepresentation {
    *
    * @param simpleObjectName the simple object name
    */
-  public void setSimpleObjectName(String simpleObjectName) {
+  private void setSimpleObjectName(String simpleObjectName) {
     this.simpleObjectName = simpleObjectName;
   }
 
@@ -208,7 +210,7 @@ public class AbstractObjectRepresentation {
    *
    * @param fullObjectName the full object name
    */
-  public void setFullObjectName(String fullObjectName) {
+  private void setFullObjectName(String fullObjectName) {
     this.fullObjectName = fullObjectName;
   }
 

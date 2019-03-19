@@ -108,4 +108,9 @@ public class AggregateEntity extends BaseDomainObject<AggregateEntity>
   public Data getTypeParameterData() {
     throw new UnsupportedOperationException();
   }
+
+  // ===============================================================================================
+  // OVERRIDES
+  // ===============================================================================================
+
 }

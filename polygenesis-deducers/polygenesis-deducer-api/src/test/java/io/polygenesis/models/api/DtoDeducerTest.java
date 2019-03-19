@@ -21,7 +21,6 @@
 package io.polygenesis.models.api;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.Function;
@@ -54,30 +53,6 @@ public class DtoDeducerTest {
   }
 
   @Test
-  public void shouldFailToDeduceRequestDtoForNoArguments() {
-    Function function = getThingFunction("functionWithNoArguments");
-
-    assertThatThrownBy(() -> dtoDeducer.deduceRequestDto(function, rootPackageName))
-        .isInstanceOf(IllegalArgumentException.class);
-  }
-
-  @Test
-  public void shouldFailToDeduceRequestDtoForMoreThanOneArguments() {
-    Function function = getThingFunction("functionWithNoReturnValueAndManyArguments");
-
-    assertThatThrownBy(() -> dtoDeducer.deduceRequestDto(function, rootPackageName))
-        .isInstanceOf(IllegalArgumentException.class);
-  }
-
-  @Test
-  public void shouldFailToDeduceRequestDtoForOneArgumentWhichIsNotDataGroup() {
-    Function function = getThingFunction("functionWithPrimitives");
-
-    assertThatThrownBy(() -> dtoDeducer.deduceRequestDto(function, rootPackageName))
-        .isInstanceOf(IllegalArgumentException.class);
-  }
-
-  @Test
   public void shouldSuccessfullyDeduceResponseDto() {
     Function function =
         thing
@@ -89,22 +64,6 @@ public class DtoDeducerTest {
 
     Dto dtoResponse = dtoDeducer.deduceResponseDto(function, rootPackageName);
     assertThat(dtoResponse).isNotNull();
-  }
-
-  @Test
-  public void shouldFailToDeduceResponseDtoForNullReturnValue() {
-    Function function = getThingFunction("functionWithNoReturnValueAndManyArguments");
-
-    assertThatThrownBy(() -> dtoDeducer.deduceResponseDto(function, rootPackageName))
-        .isInstanceOf(IllegalArgumentException.class);
-  }
-
-  @Test
-  public void shouldFailToDeduceResponseDtoForReturnValueWhichIsNotDataGroup() {
-    Function function = getThingFunction("functionWithPrimitives");
-
-    assertThatThrownBy(() -> dtoDeducer.deduceResponseDto(function, rootPackageName))
-        .isInstanceOf(IllegalArgumentException.class);
   }
 
   @Test

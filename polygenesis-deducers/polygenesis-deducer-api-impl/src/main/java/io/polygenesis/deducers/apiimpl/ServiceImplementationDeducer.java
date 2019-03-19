@@ -20,11 +20,14 @@
 
 package io.polygenesis.deducers.apiimpl;
 
+import io.polygenesis.core.data.VariableName;
 import io.polygenesis.models.api.Service;
-import io.polygenesis.models.apiimpl.AggregateRootConverter;
-import io.polygenesis.models.apiimpl.Dependency;
+import io.polygenesis.models.apiimpl.DomainObjectConverter;
+import io.polygenesis.models.apiimpl.ServiceDependency;
 import io.polygenesis.models.apiimpl.ServiceImplementation;
-import io.polygenesis.models.domain.AggregateRoot;
+import io.polygenesis.models.domain.BaseDomainObject;
+import io.polygenesis.models.domain.Persistence;
+import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -36,6 +39,26 @@ import java.util.Set;
 public class ServiceImplementationDeducer {
 
   // ===============================================================================================
+  // DEPENDENCIES
+  // ===============================================================================================
+
+  private final ServiceMethodImplementationDeducer serviceMethodImplementationDeducer;
+
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
+  /**
+   * Instantiates a new Service implementation deducer.
+   *
+   * @param serviceMethodImplementationDeducer the service method implementation deducer
+   */
+  public ServiceImplementationDeducer(
+      ServiceMethodImplementationDeducer serviceMethodImplementationDeducer) {
+    this.serviceMethodImplementationDeducer = serviceMethodImplementationDeducer;
+  }
+
+  // ===============================================================================================
   // FUNCTIONALITY
   // ===============================================================================================
 
@@ -43,20 +66,52 @@ public class ServiceImplementationDeducer {
    * Deduce service implementation.
    *
    * @param service the service
-   * @param aggregateRoot the aggregate root
-   * @param aggregateRootConverter the aggregate root converter
+   * @return the service implementation
+   */
+  public ServiceImplementation deduce(Service service) {
+    return new ServiceImplementation(
+        service,
+        new LinkedHashSet<>(),
+        new LinkedHashSet<>(),
+        new LinkedHashSet<>(),
+        serviceMethodImplementationDeducer.deduce(service));
+  }
+
+  /**
+   * Deduce service implementation.
+   *
+   * @param service the service
+   * @param domainObject the aggregate root
+   * @param domainObjectConverter the aggregate root converter
    * @return the service implementation
    */
   public ServiceImplementation deduce(
-      Service service, AggregateRoot aggregateRoot, AggregateRootConverter aggregateRootConverter) {
-    Set<Dependency> dependencies = new LinkedHashSet<>();
+      Service service,
+      BaseDomainObject<?> domainObject,
+      DomainObjectConverter domainObjectConverter) {
+    Set<ServiceDependency> dependencies = new LinkedHashSet<>();
+
+    if (domainObject.getOptionalPersistence().isPresent()) {
+      Persistence persistence = domainObject.getOptionalPersistence().get();
+
+      dependencies.add(
+          new ServiceDependency(
+              persistence.getObjectName(),
+              persistence.getPackageName(),
+              new VariableName(persistence.getObjectName().getText())));
+    }
 
     dependencies.add(
-        new Dependency(
-            aggregateRootConverter.getObjectName(),
-            aggregateRootConverter.getPackageName(),
-            aggregateRootConverter.getVariableName()));
+        new ServiceDependency(
+            domainObjectConverter.getObjectName(),
+            domainObjectConverter.getPackageName(),
+            domainObjectConverter.getVariableName()));
 
-    return new ServiceImplementation(service, dependencies, aggregateRoot, aggregateRootConverter);
+    return new ServiceImplementation(
+        service,
+        dependencies,
+        new LinkedHashSet<>(Arrays.asList(domainObject)),
+        new LinkedHashSet<>(Arrays.asList(domainObjectConverter)),
+        serviceMethodImplementationDeducer.deduce(service));
   }
 }

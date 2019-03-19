@@ -113,6 +113,7 @@ public class DataGroup extends Data {
    * @param dataSource the data source
    * @param variableName the variable name
    * @param dataBusinessType the data business type
+   * @param dataValidator the data validator
    * @param objectName the object name
    * @param packageName the package name
    * @param models the models
@@ -165,6 +166,22 @@ public class DataGroup extends Data {
         getDataBusinessType(),
         getDataValidator(),
         getObjectName(),
+        getPackageName(),
+        getModels());
+  }
+
+  /**
+   * As dto data group.
+   *
+   * @return the data group
+   */
+  public DataGroup asDto() {
+    return new DataGroup(
+        getDataSource(),
+        getVariableName(),
+        getDataBusinessType(),
+        getDataValidator(),
+        new ObjectName(String.format("%sDto", getObjectName().getText())),
         getPackageName(),
         getModels());
   }

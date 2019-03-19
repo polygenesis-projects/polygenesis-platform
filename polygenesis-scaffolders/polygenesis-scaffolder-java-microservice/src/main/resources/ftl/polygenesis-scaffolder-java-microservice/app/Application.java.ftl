@@ -17,7 +17,6 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-
 package ${ projectDescription.groupId };
 
 import org.springframework.boot.SpringApplication;
@@ -26,7 +25,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 /**
  * Spring Boot Application.
  *
- * @author PolyGenesis
+ * @author ${ authorService.getAuthor() }
  */
 @SpringBootApplication
 public class Application {

@@ -36,7 +36,7 @@ public class Service {
 
   private PackageName packageName;
   private ServiceName serviceName;
-  private Set<Method> methods;
+  private Set<ServiceMethod> serviceMethods;
   private CqsType cqrsType;
   private ThingName thingName;
   private Set<Dto> dtos;
@@ -50,7 +50,7 @@ public class Service {
    *
    * @param packageName the package name
    * @param serviceName the service name
-   * @param methods the methods
+   * @param serviceMethods the methods
    * @param cqrsType the cqrs type
    * @param thingName the thing name
    * @param dtos the dtos
@@ -58,13 +58,13 @@ public class Service {
   public Service(
       PackageName packageName,
       ServiceName serviceName,
-      Set<Method> methods,
+      Set<ServiceMethod> serviceMethods,
       CqsType cqrsType,
       ThingName thingName,
       Set<Dto> dtos) {
     setPackageName(packageName);
     setServiceName(serviceName);
-    setMethods(methods);
+    setServiceMethods(serviceMethods);
     setCqrsType(cqrsType);
     setThingName(thingName);
     setDtos(dtos);
@@ -82,7 +82,7 @@ public class Service {
    */
   public boolean contains(Function function) {
 
-    return getMethods()
+    return getServiceMethods()
         .stream()
         .filter(method -> method.getFunction().equals(function))
         .findFirst()
@@ -116,8 +116,8 @@ public class Service {
    *
    * @return the methods
    */
-  public Set<Method> getMethods() {
-    return methods;
+  public Set<ServiceMethod> getServiceMethods() {
+    return serviceMethods;
   }
 
   /**
@@ -172,10 +172,10 @@ public class Service {
   /**
    * Sets methods.
    *
-   * @param methods the methods
+   * @param serviceMethods the methods
    */
-  private void setMethods(Set<Method> methods) {
-    this.methods = methods;
+  private void setServiceMethods(Set<ServiceMethod> serviceMethods) {
+    this.serviceMethods = serviceMethods;
   }
 
   /**
@@ -220,13 +220,13 @@ public class Service {
     Service service = (Service) o;
     return Objects.equals(packageName, service.packageName)
         && Objects.equals(serviceName, service.serviceName)
-        && Objects.equals(methods, service.methods)
+        && Objects.equals(serviceMethods, service.serviceMethods)
         && cqrsType == service.cqrsType
         && Objects.equals(thingName, service.thingName);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(packageName, serviceName, methods, cqrsType, thingName);
+    return Objects.hash(packageName, serviceName, serviceMethods, cqrsType, thingName);
   }
 }

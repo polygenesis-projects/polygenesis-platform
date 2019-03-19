@@ -28,7 +28,6 @@ import static org.mockito.Mockito.verify;
 
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.valueobjects.PackageName;
-import io.polygenesis.generators.java.domain.aggregateroot.AggregateRootClassRepresentable;
 import io.polygenesis.models.api.Service;
 import io.polygenesis.models.api.ServiceName;
 import io.polygenesis.models.apiimpl.ServiceImplementation;
@@ -50,7 +49,6 @@ public class ServiceImplementationExporterTest {
   private FreemarkerService freemarkerService;
   private ServiceImplementationClassRepresentable serviceImplementationClassRepresentable;
   private ServiceImplementationExporter serviceImplementationExporter;
-  private AggregateRootClassRepresentable aggregateRootClassRepresentable;
 
   @Before
   public void setUp() {
@@ -61,12 +59,10 @@ public class ServiceImplementationExporterTest {
     aggregateRoot = mock(AggregateRoot.class);
     freemarkerService = mock(FreemarkerService.class);
     serviceImplementationClassRepresentable = mock(ServiceImplementationClassRepresentable.class);
-    aggregateRootClassRepresentable = mock(AggregateRootClassRepresentable.class);
+
     serviceImplementationExporter =
         new ServiceImplementationExporter(
-            freemarkerService,
-            serviceImplementationClassRepresentable,
-            aggregateRootClassRepresentable);
+            freemarkerService, serviceImplementationClassRepresentable);
   }
 
   @Test
@@ -75,8 +71,7 @@ public class ServiceImplementationExporterTest {
     given(service.getPackageName()).willReturn(new PackageName("com.oregor"));
     given(service.getServiceName()).willReturn(new ServiceName("someServiceName"));
 
-    serviceImplementationExporter.export(
-        generationPath, rootPackageName, serviceImplementation, aggregateRoot);
+    serviceImplementationExporter.export(generationPath, serviceImplementation);
 
     verify(serviceImplementationClassRepresentable).create(eq(serviceImplementation));
 

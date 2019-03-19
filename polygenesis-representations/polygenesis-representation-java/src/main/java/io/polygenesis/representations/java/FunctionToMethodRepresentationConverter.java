@@ -22,6 +22,7 @@ package io.polygenesis.representations.java;
 
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.Function;
+import io.polygenesis.core.data.PrimitiveType;
 import io.polygenesis.representations.commons.ParameterRepresentation;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -52,8 +53,15 @@ public class FunctionToMethodRepresentationConverter extends AbstractMethodRepre
   // ===============================================================================================
 
   @Override
-  public MethodType methodType(Function source, Object... args) {
-    return MethodType.ANY;
+  public MethodRepresentationType methodType(Function source, Object... args) {
+    return MethodRepresentationType.ANY;
+  }
+
+  @Override
+  public Set<String> imports(Function source, Object... args) {
+    Set<String> imports = new LinkedHashSet<>();
+
+    return imports;
   }
 
   @Override
@@ -63,7 +71,12 @@ public class FunctionToMethodRepresentationConverter extends AbstractMethodRepre
 
   @Override
   public String description(Function source, Object... args) {
-    return "Some description here please.";
+    StringBuilder stringBuilder = new StringBuilder();
+
+    stringBuilder.append(TextConverter.toUpperCamelSpaces(source.getName().getText()));
+    stringBuilder.append(".");
+
+    return stringBuilder.toString();
   }
 
   @Override
@@ -96,8 +109,11 @@ public class FunctionToMethodRepresentationConverter extends AbstractMethodRepre
 
   @Override
   public String returnValue(Function source, Object... args) {
-    // TODO - primitives
-    return TextConverter.toUpperCamel(source.getReturnValue().getData().getDataType());
+    if (source.getReturnValue() != null) {
+      return makeVariableDataType(source.getReturnValue().getData());
+    } else {
+      return fromDataTypeToJavaConverter.getDeclaredVariableType(PrimitiveType.VOID.name());
+    }
   }
 
   @Override

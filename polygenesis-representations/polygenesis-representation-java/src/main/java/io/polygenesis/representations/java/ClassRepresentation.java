@@ -124,7 +124,10 @@ public class ClassRepresentation extends AbstractObjectRepresentation {
     return methodRepresentations
         .stream()
         .filter(
-            methodRepresentation -> methodRepresentation.getMethodType().equals(MethodType.GETTER))
+            methodRepresentation ->
+                methodRepresentation
+                    .getMethodRepresentationType()
+                    .equals(MethodRepresentationType.GETTER))
         .collect(toCollection(LinkedHashSet::new));
   }
 
@@ -137,7 +140,10 @@ public class ClassRepresentation extends AbstractObjectRepresentation {
     return methodRepresentations
         .stream()
         .filter(
-            methodRepresentation -> methodRepresentation.getMethodType().equals(MethodType.SETTER))
+            methodRepresentation ->
+                methodRepresentation
+                    .getMethodRepresentationType()
+                    .equals(MethodRepresentationType.SETTER))
         .collect(toCollection(LinkedHashSet::new));
   }
 
@@ -150,7 +156,10 @@ public class ClassRepresentation extends AbstractObjectRepresentation {
     return methodRepresentations
         .stream()
         .filter(
-            methodRepresentation -> methodRepresentation.getMethodType().equals(MethodType.GUARD))
+            methodRepresentation ->
+                methodRepresentation
+                    .getMethodRepresentationType()
+                    .equals(MethodRepresentationType.GUARD))
         .collect(toCollection(LinkedHashSet::new));
   }
 
@@ -162,7 +171,11 @@ public class ClassRepresentation extends AbstractObjectRepresentation {
   public Set<MethodRepresentation> getAnys() {
     return methodRepresentations
         .stream()
-        .filter(methodRepresentation -> methodRepresentation.getMethodType().equals(MethodType.ANY))
+        .filter(
+            methodRepresentation ->
+                methodRepresentation
+                    .getMethodRepresentationType()
+                    .equals(MethodRepresentationType.ANY))
         .collect(toCollection(LinkedHashSet::new));
   }
 
@@ -175,7 +188,10 @@ public class ClassRepresentation extends AbstractObjectRepresentation {
     return methodRepresentations
         .stream()
         .filter(
-            methodRepresentation -> methodRepresentation.getMethodType().equals(MethodType.TEST))
+            methodRepresentation ->
+                methodRepresentation
+                    .getMethodRepresentationType()
+                    .equals(MethodRepresentationType.TEST))
         .collect(toCollection(LinkedHashSet::new));
   }
 

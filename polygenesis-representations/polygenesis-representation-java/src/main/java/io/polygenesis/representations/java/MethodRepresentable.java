@@ -47,7 +47,16 @@ public interface MethodRepresentable<S> {
    * @param args the args
    * @return the method type
    */
-  MethodType methodType(S source, Object... args);
+  MethodRepresentationType methodType(S source, Object... args);
+
+  /**
+   * Imports set.
+   *
+   * @param source the source
+   * @param args the args
+   * @return the set
+   */
+  Set<String> imports(S source, Object... args);
 
   /**
    * Annotations set.

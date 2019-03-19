@@ -38,6 +38,32 @@
       <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
 
+    <!--SPRING SECURITY OAUTH2-->
+    <#--<dependency>-->
+      <#--<groupId>org.springframework.security.oauth</groupId>-->
+      <#--<artifactId>spring-security-oauth2</artifactId>-->
+      <#--<#noparse>-->
+      <#--<version>${spring-security-oauth2.version}</version>-->
+      <#--</#noparse>-->
+    <#--</dependency>-->
+    <dependency>
+      <groupId>org.springframework.security.oauth.boot</groupId>
+      <artifactId>spring-security-oauth2-autoconfigure</artifactId>
+      <#noparse>
+      <version>${spring-security-oauth2-autoconfigure.version}</version>
+      </#noparse>
+    </dependency>
+
+    <!--APACHE-->
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+    </dependency>
+
     <!--API-->
     <dependency>
       <groupId>${ projectDescription.groupId }</groupId>

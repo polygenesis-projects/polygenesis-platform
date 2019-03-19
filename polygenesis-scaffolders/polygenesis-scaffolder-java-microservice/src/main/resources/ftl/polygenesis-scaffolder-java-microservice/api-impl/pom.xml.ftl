@@ -47,12 +47,16 @@
       <groupId>${ projectDescription.groupId }</groupId>
       <artifactId>${ projectDescription.modulePrefix }-api</artifactId>
     </dependency>
+<#list projectDescription.layers as layer>
+  <#if layer == 'DOMAIN_MODEL'>
 
     <!--DOMAIN MODEL-->
     <dependency>
       <groupId>${ projectDescription.groupId }</groupId>
       <artifactId>${ projectDescription.modulePrefix }-domain-model</artifactId>
     </dependency>
+  </#if>
+</#list>
 
     <!--TEST-->
     <dependency>

@@ -81,6 +81,10 @@ public class SqlGenerator extends AbstractGenerator {
         CoreRegistry.getModelRepositoryResolver()
             .resolve(modelRepositories, SqlModelRepository.class);
 
+    if (sqlModelRepository.getTables().size() == 1) {
+      return;
+    }
+
     scriptExporter.export(getGenerationPath(), sqlModelRepository, getTablePrefix());
   }
 }

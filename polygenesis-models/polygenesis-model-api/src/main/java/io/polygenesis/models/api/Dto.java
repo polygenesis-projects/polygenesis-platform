@@ -47,6 +47,7 @@ public class Dto {
   private Set<Data> models;
   // TODO: remove
   private DataGroup originatingDataGroup;
+  private Boolean virtual;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -60,18 +61,21 @@ public class Dto {
    * @param packageName the package name
    * @param models the models
    * @param originatingDataGroup the originating data group
+   * @param virtual the virtual
    */
   public Dto(
       DtoType dtoType,
       ObjectName objectName,
       PackageName packageName,
       Set<Data> models,
-      DataGroup originatingDataGroup) {
+      DataGroup originatingDataGroup,
+      Boolean virtual) {
     setDtoType(dtoType);
     setObjectName(objectName);
     setPackageName(packageName);
     setModels(models);
     setOriginatingDataGroup(originatingDataGroup);
+    setVirtual(virtual);
   }
 
   // ===============================================================================================
@@ -121,6 +125,15 @@ public class Dto {
    */
   public DataGroup getOriginatingDataGroup() {
     return originatingDataGroup;
+  }
+
+  /**
+   * Gets virtual.
+   *
+   * @return the virtual
+   */
+  public Boolean getVirtual() {
+    return virtual;
   }
 
   // ===============================================================================================
@@ -203,6 +216,16 @@ public class Dto {
     this.originatingDataGroup = originatingDataGroup;
   }
 
+  /**
+   * Sets virtual.
+   *
+   * @param virtual the virtual
+   */
+  private void setVirtual(Boolean virtual) {
+    Assertion.isNotNull(virtual, "virtual is required");
+    this.virtual = virtual;
+  }
+
   // ===============================================================================================
   // OVERRIDES
   // ===============================================================================================
@@ -220,11 +243,12 @@ public class Dto {
         && Objects.equals(objectName, dto.objectName)
         && Objects.equals(packageName, dto.packageName)
         && Objects.equals(models, dto.models)
-        && Objects.equals(originatingDataGroup, dto.originatingDataGroup);
+        && Objects.equals(originatingDataGroup, dto.originatingDataGroup)
+        && Objects.equals(virtual, dto.virtual);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(dtoType, objectName, packageName, models, originatingDataGroup);
+    return Objects.hash(dtoType, objectName, packageName, models, originatingDataGroup, virtual);
   }
 }

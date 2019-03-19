@@ -30,7 +30,7 @@ import ${ import };
 /**
  * ${ representation.description }
  *
- * @author PolyGenesis
+ * @author ${ authorService.getAuthor() }
  */
 <#list representation.annotations as annotation>
 ${ annotation }

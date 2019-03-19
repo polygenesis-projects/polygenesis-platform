@@ -40,7 +40,8 @@ public class DtoTest extends AbstractEqualityTest<Dto> {
             new ObjectName("asd"),
             new PackageName("com.oregor"),
             new LinkedHashSet<>(),
-            new DataGroup(new ObjectName("asd"), new PackageName("com.oregor")));
+            new DataGroup(new ObjectName("asd"), new PackageName("com.oregor")),
+            false);
 
     assertThat(dto).isNotNull();
     assertThat(dto.getOriginatingDataGroup()).isNotNull();
@@ -55,7 +56,8 @@ public class DtoTest extends AbstractEqualityTest<Dto> {
         new ObjectName("asd"),
         new PackageName("com.oregor"),
         new LinkedHashSet<>(),
-        new DataGroup(new ObjectName("asd"), new PackageName("com.oregor")));
+        new DataGroup(new ObjectName("asd"), new PackageName("com.oregor")),
+        false);
   }
 
   @Override
@@ -65,6 +67,7 @@ public class DtoTest extends AbstractEqualityTest<Dto> {
         new ObjectName("xyz"),
         new PackageName("com.oregor"),
         new LinkedHashSet<>(),
-        new DataGroup(new ObjectName("xyz"), new PackageName("com.oregor")));
+        new DataGroup(new ObjectName("xyz"), new PackageName("com.oregor")),
+        false);
   }
 }

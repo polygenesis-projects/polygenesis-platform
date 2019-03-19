@@ -137,6 +137,29 @@ public class AggregateRoot extends BaseDomainObject<AggregateRoot>
   }
 
   // ===============================================================================================
+  // QUERIES
+  // ===============================================================================================
+
+  /**
+   * Aggregate root id aggregate root id.
+   *
+   * @return the aggregate root id
+   */
+  public AggregateRootId aggregateRootId() {
+    return getProperties()
+        .stream()
+        .filter(property -> property.getPropertyType().equals(PropertyType.AGGREGATE_ROOT_ID))
+        .map(AggregateRootId.class::cast)
+        .findFirst()
+        .orElseThrow(
+            () ->
+                new IllegalStateException(
+                    String.format(
+                        "No AggregateRootId defined for AggregateRoot=%s",
+                        getObjectName().getText())));
+  }
+
+  // ===============================================================================================
   // GUARDS
   // ===============================================================================================
 

@@ -20,6 +20,7 @@
 
 package io.polygenesis.representations.java;
 
+import com.oregor.ddd4j.check.assertion.Assertion;
 import io.polygenesis.representations.commons.ParameterRepresentation;
 import java.util.Objects;
 import java.util.Set;
@@ -31,7 +32,8 @@ import java.util.Set;
  */
 public class MethodRepresentation {
 
-  private MethodType methodType;
+  private MethodRepresentationType methodRepresentationType;
+  private Set<String> imports;
   private Set<String> annotations;
   private String description;
   private String modifiers;
@@ -47,7 +49,8 @@ public class MethodRepresentation {
   /**
    * Instantiates a new Method representation.
    *
-   * @param methodType the method type
+   * @param methodRepresentationType the method type
+   * @param imports the imports
    * @param annotations the annotations
    * @param description the description
    * @param modifiers the modifiers
@@ -57,7 +60,8 @@ public class MethodRepresentation {
    * @param implementation the implementation
    */
   public MethodRepresentation(
-      MethodType methodType,
+      MethodRepresentationType methodRepresentationType,
+      Set<String> imports,
       Set<String> annotations,
       String description,
       String modifiers,
@@ -65,13 +69,27 @@ public class MethodRepresentation {
       Set<ParameterRepresentation> parameterRepresentations,
       String returnValue,
       String implementation) {
-    setMethodType(methodType);
+    setMethodRepresentationType(methodRepresentationType);
+    setImports(imports);
     setAnnotations(annotations);
     setDescription(description);
     setModifiers(modifiers);
     setMethodName(methodName);
     setParameterRepresentations(parameterRepresentations);
     setReturnValue(returnValue);
+    setImplementation(implementation);
+  }
+
+  // ===============================================================================================
+  // STATE MUTATION
+  // ===============================================================================================
+
+  /**
+   * Change implementation to.
+   *
+   * @param implementation the implementation
+   */
+  public void changeImplementationTo(String implementation) {
     setImplementation(implementation);
   }
 
@@ -84,8 +102,17 @@ public class MethodRepresentation {
    *
    * @return the method type
    */
-  public MethodType getMethodType() {
-    return methodType;
+  public MethodRepresentationType getMethodRepresentationType() {
+    return methodRepresentationType;
+  }
+
+  /**
+   * Gets imports.
+   *
+   * @return the imports
+   */
+  public Set<String> getImports() {
+    return imports;
   }
 
   /**
@@ -158,10 +185,21 @@ public class MethodRepresentation {
   /**
    * Sets method type.
    *
-   * @param methodType the method type
+   * @param methodRepresentationType the method type
    */
-  public void setMethodType(MethodType methodType) {
-    this.methodType = methodType;
+  private void setMethodRepresentationType(MethodRepresentationType methodRepresentationType) {
+    Assertion.isNotNull(methodRepresentationType, "methodRepresentationType is required");
+    this.methodRepresentationType = methodRepresentationType;
+  }
+
+  /**
+   * Sets imports.
+   *
+   * @param imports the imports
+   */
+  private void setImports(Set<String> imports) {
+    Assertion.isNotNull(imports, "imports is required");
+    this.imports = imports;
   }
 
   /**
@@ -169,7 +207,8 @@ public class MethodRepresentation {
    *
    * @param annotations the annotations
    */
-  public void setAnnotations(Set<String> annotations) {
+  private void setAnnotations(Set<String> annotations) {
+    Assertion.isNotNull(annotations, "annotations is required");
     this.annotations = annotations;
   }
 
@@ -178,7 +217,8 @@ public class MethodRepresentation {
    *
    * @param description the description
    */
-  public void setDescription(String description) {
+  private void setDescription(String description) {
+    Assertion.isNotNull(description, "description is required");
     this.description = description;
   }
 
@@ -187,7 +227,8 @@ public class MethodRepresentation {
    *
    * @param modifiers the modifiers
    */
-  public void setModifiers(String modifiers) {
+  private void setModifiers(String modifiers) {
+    Assertion.isNotNull(modifiers, "modifiers is required");
     this.modifiers = modifiers;
   }
 
@@ -196,7 +237,8 @@ public class MethodRepresentation {
    *
    * @param methodName the method name
    */
-  public void setMethodName(String methodName) {
+  private void setMethodName(String methodName) {
+    Assertion.isNotNull(methodName, "methodName is required");
     this.methodName = methodName;
   }
 
@@ -205,7 +247,8 @@ public class MethodRepresentation {
    *
    * @param parameterRepresentations the parameter representations
    */
-  public void setParameterRepresentations(Set<ParameterRepresentation> parameterRepresentations) {
+  private void setParameterRepresentations(Set<ParameterRepresentation> parameterRepresentations) {
+    Assertion.isNotNull(parameterRepresentations, "parameterRepresentations is required");
     this.parameterRepresentations = parameterRepresentations;
   }
 
@@ -214,7 +257,8 @@ public class MethodRepresentation {
    *
    * @param returnValue the return value
    */
-  public void setReturnValue(String returnValue) {
+  private void setReturnValue(String returnValue) {
+    Assertion.isNotNull(returnValue, "returnValue is required");
     this.returnValue = returnValue;
   }
 
@@ -223,7 +267,8 @@ public class MethodRepresentation {
    *
    * @param implementation the implementation
    */
-  public void setImplementation(String implementation) {
+  private void setImplementation(String implementation) {
+    Assertion.isNotNull(implementation, "implementation is required");
     this.implementation = implementation;
   }
 
@@ -240,7 +285,8 @@ public class MethodRepresentation {
       return false;
     }
     MethodRepresentation that = (MethodRepresentation) o;
-    return methodType == that.methodType
+    return methodRepresentationType == that.methodRepresentationType
+        && Objects.equals(imports, that.imports)
         && Objects.equals(annotations, that.annotations)
         && Objects.equals(description, that.description)
         && Objects.equals(modifiers, that.modifiers)
@@ -253,7 +299,8 @@ public class MethodRepresentation {
   @Override
   public int hashCode() {
     return Objects.hash(
-        methodType,
+        methodRepresentationType,
+        imports,
         annotations,
         description,
         modifiers,

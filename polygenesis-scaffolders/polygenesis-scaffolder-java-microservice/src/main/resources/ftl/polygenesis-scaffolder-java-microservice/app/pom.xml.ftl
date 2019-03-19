@@ -33,50 +33,74 @@
 
   <dependencies>
     <!-- ===================================================================================== -->
-    <!-- SPRING BOOT WEB -->
+    <!-- SPRING BOOT -->
     <!-- ===================================================================================== -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
 
+  <#list projectDescription.layers as layer>
+    <#if layer == 'API_IMPL'>
     <!-- API IMPL -->
     <dependency>
       <groupId>${ projectDescription.groupId }</groupId>
       <artifactId>${ projectDescription.modulePrefix }-api-impl</artifactId>
     </dependency>
+    </#if>
+  </#list>
 
     <!-- ===================================================================================== -->
     <!-- PRIMARY ADAPTERS                                                                      -->
     <!-- ===================================================================================== -->
 
+  <#list projectDescription.layers as layer>
+    <#if layer == 'PRIMARY_ADAPTER_REST_SPRING'>
     <!-- REST SPRING -->
     <dependency>
       <groupId>${ projectDescription.groupId }.${ projectDescription.modulePrefix }-primary-adapters</groupId>
       <artifactId>${ projectDescription.modulePrefix }-rest-spring</artifactId>
     </dependency>
+    </#if>
+  </#list>
 
+  <#list projectDescription.layers as layer>
+    <#if layer == 'PRIMARY_ADAPTER_SUBSCRIBER_ACTIVEMQ'>
     <!-- SUBSCRIBER ACTIVEMQ -->
     <dependency>
       <groupId>${ projectDescription.groupId }.${ projectDescription.modulePrefix }-primary-adapters</groupId>
       <artifactId>${ projectDescription.modulePrefix }-subscriber-activemq</artifactId>
     </dependency>
+    </#if>
+  </#list>
 
     <!-- ===================================================================================== -->
     <!-- SECONDARY ADAPTERS                                                                    -->
     <!-- ===================================================================================== -->
 
+  <#list projectDescription.layers as layer>
+    <#if layer == 'SECONDARY_ADAPTER_PERSISTENCE_SPRING_DATA_JPA'>
     <!-- PERSISTENCE RDBMS -->
     <dependency>
       <groupId>${ projectDescription.groupId }.${ projectDescription.modulePrefix }-secondary-adapters</groupId>
       <artifactId>${ projectDescription.modulePrefix }-persistence-rdbms</artifactId>
     </dependency>
+    </#if>
+  </#list>
 
+  <#list projectDescription.layers as layer>
+    <#if layer == 'SECONDARY_ADAPTER_PUBLISHER_ACTIVEMQ'>
     <!-- PUBLISHER ACTIVEMQ -->
     <dependency>
       <groupId>${ projectDescription.groupId }.${ projectDescription.modulePrefix }-secondary-adapters</groupId>
       <artifactId>${ projectDescription.modulePrefix }-publisher-activemq</artifactId>
     </dependency>
+    </#if>
+  </#list>
 
     <!-- ===================================================================================== -->
     <!-- DATABASE -->

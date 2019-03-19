@@ -180,6 +180,20 @@ public abstract class Data {
   }
 
   /**
+   * Gets as data map.
+   *
+   * @return the as data map
+   */
+  public DataMap getAsDataMap() {
+    if (isDataMap()) {
+      return (DataMap) this;
+    } else {
+      throw new IllegalStateException(
+          String.format("Model of type=%s is not a DataMap", getDataPrimaryType().name()));
+    }
+  }
+
+  /**
    * Is primitive.
    *
    * @return the boolean
@@ -204,6 +218,15 @@ public abstract class Data {
    */
   public boolean isDataArray() {
     return getDataPrimaryType().equals(DataPrimaryType.ARRAY);
+  }
+
+  /**
+   * Is data map boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isDataMap() {
+    return getDataPrimaryType().equals(DataPrimaryType.MAP);
   }
 
   /**

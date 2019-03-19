@@ -31,7 +31,7 @@ import java.util.Set;
 public class ServiceImplementationModelRepository implements ModelRepository {
 
   private Set<ServiceImplementation> serviceImplementations;
-  private Set<AggregateRootConverter> aggregateRootConverters;
+  private Set<DomainObjectConverter> domainObjectConverters;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -39,9 +39,9 @@ public class ServiceImplementationModelRepository implements ModelRepository {
 
   public ServiceImplementationModelRepository(
       Set<ServiceImplementation> serviceImplementations,
-      Set<AggregateRootConverter> aggregateRootConverters) {
+      Set<DomainObjectConverter> domainObjectConverters) {
     setServiceImplementations(serviceImplementations);
-    setAggregateRootConverters(aggregateRootConverters);
+    setDomainObjectConverters(domainObjectConverters);
   }
 
   // ===============================================================================================
@@ -62,8 +62,8 @@ public class ServiceImplementationModelRepository implements ModelRepository {
    *
    * @return the aggregate root converters
    */
-  public Set<AggregateRootConverter> getAggregateRootConverters() {
-    return aggregateRootConverters;
+  public Set<DomainObjectConverter> getDomainObjectConverters() {
+    return domainObjectConverters;
   }
 
   // ===============================================================================================
@@ -82,10 +82,10 @@ public class ServiceImplementationModelRepository implements ModelRepository {
   /**
    * Sets aggregate root converters.
    *
-   * @param aggregateRootConverters the aggregate root converters
+   * @param domainObjectConverters the aggregate root converters
    */
-  private void setAggregateRootConverters(Set<AggregateRootConverter> aggregateRootConverters) {
-    this.aggregateRootConverters = aggregateRootConverters;
+  private void setDomainObjectConverters(Set<DomainObjectConverter> domainObjectConverters) {
+    this.domainObjectConverters = domainObjectConverters;
   }
 
   // ===============================================================================================

@@ -39,7 +39,7 @@ public class AggregateRootDeducer {
   // ===============================================================================================
   // DEPENDENCIES
   // ===============================================================================================
-  private final AggregateConstructorDeducer aggregateConstructorDeducer;
+  private final DomainObjectConstructorDeducer domainObjectConstructorDeducer;
   private final AggregateRootPropertyDeducer aggregateRootPropertyDeducer;
 
   // ===============================================================================================
@@ -49,13 +49,13 @@ public class AggregateRootDeducer {
   /**
    * Instantiates a new Aggregate root deducer.
    *
-   * @param aggregateConstructorDeducer the aggregate constructor deducer
+   * @param domainObjectConstructorDeducer the aggregate constructor deducer
    * @param aggregateRootPropertyDeducer the aggregate root property deducer
    */
   public AggregateRootDeducer(
-      AggregateConstructorDeducer aggregateConstructorDeducer,
+      DomainObjectConstructorDeducer domainObjectConstructorDeducer,
       AggregateRootPropertyDeducer aggregateRootPropertyDeducer) {
-    this.aggregateConstructorDeducer = aggregateConstructorDeducer;
+    this.domainObjectConstructorDeducer = domainObjectConstructorDeducer;
     this.aggregateRootPropertyDeducer = aggregateRootPropertyDeducer;
   }
 
@@ -78,7 +78,9 @@ public class AggregateRootDeducer {
         .getDomainModelThings()
         .forEach(
             thing -> {
-              makeAggregateRoot(aggregateRoots, thing, rootPackageName);
+              if (!thing.getOptionalParent().isPresent() || thingRepository.isVirtualChild(thing)) {
+                makeAggregateRoot(aggregateRoots, thing, rootPackageName);
+              }
             });
 
     return aggregateRoots;
@@ -104,7 +106,8 @@ public class AggregateRootDeducer {
     Set<DomainObjectProperty> properties =
         aggregateRootPropertyDeducer.deduceFrom(thing, rootPackageName);
 
-    Set<Constructor> constructors = aggregateConstructorDeducer.deduceFrom(thing, rootPackageName);
+    Set<Constructor> constructors =
+        domainObjectConstructorDeducer.deduceFrom(thing, rootPackageName);
 
     Set<StateMutationMethod> stateMutationMethods = new LinkedHashSet<>();
     Set<StateQueryMethod> stateQueryMethods = new LinkedHashSet<>();
@@ -120,7 +123,7 @@ public class AggregateRootDeducer {
 
     aggregateRoots.add(
         new AggregateRootPersistable(
-            thing.getThingScopeType().equals(ThingScopeType.ABSTRACT_DOMAIN_AGGREGATE_ROOT)
+            thing.getThingScopeType().equals(ThingScopeType.DOMAIN_ABSTRACT_AGGREGATE_ROOT)
                 ? InstantiationType.ABSTRACT
                 : InstantiationType.CONCRETE,
             makeSuperclass(),

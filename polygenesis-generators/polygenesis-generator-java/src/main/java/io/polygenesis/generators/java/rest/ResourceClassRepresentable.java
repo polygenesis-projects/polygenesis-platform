@@ -117,6 +117,8 @@ public class ResourceClassRepresentable extends AbstractClassRepresentable<Resou
         .getEndpoints()
         .forEach(
             endpoint -> {
+              imports.addAll(endpointMethodRepresentable.imports(endpoint));
+
               if (endpoint.getHttpMethod().equals(HttpMethod.POST)) {
                 imports.add("org.springframework.web.bind.annotation.PostMapping");
                 imports.add("org.springframework.web.bind.annotation.RequestBody");

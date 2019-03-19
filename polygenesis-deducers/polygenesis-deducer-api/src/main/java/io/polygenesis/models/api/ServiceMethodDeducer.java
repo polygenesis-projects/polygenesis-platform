@@ -57,19 +57,20 @@ public class ServiceMethodDeducer {
   /**
    * Deduce command methods.
    *
-   * @param methods the methods
+   * @param serviceMethods the methods
    * @param thing the thing
    * @param rootPackageName the root package name
    */
-  public void deduceCommandMethods(Set<Method> methods, Thing thing, PackageName rootPackageName) {
+  public void deduceCommandMethods(
+      Set<ServiceMethod> serviceMethods, Thing thing, PackageName rootPackageName) {
     thing
         .getFunctions()
         .stream()
         .filter(function -> function.getGoal().isCommand())
         .forEach(
             function ->
-                methods.add(
-                    new Method(
+                serviceMethods.add(
+                    new ServiceMethod(
                         function,
                         dtoDeducer.deduceRequestDto(function, rootPackageName),
                         dtoDeducer.deduceResponseDto(function, rootPackageName))));
@@ -78,11 +79,12 @@ public class ServiceMethodDeducer {
   /**
    * Deduce query methods.
    *
-   * @param methods the methods
+   * @param serviceMethods the methods
    * @param thing the thing
    * @param rootPackageName the root package name
    */
-  public void deduceQueryMethods(Set<Method> methods, Thing thing, PackageName rootPackageName) {
+  public void deduceQueryMethods(
+      Set<ServiceMethod> serviceMethods, Thing thing, PackageName rootPackageName) {
 
     thing
         .getFunctions()
@@ -90,8 +92,8 @@ public class ServiceMethodDeducer {
         .filter(function -> !function.getGoal().isCommand())
         .forEach(
             function ->
-                methods.add(
-                    new Method(
+                serviceMethods.add(
+                    new ServiceMethod(
                         function,
                         dtoDeducer.deduceRequestDto(function, rootPackageName),
                         dtoDeducer.deduceResponseDto(function, rootPackageName))));

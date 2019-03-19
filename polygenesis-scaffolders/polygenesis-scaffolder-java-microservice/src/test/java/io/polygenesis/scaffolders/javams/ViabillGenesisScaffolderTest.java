@@ -54,11 +54,7 @@ public class ViabillGenesisScaffolderTest {
     projectDescription.setLicenseUrl("http://www.apache.org/licenses/LICENSE-2.0.txt");
     projectDescription.setDistributionProfile("ossrh-viabill");
     projectDescription.setExtraModules(
-        new LinkedHashSet<>(
-            Arrays.asList(
-                "ms-messaging-admin",
-                "ms-ba-projections"
-            )));
+        new LinkedHashSet<>(Arrays.asList("ms-messaging-admin", "ms-ba-projections")));
     projectDescription.setMicroservice(false);
 
     projectDescription.setScmConnection("scm:git:git://gitlab.com/viabill/viabill-genesis.git");

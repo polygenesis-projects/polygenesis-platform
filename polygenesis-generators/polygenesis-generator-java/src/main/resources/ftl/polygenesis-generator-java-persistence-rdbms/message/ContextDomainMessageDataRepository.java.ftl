@@ -25,7 +25,7 @@ import com.oregor.ddd4j.core.SpringDomainMessageDataRepository;
 /**
  * The interface Context domain message data repository.
  *
- * @author PolyGenesis
+ * @author ${ authorService.getAuthor() }
  */
 public interface ${ fullObjectName } {
 

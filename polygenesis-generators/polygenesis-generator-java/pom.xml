@@ -36,6 +36,12 @@
       <artifactId>polygenesis-representation-java</artifactId>
     </dependency>
 
+    <!--POLYGENESIS IMPLEMENTATIONS-->
+    <dependency>
+      <groupId>io.polygenesis.implementations</groupId>
+      <artifactId>polygenesis-implementation-java</artifactId>
+    </dependency>
+
     <!--TEST-->
     <dependency>
       <groupId>io.polygenesis</groupId>

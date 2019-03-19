@@ -28,7 +28,7 @@ import ${ import };
 /**
  * ${ projection.description }
  *
- * @author PolyGenesis
+ * @author ${ authorService.getAuthor() }
  */
 public interface ${ projection.objectNameWithOptionalExtendsImplements }
     extends SpringDataRepository<${ textConverter.toUpperCamelSpaces(aggregateRoot) }, ${ textConverter.toUpperCamelSpaces(aggregateRoot) }Id> {

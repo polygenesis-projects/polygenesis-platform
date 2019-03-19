@@ -27,7 +27,7 @@ import org.springframework.stereotype.Component;
 /**
  * The type Context domain message data converter.
  *
- * @author PolyGenesis
+ * @author ${ authorService.getAuthor() }
  */
 @Component
 public class ${ fullObjectName } {

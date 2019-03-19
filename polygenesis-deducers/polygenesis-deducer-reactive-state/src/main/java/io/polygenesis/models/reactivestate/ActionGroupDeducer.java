@@ -74,7 +74,7 @@ public class ActionGroupDeducer {
     services.forEach(
         service ->
             service
-                .getMethods()
+                .getServiceMethods()
                 .forEach(
                     method -> {
                       Set<Action> actions = new LinkedHashSet<>();
