@@ -50,6 +50,7 @@ public class ProjectDescription {
   private String distributionProfile;
   private Set<String> extraModules;
   private boolean microservice;
+  private Set<Layer> layers;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -59,6 +60,7 @@ public class ProjectDescription {
   public ProjectDescription() {
     setExtraModules(new LinkedHashSet<>());
     setMicroservice(true);
+    setLayers(new LinkedHashSet<>());
   }
 
   // ===============================================================================================
@@ -245,6 +247,15 @@ public class ProjectDescription {
     return microservice;
   }
 
+  /**
+   * Gets layers.
+   *
+   * @return the layers
+   */
+  public Set<Layer> getLayers() {
+    return layers;
+  }
+
   // ===============================================================================================
   // SETTERS
   // ===============================================================================================
@@ -427,5 +438,14 @@ public class ProjectDescription {
    */
   public void setMicroservice(boolean microservice) {
     this.microservice = microservice;
+  }
+
+  /**
+   * Sets layers.
+   *
+   * @param layers the layers
+   */
+  public void setLayers(Set<Layer> layers) {
+    this.layers = layers;
   }
 }

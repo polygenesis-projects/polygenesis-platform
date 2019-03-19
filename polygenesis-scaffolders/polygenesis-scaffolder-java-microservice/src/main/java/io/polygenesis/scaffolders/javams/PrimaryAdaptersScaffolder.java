@@ -61,8 +61,16 @@ public class PrimaryAdaptersScaffolder extends AbstractScaffolder {
   // ===============================================================================================
 
   @Override
-  public void scaffold(
-      Path generationPath, ProjectDescription projectDescription, Map<String, Object> dataModel) {
+  public void scaffold(Path generationPath, ProjectDescription projectDescription,
+      Map<String, Object> dataModel) {
+
+    // Check if Layer is enabled
+    if (!projectDescription.getLayers().contains(Layer.PRIMARY_ADAPTER_SUBSCRIBER_ACTIVEMQ)
+        && !projectDescription.getLayers().contains(Layer.PRIMARY_ADAPTER_REST_SPRING)
+        && !projectDescription.getLayers().contains(Layer.PRIMARY_ADAPTER_REST_CLIENT_SPRING)) {
+      return;
+    }
+
     Path modulePath =
         Paths.get(
             generationPath.toString(), projectDescription.getModulePrefix() + "-primary-adapters");

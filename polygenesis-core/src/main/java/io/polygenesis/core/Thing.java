@@ -65,7 +65,7 @@ public class Thing {
    */
   public Thing(ThingName thingName) {
     this(
-        ThingScopeType.ACROSS_LAYERS,
+        ThingScopeType.LAYERS_ALL,
         ThingBusinessType.ANY,
         ContextName.defaultContext(),
         thingName,
@@ -82,7 +82,7 @@ public class Thing {
    */
   public Thing(ThingName thingName, Boolean multiTenant) {
     this(
-        ThingScopeType.ACROSS_LAYERS,
+        ThingScopeType.LAYERS_ALL,
         ThingBusinessType.ANY,
         ContextName.defaultContext(),
         thingName,
@@ -99,7 +99,7 @@ public class Thing {
    */
   public Thing(ThingName thingName, Thing parentThing) {
     this(
-        ThingScopeType.ACROSS_LAYERS,
+        ThingScopeType.LAYERS_ALL,
         ThingBusinessType.ANY,
         ContextName.defaultContext(),
         thingName,

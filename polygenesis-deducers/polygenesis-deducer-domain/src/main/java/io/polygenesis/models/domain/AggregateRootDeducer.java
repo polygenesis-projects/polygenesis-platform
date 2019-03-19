@@ -75,14 +75,7 @@ public class AggregateRootDeducer {
     Set<AggregateRoot> aggregateRoots = new LinkedHashSet<>();
 
     thingRepository
-        .getAbstractDomainAggregateRootThings()
-        .forEach(
-            thing -> {
-              makeAggregateRoot(aggregateRoots, thing, rootPackageName);
-            });
-
-    thingRepository
-        .getApiThings()
+        .getDomainModelThings()
         .forEach(
             thing -> {
               makeAggregateRoot(aggregateRoots, thing, rootPackageName);

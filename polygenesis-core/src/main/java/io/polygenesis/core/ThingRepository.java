@@ -44,12 +44,13 @@ public interface ThingRepository extends ModelRepository {
    */
   Set<Thing> getDomainServiceThings();
 
+
   /**
-   * Gets abstract domain aggregate root things.
+   * Gets domain model things.
    *
-   * @return the abstract domain aggregate root things
+   * @return the domain model things
    */
-  Set<Thing> getAbstractDomainAggregateRootThings();
+  Set<Thing> getDomainModelThings();
 
   /**
    * Gets thing by name.

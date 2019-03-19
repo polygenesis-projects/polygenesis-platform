@@ -50,8 +50,13 @@ public class DomainModelScaffolder extends AbstractScaffolder {
   // ===============================================================================================
 
   @Override
-  public void scaffold(
-      Path generationPath, ProjectDescription projectDescription, Map<String, Object> dataModel) {
+  public void scaffold(Path generationPath, ProjectDescription projectDescription,
+      Map<String, Object> dataModel) {
+
+    // Check if Layer is enabled
+    if (!projectDescription.getLayers().contains(Layer.DOMAIN_MODEL)) {
+      return;
+    }
 
     Path modulePath =
         Paths.get(

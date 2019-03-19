@@ -26,12 +26,9 @@ package io.polygenesis.core;
  * @author Christos Tsakostas
  */
 public enum ThingScopeType {
-  /** Abstract domain aggregate root thing scope type. */
+  LAYERS_ALL,
+  LAYERS_REST,
   ABSTRACT_DOMAIN_AGGREGATE_ROOT,
-  /** Across layers thing scope type. */
-  ACROSS_LAYERS,
-  /** Domain service thing scope type. */
   DOMAIN_SERVICE,
-  /** User interface thing scope type. */
   USER_INTERFACE,
 }

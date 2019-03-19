@@ -58,7 +58,8 @@ public class ThingRepositoryImpl implements ThingRepository {
   public Set<Thing> getApiThings() {
     return things
         .stream()
-        .filter(thing -> thing.getThingScopeType().equals(ThingScopeType.ACROSS_LAYERS))
+        .filter(thing -> thing.getThingScopeType().equals(ThingScopeType.LAYERS_ALL)
+            || thing.getThingScopeType().equals(ThingScopeType.LAYERS_REST))
         .collect(Collectors.toCollection(LinkedHashSet::new));
   }
 
@@ -71,12 +72,13 @@ public class ThingRepositoryImpl implements ThingRepository {
   }
 
   @Override
-  public Set<Thing> getAbstractDomainAggregateRootThings() {
+  public Set<Thing> getDomainModelThings() {
     return things
         .stream()
         .filter(
             thing ->
-                thing.getThingScopeType().equals(ThingScopeType.ABSTRACT_DOMAIN_AGGREGATE_ROOT))
+                thing.getThingScopeType().equals(ThingScopeType.ABSTRACT_DOMAIN_AGGREGATE_ROOT)
+                    || thing.getThingScopeType().equals(ThingScopeType.LAYERS_ALL))
         .collect(Collectors.toCollection(LinkedHashSet::new));
   }
 

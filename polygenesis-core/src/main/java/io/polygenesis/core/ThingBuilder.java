@@ -59,7 +59,7 @@ public class ThingBuilder {
 
   private String contextName;
   private ThingName thingName;
-  private ThingScopeType thingScopeType = ThingScopeType.ACROSS_LAYERS;
+  private ThingScopeType thingScopeType = ThingScopeType.LAYERS_ALL;
   private ThingBusinessType thingBusinessType = ThingBusinessType.ANY;
   private Set<ThingProperty> thingProperties = new LinkedHashSet<>();
   private Boolean multiTenant = false;
