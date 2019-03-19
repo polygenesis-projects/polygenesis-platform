@@ -38,7 +38,7 @@ public class ArgumentTest extends AbstractEqualityTest<Argument> {
     Argument argument = new Argument(createDataPrimitive1());
 
     assertThat(argument).isNotNull();
-    assertThat(argument.getModel()).isEqualTo(createDataPrimitive1());
+    assertThat(argument.getData()).isEqualTo(createDataPrimitive1());
   }
 
   private DataPrimitive createDataPrimitive1() {

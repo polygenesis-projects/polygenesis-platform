@@ -18,39 +18,62 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.models.domain;
+package io.polygenesis.core.data.validation;
 
-import io.polygenesis.core.ModelRepository;
-import io.polygenesis.core.ThingRepository;
-import io.polygenesis.core.data.PackageName;
-import java.util.Set;
+import com.oregor.ddd4j.check.assertion.Assertion;
+import java.util.Objects;
 
 /**
- * The type Domain deducer.
+ * The type Validation.
  *
  * @author Christos Tsakostas
  */
-public class DomainDeducerImpl implements DomainDeducer {
+public abstract class Validation {
 
   // ===============================================================================================
-  // DEPENDENCIES
+  // STATE
   // ===============================================================================================
-  private final PackageName rootPackageName;
-  private final AggregateRootDeducer aggregateRootDeducer;
+
+  private ValidationType validationType;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
-   * Instantiates a new Domain deducer.
+   * Instantiates a new Validation.
    *
-   * @param rootPackageName the root package name
-   * @param aggregateRootDeducer the aggregate root deducer
+   * @param validationType the validation type
    */
-  public DomainDeducerImpl(PackageName rootPackageName, AggregateRootDeducer aggregateRootDeducer) {
-    this.rootPackageName = rootPackageName;
-    this.aggregateRootDeducer = aggregateRootDeducer;
+  protected Validation(ValidationType validationType) {
+    setValidationType(validationType);
+  }
+
+  // ===============================================================================================
+  // GETTERS
+  // ===============================================================================================
+
+  /**
+   * Gets validation type.
+   *
+   * @return the validation type
+   */
+  public ValidationType getValidationType() {
+    return validationType;
+  }
+
+  // ===============================================================================================
+  // GUARDS
+  // ===============================================================================================
+
+  /**
+   * Sets validation type.
+   *
+   * @param validationType the validation type
+   */
+  public void setValidationType(ValidationType validationType) {
+    Assertion.isNotNull(validationType, "validationType is required");
+    this.validationType = validationType;
   }
 
   // ===============================================================================================
@@ -58,9 +81,20 @@ public class DomainDeducerImpl implements DomainDeducer {
   // ===============================================================================================
 
   @Override
-  public DomainModelRepository deduce(
-      ThingRepository thingRepository, Set<ModelRepository> modelRepositories) {
-    return new DomainModelRepository(
-        aggregateRootDeducer.deduceFrom(thingRepository, rootPackageName));
+  public boolean equals(Object o) {
+
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Validation that = (Validation) o;
+    return validationType == that.validationType;
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(validationType);
   }
 }

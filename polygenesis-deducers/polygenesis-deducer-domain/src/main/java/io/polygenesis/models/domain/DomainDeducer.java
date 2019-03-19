@@ -20,11 +20,48 @@
 
 package io.polygenesis.models.domain;
 
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.Deducer;
+import io.polygenesis.core.ModelRepository;
+import io.polygenesis.core.ThingRepository;
+import java.util.Set;
 
 /**
- * The interface Api deducer.
+ * The type Domain deducer.
  *
  * @author Christos Tsakostas
  */
-public interface DomainDeducer extends Deducer<DomainModelRepository> {}
+public class DomainDeducer implements Deducer<DomainModelRepository> {
+
+  // ===============================================================================================
+  // DEPENDENCIES
+  // ===============================================================================================
+  private final PackageName rootPackageName;
+  private final AggregateRootDeducer aggregateRootDeducer;
+
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
+  /**
+   * Instantiates a new Domain deducer.
+   *
+   * @param rootPackageName the root package name
+   * @param aggregateRootDeducer the aggregate root deducer
+   */
+  public DomainDeducer(PackageName rootPackageName, AggregateRootDeducer aggregateRootDeducer) {
+    this.rootPackageName = rootPackageName;
+    this.aggregateRootDeducer = aggregateRootDeducer;
+  }
+
+  // ===============================================================================================
+  // OVERRIDES
+  // ===============================================================================================
+
+  @Override
+  public DomainModelRepository deduce(
+      ThingRepository thingRepository, Set<ModelRepository> modelRepositories) {
+    return new DomainModelRepository(
+        aggregateRootDeducer.deduceFrom(thingRepository, rootPackageName));
+  }
+}

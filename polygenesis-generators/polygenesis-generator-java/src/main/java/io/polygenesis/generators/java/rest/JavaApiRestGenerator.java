@@ -20,11 +20,11 @@
 
 package io.polygenesis.generators.java.rest;
 
-import io.polygenesis.commons.text.Name;
+import io.polygenesis.commons.valueobjects.ObjectName;
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.AbstractGenerator;
 import io.polygenesis.core.CoreRegistry;
 import io.polygenesis.core.ModelRepository;
-import io.polygenesis.core.data.PackageName;
 import io.polygenesis.models.rest.RestModelRepository;
 import java.nio.file.Path;
 import java.util.Set;
@@ -37,7 +37,7 @@ import java.util.Set;
 public class JavaApiRestGenerator extends AbstractGenerator {
 
   private final PackageName rootPackageName;
-  private final Name contextName;
+  private final ObjectName contextName;
   private final ResourceExporter resourceExporter;
   private final ResourceTestExporter resourceTestExporter;
   private final RestConstantsProjectionExporter restConstantsProjectionExporter;
@@ -59,7 +59,7 @@ public class JavaApiRestGenerator extends AbstractGenerator {
   public JavaApiRestGenerator(
       Path generationPath,
       PackageName rootPackageName,
-      Name contextName,
+      ObjectName contextName,
       ResourceExporter resourceExporter,
       ResourceTestExporter resourceTestExporter,
       RestConstantsProjectionExporter restConstantsProjectionExporter) {
@@ -89,7 +89,7 @@ public class JavaApiRestGenerator extends AbstractGenerator {
    *
    * @return the context name
    */
-  public Name getContextName() {
+  public ObjectName getContextName() {
     return contextName;
   }
 

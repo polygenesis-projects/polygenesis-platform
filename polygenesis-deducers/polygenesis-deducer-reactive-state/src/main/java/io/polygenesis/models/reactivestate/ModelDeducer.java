@@ -47,7 +47,7 @@ public class ModelDeducer {
   public Set<Model> deduce(Thing thing, ServiceModelRepository serviceModelRepository) {
     Set<Model> models = new LinkedHashSet<>();
 
-    Set<Service> services = serviceModelRepository.getServicesBy(thing.getName());
+    Set<Service> services = serviceModelRepository.getServicesBy(thing.getThingName());
 
     services.forEach(
         service -> {

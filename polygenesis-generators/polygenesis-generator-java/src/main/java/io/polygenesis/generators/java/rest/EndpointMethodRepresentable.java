@@ -105,21 +105,21 @@ public class EndpointMethodRepresentable extends AbstractMethodRepresentable<End
         .getArguments()
         .forEach(
             argument -> {
-              if (argument.getModel().isDataGroup()
+              if (argument.getData().isDataGroup()
                   && (source.getFunction().getGoal().isCreate()
                       || source.getFunction().getGoal().isModify())) {
                 parameterRepresentations.add(
                     new ParameterRepresentation(
                         fromDataTypeToJavaConverter.getDeclaredVariableType(
-                            argument.getModel().getDataType()),
-                        argument.getModel().getVariableName().getText(),
+                            argument.getData().getDataType()),
+                        argument.getData().getVariableName().getText(),
                         new LinkedHashSet<>(Arrays.asList("@RequestBody"))));
               } else {
                 parameterRepresentations.add(
                     new ParameterRepresentation(
                         fromDataTypeToJavaConverter.getDeclaredVariableType(
-                            argument.getModel().getDataType()),
-                        argument.getModel().getVariableName().getText()));
+                            argument.getData().getDataType()),
+                        argument.getData().getVariableName().getText()));
               }
             });
 
@@ -130,7 +130,7 @@ public class EndpointMethodRepresentable extends AbstractMethodRepresentable<End
   public String returnValue(Endpoint source, Object... args) {
     // TODO - primitives
     return TextConverter.toUpperCamel(
-        source.getFunction().getReturnValue().getModel().getDataType());
+        source.getFunction().getReturnValue().getData().getDataType());
   }
 
   @Override

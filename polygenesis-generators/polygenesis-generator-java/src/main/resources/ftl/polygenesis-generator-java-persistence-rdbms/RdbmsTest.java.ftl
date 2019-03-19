@@ -22,6 +22,7 @@ package ${ packageName };
 
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +32,13 @@ import org.springframework.transaction.annotation.Transactional;
  * @author PolyGenesis
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = RdbmsTestConfig.class)
+@SpringBootTest(classes = RdbmsTestConfig.class,
+  properties = {
+    // "logging.level.org.hibernate.SQL=debug",
+    // "logging.level.org.hibernate.type.descriptor.sql=trace",
+    "spring.jpa.show-sql=true",
+    "spring.jpa.properties.hibernate.format_sql=false"
+  })
+@ActiveProfiles({"ci-rdbms"})
 @Transactional
 public abstract class RdbmsTest {}

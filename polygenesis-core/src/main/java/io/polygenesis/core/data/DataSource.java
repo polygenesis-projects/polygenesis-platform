@@ -20,35 +20,78 @@
 
 package io.polygenesis.core.data;
 
-import com.oregor.ddd4j.check.assertion.Assertion;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import io.polygenesis.core.Function;
 import java.util.Objects;
-import java.util.regex.Pattern;
 
 /**
- * The type Package name.
+ * The type Data source.
  *
  * @author Christos Tsakostas
  */
-public class PackageName {
+public class DataSource {
 
-  private static final Pattern pattern = Pattern.compile("^(?:\\w+|\\w+\\.\\w+)+$");
+  // ===============================================================================================
+  // STATIC
+  // ===============================================================================================
 
-  private final String text;
+  /**
+   * Data input is provided by user.
+   *
+   * @return the data source
+   */
+  public static DataSource user() {
+    return new DataSource(null);
+  }
+
+  /**
+   * Data input is provided by the return value of a function.
+   *
+   * @param function the function
+   * @return the data source
+   */
+  public static DataSource function(Function function) {
+    return new DataSource(function);
+  }
+
+  // ===============================================================================================
+  // STATE
+  // ===============================================================================================
+
+  private final Function function;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
-   * Instantiates a new Package name.
+   * Instantiates a new Data source.
    *
-   * @param text the text
+   * @param function the function
    */
-  public PackageName(String text) {
-    guardText(text);
-    this.text = text;
+  public DataSource(Function function) {
+    this.function = function;
+  }
+
+  // ===============================================================================================
+  // QUERIES
+  // ===============================================================================================
+
+  /**
+   * Is user boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isUser() {
+    return getFunction() == null;
+  }
+
+  /**
+   * Is function output boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isFunctionOutput() {
+    return getFunction() != null;
   }
 
   // ===============================================================================================
@@ -56,31 +99,17 @@ public class PackageName {
   // ===============================================================================================
 
   /**
-   * Gets text.
+   * Gets function.
    *
-   * @return the text
+   * @return the function
    */
-  public String getText() {
-    return text;
-  }
-
-  /**
-   * To path path.
-   *
-   * @return the path
-   */
-  public Path toPath() {
-    return Paths.get(getText().replaceAll("\\.", "/"));
+  public Function getFunction() {
+    return function;
   }
 
   // ===============================================================================================
   // GUARDS
   // ===============================================================================================
-
-  private void guardText(String text) {
-    Assertion.isTrue(
-        pattern.matcher(text).matches(), String.format("Invalid package name=%s", text));
-  }
 
   // ===============================================================================================
   // OVERRIDES
@@ -94,12 +123,12 @@ public class PackageName {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    PackageName that = (PackageName) o;
-    return Objects.equals(text, that.text);
+    DataSource that = (DataSource) o;
+    return Objects.equals(function, that.function);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(text);
+    return Objects.hash(function);
   }
 }

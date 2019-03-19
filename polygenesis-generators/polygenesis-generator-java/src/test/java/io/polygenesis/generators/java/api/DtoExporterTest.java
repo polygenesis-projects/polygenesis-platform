@@ -28,17 +28,18 @@ import static org.mockito.Mockito.verify;
 import io.polygenesis.annotations.core.CqsType;
 import io.polygenesis.annotations.core.GoalType;
 import io.polygenesis.commons.freemarker.FreemarkerService;
+import io.polygenesis.commons.valueobjects.ObjectName;
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.Argument;
 import io.polygenesis.core.Function;
 import io.polygenesis.core.FunctionName;
 import io.polygenesis.core.Goal;
 import io.polygenesis.core.ReturnValue;
 import io.polygenesis.core.Thing;
+import io.polygenesis.core.ThingBuilder;
 import io.polygenesis.core.ThingName;
 import io.polygenesis.core.data.DataGroup;
 import io.polygenesis.core.data.DataPrimitive;
-import io.polygenesis.core.data.ObjectName;
-import io.polygenesis.core.data.PackageName;
 import io.polygenesis.core.data.PrimitiveType;
 import io.polygenesis.core.data.VariableName;
 import io.polygenesis.models.api.Dto;
@@ -115,14 +116,36 @@ public class DtoExporterTest {
     Method createMethod =
         new Method(
             makeFunctionCreate(),
-            new Dto(DtoType.API_REQUEST, argument.getModel().getAsDataGroup()),
-            new Dto(DtoType.API_RESPONSE, createReturnValue.getModel().getAsDataGroup()));
+            new Dto(
+                DtoType.API_REQUEST,
+                new ObjectName("CreateBusinessResponse"),
+                new PackageName("com.oregor.microservice.some.business"),
+                new LinkedHashSet<>(),
+                argument.getData().getAsDataGroup()),
+            new Dto(
+                DtoType.API_RESPONSE,
+                new ObjectName("CreateBusinessResponse"),
+                new PackageName("com.oregor.microservice.some.business"),
+                new LinkedHashSet<>(),
+                createReturnValue.getData().getAsDataGroup()));
 
     methods.add(createMethod);
 
     Set<Dto> dtos = new LinkedHashSet<>();
-    dtos.add(new Dto(DtoType.API_REQUEST, argument.getModel().getAsDataGroup()));
-    dtos.add(new Dto(DtoType.API_RESPONSE, createReturnValue.getModel().getAsDataGroup()));
+    dtos.add(
+        new Dto(
+            DtoType.API_REQUEST,
+            new ObjectName("CreateBusinessResponse"),
+            new PackageName("com.oregor.microservice.some.business"),
+            new LinkedHashSet<>(),
+            argument.getData().getAsDataGroup()));
+    dtos.add(
+        new Dto(
+            DtoType.API_RESPONSE,
+            new ObjectName("CreateBusinessResponse"),
+            new PackageName("com.oregor.microservice.some.business"),
+            new LinkedHashSet<>(),
+            createReturnValue.getData().getAsDataGroup()));
 
     return new Service(
         new PackageName("com.oregor"),
@@ -152,7 +175,7 @@ public class DtoExporterTest {
   }
 
   private Function makeFunctionCreate() {
-    Thing thing = new Thing(new ThingName("customer"));
+    Thing thing = ThingBuilder.generic().setThingName(new ThingName("customer")).createThing();
     ReturnValue returnValue =
         new ReturnValue(DataPrimitive.of(PrimitiveType.STRING, new VariableName("someRet")));
     return new Function(

@@ -23,9 +23,10 @@ package io.polygenesis.models.api;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.polygenesis.commons.test.AbstractEqualityTest;
+import io.polygenesis.commons.valueobjects.ObjectName;
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.data.DataGroup;
-import io.polygenesis.core.data.ObjectName;
-import io.polygenesis.core.data.PackageName;
+import java.util.LinkedHashSet;
 import org.junit.Test;
 
 /** @author Christos Tsakostas */
@@ -36,6 +37,9 @@ public class DtoTest extends AbstractEqualityTest<Dto> {
     Dto dto =
         new Dto(
             DtoType.API_REQUEST,
+            new ObjectName("asd"),
+            new PackageName("com.oregor"),
+            new LinkedHashSet<>(),
             new DataGroup(new ObjectName("asd"), new PackageName("com.oregor")));
 
     assertThat(dto).isNotNull();
@@ -47,12 +51,20 @@ public class DtoTest extends AbstractEqualityTest<Dto> {
   @Override
   public Dto createObject1() {
     return new Dto(
-        DtoType.API_REQUEST, new DataGroup(new ObjectName("asd"), new PackageName("com.oregor")));
+        DtoType.API_REQUEST,
+        new ObjectName("asd"),
+        new PackageName("com.oregor"),
+        new LinkedHashSet<>(),
+        new DataGroup(new ObjectName("asd"), new PackageName("com.oregor")));
   }
 
   @Override
   public Dto createObject2() {
     return new Dto(
-        DtoType.API_REQUEST, new DataGroup(new ObjectName("xyz"), new PackageName("com.oregor")));
+        DtoType.API_REQUEST,
+        new ObjectName("xyz"),
+        new PackageName("com.oregor"),
+        new LinkedHashSet<>(),
+        new DataGroup(new ObjectName("xyz"), new PackageName("com.oregor")));
   }
 }

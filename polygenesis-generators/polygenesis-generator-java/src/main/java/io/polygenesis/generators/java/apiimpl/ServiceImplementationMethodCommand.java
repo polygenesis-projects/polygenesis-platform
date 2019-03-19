@@ -25,9 +25,9 @@ import io.polygenesis.core.Argument;
 import io.polygenesis.models.api.Method;
 import io.polygenesis.models.apiimpl.AggregateRootConverter;
 import io.polygenesis.models.apiimpl.ValueObjectFromDto;
-import io.polygenesis.models.domain.AbstractProperty;
 import io.polygenesis.models.domain.AggregateRoot;
 import io.polygenesis.models.domain.Constructor;
+import io.polygenesis.models.domain.DomainObjectProperty;
 import java.util.stream.Collectors;
 
 /**
@@ -84,14 +84,14 @@ public class ServiceImplementationMethodCommand extends ServiceImplementationMet
       throw new IllegalStateException(
           String.format(
               "More than one Constructors for AggregateRoot=%s",
-              aggregateRoot.getName().getText()));
+              aggregateRoot.getObjectName().getText()));
     }
 
     if (method.getFunction().getArguments().size() > 1) {
       throw new IllegalStateException(
           String.format(
               "Currently, only one Argument is supported for Services. AggregateRoot=%s",
-              aggregateRoot.getName().getText()));
+              aggregateRoot.getObjectName().getText()));
     }
 
     Constructor constructor =
@@ -112,11 +112,11 @@ public class ServiceImplementationMethodCommand extends ServiceImplementationMet
     StringBuilder stringBuilder = new StringBuilder();
 
     stringBuilder.append("\t\t");
-    stringBuilder.append(TextConverter.toUpperCamelSpaces(aggregateRoot.getName().getText()));
+    stringBuilder.append(TextConverter.toUpperCamel(aggregateRoot.getObjectName().getText()));
     stringBuilder.append(" ");
-    stringBuilder.append(TextConverter.toLowerCamel(aggregateRoot.getName().getText()));
+    stringBuilder.append(TextConverter.toLowerCamel(aggregateRoot.getObjectName().getText()));
     stringBuilder.append(" = new ");
-    stringBuilder.append(TextConverter.toUpperCamelSpaces(aggregateRoot.getName().getText()));
+    stringBuilder.append(TextConverter.toUpperCamel(aggregateRoot.getObjectName().getText()));
     stringBuilder.append("(");
     stringBuilder.append("\n");
 
@@ -142,7 +142,7 @@ public class ServiceImplementationMethodCommand extends ServiceImplementationMet
 
   private String fillProperty(
       AggregateRoot aggregateRoot,
-      AbstractProperty property,
+      DomainObjectProperty property,
       Argument argument,
       AggregateRootConverter aggregateRootConverter) {
 
@@ -164,7 +164,7 @@ public class ServiceImplementationMethodCommand extends ServiceImplementationMet
   private String fillAggregateRootId(AggregateRoot aggregateRoot) {
     StringBuilder stringBuilder = new StringBuilder();
 
-    stringBuilder.append(TextConverter.toLowerCamel(aggregateRoot.getName().getText()));
+    stringBuilder.append(TextConverter.toLowerCamel(aggregateRoot.getObjectName().getText()));
     stringBuilder.append("Persistence");
     stringBuilder.append(".nextId()");
 
@@ -172,7 +172,7 @@ public class ServiceImplementationMethodCommand extends ServiceImplementationMet
   }
 
   private ValueObjectFromDto findValueObjectFromDto(
-      AbstractProperty property, AggregateRootConverter aggregateRootConverter) {
+      DomainObjectProperty property, AggregateRootConverter aggregateRootConverter) {
 
     return aggregateRootConverter
         .getValueObjectFromDtos()
@@ -182,27 +182,29 @@ public class ServiceImplementationMethodCommand extends ServiceImplementationMet
         .orElseThrow(IllegalArgumentException::new);
   }
 
-  private String fillPrimitiveCollectionProperty(AbstractProperty property, Argument argument) {
+  private String fillPrimitiveCollectionProperty(DomainObjectProperty property, Argument argument) {
     StringBuilder stringBuilder = new StringBuilder();
 
     stringBuilder.append(
-        TextConverter.toLowerCamel(argument.getModel().getVariableName().getText()));
+        TextConverter.toLowerCamel(argument.getData().getVariableName().getText()));
     stringBuilder.append(".");
     stringBuilder.append("get");
-    stringBuilder.append(TextConverter.toUpperCamel(property.getVariableName().getText()));
+    stringBuilder.append(
+        TextConverter.toUpperCamel(property.getData().getVariableName().getText()));
     stringBuilder.append("()");
 
     return stringBuilder.toString();
   }
 
-  private String fillPrimitiveProperty(AbstractProperty property, Argument argument) {
+  private String fillPrimitiveProperty(DomainObjectProperty property, Argument argument) {
     StringBuilder stringBuilder = new StringBuilder();
 
     stringBuilder.append(
-        TextConverter.toLowerCamel(argument.getModel().getVariableName().getText()));
+        TextConverter.toLowerCamel(argument.getData().getVariableName().getText()));
     stringBuilder.append(".");
     stringBuilder.append("get");
-    stringBuilder.append(TextConverter.toUpperCamel(property.getVariableName().getText()));
+    stringBuilder.append(
+        TextConverter.toUpperCamel(property.getData().getVariableName().getText()));
     stringBuilder.append("()");
 
     return stringBuilder.toString();
@@ -214,7 +216,7 @@ public class ServiceImplementationMethodCommand extends ServiceImplementationMet
     stringBuilder.append("businessConverter.convert(");
 
     stringBuilder.append(
-        TextConverter.toLowerCamel(argument.getModel().getVariableName().getText()));
+        TextConverter.toLowerCamel(argument.getData().getVariableName().getText()));
 
     stringBuilder.append(".");
     stringBuilder.append("get");
@@ -237,10 +239,10 @@ public class ServiceImplementationMethodCommand extends ServiceImplementationMet
     StringBuilder stringBuilder = new StringBuilder();
 
     stringBuilder.append("\t\t");
-    stringBuilder.append(TextConverter.toLowerCamel(aggregateRoot.getName().getText()));
+    stringBuilder.append(TextConverter.toLowerCamel(aggregateRoot.getObjectName().getText()));
     stringBuilder.append("Persistence");
     stringBuilder.append(".store(");
-    stringBuilder.append(TextConverter.toLowerCamel(aggregateRoot.getName().getText()));
+    stringBuilder.append(TextConverter.toLowerCamel(aggregateRoot.getObjectName().getText()));
     stringBuilder.append(");");
     stringBuilder.append("\n");
 

@@ -21,10 +21,9 @@
 package io.polygenesis.models.api;
 
 import io.polygenesis.annotations.core.CqsType;
-import io.polygenesis.commons.text.TextConverter;
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.Thing;
 import io.polygenesis.core.ThingName;
-import io.polygenesis.core.data.PackageName;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -71,36 +70,7 @@ public class ServiceDeducer {
   public Set<Service> deduceFrom(Thing thing, PackageName rootPackageName) {
     Set<Service> services = new LinkedHashSet<>();
 
-    Set<Method> commandMethods = serviceMethodDeducer.deduceCommandMethods(thing);
-    Set<Method> queryMethods = serviceMethodDeducer.deduceQueryMethods(thing);
-
-    Set<Method> allMethods = new LinkedHashSet<>();
-    allMethods.addAll(commandMethods);
-    allMethods.addAll(queryMethods);
-
-    Set<Dto> dtos = dtoDeducer.deduceAllDtosInMethods(allMethods);
-
-    if (!commandMethods.isEmpty()) {
-      services.add(
-          new Service(
-              makeServicePackageName(rootPackageName, thing.getName()),
-              makeCommandServiceName(thing.getName()),
-              commandMethods,
-              CqsType.COMMAND,
-              thing.getName(),
-              dtos));
-    }
-
-    if (!queryMethods.isEmpty()) {
-      services.add(
-          new Service(
-              makeServicePackageName(rootPackageName, thing.getName()),
-              makeQueryServiceName(thing.getName()),
-              queryMethods,
-              CqsType.QUERY,
-              thing.getName(),
-              dtos));
-    }
+    fillServices(services, thing, rootPackageName);
 
     return services;
   }
@@ -109,9 +79,53 @@ public class ServiceDeducer {
   // PRIVATE
   // ===============================================================================================
 
-  private PackageName makeServicePackageName(PackageName rootPackageName, ThingName thingName) {
-    return new PackageName(
-        rootPackageName.getText() + "." + TextConverter.toLowerCase(thingName.getText()));
+  /**
+   * Fill services.
+   *
+   * @param services the services
+   * @param thing the thing
+   * @param rootPackageName the root package name
+   */
+  private void fillServices(Set<Service> services, Thing thing, PackageName rootPackageName) {
+    Set<Method> commandMethods = new LinkedHashSet<>();
+    Set<Method> queryMethods = new LinkedHashSet<>();
+
+    serviceMethodDeducer.deduceCommandMethods(commandMethods, thing, rootPackageName);
+    serviceMethodDeducer.deduceQueryMethods(queryMethods, thing, rootPackageName);
+
+    Set<Method> allMethods = new LinkedHashSet<>();
+    allMethods.addAll(commandMethods);
+    allMethods.addAll(queryMethods);
+
+    Set<Dto> dtos = dtoDeducer.deduceAllDtosInMethods(allMethods, rootPackageName);
+
+    if (!commandMethods.isEmpty()) {
+      services.add(
+          new Service(
+              thing.makePackageName(rootPackageName, thing),
+              makeCommandServiceName(thing.getThingName()),
+              commandMethods,
+              CqsType.COMMAND,
+              thing.getThingName(),
+              dtos));
+    }
+
+    if (!queryMethods.isEmpty()) {
+      services.add(
+          new Service(
+              thing.makePackageName(rootPackageName, thing),
+              makeQueryServiceName(thing.getThingName()),
+              queryMethods,
+              CqsType.QUERY,
+              thing.getThingName(),
+              dtos));
+    }
+
+    thing.getChildren().forEach(thingChild -> fillServices(services, thingChild, rootPackageName));
+
+    thing
+        .getVirtualChildren()
+        .forEach(thingVirtualChild -> fillServices(services, thingVirtualChild, rootPackageName));
   }
 
   private ServiceName makeCommandServiceName(ThingName thingName) {

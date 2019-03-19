@@ -23,6 +23,7 @@ package io.polygenesis.generators.java.domain.aggregateroot;
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.models.domain.AggregateRoot;
+import io.polygenesis.models.domain.InstantiationType;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -71,6 +72,10 @@ public class AggregateRootIdExporter {
    */
   public void export(Path generationPath, AggregateRoot aggregateRoot) {
     Map<String, Object> dataModel = new HashMap<>();
+    if (aggregateRoot.getInstantiationType().equals(InstantiationType.ABSTRACT)) {
+      return;
+    }
+
     dataModel.put("representation", aggregateRootIdClassRepresentable.create(aggregateRoot));
 
     freemarkerService.export(
@@ -85,6 +90,6 @@ public class AggregateRootIdExporter {
         generationPath.toString(),
         "src/main/java",
         aggregateRoot.getPackageName().toPath().toString(),
-        TextConverter.toUpperCamel(aggregateRoot.getName().getText()) + "Id.java");
+        TextConverter.toUpperCamel(aggregateRoot.getObjectName().getText()) + "Id.java");
   }
 }

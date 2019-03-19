@@ -22,16 +22,13 @@ package io.polygenesis.models.domain;
 
 import io.polygenesis.core.data.Data;
 import io.polygenesis.core.data.DataPrimitive;
-import io.polygenesis.core.data.VariableName;
 
 /**
  * The type Primitive.
  *
  * @author Christos Tsakostas
  */
-public class Primitive extends AbstractProperty {
-
-  private DataPrimitive dataPrimitive;
+public class Primitive extends BaseProperty<DataPrimitive> {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -40,38 +37,10 @@ public class Primitive extends AbstractProperty {
   /**
    * Instantiates a new Primitive.
    *
-   * @param dataPrimitive the data primitive
-   * @param variableName the variable name
+   * @param data the data
    */
-  public Primitive(DataPrimitive dataPrimitive, VariableName variableName) {
-    super(PropertyType.PRIMITIVE, variableName);
-    setDataPrimitive(dataPrimitive);
-  }
-
-  // ===============================================================================================
-  // GETTERS
-  // ===============================================================================================
-
-  /**
-   * Gets data primitive.
-   *
-   * @return the data primitive
-   */
-  public DataPrimitive getDataPrimitive() {
-    return dataPrimitive;
-  }
-
-  // ===============================================================================================
-  // GUARDS
-  // ===============================================================================================
-
-  /**
-   * Sets data primitive.
-   *
-   * @param dataPrimitive the data primitive
-   */
-  private void setDataPrimitive(DataPrimitive dataPrimitive) {
-    this.dataPrimitive = dataPrimitive;
+  public Primitive(DataPrimitive data) {
+    super(PropertyType.PRIMITIVE, data);
   }
 
   // ===============================================================================================
@@ -79,16 +48,7 @@ public class Primitive extends AbstractProperty {
   // ===============================================================================================
 
   @Override
-  public Data getData() {
-    return dataPrimitive;
-  }
-
-  @Override
   public Data getTypeParameterData() {
     throw new UnsupportedOperationException();
   }
-
-  // ===============================================================================================
-  // OVERRIDES
-  // ===============================================================================================
 }

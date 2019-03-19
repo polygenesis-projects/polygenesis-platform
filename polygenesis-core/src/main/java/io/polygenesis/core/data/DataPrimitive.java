@@ -21,9 +21,8 @@
 package io.polygenesis.core.data;
 
 import java.lang.annotation.Annotation;
+import java.util.Objects;
 import java.util.Set;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * The type data primitive.
@@ -34,7 +33,6 @@ public class DataPrimitive extends Data {
 
   private final PrimitiveType primitiveType;
   private final Set<Annotation> annotations;
-  private final DataBusinessType dataBusinessType;
 
   // ===============================================================================================
   // STATIC
@@ -48,7 +46,13 @@ public class DataPrimitive extends Data {
    * @return the data primitive
    */
   public static DataPrimitive of(PrimitiveType primitiveType, VariableName variableName) {
-    return new DataPrimitive(primitiveType, variableName, null, DataBusinessType.ANY);
+    return new DataPrimitive(
+        DataSource.user(),
+        variableName,
+        DataBusinessType.ANY,
+        DataValidator.empty(),
+        primitiveType,
+        null);
   }
 
   /**
@@ -61,8 +65,13 @@ public class DataPrimitive extends Data {
    */
   public static DataPrimitive ofDataBusinessType(
       DataBusinessType dataBusinessType, PrimitiveType primitiveType, VariableName variableName) {
-
-    return new DataPrimitive(primitiveType, variableName, null, dataBusinessType);
+    return new DataPrimitive(
+        DataSource.user(),
+        variableName,
+        dataBusinessType,
+        DataValidator.empty(),
+        primitiveType,
+        null);
   }
 
   // ===============================================================================================
@@ -70,7 +79,7 @@ public class DataPrimitive extends Data {
   // ===============================================================================================
 
   /**
-   * Instantiates a new data primitive.
+   * Instantiates a new Data primitive.
    *
    * @param primitiveType the primitive type
    * @param variableName the variable name
@@ -82,10 +91,34 @@ public class DataPrimitive extends Data {
       VariableName variableName,
       Set<Annotation> annotations,
       DataBusinessType dataBusinessType) {
-    super(DataPrimaryType.PRIMITIVE, variableName);
+    this(
+        DataSource.user(),
+        variableName,
+        dataBusinessType,
+        DataValidator.empty(),
+        primitiveType,
+        annotations);
+  }
+
+  /**
+   * Instantiates a new Data primitive.
+   *
+   * @param dataSource the data source
+   * @param variableName the variable name
+   * @param dataBusinessType the data business type
+   * @param primitiveType the primitive type
+   * @param annotations the annotations
+   */
+  public DataPrimitive(
+      DataSource dataSource,
+      VariableName variableName,
+      DataBusinessType dataBusinessType,
+      DataValidator dataValidator,
+      PrimitiveType primitiveType,
+      Set<Annotation> annotations) {
+    super(DataPrimaryType.PRIMITIVE, dataSource, variableName, dataBusinessType, dataValidator);
     this.primitiveType = primitiveType;
     this.annotations = annotations;
-    this.dataBusinessType = dataBusinessType;
   }
 
   // ===============================================================================================
@@ -110,15 +143,6 @@ public class DataPrimitive extends Data {
     return annotations;
   }
 
-  /**
-   * Gets data business type.
-   *
-   * @return the data business type
-   */
-  public DataBusinessType getDataBusinessType() {
-    return dataBusinessType;
-  }
-
   // ===============================================================================================
   // QUERIES
   // ===============================================================================================
@@ -129,7 +153,7 @@ public class DataPrimitive extends Data {
    * @return the thing identity flag
    */
   public Boolean getThingIdentity() {
-    return dataBusinessType.equals(DataBusinessType.THING_IDENTITY);
+    return getDataBusinessType().equals(DataBusinessType.THING_IDENTITY);
   }
 
   // ===============================================================================================
@@ -150,26 +174,18 @@ public class DataPrimitive extends Data {
     if (this == o) {
       return true;
     }
-
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-
+    if (!super.equals(o)) {
+      return false;
+    }
     DataPrimitive that = (DataPrimitive) o;
-
-    return new EqualsBuilder()
-        .appendSuper(super.equals(o))
-        .append(annotations, that.annotations)
-        .append(dataBusinessType, that.dataBusinessType)
-        .isEquals();
+    return primitiveType == that.primitiveType && Objects.equals(annotations, that.annotations);
   }
 
   @Override
   public int hashCode() {
-    return new HashCodeBuilder(17, 37)
-        .appendSuper(super.hashCode())
-        .append(annotations)
-        .append(dataBusinessType)
-        .toHashCode();
+    return Objects.hash(super.hashCode(), primitiveType, annotations);
   }
 }

@@ -20,8 +20,8 @@
 
 package io.polygenesis.models.domain;
 
-import io.polygenesis.commons.text.Name;
-import io.polygenesis.core.data.PackageName;
+import io.polygenesis.commons.valueobjects.ObjectName;
+import io.polygenesis.commons.valueobjects.PackageName;
 
 /**
  * The type Persistence.
@@ -31,9 +31,9 @@ import io.polygenesis.core.data.PackageName;
 public class Persistence {
 
   private PackageName packageName;
-  private Name name;
-  private Name aggregateRootName;
-  private Name aggregateRootIdName;
+  private ObjectName objectName;
+  private ObjectName aggregateRootObjectName;
+  private ObjectName aggregateRootIdObjectName;
   private Boolean multiTenant;
 
   // ===============================================================================================
@@ -44,21 +44,21 @@ public class Persistence {
    * Instantiates a new Persistence.
    *
    * @param packageName the package name
-   * @param name the name
-   * @param aggregateRootName the aggregate root name
-   * @param aggregateRootIdName the aggregate root id name
+   * @param objectName the name
+   * @param aggregateRootObjectName the aggregate root name
+   * @param aggregateRootIdObjectName the aggregate root id name
    * @param multiTenant the multi tenant
    */
   public Persistence(
       PackageName packageName,
-      Name name,
-      Name aggregateRootName,
-      Name aggregateRootIdName,
+      ObjectName objectName,
+      ObjectName aggregateRootObjectName,
+      ObjectName aggregateRootIdObjectName,
       Boolean multiTenant) {
     setPackageName(packageName);
-    setName(name);
-    setAggregateRootName(aggregateRootName);
-    setAggregateRootIdName(aggregateRootIdName);
+    setObjectName(objectName);
+    setAggregateRootObjectName(aggregateRootObjectName);
+    setAggregateRootIdObjectName(aggregateRootIdObjectName);
     setMultiTenant(multiTenant);
   }
 
@@ -80,8 +80,8 @@ public class Persistence {
    *
    * @return the name
    */
-  public Name getName() {
-    return name;
+  public ObjectName getObjectName() {
+    return objectName;
   }
 
   /**
@@ -89,8 +89,8 @@ public class Persistence {
    *
    * @return the aggregate root name
    */
-  public Name getAggregateRootName() {
-    return aggregateRootName;
+  public ObjectName getAggregateRootObjectName() {
+    return aggregateRootObjectName;
   }
 
   /**
@@ -98,8 +98,8 @@ public class Persistence {
    *
    * @return the aggregate root id name
    */
-  public Name getAggregateRootIdName() {
-    return aggregateRootIdName;
+  public ObjectName getAggregateRootIdObjectName() {
+    return aggregateRootIdObjectName;
   }
 
   /**
@@ -127,28 +127,28 @@ public class Persistence {
   /**
    * Sets name.
    *
-   * @param name the name
+   * @param objectName the name
    */
-  private void setName(Name name) {
-    this.name = name;
+  private void setObjectName(ObjectName objectName) {
+    this.objectName = objectName;
   }
 
   /**
    * Sets aggregate root name.
    *
-   * @param aggregateRootName the aggregate root name
+   * @param aggregateRootObjectName the aggregate root name
    */
-  private void setAggregateRootName(Name aggregateRootName) {
-    this.aggregateRootName = aggregateRootName;
+  private void setAggregateRootObjectName(ObjectName aggregateRootObjectName) {
+    this.aggregateRootObjectName = aggregateRootObjectName;
   }
 
   /**
    * Sets aggregate root id name.
    *
-   * @param aggregateRootIdName the aggregate root id name
+   * @param aggregateRootIdObjectName the aggregate root id name
    */
-  private void setAggregateRootIdName(Name aggregateRootIdName) {
-    this.aggregateRootIdName = aggregateRootIdName;
+  private void setAggregateRootIdObjectName(ObjectName aggregateRootIdObjectName) {
+    this.aggregateRootIdObjectName = aggregateRootIdObjectName;
   }
 
   /**

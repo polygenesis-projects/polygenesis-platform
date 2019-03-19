@@ -64,7 +64,8 @@ public class FeatureDeducer {
    */
   public Feature deduceFeatureFromThing(Thing thing) {
     Set<AbstractContainer> containers = new LinkedHashSet<>();
-    Feature feature = new Feature(featureNameDeducer.from(thing), containers);
+    Feature feature =
+        new Feature(thing.getContextName(), featureNameDeducer.from(thing), containers);
 
     thing
         .getFunctions()

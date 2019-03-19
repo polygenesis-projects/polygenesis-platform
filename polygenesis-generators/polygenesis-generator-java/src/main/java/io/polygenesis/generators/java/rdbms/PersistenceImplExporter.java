@@ -21,9 +21,9 @@
 package io.polygenesis.generators.java.rdbms;
 
 import io.polygenesis.commons.freemarker.FreemarkerService;
-import io.polygenesis.commons.text.Name;
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.data.PackageName;
+import io.polygenesis.commons.valueobjects.ObjectName;
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.models.domain.Persistence;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -48,6 +48,12 @@ public class PersistenceImplExporter {
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
+  /**
+   * Instantiates a new Persistence impl exporter.
+   *
+   * @param freemarkerService the freemarker service
+   * @param persistenceImplClassRepresentable the persistence impl class representable
+   */
   public PersistenceImplExporter(
       FreemarkerService freemarkerService,
       PersistenceImplClassRepresentable persistenceImplClassRepresentable) {
@@ -65,9 +71,13 @@ public class PersistenceImplExporter {
    * @param generationPath the generation path
    * @param persistence the persistence
    * @param rootPackageName the root package name
+   * @param contextName the context name
    */
   public void export(
-      Path generationPath, Persistence persistence, PackageName rootPackageName, Name contextName) {
+      Path generationPath,
+      Persistence persistence,
+      PackageName rootPackageName,
+      ObjectName contextName) {
     Map<String, Object> dataModel = new HashMap<>();
     dataModel.put(
         "representation",
@@ -85,6 +95,6 @@ public class PersistenceImplExporter {
         generationPath.toString(),
         "src/main/java",
         persistence.getPackageName().toPath().toString(),
-        TextConverter.toUpperCamel(persistence.getName().getText()) + "Impl.java");
+        TextConverter.toUpperCamel(persistence.getObjectName().getText()) + "Impl.java");
   }
 }

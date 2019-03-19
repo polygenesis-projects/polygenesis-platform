@@ -27,7 +27,7 @@ import io.polygenesis.core.data.Data;
  *
  * @author Christos Tsakostas
  */
-public class ReturnValue extends AbstractIO {
+public class ReturnValue extends AbstractDataContainer {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -36,9 +36,9 @@ public class ReturnValue extends AbstractIO {
   /**
    * Instantiates a new Return value.
    *
-   * @param model the model
+   * @param data the data
    */
-  public ReturnValue(Data model) {
-    super(model);
+  public ReturnValue(Data data) {
+    super(data);
   }
 }

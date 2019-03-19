@@ -25,6 +25,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import io.polygenesis.commons.test.AbstractEqualityTest;
 import io.polygenesis.core.data.DataBusinessType;
 import io.polygenesis.core.data.DataPrimitive;
+import io.polygenesis.core.data.DataSource;
+import io.polygenesis.core.data.DataValidator;
 import io.polygenesis.core.data.PrimitiveType;
 import io.polygenesis.core.data.VariableName;
 import java.util.LinkedHashSet;
@@ -38,23 +40,27 @@ public class ReturnValueTest extends AbstractEqualityTest<ReturnValue> {
     ReturnValue returnValue = new ReturnValue(createDataPrimitive1());
 
     assertThat(returnValue).isNotNull();
-    assertThat(returnValue.getModel()).isEqualTo(createDataPrimitive1());
+    assertThat(returnValue.getData()).isEqualTo(createDataPrimitive1());
   }
 
   private DataPrimitive createDataPrimitive1() {
     return new DataPrimitive(
-        PrimitiveType.STRING,
+        DataSource.user(),
         new VariableName("someVariableName"),
-        new LinkedHashSet<>(),
-        DataBusinessType.ANY);
+        DataBusinessType.ANY,
+        DataValidator.empty(),
+        PrimitiveType.STRING,
+        new LinkedHashSet<>());
   }
 
   private DataPrimitive createDataPrimitive2() {
     return new DataPrimitive(
-        PrimitiveType.STRING,
+        DataSource.user(),
         new VariableName("someOtherVariableName"),
-        new LinkedHashSet<>(),
-        DataBusinessType.ANY);
+        DataBusinessType.ANY,
+        DataValidator.empty(),
+        PrimitiveType.STRING,
+        new LinkedHashSet<>());
   }
 
   @Override

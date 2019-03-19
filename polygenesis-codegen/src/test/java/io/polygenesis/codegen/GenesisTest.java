@@ -22,9 +22,9 @@ package io.polygenesis.codegen;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.Deducer;
 import io.polygenesis.core.Generator;
-import io.polygenesis.core.data.PackageName;
 import io.polygenesis.generators.angular.AngularGeneratorFactory;
 import io.polygenesis.models.api.ApiDeducerFactory;
 import io.polygenesis.models.reactivestate.ReactiveStateFactory;

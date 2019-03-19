@@ -22,7 +22,6 @@ package io.polygenesis.generators.java.api;
 
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.data.PackageName;
 import io.polygenesis.models.api.Dto;
 import io.polygenesis.models.api.Service;
 import java.nio.file.Path;
@@ -95,12 +94,10 @@ public class DtoExporter {
   }
 
   private Path makeFileName(Path generationPath, Dto dto) {
-    PackageName servicePackageName = dto.getOriginatingDataGroup().getPackageName();
-
     return Paths.get(
         generationPath.toString(),
         "src/main/java",
-        servicePackageName.toPath().toString(),
+        dto.getPackageName().toPath().toString(),
         TextConverter.toUpperCamel(dto.getOriginatingDataGroup().getDataType()) + ".java");
   }
 }

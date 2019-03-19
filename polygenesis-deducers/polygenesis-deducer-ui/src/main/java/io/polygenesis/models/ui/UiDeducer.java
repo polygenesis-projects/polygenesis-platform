@@ -55,7 +55,7 @@ public class UiDeducer implements Deducer<UiModelRepository> {
     Set<Feature> features = new LinkedHashSet<>();
 
     thingRepository
-        .getThings()
+        .getApiThings()
         .forEach(thing -> features.add(featureDeducer.deduceFeatureFromThing(thing)));
 
     Set<LayoutContainer> layoutContainers = layoutDeducer.deduceLayoutsFromFeatures();

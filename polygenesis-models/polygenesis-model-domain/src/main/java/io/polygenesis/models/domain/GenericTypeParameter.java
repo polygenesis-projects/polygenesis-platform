@@ -20,9 +20,25 @@
 
 package io.polygenesis.models.domain;
 
+import io.polygenesis.commons.text.AbstractText;
+
 /**
- * The type Abstract method.
+ * The type Generic type parameter.
  *
  * @author Christos Tsakostas
  */
-public abstract class AbstractMethod {}
+public class GenericTypeParameter extends AbstractText {
+
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
+  /**
+   * Instantiates a new Generic type parameter.
+   *
+   * @param text the text
+   */
+  public GenericTypeParameter(String text) {
+    super(text);
+  }
+}

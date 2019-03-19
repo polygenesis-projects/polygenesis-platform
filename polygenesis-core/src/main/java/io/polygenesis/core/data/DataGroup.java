@@ -23,6 +23,8 @@ package io.polygenesis.core.data;
 import static java.util.stream.Collectors.toCollection;
 
 import com.oregor.ddd4j.check.assertion.Assertion;
+import io.polygenesis.commons.valueobjects.ObjectName;
+import io.polygenesis.commons.valueobjects.PackageName;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -44,7 +46,14 @@ public class DataGroup extends Data {
 
   /** Instantiates a new data group. */
   public DataGroup() {
-    this(null, null, null, new LinkedHashSet<>());
+    this(
+        DataSource.user(),
+        null,
+        DataBusinessType.ANY,
+        DataValidator.empty(),
+        null,
+        null,
+        new LinkedHashSet<>());
   }
 
   /**
@@ -53,7 +62,14 @@ public class DataGroup extends Data {
    * @param variableName the variable name
    */
   public DataGroup(VariableName variableName) {
-    this(null, null, variableName, new LinkedHashSet<>());
+    this(
+        DataSource.user(),
+        variableName,
+        DataBusinessType.ANY,
+        DataValidator.empty(),
+        null,
+        null,
+        new LinkedHashSet<>());
   }
 
   /**
@@ -63,7 +79,14 @@ public class DataGroup extends Data {
    * @param packageName the package name
    */
   public DataGroup(ObjectName objectName, PackageName packageName) {
-    this(objectName, packageName, new VariableName(objectName.getText()), new LinkedHashSet<>());
+    this(
+        DataSource.user(),
+        new VariableName(objectName.getText()),
+        DataBusinessType.ANY,
+        DataValidator.empty(),
+        objectName,
+        packageName,
+        new LinkedHashSet<>());
   }
 
   /**
@@ -74,12 +97,35 @@ public class DataGroup extends Data {
    * @param variableName the variable name
    */
   public DataGroup(ObjectName objectName, PackageName packageName, VariableName variableName) {
-    this(objectName, packageName, variableName, new LinkedHashSet<>());
+    this(
+        DataSource.user(),
+        variableName,
+        DataBusinessType.ANY,
+        DataValidator.empty(),
+        objectName,
+        packageName,
+        new LinkedHashSet<>());
   }
 
-  private DataGroup(
-      ObjectName objectName, PackageName packageName, VariableName variableName, Set<Data> models) {
-    super(DataPrimaryType.OBJECT, variableName);
+  /**
+   * Instantiates a new Data group.
+   *
+   * @param dataSource the data source
+   * @param variableName the variable name
+   * @param dataBusinessType the data business type
+   * @param objectName the object name
+   * @param packageName the package name
+   * @param models the models
+   */
+  public DataGroup(
+      DataSource dataSource,
+      VariableName variableName,
+      DataBusinessType dataBusinessType,
+      DataValidator dataValidator,
+      ObjectName objectName,
+      PackageName packageName,
+      Set<Data> models) {
+    super(DataPrimaryType.OBJECT, dataSource, variableName, dataBusinessType, dataValidator);
     this.objectName = objectName;
     this.packageName = packageName;
     this.models = models;
@@ -96,7 +142,14 @@ public class DataGroup extends Data {
    * @return the data group
    */
   public DataGroup withNewObjectName(ObjectName objectName) {
-    return new DataGroup(objectName, getPackageName(), getVariableName(), getModels());
+    return new DataGroup(
+        getDataSource(),
+        getVariableName(),
+        getDataBusinessType(),
+        getDataValidator(),
+        objectName,
+        getPackageName(),
+        getModels());
   }
 
   /**
@@ -106,7 +159,14 @@ public class DataGroup extends Data {
    * @return the data group
    */
   public DataGroup withNewVariableName(VariableName variableName) {
-    return new DataGroup(getObjectName(), getPackageName(), variableName, getModels());
+    return new DataGroup(
+        getDataSource(),
+        variableName,
+        getDataBusinessType(),
+        getDataValidator(),
+        getObjectName(),
+        getPackageName(),
+        getModels());
   }
 
   // ===============================================================================================

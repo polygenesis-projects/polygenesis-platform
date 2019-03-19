@@ -21,14 +21,14 @@
 package io.polygenesis.models.domain;
 
 import io.polygenesis.core.data.Data;
-import io.polygenesis.core.data.VariableName;
+import io.polygenesis.core.data.DataArray;
 
 /**
  * The type Value object collection.
  *
  * @author Christos Tsakostas
  */
-public class ValueObjectCollection extends AbstractProperty {
+public class ValueObjectCollection extends BaseProperty<DataArray> {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -37,10 +37,10 @@ public class ValueObjectCollection extends AbstractProperty {
   /**
    * Instantiates a new Value object collection.
    *
-   * @param variableName the variable name
+   * @param data the data
    */
-  public ValueObjectCollection(VariableName variableName) {
-    super(PropertyType.VALUE_OBJECT_COLLECTION, variableName);
+  public ValueObjectCollection(DataArray data) {
+    super(PropertyType.VALUE_OBJECT_COLLECTION, data);
   }
 
   // ===============================================================================================
@@ -48,13 +48,8 @@ public class ValueObjectCollection extends AbstractProperty {
   // ===============================================================================================
 
   @Override
-  public Data getData() {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
   public Data getTypeParameterData() {
-    throw new UnsupportedOperationException();
+    return getData().getArrayElement();
   }
 
   // ===============================================================================================

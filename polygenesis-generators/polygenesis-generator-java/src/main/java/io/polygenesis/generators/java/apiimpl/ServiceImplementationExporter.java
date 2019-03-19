@@ -22,7 +22,7 @@ package io.polygenesis.generators.java.apiimpl;
 
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.data.PackageName;
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.generators.java.domain.aggregateroot.AggregateRootClassRepresentable;
 import io.polygenesis.models.api.Service;
 import io.polygenesis.models.apiimpl.ServiceImplementation;

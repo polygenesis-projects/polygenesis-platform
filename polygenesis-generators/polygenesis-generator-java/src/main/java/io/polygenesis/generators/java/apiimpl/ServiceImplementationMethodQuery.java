@@ -100,10 +100,10 @@ public class ServiceImplementationMethodQuery extends ServiceImplementationMetho
 
     stringBuilder.append("\t\t");
     stringBuilder.append("Paginated<");
-    stringBuilder.append(TextConverter.toUpperCamel(aggregateRoot.getName().getText()));
+    stringBuilder.append(TextConverter.toUpperCamel(aggregateRoot.getObjectName().getText()));
     stringBuilder.append(">");
     stringBuilder.append(" paginated = ");
-    stringBuilder.append(TextConverter.toLowerCamel(aggregateRoot.getName().getText()));
+    stringBuilder.append(TextConverter.toLowerCamel(aggregateRoot.getObjectName().getText()));
     stringBuilder.append("Persistence.findPaginated(");
     stringBuilder.append(request);
     stringBuilder.append(".getPageNumber()");
@@ -136,7 +136,7 @@ public class ServiceImplementationMethodQuery extends ServiceImplementationMetho
         TextConverter.toUpperCamel(
             method.getResponseDto().getOriginatingDataGroup().getDataType()));
     stringBuilder.append("(");
-    stringBuilder.append(TextConverter.toLowerCamel(aggregateRoot.getName().getText()));
+    stringBuilder.append(TextConverter.toLowerCamel(aggregateRoot.getObjectName().getText()));
     stringBuilder.append(");");
 
     return stringBuilder.toString();

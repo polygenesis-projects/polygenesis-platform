@@ -80,8 +80,8 @@ public class AnnotationsThingDeducerImplTest {
     // BASIC ASSERTIONS
     // =============================================================================================
     assertThat(repository).isNotNull();
-    assertThat(repository.getThings()).isNotNull();
-    assertThat(repository.getThings().size()).isEqualTo(1);
+    assertThat(repository.getApiThings()).isNotNull();
+    assertThat(repository.getApiThings().size()).isEqualTo(1);
     assertThat(repository.getThingByName(new ThingName("someThing"))).isPresent();
 
     // =============================================================================================
@@ -104,7 +104,8 @@ public class AnnotationsThingDeducerImplTest {
   // ===============================================================================================
   private void assertionsForGoalCalculation(Thing someThing) {
     Optional<Function> optionalGoalCalculation =
-        repository.getThingFunction(someThing.getName(), new FunctionName("calculateSomeThing"));
+        repository.getThingFunction(
+            someThing.getThingName(), new FunctionName("calculateSomeThing"));
 
     if (!optionalGoalCalculation.isPresent()) {
       throw new IllegalStateException();

@@ -23,7 +23,7 @@ package io.polygenesis.generators.java.rest;
 import static java.util.stream.Collectors.toCollection;
 
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.data.PackageName;
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.models.rest.HttpMethod;
 import io.polygenesis.models.rest.Resource;
 import io.polygenesis.representations.commons.FieldRepresentation;
@@ -86,7 +86,7 @@ public class ResourceClassRepresentable extends AbstractClassRepresentable<Resou
     return new LinkedHashSet<>(
         Arrays.asList(
             createConstructorWithDirectAssignmentFromFieldRepresentations(
-                source.getName().getText(), fieldRepresentations(source))));
+                source.getObjectName().getText(), fieldRepresentations(source))));
   }
 
   @Override
@@ -145,7 +145,7 @@ public class ResourceClassRepresentable extends AbstractClassRepresentable<Resou
 
     stringBuilder.append("The Spring REST Controller for ");
 
-    stringBuilder.append(TextConverter.toUpperCamelSpaces(source.getName().getText()));
+    stringBuilder.append(TextConverter.toUpperCamelSpaces(source.getObjectName().getText()));
 
     stringBuilder.append(" Services.");
 
@@ -161,7 +161,7 @@ public class ResourceClassRepresentable extends AbstractClassRepresentable<Resou
   public String simpleObjectName(Resource source, Object... args) {
     StringBuilder stringBuilder = new StringBuilder();
 
-    stringBuilder.append(TextConverter.toLowerCamel(source.getName().getText()));
+    stringBuilder.append(TextConverter.toLowerCamel(source.getObjectName().getText()));
     stringBuilder.append("RestService");
 
     return stringBuilder.toString();
@@ -171,7 +171,7 @@ public class ResourceClassRepresentable extends AbstractClassRepresentable<Resou
   public String fullObjectName(Resource source, Object... args) {
     StringBuilder stringBuilder = new StringBuilder();
 
-    stringBuilder.append(TextConverter.toUpperCamel(source.getName().getText()));
+    stringBuilder.append(TextConverter.toUpperCamel(source.getObjectName().getText()));
     stringBuilder.append("RestService");
     stringBuilder.append(" extends AbstractRestController");
 

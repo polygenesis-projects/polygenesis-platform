@@ -94,7 +94,6 @@ public class Method {
    */
   private void setFunction(Function function) {
     Assertion.isNotNull(function, "function is required");
-
     this.function = function;
   }
 
@@ -105,7 +104,6 @@ public class Method {
    */
   private void setRequestDto(Dto requestDto) {
     Assertion.isNotNull(requestDto, "requestDto is required");
-
     this.requestDto = requestDto;
   }
 
@@ -116,7 +114,6 @@ public class Method {
    */
   private void setResponseDto(Dto responseDto) {
     Assertion.isNotNull(responseDto, "responseDto is required");
-
     this.responseDto = responseDto;
   }
 

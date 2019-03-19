@@ -18,25 +18,37 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.commons.text;
+package io.polygenesis.models.domain;
+
+import io.polygenesis.core.data.Data;
+import io.polygenesis.core.data.DataGroup;
 
 /**
- * The type Name.
+ * The type Reference to aggregate root.
  *
  * @author Christos Tsakostas
  */
-public class Name extends AbstractText {
+public class ReferenceToAggregateRoot extends BaseProperty<DataGroup> {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
-   * Instantiates a new Name.
+   * Instantiates a new Reference to aggregate root.
    *
-   * @param text the text
+   * @param data the data
    */
-  public Name(String text) {
-    super(text);
+  public ReferenceToAggregateRoot(DataGroup data) {
+    super(PropertyType.REFERENCE_TO_AGGREGATE_ROOT, data);
+  }
+
+  // ===============================================================================================
+  // ABSTRACT IMPLEMENTATIONS
+  // ===============================================================================================
+
+  @Override
+  public Data getTypeParameterData() {
+    throw new UnsupportedOperationException();
   }
 }

@@ -20,79 +20,75 @@
 
 package io.polygenesis.models.domain;
 
+import com.oregor.ddd4j.check.assertion.Assertion;
 import io.polygenesis.core.data.Data;
-import io.polygenesis.core.data.VariableName;
+import java.util.Objects;
 
 /**
- * The type Abstract property.
+ * The type Base property.
  *
+ * @param <T> the type parameter
  * @author Christos Tsakostas
  */
-public abstract class AbstractProperty {
+public abstract class BaseProperty<T extends Data> implements DomainObjectProperty<T> {
+
+  // ===============================================================================================
+  // STATE
+  // ===============================================================================================
 
   private PropertyType propertyType;
-  private VariableName variableName;
+  private T data;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
-   * Instantiates a new Abstract property.
+   * Instantiates a new Base property.
    *
    * @param propertyType the property type
-   * @param variableName the variable name
+   * @param data the data
    */
-  public AbstractProperty(PropertyType propertyType, VariableName variableName) {
+  public BaseProperty(PropertyType propertyType, T data) {
     setPropertyType(propertyType);
-    setVariableName(variableName);
+    setData(data);
   }
 
   // ===============================================================================================
   // GETTERS
   // ===============================================================================================
 
-  /**
-   * Gets property type.
-   *
-   * @return the property type
-   */
+  @Override
   public PropertyType getPropertyType() {
     return propertyType;
   }
 
-  /**
-   * Gets variable name.
-   *
-   * @return the variable name
-   */
-  public VariableName getVariableName() {
-    return variableName;
+  @Override
+  public T getData() {
+    return data;
   }
 
   // ===============================================================================================
   // QUERIES
   // ===============================================================================================
 
-  // ===============================================================================================
-  // ABSTRACT
-  // ===============================================================================================
+  /**
+   * Is aggregate entity boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isAggregateEntity() {
+    return getPropertyType().equals(PropertyType.AGGREGATE_ENTITY);
+  }
 
   /**
-   * Gets data.
+   * Is aggregate entity collection boolean.
    *
-   * @return the data
+   * @return the boolean
    */
-  public abstract Data getData();
-
-  /**
-   * Gets data related to type parameter.
-   *
-   * <p>Applies only to collections.
-   *
-   * @return the type parameter data
-   */
-  public abstract Data getTypeParameterData();
+  public boolean isAggregateEntityCollection() {
+    return getPropertyType().equals(PropertyType.AGGREGATE_ENTITY_COLLECTION);
+  }
 
   // ===============================================================================================
   // GUARDS
@@ -104,15 +100,38 @@ public abstract class AbstractProperty {
    * @param propertyType the property type
    */
   private void setPropertyType(PropertyType propertyType) {
+    Assertion.isNotNull(propertyType, "propertyType is required");
     this.propertyType = propertyType;
   }
 
   /**
-   * Sets variable name.
+   * Sets data.
    *
-   * @param variableName the variable name
+   * @param data the data
    */
-  private void setVariableName(VariableName variableName) {
-    this.variableName = variableName;
+  private void setData(T data) {
+    Assertion.isNotNull(data, "data is required");
+    this.data = data;
+  }
+
+  // ===============================================================================================
+  // OVERRIDES
+  // ===============================================================================================
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    BaseProperty<?> that = (BaseProperty<?>) o;
+    return propertyType == that.propertyType && Objects.equals(data, that.data);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(propertyType, data);
   }
 }

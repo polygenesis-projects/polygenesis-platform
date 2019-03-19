@@ -69,8 +69,7 @@ public class AnnotationsThingDeducerImpl implements ThingDeducer {
 
     Set<Thing> things = thingScanner.identifyThingsInInterfaces(classes);
 
-    things.forEach(
-        thing -> thing.appendFunctions(functionIdentifier.identifyGoalsOf(thing, classes)));
+    things.forEach(thing -> thing.addFunctions(functionIdentifier.identifyGoalsOf(thing, classes)));
 
     return new ThingRepositoryImpl(things);
   }

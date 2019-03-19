@@ -23,8 +23,8 @@ package io.polygenesis.generators.java.rdbms;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import io.polygenesis.commons.text.Name;
-import io.polygenesis.core.data.PackageName;
+import io.polygenesis.commons.valueobjects.ObjectName;
+import io.polygenesis.commons.valueobjects.PackageName;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Paths;
@@ -45,7 +45,7 @@ public class JavaRdbmsGeneratorFactoryTest {
   public void shouldCreateNewInstance() {
     JavaRdbmsGenerator javaApiGenerator =
         JavaRdbmsGeneratorFactory.newInstance(
-            Paths.get("tmp"), new PackageName("com.oregor"), new Name("account"));
+            Paths.get("tmp"), new PackageName("com.oregor"), new ObjectName("account"));
     assertThat(javaApiGenerator).isNotNull();
   }
 }

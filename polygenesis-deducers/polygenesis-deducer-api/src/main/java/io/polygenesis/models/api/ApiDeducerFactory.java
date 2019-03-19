@@ -20,7 +20,7 @@
 
 package io.polygenesis.models.api;
 
-import io.polygenesis.core.data.PackageName;
+import io.polygenesis.commons.valueobjects.PackageName;
 
 /**
  * The type Api deducer factory.

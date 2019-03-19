@@ -20,10 +20,10 @@
 
 package io.polygenesis.models.api;
 
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.Deducer;
 import io.polygenesis.core.ModelRepository;
 import io.polygenesis.core.ThingRepository;
-import io.polygenesis.core.data.PackageName;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -75,14 +75,14 @@ public class ApiDeducer implements Deducer<ServiceModelRepository> {
   @Override
   public ServiceModelRepository deduce(
       ThingRepository thingRepository, Set<ModelRepository> modelRepositories) {
-    if (thingRepository.getThings().isEmpty()) {
+    if (thingRepository.getApiThings().isEmpty()) {
       throw new IllegalArgumentException("thingRepository cannot be empty");
     }
 
     Set<Service> services = new LinkedHashSet<>();
 
     thingRepository
-        .getThings()
+        .getApiThings()
         .forEach(
             thing -> {
               services.addAll(serviceDeducer.deduceFrom(thing, getRootPackageName()));

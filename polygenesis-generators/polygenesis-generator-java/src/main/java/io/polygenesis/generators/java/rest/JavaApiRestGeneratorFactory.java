@@ -22,8 +22,8 @@ package io.polygenesis.generators.java.rest;
 
 import io.polygenesis.commons.freemarker.FreemarkerConfig;
 import io.polygenesis.commons.freemarker.FreemarkerService;
-import io.polygenesis.commons.text.Name;
-import io.polygenesis.core.data.PackageName;
+import io.polygenesis.commons.valueobjects.ObjectName;
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.representations.java.FromDataTypeToJavaConverter;
 import java.nio.file.Path;
 
@@ -90,7 +90,7 @@ public final class JavaApiRestGeneratorFactory {
    * @return the java api generator
    */
   public static JavaApiRestGenerator newInstance(
-      Path generationPath, PackageName rootPackageName, Name contextName) {
+      Path generationPath, PackageName rootPackageName, ObjectName contextName) {
     return new JavaApiRestGenerator(
         generationPath,
         rootPackageName,

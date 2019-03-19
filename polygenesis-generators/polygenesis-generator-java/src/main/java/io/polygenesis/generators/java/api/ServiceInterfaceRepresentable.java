@@ -83,9 +83,9 @@ public class ServiceInterfaceRepresentable extends AbstractInterfaceRepresentabl
         .getMethods()
         .forEach(
             method -> {
-              if (method.getFunction().getReturnValue().getModel().isDataGroup()) {
+              if (method.getFunction().getReturnValue().getData().isDataGroup()) {
                 DataGroup dataGroup =
-                    method.getFunction().getReturnValue().getModel().getAsDataGroup();
+                    method.getFunction().getReturnValue().getData().getAsDataGroup();
 
                 if (!dataGroup.getPackageName().equals(source.getPackageName())) {
                   imports.add(
@@ -97,8 +97,8 @@ public class ServiceInterfaceRepresentable extends AbstractInterfaceRepresentabl
                   .getFunction()
                   .getArguments()
                   .stream()
-                  .filter(argument -> argument.getModel().isDataGroup())
-                  .map(argument -> argument.getModel())
+                  .filter(argument -> argument.getData().isDataGroup())
+                  .map(argument -> argument.getData())
                   .map(DataGroup.class::cast)
                   .forEach(
                       dataGroup -> {

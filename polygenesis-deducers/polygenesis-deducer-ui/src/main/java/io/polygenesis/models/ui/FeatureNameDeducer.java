@@ -37,6 +37,6 @@ public class FeatureNameDeducer {
    * @return the feature
    */
   public FeatureName from(Thing thing) {
-    return new FeatureName(thing.getName().getText());
+    return new FeatureName(thing.getThingName().getText());
   }
 }

@@ -20,31 +20,15 @@
 
 package io.polygenesis.codegen;
 
-import io.polygenesis.commons.text.Name;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.Deducer;
 import io.polygenesis.core.Generator;
+import io.polygenesis.core.Thing;
 import io.polygenesis.core.ThingRepositoryImpl;
-import io.polygenesis.core.data.PackageName;
-import io.polygenesis.deducers.apiimpl.ApiImplDeducerFactory;
-import io.polygenesis.deducers.sql.SqlDeducerFactory;
-import io.polygenesis.generators.angular.AngularGeneratorFactory;
-import io.polygenesis.generators.java.api.JavaApiGeneratorFactory;
-import io.polygenesis.generators.java.apiimpl.JavaApiImplGeneratorFactory;
-import io.polygenesis.generators.java.domain.JavaDomainGeneratorFactory;
-import io.polygenesis.generators.java.rdbms.JavaRdbmsGeneratorFactory;
-import io.polygenesis.generators.java.rest.JavaApiRestGeneratorFactory;
-import io.polygenesis.generators.sql.SqlGeneratorFactory;
-import io.polygenesis.models.api.ApiDeducerFactory;
-import io.polygenesis.models.domain.DomainDeducerFactory;
-import io.polygenesis.models.reactivestate.ReactiveStateFactory;
-import io.polygenesis.models.rest.RestDeducerFactory;
-import io.polygenesis.models.ui.UiDeducerFactory;
 import io.polygenesis.scaffolders.javams.ProjectDescription;
 import io.polygenesis.scaffolders.javams.ScaffolderJavaMicroservice;
 import io.polygenesis.scaffolders.javams.ScaffolderJavaMicroserviceFactory;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import org.junit.Test;
@@ -126,79 +110,34 @@ public class OregorDdd4jExampleGenesisTest {
   private void generateJava() {
     Genesis genesis = new Genesis();
 
-    Set<Deducer> deducers =
-        new LinkedHashSet<>(
-            Arrays.asList(
-                ApiDeducerFactory.newInstance(new PackageName(JAVA_ROOT_PACKAGE)),
-                DomainDeducerFactory.newInstance(new PackageName(JAVA_ROOT_PACKAGE)),
-                ApiImplDeducerFactory.newInstance(new PackageName(JAVA_ROOT_PACKAGE)),
-                RestDeducerFactory.newInstance(new PackageName(JAVA_ROOT_PACKAGE)),
-                SqlDeducerFactory.newInstance()));
+    Set<Deducer> deducers = GenesisDefault.javaDeducers(JAVA_ROOT_PACKAGE);
 
     Set<Generator> generators =
-        new LinkedHashSet<>(
-            Arrays.asList(
-                JavaApiGeneratorFactory.newInstance(
-                    Paths.get(JAVA_EXPORT_PATH, JAVA_PROJECT_FOLDER, JAVA_MODULE_PREFIX + "-api")),
-                JavaApiImplGeneratorFactory.newInstance(
-                    Paths.get(
-                        JAVA_EXPORT_PATH, JAVA_PROJECT_FOLDER, JAVA_MODULE_PREFIX + "-api-impl"),
-                    new PackageName(JAVA_ROOT_PACKAGE)),
-                JavaApiRestGeneratorFactory.newInstance(
-                    Paths.get(
-                        JAVA_EXPORT_PATH,
-                        JAVA_PROJECT_FOLDER,
-                        JAVA_MODULE_PREFIX + "-primary-adapters",
-                        JAVA_MODULE_PREFIX + "-rest-spring"),
-                    new PackageName(JAVA_ROOT_PACKAGE),
-                    new Name(JAVA_CONTEXT)),
-                JavaRdbmsGeneratorFactory.newInstance(
-                    Paths.get(
-                        JAVA_EXPORT_PATH,
-                        JAVA_PROJECT_FOLDER,
-                        JAVA_MODULE_PREFIX + "-secondary-adapters",
-                        JAVA_MODULE_PREFIX + "-persistence-rdbms"),
-                    new PackageName(JAVA_ROOT_PACKAGE),
-                    new Name(JAVA_CONTEXT)),
-                JavaDomainGeneratorFactory.newInstance(
-                    Paths.get(
-                        JAVA_EXPORT_PATH,
-                        JAVA_PROJECT_FOLDER,
-                        JAVA_MODULE_PREFIX + "-domain-model"),
-                    new PackageName(JAVA_ROOT_PACKAGE)),
-                SqlGeneratorFactory.newInstance(
-                    Paths.get(
-                        JAVA_EXPORT_PATH,
-                        JAVA_PROJECT_FOLDER,
-                        JAVA_MODULE_PREFIX + "-secondary-adapters",
-                        JAVA_MODULE_PREFIX + "-persistence-rdbms"),
-                    TABLE_PREFIX)));
+        GenesisDefault.javaGenerators(
+            JAVA_EXPORT_PATH,
+            JAVA_PROJECT_FOLDER,
+            JAVA_MODULE_PREFIX,
+            JAVA_CONTEXT,
+            TABLE_PREFIX,
+            JAVA_ROOT_PACKAGE);
 
-    genesis.generate(
-        new ThingRepositoryImpl(
-            new LinkedHashSet<>(Arrays.asList(ThingTodo.create(), ThingBusiness.create()))),
-        deducers,
-        generators);
+    Set<Thing> allThings = new LinkedHashSet<>();
+    allThings.addAll(OregorDdd4jThings.get(JAVA_ROOT_PACKAGE));
+
+    genesis.generate(new ThingRepositoryImpl(allThings), deducers, generators);
   }
 
   private void generateAngular() {
+    String rootPackageName = "com.oregor.dummy";
+
     Genesis genesis = new Genesis();
 
-    Set<Deducer> deducers =
-        new LinkedHashSet<>(
-            Arrays.asList(
-                ApiDeducerFactory.newInstance(new PackageName(JAVA_ROOT_PACKAGE)),
-                ReactiveStateFactory.newInstance(),
-                UiDeducerFactory.newInstance()));
+    Set<Deducer> deducers = GenesisDefault.angularDeducers();
+    Set<Generator> generators = GenesisDefault.angularGenerators(ANGULAR_EXPORT_PATH);
 
-    Set<Generator> generators =
-        new LinkedHashSet<>(
-            Arrays.asList(AngularGeneratorFactory.newInstance(Paths.get(ANGULAR_EXPORT_PATH))));
+    Set<Thing> allThings = new LinkedHashSet<>();
+    allThings.addAll(OregorDdd4jThings.get(rootPackageName));
 
-    genesis.generate(
-        new ThingRepositoryImpl(
-            new LinkedHashSet<>(Arrays.asList(ThingTodo.create(), ThingBusiness.create()))),
-        deducers,
-        generators);
+    genesis.generate(new ThingRepositoryImpl(allThings), deducers, generators);
   }
 }

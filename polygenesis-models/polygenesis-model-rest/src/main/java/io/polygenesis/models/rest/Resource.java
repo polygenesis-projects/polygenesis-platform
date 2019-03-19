@@ -20,8 +20,8 @@
 
 package io.polygenesis.models.rest;
 
-import io.polygenesis.commons.text.Name;
-import io.polygenesis.core.data.PackageName;
+import io.polygenesis.commons.valueobjects.ObjectName;
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.models.api.Service;
 import java.util.Set;
 
@@ -33,7 +33,7 @@ import java.util.Set;
 public class Resource {
 
   private PackageName packageName;
-  private Name name;
+  private ObjectName objectName;
   private Set<Endpoint> endpoints;
   private Set<Service> services;
 
@@ -45,14 +45,17 @@ public class Resource {
    * Instantiates a new Resource.
    *
    * @param packageName the package name
-   * @param name the name
+   * @param objectName the name
    * @param endpoints the endpoints
    * @param services the services
    */
   public Resource(
-      PackageName packageName, Name name, Set<Endpoint> endpoints, Set<Service> services) {
+      PackageName packageName,
+      ObjectName objectName,
+      Set<Endpoint> endpoints,
+      Set<Service> services) {
     setPackageName(packageName);
-    setName(name);
+    setObjectName(objectName);
     setEndpoints(endpoints);
     setServices(services);
   }
@@ -75,8 +78,8 @@ public class Resource {
    *
    * @return the name
    */
-  public Name getName() {
-    return name;
+  public ObjectName getObjectName() {
+    return objectName;
   }
 
   /**
@@ -113,10 +116,10 @@ public class Resource {
   /**
    * Sets name.
    *
-   * @param name the name
+   * @param objectName the name
    */
-  private void setName(Name name) {
-    this.name = name;
+  private void setObjectName(ObjectName objectName) {
+    this.objectName = objectName;
   }
 
   /**

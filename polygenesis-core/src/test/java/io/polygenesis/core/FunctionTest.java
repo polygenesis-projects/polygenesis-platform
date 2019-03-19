@@ -79,7 +79,7 @@ public class FunctionTest extends AbstractEqualityTest<Function> {
   @Override
   public Function createObject1() {
     return new Function(
-        new Thing(new ThingName("thingName")),
+        ThingBuilder.generic().setThingName(new ThingName("thingName")).createThing(),
         new Goal(GoalType.CREATE),
         new FunctionName("functionName"),
         new LinkedHashSet<>(),
@@ -89,7 +89,7 @@ public class FunctionTest extends AbstractEqualityTest<Function> {
   @Override
   public Function createObject2() {
     return new Function(
-        new Thing(new ThingName("thingName")),
+        ThingBuilder.generic().setThingName(new ThingName("thingName")).createThing(),
         new Goal(GoalType.CREATE),
         new FunctionName("anotherFunctionName"),
         new LinkedHashSet<>(),
@@ -102,7 +102,7 @@ public class FunctionTest extends AbstractEqualityTest<Function> {
 
   private Function createFunctionWithReturnValueAndNoArguments() {
     return new Function(
-        new Thing(new ThingName("thingName")),
+        ThingBuilder.generic().setThingName(new ThingName("thingName")).createThing(),
         new Goal(GoalType.CREATE),
         new FunctionName("functionName"),
         new ReturnValue(createDataPrimitive()));
@@ -110,7 +110,7 @@ public class FunctionTest extends AbstractEqualityTest<Function> {
 
   private Function createFunctionWithArgumentsAndNoReturnValue() {
     return new Function(
-        new Thing(new ThingName("thingName")),
+        ThingBuilder.generic().setThingName(new ThingName("thingName")).createThing(),
         new Goal(GoalType.CREATE),
         new FunctionName("functionName"),
         new LinkedHashSet<>());

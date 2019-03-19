@@ -57,7 +57,7 @@ public class ValueObjectClassRepresentable extends AbstractClassRepresentable<Va
 
   @Override
   public Set<FieldRepresentation> fieldRepresentations(ValueObject source, Object... args) {
-    return fieldRepresentations(source.getDataGroup());
+    return fieldRepresentations(source.getData());
   }
 
   @Override
@@ -77,7 +77,7 @@ public class ValueObjectClassRepresentable extends AbstractClassRepresentable<Va
 
     constructorRepresentations.add(
         createConstructorWithSettersFromFieldRepresentations(
-            source.getOriginatingDataGroup().getDataType(), fieldRepresentations));
+            source.getData().getDataType(), fieldRepresentations));
 
     return constructorRepresentations;
   }
@@ -90,14 +90,14 @@ public class ValueObjectClassRepresentable extends AbstractClassRepresentable<Va
 
   @Override
   public String packageName(ValueObject source, Object... args) {
-    return packageName(source.getDataGroup());
+    return packageName(source.getData());
   }
 
   @Override
   public Set<String> imports(ValueObject source, Object... args) {
     Set<String> imports = new LinkedHashSet<>();
 
-    imports.addAll(imports(source.getDataGroup()));
+    imports.addAll(imports(source.getData()));
     imports.add("com.oregor.ddd4j.check.assertion.Assertion");
     imports.add("javax.persistence.Embeddable");
 
@@ -115,7 +115,7 @@ public class ValueObjectClassRepresentable extends AbstractClassRepresentable<Va
 
     stringBuilder.append("The ");
 
-    stringBuilder.append(TextConverter.toUpperCamelSpaces(source.getDataGroup().getDataType()));
+    stringBuilder.append(TextConverter.toUpperCamelSpaces(source.getData().getDataType()));
 
     stringBuilder.append(" Value Object.");
 
@@ -129,11 +129,11 @@ public class ValueObjectClassRepresentable extends AbstractClassRepresentable<Va
 
   @Override
   public String simpleObjectName(ValueObject source, Object... args) {
-    return simpleObjectName(source.getDataGroup());
+    return simpleObjectName(source.getData());
   }
 
   @Override
   public String fullObjectName(ValueObject source, Object... args) {
-    return fullObjectName(source.getDataGroup());
+    return fullObjectName(source.getData());
   }
 }

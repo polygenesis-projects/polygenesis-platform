@@ -68,13 +68,13 @@ public class AggregateRootConverterMethodRepresentable
     stringBuilder.append("\t\treturn new ");
     stringBuilder.append(
         TextConverter.toUpperCamel(
-            source.getReturnValue().getModel().getAsDataGroup().getDataType()));
+            source.getReturnValue().getData().getAsDataGroup().getDataType()));
     stringBuilder.append("(\n");
 
     stringBuilder.append(
         source
             .getReturnValue()
-            .getModel()
+            .getData()
             .getAsDataGroup()
             .getModels()
             .stream()
@@ -82,7 +82,7 @@ public class AggregateRootConverterMethodRepresentable
                 model ->
                     String.format(
                         "\t\t\t\t%s.get%s()",
-                        TextConverter.toLowerCamel(argument.getModel().getVariableName().getText()),
+                        TextConverter.toLowerCamel(argument.getData().getVariableName().getText()),
                         TextConverter.toUpperCamel(model.getVariableName().getText())))
             .collect(Collectors.joining(",\n")));
     stringBuilder.append("\n");

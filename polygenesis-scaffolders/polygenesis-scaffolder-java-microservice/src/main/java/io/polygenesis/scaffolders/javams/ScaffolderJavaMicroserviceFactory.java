@@ -37,6 +37,7 @@ public class ScaffolderJavaMicroserviceFactory {
   private static final MavenSettingsScaffolder mavenSettingsScaffolder;
   private static final RootScaffolder rootScaffolder;
   private static final DomainModelScaffolder domainModelScaffolder;
+  private static final DomainServicesScaffolder domainServicesScaffolder;
   private static final ApiScaffolder apiScaffolder;
   private static final ApiImplScaffolder apiImplScaffolder;
   private static final PrimaryAdaptersScaffolder primaryAdaptersScaffolder;
@@ -56,6 +57,7 @@ public class ScaffolderJavaMicroserviceFactory {
     rootScaffolder =
         new RootScaffolder(freemarkerService, mavenParentPomScaffolder, gitIgnoreScaffolder);
     domainModelScaffolder = new DomainModelScaffolder(freemarkerService);
+    domainServicesScaffolder = new DomainServicesScaffolder(freemarkerService);
     apiScaffolder = new ApiScaffolder(freemarkerService);
     apiImplScaffolder = new ApiImplScaffolder(freemarkerService);
     appScaffolder = new AppScaffolder(freemarkerService);
@@ -98,6 +100,7 @@ public class ScaffolderJavaMicroserviceFactory {
         mavenSettingsScaffolder,
         rootScaffolder,
         domainModelScaffolder,
+        domainServicesScaffolder,
         apiScaffolder,
         apiImplScaffolder,
         primaryAdaptersScaffolder,

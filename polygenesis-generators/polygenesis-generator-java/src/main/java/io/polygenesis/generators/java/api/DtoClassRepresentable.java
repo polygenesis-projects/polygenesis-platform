@@ -20,7 +20,6 @@
 
 package io.polygenesis.generators.java.api;
 
-import com.oregor.ddd4j.check.assertion.Assertion;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.data.Data;
 import io.polygenesis.core.data.DataArray;
@@ -144,18 +143,7 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
 
   @Override
   public String packageName(Dto source, Object... args) {
-    // TODO: source.getOriginatingDataGroup() should not be DataArray
-    if (source.getOriginatingDataGroup().getPackageName() == null) {
-      return null;
-    }
-
-    Assertion.isNotNull(
-        source.getOriginatingDataGroup(), "source.getOriginatingDataGroup() is required");
-    Assertion.isNotNull(
-        source.getOriginatingDataGroup().getPackageName(),
-        "source.getOriginatingDataGroup().getPackageName() is required");
-
-    return source.getOriginatingDataGroup().getPackageName().getText();
+    return source.getPackageName().getText();
   }
 
   @Override
@@ -172,7 +160,6 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
     }
 
     source
-        .getOriginatingDataGroup()
         .getModels()
         .stream()
         .filter(model -> model.isDataArray())
@@ -180,16 +167,13 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
         .ifPresent(model -> imports.add("java.util.List"));
 
     source
-        .getOriginatingDataGroup()
         .getModels()
         .stream()
         .filter(model -> model.isDataGroup())
         .map(DataGroup.class::cast)
         .forEach(
             dataGroup -> {
-              if (!dataGroup
-                  .getPackageName()
-                  .equals(source.getOriginatingDataGroup().getPackageName())) {
+              if (!dataGroup.getPackageName().equals(source.getPackageName())) {
                 imports.add(
                     makeCanonicalObjectName(dataGroup.getPackageName(), dataGroup.getDataType()));
               }

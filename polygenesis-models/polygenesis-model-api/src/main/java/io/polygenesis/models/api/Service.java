@@ -21,9 +21,9 @@
 package io.polygenesis.models.api;
 
 import io.polygenesis.annotations.core.CqsType;
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.Function;
 import io.polygenesis.core.ThingName;
-import io.polygenesis.core.data.PackageName;
 import java.util.Objects;
 import java.util.Set;
 

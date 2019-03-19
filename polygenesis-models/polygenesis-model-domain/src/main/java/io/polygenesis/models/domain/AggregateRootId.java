@@ -22,17 +22,13 @@ package io.polygenesis.models.domain;
 
 import io.polygenesis.core.data.Data;
 import io.polygenesis.core.data.DataGroup;
-import io.polygenesis.core.data.VariableName;
-import java.util.Objects;
 
 /**
  * The type Aggregate root id.
  *
  * @author Christos Tsakostas
  */
-public class AggregateRootId extends AbstractProperty {
-
-  private DataGroup dataGroup;
+public class AggregateRootId extends BaseProperty<DataGroup> {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -41,38 +37,10 @@ public class AggregateRootId extends AbstractProperty {
   /**
    * Instantiates a new Aggregate root id.
    *
-   * @param dataGroup the data group
-   * @param variableName the variable name
+   * @param data the data
    */
-  public AggregateRootId(DataGroup dataGroup, VariableName variableName) {
-    super(PropertyType.AGGREGATE_ROOT_ID, variableName);
-    setDataGroup(dataGroup);
-  }
-
-  // ===============================================================================================
-  // GETTERS
-  // ===============================================================================================
-
-  /**
-   * Gets data group.
-   *
-   * @return the data group
-   */
-  public DataGroup getDataGroup() {
-    return dataGroup;
-  }
-
-  // ===============================================================================================
-  // GUARDS
-  // ===============================================================================================
-
-  /**
-   * Sets data group.
-   *
-   * @param dataGroup the data group
-   */
-  private void setDataGroup(DataGroup dataGroup) {
-    this.dataGroup = dataGroup;
+  public AggregateRootId(DataGroup data) {
+    super(PropertyType.AGGREGATE_ROOT_ID, data);
   }
 
   // ===============================================================================================
@@ -80,33 +48,7 @@ public class AggregateRootId extends AbstractProperty {
   // ===============================================================================================
 
   @Override
-  public Data getData() {
-    return dataGroup;
-  }
-
-  @Override
   public Data getTypeParameterData() {
     throw new UnsupportedOperationException();
-  }
-
-  // ===============================================================================================
-  // OVERRIDES
-  // ===============================================================================================
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    AggregateRootId that = (AggregateRootId) o;
-    return Objects.equals(dataGroup, that.dataGroup);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(dataGroup);
   }
 }

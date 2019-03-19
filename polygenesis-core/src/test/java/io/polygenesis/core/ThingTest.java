@@ -37,58 +37,47 @@ public class ThingTest extends AbstractEqualityTest<Thing> {
 
   @Test
   public void shouldCreateThingWithName() {
-    Thing thing = new Thing(new ThingName("someThingName"));
+    Thing thing = ThingBuilder.generic().setThingName(new ThingName("someThingName")).createThing();
 
     assertThat(thing).isNotNull();
 
-    Function function1 = createGoal1();
-    Function function2 = createGoal2();
-    Function function3 = createGoal3();
+    Function function1 = createFunction1();
+    Function function2 = createFunction2();
+    Function function3 = createFunction3();
 
     Set<Function> functionSet = new LinkedHashSet<>();
     functionSet.add(function2);
     functionSet.add(function3);
 
-    thing.appendFunction(function1);
-    thing.appendFunctions(functionSet);
+    thing.addFunction(function1);
+    thing.addFunctions(functionSet);
 
-    assertThat(thing.getName()).isEqualTo(new ThingName("someThingName"));
-    assertThat(thing.getParent()).isNull();
+    assertThat(thing.getThingName()).isEqualTo(new ThingName("someThingName"));
+    assertThat(thing.getChildren()).isEmpty();
     assertThat(thing.getFunctions().size()).isEqualTo(3);
   }
 
-  @Test
-  public void shouldCreateThingWithNameAndParent() {
-    Thing parentThing = new Thing(new ThingName("someParentThingName"));
-    Thing thing = new Thing(new ThingName("someThingName"), parentThing);
-
-    assertThat(thing).isNotNull();
-    assertThat(thing.getName()).isEqualTo(new ThingName("someThingName"));
-    assertThat(thing.getParent()).isEqualTo(parentThing);
-    assertThat(thing.getParent()).isEqualTo(new Thing(new ThingName("someParentThingName")));
-  }
-
-  private Function createGoal1() {
+  private Function createFunction1() {
     return new Function(
-        new Thing(new ThingName("thingName")),
+        ThingBuilder.generic().setThingName(new ThingName("thingName")).createThing(),
         new Goal(GoalType.MODIFY),
         new FunctionName("functionName"),
         new LinkedHashSet<>(),
         new ReturnValue(createDataPrimitive()));
   }
 
-  private Function createGoal2() {
+  private Function createFunction2() {
     return new Function(
-        new Thing(new ThingName("thingName")),
+        ThingBuilder.generic().setThingName(new ThingName("thingName")).createThing(),
         new Goal(GoalType.MODIFY),
         new FunctionName("anotherFunctionName"),
         new LinkedHashSet<>(),
         new ReturnValue(createDataPrimitive()));
   }
 
-  private Function createGoal3() {
+  private Function createFunction3() {
     return new Function(
-        new Thing(new ThingName("thingName")),
+        ThingBuilder.generic().setThingName(new ThingName("thingName")).createThing(),
         new Goal(GoalType.MODIFY),
         new FunctionName("someAnotherNewFunctionName"),
         new LinkedHashSet<>(),
@@ -108,11 +97,11 @@ public class ThingTest extends AbstractEqualityTest<Thing> {
   // ===============================================================================================
   @Override
   public Thing createObject1() {
-    return new Thing(new ThingName("xxx"));
+    return ThingBuilder.generic().setThingName(new ThingName("xxx")).createThing();
   }
 
   @Override
   public Thing createObject2() {
-    return new Thing(new ThingName("yyy"));
+    return ThingBuilder.generic().setThingName(new ThingName("yyy")).createThing();
   }
 }

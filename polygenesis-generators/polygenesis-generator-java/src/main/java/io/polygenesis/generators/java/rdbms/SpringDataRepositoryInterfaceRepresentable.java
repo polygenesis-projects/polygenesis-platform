@@ -92,7 +92,8 @@ public class SpringDataRepositoryInterfaceRepresentable
 
     stringBuilder.append("The Spring Data Repository Interface for ");
 
-    stringBuilder.append(TextConverter.toUpperCamelSpaces(source.getAggregateRootName().getText()));
+    stringBuilder.append(
+        TextConverter.toUpperCamelSpaces(source.getAggregateRootObjectName().getText()));
 
     stringBuilder.append(".");
 
@@ -108,7 +109,7 @@ public class SpringDataRepositoryInterfaceRepresentable
   public String simpleObjectName(Persistence source, Object... args) {
     StringBuilder stringBuilder = new StringBuilder();
 
-    stringBuilder.append(TextConverter.toLowerCamel(source.getName().getText()));
+    stringBuilder.append(TextConverter.toLowerCamel(source.getObjectName().getText()));
     stringBuilder.append("Repository");
 
     return stringBuilder.toString();
@@ -118,7 +119,7 @@ public class SpringDataRepositoryInterfaceRepresentable
   public String fullObjectName(Persistence source, Object... args) {
     StringBuilder stringBuilder = new StringBuilder();
 
-    stringBuilder.append(TextConverter.toUpperCamel(source.getAggregateRootName().getText()));
+    stringBuilder.append(TextConverter.toUpperCamel(source.getAggregateRootObjectName().getText()));
     stringBuilder.append("Repository");
     stringBuilder.append(" ");
     stringBuilder.append("extends");
@@ -130,9 +131,10 @@ public class SpringDataRepositoryInterfaceRepresentable
       stringBuilder.append("SpringDataRepository<");
     }
 
-    stringBuilder.append(TextConverter.toUpperCamel(source.getAggregateRootName().getText()));
+    stringBuilder.append(TextConverter.toUpperCamel(source.getAggregateRootObjectName().getText()));
     stringBuilder.append(", ");
-    stringBuilder.append(TextConverter.toUpperCamel(source.getAggregateRootIdName().getText()));
+    stringBuilder.append(
+        TextConverter.toUpperCamel(source.getAggregateRootIdObjectName().getText()));
     stringBuilder.append(">");
 
     return stringBuilder.toString();

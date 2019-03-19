@@ -21,13 +21,17 @@
 package io.polygenesis.models.domain;
 
 /**
- * The enum Property type.
+ * The enum DomainObjectProperty type.
  *
  * @author Christos Tsakostas
  */
 public enum PropertyType {
+  /** Abstract aggregate root id property type. */
+  ABSTRACT_AGGREGATE_ROOT_ID,
   /** Aggregate root id property type. */
   AGGREGATE_ROOT_ID,
+  /** Reference to aggregate root property type. */
+  REFERENCE_TO_AGGREGATE_ROOT,
   /** Primitive property type. */
   PRIMITIVE,
   /** Primitive collection property type. */

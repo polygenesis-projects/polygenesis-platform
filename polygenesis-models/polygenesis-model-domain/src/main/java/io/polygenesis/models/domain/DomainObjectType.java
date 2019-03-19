@@ -18,27 +18,32 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.core.data;
-
-import io.polygenesis.commons.text.AbstractText;
+package io.polygenesis.models.domain;
 
 /**
- * The type Object name.
+ * The enum Domain object type.
  *
  * @author Christos Tsakostas
  */
-public class ObjectName extends AbstractText {
-
-  // ===============================================================================================
-  // CONSTRUCTOR(S)
-  // ===============================================================================================
-
-  /**
-   * Instantiates a new Object name.
-   *
-   * @param text the text
-   */
-  public ObjectName(String text) {
-    super(text);
-  }
+public enum DomainObjectType {
+  /** Abstract aggregate root domain object type. */
+  ABSTRACT_AGGREGATE_ROOT,
+  /** Abstract aggregate entity domain object type. */
+  ABSTRACT_AGGREGATE_ENTITY,
+  /** Abstract value object domain object type. */
+  ABSTRACT_VALUE_OBJECT,
+  /** Abstract domain event domain object type. */
+  ABSTRACT_DOMAIN_EVENT,
+  /** Abstract domain command domain object type. */
+  ABSTRACT_DOMAIN_COMMAND,
+  /** Aggregate root domain object type. */
+  AGGREGATE_ROOT,
+  /** Aggregate entity domain object type. */
+  AGGREGATE_ENTITY,
+  /** Value object domain object type. */
+  VALUE_OBJECT,
+  /** Domain event domain object type. */
+  DOMAIN_EVENT,
+  /** Domain command domain object type. */
+  DOMAIN_COMMAND
 }

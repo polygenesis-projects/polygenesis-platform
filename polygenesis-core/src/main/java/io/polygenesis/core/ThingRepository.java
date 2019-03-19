@@ -31,11 +31,25 @@ import java.util.Set;
 public interface ThingRepository extends ModelRepository {
 
   /**
-   * Gets all things in the repository.
+   * Gets api things.
    *
-   * @return the things
+   * @return the api things
    */
-  Set<Thing> getThings();
+  Set<Thing> getApiThings();
+
+  /**
+   * Gets domain service things.
+   *
+   * @return the domain service things
+   */
+  Set<Thing> getDomainServiceThings();
+
+  /**
+   * Gets abstract domain aggregate root things.
+   *
+   * @return the abstract domain aggregate root things
+   */
+  Set<Thing> getAbstractDomainAggregateRootThings();
 
   /**
    * Gets thing by name.

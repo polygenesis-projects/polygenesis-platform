@@ -23,12 +23,13 @@ package io.polygenesis.core.data;
 /** @author Christos Tsakostas */
 class TestData extends Data {
 
-  public TestData() {
-    super(DataPrimaryType.OBJECT);
-  }
-
   public TestData(VariableName variableName) {
-    super(DataPrimaryType.OBJECT, variableName);
+    super(
+        DataPrimaryType.PRIMITIVE,
+        DataSource.user(),
+        variableName,
+        DataBusinessType.ANY,
+        DataValidator.empty());
   }
 
   @Override

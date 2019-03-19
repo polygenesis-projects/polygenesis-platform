@@ -20,8 +20,18 @@
 
 package io.polygenesis.models.domain;
 
-import io.polygenesis.commons.text.Name;
-import io.polygenesis.core.data.PackageName;
+import com.oregor.ddd4j.check.assertion.Assertion;
+import io.polygenesis.commons.valueobjects.ObjectName;
+import io.polygenesis.commons.valueobjects.PackageName;
+import io.polygenesis.core.data.Data;
+import io.polygenesis.core.data.DataBusinessType;
+import io.polygenesis.core.data.DataGroup;
+import io.polygenesis.core.data.DataSource;
+import io.polygenesis.core.data.DataValidator;
+import io.polygenesis.core.data.VariableName;
+import java.util.LinkedHashSet;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -29,16 +39,15 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class AggregateRoot {
+public class AggregateRoot extends BaseDomainObject<AggregateRoot>
+    implements DomainObjectProperty<DataGroup> {
 
-  private PackageName packageName;
-  private Name name;
-  private Set<AbstractProperty> properties;
+  // ===============================================================================================
+  // STATE
+  // ===============================================================================================
   private Set<StateMutationMethod> stateMutationMethods;
   private Set<StateQueryMethod> stateQueryMethods;
-  private Persistence persistence;
-  private Set<Constructor> constructors;
-  private Boolean multiTenant;
+  private Set<FactoryMethod> factoryMethods;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -47,87 +56,58 @@ public class AggregateRoot {
   /**
    * Instantiates a new Aggregate root.
    *
+   * @param instantiationType the instantiation type
+   * @param optionalSuperClass the optional super class
+   * @param objectName the object name
    * @param packageName the package name
-   * @param name the name
    * @param properties the properties
-   * @param persistence the persistence
    * @param constructors the constructors
-   */
-  public AggregateRoot(
-      PackageName packageName,
-      Name name,
-      Set<AbstractProperty> properties,
-      Persistence persistence,
-      Set<Constructor> constructors,
-      Boolean multiTenant) {
-    setPackageName(packageName);
-    setName(name);
-    setProperties(properties);
-    setPersistence(persistence);
-    setConstructors(constructors);
-    setMultiTenant(multiTenant);
-  }
-
-  /**
-   * Instantiates a new Aggregate root.
-   *
-   * @param packageName the package name
-   * @param name the name
-   * @param properties the properties
    * @param stateMutationMethods the state mutation methods
    * @param stateQueryMethods the state query methods
-   * @param persistence the persistence
-   * @param constructors the constructors
+   * @param factoryMethods the factory methods
+   * @param multiTenant the multi tenant
    */
   public AggregateRoot(
+      InstantiationType instantiationType,
+      Optional<AggregateRoot> optionalSuperClass,
+      ObjectName objectName,
       PackageName packageName,
-      Name name,
-      Set<AbstractProperty> properties,
+      Set<DomainObjectProperty> properties,
+      Set<Constructor> constructors,
       Set<StateMutationMethod> stateMutationMethods,
       Set<StateQueryMethod> stateQueryMethods,
-      Persistence persistence,
-      Set<Constructor> constructors,
+      Set<FactoryMethod> factoryMethods,
       Boolean multiTenant) {
-    setPackageName(packageName);
-    setName(name);
-    setProperties(properties);
+    super(
+        DomainObjectType.AGGREGATE_ROOT,
+        instantiationType,
+        optionalSuperClass,
+        objectName,
+        packageName,
+        properties,
+        constructors,
+        multiTenant);
     setStateMutationMethods(stateMutationMethods);
     setStateQueryMethods(stateQueryMethods);
-    setPersistence(persistence);
-    setConstructors(constructors);
-    setMultiTenant(multiTenant);
+    setFactoryMethods(factoryMethods);
+  }
+
+  // ===============================================================================================
+  // STATE MUTATION
+  // ===============================================================================================
+
+  /**
+   * Change superclass to.
+   *
+   * @param superclass the superclass
+   */
+  public void changeSuperclassTo(AggregateRoot superclass) {
+    setOptionalSuperClass(Optional.of(superclass));
   }
 
   // ===============================================================================================
   // GETTERS
   // ===============================================================================================
-
-  /**
-   * Gets package name.
-   *
-   * @return the package name
-   */
-  public PackageName getPackageName() {
-    return packageName;
-  }
-
-  /**
-   * Gets name.
-   *
-   * @return the name
-   */
-  public Name getName() {
-    return name;
-  }
-
-  /**
-   * Gets properties.
-   *
-   * @return the properties
-   */
-  public Set<AbstractProperty> getProperties() {
-    return properties;
-  }
 
   /**
    * Gets state mutation methods.
@@ -148,30 +128,12 @@ public class AggregateRoot {
   }
 
   /**
-   * Gets persistence.
+   * Gets factory methods.
    *
-   * @return the persistence
+   * @return the factory methods
    */
-  public Persistence getPersistence() {
-    return persistence;
-  }
-
-  /**
-   * Gets constructors.
-   *
-   * @return the constructors
-   */
-  public Set<Constructor> getConstructors() {
-    return constructors;
-  }
-
-  /**
-   * Gets multi tenant.
-   *
-   * @return the multi tenant
-   */
-  public Boolean getMultiTenant() {
-    return multiTenant;
+  public Set<FactoryMethod> getFactoryMethods() {
+    return factoryMethods;
   }
 
   // ===============================================================================================
@@ -179,38 +141,12 @@ public class AggregateRoot {
   // ===============================================================================================
 
   /**
-   * Sets package name.
-   *
-   * @param packageName the package name
-   */
-  private void setPackageName(PackageName packageName) {
-    this.packageName = packageName;
-  }
-
-  /**
-   * Sets name.
-   *
-   * @param name the name
-   */
-  private void setName(Name name) {
-    this.name = name;
-  }
-
-  /**
-   * Sets properties.
-   *
-   * @param properties the properties
-   */
-  private void setProperties(Set<AbstractProperty> properties) {
-    this.properties = properties;
-  }
-
-  /**
    * Sets state mutation methods.
    *
    * @param stateMutationMethods the state mutation methods
    */
   private void setStateMutationMethods(Set<StateMutationMethod> stateMutationMethods) {
+    Assertion.isNotNull(stateMutationMethods, "stateMutationMethods is required");
     this.stateMutationMethods = stateMutationMethods;
   }
 
@@ -220,33 +156,71 @@ public class AggregateRoot {
    * @param stateQueryMethods the state query methods
    */
   private void setStateQueryMethods(Set<StateQueryMethod> stateQueryMethods) {
+    Assertion.isNotNull(stateQueryMethods, "stateQueryMethods is required");
     this.stateQueryMethods = stateQueryMethods;
   }
 
   /**
-   * Sets persistence.
+   * Sets factory methods.
    *
-   * @param persistence the persistence
+   * @param factoryMethods the factory methods
    */
-  private void setPersistence(Persistence persistence) {
-    this.persistence = persistence;
+  private void setFactoryMethods(Set<FactoryMethod> factoryMethods) {
+    Assertion.isNotNull(factoryMethods, "factoryMethods is required");
+    this.factoryMethods = factoryMethods;
   }
 
-  /**
-   * Sets constructors.
-   *
-   * @param constructors the constructors
-   */
-  private void setConstructors(Set<Constructor> constructors) {
-    this.constructors = constructors;
+  // ===============================================================================================
+  // IMPLEMENTATIONS
+  // ===============================================================================================
+
+  @Override
+  public PropertyType getPropertyType() {
+    return PropertyType.REFERENCE_TO_AGGREGATE_ROOT;
   }
 
-  /**
-   * Sets multi tenant.
-   *
-   * @param multiTenant the multi tenant
-   */
-  private void setMultiTenant(Boolean multiTenant) {
-    this.multiTenant = multiTenant;
+  @Override
+  public DataGroup getData() {
+    Set<Data> models = new LinkedHashSet<>();
+
+    return new DataGroup(
+        DataSource.user(),
+        new VariableName(getObjectName().getText()),
+        DataBusinessType.ANY,
+        DataValidator.empty(),
+        getObjectName(),
+        getPackageName(),
+        models);
+  }
+
+  @Override
+  public Data getTypeParameterData() {
+    throw new UnsupportedOperationException();
+  }
+
+  // ===============================================================================================
+  // OVERRIDES
+  // ===============================================================================================
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    if (!super.equals(o)) {
+      return false;
+    }
+    AggregateRoot that = (AggregateRoot) o;
+    return Objects.equals(stateMutationMethods, that.stateMutationMethods)
+        && Objects.equals(stateQueryMethods, that.stateQueryMethods)
+        && Objects.equals(factoryMethods, that.factoryMethods);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(super.hashCode(), stateMutationMethods, stateQueryMethods, factoryMethods);
   }
 }

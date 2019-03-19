@@ -29,7 +29,7 @@ import java.util.Set;
  */
 public class Constructor {
 
-  private Set<AbstractProperty> properties;
+  private Set<DomainObjectProperty> properties;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -40,7 +40,7 @@ public class Constructor {
    *
    * @param properties the properties
    */
-  public Constructor(Set<AbstractProperty> properties) {
+  public Constructor(Set<DomainObjectProperty> properties) {
     setProperties(properties);
   }
 
@@ -53,7 +53,7 @@ public class Constructor {
    *
    * @return the properties
    */
-  public Set<AbstractProperty> getProperties() {
+  public Set<DomainObjectProperty> getProperties() {
     return properties;
   }
 
@@ -66,7 +66,7 @@ public class Constructor {
    *
    * @param properties the properties
    */
-  private void setProperties(Set<AbstractProperty> properties) {
+  private void setProperties(Set<DomainObjectProperty> properties) {
     this.properties = properties;
   }
 }

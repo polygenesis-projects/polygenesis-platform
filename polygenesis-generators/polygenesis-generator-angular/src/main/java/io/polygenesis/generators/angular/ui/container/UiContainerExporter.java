@@ -24,6 +24,7 @@ import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.models.ui.Feature;
 import io.polygenesis.models.ui.container.AbstractContainer;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * The type Ui container exporter.
@@ -74,55 +75,58 @@ public class UiContainerExporter {
   public void exportFeatureContainer(
       Path generationPathApp, Feature feature, AbstractContainer container) {
 
-    String folderInsideApp = TextConverter.toLowerHyphen(feature.getFeatureName().getText());
+    Path contextFeaturePath =
+        Paths.get(
+            TextConverter.toLowerHyphen(feature.getContextName().getText()),
+            TextConverter.toLowerHyphen(feature.getFeatureName().getText()));
 
     uiContainerHtmlExporter.exportHtml(
-        generationPathApp, folderInsideApp, container, UiContainerFolderType.PAGE);
+        generationPathApp, contextFeaturePath, container, UiContainerFolderType.PAGE);
     uiContainerScssExporter.exportScss(
-        generationPathApp, folderInsideApp, container, UiContainerFolderType.PAGE);
+        generationPathApp, contextFeaturePath, container, UiContainerFolderType.PAGE);
     uiContainerTypescriptExporter.exportTypescript(
-        generationPathApp, folderInsideApp, container, UiContainerFolderType.PAGE);
+        generationPathApp, contextFeaturePath, container, UiContainerFolderType.PAGE);
     uiContainerTypescriptSpecExporter.exportTypescriptSpec(
-        generationPathApp, folderInsideApp, container, UiContainerFolderType.PAGE);
+        generationPathApp, contextFeaturePath, container, UiContainerFolderType.PAGE);
   }
 
   /**
    * Export component container.
    *
    * @param generationPathApp the generation path app
-   * @param folderInsideApp the folder inside app
+   * @param contextFeaturePath the context feature path
    * @param container the container
    */
   public void exportComponentContainer(
-      Path generationPathApp, String folderInsideApp, AbstractContainer container) {
+      Path generationPathApp, Path contextFeaturePath, AbstractContainer container) {
 
     uiContainerHtmlExporter.exportHtml(
-        generationPathApp, folderInsideApp, container, UiContainerFolderType.COMPONENT);
+        generationPathApp, contextFeaturePath, container, UiContainerFolderType.COMPONENT);
     uiContainerScssExporter.exportScss(
-        generationPathApp, folderInsideApp, container, UiContainerFolderType.COMPONENT);
+        generationPathApp, contextFeaturePath, container, UiContainerFolderType.COMPONENT);
     uiContainerTypescriptExporter.exportTypescript(
-        generationPathApp, folderInsideApp, container, UiContainerFolderType.COMPONENT);
+        generationPathApp, contextFeaturePath, container, UiContainerFolderType.COMPONENT);
     uiContainerTypescriptSpecExporter.exportTypescriptSpec(
-        generationPathApp, folderInsideApp, container, UiContainerFolderType.COMPONENT);
+        generationPathApp, contextFeaturePath, container, UiContainerFolderType.COMPONENT);
   }
 
   /**
    * Export layout container.
    *
    * @param generationPathApp the generation path app
-   * @param folderInsideApp the folder inside app
+   * @param contextFeaturePath the context feature path
    * @param container the container
    */
   public void exportLayoutContainer(
-      Path generationPathApp, String folderInsideApp, AbstractContainer container) {
+      Path generationPathApp, Path contextFeaturePath, AbstractContainer container) {
 
     uiContainerHtmlExporter.exportHtml(
-        generationPathApp, folderInsideApp, container, UiContainerFolderType.LAYOUT);
+        generationPathApp, contextFeaturePath, container, UiContainerFolderType.LAYOUT);
     uiContainerScssExporter.exportScss(
-        generationPathApp, folderInsideApp, container, UiContainerFolderType.LAYOUT);
+        generationPathApp, contextFeaturePath, container, UiContainerFolderType.LAYOUT);
     uiContainerTypescriptExporter.exportTypescript(
-        generationPathApp, folderInsideApp, container, UiContainerFolderType.LAYOUT);
+        generationPathApp, contextFeaturePath, container, UiContainerFolderType.LAYOUT);
     uiContainerTypescriptSpecExporter.exportTypescriptSpec(
-        generationPathApp, folderInsideApp, container, UiContainerFolderType.LAYOUT);
+        generationPathApp, contextFeaturePath, container, UiContainerFolderType.LAYOUT);
   }
 }

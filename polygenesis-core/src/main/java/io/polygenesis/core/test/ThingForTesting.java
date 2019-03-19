@@ -21,18 +21,19 @@
 package io.polygenesis.core.test;
 
 import io.polygenesis.annotations.core.GoalType;
+import io.polygenesis.commons.valueobjects.ObjectName;
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.Argument;
 import io.polygenesis.core.Function;
 import io.polygenesis.core.FunctionName;
 import io.polygenesis.core.Goal;
 import io.polygenesis.core.ReturnValue;
 import io.polygenesis.core.Thing;
+import io.polygenesis.core.ThingBuilder;
 import io.polygenesis.core.ThingName;
 import io.polygenesis.core.data.DataBusinessType;
 import io.polygenesis.core.data.DataGroup;
 import io.polygenesis.core.data.DataPrimitive;
-import io.polygenesis.core.data.ObjectName;
-import io.polygenesis.core.data.PackageName;
 import io.polygenesis.core.data.PrimitiveType;
 import io.polygenesis.core.data.VariableName;
 import java.util.Arrays;
@@ -53,15 +54,15 @@ public class ThingForTesting {
    * @return the thing
    */
   public static Thing create() {
-    Thing business = new Thing(new ThingName("business"));
+    Thing business = ThingBuilder.generic().setThingName(new ThingName("business")).createThing();
 
-    business.appendFunction(functionCreate(business));
-    business.appendFunction(functionFetchOne(business));
-    business.appendFunction(functionFetchCollection(business));
+    business.addFunction(functionCreate(business));
+    business.addFunction(functionFetchOne(business));
+    business.addFunction(functionFetchCollection(business));
 
-    business.appendFunction(functionWithNoReturnValueAndManyArguments(business));
-    business.appendFunction(functionWithNoArguments(business));
-    business.appendFunction(functionWithPrimitives(business));
+    business.addFunction(functionWithNoReturnValueAndManyArguments(business));
+    business.addFunction(functionWithNoArguments(business));
+    business.addFunction(functionWithPrimitives(business));
 
     return business;
   }

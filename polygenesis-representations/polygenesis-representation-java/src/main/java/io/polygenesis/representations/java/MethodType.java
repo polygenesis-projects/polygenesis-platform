@@ -34,4 +34,5 @@ public enum MethodType {
   MODIFY,
   QUERY,
   SETTER,
+  TEST
 }

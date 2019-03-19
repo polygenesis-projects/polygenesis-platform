@@ -26,3 +26,5 @@
 /dist/
 /nbdist/
 /.nb-gradle/
+
+/polygenesis-codegen/src/test/java/io/polygenesis/codegen/custom

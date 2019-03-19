@@ -27,10 +27,10 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-import io.polygenesis.commons.text.Name;
+import io.polygenesis.commons.valueobjects.ObjectName;
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.ModelRepository;
 import io.polygenesis.core.ThingName;
-import io.polygenesis.core.data.PackageName;
 import io.polygenesis.models.api.Service;
 import io.polygenesis.models.api.ServiceModelRepository;
 import io.polygenesis.models.apiimpl.AggregateRootConverter;
@@ -129,7 +129,7 @@ public class JavaApiImplGeneratorTest {
     Set<AggregateRoot> aggregateRoots = new LinkedHashSet<>();
 
     AggregateRoot aggregateRoot = mock(AggregateRoot.class);
-    given(aggregateRoot.getName()).willReturn(new Name("someThing"));
+    given(aggregateRoot.getObjectName()).willReturn(new ObjectName("someThing"));
     aggregateRoots.add(aggregateRoot);
 
     return new DomainModelRepository(aggregateRoots);

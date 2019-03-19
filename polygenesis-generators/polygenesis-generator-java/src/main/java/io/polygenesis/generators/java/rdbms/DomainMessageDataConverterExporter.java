@@ -21,9 +21,9 @@
 package io.polygenesis.generators.java.rdbms;
 
 import io.polygenesis.commons.freemarker.FreemarkerService;
-import io.polygenesis.commons.text.Name;
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.data.PackageName;
+import io.polygenesis.commons.valueobjects.ObjectName;
+import io.polygenesis.commons.valueobjects.PackageName;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -66,7 +66,7 @@ public class DomainMessageDataConverterExporter {
    * @param rootPackageName the root package name
    * @param context the context
    */
-  public void export(Path generationPath, PackageName rootPackageName, Name context) {
+  public void export(Path generationPath, PackageName rootPackageName, ObjectName context) {
     Map<String, Object> dataModel = new HashMap<>();
     dataModel.put("packageName", rootPackageName.getText());
     dataModel.put("context", context.getText());
@@ -95,7 +95,7 @@ public class DomainMessageDataConverterExporter {
   // ===============================================================================================
 
   private Path makeDomainMessageDataConverterFileName(
-      Path generationPath, PackageName rootPackageName, Name context) {
+      Path generationPath, PackageName rootPackageName, ObjectName context) {
 
     return Paths.get(
         generationPath.toString(),

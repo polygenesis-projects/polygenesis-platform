@@ -59,15 +59,16 @@ public abstract class AbstractUiContainerPart {
    * Export container part.
    *
    * @param generationPathApp the generation path app
-   * @param folderInsideApp the folder inside app
+   * @param contextFeaturePath the context feature path
    * @param container the container
    * @param uiContainerFolderType the ui container folder type
    * @param freemarkerTemplate the freemarker template
    * @param containerPartFilePostFix the container part file post fix
+   * @param dataModel the data model
    */
   protected void exportContainerPart(
       Path generationPathApp,
-      String folderInsideApp,
+      Path contextFeaturePath,
       AbstractContainer container,
       UiContainerFolderType uiContainerFolderType,
       String freemarkerTemplate,
@@ -78,7 +79,7 @@ public abstract class AbstractUiContainerPart {
     Path componentPath =
         Paths.get(
             generationPathApp.toString(),
-            TextConverter.toLowerHyphen(folderInsideApp),
+            contextFeaturePath.toString(),
             uiContainerFolderType.toString(),
             TextConverter.toLowerHyphen(container.getContainerName().getText()));
 

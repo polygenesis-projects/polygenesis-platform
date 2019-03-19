@@ -115,8 +115,8 @@ public class ServiceImplementationMethodRepresentable extends AbstractMethodRepr
               parameterRepresentations.add(
                   new ParameterRepresentation(
                       fromDataTypeToJavaConverter.getDeclaredVariableType(
-                          argument.getModel().getDataType()),
-                      argument.getModel().getVariableName().getText()));
+                          argument.getData().getDataType()),
+                      argument.getData().getVariableName().getText()));
             });
 
     return parameterRepresentations;
@@ -126,7 +126,7 @@ public class ServiceImplementationMethodRepresentable extends AbstractMethodRepr
   public String returnValue(Method source, Object... args) {
     // TODO - primitives
     return TextConverter.toUpperCamel(
-        source.getFunction().getReturnValue().getModel().getDataType());
+        source.getFunction().getReturnValue().getData().getDataType());
   }
 
   @Override

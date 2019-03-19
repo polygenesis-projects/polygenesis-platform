@@ -18,27 +18,39 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.models.rest;
+package io.polygenesis.models.domain;
 
+import com.oregor.ddd4j.check.assertion.Assertion;
+import io.polygenesis.core.data.Data;
+import io.polygenesis.core.data.DataGroup;
 import java.util.Objects;
 
 /**
- * The type Abstract path content.
+ * The type Abstract aggregate root id.
  *
  * @author Christos Tsakostas
  */
-public class AbstractPathContent {
-
-  private PathContentType pathContentType;
-  private String content;
+public class AbstractAggregateRootId extends BaseProperty<DataGroup> {
 
   // ===============================================================================================
-  // CONSTRUCTORS
+  // STATE
   // ===============================================================================================
 
-  public AbstractPathContent(PathContentType pathContentType, String content) {
-    setPathContentType(pathContentType);
-    setContent(content);
+  private GenericTypeParameter genericTypeParameter;
+
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
+  /**
+   * Instantiates a new Abstract aggregate root id.
+   *
+   * @param data the data
+   * @param genericTypeParameter the generic type parameter
+   */
+  public AbstractAggregateRootId(DataGroup data, GenericTypeParameter genericTypeParameter) {
+    super(PropertyType.ABSTRACT_AGGREGATE_ROOT_ID, data);
+    setGenericTypeParameter(genericTypeParameter);
   }
 
   // ===============================================================================================
@@ -46,21 +58,12 @@ public class AbstractPathContent {
   // ===============================================================================================
 
   /**
-   * Gets path content type.
+   * Gets generic type parameter.
    *
-   * @return the path content type
+   * @return the generic type parameter
    */
-  public PathContentType getPathContentType() {
-    return pathContentType;
-  }
-
-  /**
-   * Gets content.
-   *
-   * @return the content
-   */
-  public String getContent() {
-    return content;
+  public GenericTypeParameter getGenericTypeParameter() {
+    return genericTypeParameter;
   }
 
   // ===============================================================================================
@@ -68,21 +71,22 @@ public class AbstractPathContent {
   // ===============================================================================================
 
   /**
-   * Sets path content type.
+   * Sets generic type parameter.
    *
-   * @param pathContentType the path content type
+   * @param genericTypeParameter the generic type parameter
    */
-  private void setPathContentType(PathContentType pathContentType) {
-    this.pathContentType = pathContentType;
+  private void setGenericTypeParameter(GenericTypeParameter genericTypeParameter) {
+    Assertion.isNotNull(genericTypeParameter, "genericTypeParameter is required");
+    this.genericTypeParameter = genericTypeParameter;
   }
 
-  /**
-   * Sets content.
-   *
-   * @param content the content
-   */
-  private void setContent(String content) {
-    this.content = content;
+  // ===============================================================================================
+  // ABSTRACT IMPLEMENTATIONS
+  // ===============================================================================================
+
+  @Override
+  public Data getTypeParameterData() {
+    throw new UnsupportedOperationException();
   }
 
   // ===============================================================================================
@@ -97,12 +101,15 @@ public class AbstractPathContent {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    AbstractPathContent that = (AbstractPathContent) o;
-    return pathContentType == that.pathContentType && Objects.equals(content, that.content);
+    if (!super.equals(o)) {
+      return false;
+    }
+    AbstractAggregateRootId that = (AbstractAggregateRootId) o;
+    return Objects.equals(genericTypeParameter, that.genericTypeParameter);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(pathContentType, content);
+    return Objects.hash(super.hashCode(), genericTypeParameter);
   }
 }

@@ -22,18 +22,16 @@ package io.polygenesis.models.domain;
 
 import io.polygenesis.core.data.Data;
 import io.polygenesis.core.data.DataGroup;
-import io.polygenesis.core.data.VariableName;
-import java.util.Objects;
 
 /**
  * The type Value object.
  *
  * @author Christos Tsakostas
  */
-public class ValueObject extends AbstractProperty {
+public class ValueObject extends BaseProperty<DataGroup> {
 
+  // TODO: should be removed
   private DataGroup originatingDataGroup;
-  private DataGroup dataGroup;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -42,37 +40,16 @@ public class ValueObject extends AbstractProperty {
   /**
    * Instantiates a new Value object.
    *
-   * @param propertyType the property type
+   * @param data the data
    * @param originatingDataGroup the originating data group
-   * @param dataGroup the data group
-   * @param variableName the variable name
    */
-  public ValueObject(
-      PropertyType propertyType,
-      DataGroup originatingDataGroup,
-      DataGroup dataGroup,
-      VariableName variableName) {
-    super(propertyType, variableName);
-    setOriginatingDataGroup(originatingDataGroup);
-    setDataGroup(dataGroup);
-  }
-
-  /**
-   * Instantiates a new Value object.
-   *
-   * @param originatingDataGroup the originating data group
-   * @param dataGroup the data group
-   * @param variableName the variable name
-   */
-  public ValueObject(
-      DataGroup originatingDataGroup, DataGroup dataGroup, VariableName variableName) {
-    super(PropertyType.VALUE_OBJECT, variableName);
-    setOriginatingDataGroup(originatingDataGroup);
-    setDataGroup(dataGroup);
+  public ValueObject(DataGroup data, DataGroup originatingDataGroup) {
+    super(PropertyType.VALUE_OBJECT, data);
+    this.originatingDataGroup = originatingDataGroup;
   }
 
   // ===============================================================================================
-  // GETTERS
+  // GETTER
   // ===============================================================================================
 
   /**
@@ -84,70 +61,12 @@ public class ValueObject extends AbstractProperty {
     return originatingDataGroup;
   }
 
-  /**
-   * Gets data group.
-   *
-   * @return the data group
-   */
-  public DataGroup getDataGroup() {
-    return dataGroup;
-  }
-
-  // ===============================================================================================
-  // GUARDS
-  // ===============================================================================================
-
-  /**
-   * Sets originating data group.
-   *
-   * @param originatingDataGroup the originating data group
-   */
-  private void setOriginatingDataGroup(DataGroup originatingDataGroup) {
-    this.originatingDataGroup = originatingDataGroup;
-  }
-
-  /**
-   * Sets data group.
-   *
-   * @param dataGroup the data group
-   */
-  private void setDataGroup(DataGroup dataGroup) {
-    this.dataGroup = dataGroup;
-  }
-
   // ===============================================================================================
   // ABSTRACT IMPLEMENTATIONS
   // ===============================================================================================
 
   @Override
-  public Data getData() {
-    return dataGroup;
-  }
-
-  @Override
   public Data getTypeParameterData() {
     throw new UnsupportedOperationException();
-  }
-
-  // ===============================================================================================
-  // OVERRIDES
-  // ===============================================================================================
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    ValueObject that = (ValueObject) o;
-    return Objects.equals(originatingDataGroup, that.originatingDataGroup)
-        && Objects.equals(dataGroup, that.dataGroup);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(originatingDataGroup, dataGroup);
   }
 }

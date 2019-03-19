@@ -69,7 +69,7 @@ public class ActionGroupDeducer {
   public Set<ActionGroup> deduce(Thing thing, ServiceModelRepository serviceModelRepository) {
     Set<ActionGroup> actionGroups = new LinkedHashSet<>();
 
-    Set<Service> services = serviceModelRepository.getServicesBy(thing.getName());
+    Set<Service> services = serviceModelRepository.getServicesBy(thing.getThingName());
 
     services.forEach(
         service ->
@@ -107,7 +107,7 @@ public class ActionGroupDeducer {
                               new ActionGroupName(
                                   String.format(
                                       "%s-%s-%s",
-                                      thing.getName().getText(),
+                                      thing.getThingName().getText(),
                                       TextConverter.toLowerCamel(
                                           ActionGroupType.API.name().toLowerCase()),
                                       TextConverter.toLowerHyphen(

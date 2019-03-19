@@ -168,7 +168,7 @@ public class Function {
    */
   public Optional<DataPrimitive> retrieveThingIdentityFromArgument(Argument argument) {
     return argument
-        .getModel()
+        .getData()
         .getAsDataGroup()
         .getModels()
         .stream()

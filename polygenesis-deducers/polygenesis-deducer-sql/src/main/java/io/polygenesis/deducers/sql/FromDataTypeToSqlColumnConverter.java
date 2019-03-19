@@ -75,5 +75,6 @@ public class FromDataTypeToSqlColumnConverter {
     dataTypeMap.put(PrimitiveType.INTEGER.name(), ColumnDataType.INTEGER);
     dataTypeMap.put(PrimitiveType.LONG.name(), ColumnDataType.BIG_INTEGER);
     dataTypeMap.put(PrimitiveType.BOOLEAN.name(), ColumnDataType.BIT);
+    dataTypeMap.put(PrimitiveType.DATETIME.name(), ColumnDataType.DATETIME);
   }
 }

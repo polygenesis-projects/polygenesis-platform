@@ -25,6 +25,7 @@ import io.polygenesis.core.Function;
 import io.polygenesis.core.FunctionName;
 import io.polygenesis.core.Goal;
 import io.polygenesis.core.Thing;
+import io.polygenesis.core.ThingBuilder;
 import io.polygenesis.core.ThingName;
 import java.util.LinkedHashSet;
 
@@ -41,7 +42,7 @@ public abstract class AbstractRestDeducerTest {
    * @return the function
    */
   protected Function makeFunctionCreate() {
-    Thing thing = new Thing(new ThingName("customer"));
+    Thing thing = ThingBuilder.generic().setThingName(new ThingName("customer")).createThing();
     return new Function(
         thing, new Goal(GoalType.CREATE), new FunctionName("create"), new LinkedHashSet<>());
   }
@@ -52,7 +53,7 @@ public abstract class AbstractRestDeducerTest {
    * @return the function
    */
   protected Function makeFunctionModify() {
-    Thing thing = new Thing(new ThingName("customer"));
+    Thing thing = ThingBuilder.generic().setThingName(new ThingName("customer")).createThing();
     return new Function(
         thing, new Goal(GoalType.MODIFY), new FunctionName("modify"), new LinkedHashSet<>());
   }
@@ -63,7 +64,7 @@ public abstract class AbstractRestDeducerTest {
    * @return the function
    */
   protected Function makeFunctionDelete() {
-    Thing thing = new Thing(new ThingName("customer"));
+    Thing thing = ThingBuilder.generic().setThingName(new ThingName("customer")).createThing();
     return new Function(
         thing, new Goal(GoalType.MODIFY), new FunctionName("delete"), new LinkedHashSet<>());
   }
@@ -74,7 +75,7 @@ public abstract class AbstractRestDeducerTest {
    * @return the function
    */
   protected Function makeFunctionFetchOne() {
-    Thing thing = new Thing(new ThingName("customer"));
+    Thing thing = ThingBuilder.generic().setThingName(new ThingName("customer")).createThing();
     return new Function(
         thing, new Goal(GoalType.FETCH_ONE), new FunctionName("fetchOne"), new LinkedHashSet<>());
   }
@@ -85,7 +86,7 @@ public abstract class AbstractRestDeducerTest {
    * @return the function
    */
   protected Function makeFunctionFetchCollection() {
-    Thing thing = new Thing(new ThingName("customer"));
+    Thing thing = ThingBuilder.generic().setThingName(new ThingName("customer")).createThing();
     return new Function(
         thing,
         new Goal(GoalType.FETCH_COLLECTION),
@@ -99,7 +100,7 @@ public abstract class AbstractRestDeducerTest {
    * @return the function
    */
   protected Function makeFunctionFetchPagedCollection() {
-    Thing thing = new Thing(new ThingName("customer"));
+    Thing thing = ThingBuilder.generic().setThingName(new ThingName("customer")).createThing();
     return new Function(
         thing,
         new Goal(GoalType.FETCH_PAGED_COLLECTION),
@@ -113,7 +114,7 @@ public abstract class AbstractRestDeducerTest {
    * @return the function
    */
   protected Function makeInvalidGetFunction() {
-    Thing thing = new Thing(new ThingName("customer"));
+    Thing thing = ThingBuilder.generic().setThingName(new ThingName("customer")).createThing();
     return new Function(
         thing,
         new Goal("UnidentifiedGet"),

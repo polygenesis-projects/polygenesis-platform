@@ -87,7 +87,7 @@ public class PersistenceInterfaceRepresentable extends AbstractInterfaceRepresen
 
     stringBuilder.append("The ");
 
-    stringBuilder.append(TextConverter.toUpperCamelSpaces(source.getName().getText()));
+    stringBuilder.append(TextConverter.toUpperCamelSpaces(source.getObjectName().getText()));
 
     stringBuilder.append(" Contract.");
 
@@ -103,7 +103,7 @@ public class PersistenceInterfaceRepresentable extends AbstractInterfaceRepresen
   public String simpleObjectName(Persistence source, Object... args) {
     StringBuilder stringBuilder = new StringBuilder();
 
-    stringBuilder.append(TextConverter.toLowerCamel(source.getName().getText()));
+    stringBuilder.append(TextConverter.toLowerCamel(source.getObjectName().getText()));
 
     return stringBuilder.toString();
   }
@@ -112,12 +112,13 @@ public class PersistenceInterfaceRepresentable extends AbstractInterfaceRepresen
   public String fullObjectName(Persistence source, Object... args) {
     StringBuilder stringBuilder = new StringBuilder();
 
-    stringBuilder.append(TextConverter.toUpperCamel(source.getName().getText()));
+    stringBuilder.append(TextConverter.toUpperCamel(source.getObjectName().getText()));
     stringBuilder.append(" extends ");
     stringBuilder.append("Persistence<");
-    stringBuilder.append(TextConverter.toUpperCamel(source.getAggregateRootName().getText()));
+    stringBuilder.append(TextConverter.toUpperCamel(source.getAggregateRootObjectName().getText()));
     stringBuilder.append(", ");
-    stringBuilder.append(TextConverter.toUpperCamel(source.getAggregateRootIdName().getText()));
+    stringBuilder.append(
+        TextConverter.toUpperCamel(source.getAggregateRootIdObjectName().getText()));
     stringBuilder.append(">");
 
     return stringBuilder.toString();

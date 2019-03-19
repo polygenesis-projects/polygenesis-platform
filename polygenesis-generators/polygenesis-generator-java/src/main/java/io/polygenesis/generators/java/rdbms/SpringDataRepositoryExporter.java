@@ -80,7 +80,7 @@ public class SpringDataRepositoryExporter {
         generationPath.toString(),
         "src/main/java",
         persistence.getPackageName().toPath().toString(),
-        TextConverter.toUpperCamel(persistence.getAggregateRootName().getText())
+        TextConverter.toUpperCamel(persistence.getAggregateRootObjectName().getText())
             + "Repository.java");
   }
 }

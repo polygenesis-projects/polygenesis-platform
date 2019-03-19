@@ -22,8 +22,8 @@ package io.polygenesis.generators.java.rdbms;
 
 import io.polygenesis.commons.freemarker.FreemarkerConfig;
 import io.polygenesis.commons.freemarker.FreemarkerService;
-import io.polygenesis.commons.text.Name;
-import io.polygenesis.core.data.PackageName;
+import io.polygenesis.commons.valueobjects.ObjectName;
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.representations.java.FromDataTypeToJavaConverter;
 import io.polygenesis.representations.java.FunctionToMethodRepresentationConverter;
 import java.nio.file.Path;
@@ -39,12 +39,14 @@ public final class JavaRdbmsGeneratorFactory {
   // DEPENDENCIES
   // ===============================================================================================
   private static final PersistenceImplExporter persistenceImplExporter;
+  private static final PersistenceImplTestExporter persistenceImplTestExporter;
   private static final DomainMessageDataExporter domainMessageDataExporter;
   private static final DomainMessageDataConverterExporter domainMessageDataConverterExporter;
   private static final DomainMessageDataRepositoryExporter domainMessageDataRepositoryExporter;
   private static final SpringDataRepositoryExporter springDataRepositoryExporter;
   private static final RdbmsTestExporter rdbmsTestExporter;
   private static final RdbmsTestConfigExporter rdbmsTestConfigExporter;
+  private static final ApplicationCiRdbmsYmlExporter applicationCiRdbmsYmlExporter;
 
   // ===============================================================================================
   // STATIC INITIALIZATION OF DEPENDENCIES
@@ -67,6 +69,12 @@ public final class JavaRdbmsGeneratorFactory {
     persistenceImplExporter =
         new PersistenceImplExporter(freemarkerService, persistenceImplClassRepresentable);
 
+    PersistenceImplTestClassRepresentable persistenceImplTestClassRepresentable =
+        new PersistenceImplTestClassRepresentable(fromDataTypeToJavaConverter);
+
+    persistenceImplTestExporter =
+        new PersistenceImplTestExporter(freemarkerService, persistenceImplTestClassRepresentable);
+
     FunctionToMethodRepresentationConverter functionToMethodRepresentationConverter =
         new FunctionToMethodRepresentationConverter(fromDataTypeToJavaConverter);
 
@@ -80,6 +88,8 @@ public final class JavaRdbmsGeneratorFactory {
 
     rdbmsTestExporter = new RdbmsTestExporter(freemarkerService);
     rdbmsTestConfigExporter = new RdbmsTestConfigExporter(freemarkerService);
+
+    applicationCiRdbmsYmlExporter = new ApplicationCiRdbmsYmlExporter(freemarkerService);
   }
 
   // ===============================================================================================
@@ -103,7 +113,7 @@ public final class JavaRdbmsGeneratorFactory {
    * @return the java api generator
    */
   public static JavaRdbmsGenerator newInstance(
-      Path generationPath, PackageName rootPackageName, Name contextName) {
+      Path generationPath, PackageName rootPackageName, ObjectName contextName) {
     return new JavaRdbmsGenerator(
         generationPath,
         rootPackageName,
@@ -112,8 +122,10 @@ public final class JavaRdbmsGeneratorFactory {
         domainMessageDataConverterExporter,
         domainMessageDataRepositoryExporter,
         persistenceImplExporter,
+        persistenceImplTestExporter,
         springDataRepositoryExporter,
         rdbmsTestExporter,
-        rdbmsTestConfigExporter);
+        rdbmsTestConfigExporter,
+        applicationCiRdbmsYmlExporter);
   }
 }

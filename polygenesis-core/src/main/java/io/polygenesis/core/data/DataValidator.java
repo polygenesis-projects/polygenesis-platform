@@ -18,33 +18,64 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.core;
+package io.polygenesis.core.data;
 
-import com.oregor.ddd4j.check.assertion.Assertion;
-import io.polygenesis.core.data.Data;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
+import io.polygenesis.core.data.validation.MaximumLengthValidation;
+import io.polygenesis.core.data.validation.RequiredValidation;
+import io.polygenesis.core.data.validation.Validation;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
+import java.util.Objects;
+import java.util.Set;
 
 /**
- * The base class for Function Input and Output.
+ * The type Data validator.
  *
  * @author Christos Tsakostas
  */
-abstract class AbstractIO {
+public class DataValidator {
 
-  private Data model;
+  // ===============================================================================================
+  // STATIC
+  // ===============================================================================================
+
+  /**
+   * Empty data validator.
+   *
+   * @return the data validator
+   */
+  public static DataValidator empty() {
+    return new DataValidator(new LinkedHashSet<>());
+  }
+
+  /**
+   * Default for string data validator.
+   *
+   * @return the data validator
+   */
+  public static DataValidator defaultForString() {
+    return new DataValidator(
+        new LinkedHashSet<>(
+            Arrays.asList(new RequiredValidation(), new MaximumLengthValidation(100))));
+  }
+
+  // ===============================================================================================
+  // STATE
+  // ===============================================================================================
+
+  private Set<Validation> validations;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
-   * Instantiates a new Argument.
+   * Instantiates a new Data validator.
    *
-   * @param model the model
+   * @param validations the validations
    */
-  AbstractIO(Data model) {
-    setModel(model);
+  public DataValidator(Set<Validation> validations) {
+    setValidations(validations);
   }
 
   // ===============================================================================================
@@ -52,21 +83,25 @@ abstract class AbstractIO {
   // ===============================================================================================
 
   /**
-   * Gets model.
+   * Gets validations.
    *
-   * @return the model
+   * @return the validations
    */
-  public Data getModel() {
-    return model;
+  public Set<Validation> getValidations() {
+    return validations;
   }
 
   // ===============================================================================================
   // GUARDS
   // ===============================================================================================
 
-  private void setModel(Data model) {
-    Assertion.isNotNull(model, "data is required");
-    this.model = model;
+  /**
+   * Sets validations.
+   *
+   * @param validations the validations
+   */
+  private void setValidations(Set<Validation> validations) {
+    this.validations = validations;
   }
 
   // ===============================================================================================
@@ -78,18 +113,15 @@ abstract class AbstractIO {
     if (this == o) {
       return true;
     }
-
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-
-    AbstractIO argument = (AbstractIO) o;
-
-    return new EqualsBuilder().append(model, argument.model).isEquals();
+    DataValidator that = (DataValidator) o;
+    return Objects.equals(validations, that.validations);
   }
 
   @Override
   public int hashCode() {
-    return new HashCodeBuilder(17, 37).append(model).toHashCode();
+    return Objects.hash(validations);
   }
 }

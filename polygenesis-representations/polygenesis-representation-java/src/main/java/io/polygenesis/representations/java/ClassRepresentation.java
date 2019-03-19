@@ -166,6 +166,19 @@ public class ClassRepresentation extends AbstractObjectRepresentation {
         .collect(toCollection(LinkedHashSet::new));
   }
 
+  /**
+   * Gets tests.
+   *
+   * @return the tests
+   */
+  public Set<MethodRepresentation> getTests() {
+    return methodRepresentations
+        .stream()
+        .filter(
+            methodRepresentation -> methodRepresentation.getMethodType().equals(MethodType.TEST))
+        .collect(toCollection(LinkedHashSet::new));
+  }
+
   // ===============================================================================================
   // GUARDS
   // ===============================================================================================

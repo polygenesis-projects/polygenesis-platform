@@ -25,7 +25,7 @@ package io.polygenesis.models.domain;
  *
  * @author Christos Tsakostas
  */
-public class StateMutationMethod extends AbstractMethod {
+public class StateMutationMethod extends BaseMethod {
 
   private DomainEvent domainEvent;
 

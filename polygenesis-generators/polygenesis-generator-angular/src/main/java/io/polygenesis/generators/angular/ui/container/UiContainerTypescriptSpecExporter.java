@@ -58,13 +58,13 @@ public class UiContainerTypescriptSpecExporter extends AbstractUiContainerPart {
    * Export typescript spec.
    *
    * @param generationPathApp the generation path app
-   * @param folderInsideApp the folder inside app
+   * @param contextFeaturePath the context feature path
    * @param container the container
    * @param uiContainerFolderType the ui container folder type
    */
   public void exportTypescriptSpec(
       Path generationPathApp,
-      String folderInsideApp,
+      Path contextFeaturePath,
       AbstractContainer container,
       UiContainerFolderType uiContainerFolderType) {
     Map<String, Object> dataModel = new HashMap<>();
@@ -72,7 +72,7 @@ public class UiContainerTypescriptSpecExporter extends AbstractUiContainerPart {
 
     exportContainerPart(
         generationPathApp,
-        folderInsideApp,
+        contextFeaturePath,
         container,
         uiContainerFolderType,
         getFtlTemplateBy(uiContainerFolderType),
