@@ -77,17 +77,7 @@ public class ServiceMethodImplementationRepresentable
   public MethodRepresentation create(ServiceMethodImplementation source, Object... args) {
     ServiceImplementation serviceImplementation = (ServiceImplementation) args[0];
 
-    MethodRepresentation methodRepresentation =
-        new MethodRepresentation(
-            methodType(source, args),
-            imports(source, args),
-            annotations(source, args),
-            description(source, args),
-            modifiers(source, args),
-            methodName(source, args),
-            parameterRepresentations(source, args),
-            returnValue(source, args),
-            implementation(source, args));
+    MethodRepresentation methodRepresentation = super.create(source, args);
 
     if (serviceMethodImplementationRegistry.isServiceMethodSupported(source.getServiceMethod())) {
       methodRepresentation.changeImplementationTo(

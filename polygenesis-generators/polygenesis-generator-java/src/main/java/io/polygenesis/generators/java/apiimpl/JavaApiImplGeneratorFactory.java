@@ -23,6 +23,7 @@ package io.polygenesis.generators.java.apiimpl;
 import io.polygenesis.commons.freemarker.FreemarkerConfig;
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.valueobjects.PackageName;
+import io.polygenesis.implementations.java.apiimpl.ConverterMethodImplementationRegistry;
 import io.polygenesis.implementations.java.apiimpl.ServiceMethodImplementationRegistry;
 import io.polygenesis.representations.java.FromDataTypeToJavaConverter;
 import java.nio.file.Path;
@@ -75,8 +76,12 @@ public final class JavaApiImplGeneratorFactory {
         new ServiceImplementationTestExporter(
             freemarkerService, serviceImplementationTestClassRepresentable);
 
+    ConverterMethodImplementationRegistry converterMethodImplementationRegistry =
+        new ConverterMethodImplementationRegistry();
+
     DomainObjectConverterMethodRepresentable domainObjectConverterMethodRepresentable =
-        new DomainObjectConverterMethodRepresentable(fromDataTypeToJavaConverter);
+        new DomainObjectConverterMethodRepresentable(
+            fromDataTypeToJavaConverter, freemarkerService, converterMethodImplementationRegistry);
 
     DomainObjectConverterClassRepresentable domainObjectConverterClassRepresentable =
         new DomainObjectConverterClassRepresentable(

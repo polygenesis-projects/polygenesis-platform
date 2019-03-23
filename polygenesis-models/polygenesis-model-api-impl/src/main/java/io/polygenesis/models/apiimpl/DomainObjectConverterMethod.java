@@ -21,33 +21,39 @@
 package io.polygenesis.models.apiimpl;
 
 import com.oregor.ddd4j.check.assertion.Assertion;
-import io.polygenesis.models.api.Dto;
-import io.polygenesis.models.domain.BaseDomainObject;
+import io.polygenesis.core.Function;
 import java.util.Objects;
 
 /**
- * The type Abstract fetch dto from domain object.
+ * The type Domain object converter method.
  *
  * @author Christos Tsakostas
  */
-public abstract class AbstractFetchDtoFromDomainObject {
+public class DomainObjectConverterMethod {
 
-  private Dto dto;
-  private BaseDomainObject<?> domainObject;
+  // ===============================================================================================
+  // STATE
+  // ===============================================================================================
+
+  private Function function;
+  private Object from;
+  private Object to;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
-   * Instantiates a new Abstract fetch dto from domain object.
+   * Instantiates a new Domain object converter method.
    *
-   * @param dto the dto
-   * @param domainObject the domain object
+   * @param function the function
+   * @param from the from
+   * @param to the to
    */
-  public AbstractFetchDtoFromDomainObject(Dto dto, BaseDomainObject<?> domainObject) {
-    setDto(dto);
-    setDomainObject(domainObject);
+  public DomainObjectConverterMethod(Function function, Object from, Object to) {
+    setFunction(function);
+    setFrom(from);
+    setTo(to);
   }
 
   // ===============================================================================================
@@ -55,21 +61,30 @@ public abstract class AbstractFetchDtoFromDomainObject {
   // ===============================================================================================
 
   /**
-   * Gets dto.
+   * Gets function.
    *
-   * @return the dto
+   * @return the function
    */
-  public Dto getDto() {
-    return dto;
+  public Function getFunction() {
+    return function;
   }
 
   /**
-   * Gets domain object.
+   * Gets from.
    *
-   * @return the domain object
+   * @return the from
    */
-  public BaseDomainObject<?> getDomainObject() {
-    return domainObject;
+  public Object getFrom() {
+    return from;
+  }
+
+  /**
+   * Gets to.
+   *
+   * @return the to
+   */
+  public Object getTo() {
+    return to;
   }
 
   // ===============================================================================================
@@ -77,23 +92,33 @@ public abstract class AbstractFetchDtoFromDomainObject {
   // ===============================================================================================
 
   /**
-   * Sets dto.
+   * Sets function.
    *
-   * @param dto the dto
+   * @param function the function
    */
-  private void setDto(Dto dto) {
-    Assertion.isNotNull(dto, "dto is required");
-    this.dto = dto;
+  private void setFunction(Function function) {
+    Assertion.isNotNull(function, "function is required");
+    this.function = function;
   }
 
   /**
-   * Sets domain object.
+   * Sets from.
    *
-   * @param domainObject the domain object
+   * @param from the from
    */
-  private void setDomainObject(BaseDomainObject<?> domainObject) {
-    Assertion.isNotNull(domainObject, "domainObject is required");
-    this.domainObject = domainObject;
+  private void setFrom(Object from) {
+    Assertion.isNotNull(from, "from is required");
+    this.from = from;
+  }
+
+  /**
+   * Sets to.
+   *
+   * @param to the to
+   */
+  private void setTo(Object to) {
+    Assertion.isNotNull(to, "to is required");
+    this.to = to;
   }
 
   // ===============================================================================================
@@ -108,12 +133,14 @@ public abstract class AbstractFetchDtoFromDomainObject {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    AbstractFetchDtoFromDomainObject that = (AbstractFetchDtoFromDomainObject) o;
-    return Objects.equals(dto, that.dto) && Objects.equals(domainObject, that.domainObject);
+    DomainObjectConverterMethod that = (DomainObjectConverterMethod) o;
+    return Objects.equals(function, that.function)
+        && Objects.equals(from, that.from)
+        && Objects.equals(to, that.to);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(dto, domainObject);
+    return Objects.hash(function, from, to);
   }
 }

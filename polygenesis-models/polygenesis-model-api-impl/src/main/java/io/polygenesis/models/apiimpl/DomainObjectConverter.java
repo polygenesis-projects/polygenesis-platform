@@ -36,9 +36,7 @@ import java.util.Set;
 public class DomainObjectConverter extends ServiceDependency {
 
   private BaseDomainObject<?> domainObject;
-  private Set<ValueObjectFromDto> valueObjectFromDtos;
-  private Set<FetchOneDtoFromDomainObject> fetchOneDtoFromAggregateRoots;
-  private Set<FetchCollectionDtoFromDomainObject> fetchCollectionDtoFromAggregateRoots;
+  private Set<DomainObjectConverterMethod> methods;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -48,15 +46,10 @@ public class DomainObjectConverter extends ServiceDependency {
    * Instantiates a new Domain object converter.
    *
    * @param domainObject the domain object
-   * @param valueObjectFromDtos the value object from dtos
-   * @param fetchOneDtoFromAggregateRoots the fetch one dto from aggregate roots
-   * @param fetchCollectionDtoFromAggregateRoots the fetch collection dto from aggregate roots
+   * @param methods the methods
    */
   public DomainObjectConverter(
-      BaseDomainObject<?> domainObject,
-      Set<ValueObjectFromDto> valueObjectFromDtos,
-      Set<FetchOneDtoFromDomainObject> fetchOneDtoFromAggregateRoots,
-      Set<FetchCollectionDtoFromDomainObject> fetchCollectionDtoFromAggregateRoots) {
+      BaseDomainObject<?> domainObject, Set<DomainObjectConverterMethod> methods) {
     super(
         new ObjectName(
             String.format(
@@ -67,9 +60,7 @@ public class DomainObjectConverter extends ServiceDependency {
                 "%sConverter",
                 TextConverter.toLowerCamel(domainObject.getObjectName().getText()))));
     setDomainObject(domainObject);
-    setValueObjectFromDtos(valueObjectFromDtos);
-    setFetchOneDtoFromAggregateRoots(fetchOneDtoFromAggregateRoots);
-    setFetchCollectionDtoFromAggregateRoots(fetchCollectionDtoFromAggregateRoots);
+    setMethods(methods);
   }
 
   // ===============================================================================================
@@ -86,30 +77,12 @@ public class DomainObjectConverter extends ServiceDependency {
   }
 
   /**
-   * Gets value object from dtos.
+   * Gets methods.
    *
-   * @return the value object from dtos
+   * @return the methods
    */
-  public Set<ValueObjectFromDto> getValueObjectFromDtos() {
-    return valueObjectFromDtos;
-  }
-
-  /**
-   * Gets fetch one dto from aggregate roots.
-   *
-   * @return the fetch one dto from aggregate roots
-   */
-  public Set<FetchOneDtoFromDomainObject> getFetchOneDtoFromAggregateRoots() {
-    return fetchOneDtoFromAggregateRoots;
-  }
-
-  /**
-   * Gets fetch collection dto from aggregate roots.
-   *
-   * @return the fetch collection dto from aggregate roots
-   */
-  public Set<FetchCollectionDtoFromDomainObject> getFetchCollectionDtoFromAggregateRoots() {
-    return fetchCollectionDtoFromAggregateRoots;
+  public Set<DomainObjectConverterMethod> getMethods() {
+    return methods;
   }
 
   // ===============================================================================================
@@ -127,36 +100,13 @@ public class DomainObjectConverter extends ServiceDependency {
   }
 
   /**
-   * Sets value object from dtos.
+   * Sets methods.
    *
-   * @param valueObjectFromDtos the value object from dtos
+   * @param methods the methods
    */
-  private void setValueObjectFromDtos(Set<ValueObjectFromDto> valueObjectFromDtos) {
-    Assertion.isNotNull(valueObjectFromDtos, "valueObjectFromDtos is required");
-    this.valueObjectFromDtos = valueObjectFromDtos;
-  }
-
-  /**
-   * Sets fetch one dto from aggregate roots.
-   *
-   * @param fetchOneDtoFromAggregateRoots the fetch one dto from aggregate roots
-   */
-  private void setFetchOneDtoFromAggregateRoots(
-      Set<FetchOneDtoFromDomainObject> fetchOneDtoFromAggregateRoots) {
-    Assertion.isNotNull(fetchOneDtoFromAggregateRoots, "fetchOneDtoFromAggregateRoots is required");
-    this.fetchOneDtoFromAggregateRoots = fetchOneDtoFromAggregateRoots;
-  }
-
-  /**
-   * Sets fetch collection dto from aggregate roots.
-   *
-   * @param fetchCollectionDtoFromAggregateRoots the fetch collection dto from aggregate roots
-   */
-  private void setFetchCollectionDtoFromAggregateRoots(
-      Set<FetchCollectionDtoFromDomainObject> fetchCollectionDtoFromAggregateRoots) {
-    Assertion.isNotNull(
-        fetchCollectionDtoFromAggregateRoots, "fetchCollectionDtoFromAggregateRoots is required");
-    this.fetchCollectionDtoFromAggregateRoots = fetchCollectionDtoFromAggregateRoots;
+  private void setMethods(Set<DomainObjectConverterMethod> methods) {
+    Assertion.isNotNull(methods, "methods is required");
+    this.methods = methods;
   }
 
   // ===============================================================================================
@@ -175,20 +125,11 @@ public class DomainObjectConverter extends ServiceDependency {
       return false;
     }
     DomainObjectConverter that = (DomainObjectConverter) o;
-    return Objects.equals(domainObject, that.domainObject)
-        && Objects.equals(valueObjectFromDtos, that.valueObjectFromDtos)
-        && Objects.equals(fetchOneDtoFromAggregateRoots, that.fetchOneDtoFromAggregateRoots)
-        && Objects.equals(
-            fetchCollectionDtoFromAggregateRoots, that.fetchCollectionDtoFromAggregateRoots);
+    return Objects.equals(domainObject, that.domainObject) && Objects.equals(methods, that.methods);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(
-        super.hashCode(),
-        domainObject,
-        valueObjectFromDtos,
-        fetchOneDtoFromAggregateRoots,
-        fetchCollectionDtoFromAggregateRoots);
+    return Objects.hash(super.hashCode(), domainObject, methods);
   }
 }

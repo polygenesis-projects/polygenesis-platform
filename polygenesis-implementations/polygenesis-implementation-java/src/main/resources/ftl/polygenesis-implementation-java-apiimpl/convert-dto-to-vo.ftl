@@ -18,15 +18,17 @@
  ===========================LICENSE_END==================================
 -->
 <#include "macro-assertions-for-parameters.ftl">
-<#include "macro-restore-aggregate-root.ftl">
-<#include "macro-store-aggregate-root.ftl">
-<#include "macro-fill-arguments.ftl">
-    <@assertionsForParameters representation.parameterRepresentations></@assertionsForParameters>
+<@assertionsForParameters representation.parameterRepresentations></@assertionsForParameters>
 
-    ${ aggregateRootDataType } ${ aggregateRootVariable } = new ${ aggregateRootDataType }(
-<@fillArguments properties persistenceVariable requestDto converterVariable multiTenant></@fillArguments>
+    return new ${ textConverter.toUpperCamel(to.data.dataType) }(
+<#list from.dataGroup.models as data >
+    <#switch data.dataPrimaryType>
+        <#case 'PRIMITIVE'>
+      ${ from.dataGroup.variableName.text }.get${ textConverter.toUpperCamel(data.variableName.text) }()<#sep>,</#sep>
+            <#break>
+            <#break>
+        <#default>
+      // Data Primary Type Type = ${ data.dataPrimaryType } is not supported
+    </#switch>
+</#list>
     );
-
-<@storeAggregateRoot persistenceVariable aggregateRootVariable></@storeAggregateRoot>
-
-    return new ${ representation.returnValue }(${ aggregateRootVariable }.getId().getRootId().toString());

@@ -20,33 +20,51 @@
 
 package io.polygenesis.generators.java.apiimpl;
 
+import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.Argument;
-import io.polygenesis.core.Function;
+import io.polygenesis.core.data.PrimitiveType;
+import io.polygenesis.implementations.java.apiimpl.ConverterMethodImplementationRegistry;
+import io.polygenesis.models.apiimpl.DomainObjectConverterMethod;
+import io.polygenesis.representations.commons.ParameterRepresentation;
+import io.polygenesis.representations.java.AbstractMethodRepresentable;
 import io.polygenesis.representations.java.FromDataTypeToJavaConverter;
-import io.polygenesis.representations.java.FunctionToMethodRepresentationConverter;
-import java.util.stream.Collectors;
+import io.polygenesis.representations.java.MethodRepresentation;
+import io.polygenesis.representations.java.MethodRepresentationType;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
- * The type Aggregate root converter method representable.
+ * The type Domain object converter method representable.
  *
  * @author Christos Tsakostas
  */
 public class DomainObjectConverterMethodRepresentable
-    extends FunctionToMethodRepresentationConverter {
+    extends AbstractMethodRepresentable<DomainObjectConverterMethod> {
+
+  // ===============================================================================================
+  // DEPENDENCIES
+  // ===============================================================================================
+  private final FreemarkerService freemarkerService;
+  private final ConverterMethodImplementationRegistry converterMethodImplementationRegistry;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
-   * Instantiates a new Aggregate root converter method representable.
+   * Instantiates a new Domain object converter method representable.
    *
    * @param fromDataTypeToJavaConverter the from data type to java converter
+   * @param freemarkerService the freemarker service
+   * @param converterMethodImplementationRegistry the converter method implementation registry
    */
   public DomainObjectConverterMethodRepresentable(
-      FromDataTypeToJavaConverter fromDataTypeToJavaConverter) {
+      FromDataTypeToJavaConverter fromDataTypeToJavaConverter,
+      FreemarkerService freemarkerService,
+      ConverterMethodImplementationRegistry converterMethodImplementationRegistry) {
     super(fromDataTypeToJavaConverter);
+    this.freemarkerService = freemarkerService;
+    this.converterMethodImplementationRegistry = converterMethodImplementationRegistry;
   }
 
   // ===============================================================================================
@@ -54,40 +72,93 @@ public class DomainObjectConverterMethodRepresentable
   // ===============================================================================================
 
   @Override
-  public String modifiers(Function source, Object... args) {
+  public MethodRepresentation create(DomainObjectConverterMethod source, Object... args) {
+    MethodRepresentation methodRepresentation = super.create(source, args);
+
+    if (converterMethodImplementationRegistry.isConverterMethodSupported(source)) {
+      methodRepresentation.changeImplementationTo(
+          converterMethodImplementationRegistry
+              .implementation(freemarkerService, source, methodRepresentation)
+              .orElseThrow(IllegalArgumentException::new));
+    }
+
+    return methodRepresentation;
+  }
+
+  @Override
+  public MethodRepresentationType methodType(DomainObjectConverterMethod source, Object... args) {
+    return MethodRepresentationType.ANY;
+  }
+
+  @Override
+  public Set<String> imports(DomainObjectConverterMethod source, Object... args) {
+    return new LinkedHashSet<>();
+  }
+
+  @Override
+  public Set<String> annotations(DomainObjectConverterMethod source, Object... args) {
+    return new LinkedHashSet<>();
+  }
+
+  @Override
+  public String description(DomainObjectConverterMethod source, Object... args) {
+    StringBuilder stringBuilder = new StringBuilder();
+
+    stringBuilder.append(
+        TextConverter.toUpperCamelSpaces(source.getFunction().getName().getText()));
+    stringBuilder.append(".");
+
+    return stringBuilder.toString();
+  }
+
+  @Override
+  public String modifiers(DomainObjectConverterMethod source, Object... args) {
     return MODIFIER_PUBLIC;
   }
 
   @Override
-  public String implementation(Function source, Object... args) {
-    StringBuilder stringBuilder = new StringBuilder();
+  public String methodName(DomainObjectConverterMethod source, Object... args) {
+    return source.getFunction().getName().getText();
+  }
 
-    Argument argument =
-        source.getArguments().stream().findFirst().orElseThrow(IllegalArgumentException::new);
+  @Override
+  public Set<ParameterRepresentation> parameterRepresentations(
+      DomainObjectConverterMethod source, Object... args) {
+    Set<ParameterRepresentation> parameterRepresentations = new LinkedHashSet<>();
 
-    stringBuilder.append("\t\treturn new ");
-    stringBuilder.append(
-        TextConverter.toUpperCamel(
-            source.getReturnValue().getData().getAsDataGroup().getDataType()));
-    stringBuilder.append("(\n");
+    source
+        .getFunction()
+        .getArguments()
+        .forEach(
+            argument -> {
+              parameterRepresentations.add(
+                  new ParameterRepresentation(
+                      fromDataTypeToJavaConverter.getDeclaredVariableType(
+                          argument.getData().getDataType()),
+                      argument.getData().getVariableName().getText()));
+            });
 
-    stringBuilder.append(
-        source
-            .getReturnValue()
-            .getData()
-            .getAsDataGroup()
-            .getModels()
-            .stream()
-            .map(
-                model ->
-                    String.format(
-                        "\t\t\t\t%s.get%s()",
-                        TextConverter.toLowerCamel(argument.getData().getVariableName().getText()),
-                        TextConverter.toUpperCamel(model.getVariableName().getText())))
-            .collect(Collectors.joining(",\n")));
-    stringBuilder.append("\n");
-    stringBuilder.append("\t\t);");
+    return parameterRepresentations;
+  }
 
-    return stringBuilder.toString();
+  @Override
+  public String returnValue(DomainObjectConverterMethod source, Object... args) {
+    if (source.getFunction().getReturnValue() != null) {
+      return makeVariableDataType(source.getFunction().getReturnValue().getData());
+    } else {
+      return fromDataTypeToJavaConverter.getDeclaredVariableType(PrimitiveType.VOID.name());
+    }
+  }
+
+  @Override
+  public String implementation(DomainObjectConverterMethod source, Object... args) {
+    if (source.getFunction().getReturnValue() == null) {
+      return "\t\t// TODO [PolyGenesis]: write implementation here";
+    } else {
+      StringBuilder stringBuilder = new StringBuilder();
+      stringBuilder.append("\t\t// TODO [PolyGenesis]: write implementation here\n");
+      stringBuilder.append("\t\treturn null;");
+      return stringBuilder.toString();
+    }
   }
 }

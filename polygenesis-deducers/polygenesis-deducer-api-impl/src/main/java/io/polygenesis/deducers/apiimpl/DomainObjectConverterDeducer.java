@@ -20,16 +20,26 @@
 
 package io.polygenesis.deducers.apiimpl;
 
+import io.polygenesis.commons.text.TextConverter;
+import io.polygenesis.commons.valueobjects.ObjectName;
+import io.polygenesis.core.Argument;
+import io.polygenesis.core.Function;
+import io.polygenesis.core.FunctionName;
+import io.polygenesis.core.Goal;
+import io.polygenesis.core.ReturnValue;
+import io.polygenesis.core.Thing;
+import io.polygenesis.core.ThingBuilder;
+import io.polygenesis.core.ThingName;
 import io.polygenesis.core.data.Data;
+import io.polygenesis.core.data.DataGroup;
 import io.polygenesis.models.api.Dto;
 import io.polygenesis.models.api.Service;
 import io.polygenesis.models.apiimpl.DomainObjectConverter;
-import io.polygenesis.models.apiimpl.FetchCollectionDtoFromDomainObject;
-import io.polygenesis.models.apiimpl.FetchOneDtoFromDomainObject;
-import io.polygenesis.models.apiimpl.ValueObjectFromDto;
+import io.polygenesis.models.apiimpl.DomainObjectConverterMethod;
 import io.polygenesis.models.domain.BaseDomainObject;
 import io.polygenesis.models.domain.PropertyType;
 import io.polygenesis.models.domain.ValueObject;
+import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -52,21 +62,14 @@ public class DomainObjectConverterDeducer {
    * @return the domain object converter
    */
   public DomainObjectConverter deduce(BaseDomainObject<?> domainObject, Set<Service> services) {
-    Set<ValueObjectFromDto> valueObjectFromDtos = new LinkedHashSet<>();
-    Set<FetchOneDtoFromDomainObject> fetchOneDtoFromDomainObjects = new LinkedHashSet<>();
-    Set<FetchCollectionDtoFromDomainObject> fetchCollectionDtoFromDomainObjects =
-        new LinkedHashSet<>();
+    Set<DomainObjectConverterMethod> methods = new LinkedHashSet<>();
 
-    deduceValueObjectFromDto(valueObjectFromDtos, domainObject, services);
-    deduceFetchOneDtoFromDomainObject(fetchOneDtoFromDomainObjects, domainObject, services);
-    deduceFetchCollectionDtoFromDomainObject(
-        fetchCollectionDtoFromDomainObjects, domainObject, services);
+    deduceValueObjectFromDto(methods, domainObject, services);
+    // TODO
+    // deduceFetchOneDtoFromDomainObject(domainObject, services);
+    deduceFetchCollectionDtoFromDomainObject(methods, domainObject, services);
 
-    return new DomainObjectConverter(
-        domainObject,
-        valueObjectFromDtos,
-        fetchOneDtoFromDomainObjects,
-        fetchCollectionDtoFromDomainObjects);
+    return new DomainObjectConverter(domainObject, methods);
   }
 
   // ===============================================================================================
@@ -74,7 +77,7 @@ public class DomainObjectConverterDeducer {
   // ===============================================================================================
 
   private void deduceValueObjectFromDto(
-      Set<ValueObjectFromDto> valueObjectFromDtos,
+      Set<DomainObjectConverterMethod> methods,
       BaseDomainObject<?> domainObject,
       Set<Service> services) {
 
@@ -92,7 +95,7 @@ public class DomainObjectConverterDeducer {
                           .forEach(
                               dto -> {
                                 if (dto.getDataGroup().equals(valueObject.getData().asDto())) {
-                                  valueObjectFromDtos.add(new ValueObjectFromDto(valueObject, dto));
+                                  makeValueObjectConversion(methods, dto, valueObject);
                                 }
                               });
                     });
@@ -100,31 +103,52 @@ public class DomainObjectConverterDeducer {
             });
   }
 
-  private void deduceFetchOneDtoFromDomainObject(
-      Set<FetchOneDtoFromDomainObject> fetchOneDtoFromDomainObjects,
-      BaseDomainObject<?> domainObject,
-      Set<Service> services) {
+  private void makeValueObjectConversion(
+      Set<DomainObjectConverterMethod> methods, Dto dto, ValueObject valueObject) {
+    Thing thing = ThingBuilder.generic().setThingName(new ThingName("Converter")).createThing();
 
-    services.forEach(
-        service -> {
-          service
-              .getServiceMethods()
-              .stream()
-              .filter(method -> method.getFunction().getGoal().isFetchOne())
-              .forEach(
-                  method -> {
-                    fetchOneDtoFromDomainObjects.add(
-                        new FetchOneDtoFromDomainObject(
-                            findDtoInServiceFromDataGroup(
-                                service,
-                                method.getFunction().getReturnValue().getData().getAsDataGroup()),
-                            domainObject));
-                  });
-        });
+    Function functionToVo =
+        new Function(
+            thing,
+            new Goal("CONVERT_DTO_TO_VO"),
+            new FunctionName("convertToVo"),
+            new LinkedHashSet<>(Arrays.asList(new Argument(dto.getDataGroup()))),
+            new ReturnValue(valueObject.getData()));
+
+    methods.add(new DomainObjectConverterMethod(functionToVo, dto, valueObject));
+
+    Function functionToDto =
+        new Function(
+            thing,
+            new Goal("CONVERT_VO_TO_DTO"),
+            new FunctionName("convertToDto"),
+            new LinkedHashSet<>(Arrays.asList(new Argument(valueObject.getData()))),
+            new ReturnValue(dto.getDataGroup()));
+
+    methods.add(new DomainObjectConverterMethod(functionToDto, valueObject, dto));
   }
 
+  // TODO
+  //  private void deduceFetchOneDtoFromDomainObject(
+  //      Set<DomainObjectConverterMethod> methods,
+  //      BaseDomainObject<?> domainObject,
+  //      Set<Service> services) {
+  //
+  //    services.forEach(
+  //        service -> {
+  //          service
+  //              .getServiceMethods()
+  //              .stream()
+  //              .filter(method -> method.getFunction().getGoal().isFetchOne())
+  //              .forEach(
+  //                  method -> {
+  //                    // TODO
+  //                  });
+  //        });
+  //  }
+
   private void deduceFetchCollectionDtoFromDomainObject(
-      Set<FetchCollectionDtoFromDomainObject> fetchCollectionDtoFromDomainObjects,
+      Set<DomainObjectConverterMethod> methods,
       BaseDomainObject<?> domainObject,
       Set<Service> services) {
 
@@ -139,17 +163,56 @@ public class DomainObjectConverterDeducer {
                           || method.getFunction().getGoal().isFetchPagedCollection())
               .forEach(
                   method -> {
-                    fetchCollectionDtoFromDomainObjects.add(
-                        new FetchCollectionDtoFromDomainObject(
-                            findDtoInServiceFromDataGroup(
-                                service,
-                                method
-                                    .getResponseDto()
-                                    .getArrayElementAsOptional()
-                                    .orElseThrow(IllegalArgumentException::new)),
-                            domainObject));
+                    Dto dtoCollectionRecord =
+                        findDtoInServiceFromDataGroup(
+                            service,
+                            method
+                                .getResponseDto()
+                                .getArrayElementAsOptional()
+                                .orElseThrow(IllegalArgumentException::new));
+
+                    makeCollectionRecord(methods, dtoCollectionRecord, domainObject);
                   });
         });
+  }
+
+  private void makeCollectionRecord(
+      Set<DomainObjectConverterMethod> methods,
+      Dto dtoCollectionRecord,
+      BaseDomainObject<?> domainObject) {
+
+    Thing thing = ThingBuilder.generic().setThingName(new ThingName("Converter")).createThing();
+
+    Function function =
+        new Function(
+            thing,
+            new Goal("CONVERT_DOMAIN_OBJECT_TO_COLLECTION_RECORD"),
+            new FunctionName(
+                String.format(
+                    "convertTo%s",
+                    TextConverter.toUpperCamel(dtoCollectionRecord.getDataGroup().getDataType()))),
+            new LinkedHashSet<>(
+                Arrays.asList(new Argument(transformDomainObjectToDataGroup(domainObject)))),
+            new ReturnValue(dtoCollectionRecord.getDataGroup()));
+
+    methods.add(new DomainObjectConverterMethod(function, domainObject, dtoCollectionRecord));
+  }
+
+  /**
+   * Transform domain object to data group data group.
+   *
+   * @param domainObject the domain object
+   * @return the data group
+   */
+  private DataGroup transformDomainObjectToDataGroup(BaseDomainObject<?> domainObject) {
+
+    DataGroup dataGroup =
+        new DataGroup(
+            new ObjectName(domainObject.getObjectName().getText()), domainObject.getPackageName());
+
+    domainObject.getProperties().forEach(property -> dataGroup.addData(property.getData()));
+
+    return dataGroup;
   }
 
   private Dto findDtoInServiceFromDataGroup(Service service, Data dataGroup) {

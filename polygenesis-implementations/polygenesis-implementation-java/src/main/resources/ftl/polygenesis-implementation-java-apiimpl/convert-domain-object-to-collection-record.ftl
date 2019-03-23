@@ -18,15 +18,24 @@
  ===========================LICENSE_END==================================
 -->
 <#include "macro-assertions-for-parameters.ftl">
-<#include "macro-restore-aggregate-root.ftl">
-<#include "macro-store-aggregate-root.ftl">
-<#include "macro-fill-arguments.ftl">
-    <@assertionsForParameters representation.parameterRepresentations></@assertionsForParameters>
+<@assertionsForParameters representation.parameterRepresentations></@assertionsForParameters>
 
-    ${ aggregateRootDataType } ${ aggregateRootVariable } = new ${ aggregateRootDataType }(
-<@fillArguments properties persistenceVariable requestDto converterVariable multiTenant></@fillArguments>
+    return new ${ textConverter.toUpperCamel(to.dataGroup.dataType) }(
+<#list from.properties as property>
+  <#switch property.propertyType>
+    <#case 'AGGREGATE_ROOT_ID'>
+      <#if multiTenant>
+      <#else>
+      </#if>
+      <#break>
+    <#case 'PRIMITIVE'>
+        ${ from.objectName.text }.get${ textConverter.toUpperCamel(property.data.variableName.text) }()<#sep>,</#sep>
+      <#break>
+    <#case 'VALUE_OBJECT'>
+        convertToDto(${ from.objectName.text }.get${ textConverter.toUpperCamel(property.data.variableName.text) }())<#sep>,</#sep>
+      <#break>
+    <#default>
+        // Property Type = ${ property.propertyType } is not supported
+  </#switch>
+</#list>
     );
-
-<@storeAggregateRoot persistenceVariable aggregateRootVariable></@storeAggregateRoot>
-
-    return new ${ representation.returnValue }(${ aggregateRootVariable }.getId().getRootId().toString());

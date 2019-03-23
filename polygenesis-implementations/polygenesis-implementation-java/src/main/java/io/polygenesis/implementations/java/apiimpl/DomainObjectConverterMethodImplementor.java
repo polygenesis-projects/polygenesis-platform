@@ -18,29 +18,29 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.models.apiimpl;
+package io.polygenesis.implementations.java.apiimpl;
 
-import io.polygenesis.models.api.Dto;
-import io.polygenesis.models.domain.BaseDomainObject;
+import io.polygenesis.commons.freemarker.FreemarkerService;
+import io.polygenesis.models.apiimpl.DomainObjectConverterMethod;
+import io.polygenesis.representations.java.MethodRepresentation;
 
 /**
- * The type Fetch collection dto from domain object.
+ * The interface Domain object converter method implementor.
  *
  * @author Christos Tsakostas
  */
-public class FetchCollectionDtoFromDomainObject extends AbstractFetchDtoFromDomainObject {
-
-  // ===============================================================================================
-  // CONSTRUCTOR(S)
-  // ===============================================================================================
+public interface DomainObjectConverterMethodImplementor {
 
   /**
-   * Instantiates a new Fetch collection dto from domain object.
+   * Implementation for string.
    *
-   * @param dto the dto
-   * @param domainObject the domain object
+   * @param freemarkerService the freemarker service
+   * @param domainObjectConverterMethod the domain object converter method
+   * @param methodRepresentation the method representation
+   * @return the string
    */
-  public FetchCollectionDtoFromDomainObject(Dto dto, BaseDomainObject<?> domainObject) {
-    super(dto, domainObject);
-  }
+  String implementationFor(
+      FreemarkerService freemarkerService,
+      DomainObjectConverterMethod domainObjectConverterMethod,
+      MethodRepresentation methodRepresentation);
 }

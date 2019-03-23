@@ -18,29 +18,38 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.models.apiimpl;
+package io.polygenesis.implementations.java.apiimpl;
 
-import io.polygenesis.models.api.Dto;
-import io.polygenesis.models.domain.BaseDomainObject;
+import io.polygenesis.commons.freemarker.FreemarkerService;
+import io.polygenesis.models.apiimpl.DomainObjectConverterMethod;
+import io.polygenesis.representations.java.MethodRepresentation;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * The type Fetch one dto from domain object.
+ * The type Convert vo to dto.
  *
  * @author Christos Tsakostas
  */
-public class FetchOneDtoFromDomainObject extends AbstractFetchDtoFromDomainObject {
+public class ConvertVoToDto extends AbstractServiceMethodImplementor
+    implements DomainObjectConverterMethodImplementor {
 
   // ===============================================================================================
-  // CONSTRUCTOR(S)
+  // IMPLEMENTATIONS
   // ===============================================================================================
 
-  /**
-   * Instantiates a new Fetch one dto from domain object.
-   *
-   * @param dto the dto
-   * @param domainObject the domain object
-   */
-  public FetchOneDtoFromDomainObject(Dto dto, BaseDomainObject<?> domainObject) {
-    super(dto, domainObject);
+  @Override
+  public String implementationFor(
+      FreemarkerService freemarkerService,
+      DomainObjectConverterMethod domainObjectConverterMethod,
+      MethodRepresentation methodRepresentation) {
+    Map<String, Object> dataModel = new HashMap<>();
+
+    dataModel.put("representation", methodRepresentation);
+    dataModel.put("from", domainObjectConverterMethod.getFrom());
+    dataModel.put("to", domainObjectConverterMethod.getTo());
+
+    return freemarkerService.exportToString(
+        dataModel, "polygenesis-implementation-java-apiimpl/convert-vo-to-dto.ftl");
   }
 }
