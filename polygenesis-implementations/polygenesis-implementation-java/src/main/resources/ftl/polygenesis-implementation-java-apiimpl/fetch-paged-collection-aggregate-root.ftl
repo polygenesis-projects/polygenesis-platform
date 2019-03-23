@@ -22,7 +22,7 @@
 <#include "macro-assertions-for-parameters.ftl">
 <@assertionsForParameters representation.parameterRepresentations></@assertionsForParameters>
 
-    Paginated<${ aggregateRootDataType }> paginated = ${ persistenceVariable }.findPaginated(${ requestDto.objectName.text }.getPageNumber(), ${ requestDto.objectName.text }.getPageSize());
+    Paginated<${ aggregateRootDataType }> paginated = ${ persistenceVariable }.findPaginated(${ requestDto.dataGroup.objectName.text }.getPageNumber(), ${ requestDto.dataGroup.objectName.text }.getPageSize());
 
     return new ${ representation.returnValue }(
         StreamSupport
@@ -31,6 +31,6 @@
             .collect(Collectors.toList()),
         paginated.getTotalPages(),
         paginated.getTotalElements(),
-        ${ requestDto.objectName.text }.getPageNumber(),
-        ${ requestDto.objectName.text }.getPageSize()
+        ${ requestDto.dataGroup.objectName.text }.getPageNumber(),
+        ${ requestDto.dataGroup.objectName.text }.getPageSize()
     );

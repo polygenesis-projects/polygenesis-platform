@@ -93,14 +93,7 @@ public class DtoDeducer {
       dtoType = DtoType.API_REQUEST;
     }
 
-    Dto dto =
-        new Dto(
-            dtoType,
-            originatingDataGroup.getObjectName(),
-            function.getThing().makePackageName(rootPackageName, function.getThing()),
-            originatingDataGroup.getModels(),
-            originatingDataGroup.getAsDataGroup(),
-            virtual);
+    Dto dto = new Dto(dtoType, originatingDataGroup.getAsDataGroup(), virtual);
 
     makeAssertionsForRequestDto(dto, function);
 
@@ -151,14 +144,7 @@ public class DtoDeducer {
       dtoType = DtoType.API_RESPONSE;
     }
 
-    Dto dto =
-        new Dto(
-            dtoType,
-            originatingDataGroup.getObjectName(),
-            function.getThing().makePackageName(rootPackageName, function.getThing()),
-            originatingDataGroup.getModels(),
-            originatingDataGroup,
-            virtual);
+    Dto dto = new Dto(dtoType, originatingDataGroup, virtual);
 
     makeAssertionsForResponseDto(dto, function);
 
@@ -169,11 +155,9 @@ public class DtoDeducer {
    * Deduce set.
    *
    * @param serviceMethods the methods
-   * @param rootPackageName the root package name
    * @return the set
    */
-  public Set<Dto> deduceAllDtosInMethods(
-      Set<ServiceMethod> serviceMethods, PackageName rootPackageName) {
+  public Set<Dto> deduceAllDtosInMethods(Set<ServiceMethod> serviceMethods) {
     Set<Dto> dtos = new LinkedHashSet<>();
 
     serviceMethods
@@ -203,20 +187,13 @@ public class DtoDeducer {
     if (dto.getArrayElementAsOptional().isPresent()) {
       Data arrayElement = dto.getArrayElementAsOptional().get();
       if (arrayElement.isDataGroup()) {
-        addDto(
-            dtos,
-            new Dto(
-                DtoType.COLLECTION_RECORD,
-                arrayElement.getAsDataGroup().getObjectName(),
-                dto.getPackageName(),
-                arrayElement.getAsDataGroup().getModels(),
-                (DataGroup) arrayElement,
-                false));
+        addDto(dtos, new Dto(DtoType.COLLECTION_RECORD, arrayElement.getAsDataGroup(), false));
       }
     }
 
     // Add model group children of DataGroup recursively
-    dto.getModels()
+    dto.getDataGroup()
+        .getModels()
         .forEach(
             model -> {
               // TODO
@@ -230,20 +207,13 @@ public class DtoDeducer {
                   dtoType = DtoType.COLLECTION_RECORD;
                 } else {
                   dtoType = DtoType.INTERNAL;
-                  dataGroup = dataGroup.withNewObjectName(
-                      new ObjectName(String.format("%sDto", dataGroup.getObjectName().getText()))
-                  );
+                  dataGroup =
+                      dataGroup.withNewObjectName(
+                          new ObjectName(
+                              String.format("%sDto", dataGroup.getObjectName().getText())));
                 }
 
-                addDto(
-                    dtos,
-                    new Dto(
-                        dtoType,
-                        dataGroup.getObjectName(),
-                        dataGroup.getPackageName(),
-                        dataGroup.getModels(),
-                        dataGroup,
-                        false));
+                addDto(dtos, new Dto(dtoType, dataGroup, false));
               }
             });
   }
@@ -288,7 +258,8 @@ public class DtoDeducer {
       Dto dto, Function function, DataBusinessType dataBusinessType) {
 
     Set<DataPrimitive> modelPrimitives =
-        dto.getModels()
+        dto.getDataGroup()
+            .getModels()
             .stream()
             .filter(model -> model.isDataPrimitive())
             .map(DataPrimitive.class::cast)

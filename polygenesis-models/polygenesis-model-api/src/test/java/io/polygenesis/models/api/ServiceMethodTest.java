@@ -41,17 +41,11 @@ public class ServiceMethodTest extends AbstractEqualityTest<ServiceMethod> {
     Dto requestDto =
         new Dto(
             DtoType.API_REQUEST,
-            new ObjectName("asd"),
-            new PackageName("com.oregor"),
-            new LinkedHashSet<>(),
             new DataGroup(new ObjectName("asd"), new PackageName("com.oregor")),
             false);
     Dto responseDto =
         new Dto(
             DtoType.API_REQUEST,
-            new ObjectName("xyz"),
-            new PackageName("com.oregor"),
-            new LinkedHashSet<>(),
             new DataGroup(new ObjectName("xyz"), new PackageName("com.oregor")),
             false);
 
@@ -68,17 +62,11 @@ public class ServiceMethodTest extends AbstractEqualityTest<ServiceMethod> {
     Dto requestDto =
         new Dto(
             DtoType.API_REQUEST,
-            new ObjectName("asd"),
-            new PackageName("com.oregor"),
-            new LinkedHashSet<>(),
             new DataGroup(new ObjectName("asd"), new PackageName("com.oregor")),
             false);
     Dto responseDto =
         new Dto(
             DtoType.API_REQUEST,
-            new ObjectName("xyz"),
-            new PackageName("com.oregor"),
-            new LinkedHashSet<>(),
             new DataGroup(new ObjectName("xyz"), new PackageName("com.oregor")),
             false);
 

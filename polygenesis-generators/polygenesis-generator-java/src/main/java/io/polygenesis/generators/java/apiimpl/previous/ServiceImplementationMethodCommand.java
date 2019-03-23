@@ -252,8 +252,7 @@ public class ServiceImplementationMethodCommand extends ServiceImplementationMet
     stringBuilder.append(".");
     stringBuilder.append("get");
     stringBuilder.append(
-        TextConverter.toUpperCamel(
-            valueObjectFromDto.getDto().getOriginatingDataGroup().getDataType()));
+        TextConverter.toUpperCamel(valueObjectFromDto.getDto().getDataGroup().getDataType()));
     stringBuilder.append("()");
     stringBuilder.append(")");
 

@@ -30,7 +30,6 @@ import io.polygenesis.core.data.DataArray;
 import io.polygenesis.core.data.DataBusinessType;
 import io.polygenesis.core.data.DataGroup;
 import io.polygenesis.core.data.DataPrimitive;
-import io.polygenesis.core.data.VariableName;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -131,16 +130,7 @@ public class AbstractDomainObjectDeducer {
           throw new IllegalArgumentException();
         }
       case OBJECT:
-        DataGroup originatingDataGroup = model.getAsDataGroup();
-
-        DataGroup newDataGroup =
-            originatingDataGroup
-                .withNewObjectName(
-                    new ObjectName(makeValueObjectVariableName(model.getVariableName())))
-                .withNewVariableName(
-                    new VariableName(makeValueObjectVariableName(model.getVariableName())));
-
-        return new ValueObject(newDataGroup, originatingDataGroup);
+        return new ValueObject(model.getAsDataGroup());
       case PRIMITIVE:
         return new Primitive(model.getAsDataPrimitive());
       default:
@@ -180,20 +170,6 @@ public class AbstractDomainObjectDeducer {
             function.getThing().makePackageName(rootPackageName, function.getThing()));
 
     return new AggregateRootId(dataGroup);
-  }
-
-  // ===============================================================================================
-  // HELPER
-  // ===============================================================================================
-
-  private String makeValueObjectVariableName(VariableName variableName) {
-    String text = variableName.getText();
-
-    if (text.toLowerCase().endsWith("dto")) {
-      return text.substring(0, text.length() - 3);
-    } else {
-      return text;
-    }
   }
 
   // ===============================================================================================

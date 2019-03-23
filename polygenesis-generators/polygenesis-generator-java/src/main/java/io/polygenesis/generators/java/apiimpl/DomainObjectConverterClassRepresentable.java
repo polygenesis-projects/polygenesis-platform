@@ -144,26 +144,18 @@ public class DomainObjectConverterClassRepresentable
 
               if (!valueObjectFromDto
                   .getDto()
-                  .getOriginatingDataGroup()
+                  .getDataGroup()
                   .getPackageName()
                   .equals(source.getPackageName())) {
 
                 StringBuilder stringBuilder = new StringBuilder();
 
                 stringBuilder.append(
-                    valueObjectFromDto
-                        .getDto()
-                        .getOriginatingDataGroup()
-                        .getPackageName()
-                        .getText());
+                    valueObjectFromDto.getDto().getDataGroup().getPackageName().getText());
                 stringBuilder.append(".");
                 stringBuilder.append(
                     TextConverter.toUpperCamel(
-                        valueObjectFromDto
-                            .getDto()
-                            .getOriginatingDataGroup()
-                            .getVariableName()
-                            .getText()));
+                        valueObjectFromDto.getDto().getDataGroup().getVariableName().getText()));
 
                 imports.add(stringBuilder.toString());
               }
@@ -237,8 +229,7 @@ public class DomainObjectConverterClassRepresentable
                       goal,
                       new FunctionName("convertToVo"),
                       new LinkedHashSet<>(
-                          Arrays.asList(
-                              new Argument(valueObjectFromDto.getDto().getOriginatingDataGroup()))),
+                          Arrays.asList(new Argument(valueObjectFromDto.getDto().getDataGroup()))),
                       new ReturnValue(valueObjectFromDto.getValueObject().getData()));
 
               functions.add(function);
@@ -264,8 +255,7 @@ public class DomainObjectConverterClassRepresentable
                               new Argument(
                                   transformDomainObjectToDataGroup(
                                       fetchOneDtoFromAggregateRoot.getDomainObject())))),
-                      new ReturnValue(
-                          fetchOneDtoFromAggregateRoot.getDto().getOriginatingDataGroup())));
+                      new ReturnValue(fetchOneDtoFromAggregateRoot.getDto().getDataGroup())));
             });
   }
 
@@ -289,7 +279,7 @@ public class DomainObjectConverterClassRepresentable
                                   transformDomainObjectToDataGroup(
                                       fetchCollectionDtoFromAggregateRoot.getDomainObject())))),
                       new ReturnValue(
-                          fetchCollectionDtoFromAggregateRoot.getDto().getOriginatingDataGroup())));
+                          fetchCollectionDtoFromAggregateRoot.getDto().getDataGroup())));
             });
   }
 

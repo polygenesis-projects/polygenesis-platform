@@ -116,40 +116,14 @@ public class DtoExporterTest {
     ServiceMethod createServiceMethod =
         new ServiceMethod(
             makeFunctionCreate(),
-            new Dto(
-                DtoType.API_REQUEST,
-                new ObjectName("CreateBusinessResponse"),
-                new PackageName("com.oregor.microservice.some.business"),
-                new LinkedHashSet<>(),
-                argument.getData().getAsDataGroup(),
-                false),
-            new Dto(
-                DtoType.API_RESPONSE,
-                new ObjectName("CreateBusinessResponse"),
-                new PackageName("com.oregor.microservice.some.business"),
-                new LinkedHashSet<>(),
-                createReturnValue.getData().getAsDataGroup(),
-                false));
+            new Dto(DtoType.API_REQUEST, argument.getData().getAsDataGroup(), false),
+            new Dto(DtoType.API_RESPONSE, createReturnValue.getData().getAsDataGroup(), false));
 
     serviceMethods.add(createServiceMethod);
 
     Set<Dto> dtos = new LinkedHashSet<>();
-    dtos.add(
-        new Dto(
-            DtoType.API_REQUEST,
-            new ObjectName("CreateBusinessResponse"),
-            new PackageName("com.oregor.microservice.some.business"),
-            new LinkedHashSet<>(),
-            argument.getData().getAsDataGroup(),
-            false));
-    dtos.add(
-        new Dto(
-            DtoType.API_RESPONSE,
-            new ObjectName("CreateBusinessResponse"),
-            new PackageName("com.oregor.microservice.some.business"),
-            new LinkedHashSet<>(),
-            createReturnValue.getData().getAsDataGroup(),
-            false));
+    dtos.add(new Dto(DtoType.API_REQUEST, argument.getData().getAsDataGroup(), false));
+    dtos.add(new Dto(DtoType.API_RESPONSE, createReturnValue.getData().getAsDataGroup(), false));
 
     return new Service(
         new PackageName("com.oregor"),

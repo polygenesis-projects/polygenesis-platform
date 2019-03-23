@@ -97,7 +97,7 @@ public class ServiceDeducer {
     allServiceMethods.addAll(commandServiceMethods);
     allServiceMethods.addAll(queryServiceMethods);
 
-    Set<Dto> dtos = dtoDeducer.deduceAllDtosInMethods(allServiceMethods, rootPackageName);
+    Set<Dto> dtos = dtoDeducer.deduceAllDtosInMethods(allServiceMethods);
 
     if (!commandServiceMethods.isEmpty()) {
       services.add(

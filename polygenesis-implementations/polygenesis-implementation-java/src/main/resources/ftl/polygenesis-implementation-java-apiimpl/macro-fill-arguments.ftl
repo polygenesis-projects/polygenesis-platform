@@ -22,16 +22,16 @@
       <#switch property.propertyType>
         <#case 'AGGREGATE_ROOT_ID'>
           <#if multiTenant>
-        ${ persistenceVariable }.nextId(UUID.fromString(${ requestDto.objectName.text }.getTenantId()))<#sep>,</#sep>
+        ${ persistenceVariable }.nextId(UUID.fromString(${ requestDto.dataGroup.objectName.text }.getTenantId()))<#sep>,</#sep>
           <#else>
         ${ persistenceVariable }.nextId()<#sep>,</#sep>
           </#if>
           <#break>
         <#case 'PRIMITIVE'>
-        ${ requestDto.objectName.text }.get${ textConverter.toUpperCamel(property.data.variableName.text) }()<#sep>,</#sep>
+        ${ requestDto.dataGroup.objectName.text }.get${ textConverter.toUpperCamel(property.data.variableName.text) }()<#sep>,</#sep>
           <#break>
         <#case 'VALUE_OBJECT'>
-        ${ converterVariable }.convertToVo(${ requestDto.objectName.text }.get${ textConverter.toUpperCamel(property.data.variableName.text) }())<#sep>,</#sep>
+        ${ converterVariable }.convertToVo(${ requestDto.dataGroup.objectName.text }.get${ textConverter.toUpperCamel(property.data.variableName.text) }())<#sep>,</#sep>
           <#break>
         <#default>
         // Property Type = ${ property.propertyType } is not supported

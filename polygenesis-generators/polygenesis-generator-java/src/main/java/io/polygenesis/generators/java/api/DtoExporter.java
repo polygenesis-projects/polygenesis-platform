@@ -85,11 +85,6 @@ public class DtoExporter {
   // ===============================================================================================
 
   private void export(Path generationPath, Dto dto) {
-    // TODO: getOriginatingDataGroup() should not be DataArray
-    if (dto.getOriginatingDataGroup().isDataArray()) {
-      return;
-    }
-
     Map<String, Object> dataModel = new HashMap<>();
     dataModel.put("representation", dtoClassRepresentable.create(dto));
 
@@ -103,7 +98,7 @@ public class DtoExporter {
     return Paths.get(
         generationPath.toString(),
         "src/main/java",
-        dto.getPackageName().toPath().toString(),
-        TextConverter.toUpperCamel(dto.getObjectName().getText()) + ".java");
+        dto.getDataGroup().getPackageName().toPath().toString(),
+        TextConverter.toUpperCamel(dto.getDataGroup().getObjectName().getText()) + ".java");
   }
 }

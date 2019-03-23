@@ -73,8 +73,7 @@ public abstract class BasePropertyDeducer {
       case PRIMITIVE:
         return new Primitive(thingProperty.getData().getAsDataPrimitive());
       case OBJECT:
-        return new ValueObject(
-            thingProperty.getData().getAsDataGroup(), thingProperty.getData().getAsDataGroup());
+        return new ValueObject(thingProperty.getData().getAsDataGroup());
       case ARRAY:
         switch (thingProperty.getData().getAsDataArray().getArrayElement().getDataPrimaryType()) {
           case PRIMITIVE:

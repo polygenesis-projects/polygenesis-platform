@@ -91,8 +91,7 @@ public class DomainObjectConverterDeducer {
                           .getDtos()
                           .forEach(
                               dto -> {
-                                if (dto.getOriginatingDataGroup()
-                                    .equals(valueObject.getOriginatingDataGroup())) {
+                                if (dto.getDataGroup().equals(valueObject.getData().asDto())) {
                                   valueObjectFromDtos.add(new ValueObjectFromDto(valueObject, dto));
                                 }
                               });
@@ -157,7 +156,7 @@ public class DomainObjectConverterDeducer {
     return service
         .getDtos()
         .stream()
-        .filter(dto -> dto.getOriginatingDataGroup().equals(dataGroup))
+        .filter(dto -> dto.getDataGroup().equals(dataGroup))
         .findFirst()
         .orElseThrow(
             () ->

@@ -92,6 +92,7 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
     Set<FieldRepresentation> fieldRepresentations = new LinkedHashSet<>();
 
     source
+        .getDataGroup()
         .getModels()
         .forEach(
             model -> {
@@ -113,7 +114,8 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
     // Create create constructor
     // ---------------------------------------------------------------------------------------------
     constructorRepresentations.add(
-        createConstructorWithSetters(source.getObjectName().getText(), new LinkedHashSet<>()));
+        createConstructorWithSetters(
+            source.getDataGroup().getObjectName().getText(), new LinkedHashSet<>()));
 
     // ---------------------------------------------------------------------------------------------
     // Create constructor with parameters
@@ -122,13 +124,13 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
 
     constructorRepresentations.add(
         createConstructorWithSettersFromFieldRepresentations(
-            source.getObjectName().getText(), fieldRepresentations));
+            source.getDataGroup().getObjectName().getText(), fieldRepresentations));
 
     // ---------------------------------------------------------------------------------------------
     // Create constructor for collection response
     // ---------------------------------------------------------------------------------------------
     if ((source.getDtoType().equals(DtoType.API_COLLECTION_RESPONSE)
-        || source.getDtoType().equals(DtoType.API_PAGED_COLLECTION_RESPONSE))
+            || source.getDtoType().equals(DtoType.API_PAGED_COLLECTION_RESPONSE))
         // TODO: needs more investigation
         && source.getArrayElementAsOptional().isPresent()) {
       constructorRepresentations.add(createConstructorForCollectionResponse(source));
@@ -145,7 +147,7 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
 
   @Override
   public String packageName(Dto source, Object... args) {
-    return source.getPackageName().getText();
+    return source.getDataGroup().getPackageName().getText();
   }
 
   @Override
@@ -162,6 +164,7 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
     }
 
     source
+        .getDataGroup()
         .getModels()
         .stream()
         .filter(model -> model.isDataArray())
@@ -169,6 +172,7 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
         .ifPresent(model -> imports.add("java.util.List"));
 
     source
+        .getDataGroup()
         .getModels()
         .stream()
         .filter(model -> model.isDataMap())
@@ -176,6 +180,7 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
         .ifPresent(model -> imports.add("java.util.Map"));
 
     source
+        .getDataGroup()
         .getModels()
         .stream()
         .filter(model -> model.isDataGroup())
@@ -183,7 +188,7 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
         .map(dataGroup -> dataGroup.asDto())
         .forEach(
             dataGroup -> {
-              if (!dataGroup.getPackageName().equals(source.getPackageName())) {
+              if (!dataGroup.getPackageName().equals(source.getDataGroup().getPackageName())) {
                 imports.add(
                     makeCanonicalObjectName(dataGroup.getPackageName(), dataGroup.getDataType()));
               }
@@ -203,7 +208,8 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
 
     stringBuilder.append("The ");
 
-    stringBuilder.append(TextConverter.toUpperCamelSpaces(source.getObjectName().getText()));
+    stringBuilder.append(
+        TextConverter.toUpperCamelSpaces(source.getDataGroup().getObjectName().getText()));
 
     stringBuilder.append(".");
 
@@ -219,7 +225,8 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
   public String simpleObjectName(Dto source, Object... args) {
     StringBuilder stringBuilder = new StringBuilder();
 
-    stringBuilder.append(TextConverter.toUpperCamel(source.getObjectName().getText()));
+    stringBuilder.append(
+        TextConverter.toUpperCamel(source.getDataGroup().getObjectName().getText()));
 
     return stringBuilder.toString();
   }
@@ -228,7 +235,7 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
   public String fullObjectName(Dto source, Object... args) {
     // TODO: needs more investigation
     if ((source.getDtoType().equals(DtoType.API_COLLECTION_RESPONSE)
-        || source.getDtoType().equals(DtoType.API_PAGED_COLLECTION_RESPONSE))
+            || source.getDtoType().equals(DtoType.API_PAGED_COLLECTION_RESPONSE))
         && !source.getArrayElementAsOptional().isPresent()) {
       return simpleObjectName(source, args);
     }
@@ -294,7 +301,7 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
     String description =
         String.format(
             "Instantiates a new %s.",
-            TextConverter.toUpperCamelSpaces(source.getObjectName().getText()));
+            TextConverter.toUpperCamelSpaces(source.getDataGroup().getObjectName().getText()));
 
     return new ConstructorRepresentation(
         new LinkedHashSet<>(),
