@@ -18,21 +18,20 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.implementations.java.apiimpl;
+package io.polygenesis.implementations.java.rest;
 
 import io.polygenesis.commons.freemarker.FreemarkerService;
-import io.polygenesis.models.api.ServiceMethod;
-import io.polygenesis.models.apiimpl.ServiceImplementation;
+import io.polygenesis.models.rest.Endpoint;
 import io.polygenesis.representations.java.MethodRepresentation;
 import java.util.Map;
 
 /**
- * The type Create aggregate root.
+ * The type Fetch one aggregate entity.
  *
  * @author Christos Tsakostas
  */
-public class ModifyAggregateRoot extends AbstractServiceMethodImplementor
-    implements ServiceMethodImplementor {
+public class FetchOneAggregateEntity extends AbstractEndpointImplementor
+    implements EndpointImplementor {
 
   // ===============================================================================================
   // IMPLEMENTATIONS
@@ -41,16 +40,12 @@ public class ModifyAggregateRoot extends AbstractServiceMethodImplementor
   @Override
   public String implementationFor(
       FreemarkerService freemarkerService,
-      ServiceImplementation serviceImplementation,
-      ServiceMethod serviceMethod,
+      Endpoint endpoint,
       MethodRepresentation methodRepresentation) {
-
     Map<String, Object> dataModel =
-        dataModelForCreateOrModify(serviceImplementation, serviceMethod, methodRepresentation);
-
-    dataModel.put("thingIdentity", thingIdentity(serviceMethod));
+        aggregateEntityDataModelWithThingIdentity(endpoint, methodRepresentation);
 
     return freemarkerService.exportToString(
-        dataModel, "polygenesis-implementation-java-apiimpl/modify-aggregate-root.ftl");
+        dataModel, "polygenesis-implementation-java-rest/fetch-one-aggregate-entity.ftl");
   }
 }

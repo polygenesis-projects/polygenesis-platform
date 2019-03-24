@@ -20,6 +20,7 @@
 
 package io.polygenesis.implementations.java.rest;
 
+import io.polygenesis.annotations.core.GoalType;
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.ThingScopeType;
@@ -41,14 +42,45 @@ public class EndpointImplementationRegistry {
   // STATIC
   // ===============================================================================================
 
+  @SuppressWarnings("CPD-START")
   private static Map<ScopeGoalTuple, EndpointImplementor> scopeAndGoalMap = new HashMap<>();
 
   static {
+    // AGGREGATE ROOT
     scopeAndGoalMap.put(
-        // TODO
-        // new ScopeGoalTuple(ThingScopeType.DOMAIN_AGGREGATE_ROOT, GoalType.FETCH_ONE.name()),
-        new ScopeGoalTuple(ThingScopeType.DOMAIN_AGGREGATE_ROOT, "SOME"),
+        new ScopeGoalTuple(ThingScopeType.DOMAIN_AGGREGATE_ROOT, GoalType.CREATE.name()),
+        new CreateAggregateRoot());
+
+    scopeAndGoalMap.put(
+        new ScopeGoalTuple(ThingScopeType.DOMAIN_AGGREGATE_ROOT, GoalType.MODIFY.name()),
+        new UpdateAggregateRoot());
+
+    scopeAndGoalMap.put(
+        new ScopeGoalTuple(ThingScopeType.DOMAIN_AGGREGATE_ROOT, GoalType.FETCH_ONE.name()),
         new FetchOneAggregateRoot());
+
+    scopeAndGoalMap.put(
+        new ScopeGoalTuple(
+            ThingScopeType.DOMAIN_AGGREGATE_ROOT, GoalType.FETCH_PAGED_COLLECTION.name()),
+        new FetchPagedCollectionAggregateRoot());
+
+    // AGGREGATE ENTITY
+    scopeAndGoalMap.put(
+        new ScopeGoalTuple(ThingScopeType.DOMAIN_AGGREGATE_ENTITY, GoalType.CREATE.name()),
+        new CreateAggregateEntity());
+
+    scopeAndGoalMap.put(
+        new ScopeGoalTuple(ThingScopeType.DOMAIN_AGGREGATE_ENTITY, GoalType.MODIFY.name()),
+        new UpdateAggregateEntity());
+
+    scopeAndGoalMap.put(
+        new ScopeGoalTuple(ThingScopeType.DOMAIN_AGGREGATE_ENTITY, GoalType.FETCH_ONE.name()),
+        new FetchOneAggregateEntity());
+
+    scopeAndGoalMap.put(
+        new ScopeGoalTuple(
+            ThingScopeType.DOMAIN_AGGREGATE_ENTITY, GoalType.FETCH_PAGED_COLLECTION.name()),
+        new FetchPagedCollectionAggregateEntity());
   }
 
   // ===============================================================================================
@@ -63,6 +95,7 @@ public class EndpointImplementationRegistry {
    * @param methodRepresentation the method representation
    * @return the optional
    */
+  @SuppressWarnings("CPD-END")
   public Optional<String> implementation(
       FreemarkerService freemarkerService,
       Endpoint endpoint,

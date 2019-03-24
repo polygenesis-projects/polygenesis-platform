@@ -46,9 +46,8 @@ public class FetchOneAggregateRoot extends AbstractServiceMethodImplementor
       MethodRepresentation methodRepresentation) {
 
     Map<String, Object> dataModel =
-        dataModelForCreateOrModify(serviceImplementation, serviceMethod, methodRepresentation);
-
-    dataModel.put("thingIdentity", thingIdentity(serviceMethod));
+        aggregateRootDataModelWithThingIdentity(
+            serviceImplementation, serviceMethod, methodRepresentation);
 
     dataModel.put("responseDto", serviceMethod.getResponseDto());
 

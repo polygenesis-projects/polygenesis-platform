@@ -21,7 +21,7 @@
 package io.polygenesis.implementations.java.apiimpl;
 
 import io.polygenesis.commons.freemarker.FreemarkerService;
-import io.polygenesis.models.apiimpl.DomainObjectConverterMethod;
+import io.polygenesis.models.apiimpl.DomainEntityConverterMethod;
 import io.polygenesis.representations.java.MethodRepresentation;
 
 /**
@@ -35,12 +35,12 @@ public interface DomainObjectConverterMethodImplementor {
    * Implementation for string.
    *
    * @param freemarkerService the freemarker service
-   * @param domainObjectConverterMethod the domain object converter method
+   * @param domainEntityConverterMethod the domain object converter method
    * @param methodRepresentation the method representation
    * @return the string
    */
   String implementationFor(
       FreemarkerService freemarkerService,
-      DomainObjectConverterMethod domainObjectConverterMethod,
+      DomainEntityConverterMethod domainEntityConverterMethod,
       MethodRepresentation methodRepresentation);
 }

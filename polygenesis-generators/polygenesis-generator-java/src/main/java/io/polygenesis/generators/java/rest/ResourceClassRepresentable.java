@@ -113,6 +113,7 @@ public class ResourceClassRepresentable extends AbstractClassRepresentable<Resou
     imports.add("org.springframework.web.bind.annotation.RequestMapping");
     imports.add("com.oregor.ddd4j.rest.AbstractRestController");
     imports.add("javax.servlet.http.HttpServletRequest");
+    imports.add("com.oregor.ddd4j.check.assertion.Assertion");
 
     source
         .getEndpoints()

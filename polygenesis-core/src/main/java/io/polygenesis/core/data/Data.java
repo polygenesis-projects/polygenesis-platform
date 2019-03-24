@@ -235,11 +235,16 @@ public abstract class Data {
    * @return the boolean
    */
   public boolean isThingIdentity() {
-    if (this instanceof DataPrimitive) {
-      return ((DataPrimitive) this).getThingIdentity();
-    } else {
-      return false;
-    }
+    return getDataBusinessType().equals(DataBusinessType.THING_IDENTITY);
+  }
+
+  /**
+   * Is parent thing identity boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isParentThingIdentity() {
+    return getDataBusinessType().equals(DataBusinessType.PARENT_THING_IDENTITY);
   }
 
   // ===============================================================================================

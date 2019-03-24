@@ -24,7 +24,7 @@ import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.data.DataGroup;
 import io.polygenesis.models.api.ServiceMethod;
 import io.polygenesis.models.apiimpl.ServiceImplementation;
-import io.polygenesis.models.domain.BaseDomainObject;
+import io.polygenesis.models.domain.BaseDomainEntity;
 import io.polygenesis.models.domain.PropertyType;
 import io.polygenesis.representations.commons.FieldRepresentation;
 import io.polygenesis.representations.java.AbstractClassRepresentable;
@@ -101,42 +101,6 @@ public class ServiceImplementationClassRepresentable
       ServiceImplementation source, Object... args) {
     Set<MethodRepresentation> methodRepresentations = new LinkedHashSet<>();
 
-    // TODO: Service Method needs refactor, in order to compensate for existence or not
-    //  of aggregate roots
-
-    //    if (source.getAggregateRoots().size() > 0 && source.getDomainObjectConverters().size() >
-    // 0) {
-    //      BaseDomainObject<?> domainObject =
-    //        source
-    //          .getAggregateRoots()
-    //          .stream()
-    //          .findFirst()
-    //          .orElseThrow(IllegalArgumentException::new);
-    //
-    //      DomainObjectConverter domainObjectConverter =
-    //        source
-    //          .getDomainObjectConverters()
-    //          .stream()
-    //          .findFirst()
-    //          .orElseThrow(IllegalArgumentException::new);
-    //
-    //      source
-    //        .getServiceMethodImplementations()
-    //        .forEach(
-    //          method ->
-    //            methodRepresentations.add(
-    //              serviceMethodImplementationRepresentable.create(
-    //                method, domainObject, domainObjectConverter)));
-    //    } else {
-    //      source
-    //        .getServiceMethodImplementations()
-    //        .forEach(
-    //          method ->
-    //            methodRepresentations.add(
-    //              serviceMethodImplementationRepresentable.create(method, source)));
-    //    }
-
-    // ------------------------------------------------------------------------------
     source
         .getServiceMethodImplementations()
         .forEach(
@@ -159,8 +123,12 @@ public class ServiceImplementationClassRepresentable
     Set<String> imports = new LinkedHashSet<>();
 
     source
-        .getAggregateRoots()
-        .forEach(aggregateRoot -> imports.addAll(detectImportsForDomainObject(aggregateRoot)));
+        .getOptionalDomainEntity()
+        .ifPresent(domainEntity -> imports.addAll(detectImportsForDomainEntity(domainEntity)));
+
+    source
+        .getOptionalParentAggregateRoot()
+        .ifPresent(domainEntity -> imports.addAll(detectImportsForDomainEntity(domainEntity)));
 
     imports.addAll(detectImportsForMethods(source));
 
@@ -242,12 +210,12 @@ public class ServiceImplementationClassRepresentable
   // ===============================================================================================
 
   /**
-   * Detect imports for aggregate root set.
+   * Detect imports for domain entity.
    *
    * @param domainObject the aggregate root
    * @return the set
    */
-  protected Set<String> detectImportsForDomainObject(BaseDomainObject<?> domainObject) {
+  protected Set<String> detectImportsForDomainEntity(BaseDomainEntity<?> domainObject) {
     Set<String> imports = new LinkedHashSet<>();
 
     // TODO: refactor the following implementation

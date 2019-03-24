@@ -41,6 +41,7 @@ public class AggregateRootDeducer {
   // ===============================================================================================
   private final DomainObjectConstructorDeducer domainObjectConstructorDeducer;
   private final AggregateRootPropertyDeducer aggregateRootPropertyDeducer;
+  private final StateMutationMethodDeducer stateMutationMethodDeducer;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -49,14 +50,17 @@ public class AggregateRootDeducer {
   /**
    * Instantiates a new Aggregate root deducer.
    *
-   * @param domainObjectConstructorDeducer the aggregate constructor deducer
+   * @param domainObjectConstructorDeducer the domain object constructor deducer
    * @param aggregateRootPropertyDeducer the aggregate root property deducer
+   * @param stateMutationMethodDeducer the state mutation method deducer
    */
   public AggregateRootDeducer(
       DomainObjectConstructorDeducer domainObjectConstructorDeducer,
-      AggregateRootPropertyDeducer aggregateRootPropertyDeducer) {
+      AggregateRootPropertyDeducer aggregateRootPropertyDeducer,
+      StateMutationMethodDeducer stateMutationMethodDeducer) {
     this.domainObjectConstructorDeducer = domainObjectConstructorDeducer;
     this.aggregateRootPropertyDeducer = aggregateRootPropertyDeducer;
+    this.stateMutationMethodDeducer = stateMutationMethodDeducer;
   }
 
   // ===============================================================================================
@@ -93,6 +97,7 @@ public class AggregateRootDeducer {
   /**
    * Make aggregate root aggregate root.
    *
+   * @param aggregateRoots the aggregate roots
    * @param thing the thing
    * @param rootPackageName the root package name
    * @return the aggregate root
@@ -109,7 +114,8 @@ public class AggregateRootDeducer {
     Set<Constructor> constructors =
         domainObjectConstructorDeducer.deduceFrom(thing, rootPackageName);
 
-    Set<StateMutationMethod> stateMutationMethods = new LinkedHashSet<>();
+    Set<StateMutationMethod> stateMutationMethods =
+        stateMutationMethodDeducer.deduce(thing, properties);
     Set<StateQueryMethod> stateQueryMethods = new LinkedHashSet<>();
     Set<FactoryMethod> factoryMethods = new LinkedHashSet<>();
 

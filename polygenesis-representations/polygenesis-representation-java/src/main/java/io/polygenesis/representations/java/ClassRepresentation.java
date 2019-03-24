@@ -116,82 +116,19 @@ public class ClassRepresentation extends AbstractObjectRepresentation {
   // ===============================================================================================
 
   /**
-   * Gets getters.
+   * Gets method representations by.
    *
-   * @return the getters
+   * @param methodRepresentationType the method representation type
+   * @return the method representations by
    */
-  public Set<MethodRepresentation> getGetters() {
+  public Set<MethodRepresentation> getMethodRepresentationsBy(String methodRepresentationType) {
     return methodRepresentations
         .stream()
         .filter(
             methodRepresentation ->
                 methodRepresentation
                     .getMethodRepresentationType()
-                    .equals(MethodRepresentationType.GETTER))
-        .collect(toCollection(LinkedHashSet::new));
-  }
-
-  /**
-   * Gets setters.
-   *
-   * @return the setters
-   */
-  public Set<MethodRepresentation> getSetters() {
-    return methodRepresentations
-        .stream()
-        .filter(
-            methodRepresentation ->
-                methodRepresentation
-                    .getMethodRepresentationType()
-                    .equals(MethodRepresentationType.SETTER))
-        .collect(toCollection(LinkedHashSet::new));
-  }
-
-  /**
-   * Gets guards.
-   *
-   * @return the guards
-   */
-  public Set<MethodRepresentation> getGuards() {
-    return methodRepresentations
-        .stream()
-        .filter(
-            methodRepresentation ->
-                methodRepresentation
-                    .getMethodRepresentationType()
-                    .equals(MethodRepresentationType.GUARD))
-        .collect(toCollection(LinkedHashSet::new));
-  }
-
-  /**
-   * Gets anys.
-   *
-   * @return the anys
-   */
-  public Set<MethodRepresentation> getAnys() {
-    return methodRepresentations
-        .stream()
-        .filter(
-            methodRepresentation ->
-                methodRepresentation
-                    .getMethodRepresentationType()
-                    .equals(MethodRepresentationType.ANY))
-        .collect(toCollection(LinkedHashSet::new));
-  }
-
-  /**
-   * Gets tests.
-   *
-   * @return the tests
-   */
-  public Set<MethodRepresentation> getTests() {
-    return methodRepresentations
-        .stream()
-        .filter(
-            methodRepresentation ->
-                methodRepresentation
-                    .getMethodRepresentationType()
-                    .equals(MethodRepresentationType.TEST))
+                    .equals(MethodRepresentationType.valueOf(methodRepresentationType)))
         .collect(toCollection(LinkedHashSet::new));
   }
 

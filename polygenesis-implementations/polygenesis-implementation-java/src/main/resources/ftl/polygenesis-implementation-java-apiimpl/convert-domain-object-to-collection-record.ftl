@@ -21,21 +21,33 @@
 <@assertionsForParameters representation.parameterRepresentations></@assertionsForParameters>
 
     return new ${ textConverter.toUpperCamel(to.dataGroup.dataType) }(
-<#list from.properties as property>
-  <#switch property.propertyType>
-    <#case 'AGGREGATE_ROOT_ID'>
-      <#if multiTenant>
-      <#else>
-      </#if>
-      <#break>
-    <#case 'PRIMITIVE'>
-        ${ from.objectName.text }.get${ textConverter.toUpperCamel(property.data.variableName.text) }()<#sep>,</#sep>
-      <#break>
-    <#case 'VALUE_OBJECT'>
-        convertToDto(${ from.objectName.text }.get${ textConverter.toUpperCamel(property.data.variableName.text) }())<#sep>,</#sep>
-      <#break>
-    <#default>
-        // Property Type = ${ property.propertyType } is not supported
-  </#switch>
-</#list>
+    <#list to.dataGroup.models as data>
+      <#switch data.dataPrimaryType>
+        <#case 'PRIMITIVE'>
+        ${ from.data.variableName.text }.get${ textConverter.toUpperCamel(data.variableName.text) }()<#sep>,</#sep>
+        <#break>
+        <#case 'OBJECT'>
+        convertToDto(${ from.data.variableName.text }.get${ textConverter.toUpperCamel(data.variableName.text) }())<#sep>,</#sep>
+          <#break>
+        <#default>
+        // Data Primary Type = ${ data.dataPrimaryType } is not supported
+      </#switch>
+    </#list>
+<#--<#list from.properties as property>-->
+  <#--<#switch property.propertyType>-->
+    <#--<#case 'AGGREGATE_ROOT_ID'>-->
+      <#--<#if multiTenant>-->
+      <#--<#else>-->
+      <#--</#if>-->
+      <#--<#break>-->
+    <#--<#case 'PRIMITIVE'>-->
+        <#--${ from.objectName.text }.get${ textConverter.toUpperCamel(property.data.variableName.text) }()<#sep>,</#sep>-->
+      <#--<#break>-->
+    <#--<#case 'VALUE_OBJECT'>-->
+        <#--convertToDto(${ from.objectName.text }.get${ textConverter.toUpperCamel(property.data.variableName.text) }())<#sep>,</#sep>-->
+      <#--<#break>-->
+    <#--<#default>-->
+        <#--// Property Type = ${ property.propertyType } is not supported-->
+  <#--</#switch>-->
+<#--</#list>-->
     );

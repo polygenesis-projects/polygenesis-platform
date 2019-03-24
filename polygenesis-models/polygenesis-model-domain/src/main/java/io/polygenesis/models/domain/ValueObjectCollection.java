@@ -28,7 +28,7 @@ import io.polygenesis.core.data.DataArray;
  *
  * @author Christos Tsakostas
  */
-public class ValueObjectCollection extends BaseProperty<DataArray> {
+public class ValueObjectCollection extends BaseProperty<ValueObjectCollection, DataArray> {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -44,7 +44,7 @@ public class ValueObjectCollection extends BaseProperty<DataArray> {
   }
 
   // ===============================================================================================
-  // ABSTRACT IMPLEMENTATIONS
+  // IMPLEMENTATIONS
   // ===============================================================================================
 
   @Override

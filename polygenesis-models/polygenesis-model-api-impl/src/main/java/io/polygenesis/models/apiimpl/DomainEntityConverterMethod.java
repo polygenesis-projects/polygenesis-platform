@@ -29,7 +29,7 @@ import java.util.Objects;
  *
  * @author Christos Tsakostas
  */
-public class DomainObjectConverterMethod {
+public class DomainEntityConverterMethod {
 
   // ===============================================================================================
   // STATE
@@ -50,7 +50,7 @@ public class DomainObjectConverterMethod {
    * @param from the from
    * @param to the to
    */
-  public DomainObjectConverterMethod(Function function, Object from, Object to) {
+  public DomainEntityConverterMethod(Function function, Object from, Object to) {
     setFunction(function);
     setFrom(from);
     setTo(to);
@@ -133,7 +133,7 @@ public class DomainObjectConverterMethod {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    DomainObjectConverterMethod that = (DomainObjectConverterMethod) o;
+    DomainEntityConverterMethod that = (DomainEntityConverterMethod) o;
     return Objects.equals(function, that.function)
         && Objects.equals(from, that.from)
         && Objects.equals(to, that.to);

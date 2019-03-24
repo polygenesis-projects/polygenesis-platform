@@ -28,6 +28,8 @@ package io.polygenesis.annotations.core;
 public enum CqsType {
   /** Command service cqrs type. */
   COMMAND,
+  /** Mutation cqs type. */
+  MUTATION,
   /** Query service cqrs type. */
   QUERY,
   /** Mixed service cqrs type. */

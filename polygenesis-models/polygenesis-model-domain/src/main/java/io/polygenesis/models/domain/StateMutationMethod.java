@@ -20,12 +20,20 @@
 
 package io.polygenesis.models.domain;
 
+import com.oregor.ddd4j.check.assertion.Assertion;
+import io.polygenesis.core.Function;
+import java.util.Objects;
+
 /**
  * The type State mutation command.
  *
  * @author Christos Tsakostas
  */
 public class StateMutationMethod extends BaseMethod {
+
+  // ===============================================================================================
+  // STATE
+  // ===============================================================================================
 
   private DomainEvent domainEvent;
 
@@ -36,10 +44,21 @@ public class StateMutationMethod extends BaseMethod {
   /**
    * Instantiates a new State mutation method.
    *
+   * @param function the function
+   */
+  public StateMutationMethod(Function function) {
+    super(function);
+  }
+
+  /**
+   * Instantiates a new State mutation method.
+   *
+   * @param function the function
    * @param domainEvent the domain event
    */
-  public StateMutationMethod(DomainEvent domainEvent) {
-    this.domainEvent = domainEvent;
+  public StateMutationMethod(Function function, DomainEvent domainEvent) {
+    super(function);
+    setDomainEvent(domainEvent);
   }
 
   // ===============================================================================================
@@ -53,5 +72,43 @@ public class StateMutationMethod extends BaseMethod {
    */
   public DomainEvent getDomainEvent() {
     return domainEvent;
+  }
+
+  // ===============================================================================================
+  // GUARDS
+  // ===============================================================================================
+
+  /**
+   * Sets domain event.
+   *
+   * @param domainEvent the domain event
+   */
+  private void setDomainEvent(DomainEvent domainEvent) {
+    Assertion.isNotNull(domainEvent, "domainEvent is required");
+    this.domainEvent = domainEvent;
+  }
+
+  // ===============================================================================================
+  // OVERRIDES
+  // ===============================================================================================
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    if (!super.equals(o)) {
+      return false;
+    }
+    StateMutationMethod that = (StateMutationMethod) o;
+    return Objects.equals(domainEvent, that.domainEvent);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(super.hashCode(), domainEvent);
   }
 }

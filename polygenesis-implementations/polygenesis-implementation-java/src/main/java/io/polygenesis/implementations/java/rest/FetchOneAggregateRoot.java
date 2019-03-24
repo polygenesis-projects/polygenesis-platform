@@ -23,7 +23,6 @@ package io.polygenesis.implementations.java.rest;
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.models.rest.Endpoint;
 import io.polygenesis.representations.java.MethodRepresentation;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -31,7 +30,8 @@ import java.util.Map;
  *
  * @author Christos Tsakostas
  */
-public class FetchOneAggregateRoot implements EndpointImplementor {
+public class FetchOneAggregateRoot extends AbstractEndpointImplementor
+    implements EndpointImplementor {
 
   // ===============================================================================================
   // IMPLEMENTATIONS
@@ -42,9 +42,8 @@ public class FetchOneAggregateRoot implements EndpointImplementor {
       FreemarkerService freemarkerService,
       Endpoint endpoint,
       MethodRepresentation methodRepresentation) {
-    Map<String, Object> dataModel = new HashMap<>();
-
-    dataModel.put("representation", methodRepresentation);
+    Map<String, Object> dataModel =
+        aggregateRootDataModelWithThingIdentity(endpoint, methodRepresentation);
 
     return freemarkerService.exportToString(
         dataModel, "polygenesis-implementation-java-rest/fetch-one-aggregate-root.ftl");

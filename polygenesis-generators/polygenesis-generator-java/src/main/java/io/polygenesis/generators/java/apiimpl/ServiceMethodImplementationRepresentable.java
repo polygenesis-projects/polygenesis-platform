@@ -169,25 +169,6 @@ public class ServiceMethodImplementationRepresentable
 
   @Override
   public String implementation(ServiceMethodImplementation source, Object... args) {
-    //    try {
-    //      Function function = source.getServiceMethod().getFunction();
-    //      AggregateRoot aggregateRoot = (AggregateRoot) args[0];
-    //      DomainObjectConverter aggregateRootConverter = (DomainObjectConverter) args[1];
-    //
-    //      if (function.getGoal().isCommand()) {
-    //        return new
-    // ServiceImplementationMethodCommand(freemarkerService).makeCommandImplementation(
-    //          source.getServiceMethod(), aggregateRoot, aggregateRootConverter);
-    //      } else {
-    //        return new
-    // ServiceImplementationMethodQuery(freemarkerService).makeQueryImplementation(
-    //          source.getServiceMethod(), aggregateRoot, aggregateRootConverter);
-    //      }
-    //    } catch (Exception e) {
-    //      return "";
-    //    }
-
-    // ------------------------------------------------------------------------------
     if (source.getServiceMethod().getFunction().getReturnValue() == null) {
       return "\t\t// TODO [PolyGenesis]: write implementation here";
     } else {

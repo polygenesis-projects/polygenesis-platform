@@ -43,16 +43,18 @@ public class ServiceMethodImplementationRegistry {
   // STATIC
   // ===============================================================================================
 
+  @SuppressWarnings("CPD-START")
   private static Map<ScopeGoalTuple, ServiceMethodImplementor> scopeAndGoalMap = new HashMap<>();
 
   static {
+    // AGGREGATE ROOT
     scopeAndGoalMap.put(
         new ScopeGoalTuple(ThingScopeType.DOMAIN_AGGREGATE_ROOT, GoalType.CREATE.name()),
         new CreateAggregateRoot());
 
     scopeAndGoalMap.put(
         new ScopeGoalTuple(ThingScopeType.DOMAIN_AGGREGATE_ROOT, GoalType.MODIFY.name()),
-        new ModifyAggregateRoot());
+        new UpdateAggregateRoot());
 
     scopeAndGoalMap.put(
         new ScopeGoalTuple(ThingScopeType.DOMAIN_AGGREGATE_ROOT, GoalType.FETCH_ONE.name()),
@@ -62,6 +64,24 @@ public class ServiceMethodImplementationRegistry {
         new ScopeGoalTuple(
             ThingScopeType.DOMAIN_AGGREGATE_ROOT, GoalType.FETCH_PAGED_COLLECTION.name()),
         new FetchPagedCollectionAggregateRoot());
+
+    // ENTITY
+    scopeAndGoalMap.put(
+        new ScopeGoalTuple(ThingScopeType.DOMAIN_AGGREGATE_ENTITY, GoalType.CREATE.name()),
+        new CreateAggregateEntity());
+
+    scopeAndGoalMap.put(
+        new ScopeGoalTuple(ThingScopeType.DOMAIN_AGGREGATE_ENTITY, GoalType.MODIFY.name()),
+        new UpdateAggregateEntity());
+
+    scopeAndGoalMap.put(
+        new ScopeGoalTuple(ThingScopeType.DOMAIN_AGGREGATE_ENTITY, GoalType.FETCH_ONE.name()),
+        new FetchOneAggregateEntity());
+
+    scopeAndGoalMap.put(
+        new ScopeGoalTuple(
+            ThingScopeType.DOMAIN_AGGREGATE_ENTITY, GoalType.FETCH_PAGED_COLLECTION.name()),
+        new FetchPagedCollectionAggregateEntity());
   }
 
   // ===============================================================================================
@@ -77,6 +97,7 @@ public class ServiceMethodImplementationRegistry {
    * @param methodRepresentation the method representation
    * @return the optional
    */
+  @SuppressWarnings("CPD-END")
   public Optional<String> implementation(
       FreemarkerService freemarkerService,
       ServiceImplementation serviceImplementation,

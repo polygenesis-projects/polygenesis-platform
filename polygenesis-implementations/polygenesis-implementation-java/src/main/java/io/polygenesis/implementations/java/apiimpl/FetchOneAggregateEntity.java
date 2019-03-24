@@ -18,26 +18,40 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.models.api;
+package io.polygenesis.implementations.java.apiimpl;
 
-import io.polygenesis.commons.text.AbstractText;
+import io.polygenesis.commons.freemarker.FreemarkerService;
+import io.polygenesis.models.api.ServiceMethod;
+import io.polygenesis.models.apiimpl.ServiceImplementation;
+import io.polygenesis.representations.java.MethodRepresentation;
+import java.util.Map;
 
 /**
- * The type Method name.
+ * The type Fetch one aggregate entity.
  *
  * @author Christos Tsakostas
  */
-public class MethodName extends AbstractText {
+public class FetchOneAggregateEntity extends AbstractServiceMethodImplementor
+    implements ServiceMethodImplementor {
 
   // ===============================================================================================
-  // CONSTRUCTOR(S)
+  // IMPLEMENTATIONS
   // ===============================================================================================
-  /**
-   * Instantiates a new Method name.
-   *
-   * @param text the text
-   */
-  public MethodName(String text) {
-    super(text);
+
+  @Override
+  public String implementationFor(
+      FreemarkerService freemarkerService,
+      ServiceImplementation serviceImplementation,
+      ServiceMethod serviceMethod,
+      MethodRepresentation methodRepresentation) {
+
+    Map<String, Object> dataModel =
+        aggregateEntityDataModelWithThingIdentity(
+            serviceImplementation, serviceMethod, methodRepresentation);
+
+    dataModel.put("responseDto", serviceMethod.getResponseDto());
+
+    return freemarkerService.exportToString(
+        dataModel, "polygenesis-implementation-java-apiimpl/fetch-one-aggregate-entity.ftl");
   }
 }

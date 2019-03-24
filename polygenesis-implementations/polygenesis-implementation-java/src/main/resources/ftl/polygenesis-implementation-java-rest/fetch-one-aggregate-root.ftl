@@ -18,5 +18,14 @@
  ===========================LICENSE_END==================================
 -->
 <#include "../polygenesis-implementation-java-shared/macro-assertions-for-parameters.ftl">
-<#--<@assertionsForParameters representation.parameterRepresentations></@assertionsForParameters>-->
-    return null;
+<#include "macro-create-request-dto.ftl">
+<#include "macro-set-root-id-in-request.ftl">
+<#include "macro-set-tenantid-and-ipaddress.ftl">
+<#include "macro-return-value.ftl">
+<@assertionsForParameters representation.parameterRepresentations></@assertionsForParameters>
+
+<@createRequestDto requestDto></@createRequestDto>
+<@setRootIdInRequest requestDto thingIdentityVariableName></@setRootIdInRequest>
+<@setTenantIdAndIpAddress requestDto></@setTenantIdAndIpAddress>
+
+<@returnValue serviceName serviceMethodName requestDto></@returnValue>

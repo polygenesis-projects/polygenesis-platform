@@ -22,6 +22,7 @@ package io.polygenesis.models.api;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import io.polygenesis.commons.valueobjects.MethodName;
 import org.junit.Test;
 
 /** @author Christos Tsakostas */

@@ -22,13 +22,15 @@ package io.polygenesis.deducers.apiimpl;
 
 import io.polygenesis.core.data.VariableName;
 import io.polygenesis.models.api.Service;
-import io.polygenesis.models.apiimpl.DomainObjectConverter;
+import io.polygenesis.models.apiimpl.DomainEntityConverter;
 import io.polygenesis.models.apiimpl.ServiceDependency;
 import io.polygenesis.models.apiimpl.ServiceImplementation;
-import io.polygenesis.models.domain.BaseDomainObject;
+import io.polygenesis.models.domain.AggregateRootPersistable;
+import io.polygenesis.models.domain.BaseDomainEntity;
 import io.polygenesis.models.domain.Persistence;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -69,30 +71,63 @@ public class ServiceImplementationDeducer {
    * @return the service implementation
    */
   public ServiceImplementation deduce(Service service) {
-    return new ServiceImplementation(
-        service,
-        new LinkedHashSet<>(),
-        new LinkedHashSet<>(),
-        new LinkedHashSet<>(),
-        serviceMethodImplementationDeducer.deduce(service));
+    return new ServiceImplementation(service, new LinkedHashSet<>(), new LinkedHashSet<>());
   }
 
   /**
    * Deduce service implementation.
    *
    * @param service the service
-   * @param domainObject the aggregate root
-   * @param domainObjectConverter the aggregate root converter
+   * @param domainEntity the domain entity
+   * @param optionalParentAggregateRoot the optional parent aggregate root
+   * @param domainEntityConverter the domain entity converter
    * @return the service implementation
    */
   public ServiceImplementation deduce(
       Service service,
-      BaseDomainObject<?> domainObject,
-      DomainObjectConverter domainObjectConverter) {
+      BaseDomainEntity<?> domainEntity,
+      Optional<AggregateRootPersistable> optionalParentAggregateRoot,
+      DomainEntityConverter domainEntityConverter) {
+
+    return new ServiceImplementation(
+        service,
+        dependencies(domainEntity, domainEntityConverter, optionalParentAggregateRoot),
+        serviceMethodImplementationDeducer.deduce(service),
+        Optional.of(domainEntity),
+        optionalParentAggregateRoot,
+        new LinkedHashSet<>(Arrays.asList(domainEntityConverter)));
+  }
+
+  // ===============================================================================================
+  // PRIVATE
+  // ===============================================================================================
+
+  /**
+   * Dependencies set.
+   *
+   * @param domainEntity the domain entity
+   * @param domainEntityConverter the domain entity converter
+   * @param optionalAggregateRootPersistable the optional aggregate root persistable
+   * @return the set
+   */
+  private Set<ServiceDependency> dependencies(
+      BaseDomainEntity<?> domainEntity,
+      DomainEntityConverter domainEntityConverter,
+      Optional<AggregateRootPersistable> optionalAggregateRootPersistable) {
     Set<ServiceDependency> dependencies = new LinkedHashSet<>();
 
-    if (domainObject.getOptionalPersistence().isPresent()) {
-      Persistence persistence = domainObject.getOptionalPersistence().get();
+    if (domainEntity.getOptionalPersistence().isPresent()) {
+      Persistence persistence = domainEntity.getOptionalPersistence().get();
+
+      dependencies.add(
+          new ServiceDependency(
+              persistence.getObjectName(),
+              persistence.getPackageName(),
+              new VariableName(persistence.getObjectName().getText())));
+    }
+
+    if (optionalAggregateRootPersistable.isPresent()) {
+      Persistence persistence = optionalAggregateRootPersistable.get().getPersistence();
 
       dependencies.add(
           new ServiceDependency(
@@ -103,15 +138,10 @@ public class ServiceImplementationDeducer {
 
     dependencies.add(
         new ServiceDependency(
-            domainObjectConverter.getObjectName(),
-            domainObjectConverter.getPackageName(),
-            domainObjectConverter.getVariableName()));
+            domainEntityConverter.getObjectName(),
+            domainEntityConverter.getPackageName(),
+            domainEntityConverter.getVariableName()));
 
-    return new ServiceImplementation(
-        service,
-        dependencies,
-        new LinkedHashSet<>(Arrays.asList(domainObject)),
-        new LinkedHashSet<>(Arrays.asList(domainObjectConverter)),
-        serviceMethodImplementationDeducer.deduce(service));
+    return dependencies;
   }
 }

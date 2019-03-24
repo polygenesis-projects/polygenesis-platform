@@ -30,7 +30,7 @@ import java.util.Objects;
  *
  * @author Christos Tsakostas
  */
-public class AggregateEntityCollection extends BaseProperty<DataArray> {
+public class AggregateEntityCollection extends BaseProperty<AggregateEntityCollection, DataArray> {
 
   // ===============================================================================================
   // STATE
@@ -81,7 +81,7 @@ public class AggregateEntityCollection extends BaseProperty<DataArray> {
   }
 
   // ===============================================================================================
-  // ABSTRACT IMPLEMENTATIONS
+  // IMPLEMENTATIONS
   // ===============================================================================================
 
   @Override

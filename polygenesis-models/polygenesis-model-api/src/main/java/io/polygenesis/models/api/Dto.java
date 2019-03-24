@@ -118,6 +118,19 @@ public class Dto {
     return getDataGroup().getModels().stream().filter(data -> data.isThingIdentity()).findFirst();
   }
 
+  /**
+   * Gets parent thing identity as optional.
+   *
+   * @return the parent thing identity as optional
+   */
+  public Optional<Data> getParentThingIdentityAsOptional() {
+    return getDataGroup()
+        .getModels()
+        .stream()
+        .filter(data -> data.isParentThingIdentity())
+        .findFirst();
+  }
+
   // ===============================================================================================
   // GUARDS
   // ===============================================================================================

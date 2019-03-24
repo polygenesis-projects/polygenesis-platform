@@ -149,6 +149,18 @@ public class EndpointMethodRepresentable extends AbstractMethodRepresentable<End
   public Set<ParameterRepresentation> parameterRepresentations(Endpoint source, Object... args) {
     Set<ParameterRepresentation> parameterRepresentations = new LinkedHashSet<>();
 
+    Optional<Data> optionalParentThingIdentityData =
+        source.getServiceMethod().getRequestDto().getParentThingIdentityAsOptional();
+
+    if (optionalParentThingIdentityData.isPresent()) {
+      parameterRepresentations.addAll(
+          parameterRepresentationsForIdPathVariable(
+              optionalParentThingIdentityData
+                  .orElseThrow(IllegalArgumentException::new)
+                  .getVariableName()
+                  .getText()));
+    }
+
     Optional<Data> thingIdentityData =
         source.getServiceMethod().getRequestDto().getThingIdentityAsOptional();
 
@@ -258,7 +270,7 @@ public class EndpointMethodRepresentable extends AbstractMethodRepresentable<End
               .getThingIdentityAsOptional()
               .orElseThrow(IllegalArgumentException::new);
 
-      stringBuilder.append(setThingIdenityInRequest(source, data.getVariableName().getText()));
+      stringBuilder.append(setThingIdentityInRequest(source, data.getVariableName().getText()));
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -370,7 +382,8 @@ public class EndpointMethodRepresentable extends AbstractMethodRepresentable<End
         new ParameterRepresentation(
             "String",
             "query",
-            new LinkedHashSet<>(Arrays.asList("@RequestParam(required = false)"))));
+            new LinkedHashSet<>(
+                Arrays.asList("@RequestParam(required = false, defaultValue = \"\")"))));
 
     return parameterRepresentations;
   }
@@ -396,13 +409,13 @@ public class EndpointMethodRepresentable extends AbstractMethodRepresentable<End
   }
 
   /**
-   * Sets thing idenity in request.
+   * Sets thing identity in request.
    *
    * @param source the source
    * @param variableName the variable name
    * @return the thing idenity in request
    */
-  protected String setThingIdenityInRequest(Endpoint source, String variableName) {
+  protected String setThingIdentityInRequest(Endpoint source, String variableName) {
     StringBuilder stringBuilder = new StringBuilder();
 
     stringBuilder.append("\t\t");

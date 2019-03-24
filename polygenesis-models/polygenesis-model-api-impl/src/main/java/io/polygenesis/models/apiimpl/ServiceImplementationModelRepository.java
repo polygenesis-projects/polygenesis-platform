@@ -31,7 +31,7 @@ import java.util.Set;
 public class ServiceImplementationModelRepository implements ModelRepository {
 
   private Set<ServiceImplementation> serviceImplementations;
-  private Set<DomainObjectConverter> domainObjectConverters;
+  private Set<DomainEntityConverter> domainEntityConverters;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -39,9 +39,9 @@ public class ServiceImplementationModelRepository implements ModelRepository {
 
   public ServiceImplementationModelRepository(
       Set<ServiceImplementation> serviceImplementations,
-      Set<DomainObjectConverter> domainObjectConverters) {
+      Set<DomainEntityConverter> domainEntityConverters) {
     setServiceImplementations(serviceImplementations);
-    setDomainObjectConverters(domainObjectConverters);
+    setDomainEntityConverters(domainEntityConverters);
   }
 
   // ===============================================================================================
@@ -62,8 +62,8 @@ public class ServiceImplementationModelRepository implements ModelRepository {
    *
    * @return the aggregate root converters
    */
-  public Set<DomainObjectConverter> getDomainObjectConverters() {
-    return domainObjectConverters;
+  public Set<DomainEntityConverter> getDomainEntityConverters() {
+    return domainEntityConverters;
   }
 
   // ===============================================================================================
@@ -82,10 +82,10 @@ public class ServiceImplementationModelRepository implements ModelRepository {
   /**
    * Sets aggregate root converters.
    *
-   * @param domainObjectConverters the aggregate root converters
+   * @param domainEntityConverters the aggregate root converters
    */
-  private void setDomainObjectConverters(Set<DomainObjectConverter> domainObjectConverters) {
-    this.domainObjectConverters = domainObjectConverters;
+  private void setDomainEntityConverters(Set<DomainEntityConverter> domainEntityConverters) {
+    this.domainEntityConverters = domainEntityConverters;
   }
 
   // ===============================================================================================

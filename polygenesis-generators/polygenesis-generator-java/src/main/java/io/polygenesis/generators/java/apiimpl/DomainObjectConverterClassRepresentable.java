@@ -22,7 +22,7 @@ package io.polygenesis.generators.java.apiimpl;
 
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.data.DataGroup;
-import io.polygenesis.models.apiimpl.DomainObjectConverter;
+import io.polygenesis.models.apiimpl.DomainEntityConverter;
 import io.polygenesis.representations.commons.FieldRepresentation;
 import io.polygenesis.representations.java.AbstractClassRepresentable;
 import io.polygenesis.representations.java.ConstructorRepresentation;
@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
  * @author Christos Tsakostas
  */
 public class DomainObjectConverterClassRepresentable
-    extends AbstractClassRepresentable<DomainObjectConverter> {
+    extends AbstractClassRepresentable<DomainEntityConverter> {
 
   // ===============================================================================================
   // DEPENDENCIES
@@ -71,19 +71,19 @@ public class DomainObjectConverterClassRepresentable
 
   @Override
   public Set<FieldRepresentation> fieldRepresentations(
-      DomainObjectConverter source, Object... args) {
+      DomainEntityConverter source, Object... args) {
     return new LinkedHashSet<>();
   }
 
   @Override
   public Set<ConstructorRepresentation> constructorRepresentations(
-      DomainObjectConverter source, Object... args) {
+      DomainEntityConverter source, Object... args) {
     return new LinkedHashSet<>();
   }
 
   @Override
   public Set<MethodRepresentation> methodRepresentations(
-      DomainObjectConverter source, Object... args) {
+      DomainEntityConverter source, Object... args) {
     Set<MethodRepresentation> methodRepresentations = new LinkedHashSet<>();
 
     source
@@ -97,12 +97,12 @@ public class DomainObjectConverterClassRepresentable
   }
 
   @Override
-  public String packageName(DomainObjectConverter source, Object... args) {
+  public String packageName(DomainEntityConverter source, Object... args) {
     return source.getPackageName().getText();
   }
 
   @Override
-  public Set<String> imports(DomainObjectConverter source, Object... args) {
+  public Set<String> imports(DomainEntityConverter source, Object... args) {
     Set<String> imports = new TreeSet<>();
 
     imports.add("com.oregor.ddd4j.check.assertion.Assertion");
@@ -147,7 +147,7 @@ public class DomainObjectConverterClassRepresentable
   }
 
   @Override
-  public Set<String> annotations(DomainObjectConverter source, Object... args) {
+  public Set<String> annotations(DomainEntityConverter source, Object... args) {
     Set<String> annotations = new LinkedHashSet<>();
 
     annotations.add("@Component");
@@ -156,7 +156,7 @@ public class DomainObjectConverterClassRepresentable
   }
 
   @Override
-  public String description(DomainObjectConverter source, Object... args) {
+  public String description(DomainEntityConverter source, Object... args) {
     StringBuilder stringBuilder = new StringBuilder();
 
     stringBuilder.append(TextConverter.toUpperCamelSpaces(source.getObjectName().getText()));
@@ -167,12 +167,12 @@ public class DomainObjectConverterClassRepresentable
   }
 
   @Override
-  public String modifiers(DomainObjectConverter source, Object... args) {
+  public String modifiers(DomainEntityConverter source, Object... args) {
     return MODIFIER_PUBLIC;
   }
 
   @Override
-  public String simpleObjectName(DomainObjectConverter source, Object... args) {
+  public String simpleObjectName(DomainEntityConverter source, Object... args) {
     StringBuilder stringBuilder = new StringBuilder();
 
     stringBuilder.append(TextConverter.toUpperCamel(source.getObjectName().getText()));
@@ -181,7 +181,7 @@ public class DomainObjectConverterClassRepresentable
   }
 
   @Override
-  public String fullObjectName(DomainObjectConverter source, Object... args) {
+  public String fullObjectName(DomainEntityConverter source, Object... args) {
     return simpleObjectName(source);
   }
 }

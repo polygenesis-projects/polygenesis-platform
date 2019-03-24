@@ -21,9 +21,7 @@
 package io.polygenesis.core;
 
 import com.oregor.ddd4j.check.assertion.Assertion;
-import io.polygenesis.core.data.DataPrimitive;
 import java.util.LinkedHashSet;
-import java.util.Optional;
 import java.util.Set;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -156,27 +154,6 @@ public class Function {
    */
   public Set<Argument> getArguments() {
     return arguments;
-  }
-
-  // ===============================================================================================
-  // QUERIES
-  // ===============================================================================================
-
-  /**
-   * Retrieve thing identity from argument optional.
-   *
-   * @param argument the argument
-   * @return the optional
-   */
-  public Optional<DataPrimitive> retrieveThingIdentityFromArgument(Argument argument) {
-    return argument
-        .getData()
-        .getAsDataGroup()
-        .getModels()
-        .stream()
-        .filter(model -> model.isThingIdentity())
-        .map(DataPrimitive.class::cast)
-        .findFirst();
   }
 
   // ===============================================================================================

@@ -24,7 +24,7 @@ import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.data.PrimitiveType;
 import io.polygenesis.implementations.java.apiimpl.ConverterMethodImplementationRegistry;
-import io.polygenesis.models.apiimpl.DomainObjectConverterMethod;
+import io.polygenesis.models.apiimpl.DomainEntityConverterMethod;
 import io.polygenesis.representations.commons.ParameterRepresentation;
 import io.polygenesis.representations.java.AbstractMethodRepresentable;
 import io.polygenesis.representations.java.FromDataTypeToJavaConverter;
@@ -39,7 +39,7 @@ import java.util.Set;
  * @author Christos Tsakostas
  */
 public class DomainObjectConverterMethodRepresentable
-    extends AbstractMethodRepresentable<DomainObjectConverterMethod> {
+    extends AbstractMethodRepresentable<DomainEntityConverterMethod> {
 
   // ===============================================================================================
   // DEPENDENCIES
@@ -72,7 +72,7 @@ public class DomainObjectConverterMethodRepresentable
   // ===============================================================================================
 
   @Override
-  public MethodRepresentation create(DomainObjectConverterMethod source, Object... args) {
+  public MethodRepresentation create(DomainEntityConverterMethod source, Object... args) {
     MethodRepresentation methodRepresentation = super.create(source, args);
 
     if (converterMethodImplementationRegistry.isConverterMethodSupported(source)) {
@@ -86,22 +86,22 @@ public class DomainObjectConverterMethodRepresentable
   }
 
   @Override
-  public MethodRepresentationType methodType(DomainObjectConverterMethod source, Object... args) {
+  public MethodRepresentationType methodType(DomainEntityConverterMethod source, Object... args) {
     return MethodRepresentationType.ANY;
   }
 
   @Override
-  public Set<String> imports(DomainObjectConverterMethod source, Object... args) {
+  public Set<String> imports(DomainEntityConverterMethod source, Object... args) {
     return new LinkedHashSet<>();
   }
 
   @Override
-  public Set<String> annotations(DomainObjectConverterMethod source, Object... args) {
+  public Set<String> annotations(DomainEntityConverterMethod source, Object... args) {
     return new LinkedHashSet<>();
   }
 
   @Override
-  public String description(DomainObjectConverterMethod source, Object... args) {
+  public String description(DomainEntityConverterMethod source, Object... args) {
     StringBuilder stringBuilder = new StringBuilder();
 
     stringBuilder.append(
@@ -112,18 +112,18 @@ public class DomainObjectConverterMethodRepresentable
   }
 
   @Override
-  public String modifiers(DomainObjectConverterMethod source, Object... args) {
+  public String modifiers(DomainEntityConverterMethod source, Object... args) {
     return MODIFIER_PUBLIC;
   }
 
   @Override
-  public String methodName(DomainObjectConverterMethod source, Object... args) {
+  public String methodName(DomainEntityConverterMethod source, Object... args) {
     return source.getFunction().getName().getText();
   }
 
   @Override
   public Set<ParameterRepresentation> parameterRepresentations(
-      DomainObjectConverterMethod source, Object... args) {
+      DomainEntityConverterMethod source, Object... args) {
     Set<ParameterRepresentation> parameterRepresentations = new LinkedHashSet<>();
 
     source
@@ -142,7 +142,7 @@ public class DomainObjectConverterMethodRepresentable
   }
 
   @Override
-  public String returnValue(DomainObjectConverterMethod source, Object... args) {
+  public String returnValue(DomainEntityConverterMethod source, Object... args) {
     if (source.getFunction().getReturnValue() != null) {
       return makeVariableDataType(source.getFunction().getReturnValue().getData());
     } else {
@@ -151,7 +151,7 @@ public class DomainObjectConverterMethodRepresentable
   }
 
   @Override
-  public String implementation(DomainObjectConverterMethod source, Object... args) {
+  public String implementation(DomainEntityConverterMethod source, Object... args) {
     if (source.getFunction().getReturnValue() == null) {
       return "\t\t// TODO [PolyGenesis]: write implementation here";
     } else {

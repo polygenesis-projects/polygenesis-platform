@@ -19,7 +19,6 @@
 -->
 <#include "../polygenesis-implementation-java-shared/macro-assertions-for-parameters.ftl">
 <#include "macro-restore-aggregate-root.ftl">
-<#include "macro-store-aggregate-root.ftl">
 <#include "macro-fill-fetch-one-response-dto-arguments.ftl">
 <@assertionsForParameters representation.parameterRepresentations></@assertionsForParameters>
 

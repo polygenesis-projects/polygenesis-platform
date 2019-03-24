@@ -68,6 +68,10 @@
       <groupId>com.oregor.ddd4j</groupId>
       <artifactId>ddd4j-primary-adapter-rest-spring</artifactId>
     </dependency>
+    <dependency>
+      <groupId>com.oregor.ddd4j</groupId>
+      <artifactId>ddd4j-core</artifactId>
+    </dependency>
 
     <!--TEST-->
     <dependency>

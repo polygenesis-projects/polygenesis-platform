@@ -38,6 +38,7 @@ import io.polygenesis.generators.java.domain.service.DomainServiceExporter;
 import io.polygenesis.generators.java.domain.service.DomainServiceInterfaceRepresentable;
 import io.polygenesis.generators.java.domain.valueobject.ValueObjectClassRepresentable;
 import io.polygenesis.generators.java.domain.valueobject.ValueObjectExporter;
+import io.polygenesis.implementations.java.domain.StateMutationMethodImplementorRegistry;
 import io.polygenesis.representations.java.FromDataTypeToJavaConverter;
 import io.polygenesis.representations.java.FunctionToMethodRepresentationConverter;
 import java.nio.file.Path;
@@ -52,6 +53,7 @@ public final class JavaDomainGeneratorFactory {
   // ===============================================================================================
   // DEPENDENCIES
   // ===============================================================================================
+
   private static AggregateRootExporter aggregateRootExporter;
   private static AggregateRootIdExporter aggregateRootIdExporter;
   private static AggregateEntityExporter aggregateEntityExporter;
@@ -71,8 +73,16 @@ public final class JavaDomainGeneratorFactory {
 
     FromDataTypeToJavaConverter fromDataTypeToJavaConverter = new FromDataTypeToJavaConverter();
 
+    StateMutationMethodImplementorRegistry stateMutationMethodImplementorRegistry =
+        new StateMutationMethodImplementorRegistry(freemarkerService);
+
+    StateMutationMethodRepresentable stateMutationMethodRepresentable =
+        new StateMutationMethodRepresentable(
+            fromDataTypeToJavaConverter, stateMutationMethodImplementorRegistry);
+
     AggregateRootClassRepresentable aggregateRootClassRepresentable =
-        new AggregateRootClassRepresentable(fromDataTypeToJavaConverter);
+        new AggregateRootClassRepresentable(
+            fromDataTypeToJavaConverter, stateMutationMethodRepresentable);
 
     aggregateRootExporter =
         new AggregateRootExporter(freemarkerService, aggregateRootClassRepresentable);

@@ -24,7 +24,7 @@ import com.oregor.ddd4j.check.assertion.Assertion;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.core.data.VariableName;
-import io.polygenesis.models.domain.BaseDomainObject;
+import io.polygenesis.models.domain.BaseDomainEntity;
 import java.util.Objects;
 import java.util.Set;
 
@@ -33,10 +33,10 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class DomainObjectConverter extends ServiceDependency {
+public class DomainEntityConverter extends ServiceDependency {
 
-  private BaseDomainObject<?> domainObject;
-  private Set<DomainObjectConverterMethod> methods;
+  private BaseDomainEntity<?> domainEntity;
+  private Set<DomainEntityConverterMethod> methods;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -45,21 +45,21 @@ public class DomainObjectConverter extends ServiceDependency {
   /**
    * Instantiates a new Domain object converter.
    *
-   * @param domainObject the domain object
+   * @param domainEntity the domain object
    * @param methods the methods
    */
-  public DomainObjectConverter(
-      BaseDomainObject<?> domainObject, Set<DomainObjectConverterMethod> methods) {
+  public DomainEntityConverter(
+      BaseDomainEntity<?> domainEntity, Set<DomainEntityConverterMethod> methods) {
     super(
         new ObjectName(
             String.format(
-                "%sConverter", TextConverter.toUpperCamel(domainObject.getObjectName().getText()))),
-        domainObject.getPackageName(),
+                "%sConverter", TextConverter.toUpperCamel(domainEntity.getObjectName().getText()))),
+        domainEntity.getPackageName(),
         new VariableName(
             String.format(
                 "%sConverter",
-                TextConverter.toLowerCamel(domainObject.getObjectName().getText()))));
-    setDomainObject(domainObject);
+                TextConverter.toLowerCamel(domainEntity.getObjectName().getText()))));
+    setDomainEntity(domainEntity);
     setMethods(methods);
   }
 
@@ -72,8 +72,8 @@ public class DomainObjectConverter extends ServiceDependency {
    *
    * @return the domain object
    */
-  public BaseDomainObject<?> getDomainObject() {
-    return domainObject;
+  public BaseDomainEntity<?> getDomainEntity() {
+    return domainEntity;
   }
 
   /**
@@ -81,7 +81,7 @@ public class DomainObjectConverter extends ServiceDependency {
    *
    * @return the methods
    */
-  public Set<DomainObjectConverterMethod> getMethods() {
+  public Set<DomainEntityConverterMethod> getMethods() {
     return methods;
   }
 
@@ -92,11 +92,11 @@ public class DomainObjectConverter extends ServiceDependency {
   /**
    * Sets domain object.
    *
-   * @param domainObject the domain object
+   * @param domainEntity the domain object
    */
-  private void setDomainObject(BaseDomainObject<?> domainObject) {
-    Assertion.isNotNull(domainObject, "domainObject is required");
-    this.domainObject = domainObject;
+  private void setDomainEntity(BaseDomainEntity<?> domainEntity) {
+    Assertion.isNotNull(domainEntity, "domainEntity is required");
+    this.domainEntity = domainEntity;
   }
 
   /**
@@ -104,7 +104,7 @@ public class DomainObjectConverter extends ServiceDependency {
    *
    * @param methods the methods
    */
-  private void setMethods(Set<DomainObjectConverterMethod> methods) {
+  private void setMethods(Set<DomainEntityConverterMethod> methods) {
     Assertion.isNotNull(methods, "methods is required");
     this.methods = methods;
   }
@@ -124,12 +124,12 @@ public class DomainObjectConverter extends ServiceDependency {
     if (!super.equals(o)) {
       return false;
     }
-    DomainObjectConverter that = (DomainObjectConverter) o;
-    return Objects.equals(domainObject, that.domainObject) && Objects.equals(methods, that.methods);
+    DomainEntityConverter that = (DomainEntityConverter) o;
+    return Objects.equals(domainEntity, that.domainEntity) && Objects.equals(methods, that.methods);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(super.hashCode(), domainObject, methods);
+    return Objects.hash(super.hashCode(), domainEntity, methods);
   }
 }

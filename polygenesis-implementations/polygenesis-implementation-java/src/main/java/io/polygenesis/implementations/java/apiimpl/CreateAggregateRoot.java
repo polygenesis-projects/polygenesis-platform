@@ -45,7 +45,7 @@ public class CreateAggregateRoot extends AbstractServiceMethodImplementor
       ServiceMethod serviceMethod,
       MethodRepresentation methodRepresentation) {
     Map<String, Object> dataModel =
-        dataModelForCreateOrModify(serviceImplementation, serviceMethod, methodRepresentation);
+        aggregateRootDataModel(serviceImplementation, serviceMethod, methodRepresentation);
 
     return freemarkerService.exportToString(
         dataModel, "polygenesis-implementation-java-apiimpl/create-aggregate-root.ftl");

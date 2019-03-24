@@ -39,8 +39,8 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class AggregateRoot extends BaseDomainObject<AggregateRoot>
-    implements DomainObjectProperty<DataGroup> {
+public class AggregateRoot extends BaseDomainEntity<AggregateRoot>
+    implements DomainObjectProperty<AggregateRoot, DataGroup> {
 
   // ===============================================================================================
   // STATE
@@ -157,6 +157,27 @@ public class AggregateRoot extends BaseDomainObject<AggregateRoot>
                     String.format(
                         "No AggregateRootId defined for AggregateRoot=%s",
                         getObjectName().getText())));
+  }
+
+  /**
+   * Contains domain entity.
+   *
+   * @param domainEntity the domain entity
+   * @return the boolean
+   */
+  public boolean contains(BaseDomainEntity<?> domainEntity) {
+    return getProperties()
+        .stream()
+        .filter(
+            domainObjectProperty ->
+                domainObjectProperty
+                    .getPropertyType()
+                    .equals(PropertyType.AGGREGATE_ENTITY_COLLECTION))
+        .map(AggregateEntityCollection.class::cast)
+        .filter(
+            aggregateEntityCollection ->
+                aggregateEntityCollection.getAggregateEntity().equals(domainEntity))
+        .anyMatch(aggregateEntityCollection -> true);
   }
 
   // ===============================================================================================

@@ -46,7 +46,7 @@ public class FetchPagedCollectionAggregateRoot extends AbstractServiceMethodImpl
       MethodRepresentation methodRepresentation) {
 
     Map<String, Object> dataModel =
-        dataModelForCreateOrModify(serviceImplementation, serviceMethod, methodRepresentation);
+        aggregateRootDataModel(serviceImplementation, serviceMethod, methodRepresentation);
 
     dataModel.put("responseDto", serviceMethod.getResponseDto());
 

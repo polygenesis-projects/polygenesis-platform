@@ -21,11 +21,10 @@
 package io.polygenesis.implementations.java.apiimpl;
 
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.Argument;
-import io.polygenesis.core.data.DataPrimitive;
 import io.polygenesis.models.api.ServiceMethod;
 import io.polygenesis.models.apiimpl.ServiceImplementation;
 import io.polygenesis.models.domain.AggregateRootPersistable;
+import io.polygenesis.models.domain.BaseDomainEntity;
 import io.polygenesis.models.domain.BaseDomainObject;
 import io.polygenesis.models.domain.DomainObjectProperty;
 import io.polygenesis.representations.java.MethodRepresentation;
@@ -45,14 +44,111 @@ public abstract class AbstractServiceMethodImplementor {
   // ===============================================================================================
 
   /**
-   * Data model for create or modify map.
+   * Aggregate root data model map.
    *
    * @param serviceImplementation the service implementation
    * @param serviceMethod the service method
    * @param methodRepresentation the method representation
    * @return the map
    */
-  protected Map<String, Object> dataModelForCreateOrModify(
+  protected Map<String, Object> aggregateRootDataModel(
+      ServiceImplementation serviceImplementation,
+      ServiceMethod serviceMethod,
+      MethodRepresentation methodRepresentation) {
+    Map<String, Object> dataModel =
+        defaultDataModel(serviceImplementation, serviceMethod, methodRepresentation);
+
+    return dataModel;
+  }
+
+  /**
+   * Aggregate root data model with thing identity map.
+   *
+   * @param serviceImplementation the service implementation
+   * @param serviceMethod the service method
+   * @param methodRepresentation the method representation
+   * @return the map
+   */
+  protected Map<String, Object> aggregateRootDataModelWithThingIdentity(
+      ServiceImplementation serviceImplementation,
+      ServiceMethod serviceMethod,
+      MethodRepresentation methodRepresentation) {
+    Map<String, Object> dataModel =
+        aggregateRootDataModel(serviceImplementation, serviceMethod, methodRepresentation);
+
+    dataModel.put(
+        "thingIdentity",
+        serviceMethod
+            .getRequestDto()
+            .getThingIdentityAsOptional()
+            .orElseThrow(IllegalArgumentException::new));
+
+    return dataModel;
+  }
+
+  /**
+   * Aggregate entity data model map.
+   *
+   * @param serviceImplementation the service implementation
+   * @param serviceMethod the service method
+   * @param methodRepresentation the method representation
+   * @return the map
+   */
+  protected Map<String, Object> aggregateEntityDataModel(
+      ServiceImplementation serviceImplementation,
+      ServiceMethod serviceMethod,
+      MethodRepresentation methodRepresentation) {
+    Map<String, Object> dataModel =
+        aggregateRootDataModel(serviceImplementation, serviceMethod, methodRepresentation);
+
+    dataModel.put(
+        "parentThingIdentity",
+        serviceMethod
+            .getRequestDto()
+            .getParentThingIdentityAsOptional()
+            .orElseThrow(IllegalArgumentException::new));
+
+    return dataModel;
+  }
+
+  /**
+   * Aggregate entity data model with thing identity map.
+   *
+   * @param serviceImplementation the service implementation
+   * @param serviceMethod the service method
+   * @param methodRepresentation the method representation
+   * @return the map
+   */
+  protected Map<String, Object> aggregateEntityDataModelWithThingIdentity(
+      ServiceImplementation serviceImplementation,
+      ServiceMethod serviceMethod,
+      MethodRepresentation methodRepresentation) {
+    Map<String, Object> dataModel =
+        aggregateEntityDataModel(serviceImplementation, serviceMethod, methodRepresentation);
+
+    dataModel.put(
+        "thingIdentity",
+        serviceMethod
+            .getRequestDto()
+            .getThingIdentityAsOptional()
+            .orElseThrow(IllegalArgumentException::new));
+
+    return dataModel;
+  }
+
+  // ===============================================================================================
+  // PRIVATE
+  // ===============================================================================================
+
+  /**
+   * Default data model map.
+   *
+   * @param serviceImplementation the service implementation
+   * @param serviceMethod the service method
+   * @param methodRepresentation the method representation
+   * @return the map
+   */
+  private Map<String, Object> defaultDataModel(
       ServiceImplementation serviceImplementation,
       ServiceMethod serviceMethod,
       MethodRepresentation methodRepresentation) {
@@ -60,7 +156,7 @@ public abstract class AbstractServiceMethodImplementor {
 
     dataModel.put("representation", methodRepresentation);
 
-    AggregateRootPersistable aggregateRoot = aggregateRoot(serviceImplementation);
+    AggregateRootPersistable aggregateRoot = retrieveAggregateRoot(serviceImplementation);
 
     dataModel.put(
         "aggregateRootDataType",
@@ -93,22 +189,29 @@ public abstract class AbstractServiceMethodImplementor {
    * @param serviceImplementation the service implementation
    * @return the base domain object
    */
-  protected AggregateRootPersistable aggregateRoot(ServiceImplementation serviceImplementation) {
-    BaseDomainObject<?> domainObject =
-        serviceImplementation
-            .getAggregateRoots()
-            .stream()
-            .findFirst()
-            .orElseThrow(IllegalArgumentException::new);
+  private AggregateRootPersistable retrieveAggregateRoot(
+      ServiceImplementation serviceImplementation) {
+    if (serviceImplementation.getOptionalParentAggregateRoot().isPresent()) {
+      return serviceImplementation.getOptionalParentAggregateRoot().get();
+    }
 
-    // TODO
-    if (domainObject instanceof AggregateRootPersistable) {
-      return (AggregateRootPersistable) domainObject;
+    if (serviceImplementation.getOptionalDomainEntity().isPresent()) {
+      BaseDomainEntity<?> domainEntity = serviceImplementation.getOptionalDomainEntity().get();
+
+      if (domainEntity instanceof AggregateRootPersistable) {
+        return (AggregateRootPersistable) domainEntity;
+      } else {
+        throw new IllegalArgumentException(
+            String.format(
+                "Domain Object=%s is not of type AggregateRootPersistable",
+                domainEntity.getObjectName().getText()));
+      }
+
     } else {
       throw new IllegalArgumentException(
           String.format(
-              "Domain Object=%s is not of type AggregateRootPersistable",
-              domainObject.getObjectName().getText()));
+              "No Domain Entity exists for service implementation",
+              serviceImplementation.getService().getServiceName().getText()));
     }
   }
 
@@ -118,7 +221,7 @@ public abstract class AbstractServiceMethodImplementor {
    * @param domainObject the domain object
    * @return the set
    */
-  protected Set<DomainObjectProperty> propertiesOfConstructorFor(BaseDomainObject<?> domainObject) {
+  private Set<DomainObjectProperty> propertiesOfConstructorFor(BaseDomainObject<?> domainObject) {
     return domainObject
         .getConstructors()
         .stream()
@@ -129,31 +232,5 @@ public abstract class AbstractServiceMethodImplementor {
                     String.format(
                         "Cannot get constructor for %s", domainObject.getObjectName().getText())))
         .getProperties();
-  }
-
-  /**
-   * Thing identity data primitive.
-   *
-   * @param serviceMethod the service method
-   * @return the data primitive
-   */
-  protected DataPrimitive thingIdentity(ServiceMethod serviceMethod) {
-    Argument argument =
-        serviceMethod
-            .getFunction()
-            .getArguments()
-            .stream()
-            .findFirst()
-            .orElseThrow(IllegalArgumentException::new);
-
-    return serviceMethod
-        .getFunction()
-        .retrieveThingIdentityFromArgument(argument)
-        .orElseThrow(
-            () ->
-                new IllegalStateException(
-                    String.format(
-                        "No thingIdentity found in arguments of method=%s",
-                        serviceMethod.getFunction().getName().getText())));
   }
 }

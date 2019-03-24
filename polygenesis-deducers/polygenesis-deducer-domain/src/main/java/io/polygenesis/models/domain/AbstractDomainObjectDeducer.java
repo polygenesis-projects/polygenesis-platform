@@ -29,7 +29,6 @@ import io.polygenesis.core.data.Data;
 import io.polygenesis.core.data.DataArray;
 import io.polygenesis.core.data.DataBusinessType;
 import io.polygenesis.core.data.DataGroup;
-import io.polygenesis.core.data.DataPrimitive;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -77,6 +76,7 @@ public class AbstractDomainObjectDeducer {
                       .forEach(
                           model -> {
                             if (!isPropertyThingIdentity(model)
+                                && !isPropertyParentThingIdentity(model)
                                 && !isPropertyPageNumber(model)
                                 && !isPropertyPageSize(model)) {
                               properties.add(makeAbstractProperty(model));
@@ -176,25 +176,43 @@ public class AbstractDomainObjectDeducer {
   // QUERIES
   // ===============================================================================================
 
+  /**
+   * Is property thing identity boolean.
+   *
+   * @param model the model
+   * @return the boolean
+   */
   private boolean isPropertyThingIdentity(Data model) {
-    if (model.isDataPrimitive() && ((DataPrimitive) model).getThingIdentity()) {
-      return true;
-    }
-    return false;
+    return model.getDataBusinessType().equals(DataBusinessType.THING_IDENTITY);
   }
 
+  /**
+   * Is property parent thing identity boolean.
+   *
+   * @param model the model
+   * @return the boolean
+   */
+  private boolean isPropertyParentThingIdentity(Data model) {
+    return model.getDataBusinessType().equals(DataBusinessType.PARENT_THING_IDENTITY);
+  }
+
+  /**
+   * Is property page number boolean.
+   *
+   * @param model the model
+   * @return the boolean
+   */
   private boolean isPropertyPageNumber(Data model) {
-    if (model.isDataPrimitive()
-        && model.getDataBusinessType().equals(DataBusinessType.PAGE_NUMBER)) {
-      return true;
-    }
-    return false;
+    return model.getDataBusinessType().equals(DataBusinessType.PAGE_NUMBER);
   }
 
+  /**
+   * Is property page size boolean.
+   *
+   * @param model the model
+   * @return the boolean
+   */
   private boolean isPropertyPageSize(Data model) {
-    if (model.isDataPrimitive() && model.getDataBusinessType().equals(DataBusinessType.PAGE_SIZE)) {
-      return true;
-    }
-    return false;
+    return model.getDataBusinessType().equals(DataBusinessType.PAGE_SIZE);
   }
 }

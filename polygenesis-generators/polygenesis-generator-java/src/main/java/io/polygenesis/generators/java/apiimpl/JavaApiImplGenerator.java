@@ -102,7 +102,7 @@ public class JavaApiImplGenerator extends AbstractGenerator {
             });
 
     serviceImplementationModelRepository
-        .getDomainObjectConverters()
+        .getDomainEntityConverters()
         .forEach(
             aggregateRootConverter ->
                 domainObjectConverterExporter.export(getGenerationPath(), aggregateRootConverter));

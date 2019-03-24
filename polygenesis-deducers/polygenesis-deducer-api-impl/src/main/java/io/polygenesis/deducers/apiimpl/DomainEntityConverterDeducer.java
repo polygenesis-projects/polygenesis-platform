@@ -34,9 +34,9 @@ import io.polygenesis.core.data.Data;
 import io.polygenesis.core.data.DataGroup;
 import io.polygenesis.models.api.Dto;
 import io.polygenesis.models.api.Service;
-import io.polygenesis.models.apiimpl.DomainObjectConverter;
-import io.polygenesis.models.apiimpl.DomainObjectConverterMethod;
-import io.polygenesis.models.domain.BaseDomainObject;
+import io.polygenesis.models.apiimpl.DomainEntityConverter;
+import io.polygenesis.models.apiimpl.DomainEntityConverterMethod;
+import io.polygenesis.models.domain.BaseDomainEntity;
 import io.polygenesis.models.domain.PropertyType;
 import io.polygenesis.models.domain.ValueObject;
 import java.util.Arrays;
@@ -44,41 +44,48 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
- * The type Domain object converter deducer.
+ * The type Domain entity converter deducer.
  *
  * @author Christos Tsakostas
  */
-public class DomainObjectConverterDeducer {
+public class DomainEntityConverterDeducer {
 
   // ===============================================================================================
   // FUNCTIONALITY
   // ===============================================================================================
 
   /**
-   * Deduce domain object converter.
+   * Deduce domain entity converter.
    *
-   * @param domainObject the domain object
+   * @param domainEntity the domain entity
    * @param services the services
-   * @return the domain object converter
+   * @return the domain entity converter
    */
-  public DomainObjectConverter deduce(BaseDomainObject<?> domainObject, Set<Service> services) {
-    Set<DomainObjectConverterMethod> methods = new LinkedHashSet<>();
+  public DomainEntityConverter deduce(BaseDomainEntity<?> domainEntity, Set<Service> services) {
+    Set<DomainEntityConverterMethod> methods = new LinkedHashSet<>();
 
-    deduceValueObjectFromDto(methods, domainObject, services);
+    deduceValueObjectFromDto(methods, domainEntity, services);
     // TODO
-    // deduceFetchOneDtoFromDomainObject(domainObject, services);
-    deduceFetchCollectionDtoFromDomainObject(methods, domainObject, services);
+    // deduceFetchOneDtoFromDomainObject(domainEntity, services);
+    deduceFetchCollectionDtoFromDomainObject(methods, domainEntity, services);
 
-    return new DomainObjectConverter(domainObject, methods);
+    return new DomainEntityConverter(domainEntity, methods);
   }
 
   // ===============================================================================================
   // PRIVATE
   // ===============================================================================================
 
+  /**
+   * Deduce value object from dto.
+   *
+   * @param methods the methods
+   * @param domainObject the domain object
+   * @param services the services
+   */
   private void deduceValueObjectFromDto(
-      Set<DomainObjectConverterMethod> methods,
-      BaseDomainObject<?> domainObject,
+      Set<DomainEntityConverterMethod> methods,
+      BaseDomainEntity<?> domainObject,
       Set<Service> services) {
 
     domainObject
@@ -103,8 +110,15 @@ public class DomainObjectConverterDeducer {
             });
   }
 
+  /**
+   * Make value object conversion.
+   *
+   * @param methods the methods
+   * @param dto the dto
+   * @param valueObject the value object
+   */
   private void makeValueObjectConversion(
-      Set<DomainObjectConverterMethod> methods, Dto dto, ValueObject valueObject) {
+      Set<DomainEntityConverterMethod> methods, Dto dto, ValueObject valueObject) {
     Thing thing = ThingBuilder.generic().setThingName(new ThingName("Converter")).createThing();
 
     Function functionToVo =
@@ -115,7 +129,7 @@ public class DomainObjectConverterDeducer {
             new LinkedHashSet<>(Arrays.asList(new Argument(dto.getDataGroup()))),
             new ReturnValue(valueObject.getData()));
 
-    methods.add(new DomainObjectConverterMethod(functionToVo, dto, valueObject));
+    methods.add(new DomainEntityConverterMethod(functionToVo, dto, valueObject));
 
     Function functionToDto =
         new Function(
@@ -125,13 +139,13 @@ public class DomainObjectConverterDeducer {
             new LinkedHashSet<>(Arrays.asList(new Argument(valueObject.getData()))),
             new ReturnValue(dto.getDataGroup()));
 
-    methods.add(new DomainObjectConverterMethod(functionToDto, valueObject, dto));
+    methods.add(new DomainEntityConverterMethod(functionToDto, valueObject, dto));
   }
 
   // TODO
   //  private void deduceFetchOneDtoFromDomainObject(
-  //      Set<DomainObjectConverterMethod> methods,
-  //      BaseDomainObject<?> domainObject,
+  //      Set<DomainEntityConverterMethod> methods,
+  //      BaseDomainEntity<?> domainObject,
   //      Set<Service> services) {
   //
   //    services.forEach(
@@ -147,9 +161,16 @@ public class DomainObjectConverterDeducer {
   //        });
   //  }
 
+  /**
+   * Deduce fetch collection dto from domain object.
+   *
+   * @param methods the methods
+   * @param domainObject the domain object
+   * @param services the services
+   */
   private void deduceFetchCollectionDtoFromDomainObject(
-      Set<DomainObjectConverterMethod> methods,
-      BaseDomainObject<?> domainObject,
+      Set<DomainEntityConverterMethod> methods,
+      BaseDomainEntity<?> domainObject,
       Set<Service> services) {
 
     services.forEach(
@@ -176,10 +197,17 @@ public class DomainObjectConverterDeducer {
         });
   }
 
+  /**
+   * Make collection record.
+   *
+   * @param methods the methods
+   * @param dtoCollectionRecord the dto collection record
+   * @param domainObject the domain object
+   */
   private void makeCollectionRecord(
-      Set<DomainObjectConverterMethod> methods,
+      Set<DomainEntityConverterMethod> methods,
       Dto dtoCollectionRecord,
-      BaseDomainObject<?> domainObject) {
+      BaseDomainEntity<?> domainObject) {
 
     Thing thing = ThingBuilder.generic().setThingName(new ThingName("Converter")).createThing();
 
@@ -195,7 +223,7 @@ public class DomainObjectConverterDeducer {
                 Arrays.asList(new Argument(transformDomainObjectToDataGroup(domainObject)))),
             new ReturnValue(dtoCollectionRecord.getDataGroup()));
 
-    methods.add(new DomainObjectConverterMethod(function, domainObject, dtoCollectionRecord));
+    methods.add(new DomainEntityConverterMethod(function, domainObject, dtoCollectionRecord));
   }
 
   /**
@@ -204,7 +232,7 @@ public class DomainObjectConverterDeducer {
    * @param domainObject the domain object
    * @return the data group
    */
-  private DataGroup transformDomainObjectToDataGroup(BaseDomainObject<?> domainObject) {
+  private DataGroup transformDomainObjectToDataGroup(BaseDomainEntity<?> domainObject) {
 
     DataGroup dataGroup =
         new DataGroup(
@@ -215,6 +243,13 @@ public class DomainObjectConverterDeducer {
     return dataGroup;
   }
 
+  /**
+   * Find dto in service from data group dto.
+   *
+   * @param service the service
+   * @param dataGroup the data group
+   * @return the dto
+   */
   private Dto findDtoInServiceFromDataGroup(Service service, Data dataGroup) {
     return service
         .getDtos()

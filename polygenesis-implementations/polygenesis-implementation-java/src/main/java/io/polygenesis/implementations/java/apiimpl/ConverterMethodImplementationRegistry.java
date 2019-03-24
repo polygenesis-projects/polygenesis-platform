@@ -24,7 +24,7 @@ import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.ThingScopeType;
 import io.polygenesis.implementations.java.ScopeGoalTuple;
-import io.polygenesis.models.apiimpl.DomainObjectConverterMethod;
+import io.polygenesis.models.apiimpl.DomainEntityConverterMethod;
 import io.polygenesis.representations.java.MethodRepresentation;
 import java.util.HashMap;
 import java.util.Map;
@@ -67,19 +67,19 @@ public class ConverterMethodImplementationRegistry {
    * Implementation optional.
    *
    * @param freemarkerService the freemarker service
-   * @param domainObjectConverterMethod the domain object converter method
+   * @param domainEntityConverterMethod the domain object converter method
    * @param methodRepresentation the method representation
    * @return the optional
    */
   public Optional<String> implementation(
       FreemarkerService freemarkerService,
-      DomainObjectConverterMethod domainObjectConverterMethod,
+      DomainEntityConverterMethod domainEntityConverterMethod,
       MethodRepresentation methodRepresentation) {
-    if (isConverterMethodSupported(domainObjectConverterMethod)) {
+    if (isConverterMethodSupported(domainEntityConverterMethod)) {
       return Optional.of(
-          domainObjectConverterMethodImplementorFor(domainObjectConverterMethod)
+          domainObjectConverterMethodImplementorFor(domainEntityConverterMethod)
               .implementationFor(
-                  freemarkerService, domainObjectConverterMethod, methodRepresentation));
+                  freemarkerService, domainEntityConverterMethod, methodRepresentation));
     } else {
       return Optional.empty();
     }
@@ -88,16 +88,16 @@ public class ConverterMethodImplementationRegistry {
   /**
    * Is converter method supported boolean.
    *
-   * @param domainObjectConverterMethod the domain object converter method
+   * @param domainEntityConverterMethod the domain object converter method
    * @return the boolean
    */
   public boolean isConverterMethodSupported(
-      DomainObjectConverterMethod domainObjectConverterMethod) {
+      DomainEntityConverterMethod domainEntityConverterMethod) {
     return scopeAndGoalMap.containsKey(
         new ScopeGoalTuple(
-            domainObjectConverterMethod.getFunction().getThing().getThingScopeType(),
+            domainEntityConverterMethod.getFunction().getThing().getThingScopeType(),
             TextConverter.toUpperUnderscore(
-                domainObjectConverterMethod.getFunction().getGoal().getText())));
+                domainEntityConverterMethod.getFunction().getGoal().getText())));
   }
 
   // ===============================================================================================
@@ -105,11 +105,11 @@ public class ConverterMethodImplementationRegistry {
   // ===============================================================================================
 
   private DomainObjectConverterMethodImplementor domainObjectConverterMethodImplementorFor(
-      DomainObjectConverterMethod domainObjectConverterMethod) {
+      DomainEntityConverterMethod domainEntityConverterMethod) {
     return scopeAndGoalMap.get(
         new ScopeGoalTuple(
-            domainObjectConverterMethod.getFunction().getThing().getThingScopeType(),
+            domainEntityConverterMethod.getFunction().getThing().getThingScopeType(),
             TextConverter.toUpperUnderscore(
-                domainObjectConverterMethod.getFunction().getGoal().getText())));
+                domainEntityConverterMethod.getFunction().getGoal().getText())));
   }
 }

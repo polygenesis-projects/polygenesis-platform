@@ -26,12 +26,14 @@ import io.polygenesis.core.Deducer;
 import io.polygenesis.core.ModelRepository;
 import io.polygenesis.core.Thing;
 import io.polygenesis.core.ThingRepository;
+import io.polygenesis.models.api.Service;
 import io.polygenesis.models.api.ServiceModelRepository;
-import io.polygenesis.models.apiimpl.DomainObjectConverter;
+import io.polygenesis.models.apiimpl.DomainEntityConverter;
 import io.polygenesis.models.apiimpl.ServiceImplementation;
 import io.polygenesis.models.apiimpl.ServiceImplementationModelRepository;
 import io.polygenesis.models.domain.AggregateEntityCollection;
-import io.polygenesis.models.domain.BaseDomainObject;
+import io.polygenesis.models.domain.AggregateRootPersistable;
+import io.polygenesis.models.domain.BaseDomainEntity;
 import io.polygenesis.models.domain.DomainModelRepository;
 import io.polygenesis.models.domain.PropertyType;
 import java.util.LinkedHashSet;
@@ -49,7 +51,7 @@ public class ApiImplDeducer implements Deducer<ServiceImplementationModelReposit
   // DEPENDENCIES
   // ===============================================================================================
 
-  private final DomainObjectConverterDeducer domainObjectConverterDeducer;
+  private final DomainEntityConverterDeducer domainEntityConverterDeducer;
   private final ServiceImplementationDeducer serviceImplementationDeducer;
 
   // ===============================================================================================
@@ -59,13 +61,13 @@ public class ApiImplDeducer implements Deducer<ServiceImplementationModelReposit
   /**
    * Instantiates a new Api impl deducer.
    *
-   * @param domainObjectConverterDeducer the aggregate root converter deducer
+   * @param domainEntityConverterDeducer the aggregate root converter deducer
    * @param serviceImplementationDeducer the service implementation deducer
    */
   public ApiImplDeducer(
-      DomainObjectConverterDeducer domainObjectConverterDeducer,
+      DomainEntityConverterDeducer domainEntityConverterDeducer,
       ServiceImplementationDeducer serviceImplementationDeducer) {
-    this.domainObjectConverterDeducer = domainObjectConverterDeducer;
+    this.domainEntityConverterDeducer = domainEntityConverterDeducer;
     this.serviceImplementationDeducer = serviceImplementationDeducer;
   }
 
@@ -81,42 +83,22 @@ public class ApiImplDeducer implements Deducer<ServiceImplementationModelReposit
         CoreRegistry.getModelRepositoryResolver()
             .resolve(modelRepositories, ServiceModelRepository.class);
 
-    Set<DomainObjectConverter> domainObjectConverters = new LinkedHashSet<>();
-    thingRepository
-        .getApiThings()
-        .forEach(
-            thing -> {
-              Optional<BaseDomainObject> optionalDomainObject =
-                  getOptionalDomainObject(thing, modelRepositories);
+    DomainModelRepository domainModelRepository =
+        CoreRegistry.getModelRepositoryResolver()
+            .resolve(modelRepositories, DomainModelRepository.class);
 
-              if (optionalDomainObject.isPresent()) {
-                domainObjectConverters.add(
-                    domainObjectConverterDeducer.deduce(
-                        optionalDomainObject.get(),
-                        serviceModelRepository.getServicesBy(thing.getThingName())));
-              }
-            });
+    Set<DomainEntityConverter> domainEntityConverters = new LinkedHashSet<>();
+    fillDomainEntityConverters(
+        domainEntityConverters, thingRepository, serviceModelRepository, domainModelRepository);
 
     Set<ServiceImplementation> serviceImplementations = new LinkedHashSet<>();
-    serviceModelRepository
-        .getServices()
-        .forEach(
-            service -> {
-              Optional<DomainObjectConverter> optionalDomainObjectConverter =
-                  getOptionalDomainObjectConverter(
-                      domainObjectConverters, new ObjectName(service.getThingName().getText()));
+    fillServiceImplementations(
+        serviceImplementations,
+        serviceModelRepository,
+        domainEntityConverters,
+        domainModelRepository);
 
-              DomainObjectConverter domainObjectConverter = optionalDomainObjectConverter.get();
-              if (optionalDomainObjectConverter.isPresent()) {
-                serviceImplementations.add(
-                    serviceImplementationDeducer.deduce(
-                        service, domainObjectConverter.getDomainObject(), domainObjectConverter));
-              } else {
-                serviceImplementations.add(serviceImplementationDeducer.deduce(service));
-              }
-            });
-
-    return new ServiceImplementationModelRepository(serviceImplementations, domainObjectConverters);
+    return new ServiceImplementationModelRepository(serviceImplementations, domainEntityConverters);
   }
 
   // ===============================================================================================
@@ -124,47 +106,122 @@ public class ApiImplDeducer implements Deducer<ServiceImplementationModelReposit
   // ===============================================================================================
 
   /**
+   * Fill domain entity converters.
+   *
+   * @param domainEntityConverters the domain entity converters
+   * @param thingRepository the thing repository
+   * @param serviceModelRepository the service model repository
+   * @param domainModelRepository the domain model repository
+   */
+  protected void fillDomainEntityConverters(
+      Set<DomainEntityConverter> domainEntityConverters,
+      ThingRepository thingRepository,
+      ServiceModelRepository serviceModelRepository,
+      DomainModelRepository domainModelRepository) {
+    thingRepository
+        .getApiThings()
+        .forEach(
+            thing -> {
+              Optional<BaseDomainEntity> optionalDomainObject =
+                  getOptionalDomainEntity(thing, domainModelRepository);
+
+              if (optionalDomainObject.isPresent()) {
+                domainEntityConverters.add(
+                    domainEntityConverterDeducer.deduce(
+                        optionalDomainObject.get(),
+                        serviceModelRepository.getServicesBy(thing.getThingName())));
+              }
+            });
+  }
+
+  /**
+   * Fill service implementations.
+   *
+   * @param serviceImplementations the service implementations
+   * @param serviceModelRepository the service model repository
+   * @param domainEntityConverters the domain entity converters
+   */
+  private void fillServiceImplementations(
+      Set<ServiceImplementation> serviceImplementations,
+      ServiceModelRepository serviceModelRepository,
+      Set<DomainEntityConverter> domainEntityConverters,
+      DomainModelRepository domainModelRepository) {
+    serviceModelRepository
+        .getServices()
+        .forEach(
+            service ->
+                serviceImplementations.add(
+                    serviceImplementation(service, domainEntityConverters, domainModelRepository)));
+  }
+
+  /**
+   * Service implementation service implementation.
+   *
+   * @param service the service
+   * @param domainEntityConverters the domain entity converters
+   * @param domainModelRepository the domain model repository
+   * @return the service implementation
+   */
+  private ServiceImplementation serviceImplementation(
+      Service service,
+      Set<DomainEntityConverter> domainEntityConverters,
+      DomainModelRepository domainModelRepository) {
+
+    Optional<DomainEntityConverter> optionalDomainEntityConverter =
+        getOptionalDomainObjectConverter(
+            domainEntityConverters, new ObjectName(service.getThingName().getText()));
+
+    DomainEntityConverter domainEntityConverter = optionalDomainEntityConverter.get();
+
+    if (optionalDomainEntityConverter.isPresent()) {
+      return serviceImplementationDeducer.deduce(
+          service,
+          domainEntityConverter.getDomainEntity(),
+          aggregateRootParent(domainModelRepository, domainEntityConverter.getDomainEntity()),
+          domainEntityConverter);
+    } else {
+      return serviceImplementationDeducer.deduce(service);
+    }
+  }
+
+  /**
    * Gets optional domain object converter.
    *
-   * @param domainObjectConverters the domain object converters
+   * @param domainEntityConverters the domain object converters
    * @param domainObjectName the domain object name
    * @return the optional domain object converter
    */
-  private Optional<DomainObjectConverter> getOptionalDomainObjectConverter(
-      Set<DomainObjectConverter> domainObjectConverters, ObjectName domainObjectName) {
-    return domainObjectConverters
+  private Optional<DomainEntityConverter> getOptionalDomainObjectConverter(
+      Set<DomainEntityConverter> domainEntityConverters, ObjectName domainObjectName) {
+    return domainEntityConverters
         .stream()
         .filter(
             domainObjectConverter ->
-                domainObjectConverter.getDomainObject().getObjectName().equals(domainObjectName))
+                domainObjectConverter.getDomainEntity().getObjectName().equals(domainObjectName))
         .findFirst();
   }
 
   /**
-   * Gets optional domain object.
+   * Gets optional domain entity.
    *
    * @param thing the thing
-   * @param modelRepositories the model repositories
+   * @param domainModelRepository the domain model repository
    * @return the optional domain object
    */
-  private Optional<BaseDomainObject> getOptionalDomainObject(
-      Thing thing, Set<ModelRepository> modelRepositories) {
-    DomainModelRepository domainModelRepository =
-        CoreRegistry.getModelRepositoryResolver()
-            .resolve(modelRepositories, DomainModelRepository.class);
-
+  private Optional<BaseDomainEntity> getOptionalDomainEntity(
+      Thing thing, DomainModelRepository domainModelRepository) {
     ObjectName objectName = new ObjectName(thing.getThingName().getText());
 
-    Optional<BaseDomainObject> optionalBaseDomainObject =
+    Optional<BaseDomainEntity> optionalBaseDomainEntity =
         domainModelRepository
             .getAggregateRoots()
             .stream()
             .filter(aggregateRoot -> aggregateRoot.getObjectName().equals(objectName))
-            .map(aggregateRoot -> (BaseDomainObject) aggregateRoot)
+            .map(aggregateRoot -> (BaseDomainEntity) aggregateRoot)
             .findFirst();
 
-    if (optionalBaseDomainObject.isPresent()) {
-      return optionalBaseDomainObject;
+    if (optionalBaseDomainEntity.isPresent()) {
+      return optionalBaseDomainEntity;
     }
 
     Optional<AggregateEntityCollection> optionalAggregateEntityCollection =
@@ -189,5 +246,23 @@ public class ApiImplDeducer implements Deducer<ServiceImplementationModelReposit
     }
 
     return Optional.empty();
+  }
+
+  /**
+   * Aggregate root parent optional.
+   *
+   * @param domainModelRepository the domain model repository
+   * @param domainEntity the domain entity
+   * @return the optional
+   */
+  protected Optional<AggregateRootPersistable> aggregateRootParent(
+      DomainModelRepository domainModelRepository, BaseDomainEntity<?> domainEntity) {
+
+    return domainModelRepository
+        .getAggregateRoots()
+        .stream()
+        .filter(aggregateRoot -> aggregateRoot.contains(domainEntity))
+        .map(AggregateRootPersistable.class::cast)
+        .findFirst();
   }
 }
