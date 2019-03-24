@@ -40,19 +40,12 @@
 
     <!--SPRING SECURITY OAUTH2-->
     <#--<dependency>-->
-      <#--<groupId>org.springframework.security.oauth</groupId>-->
-      <#--<artifactId>spring-security-oauth2</artifactId>-->
+      <#--<groupId>org.springframework.security.oauth.boot</groupId>-->
+      <#--<artifactId>spring-security-oauth2-autoconfigure</artifactId>-->
       <#--<#noparse>-->
-      <#--<version>${spring-security-oauth2.version}</version>-->
+      <#--<version>${spring-security-oauth2-autoconfigure.version}</version>-->
       <#--</#noparse>-->
     <#--</dependency>-->
-    <dependency>
-      <groupId>org.springframework.security.oauth.boot</groupId>
-      <artifactId>spring-security-oauth2-autoconfigure</artifactId>
-      <#noparse>
-      <version>${spring-security-oauth2-autoconfigure.version}</version>
-      </#noparse>
-    </dependency>
 
     <!--APACHE-->
     <dependency>

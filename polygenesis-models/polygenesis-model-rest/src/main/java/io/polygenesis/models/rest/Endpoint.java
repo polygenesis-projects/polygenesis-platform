@@ -20,8 +20,10 @@
 
 package io.polygenesis.models.rest;
 
-import io.polygenesis.core.Function;
+import com.oregor.ddd4j.check.assertion.Assertion;
 import io.polygenesis.models.api.Service;
+import io.polygenesis.models.api.ServiceMethod;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -32,7 +34,7 @@ import java.util.Set;
 public class Endpoint {
 
   private Service service;
-  private Function function;
+  private ServiceMethod serviceMethod;
   private HttpMethod httpMethod;
   private Set<Mapping> mappings;
   private Set<RequestParameter> requestParameters;
@@ -45,19 +47,16 @@ public class Endpoint {
    * Instantiates a new Endpoint.
    *
    * @param service the service
-   * @param function the function
+   * @param serviceMethod the service method
    * @param httpMethod the http method
    * @param mappings the mappings
    * @param requestParameters the request parameters
    */
-  public Endpoint(
-      Service service,
-      Function function,
-      HttpMethod httpMethod,
-      Set<Mapping> mappings,
+  public Endpoint(Service service, ServiceMethod serviceMethod,
+      HttpMethod httpMethod, Set<Mapping> mappings,
       Set<RequestParameter> requestParameters) {
     setService(service);
-    setFunction(function);
+    setServiceMethod(serviceMethod);
     setHttpMethod(httpMethod);
     setMappings(mappings);
     setRequestParameters(requestParameters);
@@ -77,12 +76,12 @@ public class Endpoint {
   }
 
   /**
-   * Gets function.
+   * Gets service method.
    *
-   * @return the function
+   * @return the service method
    */
-  public Function getFunction() {
-    return function;
+  public ServiceMethod getServiceMethod() {
+    return serviceMethod;
   }
 
   /**
@@ -122,16 +121,18 @@ public class Endpoint {
    * @param service the service
    */
   private void setService(Service service) {
+    Assertion.isNotNull(service, "service is required");
     this.service = service;
   }
 
   /**
-   * Sets function.
+   * Sets service method.
    *
-   * @param function the function
+   * @param serviceMethod the service method
    */
-  private void setFunction(Function function) {
-    this.function = function;
+  public void setServiceMethod(ServiceMethod serviceMethod) {
+    Assertion.isNotNull(serviceMethod, "serviceMethod is required");
+    this.serviceMethod = serviceMethod;
   }
 
   /**
@@ -140,6 +141,7 @@ public class Endpoint {
    * @param httpMethod the http method
    */
   private void setHttpMethod(HttpMethod httpMethod) {
+    Assertion.isNotNull(httpMethod, "httpMethod is required");
     this.httpMethod = httpMethod;
   }
 
@@ -149,6 +151,7 @@ public class Endpoint {
    * @param mappings the mappings
    */
   private void setMappings(Set<Mapping> mappings) {
+    Assertion.isNotNull(mappings, "mappings is required");
     this.mappings = mappings;
   }
 
@@ -158,6 +161,32 @@ public class Endpoint {
    * @param requestParameters the request parameters
    */
   private void setRequestParameters(Set<RequestParameter> requestParameters) {
+    Assertion.isNotNull(requestParameters, "requestParameters is required");
     this.requestParameters = requestParameters;
+  }
+
+  // ===============================================================================================
+  // OVERRIDES
+  // ===============================================================================================
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Endpoint endpoint = (Endpoint) o;
+    return Objects.equals(service, endpoint.service) &&
+        Objects.equals(serviceMethod, endpoint.serviceMethod) &&
+        httpMethod == endpoint.httpMethod &&
+        Objects.equals(mappings, endpoint.mappings) &&
+        Objects.equals(requestParameters, endpoint.requestParameters);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(service, serviceMethod, httpMethod, mappings, requestParameters);
   }
 }

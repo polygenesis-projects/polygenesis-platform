@@ -108,10 +108,11 @@ public class ResourceClassRepresentable extends AbstractClassRepresentable<Resou
     PackageName rootPackageName = (PackageName) args[0];
     Set<String> imports = new TreeSet<>();
 
+    imports.add(String.format("%s.RestConstants", rootPackageName.getText()));
     imports.add("org.springframework.web.bind.annotation.RestController");
     imports.add("org.springframework.web.bind.annotation.RequestMapping");
     imports.add("com.oregor.ddd4j.rest.AbstractRestController");
-    imports.add(String.format("%s.RestConstants", rootPackageName.getText()));
+    imports.add("javax.servlet.http.HttpServletRequest");
 
     source
         .getEndpoints()
@@ -127,6 +128,7 @@ public class ResourceClassRepresentable extends AbstractClassRepresentable<Resou
                 imports.add("org.springframework.web.bind.annotation.RequestBody");
               } else if (endpoint.getHttpMethod().equals(HttpMethod.GET)) {
                 imports.add("org.springframework.web.bind.annotation.GetMapping");
+                imports.add("org.springframework.web.bind.annotation.RequestParam");
               } else if (endpoint.getHttpMethod().equals(HttpMethod.DELETE)) {
                 imports.add("org.springframework.web.bind.annotation.DeleteMapping");
               }

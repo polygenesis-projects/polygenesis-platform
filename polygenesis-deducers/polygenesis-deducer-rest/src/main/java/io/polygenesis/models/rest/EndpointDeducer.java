@@ -22,8 +22,8 @@ package io.polygenesis.models.rest;
 
 import io.polygenesis.annotations.core.GoalType;
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.Function;
 import io.polygenesis.models.api.Service;
+import io.polygenesis.models.api.ServiceMethod;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -79,12 +79,13 @@ public class EndpointDeducer {
   /**
    * Deduce from function optional endpoint.
    *
-   * @param function the function
+   * @param serviceMethod the service method
    * @param service the service
    * @return the optional endpoint
    */
-  public Optional<Endpoint> deduceFromFunction(Function function, Service service) {
-    String goalType = TextConverter.toUpperUnderscore(function.getGoal().getText());
+  public Optional<Endpoint> deduceFromServiceMethod(ServiceMethod serviceMethod, Service service) {
+    String goalType = TextConverter
+        .toUpperUnderscore(serviceMethod.getFunction().getGoal().getText());
 
     if (goalToHttpMethod.containsKey(goalType)) {
       HttpMethod httpMethod = goalToHttpMethod.get(goalType);
@@ -92,10 +93,10 @@ public class EndpointDeducer {
       return Optional.of(
           new Endpoint(
               service,
-              function,
+              serviceMethod,
               httpMethod,
-              mappingDeducer.deduceFrom(function, httpMethod),
-              requestParameterDeducer.deduceFrom(function)));
+              mappingDeducer.deduceFrom(serviceMethod.getFunction(), httpMethod),
+              requestParameterDeducer.deduceFrom(serviceMethod.getFunction())));
     } else {
       return Optional.empty();
     }

@@ -69,7 +69,7 @@ public class EndpointMethodRepresentable extends AbstractMethodRepresentable<End
   }
 
   // ===============================================================================================
-  // OVERRIDES
+  // IMPLEMENTATIONS
   // ===============================================================================================
 
   @Override
@@ -95,7 +95,8 @@ public class EndpointMethodRepresentable extends AbstractMethodRepresentable<End
 
     stringBuilder.append("REST Endpoint for ");
     stringBuilder.append(
-        TextConverter.toUpperCamelSpaces(source.getFunction().getName().getText()));
+        TextConverter
+            .toUpperCamelSpaces(source.getServiceMethod().getFunction().getName().getText()));
     stringBuilder.append(".");
 
     return stringBuilder.toString();
@@ -108,21 +109,36 @@ public class EndpointMethodRepresentable extends AbstractMethodRepresentable<End
 
   @Override
   public String methodName(Endpoint source, Object... args) {
-    return source.getFunction().getName().getText();
+    return source.getServiceMethod().getFunction().getName().getText();
   }
 
   @Override
   public Set<ParameterRepresentation> parameterRepresentations(Endpoint source, Object... args) {
     Set<ParameterRepresentation> parameterRepresentations = new LinkedHashSet<>();
 
+    switch (source.getHttpMethod()) {
+      case GET:
+        if (source.getServiceMethod().getFunction().getGoal().isFetchOne()) {
+          ;
+        } else if (source.getServiceMethod().getFunction().getGoal().isFetchCollection()) {
+          ;
+        } else if (source.getServiceMethod().getFunction().getGoal().isFetchPagedCollection()) {
+          parameterRepresentations.addAll(parameterRepresentationsForPagedCollection());
+        }
+        break;
+      default:
+        break;
+    }
+
     source
+        .getServiceMethod()
         .getFunction()
         .getArguments()
         .forEach(
             argument -> {
               if (argument.getData().isDataGroup()
-                  && (source.getFunction().getGoal().isCreate()
-                      || source.getFunction().getGoal().isModify())) {
+                  && (source.getServiceMethod().getFunction().getGoal().isCreate()
+                  || source.getServiceMethod().getFunction().getGoal().isModify())) {
                 parameterRepresentations.add(
                     new ParameterRepresentation(
                         fromDataTypeToJavaConverter.getDeclaredVariableType(
@@ -130,21 +146,25 @@ public class EndpointMethodRepresentable extends AbstractMethodRepresentable<End
                         argument.getData().getVariableName().getText(),
                         new LinkedHashSet<>(Arrays.asList("@RequestBody"))));
               } else {
-                parameterRepresentations.add(
-                    new ParameterRepresentation(
-                        fromDataTypeToJavaConverter.getDeclaredVariableType(
-                            argument.getData().getDataType()),
-                        argument.getData().getVariableName().getText()));
+//                parameterRepresentations.add(
+//                    new ParameterRepresentation(
+//                        fromDataTypeToJavaConverter.getDeclaredVariableType(
+//                            argument.getData().getDataType()),
+//                        argument.getData().getVariableName().getText()));
               }
             });
+
+    parameterRepresentations.add(
+        new ParameterRepresentation("HttpServletRequest", "httpServletRequest"));
 
     return parameterRepresentations;
   }
 
   @Override
   public String returnValue(Endpoint source, Object... args) {
-    if (source.getFunction().getReturnValue() != null) {
-      return makeVariableDataType(source.getFunction().getReturnValue().getData());
+    if (source.getServiceMethod().getFunction().getReturnValue() != null) {
+      return makeVariableDataType(
+          source.getServiceMethod().getFunction().getReturnValue().getData());
     } else {
       return fromDataTypeToJavaConverter.getDeclaredVariableType(PrimitiveType.VOID.name());
     }
@@ -154,20 +174,75 @@ public class EndpointMethodRepresentable extends AbstractMethodRepresentable<End
   public String implementation(Endpoint source, Object... args) {
     StringBuilder stringBuilder = new StringBuilder();
 
+    // ---------------------------------------------------------------------------------------------
+    if (source.getHttpMethod().equals(HttpMethod.GET)) {
+      stringBuilder.append("\t\t");
+      stringBuilder.append(TextConverter
+          .toUpperCamel(source.getServiceMethod().getRequestDto().getDataGroup().getDataType()));
+      stringBuilder.append(" ");
+      stringBuilder.append(TextConverter
+          .toLowerCamel(source.getServiceMethod().getRequestDto().getDataGroup().getDataType()));
+      stringBuilder.append(" = new ");
+      stringBuilder.append(TextConverter
+          .toUpperCamel(source.getServiceMethod().getRequestDto().getDataGroup().getDataType()));
+      stringBuilder.append("();\n");
+
+      // ---------------------------------------------------------------------------------------------
+
+      if (source.getServiceMethod().getFunction().getGoal().isFetchPagedCollection()) {
+        stringBuilder.append("\t\t");
+        stringBuilder.append(TextConverter
+            .toLowerCamel(source.getServiceMethod().getRequestDto().getDataGroup().getDataType()));
+        stringBuilder.append(".setPageNumber(pageNumber);\n");
+
+        stringBuilder.append("\t\t");
+        stringBuilder.append(TextConverter
+            .toLowerCamel(source.getServiceMethod().getRequestDto().getDataGroup().getDataType()));
+        stringBuilder.append(".setPageSize(pageSize);\n");
+
+      }
+    }
+    // ---------------------------------------------------------------------------------------------
+
     stringBuilder.append("\t\t");
-    if (source.getFunction().getReturnValue() != null) {
+    stringBuilder.append(TextConverter
+        .toLowerCamel(source.getServiceMethod().getRequestDto().getDataGroup().getDataType()));
+    stringBuilder.append(".setTenantId(this.getTenantId(httpServletRequest));\n");
+    stringBuilder.append("\t\t");
+    stringBuilder.append(TextConverter
+        .toLowerCamel(source.getServiceMethod().getRequestDto().getDataGroup().getDataType()));
+    stringBuilder.append(".setIpAddress(this.getRemoteIpAddress(httpServletRequest));\n");
+
+    // ---------------------------------------------------------------------------------------------
+    stringBuilder.append("\t\t");
+    if (source.getServiceMethod().getFunction().getReturnValue() != null) {
       stringBuilder.append("return");
       stringBuilder.append(" ");
     }
     stringBuilder.append(
         TextConverter.toLowerCamel(source.getService().getServiceName().getText()));
     stringBuilder.append(".");
-    stringBuilder.append(source.getFunction().getName().getText());
+    stringBuilder.append(source.getServiceMethod().getFunction().getName().getText());
     stringBuilder.append("(");
-    stringBuilder.append(getParametersCommaSeparated(parameterRepresentations(source)));
+    stringBuilder.append(TextConverter
+        .toLowerCamel(source.getServiceMethod().getRequestDto().getDataGroup().getDataType()));
     stringBuilder.append(");");
 
     return stringBuilder.toString();
+  }
+
+  // ===============================================================================================
+  // OVERRIDES
+  // ===============================================================================================
+
+  @Override
+  protected String getParametersCommaSeparated(
+      Set<ParameterRepresentation> parameterRepresentations) {
+    return parameterRepresentations
+        .stream()
+        .map(parameterRepresentation -> parameterRepresentation.getVariableName())
+        .filter(variableName -> !variableName.equals("httpServletRequest"))
+        .collect(Collectors.joining(", "));
   }
 
   // ===============================================================================================
@@ -202,7 +277,8 @@ public class EndpointMethodRepresentable extends AbstractMethodRepresentable<End
               if (endpoint.getHttpMethod().equals(HttpMethod.PUT)) {
                 stringBuilder.append("/");
                 stringBuilder.append(
-                    TextConverter.toLowerHyphen(endpoint.getFunction().getName().getText()));
+                    TextConverter.toLowerHyphen(
+                        endpoint.getServiceMethod().getFunction().getName().getText()));
               }
 
               stringBuilder.append("\"");
@@ -211,5 +287,28 @@ public class EndpointMethodRepresentable extends AbstractMethodRepresentable<End
     stringBuilder.append("})");
 
     return stringBuilder.toString();
+  }
+
+  /**
+   * Parameter representations for paged collection set.
+   *
+   * @return the set
+   */
+  private Set<ParameterRepresentation> parameterRepresentationsForPagedCollection() {
+    Set<ParameterRepresentation> parameterRepresentations = new LinkedHashSet<>();
+
+    parameterRepresentations.add(
+        new ParameterRepresentation("Integer", "pageNumber",
+            new LinkedHashSet<>(Arrays.asList("@RequestParam"))));
+
+    parameterRepresentations.add(
+        new ParameterRepresentation("Integer", "pageSize",
+            new LinkedHashSet<>(Arrays.asList("@RequestParam"))));
+
+    parameterRepresentations.add(
+        new ParameterRepresentation("String", "query",
+            new LinkedHashSet<>(Arrays.asList("@RequestParam(required = false)"))));
+
+    return parameterRepresentations;
   }
 }
