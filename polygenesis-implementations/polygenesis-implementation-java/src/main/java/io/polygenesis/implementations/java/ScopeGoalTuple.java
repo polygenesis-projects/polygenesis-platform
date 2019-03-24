@@ -18,7 +18,7 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.implementations.java.apiimpl;
+package io.polygenesis.implementations.java;
 
 import io.polygenesis.core.ThingScopeType;
 import java.util.Objects;

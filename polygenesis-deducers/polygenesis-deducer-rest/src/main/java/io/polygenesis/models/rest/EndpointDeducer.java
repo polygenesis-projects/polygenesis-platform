@@ -84,8 +84,8 @@ public class EndpointDeducer {
    * @return the optional endpoint
    */
   public Optional<Endpoint> deduceFromServiceMethod(ServiceMethod serviceMethod, Service service) {
-    String goalType = TextConverter
-        .toUpperUnderscore(serviceMethod.getFunction().getGoal().getText());
+    String goalType =
+        TextConverter.toUpperUnderscore(serviceMethod.getFunction().getGoal().getText());
 
     if (goalToHttpMethod.containsKey(goalType)) {
       HttpMethod httpMethod = goalToHttpMethod.get(goalType);

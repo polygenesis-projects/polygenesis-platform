@@ -17,7 +17,7 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-<#include "macro-assertions-for-parameters.ftl">
+<#include "../polygenesis-implementation-java-shared/macro-assertions-for-parameters.ftl">
 <#include "macro-restore-aggregate-root.ftl">
 <#include "macro-store-aggregate-root.ftl">
 <#include "macro-fill-arguments.ftl">

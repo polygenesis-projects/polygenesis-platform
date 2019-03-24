@@ -126,9 +126,11 @@ public class ResourceClassRepresentable extends AbstractClassRepresentable<Resou
               } else if (endpoint.getHttpMethod().equals(HttpMethod.PUT)) {
                 imports.add("org.springframework.web.bind.annotation.PutMapping");
                 imports.add("org.springframework.web.bind.annotation.RequestBody");
+                imports.add("org.springframework.web.bind.annotation.PathVariable");
               } else if (endpoint.getHttpMethod().equals(HttpMethod.GET)) {
                 imports.add("org.springframework.web.bind.annotation.GetMapping");
                 imports.add("org.springframework.web.bind.annotation.RequestParam");
+                imports.add("org.springframework.web.bind.annotation.PathVariable");
               } else if (endpoint.getHttpMethod().equals(HttpMethod.DELETE)) {
                 imports.add("org.springframework.web.bind.annotation.DeleteMapping");
               }

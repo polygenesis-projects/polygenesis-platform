@@ -169,9 +169,7 @@ public abstract class AbstractClassRepresentable<S> extends AbstractRepresentabl
    * @return the constructor representation
    */
   protected ConstructorRepresentation createEmptyConstructorWithImplementation(
-      String dataType,
-      Set<String> annotations,
-      String implementation) {
+      String dataType, Set<String> annotations, String implementation) {
     String description =
         String.format("Instantiates a new %s.", TextConverter.toUpperCamelSpaces(dataType));
 
@@ -292,20 +290,25 @@ public abstract class AbstractClassRepresentable<S> extends AbstractRepresentabl
     fieldRepresentations
         .stream()
         .limit(fieldRepresentations.size() - 1)
-        .forEach(fieldRepresentation -> {
-          methodRepresentations.add(createGetterMethod(fieldRepresentation, new LinkedHashSet<>()));
-          methodRepresentations.add(createSetterMethod(fieldRepresentation, new LinkedHashSet<>()));
-        });
+        .forEach(
+            fieldRepresentation -> {
+              methodRepresentations.add(
+                  createGetterMethod(fieldRepresentation, new LinkedHashSet<>()));
+              methodRepresentations.add(
+                  createSetterMethod(fieldRepresentation, new LinkedHashSet<>()));
+            });
 
-    FieldRepresentation fieldRepresentationLast = fieldRepresentations
-        .stream()
-        .skip(fieldRepresentations.size() - 1)
-        .findFirst()
-        .orElseThrow(IllegalArgumentException::new);
+    FieldRepresentation fieldRepresentationLast =
+        fieldRepresentations
+            .stream()
+            .skip(fieldRepresentations.size() - 1)
+            .findFirst()
+            .orElseThrow(IllegalArgumentException::new);
     methodRepresentations.add(createGetterMethod(fieldRepresentationLast, new LinkedHashSet<>()));
-    methodRepresentations.add(createSetterMethod(fieldRepresentationLast, new LinkedHashSet<>(
-        Arrays.asList("@SuppressWarnings(\"CPD-END\")")
-    )));
+    methodRepresentations.add(
+        createSetterMethod(
+            fieldRepresentationLast,
+            new LinkedHashSet<>(Arrays.asList("@SuppressWarnings(\"CPD-END\")"))));
 
     return methodRepresentations;
   }
@@ -336,8 +339,8 @@ public abstract class AbstractClassRepresentable<S> extends AbstractRepresentabl
    * @param annotations the annotations
    * @return the method representation
    */
-  protected MethodRepresentation createGetterMethod(FieldRepresentation fieldRepresentation,
-      Set<String> annotations) {
+  protected MethodRepresentation createGetterMethod(
+      FieldRepresentation fieldRepresentation, Set<String> annotations) {
     return new MethodRepresentation(
         MethodRepresentationType.GETTER,
         new LinkedHashSet<>(),
@@ -359,10 +362,10 @@ public abstract class AbstractClassRepresentable<S> extends AbstractRepresentabl
    * @param annotations the annotations
    * @return the method representation
    */
-  protected MethodRepresentation createGuardMethod(FieldRepresentation fieldRepresentation,
-      Set<String> annotations) {
-    return createSetterOrGuardMethod(fieldRepresentation, MethodRepresentationType.GUARD,
-        annotations);
+  protected MethodRepresentation createGuardMethod(
+      FieldRepresentation fieldRepresentation, Set<String> annotations) {
+    return createSetterOrGuardMethod(
+        fieldRepresentation, MethodRepresentationType.GUARD, annotations);
   }
 
   /**
@@ -372,10 +375,10 @@ public abstract class AbstractClassRepresentable<S> extends AbstractRepresentabl
    * @param annotations the annotations
    * @return the method representation
    */
-  protected MethodRepresentation createSetterMethod(FieldRepresentation fieldRepresentation,
-      Set<String> annotations) {
-    return createSetterOrGuardMethod(fieldRepresentation, MethodRepresentationType.SETTER,
-        annotations);
+  protected MethodRepresentation createSetterMethod(
+      FieldRepresentation fieldRepresentation, Set<String> annotations) {
+    return createSetterOrGuardMethod(
+        fieldRepresentation, MethodRepresentationType.SETTER, annotations);
   }
 
   /**
@@ -402,7 +405,8 @@ public abstract class AbstractClassRepresentable<S> extends AbstractRepresentabl
    * @return the method representation
    */
   private MethodRepresentation createSetterOrGuardMethod(
-      FieldRepresentation fieldRepresentation, MethodRepresentationType methodRepresentationType,
+      FieldRepresentation fieldRepresentation,
+      MethodRepresentationType methodRepresentationType,
       Set<String> annotations) {
     String modifiers;
     switch (methodRepresentationType) {

@@ -18,6 +18,5 @@
  ===========================LICENSE_END==================================
 -->
 <#include "../polygenesis-implementation-java-shared/macro-assertions-for-parameters.ftl">
-<#include "macro-restore-aggregate-root.ftl">
-<#include "macro-store-aggregate-root.ftl">
-<@assertionsForParameters representation.parameterRepresentations></@assertionsForParameters>
+<#--<@assertionsForParameters representation.parameterRepresentations></@assertionsForParameters>-->
+    return null;

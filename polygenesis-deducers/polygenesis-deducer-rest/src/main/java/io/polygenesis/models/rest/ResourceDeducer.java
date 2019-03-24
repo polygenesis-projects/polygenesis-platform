@@ -22,7 +22,6 @@ package io.polygenesis.models.rest;
 
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
-import io.polygenesis.core.Function;
 import io.polygenesis.core.ThingRepository;
 import io.polygenesis.models.api.Service;
 import io.polygenesis.models.api.ServiceMethod;
@@ -105,13 +104,16 @@ public class ResourceDeducer {
    * @param endpoints the endpoints
    * @param services the services
    */
-  protected void fillEndpoints(Set<Endpoint> endpoints, Set<Service> services) {
-    services.forEach(service -> {
-      service.getServiceMethods()
-          .forEach(serviceMethod -> {
-            fillEndpointForServiceMethod(endpoints, service, serviceMethod);
-          });
-    });
+  private void fillEndpoints(Set<Endpoint> endpoints, Set<Service> services) {
+    services.forEach(
+        service -> {
+          service
+              .getServiceMethods()
+              .forEach(
+                  serviceMethod -> {
+                    fillEndpointForServiceMethod(endpoints, service, serviceMethod);
+                  });
+        });
   }
 
   /**
@@ -121,40 +123,12 @@ public class ResourceDeducer {
    * @param service the service
    * @param serviceMethod the service method
    */
-  private void fillEndpointForServiceMethod(Set<Endpoint> endpoints,
-      Service service,
-      ServiceMethod serviceMethod) {
-    Optional<Endpoint> optionalEndpoint = endpointDeducer
-        .deduceFromServiceMethod(serviceMethod, service);
+  private void fillEndpointForServiceMethod(
+      Set<Endpoint> endpoints, Service service, ServiceMethod serviceMethod) {
+    Optional<Endpoint> optionalEndpoint =
+        endpointDeducer.deduceFromServiceMethod(serviceMethod, service);
     if (optionalEndpoint.isPresent()) {
       endpoints.add(optionalEndpoint.get());
-    }
-  }
-
-  /**
-   * Gets service for.
-   *
-   * @param function the function
-   * @param serviceModelRepository the service model repository
-   * @return the service for
-   */
-  private Service getServiceFor(Function function, ServiceModelRepository serviceModelRepository) {
-    if (serviceModelRepository.getServices().isEmpty()) {
-      throw new IllegalStateException(
-          "serviceModelRepository is create. Check the order of the decucers.");
-    }
-
-    Optional<Service> optionalService =
-        serviceModelRepository
-            .getServicesBy(function.getThing().getThingName())
-            .stream()
-            .filter(service -> service.contains(function))
-            .findFirst();
-
-    if (optionalService.isPresent()) {
-      return optionalService.get();
-    } else {
-      throw new IllegalStateException("Could not find Service for Function");
     }
   }
 }

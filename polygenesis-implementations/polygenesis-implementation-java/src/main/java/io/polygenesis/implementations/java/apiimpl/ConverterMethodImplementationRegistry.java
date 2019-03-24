@@ -23,6 +23,7 @@ package io.polygenesis.implementations.java.apiimpl;
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.ThingScopeType;
+import io.polygenesis.implementations.java.ScopeGoalTuple;
 import io.polygenesis.models.apiimpl.DomainObjectConverterMethod;
 import io.polygenesis.representations.java.MethodRepresentation;
 import java.util.HashMap;

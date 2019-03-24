@@ -20,19 +20,24 @@
 
 package io.polygenesis.generators.java.rest;
 
+import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.text.TextConverter;
+import io.polygenesis.core.data.Data;
 import io.polygenesis.core.data.PrimitiveType;
+import io.polygenesis.implementations.java.rest.EndpointImplementationRegistry;
 import io.polygenesis.models.rest.Endpoint;
 import io.polygenesis.models.rest.HttpMethod;
 import io.polygenesis.models.rest.PathContentType;
 import io.polygenesis.representations.commons.ParameterRepresentation;
 import io.polygenesis.representations.java.AbstractMethodRepresentable;
 import io.polygenesis.representations.java.FromDataTypeToJavaConverter;
+import io.polygenesis.representations.java.MethodRepresentation;
 import io.polygenesis.representations.java.MethodRepresentationType;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -56,6 +61,13 @@ public class EndpointMethodRepresentable extends AbstractMethodRepresentable<End
   }
 
   // ===============================================================================================
+  // DEPENDENCIES
+  // ===============================================================================================
+
+  private final FreemarkerService freemarkerService;
+  private final EndpointImplementationRegistry endpointImplementationRegistry;
+
+  // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
@@ -63,14 +75,35 @@ public class EndpointMethodRepresentable extends AbstractMethodRepresentable<End
    * Instantiates a new Endpoint method representable.
    *
    * @param fromDataTypeToJavaConverter the from data type to java converter
+   * @param freemarkerService the freemarker service
+   * @param endpointImplementationRegistry the endpoint implementation registry
    */
-  public EndpointMethodRepresentable(FromDataTypeToJavaConverter fromDataTypeToJavaConverter) {
+  public EndpointMethodRepresentable(
+      FromDataTypeToJavaConverter fromDataTypeToJavaConverter,
+      FreemarkerService freemarkerService,
+      EndpointImplementationRegistry endpointImplementationRegistry) {
     super(fromDataTypeToJavaConverter);
+    this.freemarkerService = freemarkerService;
+    this.endpointImplementationRegistry = endpointImplementationRegistry;
   }
 
   // ===============================================================================================
   // IMPLEMENTATIONS
   // ===============================================================================================
+
+  @Override
+  public MethodRepresentation create(Endpoint source, Object... args) {
+    MethodRepresentation methodRepresentation = super.create(source, args);
+
+    if (endpointImplementationRegistry.isEndpointSupported(source)) {
+      methodRepresentation.changeImplementationTo(
+          endpointImplementationRegistry
+              .implementation(freemarkerService, source, methodRepresentation)
+              .orElseThrow(IllegalArgumentException::new));
+    }
+
+    return methodRepresentation;
+  }
 
   @Override
   public MethodRepresentationType methodType(Endpoint source, Object... args) {
@@ -95,8 +128,8 @@ public class EndpointMethodRepresentable extends AbstractMethodRepresentable<End
 
     stringBuilder.append("REST Endpoint for ");
     stringBuilder.append(
-        TextConverter
-            .toUpperCamelSpaces(source.getServiceMethod().getFunction().getName().getText()));
+        TextConverter.toUpperCamelSpaces(
+            source.getServiceMethod().getFunction().getName().getText()));
     stringBuilder.append(".");
 
     return stringBuilder.toString();
@@ -116,15 +149,29 @@ public class EndpointMethodRepresentable extends AbstractMethodRepresentable<End
   public Set<ParameterRepresentation> parameterRepresentations(Endpoint source, Object... args) {
     Set<ParameterRepresentation> parameterRepresentations = new LinkedHashSet<>();
 
+    Optional<Data> thingIdentityData =
+        source.getServiceMethod().getRequestDto().getThingIdentityAsOptional();
+
     switch (source.getHttpMethod()) {
       case GET:
         if (source.getServiceMethod().getFunction().getGoal().isFetchOne()) {
-          ;
-        } else if (source.getServiceMethod().getFunction().getGoal().isFetchCollection()) {
-          ;
+          parameterRepresentations.addAll(
+              parameterRepresentationsForIdPathVariable(
+                  thingIdentityData
+                      .orElseThrow(IllegalArgumentException::new)
+                      .getVariableName()
+                      .getText()));
         } else if (source.getServiceMethod().getFunction().getGoal().isFetchPagedCollection()) {
           parameterRepresentations.addAll(parameterRepresentationsForPagedCollection());
         }
+        break;
+      case PUT:
+        parameterRepresentations.addAll(
+            parameterRepresentationsForIdPathVariable(
+                thingIdentityData
+                    .orElseThrow(IllegalArgumentException::new)
+                    .getVariableName()
+                    .getText()));
         break;
       default:
         break;
@@ -138,19 +185,13 @@ public class EndpointMethodRepresentable extends AbstractMethodRepresentable<End
             argument -> {
               if (argument.getData().isDataGroup()
                   && (source.getServiceMethod().getFunction().getGoal().isCreate()
-                  || source.getServiceMethod().getFunction().getGoal().isModify())) {
+                      || source.getServiceMethod().getFunction().getGoal().isModify())) {
                 parameterRepresentations.add(
                     new ParameterRepresentation(
                         fromDataTypeToJavaConverter.getDeclaredVariableType(
                             argument.getData().getDataType()),
                         argument.getData().getVariableName().getText(),
                         new LinkedHashSet<>(Arrays.asList("@RequestBody"))));
-              } else {
-//                parameterRepresentations.add(
-//                    new ParameterRepresentation(
-//                        fromDataTypeToJavaConverter.getDeclaredVariableType(
-//                            argument.getData().getDataType()),
-//                        argument.getData().getVariableName().getText()));
               }
             });
 
@@ -177,40 +218,59 @@ public class EndpointMethodRepresentable extends AbstractMethodRepresentable<End
     // ---------------------------------------------------------------------------------------------
     if (source.getHttpMethod().equals(HttpMethod.GET)) {
       stringBuilder.append("\t\t");
-      stringBuilder.append(TextConverter
-          .toUpperCamel(source.getServiceMethod().getRequestDto().getDataGroup().getDataType()));
+      stringBuilder.append(
+          TextConverter.toUpperCamel(
+              source.getServiceMethod().getRequestDto().getDataGroup().getDataType()));
       stringBuilder.append(" ");
-      stringBuilder.append(TextConverter
-          .toLowerCamel(source.getServiceMethod().getRequestDto().getDataGroup().getDataType()));
+      stringBuilder.append(
+          TextConverter.toLowerCamel(
+              source.getServiceMethod().getRequestDto().getDataGroup().getDataType()));
       stringBuilder.append(" = new ");
-      stringBuilder.append(TextConverter
-          .toUpperCamel(source.getServiceMethod().getRequestDto().getDataGroup().getDataType()));
+      stringBuilder.append(
+          TextConverter.toUpperCamel(
+              source.getServiceMethod().getRequestDto().getDataGroup().getDataType()));
       stringBuilder.append("();\n");
 
-      // ---------------------------------------------------------------------------------------------
-
+      // -------------------------------------------------------------------------------------------
       if (source.getServiceMethod().getFunction().getGoal().isFetchPagedCollection()) {
         stringBuilder.append("\t\t");
-        stringBuilder.append(TextConverter
-            .toLowerCamel(source.getServiceMethod().getRequestDto().getDataGroup().getDataType()));
+        stringBuilder.append(
+            TextConverter.toLowerCamel(
+                source.getServiceMethod().getRequestDto().getDataGroup().getDataType()));
         stringBuilder.append(".setPageNumber(pageNumber);\n");
 
         stringBuilder.append("\t\t");
-        stringBuilder.append(TextConverter
-            .toLowerCamel(source.getServiceMethod().getRequestDto().getDataGroup().getDataType()));
+        stringBuilder.append(
+            TextConverter.toLowerCamel(
+                source.getServiceMethod().getRequestDto().getDataGroup().getDataType()));
         stringBuilder.append(".setPageSize(pageSize);\n");
-
       }
     }
     // ---------------------------------------------------------------------------------------------
 
+    // ID
+    if (source.getServiceMethod().getFunction().getGoal().isFetchOne()
+        || source.getServiceMethod().getFunction().getGoal().isModify()) {
+      Data data =
+          source
+              .getServiceMethod()
+              .getRequestDto()
+              .getThingIdentityAsOptional()
+              .orElseThrow(IllegalArgumentException::new);
+
+      stringBuilder.append(setThingIdenityInRequest(source, data.getVariableName().getText()));
+    }
+
+    // ---------------------------------------------------------------------------------------------
     stringBuilder.append("\t\t");
-    stringBuilder.append(TextConverter
-        .toLowerCamel(source.getServiceMethod().getRequestDto().getDataGroup().getDataType()));
+    stringBuilder.append(
+        TextConverter.toLowerCamel(
+            source.getServiceMethod().getRequestDto().getDataGroup().getDataType()));
     stringBuilder.append(".setTenantId(this.getTenantId(httpServletRequest));\n");
     stringBuilder.append("\t\t");
-    stringBuilder.append(TextConverter
-        .toLowerCamel(source.getServiceMethod().getRequestDto().getDataGroup().getDataType()));
+    stringBuilder.append(
+        TextConverter.toLowerCamel(
+            source.getServiceMethod().getRequestDto().getDataGroup().getDataType()));
     stringBuilder.append(".setIpAddress(this.getRemoteIpAddress(httpServletRequest));\n");
 
     // ---------------------------------------------------------------------------------------------
@@ -224,8 +284,9 @@ public class EndpointMethodRepresentable extends AbstractMethodRepresentable<End
     stringBuilder.append(".");
     stringBuilder.append(source.getServiceMethod().getFunction().getName().getText());
     stringBuilder.append("(");
-    stringBuilder.append(TextConverter
-        .toLowerCamel(source.getServiceMethod().getRequestDto().getDataGroup().getDataType()));
+    stringBuilder.append(
+        TextConverter.toLowerCamel(
+            source.getServiceMethod().getRequestDto().getDataGroup().getDataType()));
     stringBuilder.append(");");
 
     return stringBuilder.toString();
@@ -298,17 +359,62 @@ public class EndpointMethodRepresentable extends AbstractMethodRepresentable<End
     Set<ParameterRepresentation> parameterRepresentations = new LinkedHashSet<>();
 
     parameterRepresentations.add(
-        new ParameterRepresentation("Integer", "pageNumber",
-            new LinkedHashSet<>(Arrays.asList("@RequestParam"))));
+        new ParameterRepresentation(
+            "Integer", "pageNumber", new LinkedHashSet<>(Arrays.asList("@RequestParam"))));
 
     parameterRepresentations.add(
-        new ParameterRepresentation("Integer", "pageSize",
-            new LinkedHashSet<>(Arrays.asList("@RequestParam"))));
+        new ParameterRepresentation(
+            "Integer", "pageSize", new LinkedHashSet<>(Arrays.asList("@RequestParam"))));
 
     parameterRepresentations.add(
-        new ParameterRepresentation("String", "query",
+        new ParameterRepresentation(
+            "String",
+            "query",
             new LinkedHashSet<>(Arrays.asList("@RequestParam(required = false)"))));
 
     return parameterRepresentations;
+  }
+
+  /**
+   * Parameter representations for id path variable set.
+   *
+   * @param idVariable the id variable
+   * @return the set
+   */
+  private Set<ParameterRepresentation> parameterRepresentationsForIdPathVariable(
+      String idVariable) {
+    Set<ParameterRepresentation> parameterRepresentations = new LinkedHashSet<>();
+
+    parameterRepresentations.add(
+        new ParameterRepresentation(
+            "String",
+            idVariable,
+            new LinkedHashSet<>(
+                Arrays.asList(String.format("@PathVariable(\"%s\")", idVariable)))));
+
+    return parameterRepresentations;
+  }
+
+  /**
+   * Sets thing idenity in request.
+   *
+   * @param source the source
+   * @param variableName the variable name
+   * @return the thing idenity in request
+   */
+  protected String setThingIdenityInRequest(Endpoint source, String variableName) {
+    StringBuilder stringBuilder = new StringBuilder();
+
+    stringBuilder.append("\t\t");
+    stringBuilder.append(
+        TextConverter.toLowerCamel(
+            source.getServiceMethod().getRequestDto().getDataGroup().getDataType()));
+    stringBuilder.append(".set");
+    stringBuilder.append(TextConverter.toUpperCamel(variableName));
+    stringBuilder.append("(");
+    stringBuilder.append(TextConverter.toLowerCamel(variableName));
+    stringBuilder.append(");\n");
+
+    return stringBuilder.toString();
   }
 }

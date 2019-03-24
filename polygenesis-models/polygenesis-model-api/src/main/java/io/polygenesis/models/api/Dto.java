@@ -109,6 +109,15 @@ public class Dto {
         .findFirst();
   }
 
+  /**
+   * Gets thing identity as optional.
+   *
+   * @return the optional thing identity
+   */
+  public Optional<Data> getThingIdentityAsOptional() {
+    return getDataGroup().getModels().stream().filter(data -> data.isThingIdentity()).findFirst();
+  }
+
   // ===============================================================================================
   // GUARDS
   // ===============================================================================================

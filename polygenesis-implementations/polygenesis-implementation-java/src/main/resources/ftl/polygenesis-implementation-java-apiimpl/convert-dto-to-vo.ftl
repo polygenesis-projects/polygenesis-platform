@@ -17,7 +17,7 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-<#include "macro-assertions-for-parameters.ftl">
+<#include "../polygenesis-implementation-java-shared/macro-assertions-for-parameters.ftl">
 <@assertionsForParameters representation.parameterRepresentations></@assertionsForParameters>
 
     return new ${ textConverter.toUpperCamel(to.data.dataType) }(

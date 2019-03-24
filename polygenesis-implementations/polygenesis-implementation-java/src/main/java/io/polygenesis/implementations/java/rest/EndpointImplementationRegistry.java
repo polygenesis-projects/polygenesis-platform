@@ -18,50 +18,37 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.implementations.java.apiimpl;
+package io.polygenesis.implementations.java.rest;
 
-import io.polygenesis.annotations.core.GoalType;
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.ThingScopeType;
 import io.polygenesis.implementations.java.ScopeGoalTuple;
-import io.polygenesis.models.api.ServiceMethod;
-import io.polygenesis.models.apiimpl.ServiceImplementation;
+import io.polygenesis.models.rest.Endpoint;
 import io.polygenesis.representations.java.MethodRepresentation;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
 /**
- * The type Service method implementation registry.
+ * The type Endpoint implementation registry.
  *
  * @author Christos Tsakostas
  */
-public class ServiceMethodImplementationRegistry {
+public class EndpointImplementationRegistry {
 
   // ===============================================================================================
   // STATIC
   // ===============================================================================================
 
-  private static Map<ScopeGoalTuple, ServiceMethodImplementor> scopeAndGoalMap = new HashMap<>();
+  private static Map<ScopeGoalTuple, EndpointImplementor> scopeAndGoalMap = new HashMap<>();
 
   static {
     scopeAndGoalMap.put(
-        new ScopeGoalTuple(ThingScopeType.DOMAIN_AGGREGATE_ROOT, GoalType.CREATE.name()),
-        new CreateAggregateRoot());
-
-    scopeAndGoalMap.put(
-        new ScopeGoalTuple(ThingScopeType.DOMAIN_AGGREGATE_ROOT, GoalType.MODIFY.name()),
-        new ModifyAggregateRoot());
-
-    scopeAndGoalMap.put(
-        new ScopeGoalTuple(ThingScopeType.DOMAIN_AGGREGATE_ROOT, GoalType.FETCH_ONE.name()),
+        // TODO
+        // new ScopeGoalTuple(ThingScopeType.DOMAIN_AGGREGATE_ROOT, GoalType.FETCH_ONE.name()),
+        new ScopeGoalTuple(ThingScopeType.DOMAIN_AGGREGATE_ROOT, "SOME"),
         new FetchOneAggregateRoot());
-
-    scopeAndGoalMap.put(
-        new ScopeGoalTuple(
-            ThingScopeType.DOMAIN_AGGREGATE_ROOT, GoalType.FETCH_PAGED_COLLECTION.name()),
-        new FetchPagedCollectionAggregateRoot());
   }
 
   // ===============================================================================================
@@ -72,53 +59,46 @@ public class ServiceMethodImplementationRegistry {
    * Implementation optional.
    *
    * @param freemarkerService the freemarker service
-   * @param serviceImplementation the service implementation
-   * @param serviceMethod the service method
+   * @param endpoint the endpoint
    * @param methodRepresentation the method representation
    * @return the optional
    */
   public Optional<String> implementation(
       FreemarkerService freemarkerService,
-      ServiceImplementation serviceImplementation,
-      ServiceMethod serviceMethod,
+      Endpoint endpoint,
       MethodRepresentation methodRepresentation) {
-    if (isServiceMethodSupported(serviceMethod)) {
+    if (isEndpointSupported(endpoint)) {
       return Optional.of(
-          serviceMethodImplementorFor(serviceMethod)
-              .implementationFor(
-                  freemarkerService, serviceImplementation, serviceMethod, methodRepresentation));
+          endpointImplementorFor(endpoint)
+              .implementationFor(freemarkerService, endpoint, methodRepresentation));
     } else {
       return Optional.empty();
     }
   }
 
   /**
-   * Supports boolean.
+   * Is endpoint supported boolean.
    *
-   * @param serviceMethod the service method
+   * @param endpoint the endpoint
    * @return the boolean
    */
-  public boolean isServiceMethodSupported(ServiceMethod serviceMethod) {
+  public boolean isEndpointSupported(Endpoint endpoint) {
     return scopeAndGoalMap.containsKey(
         new ScopeGoalTuple(
-            serviceMethod.getFunction().getThing().getThingScopeType(),
-            TextConverter.toUpperUnderscore(serviceMethod.getFunction().getGoal().getText())));
+            endpoint.getServiceMethod().getFunction().getThing().getThingScopeType(),
+            TextConverter.toUpperUnderscore(
+                endpoint.getServiceMethod().getFunction().getGoal().getText())));
   }
 
   // ===============================================================================================
   // PRIVATE
   // ===============================================================================================
 
-  /**
-   * Service method implementor for service method implementor.
-   *
-   * @param serviceMethod the service method
-   * @return the service method implementor
-   */
-  private ServiceMethodImplementor serviceMethodImplementorFor(ServiceMethod serviceMethod) {
+  private EndpointImplementor endpointImplementorFor(Endpoint endpoint) {
     return scopeAndGoalMap.get(
         new ScopeGoalTuple(
-            serviceMethod.getFunction().getThing().getThingScopeType(),
-            TextConverter.toUpperUnderscore(serviceMethod.getFunction().getGoal().getText())));
+            endpoint.getServiceMethod().getFunction().getThing().getThingScopeType(),
+            TextConverter.toUpperUnderscore(
+                endpoint.getServiceMethod().getFunction().getGoal().getText())));
   }
 }

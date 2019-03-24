@@ -52,8 +52,11 @@ public class Endpoint {
    * @param mappings the mappings
    * @param requestParameters the request parameters
    */
-  public Endpoint(Service service, ServiceMethod serviceMethod,
-      HttpMethod httpMethod, Set<Mapping> mappings,
+  public Endpoint(
+      Service service,
+      ServiceMethod serviceMethod,
+      HttpMethod httpMethod,
+      Set<Mapping> mappings,
       Set<RequestParameter> requestParameters) {
     setService(service);
     setServiceMethod(serviceMethod);
@@ -178,11 +181,11 @@ public class Endpoint {
       return false;
     }
     Endpoint endpoint = (Endpoint) o;
-    return Objects.equals(service, endpoint.service) &&
-        Objects.equals(serviceMethod, endpoint.serviceMethod) &&
-        httpMethod == endpoint.httpMethod &&
-        Objects.equals(mappings, endpoint.mappings) &&
-        Objects.equals(requestParameters, endpoint.requestParameters);
+    return Objects.equals(service, endpoint.service)
+        && Objects.equals(serviceMethod, endpoint.serviceMethod)
+        && httpMethod == endpoint.httpMethod
+        && Objects.equals(mappings, endpoint.mappings)
+        && Objects.equals(requestParameters, endpoint.requestParameters);
   }
 
   @Override
