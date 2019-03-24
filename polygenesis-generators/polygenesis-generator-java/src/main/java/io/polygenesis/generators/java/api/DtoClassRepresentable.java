@@ -31,6 +31,7 @@ import io.polygenesis.representations.java.AbstractClassRepresentable;
 import io.polygenesis.representations.java.ConstructorRepresentation;
 import io.polygenesis.representations.java.FromDataTypeToJavaConverter;
 import io.polygenesis.representations.java.MethodRepresentation;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -111,11 +112,13 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
     Set<ConstructorRepresentation> constructorRepresentations = new LinkedHashSet<>();
 
     // ---------------------------------------------------------------------------------------------
-    // Create create constructor
+    // Create empty constructor
     // ---------------------------------------------------------------------------------------------
     constructorRepresentations.add(
-        createConstructorWithSetters(
-            source.getDataGroup().getObjectName().getText(), new LinkedHashSet<>()));
+        createEmptyConstructorWithImplementation(
+            source.getDataGroup().getObjectName().getText(),
+            new LinkedHashSet<>(Collections.singletonList("@SuppressWarnings(\"CPD-START\")")),
+            "\t\tsuper();"));
 
     // ---------------------------------------------------------------------------------------------
     // Create constructor with parameters

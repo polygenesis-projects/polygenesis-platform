@@ -161,6 +161,25 @@ public abstract class AbstractClassRepresentable<S> extends AbstractRepresentabl
   }
 
   /**
+   * Create empty constructor with implementation constructor representation.
+   *
+   * @param dataType the data type
+   * @param annotations the annotations
+   * @param implementation the implementation
+   * @return the constructor representation
+   */
+  protected ConstructorRepresentation createEmptyConstructorWithImplementation(
+      String dataType,
+      Set<String> annotations,
+      String implementation) {
+    String description =
+        String.format("Instantiates a new %s.", TextConverter.toUpperCamelSpaces(dataType));
+
+    return new ConstructorRepresentation(
+        annotations, description, "public", new LinkedHashSet<>(), implementation);
+  }
+
+  /**
    * Create constructor with implementation constructor representation.
    *
    * @param dataType the data type
@@ -270,11 +289,23 @@ public abstract class AbstractClassRepresentable<S> extends AbstractRepresentabl
       Set<FieldRepresentation> fieldRepresentations) {
     Set<MethodRepresentation> methodRepresentations = new LinkedHashSet<>();
 
-    fieldRepresentations.forEach(
-        fieldRepresentation -> {
-          methodRepresentations.add(createGetterMethod(fieldRepresentation));
-          methodRepresentations.add(createSetterMethod(fieldRepresentation));
+    fieldRepresentations
+        .stream()
+        .limit(fieldRepresentations.size() - 1)
+        .forEach(fieldRepresentation -> {
+          methodRepresentations.add(createGetterMethod(fieldRepresentation, new LinkedHashSet<>()));
+          methodRepresentations.add(createSetterMethod(fieldRepresentation, new LinkedHashSet<>()));
         });
+
+    FieldRepresentation fieldRepresentationLast = fieldRepresentations
+        .stream()
+        .skip(fieldRepresentations.size() - 1)
+        .findFirst()
+        .orElseThrow(IllegalArgumentException::new);
+    methodRepresentations.add(createGetterMethod(fieldRepresentationLast, new LinkedHashSet<>()));
+    methodRepresentations.add(createSetterMethod(fieldRepresentationLast, new LinkedHashSet<>(
+        Arrays.asList("@SuppressWarnings(\"CPD-END\")")
+    )));
 
     return methodRepresentations;
   }
@@ -291,8 +322,8 @@ public abstract class AbstractClassRepresentable<S> extends AbstractRepresentabl
 
     fieldRepresentations.forEach(
         fieldRepresentation -> {
-          methodRepresentations.add(createGetterMethod(fieldRepresentation));
-          methodRepresentations.add(createGuardMethod(fieldRepresentation));
+          methodRepresentations.add(createGetterMethod(fieldRepresentation, new LinkedHashSet<>()));
+          methodRepresentations.add(createGuardMethod(fieldRepresentation, new LinkedHashSet<>()));
         });
 
     return methodRepresentations;
@@ -302,13 +333,15 @@ public abstract class AbstractClassRepresentable<S> extends AbstractRepresentabl
    * Create getter method representation.
    *
    * @param fieldRepresentation the field representation
+   * @param annotations the annotations
    * @return the method representation
    */
-  protected MethodRepresentation createGetterMethod(FieldRepresentation fieldRepresentation) {
+  protected MethodRepresentation createGetterMethod(FieldRepresentation fieldRepresentation,
+      Set<String> annotations) {
     return new MethodRepresentation(
         MethodRepresentationType.GETTER,
         new LinkedHashSet<>(),
-        new LinkedHashSet<>(),
+        annotations,
         String.format(
             "Gets the %s.",
             TextConverter.toUpperCamelSpaces(fieldRepresentation.getVariableName())),
@@ -323,20 +356,26 @@ public abstract class AbstractClassRepresentable<S> extends AbstractRepresentabl
    * Create guard method method representation.
    *
    * @param fieldRepresentation the field representation
+   * @param annotations the annotations
    * @return the method representation
    */
-  protected MethodRepresentation createGuardMethod(FieldRepresentation fieldRepresentation) {
-    return createSetterOrGuardMethod(fieldRepresentation, MethodRepresentationType.GUARD);
+  protected MethodRepresentation createGuardMethod(FieldRepresentation fieldRepresentation,
+      Set<String> annotations) {
+    return createSetterOrGuardMethod(fieldRepresentation, MethodRepresentationType.GUARD,
+        annotations);
   }
 
   /**
    * Create setter method method representation.
    *
    * @param fieldRepresentation the field representation
+   * @param annotations the annotations
    * @return the method representation
    */
-  protected MethodRepresentation createSetterMethod(FieldRepresentation fieldRepresentation) {
-    return createSetterOrGuardMethod(fieldRepresentation, MethodRepresentationType.SETTER);
+  protected MethodRepresentation createSetterMethod(FieldRepresentation fieldRepresentation,
+      Set<String> annotations) {
+    return createSetterOrGuardMethod(fieldRepresentation, MethodRepresentationType.SETTER,
+        annotations);
   }
 
   /**
@@ -359,10 +398,12 @@ public abstract class AbstractClassRepresentable<S> extends AbstractRepresentabl
    *
    * @param fieldRepresentation the field representation
    * @param methodRepresentationType the method type
+   * @param annotations the annotations
    * @return the method representation
    */
   private MethodRepresentation createSetterOrGuardMethod(
-      FieldRepresentation fieldRepresentation, MethodRepresentationType methodRepresentationType) {
+      FieldRepresentation fieldRepresentation, MethodRepresentationType methodRepresentationType,
+      Set<String> annotations) {
     String modifiers;
     switch (methodRepresentationType) {
       case GUARD:
@@ -406,7 +447,7 @@ public abstract class AbstractClassRepresentable<S> extends AbstractRepresentabl
     return new MethodRepresentation(
         methodRepresentationType,
         new LinkedHashSet<>(),
-        new LinkedHashSet<>(),
+        annotations,
         String.format(
             "Sets the %s.",
             TextConverter.toUpperCamelSpaces(fieldRepresentation.getVariableName())),
