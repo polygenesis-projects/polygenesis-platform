@@ -20,74 +20,48 @@
 
 package io.polygenesis.core.data;
 
-import io.polygenesis.commons.text.TextConverter;
+import io.polygenesis.core.Thing;
 import java.util.Objects;
 
 /**
- * The type data array.
+ * The type Data reference to thing.
  *
  * @author Christos Tsakostas
  */
-public class DataArray extends Data {
+public class DataReferenceToThing extends Data {
 
-  private final Data arrayElement;
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
+  private final Thing thing;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
-   * Instantiates a new data array.
+   * Instantiates a new Data reference to thing.
    *
-   * @param arrayElement the array element
+   * @param thing the thing
    */
-  public DataArray(Data arrayElement) {
-    this(DataSource.user(), null, DataBusinessType.ANY, DataValidator.empty(), arrayElement);
-  }
-
-  /**
-   * Instantiates a new data array.
-   *
-   * @param variableName the variable name
-   */
-  public DataArray(VariableName variableName) {
-    this(DataSource.user(), variableName, DataBusinessType.ANY, DataValidator.empty(), null);
-  }
-
-  /**
-   * Instantiates a new Data array.
-   *
-   * @param variableName the variable name
-   * @param arrayElement the array element
-   */
-  public DataArray(VariableName variableName, Data arrayElement) {
-    this(
-        DataSource.user(), variableName, DataBusinessType.ANY, DataValidator.empty(), arrayElement);
-  }
-
-  /**
-   * Instantiates a new Data array.
-   *
-   * @param dataSource the data source
-   * @param variableName the variable name
-   * @param dataBusinessType the data business type
-   * @param arrayElement the array element
-   */
-  public DataArray(
-      DataSource dataSource,
-      VariableName variableName,
-      DataBusinessType dataBusinessType,
-      DataValidator dataValidator,
-      Data arrayElement) {
+  public DataReferenceToThing(Thing thing) {
     super(
-        DataPrimaryType.ARRAY,
-        dataSource,
-        variableName != null
-            ? new VariableName(TextConverter.toPlural(variableName.getText()))
-            : null,
-        dataBusinessType,
-        dataValidator);
-    this.arrayElement = arrayElement;
+        DataPrimaryType.THING,
+        DataSource.user(),
+        new VariableName(String.format("%sRef", thing.getThingName().getText())),
+        DataBusinessType.REFERENCE_TO_THING,
+        DataValidator.empty());
+    this.thing = thing;
+  }
+
+  // ===============================================================================================
+  // IMPLEMENTATIONS
+  // ===============================================================================================
+
+  @Override
+  public String getDataType() {
+    return DataPrimaryType.THING.name();
   }
 
   // ===============================================================================================
@@ -95,21 +69,12 @@ public class DataArray extends Data {
   // ===============================================================================================
 
   /**
-   * Gets array element.
+   * Gets thing.
    *
-   * @return the array element
+   * @return the thing
    */
-  public Data getArrayElement() {
-    return arrayElement;
-  }
-
-  // ===============================================================================================
-  // ABSTRACT IMPLEMENTATION
-  // ===============================================================================================
-
-  @Override
-  public String getDataType() {
-    return DataPrimaryType.ARRAY.name();
+  public Thing getThing() {
+    return thing;
   }
 
   // ===============================================================================================
@@ -118,6 +83,7 @@ public class DataArray extends Data {
 
   @Override
   public boolean equals(Object o) {
+
     if (this == o) {
       return true;
     }
@@ -127,12 +93,12 @@ public class DataArray extends Data {
     if (!super.equals(o)) {
       return false;
     }
-    DataArray that = (DataArray) o;
-    return Objects.equals(arrayElement, that.arrayElement);
+    DataReferenceToThing that = (DataReferenceToThing) o;
+    return Objects.equals(thing, that.thing);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(super.hashCode(), arrayElement);
+    return Objects.hash(super.hashCode(), thing);
   }
 }

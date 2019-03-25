@@ -28,4 +28,4 @@ spring:
     hibernate.ddl-auto: validate
     properties:
       hibernate:
-        dialect: com.oregor.ddd4j.core.hibernate.CustomH2Dialect
+        dialect: com.oregor.ddd4j.domain.hibernate.CustomH2Dialect

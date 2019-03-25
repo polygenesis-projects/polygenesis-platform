@@ -148,7 +148,7 @@ public class AggregateEntityDeducer {
             InstantiationType.ABSTRACT,
             Optional.empty(),
             new ObjectName("AggregateEntity"),
-            new PackageName("com.oregor.ddd4j.core"),
+            new PackageName("com.oregor.ddd4j.domain"),
             new LinkedHashSet<>(),
             new LinkedHashSet<>(),
             multiTenant));

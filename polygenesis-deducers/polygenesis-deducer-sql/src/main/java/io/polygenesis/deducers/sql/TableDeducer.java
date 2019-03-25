@@ -23,6 +23,9 @@ package io.polygenesis.deducers.sql;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.data.Data;
 import io.polygenesis.core.data.DataGroup;
+import io.polygenesis.core.data.DataPrimitive;
+import io.polygenesis.core.data.PrimitiveType;
+import io.polygenesis.core.data.VariableName;
 import io.polygenesis.models.domain.AggregateEntityCollection;
 import io.polygenesis.models.domain.AggregateRoot;
 import io.polygenesis.models.domain.BaseDomainObject;
@@ -156,6 +159,9 @@ public class TableDeducer {
             case PRIMITIVE:
               columns.add(getColumnForPrimitive(property.getData(), ""));
               break;
+            case REFERENCE:
+              columns.add(getColumnForReferenceToThing(""));
+              break;
             case PRIMITIVE_COLLECTION:
               break;
             case VALUE_OBJECT:
@@ -232,6 +238,18 @@ public class TableDeducer {
   // ===============================================================================================
   // PRIVATE
   // ===============================================================================================
+
+  /**
+   * Gets column for reference to thing.
+   *
+   * @param columnPrefix the column prefix
+   * @return the column for reference to thing
+   */
+  private Column getColumnForReferenceToThing(String columnPrefix) {
+    // TODO
+    DataPrimitive dataPrimitive = DataPrimitive.of(PrimitiveType.STRING, new VariableName("ref"));
+    return getColumnForPrimitive(dataPrimitive, columnPrefix);
+  }
 
   /**
    * Gets column for primitive.

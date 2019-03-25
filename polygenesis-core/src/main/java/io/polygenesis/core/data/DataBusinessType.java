@@ -29,14 +29,22 @@ package io.polygenesis.core.data;
 public enum DataBusinessType {
   /** Any type of business data, which is not directly relevant to the code generation process. */
   ANY,
-  /** Parent thing identity data business type. */
-  PARENT_THING_IDENTITY,
-  /** Denotes a Thing's identity. */
-  THING_IDENTITY,
-  /** Denotes a Tenant's identity. */
-  TENANT_IDENTITY,
+  /** Country code data business type. */
+  COUNTRY_CODE,
+  /** Language code data business type. */
+  LANGUAGE_CODE,
   /** Page number used for fetching collections. */
   PAGE_NUMBER,
   /** Page size used for fetching collections. */
-  PAGE_SIZE;
+  PAGE_SIZE,
+  /** Parent thing identity data business type. */
+  PARENT_THING_IDENTITY,
+
+  /** Reference to thing data business type. */
+  REFERENCE_TO_THING,
+
+  /** Denotes a Thing's identity. */
+  THING_IDENTITY,
+  /** Denotes a Tenant's identity. */
+  TENANT_IDENTITY;
 }

@@ -124,6 +124,11 @@ public abstract class DomainObjectClassRepresentable<S extends BaseDomainObject<
                           makeVariableName(property),
                           makeAnnotationsForAggregateEntityCollection(source)));
                   break;
+                case REFERENCE:
+                  fieldRepresentations.add(
+                      new FieldRepresentation(
+                          makeVariableDataType(property), makeVariableName(property)));
+                  break;
                 default:
                   throw new IllegalStateException(
                       String.format(
@@ -252,7 +257,7 @@ public abstract class DomainObjectClassRepresentable<S extends BaseDomainObject<
       imports.add("javax.persistence.Entity");
       imports.add("javax.persistence.Table");
     } else {
-      imports.add("com.oregor.ddd4j.core.AggregateRootId");
+      imports.add("com.oregor.ddd4j.domain.AggregateRootId");
       imports.add("javax.persistence.MappedSuperclass");
     }
 

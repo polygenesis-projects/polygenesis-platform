@@ -54,7 +54,11 @@ public abstract class BasePropertyDeducer {
           .filter(data -> data.isDataGroup())
           .map(data -> data.getAsDataGroup())
           .flatMap(dataGroup -> dataGroup.getModels().stream())
-          .filter(data -> data.getDataBusinessType().equals(DataBusinessType.ANY))
+          // TODO
+          .filter(
+              data ->
+                  data.getDataBusinessType().equals(DataBusinessType.ANY)
+                      || data.getDataBusinessType().equals(DataBusinessType.REFERENCE_TO_THING))
           .forEach(data -> thingProperties.add(new ThingProperty(data)));
 
       thing.assignThingProperties(thingProperties);
@@ -70,10 +74,6 @@ public abstract class BasePropertyDeducer {
   protected BaseProperty thingPropertyToBaseProperty(ThingProperty thingProperty) {
 
     switch (thingProperty.getData().getDataPrimaryType()) {
-      case PRIMITIVE:
-        return new Primitive(thingProperty.getData().getAsDataPrimitive());
-      case OBJECT:
-        return new ValueObject(thingProperty.getData().getAsDataGroup());
       case ARRAY:
         switch (thingProperty.getData().getAsDataArray().getArrayElement().getDataPrimaryType()) {
           case PRIMITIVE:
@@ -83,6 +83,12 @@ public abstract class BasePropertyDeducer {
           default:
             throw new UnsupportedOperationException();
         }
+      case OBJECT:
+        return new ValueObject(thingProperty.getData().getAsDataGroup());
+      case PRIMITIVE:
+        return new Primitive(thingProperty.getData().getAsDataPrimitive());
+      case THING:
+        return new Reference(thingProperty.getData());
       default:
         throw new UnsupportedOperationException();
     }

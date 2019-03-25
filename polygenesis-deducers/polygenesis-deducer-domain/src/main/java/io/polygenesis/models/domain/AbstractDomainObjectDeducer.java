@@ -133,6 +133,8 @@ public class AbstractDomainObjectDeducer {
         return new ValueObject(model.getAsDataGroup());
       case PRIMITIVE:
         return new Primitive(model.getAsDataPrimitive());
+      case THING:
+        return new Reference(model);
       default:
         throw new IllegalStateException(
             String.format("Cannot make DomainObjectProperty for %s", model.getDataPrimaryType()));

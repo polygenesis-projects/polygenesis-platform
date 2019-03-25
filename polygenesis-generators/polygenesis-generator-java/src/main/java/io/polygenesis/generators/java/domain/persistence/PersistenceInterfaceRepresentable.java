@@ -71,7 +71,7 @@ public class PersistenceInterfaceRepresentable extends AbstractInterfaceRepresen
   public Set<String> imports(Persistence source, Object... args) {
     Set<String> imports = new TreeSet<>();
 
-    imports.add("com.oregor.ddd4j.core.Persistence");
+    imports.add("com.oregor.ddd4j.domain.Persistence");
 
     return imports;
   }

@@ -101,7 +101,7 @@ public class AggregateEntityIdClassRepresentable
   public Set<String> imports(AggregateEntity source, Object... args) {
     Set<String> imports = new TreeSet<>();
 
-    imports.add("com.oregor.ddd4j.core.AggregateEntityId");
+    imports.add("com.oregor.ddd4j.domain.AggregateEntityId");
     imports.add("javax.persistence.Embeddable");
     imports.add("java.util.UUID");
 

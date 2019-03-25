@@ -36,5 +36,8 @@ public enum DataPrimaryType {
   ARRAY,
 
   /** Map data primary type. */
-  MAP
+  MAP,
+
+  /** Thing data primary type. */
+  THING
 }

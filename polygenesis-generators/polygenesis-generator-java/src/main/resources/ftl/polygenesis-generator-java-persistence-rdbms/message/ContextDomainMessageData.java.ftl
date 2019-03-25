@@ -20,7 +20,7 @@
 
 package ${ packageName };
 
-import com.oregor.ddd4j.core.AbstractDomainMessageData;
+import com.oregor.ddd4j.domain.AbstractDomainMessageData;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import javax.persistence.Entity;

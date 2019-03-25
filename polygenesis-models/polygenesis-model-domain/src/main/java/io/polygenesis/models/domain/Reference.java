@@ -18,21 +18,36 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.core.data;
+package io.polygenesis.models.domain;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import io.polygenesis.core.data.Data;
 
-import org.junit.Test;
+/**
+ * The type Reference.
+ *
+ * @author Christos Tsakostas
+ */
+public class Reference extends BaseProperty<Reference, Data> {
 
-/** @author Christos Tsakostas */
-public class DataArrayTest {
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
 
-  @Test
-  public void shouldInitializeDataArray() {
-    DataArray dataArray = new DataArray(new VariableName("someVariableName"));
+  /**
+   * Instantiates a new Reference.
+   *
+   * @param data the data
+   */
+  public Reference(Data data) {
+    super(PropertyType.REFERENCE, data);
+  }
 
-    assertThat(dataArray).isNotNull();
-    assertThat(dataArray.getDataType()).isEqualTo(DataPrimaryType.ARRAY.name());
-    assertThat(dataArray.getVariableName()).isEqualTo(new VariableName("someVariableNames"));
+  // ===============================================================================================
+  // IMPLEMENTATIONS
+  // ===============================================================================================
+
+  @Override
+  public Data getTypeParameterData() {
+    throw new UnsupportedOperationException();
   }
 }

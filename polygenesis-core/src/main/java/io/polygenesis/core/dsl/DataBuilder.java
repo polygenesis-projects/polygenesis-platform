@@ -20,9 +20,11 @@
 
 package io.polygenesis.core.dsl;
 
+import io.polygenesis.core.Thing;
 import io.polygenesis.core.data.Data;
 import io.polygenesis.core.data.DataArray;
 import io.polygenesis.core.data.DataGroup;
+import io.polygenesis.core.data.DataReferenceToThing;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -82,6 +84,30 @@ public class DataBuilder {
    */
   public final DataTextBuilder withTextProperty(String propertyName) {
     DataTextBuilder dataTextBuilder = DataTextBuilder.create(this, propertyName);
+
+    this.models.add(dataTextBuilder.getModel());
+
+    return dataTextBuilder;
+  }
+
+  /**
+   * With reference to thing data builder.
+   *
+   * @param thing the thing
+   * @return the data builder
+   */
+  public final DataBuilder withReferenceToThing(Thing thing) {
+    this.models.add(new DataReferenceToThing(thing));
+    return this;
+  }
+
+  /**
+   * With country data country builder.
+   *
+   * @return the data country builder
+   */
+  public final DataCountryBuilder withCountry() {
+    DataCountryBuilder dataTextBuilder = DataCountryBuilder.create(this, "countryCode");
 
     this.models.add(dataTextBuilder.getModel());
 

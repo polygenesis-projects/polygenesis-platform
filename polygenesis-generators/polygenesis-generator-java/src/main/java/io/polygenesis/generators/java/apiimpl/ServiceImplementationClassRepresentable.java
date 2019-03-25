@@ -147,7 +147,7 @@ public class ServiceImplementationClassRepresentable
     if (optionalMethodFetchPagedCollection.isPresent()) {
       imports.add("java.util.stream.Collectors");
       imports.add("java.util.stream.StreamSupport");
-      imports.add("com.oregor.ddd4j.core.Paginated");
+      imports.add("com.oregor.ddd4j.domain.Paginated");
     }
 
     return imports;

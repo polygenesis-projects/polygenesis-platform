@@ -67,7 +67,8 @@ public class AggregateEntityClassRepresentable
           String.format(
               "@Table(name = Constants.DEFAULT_TABLE_PREFIX + \"%s_%s\")",
               TextConverter.toLowerUnderscore(aggregateRoot.getObjectName().getText()),
-              TextConverter.toLowerUnderscore(source.getObjectName().getText())));
+              TextConverter.toLowerUnderscore(
+                  TextConverter.toPlural(source.getObjectName().getText()))));
     } else {
       annotations.add("@MappedSuperclass");
     }

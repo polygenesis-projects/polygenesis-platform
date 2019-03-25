@@ -73,9 +73,9 @@ public class SpringDataRepositoryInterfaceRepresentable
     Set<String> imports = new TreeSet<>();
 
     if (source.getMultiTenant()) {
-      imports.add("com.oregor.ddd4j.core.SpringDataRepositoryWithTenant");
+      imports.add("com.oregor.ddd4j.domain.SpringDataRepositoryWithTenant");
     } else {
-      imports.add("com.oregor.ddd4j.core.SpringDataRepository");
+      imports.add("com.oregor.ddd4j.domain.SpringDataRepository");
     }
 
     return imports;

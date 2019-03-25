@@ -123,9 +123,9 @@ public class PersistenceImplClassRepresentable extends AbstractClassRepresentabl
     String context = TextConverter.toUpperCamel(contextName.getText());
 
     if (source.getMultiTenant()) {
-      imports.add("com.oregor.ddd4j.core.AbstractJpaPersistenceWithTenant");
+      imports.add("com.oregor.ddd4j.domain.AbstractJpaPersistenceWithTenant");
     } else {
-      imports.add("com.oregor.ddd4j.core.AbstractJpaPersistence");
+      imports.add("com.oregor.ddd4j.domain.AbstractJpaPersistence");
     }
 
     imports.add(rootPackageName.getText() + "." + context + "DomainMessageData");

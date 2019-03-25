@@ -191,7 +191,7 @@ public class AggregateRootDeducer {
             InstantiationType.ABSTRACT,
             Optional.empty(),
             new ObjectName("AggregateRoot"),
-            new PackageName("com.oregor.ddd4j.core"),
+            new PackageName("com.oregor.ddd4j.domain"),
             new LinkedHashSet<>(),
             new LinkedHashSet<>(),
             new LinkedHashSet<>(),
