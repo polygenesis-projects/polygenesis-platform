@@ -24,8 +24,10 @@ import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.Deducer;
 import io.polygenesis.core.Generator;
-import io.polygenesis.deducers.apiimpl.ApiImplDeducerFactory;
-import io.polygenesis.deducers.sql.SqlDeducerFactory;
+import io.polygenesis.deducers.apiimpl.DomainEntityConverterDeducerFactory;
+import io.polygenesis.deducers.apiimpl.ServiceImplementationDeducerFactory;
+import io.polygenesis.deducers.sql.SqlIndexDeducerFactory;
+import io.polygenesis.deducers.sql.SqlTableDeducerFactory;
 import io.polygenesis.generators.angular.AngularGeneratorFactory;
 import io.polygenesis.generators.java.api.JavaApiGeneratorFactory;
 import io.polygenesis.generators.java.apiimpl.JavaApiImplGeneratorFactory;
@@ -37,9 +39,11 @@ import io.polygenesis.generators.sql.SqlGeneratorFactory;
 import io.polygenesis.models.api.ApiDeducerFactory;
 import io.polygenesis.models.domain.DomainDeducerFactory;
 import io.polygenesis.models.domain.DomainServiceDeducerFactory;
+import io.polygenesis.models.domain.HelperEntityDeducerFactory;
 import io.polygenesis.models.reactivestate.ReactiveStateFactory;
 import io.polygenesis.models.rest.RestDeducerFactory;
-import io.polygenesis.models.ui.UiDeducerFactory;
+import io.polygenesis.models.ui.UiFeatureDeducerFactory;
+import io.polygenesis.models.ui.UiLayoutContainerDeducerFactory;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
@@ -66,9 +70,12 @@ public class GenesisDefault {
             ApiDeducerFactory.newInstance(packageName),
             DomainDeducerFactory.newInstance(packageName),
             DomainServiceDeducerFactory.newInstance(packageName),
-            ApiImplDeducerFactory.newInstance(packageName),
+            DomainEntityConverterDeducerFactory.newInstance(packageName),
+            HelperEntityDeducerFactory.newInstance(packageName),
+            ServiceImplementationDeducerFactory.newInstance(packageName),
             RestDeducerFactory.newInstance(packageName),
-            SqlDeducerFactory.newInstance()));
+            SqlTableDeducerFactory.newInstance(),
+            SqlIndexDeducerFactory.newInstance()));
   }
 
   /**
@@ -138,7 +145,8 @@ public class GenesisDefault {
         Arrays.asList(
             ApiDeducerFactory.newInstance(packageName),
             ReactiveStateFactory.newInstance(),
-            UiDeducerFactory.newInstance()));
+            UiFeatureDeducerFactory.newInstance(),
+            UiLayoutContainerDeducerFactory.newInstance()));
   }
 
   /**

@@ -20,13 +20,22 @@
 
 package io.polygenesis.deducers.apiimpl;
 
+import io.polygenesis.commons.valueobjects.ObjectName;
+import io.polygenesis.core.CoreRegistry;
+import io.polygenesis.core.Deducer;
+import io.polygenesis.core.ModelRepository;
+import io.polygenesis.core.ThingRepository;
 import io.polygenesis.core.data.VariableName;
 import io.polygenesis.models.api.Service;
+import io.polygenesis.models.api.ServiceModelRepository;
 import io.polygenesis.models.apiimpl.DomainEntityConverter;
+import io.polygenesis.models.apiimpl.DomainEntityConverterModelRepository;
 import io.polygenesis.models.apiimpl.ServiceDependency;
 import io.polygenesis.models.apiimpl.ServiceImplementation;
+import io.polygenesis.models.apiimpl.ServiceImplementationModelRepository;
 import io.polygenesis.models.domain.AggregateRootPersistable;
 import io.polygenesis.models.domain.BaseDomainEntity;
+import io.polygenesis.models.domain.DomainModelRepository;
 import io.polygenesis.models.domain.Persistence;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
@@ -38,7 +47,8 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class ServiceImplementationDeducer {
+public class ServiceImplementationDeducer extends BaseApiImplementationDeducer
+    implements Deducer<ServiceImplementationModelRepository> {
 
   // ===============================================================================================
   // DEPENDENCIES
@@ -61,21 +71,94 @@ public class ServiceImplementationDeducer {
   }
 
   // ===============================================================================================
+  // IMPLEMENTATIONS
+  // ===============================================================================================
+
+  @Override
+  public ServiceImplementationModelRepository deduce(
+      ThingRepository thingRepository, Set<ModelRepository> modelRepositories) {
+    ServiceModelRepository serviceModelRepository =
+        CoreRegistry.getModelRepositoryResolver()
+            .resolve(modelRepositories, ServiceModelRepository.class);
+
+    DomainModelRepository domainModelRepository =
+        CoreRegistry.getModelRepositoryResolver()
+            .resolve(modelRepositories, DomainModelRepository.class);
+
+    DomainEntityConverterModelRepository domainEntityConverterModelRepository =
+        CoreRegistry.getModelRepositoryResolver()
+            .resolve(modelRepositories, DomainEntityConverterModelRepository.class);
+
+    Set<ServiceImplementation> serviceImplementations = new LinkedHashSet<>();
+    fillServiceImplementations(
+        serviceImplementations,
+        serviceModelRepository,
+        domainEntityConverterModelRepository,
+        domainModelRepository);
+
+    return new ServiceImplementationModelRepository(serviceImplementations);
+  }
+
+  // ===============================================================================================
   // FUNCTIONALITY
   // ===============================================================================================
 
   /**
-   * Deduce service implementation.
+   * Fill service implementations.
    *
-   * @param service the service
-   * @return the service implementation
+   * @param serviceImplementations the service implementations
+   * @param serviceModelRepository the service model repository
+   * @param domainEntityConverterModelRepository the domain entity converter model repository
+   * @param domainModelRepository the domain model repository
    */
-  public ServiceImplementation deduce(Service service) {
-    return new ServiceImplementation(service, new LinkedHashSet<>(), new LinkedHashSet<>());
+  private void fillServiceImplementations(
+      Set<ServiceImplementation> serviceImplementations,
+      ServiceModelRepository serviceModelRepository,
+      DomainEntityConverterModelRepository domainEntityConverterModelRepository,
+      DomainModelRepository domainModelRepository) {
+    serviceModelRepository
+        .getItems()
+        .forEach(
+            service ->
+                serviceImplementations.add(
+                    makeServiceImplementation(
+                        service,
+                        domainEntityConverterModelRepository.getItems(),
+                        domainModelRepository)));
   }
 
   /**
-   * Deduce service implementation.
+   * Service implementation service implementation.
+   *
+   * @param service the service
+   * @param domainEntityConverters the domain entity converters
+   * @param domainModelRepository the domain model repository
+   * @return the service implementation
+   */
+  private ServiceImplementation makeServiceImplementation(
+      Service service,
+      Set<DomainEntityConverter> domainEntityConverters,
+      DomainModelRepository domainModelRepository) {
+
+    Optional<DomainEntityConverter> optionalDomainEntityConverter =
+        getOptionalDomainObjectConverter(
+            domainEntityConverters, new ObjectName(service.getThingName().getText()));
+
+    DomainEntityConverter domainEntityConverter = optionalDomainEntityConverter.get();
+
+    if (optionalDomainEntityConverter.isPresent()) {
+      return makeServiceImplementation(
+          service,
+          domainEntityConverter.getDomainEntity(),
+          aggregateRootParent(domainModelRepository, domainEntityConverter.getDomainEntity()),
+          domainEntityConverter);
+    } else {
+      return new ServiceImplementation(service, new LinkedHashSet<>(), new LinkedHashSet<>());
+    }
+  }
+
+  /**
+   * Make service implementation service implementation.
    *
    * @param service the service
    * @param domainEntity the domain entity
@@ -83,7 +166,7 @@ public class ServiceImplementationDeducer {
    * @param domainEntityConverter the domain entity converter
    * @return the service implementation
    */
-  public ServiceImplementation deduce(
+  public ServiceImplementation makeServiceImplementation(
       Service service,
       BaseDomainEntity<?> domainEntity,
       Optional<AggregateRootPersistable> optionalParentAggregateRoot,

@@ -20,26 +20,35 @@
 
 package io.polygenesis.models.ui;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+/**
+ * The type Ui deducer factory.
+ *
+ * @author Christos Tsakostas
+ */
+public class UiFeatureDeducerFactory {
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import org.junit.Test;
-
-/** @author Christos Tsakostas */
-public class UiDeducerFactoryTest {
-
-  @Test
-  public void shouldFailToInstantiate() throws NoSuchMethodException {
-    Constructor<UiDeducerFactory> constructor = UiDeducerFactory.class.getDeclaredConstructor();
-    constructor.setAccessible(true);
-
-    assertThatThrownBy(constructor::newInstance).isInstanceOf(InvocationTargetException.class);
+  private UiFeatureDeducerFactory() {
+    throw new IllegalStateException("Utility class");
   }
 
-  @Test
-  public void shouldGetUiDeducer() {
-    assertThat(UiDeducerFactory.newInstance()).isNotNull();
+  private static final FeatureDeducer featureDeducer;
+
+  static {
+    FeatureNameDeducer featureNameDeducer = new FeatureNameDeducer();
+    ContainerDeducer containerDeducer = new ContainerDeducer();
+    featureDeducer = new FeatureDeducer(featureNameDeducer, containerDeducer);
+  }
+
+  // ===============================================================================================
+  // GETTERS
+  // ===============================================================================================
+
+  /**
+   * New instance ui deducer.
+   *
+   * @return the ui deducer
+   */
+  public static UiFeatureDeducer newInstance() {
+    return new UiFeatureDeducer(featureDeducer);
   }
 }

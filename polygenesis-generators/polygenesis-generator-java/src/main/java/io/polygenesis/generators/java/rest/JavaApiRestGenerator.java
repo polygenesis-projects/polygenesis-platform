@@ -101,7 +101,7 @@ public class JavaApiRestGenerator extends AbstractGenerator {
   public void generate(Set<ModelRepository> modelRepositories) {
     CoreRegistry.getModelRepositoryResolver()
         .resolve(modelRepositories, RestModelRepository.class)
-        .getResources()
+        .getItems()
         .forEach(
             resource -> {
               resourceExporter.export(getGenerationPath(), resource, getRootPackageName());

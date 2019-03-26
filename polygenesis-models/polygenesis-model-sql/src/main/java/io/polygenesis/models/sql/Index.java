@@ -21,6 +21,8 @@
 package io.polygenesis.models.sql;
 
 import com.oregor.ddd4j.check.assertion.Assertion;
+import io.polygenesis.commons.valueobjects.ObjectName;
+import io.polygenesis.core.Model;
 import java.util.Objects;
 
 /**
@@ -28,7 +30,7 @@ import java.util.Objects;
  *
  * @author Christos Tsakostas
  */
-public class Index {
+public class Index implements Model {
 
   private IndexName indexName;
 
@@ -43,6 +45,15 @@ public class Index {
    */
   public Index(IndexName indexName) {
     setIndexName(indexName);
+  }
+
+  // ===============================================================================================
+  // IMPLEMENTATIONS
+  // ===============================================================================================
+
+  @Override
+  public ObjectName getObjectName() {
+    return new ObjectName(indexName.getText());
   }
 
   // ===============================================================================================

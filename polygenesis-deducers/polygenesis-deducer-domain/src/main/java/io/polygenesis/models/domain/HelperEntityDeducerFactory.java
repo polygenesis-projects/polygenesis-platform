@@ -18,35 +18,37 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.models.sql;
+package io.polygenesis.models.domain;
 
-import com.oregor.ddd4j.check.assertion.Assertion;
-import io.polygenesis.core.ModelRepository;
-import java.util.Set;
+import io.polygenesis.commons.valueobjects.PackageName;
 
 /**
- * The type Sql model repository.
+ * The type Domain service deducer factory.
  *
  * @author Christos Tsakostas
  */
-public class SqlModelRepository implements ModelRepository {
+public final class HelperEntityDeducerFactory {
 
-  private Set<Table> tables;
-  private Set<Index> indices;
+  // ===============================================================================================
+  // DEPENDENCIES
+  // ===============================================================================================
+  private static DomainObjectConstructorDeducer domainObjectConstructorDeducer;
+  private static HelperEntityPropertyDeducer helperEntityPropertyDeducer;
+
+  // ===============================================================================================
+  // STATIC INITIALIZATION OF DEPENDENCIES
+  // ===============================================================================================
+
+  static {
+    domainObjectConstructorDeducer = new DomainObjectConstructorDeducer();
+    helperEntityPropertyDeducer = new HelperEntityPropertyDeducer();
+  }
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
-
-  /**
-   * Instantiates a new Sql model repository.
-   *
-   * @param tables the tables
-   * @param indices the indices
-   */
-  public SqlModelRepository(Set<Table> tables, Set<Index> indices) {
-    setTables(tables);
-    setIndices(indices);
+  private HelperEntityDeducerFactory() {
+    throw new IllegalStateException("Utility class");
   }
 
   // ===============================================================================================
@@ -54,48 +56,12 @@ public class SqlModelRepository implements ModelRepository {
   // ===============================================================================================
 
   /**
-   * Gets tables.
+   * New instance domain service deducer.
    *
-   * @return the tables
+   * @param packageName the package name
+   * @return the domain service deducer
    */
-  public Set<Table> getTables() {
-    return tables;
-  }
-
-  /**
-   * Gets indices.
-   *
-   * @return the indices
-   */
-  public Set<Index> getIndices() {
-    return indices;
-  }
-
-  // ===============================================================================================
-  // QUERIES
-  // ===============================================================================================
-
-  // ===============================================================================================
-  // GUARDS
-  // ===============================================================================================
-
-  /**
-   * Sets tables.
-   *
-   * @param tables the tables
-   */
-  private void setTables(Set<Table> tables) {
-    Assertion.isNotNull(tables, "tables is required");
-    this.tables = tables;
-  }
-
-  /**
-   * Sets indices.
-   *
-   * @param indices the indices
-   */
-  private void setIndices(Set<Index> indices) {
-    Assertion.isNotNull(indices, "indices is required");
-    this.indices = indices;
+  public static HelperEntityDeducer newInstance(PackageName packageName) {
+    return new HelperEntityDeducer(domainObjectConstructorDeducer, helperEntityPropertyDeducer);
   }
 }

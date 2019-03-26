@@ -105,6 +105,7 @@ public class Dto {
         .stream()
         .filter(model -> model.isDataArray())
         .map(DataArray.class::cast)
+        .filter(dataArray -> dataArray.getArrayElement() != null)
         .map(dataArray -> dataArray.getArrayElement())
         .findFirst();
   }

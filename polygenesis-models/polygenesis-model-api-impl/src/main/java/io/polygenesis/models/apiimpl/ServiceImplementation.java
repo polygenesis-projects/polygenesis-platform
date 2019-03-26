@@ -21,6 +21,8 @@
 package io.polygenesis.models.apiimpl;
 
 import com.oregor.ddd4j.check.assertion.Assertion;
+import io.polygenesis.commons.valueobjects.ObjectName;
+import io.polygenesis.core.Model;
 import io.polygenesis.models.api.Service;
 import io.polygenesis.models.domain.AggregateRootPersistable;
 import io.polygenesis.models.domain.BaseDomainEntity;
@@ -34,7 +36,7 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class ServiceImplementation {
+public class ServiceImplementation implements Model {
 
   private Service service;
   private Set<ServiceDependency> dependencies;
@@ -91,6 +93,15 @@ public class ServiceImplementation {
     this.optionalDomainEntity = optionalDomainEntity;
     this.optionalParentAggregateRoot = optionalParentAggregateRoot;
     setDomainEntityConverters(domainEntityConverters);
+  }
+
+  // ===============================================================================================
+  // IMPLEMENTATIONS
+  // ===============================================================================================
+
+  @Override
+  public ObjectName getObjectName() {
+    throw new UnsupportedOperationException();
   }
 
   // ===============================================================================================

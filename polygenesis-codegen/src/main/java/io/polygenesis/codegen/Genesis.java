@@ -104,7 +104,16 @@ public class Genesis {
       ThingRepository thingRepository, Set<Deducer> deducers) {
     Set<ModelRepository> modelRepositories = new LinkedHashSet<>();
     deducers.forEach(
-        deducer -> modelRepositories.add(deducer.deduce(thingRepository, modelRepositories)));
+        deducer -> {
+          ModelRepository modelRepository = deducer.deduce(thingRepository, modelRepositories);
+          if (modelRepository == null) {
+            throw new IllegalArgumentException(
+                String.format(
+                    "Model repository is null for deducer=%s",
+                    deducer.getClass().getCanonicalName()));
+          }
+          modelRepositories.add(modelRepository);
+        });
     return modelRepositories;
   }
 

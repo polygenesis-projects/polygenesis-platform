@@ -22,6 +22,7 @@ package io.polygenesis.core;
 
 import com.oregor.ddd4j.check.assertion.Assertion;
 import io.polygenesis.commons.valueobjects.ContextName;
+import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import java.util.EnumSet;
 import java.util.LinkedHashSet;
@@ -42,7 +43,7 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class Thing {
+public class Thing implements Model {
 
   private ThingScopeType thingScopeType;
   private ThingBusinessType thingBusinessType;
@@ -241,6 +242,15 @@ public class Thing {
     return new PackageName(
         String.format(
             "%s.%s", rootPackageName.getText(), thing.getThingName().getText().toLowerCase()));
+  }
+
+  // ===============================================================================================
+  // IMPLEMENTATIONS
+  // ===============================================================================================
+
+  @Override
+  public ObjectName getObjectName() {
+    return new ObjectName(getThingName().getText());
   }
 
   // ===============================================================================================

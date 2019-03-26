@@ -18,44 +18,36 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.generators.sql;
+package io.polygenesis.deducers.apiimpl;
 
-import io.polygenesis.core.AbstractGenerator;
-import io.polygenesis.core.CoreRegistry;
-import io.polygenesis.core.ModelRepository;
-import io.polygenesis.models.sql.SqlTableModelRepository;
-import java.nio.file.Path;
-import java.util.Set;
+import io.polygenesis.commons.valueobjects.PackageName;
 
 /**
- * The type Sql generator.
+ * The type Api impl deducer factory.
  *
  * @author Christos Tsakostas
  */
-public class SqlGenerator extends AbstractGenerator {
+public class ServiceImplementationDeducerFactory {
 
   // ===============================================================================================
   // DEPENDENCIES
   // ===============================================================================================
 
-  private final ScriptExporter scriptExporter;
-  private final String tablePrefix;
+  private static final ServiceMethodImplementationDeducer serviceMethodImplementationDeducer;
+
+  // ===============================================================================================
+  // STATIC INITIALIZATION OF DEPENDENCIES
+  // ===============================================================================================
+
+  static {
+    serviceMethodImplementationDeducer = new ServiceMethodImplementationDeducer();
+  }
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
-
-  /**
-   * Instantiates a new Sql generator.
-   *
-   * @param generationPath the generation path
-   * @param scriptExporter the script exporter
-   * @param tablePrefix the table prefix
-   */
-  public SqlGenerator(Path generationPath, ScriptExporter scriptExporter, String tablePrefix) {
-    super(generationPath);
-    this.scriptExporter = scriptExporter;
-    this.tablePrefix = tablePrefix;
+  private ServiceImplementationDeducerFactory() {
+    throw new IllegalStateException("Utility class");
   }
 
   // ===============================================================================================
@@ -63,28 +55,12 @@ public class SqlGenerator extends AbstractGenerator {
   // ===============================================================================================
 
   /**
-   * Gets table prefix.
+   * New instance api impl deducer.
    *
-   * @return the table prefix
+   * @param packageName the package name
+   * @return the api impl deducer
    */
-  public String getTablePrefix() {
-    return tablePrefix;
-  }
-
-  // ===============================================================================================
-  // OVERRIDES
-  // ===============================================================================================
-
-  @Override
-  public void generate(Set<ModelRepository> modelRepositories) {
-    SqlTableModelRepository sqlTableModelRepository =
-        CoreRegistry.getModelRepositoryResolver()
-            .resolve(modelRepositories, SqlTableModelRepository.class);
-
-    if (sqlTableModelRepository.getItems().size() == 1) {
-      return;
-    }
-
-    scriptExporter.export(getGenerationPath(), sqlTableModelRepository, getTablePrefix());
+  public static ServiceImplementationDeducer newInstance(PackageName packageName) {
+    return new ServiceImplementationDeducer(serviceMethodImplementationDeducer);
   }
 }

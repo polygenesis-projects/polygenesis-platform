@@ -24,6 +24,7 @@ import com.oregor.ddd4j.check.assertion.Assertion;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.Function;
+import io.polygenesis.core.Model;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -33,7 +34,7 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class DomainService {
+public class DomainService implements Model {
 
   // ===============================================================================================
   // STATE
@@ -57,6 +58,10 @@ public class DomainService {
     setPackageName(packageName);
     setFunctions(new LinkedHashSet<>());
   }
+
+  // ===============================================================================================
+  // IMPLEMENTATIONS
+  // ===============================================================================================
 
   // ===============================================================================================
   // STATE MUTATION

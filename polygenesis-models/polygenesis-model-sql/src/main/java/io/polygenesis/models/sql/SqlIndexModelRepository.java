@@ -18,15 +18,30 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.models.ui;
+package io.polygenesis.models.sql;
 
-import org.junit.Test;
+import io.polygenesis.core.AbstractModelRepository;
+import io.polygenesis.core.ModelRepository;
+import java.util.Set;
 
-/** @author Christos Tsakostas */
-public class UiDeducerTest {
+/**
+ * The type Sql index model repository.
+ *
+ * @author Christos Tsakostas
+ */
+public class SqlIndexModelRepository extends AbstractModelRepository<Index>
+    implements ModelRepository<Index> {
 
-  @Test
-  public void deduce() {
-    // TODO
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
+  /**
+   * Instantiates a new Sql index model repository.
+   *
+   * @param items the items
+   */
+  public SqlIndexModelRepository(Set<Index> items) {
+    super(items);
   }
 }

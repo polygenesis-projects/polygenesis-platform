@@ -20,7 +20,6 @@
 
 package io.polygenesis.generators.sql;
 
-import io.polygenesis.models.sql.SqlModelRepository;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -34,10 +33,9 @@ public class ScriptRepresentable {
   /**
    * Create script representation.
    *
-   * @param sqlModelRepository the sql model repository
    * @return the script representation
    */
-  public ScriptRepresentation create(SqlModelRepository sqlModelRepository) {
+  public ScriptRepresentation create() {
     Set<String> createTables = new LinkedHashSet<>();
     Set<String> createTableIndices = new LinkedHashSet<>();
 

@@ -24,6 +24,7 @@ import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.AbstractGenerator;
 import io.polygenesis.core.CoreRegistry;
 import io.polygenesis.core.ModelRepository;
+import io.polygenesis.models.apiimpl.DomainEntityConverterModelRepository;
 import io.polygenesis.models.apiimpl.ServiceImplementationModelRepository;
 import java.nio.file.Path;
 import java.util.Set;
@@ -89,22 +90,26 @@ public class JavaApiImplGenerator extends AbstractGenerator {
         CoreRegistry.getModelRepositoryResolver()
             .resolve(modelRepositories, ServiceImplementationModelRepository.class);
 
-    if (serviceImplementationModelRepository.getServiceImplementations().isEmpty()) {
+    if (serviceImplementationModelRepository.getItems().isEmpty()) {
       throw new IllegalStateException();
     }
 
     serviceImplementationModelRepository
-        .getServiceImplementations()
+        .getItems()
         .forEach(
             serviceImplementation -> {
               serviceImplementationExporter.export(getGenerationPath(), serviceImplementation);
               serviceImplementationTestExporter.export(getGenerationPath(), serviceImplementation);
             });
 
-    serviceImplementationModelRepository
-        .getDomainEntityConverters()
+    DomainEntityConverterModelRepository domainEntityConverterModelRepository =
+        CoreRegistry.getModelRepositoryResolver()
+            .resolve(modelRepositories, DomainEntityConverterModelRepository.class);
+
+    domainEntityConverterModelRepository
+        .getItems()
         .forEach(
-            aggregateRootConverter ->
-                domainObjectConverterExporter.export(getGenerationPath(), aggregateRootConverter));
+            domainEntityConverter ->
+                domainObjectConverterExporter.export(getGenerationPath(), domainEntityConverter));
   }
 }

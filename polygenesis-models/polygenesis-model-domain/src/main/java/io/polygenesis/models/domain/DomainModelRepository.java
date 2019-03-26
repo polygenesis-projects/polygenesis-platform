@@ -20,9 +20,8 @@
 
 package io.polygenesis.models.domain;
 
-import io.polygenesis.commons.valueobjects.ObjectName;
+import io.polygenesis.core.AbstractModelRepository;
 import io.polygenesis.core.ModelRepository;
-import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -30,13 +29,8 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class DomainModelRepository implements ModelRepository {
-
-  // ===============================================================================================
-  // STATE
-  // ===============================================================================================
-
-  private Set<AggregateRoot> aggregateRoots;
+public class DomainModelRepository extends AbstractModelRepository<AggregateRoot>
+    implements ModelRepository<AggregateRoot> {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -45,65 +39,9 @@ public class DomainModelRepository implements ModelRepository {
   /**
    * Instantiates a new Domain model repository.
    *
-   * @param aggregateRoots the aggregate roots
+   * @param items the items
    */
-  public DomainModelRepository(Set<AggregateRoot> aggregateRoots) {
-    setAggregateRoots(aggregateRoots);
-  }
-
-  // ===============================================================================================
-  // STATE MUTATION
-  // ===============================================================================================
-
-  /**
-   * Add aggregate root.
-   *
-   * @param aggregateRoot the aggregate root
-   */
-  public void addAggregateRoot(AggregateRoot aggregateRoot) {
-    getAggregateRoots().add(aggregateRoot);
-  }
-
-  // ===============================================================================================
-  // QUERIES
-  // ===============================================================================================
-
-  /**
-   * Gets aggregate root by name.
-   *
-   * @param objectName the name
-   * @return the aggregate root by name
-   */
-  public Optional<AggregateRoot> getAggregateRootByName(ObjectName objectName) {
-    return aggregateRoots
-        .stream()
-        .filter(aggregateRoot -> aggregateRoot.getObjectName().equals(objectName))
-        .findFirst();
-  }
-
-  // ===============================================================================================
-  // GETTERS
-  // ===============================================================================================
-
-  /**
-   * Gets aggregate roots.
-   *
-   * @return the aggregate roots
-   */
-  public Set<AggregateRoot> getAggregateRoots() {
-    return aggregateRoots;
-  }
-
-  // ===============================================================================================
-  // GUARDS
-  // ===============================================================================================
-
-  /**
-   * Sets aggregate roots.
-   *
-   * @param aggregateRoots the aggregate roots
-   */
-  private void setAggregateRoots(Set<AggregateRoot> aggregateRoots) {
-    this.aggregateRoots = aggregateRoots;
+  public DomainModelRepository(Set<AggregateRoot> items) {
+    super(items);
   }
 }

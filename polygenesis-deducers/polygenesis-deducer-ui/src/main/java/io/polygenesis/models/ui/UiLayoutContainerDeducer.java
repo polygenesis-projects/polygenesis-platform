@@ -18,30 +18,45 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.models.domain;
+package io.polygenesis.models.ui;
 
-import io.polygenesis.core.AbstractModelRepository;
+import io.polygenesis.core.Deducer;
 import io.polygenesis.core.ModelRepository;
+import io.polygenesis.core.ThingRepository;
+import io.polygenesis.models.ui.container.LayoutContainer;
 import java.util.Set;
 
 /**
- * The type Domain service repository.
+ * The type Ui layout container deducer.
  *
  * @author Christos Tsakostas
  */
-public class DomainServiceRepository extends AbstractModelRepository<DomainService>
-    implements ModelRepository<DomainService> {
+public class UiLayoutContainerDeducer implements Deducer<UiLayoutContainerModelRepository> {
+
+  private final LayoutDeducer layoutDeducer;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
-   * Instantiates a new Domain service repository.
+   * Instantiates a new Ui layout container deducer.
    *
-   * @param items the items
+   * @param layoutDeducer the layout deducer
    */
-  public DomainServiceRepository(Set<DomainService> items) {
-    super(items);
+  public UiLayoutContainerDeducer(LayoutDeducer layoutDeducer) {
+    this.layoutDeducer = layoutDeducer;
+  }
+
+  // ===============================================================================================
+  // OVERRIDES
+  // ===============================================================================================
+  @Override
+  public UiLayoutContainerModelRepository deduce(
+      ThingRepository thingRepository, Set<ModelRepository> modelRepositories) {
+
+    Set<LayoutContainer> layoutContainers = layoutDeducer.deduceLayoutsFromFeatures();
+
+    return new UiLayoutContainerModelRepository(layoutContainers);
   }
 }

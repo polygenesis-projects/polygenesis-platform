@@ -80,6 +80,13 @@ public class AggregateRootDeducer {
 
     thingRepository
         .getDomainModelThings()
+        .stream()
+        .filter(
+            thing ->
+                thing.getThingScopeType().equals(ThingScopeType.DOMAIN_AGGREGATE_ROOT)
+                    || thing
+                        .getThingScopeType()
+                        .equals(ThingScopeType.DOMAIN_ABSTRACT_AGGREGATE_ROOT))
         .forEach(
             thing -> {
               if (!thing.getOptionalParent().isPresent() || thingRepository.isVirtualChild(thing)) {
@@ -143,6 +150,7 @@ public class AggregateRootDeducer {
             thing.getMultiTenant(),
             persistence));
 
+    // TODO: check if the following should be removed
     thing
         .getVirtualChildren()
         .forEach(

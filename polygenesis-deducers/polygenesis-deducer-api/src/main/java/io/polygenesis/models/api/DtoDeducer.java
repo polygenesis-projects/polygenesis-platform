@@ -269,8 +269,9 @@ public class DtoDeducer {
     if (modelPrimitives.isEmpty()) {
       throw new IllegalStateException(
           String.format(
-              "No %s found in Request Dto. Thing name=%s, function=%s",
+              "No %s found in Dto=%s. Thing name=%s, function=%s",
               dataBusinessType.name(),
+              dto.getDataGroup().getObjectName().getText(),
               function.getThing().getThingName().getText(),
               function.getName().getText()));
     }
@@ -278,8 +279,9 @@ public class DtoDeducer {
     if (modelPrimitives.size() > 1) {
       throw new IllegalStateException(
           String.format(
-              "More than one %s found in Request Dto. Thing name=%s, function=%s",
+              "More than one %s found in Dto=%s. Thing name=%s, function=%s",
               dataBusinessType.name(),
+              dto.getDataGroup().getObjectName().getText(),
               function.getThing().getThingName().getText(),
               function.getName().getText()));
     }

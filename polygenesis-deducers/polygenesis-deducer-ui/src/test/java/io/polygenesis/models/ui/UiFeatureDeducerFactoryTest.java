@@ -18,26 +18,29 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.generators.angular;
+package io.polygenesis.models.ui;
 
-import java.nio.file.Paths;
-import org.junit.Before;
-import org.junit.Ignore;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import org.junit.Test;
 
 /** @author Christos Tsakostas */
-public class AngularGeneratorTest extends AbstractAngularGeneratorTest {
+public class UiFeatureDeducerFactoryTest {
 
-  private AngularGenerator generator;
+  @Test
+  public void shouldFailToInstantiate() throws NoSuchMethodException {
+    Constructor<UiFeatureDeducerFactory> constructor =
+        UiFeatureDeducerFactory.class.getDeclaredConstructor();
+    constructor.setAccessible(true);
 
-  @Before
-  public void setUp() throws Exception {
-    generator = AngularGeneratorFactory.newInstance(Paths.get("tmp/polygenesis-angular-generator"));
+    assertThatThrownBy(constructor::newInstance).isInstanceOf(InvocationTargetException.class);
   }
 
   @Test
-  public void shouldInitialize() {
-    generator.generate(getModelRepositories());
-    // TODO
+  public void shouldGetUiDeducer() {
+    assertThat(UiFeatureDeducerFactory.newInstance()).isNotNull();
   }
 }

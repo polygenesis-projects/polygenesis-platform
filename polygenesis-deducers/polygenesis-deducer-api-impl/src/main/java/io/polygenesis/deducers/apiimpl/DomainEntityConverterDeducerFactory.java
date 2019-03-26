@@ -18,30 +18,37 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.models.domain;
+package io.polygenesis.deducers.apiimpl;
 
-import io.polygenesis.core.AbstractModelRepository;
-import io.polygenesis.core.ModelRepository;
-import java.util.Set;
+import io.polygenesis.commons.valueobjects.PackageName;
 
 /**
- * The type Domain service repository.
+ * The type Api impl deducer factory.
  *
  * @author Christos Tsakostas
  */
-public class DomainServiceRepository extends AbstractModelRepository<DomainService>
-    implements ModelRepository<DomainService> {
+public class DomainEntityConverterDeducerFactory {
+
+  // ===============================================================================================
+  // DEPENDENCIES
+  // ===============================================================================================
+
+  // ===============================================================================================
+  // STATIC INITIALIZATION OF DEPENDENCIES
+  // ===============================================================================================
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
+  private DomainEntityConverterDeducerFactory() {
+    throw new IllegalStateException("Utility class");
+  }
 
-  /**
-   * Instantiates a new Domain service repository.
-   *
-   * @param items the items
-   */
-  public DomainServiceRepository(Set<DomainService> items) {
-    super(items);
+  // ===============================================================================================
+  // GETTERS
+  // ===============================================================================================
+
+  public static DomainEntityConverterDeducer newInstance(PackageName packageName) {
+    return new DomainEntityConverterDeducer();
   }
 }

@@ -18,58 +18,59 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.models.ui;
+package io.polygenesis.core;
 
 import com.oregor.ddd4j.check.assertion.Assertion;
-import io.polygenesis.core.ModelRepository;
-import io.polygenesis.models.ui.container.LayoutContainer;
+import io.polygenesis.commons.valueobjects.ObjectName;
+import java.util.Optional;
 import java.util.Set;
 
 /**
- * The type Ui model repository.
+ * The type Abstract model repository.
  *
+ * @param <T> the type parameter
  * @author Christos Tsakostas
  */
-public class UiModelRepository implements ModelRepository {
+public class AbstractModelRepository<T extends Model> implements ModelRepository<T> {
 
-  private Set<Feature> features;
-  private Set<LayoutContainer> layouts;
+  // ===============================================================================================
+  // STATE
+  // ===============================================================================================
+
+  private Set<T> items;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
-   * Instantiates a new Ui model repository.
+   * Instantiates a new Abstract model repository.
    *
-   * @param features the features
-   * @param layouts the layouts
+   * @param items the items
    */
-  public UiModelRepository(Set<Feature> features, Set<LayoutContainer> layouts) {
-    setFeatures(features);
-    setLayouts(layouts);
+  public AbstractModelRepository(Set<T> items) {
+    setItems(items);
   }
+
+  // ===============================================================================================
+  // STATE MUTATION
+  // ===============================================================================================
 
   // ===============================================================================================
   // GETTERS
   // ===============================================================================================
 
-  /**
-   * Gets features.
-   *
-   * @return the features
-   */
-  public Set<Feature> getFeatures() {
-    return features;
+  @Override
+  public Set<T> getItems() {
+    return items;
   }
 
-  /**
-   * Gets layouts.
-   *
-   * @return the layouts
-   */
-  public Set<LayoutContainer> getLayouts() {
-    return layouts;
+  // ===============================================================================================
+  // QUERIES
+  // ===============================================================================================
+  @Override
+  public Optional<T> getItemByObjectName(ObjectName objectName) {
+    return items.stream().filter(item -> item.getObjectName().equals(objectName)).findFirst();
   }
 
   // ===============================================================================================
@@ -77,22 +78,12 @@ public class UiModelRepository implements ModelRepository {
   // ===============================================================================================
 
   /**
-   * Sets features.
+   * Sets items.
    *
-   * @param features the features
+   * @param items the items
    */
-  private void setFeatures(Set<Feature> features) {
-    Assertion.isNotNull(features, "features is required");
-    this.features = features;
-  }
-
-  /**
-   * Sets layouts.
-   *
-   * @param layouts the layouts
-   */
-  private void setLayouts(Set<LayoutContainer> layouts) {
-    Assertion.isNotNull(layouts, "layouts is required");
-    this.layouts = layouts;
+  private void setItems(Set<T> items) {
+    Assertion.isNotNull(items, "items is required");
+    this.items = items;
   }
 }

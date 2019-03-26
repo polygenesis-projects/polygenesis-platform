@@ -18,26 +18,28 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.generators.angular;
+package io.polygenesis.models.domain;
 
-import java.nio.file.Paths;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import io.polygenesis.core.AbstractModelRepository;
+import java.util.Set;
 
-/** @author Christos Tsakostas */
-public class AngularGeneratorTest extends AbstractAngularGeneratorTest {
+/**
+ * The type Helper entity model repository.
+ *
+ * @author Christos Tsakostas
+ */
+public class HelperEntityModelRepository extends AbstractModelRepository<HelperEntity> {
 
-  private AngularGenerator generator;
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
 
-  @Before
-  public void setUp() throws Exception {
-    generator = AngularGeneratorFactory.newInstance(Paths.get("tmp/polygenesis-angular-generator"));
-  }
-
-  @Test
-  public void shouldInitialize() {
-    generator.generate(getModelRepositories());
-    // TODO
+  /**
+   * Instantiates a new Helper entity model repository.
+   *
+   * @param items the items
+   */
+  public HelperEntityModelRepository(Set<HelperEntity> items) {
+    super(items);
   }
 }

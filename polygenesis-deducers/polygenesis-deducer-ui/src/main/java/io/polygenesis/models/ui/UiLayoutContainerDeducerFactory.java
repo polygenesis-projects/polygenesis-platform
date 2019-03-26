@@ -18,26 +18,35 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.generators.angular;
+package io.polygenesis.models.ui;
 
-import java.nio.file.Paths;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+/**
+ * The type Ui deducer factory.
+ *
+ * @author Christos Tsakostas
+ */
+public class UiLayoutContainerDeducerFactory {
 
-/** @author Christos Tsakostas */
-public class AngularGeneratorTest extends AbstractAngularGeneratorTest {
-
-  private AngularGenerator generator;
-
-  @Before
-  public void setUp() throws Exception {
-    generator = AngularGeneratorFactory.newInstance(Paths.get("tmp/polygenesis-angular-generator"));
+  private UiLayoutContainerDeducerFactory() {
+    throw new IllegalStateException("Utility class");
   }
 
-  @Test
-  public void shouldInitialize() {
-    generator.generate(getModelRepositories());
-    // TODO
+  private static final LayoutDeducer layoutDeducer;
+
+  static {
+    layoutDeducer = new LayoutDeducer();
+  }
+
+  // ===============================================================================================
+  // GETTERS
+  // ===============================================================================================
+
+  /**
+   * New instance ui deducer.
+   *
+   * @return the ui deducer
+   */
+  public static UiLayoutContainerDeducer newInstance() {
+    return new UiLayoutContainerDeducer(layoutDeducer);
   }
 }

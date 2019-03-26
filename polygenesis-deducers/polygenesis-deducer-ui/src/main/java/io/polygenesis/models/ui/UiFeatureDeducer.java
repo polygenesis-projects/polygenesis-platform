@@ -18,30 +18,48 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.models.domain;
+package io.polygenesis.models.ui;
 
-import io.polygenesis.core.AbstractModelRepository;
+import io.polygenesis.core.Deducer;
 import io.polygenesis.core.ModelRepository;
+import io.polygenesis.core.ThingRepository;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
- * The type Domain service repository.
+ * The type Ui feature deducer.
  *
  * @author Christos Tsakostas
  */
-public class DomainServiceRepository extends AbstractModelRepository<DomainService>
-    implements ModelRepository<DomainService> {
+public class UiFeatureDeducer implements Deducer<UiFeatureModelRepository> {
+
+  private final FeatureDeducer featureDeducer;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
-   * Instantiates a new Domain service repository.
+   * Instantiates a new Ui feature deducer.
    *
-   * @param items the items
+   * @param featureDeducer the feature deducer
    */
-  public DomainServiceRepository(Set<DomainService> items) {
-    super(items);
+  public UiFeatureDeducer(FeatureDeducer featureDeducer) {
+    this.featureDeducer = featureDeducer;
+  }
+
+  // ===============================================================================================
+  // OVERRIDES
+  // ===============================================================================================
+  @Override
+  public UiFeatureModelRepository deduce(
+      ThingRepository thingRepository, Set<ModelRepository> modelRepositories) {
+    Set<Feature> features = new LinkedHashSet<>();
+
+    thingRepository
+        .getApiThings()
+        .forEach(thing -> features.add(featureDeducer.deduceFeatureFromThing(thing)));
+
+    return new UiFeatureModelRepository(features);
   }
 }

@@ -21,8 +21,10 @@
 package io.polygenesis.models.api;
 
 import io.polygenesis.annotations.core.CqsType;
+import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.Function;
+import io.polygenesis.core.Model;
 import io.polygenesis.core.ThingName;
 import java.util.Objects;
 import java.util.Set;
@@ -32,7 +34,7 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class Service {
+public class Service implements Model {
 
   private PackageName packageName;
   private ServiceName serviceName;
@@ -68,6 +70,15 @@ public class Service {
     setCqrsType(cqrsType);
     setThingName(thingName);
     setDtos(dtos);
+  }
+
+  // ===============================================================================================
+  // IMPLEMENTATIONS
+  // ===============================================================================================
+
+  @Override
+  public ObjectName getObjectName() {
+    return new ObjectName(serviceName.getText());
   }
 
   // ===============================================================================================

@@ -23,6 +23,7 @@ package io.polygenesis.models.apiimpl;
 import com.oregor.ddd4j.check.assertion.Assertion;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.commons.valueobjects.ObjectName;
+import io.polygenesis.core.Model;
 import io.polygenesis.core.data.VariableName;
 import io.polygenesis.models.domain.BaseDomainEntity;
 import java.util.Objects;
@@ -33,7 +34,7 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class DomainEntityConverter extends ServiceDependency {
+public class DomainEntityConverter extends ServiceDependency implements Model {
 
   private BaseDomainEntity<?> domainEntity;
   private Set<DomainEntityConverterMethod> methods;
@@ -62,6 +63,10 @@ public class DomainEntityConverter extends ServiceDependency {
     setDomainEntity(domainEntity);
     setMethods(methods);
   }
+
+  // ===============================================================================================
+  // IMPLEMENTATIONS
+  // ===============================================================================================
 
   // ===============================================================================================
   // GETTERS

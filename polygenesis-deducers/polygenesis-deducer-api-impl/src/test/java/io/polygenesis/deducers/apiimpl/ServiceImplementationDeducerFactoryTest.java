@@ -18,26 +18,30 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.generators.angular;
+package io.polygenesis.deducers.apiimpl;
 
-import java.nio.file.Paths;
-import org.junit.Before;
-import org.junit.Ignore;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+import io.polygenesis.commons.valueobjects.PackageName;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import org.junit.Test;
 
 /** @author Christos Tsakostas */
-public class AngularGeneratorTest extends AbstractAngularGeneratorTest {
+public class ServiceImplementationDeducerFactoryTest {
 
-  private AngularGenerator generator;
-
-  @Before
-  public void setUp() throws Exception {
-    generator = AngularGeneratorFactory.newInstance(Paths.get("tmp/polygenesis-angular-generator"));
+  @Test
+  public void shouldFailToInstantiate() throws NoSuchMethodException {
+    Constructor<ServiceImplementationDeducerFactory> constructor =
+        ServiceImplementationDeducerFactory.class.getDeclaredConstructor();
+    constructor.setAccessible(true);
+    assertThatThrownBy(constructor::newInstance).isInstanceOf(InvocationTargetException.class);
   }
 
   @Test
-  public void shouldInitialize() {
-    generator.generate(getModelRepositories());
-    // TODO
+  public void shouldCreateNewInstance() {
+    assertThat(ServiceImplementationDeducerFactory.newInstance(new PackageName("com.oregor")))
+        .isNotNull();
   }
 }

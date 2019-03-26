@@ -65,7 +65,7 @@ public class DomainServiceImplementationGenerator extends AbstractGenerator {
   public void generate(Set<ModelRepository> modelRepositories) {
     CoreRegistry.getModelRepositoryResolver()
         .resolve(modelRepositories, DomainServiceRepository.class)
-        .getDomainServices()
+        .getItems()
         .forEach(
             domainService -> {
               domainServiceImplementationExporter.export(getGenerationPath(), domainService);

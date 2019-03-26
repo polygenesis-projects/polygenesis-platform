@@ -128,7 +128,7 @@ public class JavaRdbmsGenerator extends AbstractGenerator {
         CoreRegistry.getModelRepositoryResolver()
             .resolve(modelRepositories, DomainModelRepository.class);
 
-    if (domainModelRepository.getAggregateRoots().isEmpty()) {
+    if (domainModelRepository.getItems().isEmpty()) {
       return;
     }
 
@@ -142,7 +142,7 @@ public class JavaRdbmsGenerator extends AbstractGenerator {
     applicationCiRdbmsYmlExporter.export(getGenerationPath());
 
     domainModelRepository
-        .getAggregateRoots()
+        .getItems()
         .stream()
         .filter(aggregateRoot -> aggregateRoot instanceof AggregateRootPersistable)
         .map(AggregateRootPersistable.class::cast)

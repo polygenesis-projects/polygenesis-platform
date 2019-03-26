@@ -27,9 +27,8 @@ import io.polygenesis.core.ThingRepository;
 import io.polygenesis.models.domain.DomainModelRepository;
 import io.polygenesis.models.sql.Column;
 import io.polygenesis.models.sql.ColumnDataType;
-import io.polygenesis.models.sql.Index;
 import io.polygenesis.models.sql.RequiredType;
-import io.polygenesis.models.sql.SqlModelRepository;
+import io.polygenesis.models.sql.SqlTableModelRepository;
 import io.polygenesis.models.sql.Table;
 import io.polygenesis.models.sql.TableName;
 import java.util.LinkedHashSet;
@@ -40,27 +39,19 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class SqlDeducer implements Deducer<SqlModelRepository> {
+public class SqlTableDeducer implements Deducer<SqlTableModelRepository> {
 
   // ===============================================================================================
   // DEPENDENCIES
   // ===============================================================================================
   private final TableDeducer tableDeducer;
-  private final IndexDeducer indexDeducer;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
-  /**
-   * Instantiates a new Sql deducer.
-   *
-   * @param tableDeducer the table deducer
-   * @param indexDeducer the index deducer
-   */
-  public SqlDeducer(TableDeducer tableDeducer, IndexDeducer indexDeducer) {
+  public SqlTableDeducer(TableDeducer tableDeducer) {
     this.tableDeducer = tableDeducer;
-    this.indexDeducer = indexDeducer;
   }
 
   // ===============================================================================================
@@ -68,27 +59,25 @@ public class SqlDeducer implements Deducer<SqlModelRepository> {
   // ===============================================================================================
 
   @Override
-  public SqlModelRepository deduce(
+  public SqlTableModelRepository deduce(
       ThingRepository thingRepository, Set<ModelRepository> modelRepositories) {
     if (thingRepository.getApiThings().isEmpty()) {
       throw new IllegalArgumentException("thingRepository cannot be empty");
     }
 
     Set<Table> tables = new LinkedHashSet<>();
-    Set<Index> indices = new LinkedHashSet<>();
 
     CoreRegistry.getModelRepositoryResolver()
         .resolve(modelRepositories, DomainModelRepository.class)
-        .getAggregateRoots()
+        .getItems()
         .forEach(
             aggregateRoot -> {
               tables.addAll(tableDeducer.deduce(aggregateRoot));
-              indices.add(indexDeducer.deduce());
             });
 
     tables.add(createDomainMessageTable());
 
-    return new SqlModelRepository(tables, indices);
+    return new SqlTableModelRepository(tables);
   }
 
   // ===============================================================================================

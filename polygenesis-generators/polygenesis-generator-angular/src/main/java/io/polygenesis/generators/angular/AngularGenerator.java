@@ -28,7 +28,8 @@ import io.polygenesis.generators.angular.once.OnceExporter;
 import io.polygenesis.generators.angular.reactivestate.StoreExporter;
 import io.polygenesis.generators.angular.ui.UiExporter;
 import io.polygenesis.models.reactivestate.ReactiveStateModelRepository;
-import io.polygenesis.models.ui.UiModelRepository;
+import io.polygenesis.models.ui.UiFeatureModelRepository;
+import io.polygenesis.models.ui.UiLayoutContainerModelRepository;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Set;
@@ -45,7 +46,7 @@ public class AngularGenerator extends AbstractGenerator {
   private final UiExporter uiExporter;
 
   private ReactiveStateModelRepository reactiveStateModelRepository;
-  private UiModelRepository uiModelRepository;
+  private UiFeatureModelRepository uiFeatureModelRepository;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -86,14 +87,17 @@ public class AngularGenerator extends AbstractGenerator {
 
     Path generationPathApp = Paths.get(getGenerationPath().toString(), "app");
 
-    onceExporter.export(getGenerationPath(), uiModelRepository);
+    onceExporter.export(
+        getGenerationPath(),
+        CoreRegistry.getModelRepositoryResolver()
+            .resolve(modelRepositories, UiLayoutContainerModelRepository.class));
 
     reactiveStateModelRepository
-        .getStores()
+        .getItems()
         .forEach(store -> storeExporter.export(generationPathApp, store));
 
-    uiModelRepository
-        .getFeatures()
+    uiFeatureModelRepository
+        .getItems()
         .forEach(feature -> uiExporter.export(getGenerationPath(), feature));
   }
 
@@ -111,8 +115,8 @@ public class AngularGenerator extends AbstractGenerator {
         CoreRegistry.getModelRepositoryResolver()
             .resolve(modelRepositories, ReactiveStateModelRepository.class);
 
-    uiModelRepository =
+    uiFeatureModelRepository =
         CoreRegistry.getModelRepositoryResolver()
-            .resolve(modelRepositories, UiModelRepository.class);
+            .resolve(modelRepositories, UiFeatureModelRepository.class);
   }
 }

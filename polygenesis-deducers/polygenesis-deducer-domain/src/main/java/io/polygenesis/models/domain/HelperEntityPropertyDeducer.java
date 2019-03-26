@@ -18,26 +18,30 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.generators.angular;
+package io.polygenesis.models.domain;
 
-import java.nio.file.Paths;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import io.polygenesis.commons.valueobjects.PackageName;
+import io.polygenesis.core.Thing;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
-/** @author Christos Tsakostas */
-public class AngularGeneratorTest extends AbstractAngularGeneratorTest {
+/**
+ * The type Helper entity property deducer.
+ *
+ * @author Christos Tsakostas
+ */
+public class HelperEntityPropertyDeducer extends BasePropertyDeducer {
 
-  private AngularGenerator generator;
+  /**
+   * Deduce from set.
+   *
+   * @param thing the thing
+   * @param rootPackageName the root package name
+   * @return the set
+   */
+  public Set<DomainObjectProperty> deduceFrom(Thing thing, PackageName rootPackageName) {
+    Set<DomainObjectProperty> properties = new LinkedHashSet<>();
 
-  @Before
-  public void setUp() throws Exception {
-    generator = AngularGeneratorFactory.newInstance(Paths.get("tmp/polygenesis-angular-generator"));
-  }
-
-  @Test
-  public void shouldInitialize() {
-    generator.generate(getModelRepositories());
-    // TODO
+    return properties;
   }
 }

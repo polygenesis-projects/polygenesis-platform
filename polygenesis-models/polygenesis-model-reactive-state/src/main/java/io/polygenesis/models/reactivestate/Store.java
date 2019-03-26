@@ -22,6 +22,7 @@ package io.polygenesis.models.reactivestate;
 
 import com.oregor.ddd4j.check.assertion.Assertion;
 import io.polygenesis.commons.valueobjects.FeatureName;
+import io.polygenesis.commons.valueobjects.ObjectName;
 import java.util.Objects;
 import java.util.Set;
 
@@ -30,7 +31,7 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class Store {
+public class Store implements io.polygenesis.core.Model {
 
   // ===============================================================================================
   // STATE
@@ -66,6 +67,15 @@ public class Store {
     setEffectGroups(effectGroups);
     setModels(models);
     setReducerGroups(reducerGroups);
+  }
+
+  // ===============================================================================================
+  // IMPLEMENTATIONS
+  // ===============================================================================================
+
+  @Override
+  public ObjectName getObjectName() {
+    return new ObjectName(featureName.getText());
   }
 
   // ===============================================================================================

@@ -121,7 +121,7 @@ public class JavaDomainGenerator extends AbstractGenerator {
   public void generate(Set<ModelRepository> modelRepositories) {
     CoreRegistry.getModelRepositoryResolver()
         .resolve(modelRepositories, DomainModelRepository.class)
-        .getAggregateRoots()
+        .getItems()
         .forEach(
             aggregateRoot -> {
               aggregateRootExporter.export(
@@ -189,7 +189,7 @@ public class JavaDomainGenerator extends AbstractGenerator {
 
     CoreRegistry.getModelRepositoryResolver()
         .resolve(modelRepositories, DomainServiceRepository.class)
-        .getDomainServices()
+        .getItems()
         .forEach(
             domainService -> {
               domainServiceExporter.export(getGenerationPath(), domainService);

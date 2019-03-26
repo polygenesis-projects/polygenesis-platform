@@ -34,6 +34,7 @@ import io.polygenesis.core.ThingName;
 import io.polygenesis.models.api.Service;
 import io.polygenesis.models.api.ServiceModelRepository;
 import io.polygenesis.models.apiimpl.DomainEntityConverter;
+import io.polygenesis.models.apiimpl.DomainEntityConverterModelRepository;
 import io.polygenesis.models.apiimpl.ServiceImplementation;
 import io.polygenesis.models.apiimpl.ServiceImplementationModelRepository;
 import io.polygenesis.models.domain.AggregateRoot;
@@ -108,6 +109,7 @@ public class JavaApiImplGeneratorTest {
         Arrays.asList(
             createServiceModelRepository(),
             createDomainModelRepository(),
+            createDomainEntityConverterModelRepository(),
             createServiceImplementationModelRepository()));
   }
 
@@ -131,9 +133,14 @@ public class JavaApiImplGeneratorTest {
     return new DomainModelRepository(aggregateRoots);
   }
 
+  private DomainEntityConverterModelRepository createDomainEntityConverterModelRepository() {
+    Set<DomainEntityConverter> domainEntityConverters = new LinkedHashSet<>();
+
+    return new DomainEntityConverterModelRepository(domainEntityConverters);
+  }
+
   private ServiceImplementationModelRepository createServiceImplementationModelRepository() {
     Set<ServiceImplementation> serviceImplementations = new LinkedHashSet<>();
-    Set<DomainEntityConverter> domainEntityConverters = new LinkedHashSet<>();
 
     ServiceImplementation serviceImplementation = mock(ServiceImplementation.class);
     Service service = mock(Service.class);
@@ -142,6 +149,6 @@ public class JavaApiImplGeneratorTest {
 
     serviceImplementations.add(serviceImplementation);
 
-    return new ServiceImplementationModelRepository(serviceImplementations, domainEntityConverters);
+    return new ServiceImplementationModelRepository(serviceImplementations);
   }
 }

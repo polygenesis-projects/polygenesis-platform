@@ -18,29 +18,30 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.deducers.apiimpl;
+package io.polygenesis.models.sql;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import io.polygenesis.core.AbstractModelRepository;
+import io.polygenesis.core.ModelRepository;
+import java.util.Set;
 
-import io.polygenesis.commons.valueobjects.PackageName;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import org.junit.Test;
+/**
+ * The type Sql table model repository.
+ *
+ * @author Christos Tsakostas
+ */
+public class SqlTableModelRepository extends AbstractModelRepository<Table>
+    implements ModelRepository<Table> {
 
-/** @author Christos Tsakostas */
-public class ApiImplDeducerFactoryTest {
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
 
-  @Test
-  public void shouldFailToInstantiate() throws NoSuchMethodException {
-    Constructor<ApiImplDeducerFactory> constructor =
-        ApiImplDeducerFactory.class.getDeclaredConstructor();
-    constructor.setAccessible(true);
-    assertThatThrownBy(constructor::newInstance).isInstanceOf(InvocationTargetException.class);
-  }
-
-  @Test
-  public void shouldCreateNewInstance() {
-    assertThat(ApiImplDeducerFactory.newInstance(new PackageName("com.oregor"))).isNotNull();
+  /**
+   * Instantiates a new Sql table model repository.
+   *
+   * @param items the items
+   */
+  public SqlTableModelRepository(Set<Table> items) {
+    super(items);
   }
 }

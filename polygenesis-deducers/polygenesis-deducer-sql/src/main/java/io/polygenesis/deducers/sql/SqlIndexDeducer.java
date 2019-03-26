@@ -18,48 +18,69 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.models.ui;
+package io.polygenesis.deducers.sql;
 
+import io.polygenesis.core.CoreRegistry;
 import io.polygenesis.core.Deducer;
 import io.polygenesis.core.ModelRepository;
 import io.polygenesis.core.ThingRepository;
-import io.polygenesis.models.ui.container.LayoutContainer;
+import io.polygenesis.models.domain.DomainModelRepository;
+import io.polygenesis.models.sql.Index;
+import io.polygenesis.models.sql.SqlIndexModelRepository;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
- * The type Ui deducer.
+ * The type Sql index deducer.
  *
  * @author Christos Tsakostas
  */
-public class UiDeducer implements Deducer<UiModelRepository> {
+public class SqlIndexDeducer implements Deducer<SqlIndexModelRepository> {
 
-  private final FeatureDeducer featureDeducer;
-  private final LayoutDeducer layoutDeducer;
+  // ===============================================================================================
+  // DEPENDENCIES
+  // ===============================================================================================
+  private final IndexDeducer indexDeducer;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
-  public UiDeducer(FeatureDeducer featureDeducer, LayoutDeducer layoutDeducer) {
-    this.featureDeducer = featureDeducer;
-    this.layoutDeducer = layoutDeducer;
+  /**
+   * Instantiates a new Sql index deducer.
+   *
+   * @param indexDeducer the index deducer
+   */
+  public SqlIndexDeducer(IndexDeducer indexDeducer) {
+    this.indexDeducer = indexDeducer;
   }
 
   // ===============================================================================================
   // OVERRIDES
   // ===============================================================================================
+
   @Override
-  public UiModelRepository deduce(
+  public SqlIndexModelRepository deduce(
       ThingRepository thingRepository, Set<ModelRepository> modelRepositories) {
-    Set<Feature> features = new LinkedHashSet<>();
+    if (thingRepository.getApiThings().isEmpty()) {
+      throw new IllegalArgumentException("thingRepository cannot be empty");
+    }
 
-    thingRepository
-        .getApiThings()
-        .forEach(thing -> features.add(featureDeducer.deduceFeatureFromThing(thing)));
+    Set<Index> indices = new LinkedHashSet<>();
 
-    Set<LayoutContainer> layoutContainers = layoutDeducer.deduceLayoutsFromFeatures();
+    CoreRegistry.getModelRepositoryResolver()
+        .resolve(modelRepositories, DomainModelRepository.class)
+        .getItems()
+        .forEach(
+            aggregateRoot -> {
+              indices.add(indexDeducer.deduce());
+            });
 
-    return new UiModelRepository(features, layoutContainers);
+    return new SqlIndexModelRepository(indices);
   }
+
+  // ===============================================================================================
+  // PRIVATE
+  // ===============================================================================================
+
 }

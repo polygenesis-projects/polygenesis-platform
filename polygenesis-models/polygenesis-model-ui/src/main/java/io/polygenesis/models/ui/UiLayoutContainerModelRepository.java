@@ -18,26 +18,31 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.generators.angular;
+package io.polygenesis.models.ui;
 
-import java.nio.file.Paths;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import io.polygenesis.core.AbstractModelRepository;
+import io.polygenesis.core.ModelRepository;
+import io.polygenesis.models.ui.container.LayoutContainer;
+import java.util.Set;
 
-/** @author Christos Tsakostas */
-public class AngularGeneratorTest extends AbstractAngularGeneratorTest {
+/**
+ * The type Ui layout container model repository.
+ *
+ * @author Christos Tsakostas
+ */
+public class UiLayoutContainerModelRepository extends AbstractModelRepository<LayoutContainer>
+    implements ModelRepository<LayoutContainer> {
 
-  private AngularGenerator generator;
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
 
-  @Before
-  public void setUp() throws Exception {
-    generator = AngularGeneratorFactory.newInstance(Paths.get("tmp/polygenesis-angular-generator"));
-  }
-
-  @Test
-  public void shouldInitialize() {
-    generator.generate(getModelRepositories());
-    // TODO
+  /**
+   * Instantiates a new Ui layout container model repository.
+   *
+   * @param items the items
+   */
+  public UiLayoutContainerModelRepository(Set<LayoutContainer> items) {
+    super(items);
   }
 }

@@ -23,24 +23,32 @@ package io.polygenesis.deducers.apiimpl;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.core.Argument;
+import io.polygenesis.core.CoreRegistry;
+import io.polygenesis.core.Deducer;
 import io.polygenesis.core.Function;
 import io.polygenesis.core.FunctionName;
 import io.polygenesis.core.Goal;
+import io.polygenesis.core.ModelRepository;
 import io.polygenesis.core.ReturnValue;
 import io.polygenesis.core.Thing;
 import io.polygenesis.core.ThingBuilder;
 import io.polygenesis.core.ThingName;
+import io.polygenesis.core.ThingRepository;
 import io.polygenesis.core.data.Data;
 import io.polygenesis.core.data.DataGroup;
 import io.polygenesis.models.api.Dto;
 import io.polygenesis.models.api.Service;
+import io.polygenesis.models.api.ServiceModelRepository;
 import io.polygenesis.models.apiimpl.DomainEntityConverter;
 import io.polygenesis.models.apiimpl.DomainEntityConverterMethod;
+import io.polygenesis.models.apiimpl.DomainEntityConverterModelRepository;
 import io.polygenesis.models.domain.BaseDomainEntity;
+import io.polygenesis.models.domain.DomainModelRepository;
 import io.polygenesis.models.domain.PropertyType;
 import io.polygenesis.models.domain.ValueObject;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -48,20 +56,74 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class DomainEntityConverterDeducer {
+public class DomainEntityConverterDeducer extends BaseApiImplementationDeducer
+    implements Deducer<DomainEntityConverterModelRepository> {
+
+  // ===============================================================================================
+  // OVERRIDES
+  // ===============================================================================================
+
+  @Override
+  public DomainEntityConverterModelRepository deduce(
+      ThingRepository thingRepository, Set<ModelRepository> modelRepositories) {
+    Set<DomainEntityConverter> domainEntityConverters = new LinkedHashSet<>();
+
+    ServiceModelRepository serviceModelRepository =
+        CoreRegistry.getModelRepositoryResolver()
+            .resolve(modelRepositories, ServiceModelRepository.class);
+
+    DomainModelRepository domainModelRepository =
+        CoreRegistry.getModelRepositoryResolver()
+            .resolve(modelRepositories, DomainModelRepository.class);
+
+    fillDomainEntityConverters(
+        domainEntityConverters, thingRepository, serviceModelRepository, domainModelRepository);
+
+    return new DomainEntityConverterModelRepository(domainEntityConverters);
+  }
 
   // ===============================================================================================
   // FUNCTIONALITY
   // ===============================================================================================
 
   /**
-   * Deduce domain entity converter.
+   * Fill domain entity converters.
+   *
+   * @param domainEntityConverters the domain entity converters
+   * @param thingRepository the thing repository
+   * @param serviceModelRepository the service model repository
+   * @param domainModelRepository the domain model repository
+   */
+  protected void fillDomainEntityConverters(
+      Set<DomainEntityConverter> domainEntityConverters,
+      ThingRepository thingRepository,
+      ServiceModelRepository serviceModelRepository,
+      DomainModelRepository domainModelRepository) {
+    thingRepository
+        .getApiThings()
+        .forEach(
+            thing -> {
+              Optional<BaseDomainEntity> optionalDomainObject =
+                  getOptionalDomainEntity(thing, domainModelRepository);
+
+              if (optionalDomainObject.isPresent()) {
+                domainEntityConverters.add(
+                    deduceDomainEntityConverter(
+                        optionalDomainObject.get(),
+                        serviceModelRepository.getServicesBy(thing.getThingName())));
+              }
+            });
+  }
+
+  /**
+   * Deduce domain entity converter domain entity converter.
    *
    * @param domainEntity the domain entity
    * @param services the services
    * @return the domain entity converter
    */
-  public DomainEntityConverter deduce(BaseDomainEntity<?> domainEntity, Set<Service> services) {
+  public DomainEntityConverter deduceDomainEntityConverter(
+      BaseDomainEntity<?> domainEntity, Set<Service> services) {
     Set<DomainEntityConverterMethod> methods = new LinkedHashSet<>();
 
     deduceValueObjectFromDto(methods, domainEntity, services);

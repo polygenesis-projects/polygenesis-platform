@@ -21,7 +21,7 @@
 package io.polygenesis.generators.sql;
 
 import io.polygenesis.commons.freemarker.FreemarkerService;
-import io.polygenesis.models.sql.SqlModelRepository;
+import io.polygenesis.models.sql.SqlTableModelRepository;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -65,15 +65,15 @@ public class ScriptExporter {
    * Export.
    *
    * @param generationPath the generation path
-   * @param sqlModelRepository the sql model repository
+   * @param sqlTableModelRepository the sql model repository
    * @param tablePrefix the table prefix
    */
   public void export(
-      Path generationPath, SqlModelRepository sqlModelRepository, String tablePrefix) {
+      Path generationPath, SqlTableModelRepository sqlTableModelRepository, String tablePrefix) {
     Map<String, Object> dataModel = new HashMap<>();
     // TODO
-    dataModel.put("representation", scriptRepresentable.create(sqlModelRepository));
-    dataModel.put("representation", sqlModelRepository);
+    dataModel.put("representation", scriptRepresentable.create());
+    dataModel.put("representation", sqlTableModelRepository);
     dataModel.put("tablePrefix", tablePrefix);
 
     freemarkerService.export(

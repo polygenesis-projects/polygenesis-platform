@@ -66,7 +66,7 @@ public class JavaApiGenerator extends AbstractGenerator {
     initializeModelRepositories(modelRepositories);
 
     serviceModelRepository
-        .getServices()
+        .getItems()
         .forEach(
             service -> {
               serviceExporter.export(getGenerationPath(), service);

@@ -21,6 +21,7 @@
 package io.polygenesis.core;
 
 import com.oregor.ddd4j.check.assertion.Assertion;
+import io.polygenesis.commons.valueobjects.ObjectName;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -48,6 +49,20 @@ public class ThingRepositoryImpl implements ThingRepository {
    */
   public ThingRepositoryImpl(Set<Thing> things) {
     setThings(things);
+  }
+
+  // ===============================================================================================
+  // IMPLEMENTATIONS
+  // ===============================================================================================
+
+  @Override
+  public Set getItems() {
+    return things;
+  }
+
+  @Override
+  public Optional getItemByObjectName(ObjectName objectName) {
+    return Optional.empty();
   }
 
   // ===============================================================================================

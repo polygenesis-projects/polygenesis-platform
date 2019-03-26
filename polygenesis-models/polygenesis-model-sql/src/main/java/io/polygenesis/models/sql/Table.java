@@ -21,6 +21,8 @@
 package io.polygenesis.models.sql;
 
 import com.oregor.ddd4j.check.assertion.Assertion;
+import io.polygenesis.commons.valueobjects.ObjectName;
+import io.polygenesis.core.Model;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -31,7 +33,7 @@ import java.util.stream.Collectors;
  *
  * @author Christos Tsakostas
  */
-public class Table {
+public class Table implements Model {
 
   private TableName tableName;
   private Set<Column> columns;
@@ -52,6 +54,15 @@ public class Table {
     setTableName(tableName);
     setColumns(columns);
     setMultiTenant(multiTenant);
+  }
+
+  // ===============================================================================================
+  // IMPLEMENTATIONS
+  // ===============================================================================================
+
+  @Override
+  public ObjectName getObjectName() {
+    return new ObjectName(tableName.getText());
   }
 
   // ===============================================================================================

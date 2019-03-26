@@ -20,37 +20,13 @@
 
 package io.polygenesis.models.ui;
 
-/**
- * The type Ui deducer factory.
- *
- * @author Christos Tsakostas
- */
-public class UiDeducerFactory {
+import org.junit.Test;
 
-  private UiDeducerFactory() {
-    throw new IllegalStateException("Utility class");
-  }
+/** @author Christos Tsakostas */
+public class UiFeatureDeducerTest {
 
-  private static final FeatureDeducer featureDeducer;
-  private static final LayoutDeducer layoutDeducer;
-
-  static {
-    FeatureNameDeducer featureNameDeducer = new FeatureNameDeducer();
-    ContainerDeducer containerDeducer = new ContainerDeducer();
-    featureDeducer = new FeatureDeducer(featureNameDeducer, containerDeducer);
-    layoutDeducer = new LayoutDeducer();
-  }
-
-  // ===============================================================================================
-  // GETTERS
-  // ===============================================================================================
-
-  /**
-   * New instance ui deducer.
-   *
-   * @return the ui deducer
-   */
-  public static UiDeducer newInstance() {
-    return new UiDeducer(featureDeducer, layoutDeducer);
+  @Test
+  public void deduce() {
+    // TODO
   }
 }

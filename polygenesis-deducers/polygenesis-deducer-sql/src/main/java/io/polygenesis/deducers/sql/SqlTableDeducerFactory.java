@@ -21,17 +21,16 @@
 package io.polygenesis.deducers.sql;
 
 /**
- * The type Api deducer factory.
+ * The type Sql table deducer factory.
  *
  * @author Christos Tsakostas
  */
-public final class SqlDeducerFactory {
+public final class SqlTableDeducerFactory {
 
   // ===============================================================================================
   // DEPENDENCIES
   // ===============================================================================================
   private static final TableDeducer tableDeducer;
-  private static final IndexDeducer indexDeducer;
 
   // ===============================================================================================
   // STATIC INITIALIZATION OF DEPENDENCIES
@@ -42,13 +41,12 @@ public final class SqlDeducerFactory {
         new FromDataTypeToSqlColumnConverter();
 
     tableDeducer = new TableDeducer(fromDataTypeToSqlColumnConverter);
-    indexDeducer = new IndexDeducer();
   }
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
-  private SqlDeducerFactory() {
+  private SqlTableDeducerFactory() {
     throw new IllegalStateException("Utility class");
   }
 
@@ -57,11 +55,11 @@ public final class SqlDeducerFactory {
   // ===============================================================================================
 
   /**
-   * New instance sql deducer.
+   * New instance sql table deducer.
    *
-   * @return the sql deducer
+   * @return the sql table deducer
    */
-  public static SqlDeducer newInstance() {
-    return new SqlDeducer(tableDeducer, indexDeducer);
+  public static SqlTableDeducer newInstance() {
+    return new SqlTableDeducer(tableDeducer);
   }
 }

@@ -18,42 +18,32 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.deducers.apiimpl;
-
-import io.polygenesis.commons.valueobjects.PackageName;
+package io.polygenesis.deducers.sql;
 
 /**
- * The type Api impl deducer factory.
+ * The type Sql index deducer factory.
  *
  * @author Christos Tsakostas
  */
-public class ApiImplDeducerFactory {
+public final class SqlIndexDeducerFactory {
 
   // ===============================================================================================
   // DEPENDENCIES
   // ===============================================================================================
-
-  private static final DomainEntityConverterDeducer domainEntityConverterDeducer;
-  private static final ServiceImplementationDeducer serviceImplementationDeducer;
+  private static final IndexDeducer indexDeducer;
 
   // ===============================================================================================
   // STATIC INITIALIZATION OF DEPENDENCIES
   // ===============================================================================================
 
   static {
-    domainEntityConverterDeducer = new DomainEntityConverterDeducer();
-
-    ServiceMethodImplementationDeducer serviceMethodImplementationDeducer =
-        new ServiceMethodImplementationDeducer();
-
-    serviceImplementationDeducer =
-        new ServiceImplementationDeducer(serviceMethodImplementationDeducer);
+    indexDeducer = new IndexDeducer();
   }
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
-  private ApiImplDeducerFactory() {
+  private SqlIndexDeducerFactory() {
     throw new IllegalStateException("Utility class");
   }
 
@@ -62,12 +52,11 @@ public class ApiImplDeducerFactory {
   // ===============================================================================================
 
   /**
-   * New instance api impl deducer.
+   * New instance sql index deducer.
    *
-   * @param packageName the package name
-   * @return the api impl deducer
+   * @return the sql index deducer
    */
-  public static ApiImplDeducer newInstance(PackageName packageName) {
-    return new ApiImplDeducer(domainEntityConverterDeducer, serviceImplementationDeducer);
+  public static SqlIndexDeducer newInstance() {
+    return new SqlIndexDeducer(indexDeducer);
   }
 }

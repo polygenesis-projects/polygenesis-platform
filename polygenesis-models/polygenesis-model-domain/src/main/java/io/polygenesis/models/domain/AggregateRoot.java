@@ -23,6 +23,7 @@ package io.polygenesis.models.domain;
 import com.oregor.ddd4j.check.assertion.Assertion;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
+import io.polygenesis.core.Model;
 import io.polygenesis.core.data.Data;
 import io.polygenesis.core.data.DataBusinessType;
 import io.polygenesis.core.data.DataGroup;
@@ -40,7 +41,7 @@ import java.util.Set;
  * @author Christos Tsakostas
  */
 public class AggregateRoot extends BaseDomainEntity<AggregateRoot>
-    implements DomainObjectProperty<AggregateRoot, DataGroup> {
+    implements DomainObjectProperty<AggregateRoot, DataGroup>, Model {
 
   // ===============================================================================================
   // STATE
