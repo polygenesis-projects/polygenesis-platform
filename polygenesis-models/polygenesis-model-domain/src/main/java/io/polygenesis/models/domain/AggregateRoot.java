@@ -41,7 +41,7 @@ import java.util.Set;
  * @author Christos Tsakostas
  */
 public class AggregateRoot extends BaseDomainEntity<AggregateRoot>
-    implements DomainObjectProperty<AggregateRoot, DataGroup>, Model {
+    implements DomainObjectProperty<DataGroup>, Model {
 
   // ===============================================================================================
   // STATE

@@ -25,6 +25,7 @@ import io.polygenesis.core.data.Data;
 import io.polygenesis.core.data.DataArray;
 import io.polygenesis.core.data.DataGroup;
 import io.polygenesis.core.data.DataReferenceToThing;
+import io.polygenesis.core.data.VariableName;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -94,10 +95,22 @@ public class DataBuilder {
    * With reference to thing data builder.
    *
    * @param thing the thing
+   * @param propertyName the property name
    * @return the data builder
    */
-  public final DataBuilder withReferenceToThing(Thing thing) {
-    this.models.add(new DataReferenceToThing(thing));
+  public final DataBuilder withReferenceToThing(Thing thing, String propertyName) {
+    this.models.add(new DataReferenceToThing(thing, new VariableName(propertyName)));
+    return this;
+  }
+
+  /**
+   * With thing identity data builder.
+   *
+   * @param data the data
+   * @return the data builder
+   */
+  public final DataBuilder withThingIdentity(Data data) {
+    this.models.add(data);
     return this;
   }
 
@@ -108,9 +121,7 @@ public class DataBuilder {
    */
   public final DataCountryBuilder withCountry() {
     DataCountryBuilder dataTextBuilder = DataCountryBuilder.create(this, "countryCode");
-
     this.models.add(dataTextBuilder.getModel());
-
     return dataTextBuilder;
   }
 

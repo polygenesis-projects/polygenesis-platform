@@ -34,26 +34,26 @@ import java.util.Optional;
 import java.util.Set;
 
 /**
- * The type Helper entity.
+ * The type Supportive entity.
  *
  * @author Christos Tsakostas
  */
-public class HelperEntity extends BaseDomainEntity<HelperEntity>
-    implements DomainObjectProperty<HelperEntity, DataGroup>, Model {
+public class SupportiveEntity extends BaseDomainEntity<SupportiveEntity>
+    implements DomainObjectProperty<DataGroup>, Model {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
-   * Instantiates a new Helper entity.
+   * Instantiates a new Supportive entity.
    *
    * @param objectName the object name
    * @param packageName the package name
    * @param properties the properties
    * @param constructors the constructors
    */
-  public HelperEntity(
+  public SupportiveEntity(
       ObjectName objectName,
       PackageName packageName,
       Set<DomainObjectProperty> properties,

@@ -17,24 +17,6 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-<#include "macro-parameters.ftl">
-<#macro printMethod method>
-  /**
-   * ${ method.description }
-  <#if method.parameterRepresentations?size gt 0 || method.returnValue != "void">
-   *
-  </#if>
-  <#list method.parameterRepresentations as parameter>
-   * @param ${ textConverter.toLowerCamel(parameter.variableName) } the ${ textConverter.toLowerCamelSpaces(parameter.variableName) }
-  </#list>
-  <#if method.returnValue != "void">
-   * @return ${ textConverter.toLowerCamelSpaces(method.returnValue) }
-  </#if>
-   */
-<#list method.annotations as annotation>
-  ${ annotation }
-</#list>
-  ${ method.modifiers }<#if method.modifiers != ""> </#if><#if method.returnValue != "">${ method.returnValue } </#if>${ method.methodName }(<@printParameters method.parameterRepresentations></@printParameters>) {
-${ method.implementation }
-  }
-</#macro>
+<#include "../../polygenesis-implementation-java-shared/macro-assertions-for-parameters.ftl">
+<@assertionsForParameters representation.parameterRepresentations></@assertionsForParameters>
+    // TODO - constructor(s), aggregate root

@@ -18,58 +18,51 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.models.domain;
+package io.polygenesis.implementations.java.domain.constructor;
 
-import io.polygenesis.core.Function;
-import java.util.Set;
+import io.polygenesis.annotations.core.GoalType;
+import io.polygenesis.commons.freemarker.FreemarkerService;
+import io.polygenesis.core.ThingScopeType;
+import io.polygenesis.implementations.java.AbstractMethodImplementorRegistry;
+import io.polygenesis.implementations.java.ScopeGoalTuple;
+import io.polygenesis.models.domain.Constructor;
 
 /**
- * The type Constructor.
+ * The type Constructor implementor registry.
  *
  * @author Christos Tsakostas
  */
-public class Constructor extends BaseMethod {
-
-  private Set<DomainObjectProperty> properties;
+public class ConstructorImplementorRegistry extends AbstractMethodImplementorRegistry<Constructor> {
 
   // ===============================================================================================
-  // CONSTRUCTOR(S)
+  // CONSTRUCTORS
   // ===============================================================================================
 
   /**
-   * Instantiates a new Constructor.
+   * Instantiates a new Constructor implementor registry.
    *
-   * @param function the function
-   * @param properties the properties
+   * @param freemarkerService the freemarker service
    */
-  public Constructor(Function function, Set<DomainObjectProperty> properties) {
-    super(function);
-    setProperties(properties);
+  public ConstructorImplementorRegistry(FreemarkerService freemarkerService) {
+    super(freemarkerService);
   }
 
   // ===============================================================================================
-  // GETTERS
+  // IMPLEMENTATIONS
   // ===============================================================================================
 
-  /**
-   * Gets properties.
-   *
-   * @return the properties
-   */
-  public Set<DomainObjectProperty> getProperties() {
-    return properties;
-  }
+  @Override
+  public void initializeScopeAndGoalMap() {
+    scopeAndGoalMap.put(
+        new ScopeGoalTuple(ThingScopeType.DOMAIN_AGGREGATE_ROOT, GoalType.CREATE.name()),
+        new AggregateRootConstructor());
 
-  // ===============================================================================================
-  // GUARDS
-  // ===============================================================================================
+    scopeAndGoalMap.put(
+        new ScopeGoalTuple(ThingScopeType.DOMAIN_AGGREGATE_ENTITY, GoalType.CREATE.name()),
+        new AggregateEntityConstructor());
 
-  /**
-   * Sets properties.
-   *
-   * @param properties the properties
-   */
-  private void setProperties(Set<DomainObjectProperty> properties) {
-    this.properties = properties;
+    scopeAndGoalMap.put(
+        new ScopeGoalTuple(ThingScopeType.DOMAIN_SUPPORTIVE_ENTITY, GoalType.CREATE.name()),
+        new SupportiveEntityConstructor());
   }
 }

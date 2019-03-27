@@ -31,33 +31,37 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
- * The type Helper entity deducer.
+ * The type Supportive entity deducer.
  *
  * @author Christos Tsakostas
  */
-public class HelperEntityDeducer implements Deducer<HelperEntityModelRepository> {
+public class SupportiveEntityDeducer implements Deducer<SupportiveEntityModelRepository> {
 
   // ===============================================================================================
   // DEPENDENCIES
   // ===============================================================================================
+  private final PackageName rootPackageName;
   private final DomainObjectConstructorDeducer domainObjectConstructorDeducer;
-  private final HelperEntityPropertyDeducer helperEntityPropertyDeducer;
+  private final SupportiveEntityPropertyDeducer supportiveEntityPropertyDeducer;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
-   * Instantiates a new Helper entity deducer.
+   * Instantiates a new Supportive entity deducer.
    *
+   * @param rootPackageName the root package name
    * @param domainObjectConstructorDeducer the domain object constructor deducer
-   * @param helperEntityPropertyDeducer the helper entity property deducer
+   * @param supportiveEntityPropertyDeducer the helper entity property deducer
    */
-  public HelperEntityDeducer(
+  public SupportiveEntityDeducer(
+      PackageName rootPackageName,
       DomainObjectConstructorDeducer domainObjectConstructorDeducer,
-      HelperEntityPropertyDeducer helperEntityPropertyDeducer) {
+      SupportiveEntityPropertyDeducer supportiveEntityPropertyDeducer) {
+    this.rootPackageName = rootPackageName;
     this.domainObjectConstructorDeducer = domainObjectConstructorDeducer;
-    this.helperEntityPropertyDeducer = helperEntityPropertyDeducer;
+    this.supportiveEntityPropertyDeducer = supportiveEntityPropertyDeducer;
   }
 
   // ===============================================================================================
@@ -65,35 +69,17 @@ public class HelperEntityDeducer implements Deducer<HelperEntityModelRepository>
   // ===============================================================================================
 
   @Override
-  public HelperEntityModelRepository deduce(
+  public SupportiveEntityModelRepository deduce(
       ThingRepository thingRepository, Set<ModelRepository> modelRepositories) {
-    // TODO
-    return new HelperEntityModelRepository(new LinkedHashSet<>());
-  }
-
-  /**
-   * Deduce from set.
-   *
-   * @param thingRepository the thing repository
-   * @param rootPackageName the root package name
-   * @return the set
-   */
-  public Set<HelperEntity> deduceFrom(
-      ThingRepository thingRepository, PackageName rootPackageName) {
-    Set<HelperEntity> helperEntities = new LinkedHashSet<>();
+    Set<SupportiveEntity> helperEntities = new LinkedHashSet<>();
 
     thingRepository
         .getDomainModelThings()
         .stream()
-        .filter(thing -> thing.getThingScopeType().equals(ThingScopeType.DOMAIN_HELPER_ENTITY))
-        .forEach(
-            thing -> {
-              if (!thing.getOptionalParent().isPresent() || thingRepository.isVirtualChild(thing)) {
-                makeHelperEntity(helperEntities, thing, rootPackageName);
-              }
-            });
+        .filter(thing -> thing.getThingScopeType().equals(ThingScopeType.DOMAIN_SUPPORTIVE_ENTITY))
+        .forEach(thing -> makeSupportiveEntity(helperEntities, thing, rootPackageName));
 
-    return helperEntities;
+    return new SupportiveEntityModelRepository(helperEntities);
   }
 
   // ===============================================================================================
@@ -101,19 +87,20 @@ public class HelperEntityDeducer implements Deducer<HelperEntityModelRepository>
   // ===============================================================================================
 
   /**
-   * Make helper entity.
+   * Make supportive entity.
    *
    * @param helperEntities the helper entities
    * @param thing the thing
    * @param rootPackageName the root package name
    */
-  protected void makeHelperEntity(
-      Set<HelperEntity> helperEntities, Thing thing, PackageName rootPackageName) {
+  protected void makeSupportiveEntity(
+      Set<SupportiveEntity> helperEntities, Thing thing, PackageName rootPackageName) {
     helperEntities.add(
-        new HelperEntity(
+        new SupportiveEntity(
             new ObjectName(thing.getThingName().getText()),
-            new PackageName(String.format("%s.%s", rootPackageName.getText(), "helper")),
-            helperEntityPropertyDeducer.deduceFrom(thing, rootPackageName),
-            domainObjectConstructorDeducer.deduceFrom(thing, rootPackageName)));
+            new PackageName(String.format("%s.%s", rootPackageName.getText(), "supportive")),
+            supportiveEntityPropertyDeducer.deduceFrom(thing, rootPackageName),
+            domainObjectConstructorDeducer.deduceConstructorFromFunctionCreate(
+                thing, rootPackageName)));
   }
 }

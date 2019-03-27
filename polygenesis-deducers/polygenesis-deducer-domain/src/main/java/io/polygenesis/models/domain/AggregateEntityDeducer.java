@@ -116,7 +116,8 @@ public class AggregateEntityDeducer {
         new ObjectName(thingChild.getThingName().getText()),
         thingParent.makePackageName(rootPackageName, thingParent),
         aggregateEntityPropertyDeducer.deduceFrom(thingParent, thingChild, rootPackageName),
-        domainObjectConstructorDeducer.deduceFrom(thingChild, rootPackageName),
+        domainObjectConstructorDeducer.deduceConstructorFromFunctionCreate(
+            thingChild, rootPackageName),
         thingParent.getMultiTenant());
   }
 

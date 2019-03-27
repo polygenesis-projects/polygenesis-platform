@@ -144,9 +144,9 @@ public class ServiceImplementationDeducer extends BaseApiImplementationDeducer
         getOptionalDomainObjectConverter(
             domainEntityConverters, new ObjectName(service.getThingName().getText()));
 
-    DomainEntityConverter domainEntityConverter = optionalDomainEntityConverter.get();
-
     if (optionalDomainEntityConverter.isPresent()) {
+      DomainEntityConverter domainEntityConverter = optionalDomainEntityConverter.get();
+
       return makeServiceImplementation(
           service,
           domainEntityConverter.getDomainEntity(),

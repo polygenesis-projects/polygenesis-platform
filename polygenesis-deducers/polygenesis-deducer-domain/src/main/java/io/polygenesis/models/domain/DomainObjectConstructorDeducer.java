@@ -37,13 +37,14 @@ public class DomainObjectConstructorDeducer extends AbstractDomainObjectDeducer 
   // ===============================================================================================
 
   /**
-   * Deduce from set.
+   * Deduce constructor from function create set.
    *
    * @param thing the thing
    * @param rootPackageName the root package name
    * @return the set
    */
-  public Set<Constructor> deduceFrom(Thing thing, PackageName rootPackageName) {
+  public Set<Constructor> deduceConstructorFromFunctionCreate(
+      Thing thing, PackageName rootPackageName) {
     Set<Constructor> constructors = new LinkedHashSet<>();
 
     thing
@@ -53,9 +54,27 @@ public class DomainObjectConstructorDeducer extends AbstractDomainObjectDeducer 
         .forEach(
             function -> {
               constructors.add(
-                  new Constructor(deduceFromFunctionArguments(function, rootPackageName)));
+                  new Constructor(
+                      function, deduceFromFunctionArguments(function, rootPackageName)));
             });
 
     return constructors;
+  }
+
+  /**
+   * Deduce constructor from thing properties set.
+   *
+   * @param thing the thing
+   * @return the set
+   */
+  public Set<Constructor> deduceConstructorFromThingProperties(Thing thing) {
+    //    Set<Constructor> constructors = new LinkedHashSet<>();
+    //
+    //    constructors.add(
+    //        new Constructor(deduceFromThingProperties(thing)));
+    //
+    //    return constructors;
+
+    throw new UnsupportedOperationException();
   }
 }

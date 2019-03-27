@@ -73,6 +73,18 @@ public abstract class BasePropertyDeducer {
    */
   protected BaseProperty thingPropertyToBaseProperty(ThingProperty thingProperty) {
 
+    switch (thingProperty.getData().getDataBusinessType()) {
+      case THING_IDENTITY:
+        switch (thingProperty.getData().getDataPrimaryType()) {
+          case PRIMITIVE:
+            return new SupportiveEntityId(thingProperty.getData().getAsDataPrimitive());
+          default:
+            throw new UnsupportedOperationException();
+        }
+      default:
+        break;
+    }
+
     switch (thingProperty.getData().getDataPrimaryType()) {
       case ARRAY:
         switch (thingProperty.getData().getAsDataArray().getArrayElement().getDataPrimaryType()) {

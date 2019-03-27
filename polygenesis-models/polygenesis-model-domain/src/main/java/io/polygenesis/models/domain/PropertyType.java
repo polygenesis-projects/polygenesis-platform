@@ -42,6 +42,8 @@ public enum PropertyType {
   REFERENCE_TO_AGGREGATE_ROOT,
   /** Reference property type. */
   REFERENCE,
+  /** Supportive entity id property type. */
+  SUPPORTIVE_ENTITY_ID,
   /** Value object property type. */
   VALUE_OBJECT,
   /** Value object collection property type. */

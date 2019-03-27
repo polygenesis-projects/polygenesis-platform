@@ -39,7 +39,7 @@ import io.polygenesis.generators.sql.SqlGeneratorFactory;
 import io.polygenesis.models.api.ApiDeducerFactory;
 import io.polygenesis.models.domain.DomainDeducerFactory;
 import io.polygenesis.models.domain.DomainServiceDeducerFactory;
-import io.polygenesis.models.domain.HelperEntityDeducerFactory;
+import io.polygenesis.models.domain.SupportiveEntityDeducerFactory;
 import io.polygenesis.models.reactivestate.ReactiveStateFactory;
 import io.polygenesis.models.rest.RestDeducerFactory;
 import io.polygenesis.models.ui.UiFeatureDeducerFactory;
@@ -71,7 +71,7 @@ public class GenesisDefault {
             DomainDeducerFactory.newInstance(packageName),
             DomainServiceDeducerFactory.newInstance(packageName),
             DomainEntityConverterDeducerFactory.newInstance(packageName),
-            HelperEntityDeducerFactory.newInstance(packageName),
+            SupportiveEntityDeducerFactory.newInstance(packageName),
             ServiceImplementationDeducerFactory.newInstance(packageName),
             RestDeducerFactory.newInstance(packageName),
             SqlTableDeducerFactory.newInstance(),

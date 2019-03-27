@@ -27,6 +27,7 @@ package io.polygenesis.representations.java;
  */
 public enum MethodRepresentationType {
   ANY,
+  CONSTRUCTOR,
   CONVERT,
   FACTORY,
   GETTER,

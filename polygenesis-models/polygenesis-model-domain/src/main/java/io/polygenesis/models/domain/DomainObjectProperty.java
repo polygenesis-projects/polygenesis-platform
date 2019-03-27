@@ -25,11 +25,10 @@ import io.polygenesis.core.data.Data;
 /**
  * The interface DomainObjectProperty.
  *
- * @param <T> the type parameter
  * @param <D> the type parameter
  * @author Christos Tsakostas
  */
-public interface DomainObjectProperty<T, D extends Data> {
+public interface DomainObjectProperty<D extends Data> {
 
   /**
    * Gets property type.

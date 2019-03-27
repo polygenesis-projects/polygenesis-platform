@@ -18,28 +18,36 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.models.domain;
+package io.polygenesis.implementations.java.domain.constructor;
 
-import io.polygenesis.core.AbstractModelRepository;
-import java.util.Set;
+import io.polygenesis.commons.freemarker.FreemarkerService;
+import io.polygenesis.implementations.java.MethodImplementor;
+import io.polygenesis.models.domain.Constructor;
+import io.polygenesis.representations.java.MethodRepresentation;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * The type Helper entity model repository.
+ * The type Aggregate root constructor.
  *
  * @author Christos Tsakostas
  */
-public class HelperEntityModelRepository extends AbstractModelRepository<HelperEntity> {
+public class AggregateRootConstructor implements MethodImplementor<Constructor> {
 
   // ===============================================================================================
-  // CONSTRUCTOR(S)
+  // IMPLEMENTATIONS
   // ===============================================================================================
 
-  /**
-   * Instantiates a new Helper entity model repository.
-   *
-   * @param items the items
-   */
-  public HelperEntityModelRepository(Set<HelperEntity> items) {
-    super(items);
+  @Override
+  public String implementationFor(
+      FreemarkerService freemarkerService,
+      Constructor methodProvider,
+      MethodRepresentation methodRepresentation) {
+    Map<String, Object> dataModel = new HashMap<>();
+
+    dataModel.put("representation", methodRepresentation);
+
+    return freemarkerService.exportToString(
+        dataModel, "polygenesis-implementation-java-domain/constructor/create-aggregate-root.ftl");
   }
 }

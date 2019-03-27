@@ -18,17 +18,36 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.core;
+package io.polygenesis.models.domain;
+
+import io.polygenesis.core.data.Data;
 
 /**
- * The enum Thing Scope Type.
+ * The type Supportive entity id.
  *
  * @author Christos Tsakostas
  */
-public enum ThingScopeType {
-  DOMAIN_ABSTRACT_AGGREGATE_ROOT,
-  DOMAIN_AGGREGATE_ROOT,
-  DOMAIN_AGGREGATE_ENTITY,
-  DOMAIN_SUPPORTIVE_ENTITY,
-  DOMAIN_SERVICE
+public class SupportiveEntityId extends BaseProperty<SupportiveEntityId, Data> {
+
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
+  /**
+   * Instantiates a new Supportive entity id.
+   *
+   * @param data the data
+   */
+  public SupportiveEntityId(Data data) {
+    super(PropertyType.SUPPORTIVE_ENTITY_ID, data);
+  }
+
+  // ===============================================================================================
+  // IMPLEMENTATIONS
+  // ===============================================================================================
+
+  @Override
+  public Data getTypeParameterData() {
+    throw new UnsupportedOperationException();
+  }
 }

@@ -18,30 +18,29 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.models.domain;
+package io.polygenesis.implementations.java.domain.constructor;
 
-import io.polygenesis.commons.valueobjects.PackageName;
-import io.polygenesis.core.Thing;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import io.polygenesis.commons.freemarker.FreemarkerService;
+import io.polygenesis.models.domain.Constructor;
+import io.polygenesis.representations.java.MethodRepresentation;
 
 /**
- * The type Helper entity property deducer.
+ * The interface Constructor implementor.
  *
  * @author Christos Tsakostas
  */
-public class HelperEntityPropertyDeducer extends BasePropertyDeducer {
+public interface ConstructorImplementor {
 
   /**
-   * Deduce from set.
+   * Implementation for string.
    *
-   * @param thing the thing
-   * @param rootPackageName the root package name
-   * @return the set
+   * @param freemarkerService the freemarker service
+   * @param constructor the constructor
+   * @param methodRepresentation the method representation
+   * @return the string
    */
-  public Set<DomainObjectProperty> deduceFrom(Thing thing, PackageName rootPackageName) {
-    Set<DomainObjectProperty> properties = new LinkedHashSet<>();
-
-    return properties;
-  }
+  String implementationFor(
+      FreemarkerService freemarkerService,
+      Constructor constructor,
+      MethodRepresentation methodRepresentation);
 }

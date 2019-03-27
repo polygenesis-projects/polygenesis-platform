@@ -55,10 +55,7 @@ public class AbstractDomainObjectDeducer {
     Set<DomainObjectProperty> properties = new LinkedHashSet<>();
 
     // Add Aggregate Root ID if the thing is not abstract
-    if (!function
-            .getThing()
-            .getThingScopeType()
-            .equals(ThingScopeType.DOMAIN_ABSTRACT_AGGREGATE_ROOT)
+    if (function.getThing().getThingScopeType().equals(ThingScopeType.DOMAIN_AGGREGATE_ROOT)
         && function.getGoal().isCreate()) {
       properties.add(makeAggregateRootId(function, rootPackageName));
     }
@@ -79,7 +76,7 @@ public class AbstractDomainObjectDeducer {
                                 && !isPropertyParentThingIdentity(model)
                                 && !isPropertyPageNumber(model)
                                 && !isPropertyPageSize(model)) {
-                              properties.add(makeAbstractProperty(model));
+                              properties.add(makeDomainObjectProperty(model));
                             }
                           });
 
@@ -108,9 +105,13 @@ public class AbstractDomainObjectDeducer {
         .forEach(
             data -> {
               // TODO: check if more restrictions are required here
-              properties.add(makeAbstractProperty(data));
+              properties.add(makeDomainObjectProperty(data));
             });
 
+    // TODO
+    if (1 == 1) {
+      throw new UnsupportedOperationException();
+    }
     return properties;
   }
 
@@ -118,7 +119,7 @@ public class AbstractDomainObjectDeducer {
   // PRIVATE
   // ===============================================================================================
 
-  private DomainObjectProperty makeAbstractProperty(Data model) {
+  private DomainObjectProperty makeDomainObjectProperty(Data model) {
     switch (model.getDataPrimaryType()) {
       case ARRAY:
         DataArray dataArray = model.getAsDataArray();

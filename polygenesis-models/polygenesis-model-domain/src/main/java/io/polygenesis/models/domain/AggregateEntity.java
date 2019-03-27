@@ -38,7 +38,7 @@ import java.util.Set;
  * @author Christos Tsakostas
  */
 public class AggregateEntity extends BaseDomainEntity<AggregateEntity>
-    implements DomainObjectProperty<AggregateEntity, DataGroup> {
+    implements DomainObjectProperty<DataGroup> {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)

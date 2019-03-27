@@ -119,7 +119,7 @@ public class AggregateRootDeducer {
         aggregateRootPropertyDeducer.deduceFrom(thing, rootPackageName);
 
     Set<Constructor> constructors =
-        domainObjectConstructorDeducer.deduceFrom(thing, rootPackageName);
+        domainObjectConstructorDeducer.deduceConstructorFromFunctionCreate(thing, rootPackageName);
 
     Set<StateMutationMethod> stateMutationMethods =
         stateMutationMethodDeducer.deduce(thing, properties);

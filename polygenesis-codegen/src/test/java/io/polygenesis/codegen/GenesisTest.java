@@ -52,8 +52,8 @@ public class GenesisTest {
 
     Set<Deducer> deducers = GenesisDefault.angularDeducers();
 
-    Set<Generator> generators = GenesisDefault
-        .angularGenerators("tmp/polygenesis-angular-generator");
+    Set<Generator> generators =
+        GenesisDefault.angularGenerators("tmp/polygenesis-angular-generator");
 
     genesis.generate(genesisRequest, deducers, generators);
   }

@@ -36,9 +36,12 @@ import io.polygenesis.generators.java.domain.persistence.PersistenceExporter;
 import io.polygenesis.generators.java.domain.persistence.PersistenceInterfaceRepresentable;
 import io.polygenesis.generators.java.domain.service.DomainServiceExporter;
 import io.polygenesis.generators.java.domain.service.DomainServiceInterfaceRepresentable;
+import io.polygenesis.generators.java.domain.supportiveentity.SupportiveEntityClassRepresentable;
+import io.polygenesis.generators.java.domain.supportiveentity.SupportiveEntityExporter;
 import io.polygenesis.generators.java.domain.valueobject.ValueObjectClassRepresentable;
 import io.polygenesis.generators.java.domain.valueobject.ValueObjectExporter;
 import io.polygenesis.implementations.java.domain.StateMutationMethodImplementorRegistry;
+import io.polygenesis.implementations.java.domain.constructor.ConstructorImplementorRegistry;
 import io.polygenesis.representations.java.FromDataTypeToJavaConverter;
 import io.polygenesis.representations.java.FunctionToMethodRepresentationConverter;
 import java.nio.file.Path;
@@ -62,6 +65,7 @@ public final class JavaDomainGeneratorFactory {
   private static DomainEventExporter domainEventExporter;
   private static PersistenceExporter persistenceExporter;
   private static DomainServiceExporter domainServiceExporter;
+  private static SupportiveEntityExporter supportiveEntityExporter;
 
   // ===============================================================================================
   // STATIC INITIALIZATION OF DEPENDENCIES
@@ -126,6 +130,18 @@ public final class JavaDomainGeneratorFactory {
 
     domainServiceExporter =
         new DomainServiceExporter(freemarkerService, domainServiceInterfaceRepresentable);
+
+    ConstructorImplementorRegistry constructorImplementorRegistry =
+        new ConstructorImplementorRegistry(freemarkerService);
+    ConstructorRepresentable constructorRepresentable =
+        new ConstructorRepresentable(fromDataTypeToJavaConverter, constructorImplementorRegistry);
+
+    SupportiveEntityClassRepresentable supportiveEntityClassRepresentable =
+        new SupportiveEntityClassRepresentable(
+            fromDataTypeToJavaConverter, constructorRepresentable);
+
+    supportiveEntityExporter =
+        new SupportiveEntityExporter(freemarkerService, supportiveEntityClassRepresentable);
   }
 
   // ===============================================================================================
@@ -157,6 +173,7 @@ public final class JavaDomainGeneratorFactory {
         valueObjectExporter,
         domainEventExporter,
         persistenceExporter,
-        domainServiceExporter);
+        domainServiceExporter,
+        supportiveEntityExporter);
   }
 }

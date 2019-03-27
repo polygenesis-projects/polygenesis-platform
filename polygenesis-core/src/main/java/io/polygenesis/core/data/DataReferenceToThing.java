@@ -44,12 +44,13 @@ public class DataReferenceToThing extends Data {
    * Instantiates a new Data reference to thing.
    *
    * @param thing the thing
+   * @param variableName the variable name
    */
-  public DataReferenceToThing(Thing thing) {
+  public DataReferenceToThing(Thing thing, VariableName variableName) {
     super(
         DataPrimaryType.THING,
         DataSource.user(),
-        new VariableName(String.format("%sRef", thing.getThingName().getText())),
+        variableName,
         DataBusinessType.REFERENCE_TO_THING,
         DataValidator.empty());
     this.thing = thing;

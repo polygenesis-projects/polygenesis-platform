@@ -30,7 +30,7 @@ import java.util.Objects;
  * @param <D> the type parameter
  * @author Christos Tsakostas
  */
-public abstract class BaseProperty<T, D extends Data> implements DomainObjectProperty<T, D> {
+public abstract class BaseProperty<T, D extends Data> implements DomainObjectProperty<D> {
 
   // ===============================================================================================
   // STATE

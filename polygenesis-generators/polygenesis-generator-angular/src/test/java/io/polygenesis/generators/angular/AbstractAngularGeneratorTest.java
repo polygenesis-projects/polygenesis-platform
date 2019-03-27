@@ -37,8 +37,7 @@ public abstract class AbstractAngularGeneratorTest {
             Arrays.asList(
                 new ReactiveStateModelRepository(new LinkedHashSet<>()),
                 new UiFeatureModelRepository(new LinkedHashSet<>()),
-                new UiLayoutContainerModelRepository(new LinkedHashSet<>())
-            ));
+                new UiLayoutContainerModelRepository(new LinkedHashSet<>())));
 
     return modelRepositories;
   }

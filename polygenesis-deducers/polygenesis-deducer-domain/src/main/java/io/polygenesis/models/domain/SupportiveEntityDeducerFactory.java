@@ -23,17 +23,17 @@ package io.polygenesis.models.domain;
 import io.polygenesis.commons.valueobjects.PackageName;
 
 /**
- * The type Domain service deducer factory.
+ * The type Supportive entity deducer factory.
  *
  * @author Christos Tsakostas
  */
-public final class HelperEntityDeducerFactory {
+public final class SupportiveEntityDeducerFactory {
 
   // ===============================================================================================
   // DEPENDENCIES
   // ===============================================================================================
   private static DomainObjectConstructorDeducer domainObjectConstructorDeducer;
-  private static HelperEntityPropertyDeducer helperEntityPropertyDeducer;
+  private static SupportiveEntityPropertyDeducer supportiveEntityPropertyDeducer;
 
   // ===============================================================================================
   // STATIC INITIALIZATION OF DEPENDENCIES
@@ -41,13 +41,13 @@ public final class HelperEntityDeducerFactory {
 
   static {
     domainObjectConstructorDeducer = new DomainObjectConstructorDeducer();
-    helperEntityPropertyDeducer = new HelperEntityPropertyDeducer();
+    supportiveEntityPropertyDeducer = new SupportiveEntityPropertyDeducer();
   }
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
-  private HelperEntityDeducerFactory() {
+  private SupportiveEntityDeducerFactory() {
     throw new IllegalStateException("Utility class");
   }
 
@@ -56,12 +56,13 @@ public final class HelperEntityDeducerFactory {
   // ===============================================================================================
 
   /**
-   * New instance domain service deducer.
+   * New instance supportive entity deducer.
    *
    * @param packageName the package name
    * @return the domain service deducer
    */
-  public static HelperEntityDeducer newInstance(PackageName packageName) {
-    return new HelperEntityDeducer(domainObjectConstructorDeducer, helperEntityPropertyDeducer);
+  public static SupportiveEntityDeducer newInstance(PackageName packageName) {
+    return new SupportiveEntityDeducer(
+        packageName, domainObjectConstructorDeducer, supportiveEntityPropertyDeducer);
   }
 }
