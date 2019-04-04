@@ -30,18 +30,22 @@ public enum PropertyType {
   ABSTRACT_AGGREGATE_ROOT_ID,
   /** Aggregate root id property type. */
   AGGREGATE_ROOT_ID,
-  /** Reference to aggregate root property type. */
-  REFERENCE_TO_AGGREGATE_ROOT,
+  /** Aggregate entity property type. */
+  AGGREGATE_ENTITY,
+  /** Aggregate entity collection property type. */
+  AGGREGATE_ENTITY_COLLECTION,
   /** Primitive property type. */
   PRIMITIVE,
   /** Primitive collection property type. */
   PRIMITIVE_COLLECTION,
+  /** Reference to aggregate root property type. */
+  REFERENCE_TO_AGGREGATE_ROOT,
+  /** Reference property type. */
+  REFERENCE,
+  /** Supportive entity id property type. */
+  SUPPORTIVE_ENTITY_ID,
   /** Value object property type. */
   VALUE_OBJECT,
   /** Value object collection property type. */
-  VALUE_OBJECT_COLLECTION,
-  /** Aggregate entity property type. */
-  AGGREGATE_ENTITY,
-  /** Aggregate entity collection property type. */
-  AGGREGATE_ENTITY_COLLECTION;
+  VALUE_OBJECT_COLLECTION;
 }

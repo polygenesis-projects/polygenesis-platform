@@ -124,6 +124,14 @@ public class JavaRdbmsGenerator extends AbstractGenerator {
 
   @Override
   public void generate(Set<ModelRepository> modelRepositories) {
+    DomainModelRepository domainModelRepository =
+        CoreRegistry.getModelRepositoryResolver()
+            .resolve(modelRepositories, DomainModelRepository.class);
+
+    if (domainModelRepository.getItems().isEmpty()) {
+      return;
+    }
+
     domainMessageDataExporter.export(getGenerationPath(), getRootPackageName(), getContextName());
     domainMessageDataConverterExporter.export(
         getGenerationPath(), getRootPackageName(), getContextName());
@@ -133,9 +141,8 @@ public class JavaRdbmsGenerator extends AbstractGenerator {
     rdbmsTestConfigExporter.export(getGenerationPath(), getRootPackageName());
     applicationCiRdbmsYmlExporter.export(getGenerationPath());
 
-    CoreRegistry.getModelRepositoryResolver()
-        .resolve(modelRepositories, DomainModelRepository.class)
-        .getAggregateRoots()
+    domainModelRepository
+        .getItems()
         .stream()
         .filter(aggregateRoot -> aggregateRoot instanceof AggregateRootPersistable)
         .map(AggregateRootPersistable.class::cast)

@@ -20,7 +20,7 @@
 
 package io.polygenesis.generators.angular.once;
 
-import io.polygenesis.models.ui.UiModelRepository;
+import io.polygenesis.models.ui.UiLayoutContainerModelRepository;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -79,16 +79,17 @@ public class OnceExporter {
    * Export.
    *
    * @param generationPath the generation path
-   * @param uiModelRepository the ui model repository
+   * @param uiLayoutContainerModelRepository the ui layout container model repository
    */
-  public void export(Path generationPath, UiModelRepository uiModelRepository) {
+  public void export(
+      Path generationPath, UiLayoutContainerModelRepository uiLayoutContainerModelRepository) {
     Path generationPathApp = Paths.get(generationPath.toString(), "app");
     Path generationPathEnvironments = Paths.get(generationPath.toString(), "environments");
 
     onceSourceRootExporter.export(generationPath);
     onceEnvironmentsExporter.export(generationPathEnvironments);
     onceCoreModuleExporter.export(generationPathApp);
-    onceSharedModuleExporter.export(generationPathApp, uiModelRepository);
+    onceSharedModuleExporter.export(generationPathApp, uiLayoutContainerModelRepository);
     onceAppModuleExporter.export(generationPathApp);
     onceLandingModuleExporter.export(generationPathApp);
   }

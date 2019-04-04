@@ -20,6 +20,7 @@
 
 package io.polygenesis.models.rest;
 
+import io.polygenesis.core.AbstractModelRepository;
 import io.polygenesis.core.ModelRepository;
 import java.util.Set;
 
@@ -28,9 +29,8 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class RestModelRepository implements ModelRepository {
-
-  private Set<Resource> resources;
+public class RestModelRepository extends AbstractModelRepository<Resource>
+    implements ModelRepository<Resource> {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -39,35 +39,9 @@ public class RestModelRepository implements ModelRepository {
   /**
    * Instantiates a new Rest model repository.
    *
-   * @param resources the resources
+   * @param items the items
    */
-  public RestModelRepository(Set<Resource> resources) {
-    setResources(resources);
-  }
-
-  // ===============================================================================================
-  // GETTERS
-  // ===============================================================================================
-
-  /**
-   * Gets resources.
-   *
-   * @return the resources
-   */
-  public Set<Resource> getResources() {
-    return resources;
-  }
-
-  // ===============================================================================================
-  // GUARDS
-  // ===============================================================================================
-
-  /**
-   * Sets resources.
-   *
-   * @param resources the resources
-   */
-  private void setResources(Set<Resource> resources) {
-    this.resources = resources;
+  public RestModelRepository(Set<Resource> items) {
+    super(items);
   }
 }

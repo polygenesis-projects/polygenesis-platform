@@ -20,12 +20,12 @@
 
 package ${ packageName };
 
-import com.oregor.ddd4j.core.SpringDomainMessageDataRepository;
+import com.oregor.ddd4j.domain.SpringDomainMessageDataRepository;
 
 /**
  * The interface Context domain message data repository.
  *
- * @author PolyGenesis
+ * @author ${ authorService.getAuthor() }
  */
 public interface ${ fullObjectName } {
 

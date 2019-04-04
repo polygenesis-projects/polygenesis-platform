@@ -40,7 +40,7 @@ public class DataPrimitiveTest extends AbstractEqualityTest<DataPrimitive> {
     assertThat(dataPrimitive.getAnnotations()).isNotNull();
     assertThat(dataPrimitive.getAnnotations().size()).isEqualTo(0);
 
-    assertThat(dataPrimitive.getThingIdentity()).isFalse();
+    assertThat(dataPrimitive.isThingIdentity()).isFalse();
   }
 
   @Test

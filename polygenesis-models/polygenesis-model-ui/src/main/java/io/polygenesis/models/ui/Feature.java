@@ -23,6 +23,8 @@ package io.polygenesis.models.ui;
 import com.oregor.ddd4j.check.assertion.Assertion;
 import io.polygenesis.commons.valueobjects.ContextName;
 import io.polygenesis.commons.valueobjects.FeatureName;
+import io.polygenesis.commons.valueobjects.ObjectName;
+import io.polygenesis.core.Model;
 import io.polygenesis.models.ui.container.AbstractContainer;
 import java.util.Set;
 
@@ -33,7 +35,7 @@ import java.util.Set;
  * @author Christos Tsakostas
  * @see io.polygenesis.core.Thing
  */
-public class Feature {
+public class Feature implements Model {
 
   private ContextName contextName;
   private FeatureName featureName;
@@ -55,6 +57,15 @@ public class Feature {
     setContextName(contextName);
     setFeatureName(featureName);
     setContainers(containers);
+  }
+
+  // ===============================================================================================
+  // IMPLEMENTATIONS
+  // ===============================================================================================
+
+  @Override
+  public ObjectName getObjectName() {
+    return new ObjectName(featureName.getText());
   }
 
   // ===============================================================================================

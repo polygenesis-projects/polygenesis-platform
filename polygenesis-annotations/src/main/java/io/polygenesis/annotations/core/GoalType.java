@@ -57,6 +57,16 @@ public enum GoalType {
   VALIDATE(CqsType.SUPPORTIVE),
 
   // ===============================================================================================
+  // AGGREGATE ROOTS
+  // ===============================================================================================
+
+  AGGREGATE_ROOT_CREATE_ENTITY(CqsType.MUTATION),
+  AGGREGATE_ROOT_UPDATE_ENTITY(CqsType.MUTATION),
+  AGGREGATE_ROOT_DELETE_ENTITY(CqsType.MUTATION),
+  AGGREGATE_ROOT_FETCH_ONE_ENTITY(CqsType.QUERY),
+  AGGREGATE_ROOT_FETCH_ENTITY_COLLECTION(CqsType.QUERY),
+
+  // ===============================================================================================
   // DOMAIN SERVICE METHOD
   // ===============================================================================================
 

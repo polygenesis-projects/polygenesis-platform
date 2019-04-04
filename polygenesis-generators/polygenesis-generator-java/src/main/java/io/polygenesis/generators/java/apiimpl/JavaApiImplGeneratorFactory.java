@@ -23,7 +23,8 @@ package io.polygenesis.generators.java.apiimpl;
 import io.polygenesis.commons.freemarker.FreemarkerConfig;
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.valueobjects.PackageName;
-import io.polygenesis.generators.java.domain.aggregateroot.AggregateRootClassRepresentable;
+import io.polygenesis.implementations.java.apiimpl.ConverterMethodImplementationRegistry;
+import io.polygenesis.implementations.java.apiimpl.ServiceMethodImplementationRegistry;
 import io.polygenesis.representations.java.FromDataTypeToJavaConverter;
 import java.nio.file.Path;
 
@@ -40,7 +41,7 @@ public final class JavaApiImplGeneratorFactory {
   // ===============================================================================================
   private static final ServiceImplementationExporter serviceImplementationExporter;
   private static final ServiceImplementationTestExporter serviceImplementationTestExporter;
-  private static final AggregateRootConverterExporter aggregateRootConverterExporter;
+  private static final DomainObjectConverterExporter domainObjectConverterExporter;
 
   // ===============================================================================================
   // STATIC INITIALIZATION OF DEPENDENCIES
@@ -52,30 +53,20 @@ public final class JavaApiImplGeneratorFactory {
 
     FromDataTypeToJavaConverter fromDataTypeToJavaConverter = new FromDataTypeToJavaConverter();
 
-    ServiceImplementationMethodCommand serviceImplementationMethodCommandRepresentable =
-        new ServiceImplementationMethodCommand();
+    ServiceMethodImplementationRegistry serviceMethodImplementationRegistry =
+        new ServiceMethodImplementationRegistry();
 
-    ServiceImplementationMethodQuery serviceImplementationMethodQueryRepresentable =
-        new ServiceImplementationMethodQuery();
-
-    ServiceImplementationMethodRepresentable apiImplMethodProjectionMaker =
-        new ServiceImplementationMethodRepresentable(
-            fromDataTypeToJavaConverter,
-            serviceImplementationMethodCommandRepresentable,
-            serviceImplementationMethodQueryRepresentable);
+    ServiceMethodImplementationRepresentable apiImplMethodProjectionMaker =
+        new ServiceMethodImplementationRepresentable(
+            fromDataTypeToJavaConverter, serviceMethodImplementationRegistry, freemarkerService);
 
     ServiceImplementationClassRepresentable serviceImplementationClassRepresentable =
         new ServiceImplementationClassRepresentable(
             fromDataTypeToJavaConverter, apiImplMethodProjectionMaker);
 
-    AggregateRootClassRepresentable aggregateRootClassRepresentable =
-        new AggregateRootClassRepresentable(fromDataTypeToJavaConverter);
-
     serviceImplementationExporter =
         new ServiceImplementationExporter(
-            freemarkerService,
-            serviceImplementationClassRepresentable,
-            aggregateRootClassRepresentable);
+            freemarkerService, serviceImplementationClassRepresentable);
 
     ServiceImplementationTestClassRepresentable serviceImplementationTestClassRepresentable =
         new ServiceImplementationTestClassRepresentable(
@@ -85,16 +76,20 @@ public final class JavaApiImplGeneratorFactory {
         new ServiceImplementationTestExporter(
             freemarkerService, serviceImplementationTestClassRepresentable);
 
-    AggregateRootConverterMethodRepresentable aggregateRootConverterMethodRepresentable =
-        new AggregateRootConverterMethodRepresentable(fromDataTypeToJavaConverter);
+    ConverterMethodImplementationRegistry converterMethodImplementationRegistry =
+        new ConverterMethodImplementationRegistry();
 
-    AggregateRootConverterClassRepresentable aggregateRootConverterClassRepresentable =
-        new AggregateRootConverterClassRepresentable(
-            fromDataTypeToJavaConverter, aggregateRootConverterMethodRepresentable);
+    DomainObjectConverterMethodRepresentable domainObjectConverterMethodRepresentable =
+        new DomainObjectConverterMethodRepresentable(
+            fromDataTypeToJavaConverter, freemarkerService, converterMethodImplementationRegistry);
 
-    aggregateRootConverterExporter =
-        new AggregateRootConverterExporter(
-            freemarkerService, aggregateRootConverterClassRepresentable);
+    DomainObjectConverterClassRepresentable domainObjectConverterClassRepresentable =
+        new DomainObjectConverterClassRepresentable(
+            fromDataTypeToJavaConverter, domainObjectConverterMethodRepresentable);
+
+    domainObjectConverterExporter =
+        new DomainObjectConverterExporter(
+            freemarkerService, domainObjectConverterClassRepresentable);
   }
 
   // ===============================================================================================
@@ -122,6 +117,6 @@ public final class JavaApiImplGeneratorFactory {
         rootPackageName,
         serviceImplementationExporter,
         serviceImplementationTestExporter,
-        aggregateRootConverterExporter);
+        domainObjectConverterExporter);
   }
 }

@@ -20,6 +20,7 @@
 
 package io.polygenesis.models.apiimpl;
 
+import io.polygenesis.core.AbstractModelRepository;
 import io.polygenesis.core.ModelRepository;
 import java.util.Set;
 
@@ -28,68 +29,20 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class ServiceImplementationModelRepository implements ModelRepository {
-
-  private Set<ServiceImplementation> serviceImplementations;
-  private Set<AggregateRootConverter> aggregateRootConverters;
+public class ServiceImplementationModelRepository
+    extends AbstractModelRepository<ServiceImplementation>
+    implements ModelRepository<ServiceImplementation> {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
-  public ServiceImplementationModelRepository(
-      Set<ServiceImplementation> serviceImplementations,
-      Set<AggregateRootConverter> aggregateRootConverters) {
-    setServiceImplementations(serviceImplementations);
-    setAggregateRootConverters(aggregateRootConverters);
-  }
-
-  // ===============================================================================================
-  // GETTERS
-  // ===============================================================================================
-
   /**
-   * Gets service implementations.
+   * Instantiates a new Service implementation model repository.
    *
-   * @return the service implementations
+   * @param items the items
    */
-  public Set<ServiceImplementation> getServiceImplementations() {
-    return serviceImplementations;
+  public ServiceImplementationModelRepository(Set<ServiceImplementation> items) {
+    super(items);
   }
-
-  /**
-   * Gets aggregate root converters.
-   *
-   * @return the aggregate root converters
-   */
-  public Set<AggregateRootConverter> getAggregateRootConverters() {
-    return aggregateRootConverters;
-  }
-
-  // ===============================================================================================
-  // GUARDS
-  // ===============================================================================================
-
-  /**
-   * Sets service implementations.
-   *
-   * @param serviceImplementations the service implementations
-   */
-  private void setServiceImplementations(Set<ServiceImplementation> serviceImplementations) {
-    this.serviceImplementations = serviceImplementations;
-  }
-
-  /**
-   * Sets aggregate root converters.
-   *
-   * @param aggregateRootConverters the aggregate root converters
-   */
-  private void setAggregateRootConverters(Set<AggregateRootConverter> aggregateRootConverters) {
-    this.aggregateRootConverters = aggregateRootConverters;
-  }
-
-  // ===============================================================================================
-  // OVERRIDES
-  // ===============================================================================================
-
 }

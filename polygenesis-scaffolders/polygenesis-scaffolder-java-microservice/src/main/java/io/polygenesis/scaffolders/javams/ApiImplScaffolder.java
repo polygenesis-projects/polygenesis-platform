@@ -52,6 +52,12 @@ public class ApiImplScaffolder extends AbstractScaffolder {
   @Override
   public void scaffold(
       Path generationPath, ProjectDescription projectDescription, Map<String, Object> dataModel) {
+
+    // Check if Layer is enabled
+    if (!projectDescription.getLayers().contains(Layer.API_IMPL)) {
+      return;
+    }
+
     Path modulePath =
         Paths.get(generationPath.toString(), projectDescription.getModulePrefix() + "-api-impl");
     ensureSources(modulePath, projectDescription);

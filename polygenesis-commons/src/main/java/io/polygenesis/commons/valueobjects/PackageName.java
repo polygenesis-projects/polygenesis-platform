@@ -52,6 +52,20 @@ public class PackageName {
   }
 
   // ===============================================================================================
+  // WITH
+  // ===============================================================================================
+
+  /**
+   * With sub package package name.
+   *
+   * @param subPackage the sub package
+   * @return the package name
+   */
+  public PackageName withSubPackage(String subPackage) {
+    return new PackageName(String.format("%s.%s", getText(), subPackage));
+  }
+
+  // ===============================================================================================
   // GETTERS
   // ===============================================================================================
 

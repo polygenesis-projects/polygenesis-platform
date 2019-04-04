@@ -28,7 +28,7 @@ import io.polygenesis.core.data.DataPrimitive;
  *
  * @author Christos Tsakostas
  */
-public class Primitive extends BaseProperty<DataPrimitive> {
+public class Primitive extends BaseProperty<Primitive, DataPrimitive> {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -44,7 +44,7 @@ public class Primitive extends BaseProperty<DataPrimitive> {
   }
 
   // ===============================================================================================
-  // ABSTRACT IMPLEMENTATIONS
+  // IMPLEMENTATIONS
   // ===============================================================================================
 
   @Override

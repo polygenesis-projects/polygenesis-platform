@@ -28,7 +28,7 @@ import ${ import };
 /**
  * ${ projection.description }
  *
- * @author PolyGenesis
+ * @author ${ authorService.getAuthor() }
  */
 @Component
 public class ${ projection.objectNameWithOptionalExtendsImplements } {

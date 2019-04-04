@@ -20,7 +20,7 @@
 
 package io.polygenesis.models.domain;
 
-import com.oregor.ddd4j.check.assertion.Assertion;
+import io.polygenesis.core.AbstractModelRepository;
 import io.polygenesis.core.ModelRepository;
 import java.util.Set;
 
@@ -29,13 +29,8 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class DomainServiceRepository implements ModelRepository {
-
-  // ===============================================================================================
-  // STATE
-  // ===============================================================================================
-
-  private Set<DomainService> domainServices;
+public class DomainServiceRepository extends AbstractModelRepository<DomainService>
+    implements ModelRepository<DomainService> {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -44,44 +39,9 @@ public class DomainServiceRepository implements ModelRepository {
   /**
    * Instantiates a new Domain service repository.
    *
-   * @param domainServices the domain services
+   * @param items the items
    */
-  public DomainServiceRepository(Set<DomainService> domainServices) {
-    setDomainServices(domainServices);
-  }
-
-  // ===============================================================================================
-  // STATE MUTATION
-  // ===============================================================================================
-
-  // ===============================================================================================
-  // QUERIES
-  // ===============================================================================================
-
-  // ===============================================================================================
-  // GETTERS
-  // ===============================================================================================
-
-  /**
-   * Gets domain services.
-   *
-   * @return the domain services
-   */
-  public Set<DomainService> getDomainServices() {
-    return domainServices;
-  }
-
-  // ===============================================================================================
-  // GUARDS
-  // ===============================================================================================
-
-  /**
-   * Sets domain services.
-   *
-   * @param domainServices the domain services
-   */
-  private void setDomainServices(Set<DomainService> domainServices) {
-    Assertion.isNotNull(domainServices, "domainServices is required");
-    this.domainServices = domainServices;
+  public DomainServiceRepository(Set<DomainService> items) {
+    super(items);
   }
 }

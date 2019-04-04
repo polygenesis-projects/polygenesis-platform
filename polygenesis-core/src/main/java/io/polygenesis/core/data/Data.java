@@ -180,6 +180,20 @@ public abstract class Data {
   }
 
   /**
+   * Gets as data map.
+   *
+   * @return the as data map
+   */
+  public DataMap getAsDataMap() {
+    if (isDataMap()) {
+      return (DataMap) this;
+    } else {
+      throw new IllegalStateException(
+          String.format("Model of type=%s is not a DataMap", getDataPrimaryType().name()));
+    }
+  }
+
+  /**
    * Is primitive.
    *
    * @return the boolean
@@ -207,16 +221,30 @@ public abstract class Data {
   }
 
   /**
+   * Is data map boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isDataMap() {
+    return getDataPrimaryType().equals(DataPrimaryType.MAP);
+  }
+
+  /**
    * Is thing identity boolean.
    *
    * @return the boolean
    */
   public boolean isThingIdentity() {
-    if (this instanceof DataPrimitive) {
-      return ((DataPrimitive) this).getThingIdentity();
-    } else {
-      return false;
-    }
+    return getDataBusinessType().equals(DataBusinessType.THING_IDENTITY);
+  }
+
+  /**
+   * Is parent thing identity boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isParentThingIdentity() {
+    return getDataBusinessType().equals(DataBusinessType.PARENT_THING_IDENTITY);
   }
 
   // ===============================================================================================

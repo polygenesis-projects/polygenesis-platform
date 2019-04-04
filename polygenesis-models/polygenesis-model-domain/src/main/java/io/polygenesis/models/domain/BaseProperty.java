@@ -27,17 +27,17 @@ import java.util.Objects;
 /**
  * The type Base property.
  *
- * @param <T> the type parameter
+ * @param <D> the type parameter
  * @author Christos Tsakostas
  */
-public abstract class BaseProperty<T extends Data> implements DomainObjectProperty<T> {
+public abstract class BaseProperty<T, D extends Data> implements DomainObjectProperty<D> {
 
   // ===============================================================================================
   // STATE
   // ===============================================================================================
 
   private PropertyType propertyType;
-  private T data;
+  private D data;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -49,7 +49,7 @@ public abstract class BaseProperty<T extends Data> implements DomainObjectProper
    * @param propertyType the property type
    * @param data the data
    */
-  public BaseProperty(PropertyType propertyType, T data) {
+  public BaseProperty(PropertyType propertyType, D data) {
     setPropertyType(propertyType);
     setData(data);
   }
@@ -64,7 +64,7 @@ public abstract class BaseProperty<T extends Data> implements DomainObjectProper
   }
 
   @Override
-  public T getData() {
+  public D getData() {
     return data;
   }
 
@@ -109,7 +109,7 @@ public abstract class BaseProperty<T extends Data> implements DomainObjectProper
    *
    * @param data the data
    */
-  private void setData(T data) {
+  private void setData(D data) {
     Assertion.isNotNull(data, "data is required");
     this.data = data;
   }
@@ -126,7 +126,7 @@ public abstract class BaseProperty<T extends Data> implements DomainObjectProper
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    BaseProperty<?> that = (BaseProperty<?>) o;
+    BaseProperty<?, ?> that = (BaseProperty<?, ?>) o;
     return propertyType == that.propertyType && Objects.equals(data, that.data);
   }
 

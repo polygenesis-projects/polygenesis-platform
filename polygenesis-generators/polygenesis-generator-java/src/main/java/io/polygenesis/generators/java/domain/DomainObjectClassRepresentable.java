@@ -86,6 +86,7 @@ public abstract class DomainObjectClassRepresentable<S extends BaseDomainObject<
                   break;
                 case AGGREGATE_ROOT_ID:
                 case ABSTRACT_AGGREGATE_ROOT_ID:
+                case SUPPORTIVE_ENTITY_ID:
                   break;
                 case PRIMITIVE:
                   fieldRepresentations.add(
@@ -123,6 +124,11 @@ public abstract class DomainObjectClassRepresentable<S extends BaseDomainObject<
                           makeVariableDataType(property),
                           makeVariableName(property),
                           makeAnnotationsForAggregateEntityCollection(source)));
+                  break;
+                case REFERENCE:
+                  fieldRepresentations.add(
+                      new FieldRepresentation(
+                          makeVariableDataType(property), makeVariableName(property)));
                   break;
                 default:
                   throw new IllegalStateException(
@@ -247,13 +253,17 @@ public abstract class DomainObjectClassRepresentable<S extends BaseDomainObject<
               TextConverter.toUpperCamel(superClass.getObjectName().getText())));
     }
 
-    if (source.getInstantiationType().equals(InstantiationType.CONCRETE)) {
-      imports.add(rootPackageName.getText() + ".Constants");
-      imports.add("javax.persistence.Entity");
-      imports.add("javax.persistence.Table");
+    if (!source.getDomainObjectType().equals(DomainObjectType.HELPER_ENTITY)) {
+      if (source.getInstantiationType().equals(InstantiationType.CONCRETE)) {
+        imports.add(rootPackageName.getText() + ".Constants");
+        imports.add("javax.persistence.Entity");
+        imports.add("javax.persistence.Table");
+      } else {
+        imports.add("com.oregor.ddd4j.domain.AggregateRootId");
+        imports.add("javax.persistence.MappedSuperclass");
+      }
     } else {
-      imports.add("com.oregor.ddd4j.core.AggregateRootId");
-      imports.add("javax.persistence.MappedSuperclass");
+      imports.add("com.oregor.ddd4j.domain.SupportiveEntity");
     }
 
     return imports;

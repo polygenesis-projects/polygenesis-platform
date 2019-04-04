@@ -22,10 +22,9 @@ package io.polygenesis.generators.java.apiimpl;
 
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.data.DataGroup;
-import io.polygenesis.models.api.Method;
-import io.polygenesis.models.api.Service;
+import io.polygenesis.models.api.ServiceMethod;
 import io.polygenesis.models.apiimpl.ServiceImplementation;
-import io.polygenesis.models.domain.AggregateRoot;
+import io.polygenesis.models.domain.BaseDomainEntity;
 import io.polygenesis.models.domain.PropertyType;
 import io.polygenesis.representations.commons.FieldRepresentation;
 import io.polygenesis.representations.java.AbstractClassRepresentable;
@@ -48,7 +47,7 @@ public class ServiceImplementationClassRepresentable
   // ===============================================================================================
   // DEPENDENCIES
   // ===============================================================================================
-  private final ServiceImplementationMethodRepresentable serviceImplementationMethodRepresentable;
+  private final ServiceMethodImplementationRepresentable serviceMethodImplementationRepresentable;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -58,13 +57,13 @@ public class ServiceImplementationClassRepresentable
    * Instantiates a new Service implementation class representable.
    *
    * @param fromDataTypeToJavaConverter the from data type to java converter
-   * @param serviceImplementationMethodRepresentable the api impl method projection converter
+   * @param serviceMethodImplementationRepresentable the api impl method projection converter
    */
   public ServiceImplementationClassRepresentable(
       FromDataTypeToJavaConverter fromDataTypeToJavaConverter,
-      ServiceImplementationMethodRepresentable serviceImplementationMethodRepresentable) {
+      ServiceMethodImplementationRepresentable serviceMethodImplementationRepresentable) {
     super(fromDataTypeToJavaConverter);
-    this.serviceImplementationMethodRepresentable = serviceImplementationMethodRepresentable;
+    this.serviceMethodImplementationRepresentable = serviceMethodImplementationRepresentable;
   }
 
   // ===============================================================================================
@@ -75,13 +74,6 @@ public class ServiceImplementationClassRepresentable
   public Set<FieldRepresentation> fieldRepresentations(
       ServiceImplementation source, Object... args) {
     Set<FieldRepresentation> fieldRepresentations = new LinkedHashSet<>();
-
-    fieldRepresentations.add(
-        new FieldRepresentation(
-            TextConverter.toUpperCamel(source.getService().getThingName().getText())
-                + "Persistence",
-            TextConverter.toLowerCamel(source.getService().getThingName().getText())
-                + "Persistence"));
 
     source
         .getDependencies()
@@ -110,13 +102,11 @@ public class ServiceImplementationClassRepresentable
     Set<MethodRepresentation> methodRepresentations = new LinkedHashSet<>();
 
     source
-        .getService()
-        .getMethods()
+        .getServiceMethodImplementations()
         .forEach(
             method ->
                 methodRepresentations.add(
-                    serviceImplementationMethodRepresentable.create(
-                        method, source.getAggregateRoot(), source.getAggregateRootConverter())));
+                    serviceMethodImplementationRepresentable.create(method, source)));
 
     return methodRepresentations;
   }
@@ -132,17 +122,24 @@ public class ServiceImplementationClassRepresentable
     // Set<String> imports = super.projectImports(source.getService());
     Set<String> imports = new LinkedHashSet<>();
 
-    imports.addAll(detectImportsForAggregateRoot(source.getAggregateRoot()));
-    imports.addAll(detectImportsForMethods(source.getService()));
+    source
+        .getOptionalDomainEntity()
+        .ifPresent(domainEntity -> imports.addAll(detectImportsForDomainEntity(domainEntity)));
+
+    source
+        .getOptionalParentAggregateRoot()
+        .ifPresent(domainEntity -> imports.addAll(detectImportsForDomainEntity(domainEntity)));
+
+    imports.addAll(detectImportsForMethods(source));
 
     imports.add("com.oregor.ddd4j.check.assertion.Assertion");
     imports.add("org.springframework.stereotype.Service");
     imports.add("org.springframework.transaction.annotation.Transactional");
 
-    Optional<Method> optionalMethodFetchPagedCollection =
+    Optional<ServiceMethod> optionalMethodFetchPagedCollection =
         source
             .getService()
-            .getMethods()
+            .getServiceMethods()
             .stream()
             .filter(method -> method.getFunction().getGoal().isFetchPagedCollection())
             .findFirst();
@@ -150,7 +147,7 @@ public class ServiceImplementationClassRepresentable
     if (optionalMethodFetchPagedCollection.isPresent()) {
       imports.add("java.util.stream.Collectors");
       imports.add("java.util.stream.StreamSupport");
-      imports.add("com.oregor.ddd4j.core.Paginated");
+      imports.add("com.oregor.ddd4j.domain.Paginated");
     }
 
     return imports;
@@ -168,7 +165,14 @@ public class ServiceImplementationClassRepresentable
 
   @Override
   public String description(ServiceImplementation source, Object... args) {
-    return "No description yet.";
+    StringBuilder stringBuilder = new StringBuilder();
+
+    stringBuilder.append("Implements the ");
+    stringBuilder.append(
+        TextConverter.toUpperCamelSpaces(source.getService().getServiceName().getText()));
+    stringBuilder.append(".");
+
+    return stringBuilder.toString();
   }
 
   @Override
@@ -206,23 +210,23 @@ public class ServiceImplementationClassRepresentable
   // ===============================================================================================
 
   /**
-   * Detect imports for aggregate root set.
+   * Detect imports for domain entity.
    *
-   * @param aggregateRoot the aggregate root
+   * @param domainObject the aggregate root
    * @return the set
    */
-  protected Set<String> detectImportsForAggregateRoot(AggregateRoot aggregateRoot) {
+  protected Set<String> detectImportsForDomainEntity(BaseDomainEntity<?> domainObject) {
     Set<String> imports = new LinkedHashSet<>();
 
     // TODO: refactor the following implementation
-    aggregateRoot
+    domainObject
         .getProperties()
         .forEach(
             property -> {
               if (property.getPropertyType().equals(PropertyType.VALUE_OBJECT)) {
                 DataGroup modelGroup = property.getData().getAsDataGroup();
 
-                if (modelGroup.getPackageName().equals(aggregateRoot.getPackageName())) {
+                if (modelGroup.getPackageName().equals(domainObject.getPackageName())) {
                   imports.add(
                       modelGroup.getPackageName().getText()
                           + "."
@@ -237,18 +241,20 @@ public class ServiceImplementationClassRepresentable
   /**
    * Detect imports for methods set.
    *
-   * @param service the service
+   * @param serviceImplementation the service implementation
    * @return the set
    */
-  protected Set<String> detectImportsForMethods(Service service) {
+  protected Set<String> detectImportsForMethods(ServiceImplementation serviceImplementation) {
     Set<String> imports = new LinkedHashSet<>();
 
-    service
-        .getMethods()
+    serviceImplementation
+        .getServiceMethodImplementations()
         .forEach(
             method -> {
-              if (method.getFunction().getGoal().isFetchOne()
-                  || method.getFunction().getGoal().isModify()) {
+              imports.addAll(serviceMethodImplementationRepresentable.imports(method));
+
+              if (method.getServiceMethod().getFunction().getGoal().isFetchOne()
+                  || method.getServiceMethod().getFunction().getGoal().isModify()) {
                 imports.add("java.util.UUID");
               }
             });

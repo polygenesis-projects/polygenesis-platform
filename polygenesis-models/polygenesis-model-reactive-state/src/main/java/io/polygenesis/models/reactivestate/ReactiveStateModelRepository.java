@@ -20,7 +20,7 @@
 
 package io.polygenesis.models.reactivestate;
 
-import com.oregor.ddd4j.check.assertion.Assertion;
+import io.polygenesis.core.AbstractModelRepository;
 import io.polygenesis.core.ModelRepository;
 import java.util.Set;
 
@@ -29,43 +29,19 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class ReactiveStateModelRepository implements ModelRepository {
-
-  private Set<Store> stores;
+public class ReactiveStateModelRepository extends AbstractModelRepository<Store>
+    implements ModelRepository<Store> {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
-   * Instantiates a new Store repository.
+   * Instantiates a new Reactive state model repository.
    *
-   * @param stores the stores
+   * @param items the items
    */
-  public ReactiveStateModelRepository(Set<Store> stores) {
-    setStores(stores);
-  }
-
-  // ===============================================================================================
-  // GETTERS
-  // ===============================================================================================
-
-  /**
-   * Gets stores.
-   *
-   * @return the stores
-   */
-  public Set<Store> getStores() {
-    return stores;
-  }
-
-  // ===============================================================================================
-  // GUARDS
-  // ===============================================================================================
-
-  private void setStores(Set<Store> stores) {
-    Assertion.isNotNull(stores, "stores is required");
-
-    this.stores = stores;
+  public ReactiveStateModelRepository(Set<Store> items) {
+    super(items);
   }
 }

@@ -28,7 +28,7 @@ import io.polygenesis.core.data.DataGroup;
  *
  * @author Christos Tsakostas
  */
-public class AggregateRootId extends BaseProperty<DataGroup> {
+public class AggregateRootId extends BaseProperty<AggregateRootId, DataGroup> {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -44,7 +44,7 @@ public class AggregateRootId extends BaseProperty<DataGroup> {
   }
 
   // ===============================================================================================
-  // ABSTRACT IMPLEMENTATIONS
+  // IMPLEMENTATIONS
   // ===============================================================================================
 
   @Override

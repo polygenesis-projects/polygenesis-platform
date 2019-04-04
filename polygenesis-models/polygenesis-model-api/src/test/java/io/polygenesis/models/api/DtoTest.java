@@ -26,7 +26,6 @@ import io.polygenesis.commons.test.AbstractEqualityTest;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.data.DataGroup;
-import java.util.LinkedHashSet;
 import org.junit.Test;
 
 /** @author Christos Tsakostas */
@@ -37,14 +36,12 @@ public class DtoTest extends AbstractEqualityTest<Dto> {
     Dto dto =
         new Dto(
             DtoType.API_REQUEST,
-            new ObjectName("asd"),
-            new PackageName("com.oregor"),
-            new LinkedHashSet<>(),
-            new DataGroup(new ObjectName("asd"), new PackageName("com.oregor")));
+            new DataGroup(new ObjectName("asd"), new PackageName("com.oregor")),
+            false);
 
     assertThat(dto).isNotNull();
-    assertThat(dto.getOriginatingDataGroup()).isNotNull();
-    assertThat(dto.getOriginatingDataGroup())
+    assertThat(dto.getDataGroup()).isNotNull();
+    assertThat(dto.getDataGroup())
         .isEqualTo(new DataGroup(new ObjectName("asd"), new PackageName("com.oregor")));
   }
 
@@ -52,19 +49,15 @@ public class DtoTest extends AbstractEqualityTest<Dto> {
   public Dto createObject1() {
     return new Dto(
         DtoType.API_REQUEST,
-        new ObjectName("asd"),
-        new PackageName("com.oregor"),
-        new LinkedHashSet<>(),
-        new DataGroup(new ObjectName("asd"), new PackageName("com.oregor")));
+        new DataGroup(new ObjectName("asd"), new PackageName("com.oregor")),
+        false);
   }
 
   @Override
   public Dto createObject2() {
     return new Dto(
         DtoType.API_REQUEST,
-        new ObjectName("xyz"),
-        new PackageName("com.oregor"),
-        new LinkedHashSet<>(),
-        new DataGroup(new ObjectName("xyz"), new PackageName("com.oregor")));
+        new DataGroup(new ObjectName("xyz"), new PackageName("com.oregor")),
+        false);
   }
 }

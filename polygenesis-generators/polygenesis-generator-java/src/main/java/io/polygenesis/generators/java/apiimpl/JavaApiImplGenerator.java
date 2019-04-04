@@ -20,16 +20,13 @@
 
 package io.polygenesis.generators.java.apiimpl;
 
-import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.AbstractGenerator;
 import io.polygenesis.core.CoreRegistry;
 import io.polygenesis.core.ModelRepository;
+import io.polygenesis.models.apiimpl.DomainEntityConverterModelRepository;
 import io.polygenesis.models.apiimpl.ServiceImplementationModelRepository;
-import io.polygenesis.models.domain.AggregateRoot;
-import io.polygenesis.models.domain.DomainModelRepository;
 import java.nio.file.Path;
-import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -42,7 +39,7 @@ public class JavaApiImplGenerator extends AbstractGenerator {
   private final PackageName rootPackageName;
   private final ServiceImplementationExporter serviceImplementationExporter;
   private final ServiceImplementationTestExporter serviceImplementationTestExporter;
-  private final AggregateRootConverterExporter aggregateRootConverterExporter;
+  private final DomainObjectConverterExporter domainObjectConverterExporter;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -55,19 +52,19 @@ public class JavaApiImplGenerator extends AbstractGenerator {
    * @param rootPackageName the root package name
    * @param serviceImplementationExporter the api impl service exporter
    * @param serviceImplementationTestExporter the api impl service test exporter
-   * @param aggregateRootConverterExporter the aggregate root converter exporter
+   * @param domainObjectConverterExporter the aggregate root converter exporter
    */
   public JavaApiImplGenerator(
       Path generationPath,
       PackageName rootPackageName,
       ServiceImplementationExporter serviceImplementationExporter,
       ServiceImplementationTestExporter serviceImplementationTestExporter,
-      AggregateRootConverterExporter aggregateRootConverterExporter) {
+      DomainObjectConverterExporter domainObjectConverterExporter) {
     super(generationPath);
     this.rootPackageName = rootPackageName;
     this.serviceImplementationExporter = serviceImplementationExporter;
     this.serviceImplementationTestExporter = serviceImplementationTestExporter;
-    this.aggregateRootConverterExporter = aggregateRootConverterExporter;
+    this.domainObjectConverterExporter = domainObjectConverterExporter;
   }
 
   // ===============================================================================================
@@ -89,46 +86,30 @@ public class JavaApiImplGenerator extends AbstractGenerator {
 
   @Override
   public void generate(Set<ModelRepository> modelRepositories) {
-    DomainModelRepository domainModelRepository =
-        CoreRegistry.getModelRepositoryResolver()
-            .resolve(modelRepositories, DomainModelRepository.class);
-
     ServiceImplementationModelRepository serviceImplementationModelRepository =
         CoreRegistry.getModelRepositoryResolver()
             .resolve(modelRepositories, ServiceImplementationModelRepository.class);
 
-    if (serviceImplementationModelRepository.getServiceImplementations().isEmpty()) {
+    if (serviceImplementationModelRepository.getItems().isEmpty()) {
       throw new IllegalStateException();
     }
 
     serviceImplementationModelRepository
-        .getServiceImplementations()
+        .getItems()
         .forEach(
             serviceImplementation -> {
-              Optional<AggregateRoot> optionalAggregateRoot =
-                  domainModelRepository.getAggregateRootByName(
-                      new ObjectName(serviceImplementation.getService().getThingName().getText()));
-
-              if (!optionalAggregateRoot.isPresent()) {
-                throw new IllegalStateException(
-                    String.format(
-                        "Cannot get AggregateRoot with name=%s. Check that the AggregateRoot "
-                            + "exists and take care of the order of generators",
-                        serviceImplementation.getService().getThingName().getText()));
-              }
-
-              serviceImplementationExporter.export(
-                  getGenerationPath(),
-                  getRootPackageName(),
-                  serviceImplementation,
-                  optionalAggregateRoot.get());
+              serviceImplementationExporter.export(getGenerationPath(), serviceImplementation);
               serviceImplementationTestExporter.export(getGenerationPath(), serviceImplementation);
             });
 
-    serviceImplementationModelRepository
-        .getAggregateRootConverters()
+    DomainEntityConverterModelRepository domainEntityConverterModelRepository =
+        CoreRegistry.getModelRepositoryResolver()
+            .resolve(modelRepositories, DomainEntityConverterModelRepository.class);
+
+    domainEntityConverterModelRepository
+        .getItems()
         .forEach(
-            aggregateRootConverter ->
-                aggregateRootConverterExporter.export(getGenerationPath(), aggregateRootConverter));
+            domainEntityConverter ->
+                domainObjectConverterExporter.export(getGenerationPath(), domainEntityConverter));
   }
 }

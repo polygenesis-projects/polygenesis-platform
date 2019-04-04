@@ -17,7 +17,6 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-
 package ${ projectDescription.groupId };
 
 import org.junit.Test;
@@ -27,7 +26,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 /**
- * @author PolyGenesis
+ * @author ${ authorService.getAuthor() }
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest

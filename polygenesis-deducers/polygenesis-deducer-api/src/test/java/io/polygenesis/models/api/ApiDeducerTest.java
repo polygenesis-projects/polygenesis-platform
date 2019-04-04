@@ -71,8 +71,8 @@ public class ApiDeducerTest {
     verify(serviceDeducer).deduceFrom(eq(thing), eq(rootPackageName));
 
     assertThat(serviceModelRepository).isNotNull();
-    assertThat(serviceModelRepository.getServices()).isNotNull();
-    assertThat(serviceModelRepository.getServices().size()).isEqualTo(1);
+    assertThat(serviceModelRepository.getItems()).isNotNull();
+    assertThat(serviceModelRepository.getItems().size()).isEqualTo(1);
   }
 
   @Test

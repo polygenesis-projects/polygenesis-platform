@@ -20,5 +20,20 @@
 
 package io.polygenesis.core;
 
+import io.polygenesis.commons.valueobjects.ObjectName;
+import java.util.Optional;
+import java.util.Set;
+
 /** @author Christos Tsakostas */
-public class TestModelRepository implements ModelRepository {}
+public class TestModelRepository implements ModelRepository<Thing> {
+
+  @Override
+  public Set<Thing> getItems() {
+    return null;
+  }
+
+  @Override
+  public Optional<Thing> getItemByObjectName(ObjectName objectName) {
+    return Optional.empty();
+  }
+}

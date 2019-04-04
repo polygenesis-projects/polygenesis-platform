@@ -30,7 +30,7 @@ import java.util.Objects;
  *
  * @author Christos Tsakostas
  */
-public class AbstractAggregateRootId extends BaseProperty<DataGroup> {
+public class AbstractAggregateRootId extends BaseProperty<AbstractAggregateRootId, DataGroup> {
 
   // ===============================================================================================
   // STATE
@@ -81,7 +81,7 @@ public class AbstractAggregateRootId extends BaseProperty<DataGroup> {
   }
 
   // ===============================================================================================
-  // ABSTRACT IMPLEMENTATIONS
+  // IMPLEMENTATIONS
   // ===============================================================================================
 
   @Override

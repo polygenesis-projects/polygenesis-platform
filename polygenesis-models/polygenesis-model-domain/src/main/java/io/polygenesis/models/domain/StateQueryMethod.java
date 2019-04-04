@@ -20,9 +20,25 @@
 
 package io.polygenesis.models.domain;
 
+import io.polygenesis.core.Function;
+
 /**
  * The type State query.
  *
  * @author Christos Tsakostas
  */
-public class StateQueryMethod extends BaseMethod {}
+public class StateQueryMethod extends BaseMethod {
+
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
+  /**
+   * Instantiates a new State query method.
+   *
+   * @param function the function
+   */
+  public StateQueryMethod(Function function) {
+    super(function);
+  }
+}

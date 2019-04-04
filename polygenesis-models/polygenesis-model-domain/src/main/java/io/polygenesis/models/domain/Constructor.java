@@ -20,6 +20,7 @@
 
 package io.polygenesis.models.domain;
 
+import io.polygenesis.core.Function;
 import java.util.Set;
 
 /**
@@ -27,7 +28,7 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class Constructor {
+public class Constructor extends BaseMethod {
 
   private Set<DomainObjectProperty> properties;
 
@@ -38,9 +39,11 @@ public class Constructor {
   /**
    * Instantiates a new Constructor.
    *
+   * @param function the function
    * @param properties the properties
    */
-  public Constructor(Set<DomainObjectProperty> properties) {
+  public Constructor(Function function, Set<DomainObjectProperty> properties) {
+    super(function);
     setProperties(properties);
   }
 

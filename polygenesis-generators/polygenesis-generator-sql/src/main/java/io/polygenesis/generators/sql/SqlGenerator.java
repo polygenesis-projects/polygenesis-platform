@@ -23,7 +23,7 @@ package io.polygenesis.generators.sql;
 import io.polygenesis.core.AbstractGenerator;
 import io.polygenesis.core.CoreRegistry;
 import io.polygenesis.core.ModelRepository;
-import io.polygenesis.models.sql.SqlModelRepository;
+import io.polygenesis.models.sql.SqlTableModelRepository;
 import java.nio.file.Path;
 import java.util.Set;
 
@@ -77,10 +77,14 @@ public class SqlGenerator extends AbstractGenerator {
 
   @Override
   public void generate(Set<ModelRepository> modelRepositories) {
-    SqlModelRepository sqlModelRepository =
+    SqlTableModelRepository sqlTableModelRepository =
         CoreRegistry.getModelRepositoryResolver()
-            .resolve(modelRepositories, SqlModelRepository.class);
+            .resolve(modelRepositories, SqlTableModelRepository.class);
 
-    scriptExporter.export(getGenerationPath(), sqlModelRepository, getTablePrefix());
+    if (sqlTableModelRepository.getItems().size() == 1) {
+      return;
+    }
+
+    scriptExporter.export(getGenerationPath(), sqlTableModelRepository, getTablePrefix());
   }
 }

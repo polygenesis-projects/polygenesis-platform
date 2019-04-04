@@ -25,7 +25,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
 
-/** The type Primary adapter rest scaffolder. */
+/**
+ * The type Primary adapter rest scaffolder.
+ *
+ * @author Christos Tsakostas
+ */
 public class PrimaryAdapterRestScaffolder extends AbstractScaffolder {
 
   // ===============================================================================================
@@ -48,6 +52,12 @@ public class PrimaryAdapterRestScaffolder extends AbstractScaffolder {
   @Override
   public void scaffold(
       Path generationPath, ProjectDescription projectDescription, Map<String, Object> dataModel) {
+
+    // Check if Layer is enabled
+    if (!projectDescription.getLayers().contains(Layer.PRIMARY_ADAPTER_REST_SPRING)) {
+      return;
+    }
+
     Path modulePath =
         Paths.get(
             generationPath.toString(),

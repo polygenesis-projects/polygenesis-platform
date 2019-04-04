@@ -22,9 +22,11 @@ package io.polygenesis.generators.java.domain.aggregateroot;
 
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.generators.java.domain.DomainObjectClassRepresentable;
+import io.polygenesis.generators.java.domain.StateMutationMethodRepresentable;
 import io.polygenesis.models.domain.AggregateRoot;
 import io.polygenesis.models.domain.InstantiationType;
 import io.polygenesis.representations.java.FromDataTypeToJavaConverter;
+import io.polygenesis.representations.java.MethodRepresentation;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -36,21 +38,47 @@ import java.util.Set;
 public class AggregateRootClassRepresentable extends DomainObjectClassRepresentable<AggregateRoot> {
 
   // ===============================================================================================
+  // DEPENDENCIES
+  // ===============================================================================================
+
+  private final StateMutationMethodRepresentable stateMutationMethodRepresentable;
+
+  // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
-   * Instantiates a new Abstract aggregate root class representable.
+   * Instantiates a new Aggregate root class representable.
    *
    * @param fromDataTypeToJavaConverter the from data type to java converter
+   * @param stateMutationMethodRepresentable the state mutation method representable
    */
-  public AggregateRootClassRepresentable(FromDataTypeToJavaConverter fromDataTypeToJavaConverter) {
+  public AggregateRootClassRepresentable(
+      FromDataTypeToJavaConverter fromDataTypeToJavaConverter,
+      StateMutationMethodRepresentable stateMutationMethodRepresentable) {
     super(fromDataTypeToJavaConverter);
+    this.stateMutationMethodRepresentable = stateMutationMethodRepresentable;
   }
 
   // ===============================================================================================
   // OVERRIDES
   // ===============================================================================================
+
+  @Override
+  public Set<MethodRepresentation> methodRepresentations(AggregateRoot source, Object... args) {
+    Set<MethodRepresentation> methodRepresentations = new LinkedHashSet<>();
+
+    methodRepresentations.addAll(super.methodRepresentations(source, args));
+
+    source
+        .getStateMutationMethods()
+        .forEach(
+            stateMutationMethod ->
+                methodRepresentations.add(
+                    stateMutationMethodRepresentable.create(stateMutationMethod)));
+
+    return methodRepresentations;
+  }
 
   @Override
   public Set<String> annotations(AggregateRoot source, Object... args) {

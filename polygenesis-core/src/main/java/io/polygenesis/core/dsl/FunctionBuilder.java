@@ -114,6 +114,12 @@ public class FunctionBuilder {
             thing.makePackageName(rootPackageNameVo, thing));
 
     // ---------------------------------------------------------------------------------------------
+    // Add Parent Thing Identity if Any
+    if (thing.getOptionalParent().isPresent()) {
+      argumentDataGroup.addData(makeParentThingIdentity(thing.getOptionalParent().get()));
+    }
+
+    // ---------------------------------------------------------------------------------------------
     models.forEach(model -> argumentDataGroup.addData(model));
     // ---------------------------------------------------------------------------------------------
 
@@ -173,13 +179,14 @@ public class FunctionBuilder {
             thing.makePackageName(rootPackageNameVo, thing));
 
     // ---------------------------------------------------------------------------------------------
-    argumentDataGroup.addData(
-        DataPrimitive.ofDataBusinessType(
-            DataBusinessType.THING_IDENTITY,
-            PrimitiveType.STRING,
-            new VariableName(
-                String.format(
-                    "%sId", TextConverter.toLowerCamel(thing.getThingName().getText())))));
+    // Add Parent Thing Identity if Any
+    if (thing.getOptionalParent().isPresent()) {
+      argumentDataGroup.addData(makeParentThingIdentity(thing.getOptionalParent().get()));
+    }
+
+    // ---------------------------------------------------------------------------------------------
+    // Add Thing Identity
+    argumentDataGroup.addData(makeThingIdentity(thing));
 
     // ---------------------------------------------------------------------------------------------
     models.forEach(model -> argumentDataGroup.addData(model));
@@ -241,14 +248,14 @@ public class FunctionBuilder {
             thing.makePackageName(rootPackageNameVo, thing));
 
     // ---------------------------------------------------------------------------------------------
+    // Add Parent Thing Identity if Any
+    if (thing.getOptionalParent().isPresent()) {
+      argumentDataGroup.addData(makeParentThingIdentity(thing.getOptionalParent().get()));
+    }
 
-    argumentDataGroup.addData(
-        DataPrimitive.ofDataBusinessType(
-            DataBusinessType.THING_IDENTITY,
-            PrimitiveType.STRING,
-            new VariableName(
-                String.format(
-                    "%sId", TextConverter.toLowerCamel(thing.getThingName().getText())))));
+    // ---------------------------------------------------------------------------------------------
+    // Add Thing Identity
+    argumentDataGroup.addData(makeThingIdentity(thing));
 
     // ---------------------------------------------------------------------------------------------
     // RETURN VALUE
@@ -300,7 +307,12 @@ public class FunctionBuilder {
             thing.makePackageName(rootPackageNameVo, thing));
 
     // ---------------------------------------------------------------------------------------------
+    // Add Parent Thing Identity if Any
+    if (thing.getOptionalParent().isPresent()) {
+      argumentDataGroup.addData(makeParentThingIdentity(thing.getOptionalParent().get()));
+    }
 
+    // ---------------------------------------------------------------------------------------------
     argumentDataGroup.addData(
         DataPrimitive.ofDataBusinessType(
             DataBusinessType.PAGE_NUMBER, PrimitiveType.INTEGER, new VariableName("pageNumber")));
@@ -366,5 +378,38 @@ public class FunctionBuilder {
    */
   public final Set<Function> build() {
     return functions;
+  }
+
+  // ===============================================================================================
+  // PRIVATE
+  // ===============================================================================================
+
+  /**
+   * Make thing identity data primitive.
+   *
+   * @param thing the thing
+   * @return the data primitive
+   */
+  private DataPrimitive makeThingIdentity(Thing thing) {
+    return DataPrimitive.ofDataBusinessType(
+        DataBusinessType.THING_IDENTITY,
+        PrimitiveType.STRING,
+        new VariableName(
+            String.format("%sId", TextConverter.toLowerCamel(thing.getThingName().getText()))));
+  }
+
+  /**
+   * Make parent thing identity data primitive.
+   *
+   * @param parentThing the parent thing
+   * @return the data primitive
+   */
+  private DataPrimitive makeParentThingIdentity(Thing parentThing) {
+    return DataPrimitive.ofDataBusinessType(
+        DataBusinessType.PARENT_THING_IDENTITY,
+        PrimitiveType.STRING,
+        new VariableName(
+            String.format(
+                "%sId", TextConverter.toLowerCamel(parentThing.getThingName().getText()))));
   }
 }

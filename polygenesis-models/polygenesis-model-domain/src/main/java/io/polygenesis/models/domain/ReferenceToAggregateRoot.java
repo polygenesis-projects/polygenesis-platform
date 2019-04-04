@@ -28,7 +28,7 @@ import io.polygenesis.core.data.DataGroup;
  *
  * @author Christos Tsakostas
  */
-public class ReferenceToAggregateRoot extends BaseProperty<DataGroup> {
+public class ReferenceToAggregateRoot extends BaseProperty<ReferenceToAggregateRoot, DataGroup> {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -44,7 +44,7 @@ public class ReferenceToAggregateRoot extends BaseProperty<DataGroup> {
   }
 
   // ===============================================================================================
-  // ABSTRACT IMPLEMENTATIONS
+  // IMPLEMENTATIONS
   // ===============================================================================================
 
   @Override

@@ -20,7 +20,7 @@
 
 package ${ packageName };
 
-import com.oregor.ddd4j.core.AbstractDomainMessageData;
+import com.oregor.ddd4j.domain.AbstractDomainMessageData;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import javax.persistence.Entity;
@@ -29,7 +29,7 @@ import javax.persistence.Table;
 /**
  * The type Context domain message data.
  *
- * @author PolyGenesis
+ * @author ${ authorService.getAuthor() }
  */
 @Entity
 @Table(name = Constants.DEFAULT_TABLE_PREFIX + "domain_message")

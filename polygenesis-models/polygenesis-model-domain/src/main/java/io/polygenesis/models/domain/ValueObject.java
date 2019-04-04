@@ -28,10 +28,7 @@ import io.polygenesis.core.data.DataGroup;
  *
  * @author Christos Tsakostas
  */
-public class ValueObject extends BaseProperty<DataGroup> {
-
-  // TODO: should be removed
-  private DataGroup originatingDataGroup;
+public class ValueObject extends BaseProperty<ValueObject, DataGroup> {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -41,28 +38,13 @@ public class ValueObject extends BaseProperty<DataGroup> {
    * Instantiates a new Value object.
    *
    * @param data the data
-   * @param originatingDataGroup the originating data group
    */
-  public ValueObject(DataGroup data, DataGroup originatingDataGroup) {
+  public ValueObject(DataGroup data) {
     super(PropertyType.VALUE_OBJECT, data);
-    this.originatingDataGroup = originatingDataGroup;
   }
 
   // ===============================================================================================
-  // GETTER
-  // ===============================================================================================
-
-  /**
-   * Gets originating data group.
-   *
-   * @return the originating data group
-   */
-  public DataGroup getOriginatingDataGroup() {
-    return originatingDataGroup;
-  }
-
-  // ===============================================================================================
-  // ABSTRACT IMPLEMENTATIONS
+  // IMPLEMENTATIONS
   // ===============================================================================================
 
   @Override

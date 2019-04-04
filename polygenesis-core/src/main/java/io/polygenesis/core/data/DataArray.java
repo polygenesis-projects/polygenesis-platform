@@ -20,6 +20,7 @@
 
 package io.polygenesis.core.data;
 
+import io.polygenesis.commons.text.TextConverter;
 import java.util.Objects;
 
 /**
@@ -78,7 +79,14 @@ public class DataArray extends Data {
       DataBusinessType dataBusinessType,
       DataValidator dataValidator,
       Data arrayElement) {
-    super(DataPrimaryType.ARRAY, dataSource, variableName, dataBusinessType, dataValidator);
+    super(
+        DataPrimaryType.ARRAY,
+        dataSource,
+        variableName != null
+            ? new VariableName(TextConverter.toPlural(variableName.getText()))
+            : null,
+        dataBusinessType,
+        dataValidator);
     this.arrayElement = arrayElement;
   }
 

@@ -52,6 +52,14 @@ public class SecondaryAdapterRdbmsScaffolder extends AbstractScaffolder {
   @Override
   public void scaffold(
       Path generationPath, ProjectDescription projectDescription, Map<String, Object> dataModel) {
+
+    // Check if Layer is enabled
+    if (!projectDescription
+        .getLayers()
+        .contains(Layer.SECONDARY_ADAPTER_PERSISTENCE_SPRING_DATA_JPA)) {
+      return;
+    }
+
     Path modulePath =
         Paths.get(
             generationPath.toString(),

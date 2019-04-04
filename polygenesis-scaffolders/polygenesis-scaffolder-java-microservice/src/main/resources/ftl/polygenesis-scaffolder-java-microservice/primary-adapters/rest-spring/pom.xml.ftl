@@ -38,6 +38,25 @@
       <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
 
+    <!--SPRING SECURITY OAUTH2-->
+    <#--<dependency>-->
+      <#--<groupId>org.springframework.security.oauth.boot</groupId>-->
+      <#--<artifactId>spring-security-oauth2-autoconfigure</artifactId>-->
+      <#--<#noparse>-->
+      <#--<version>${spring-security-oauth2-autoconfigure.version}</version>-->
+      <#--</#noparse>-->
+    <#--</dependency>-->
+
+    <!--APACHE-->
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+    </dependency>
+
     <!--API-->
     <dependency>
       <groupId>${ projectDescription.groupId }</groupId>
@@ -48,6 +67,10 @@
     <dependency>
       <groupId>com.oregor.ddd4j</groupId>
       <artifactId>ddd4j-primary-adapter-rest-spring</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.oregor.ddd4j</groupId>
+      <artifactId>ddd4j-core</artifactId>
     </dependency>
 
     <!--TEST-->

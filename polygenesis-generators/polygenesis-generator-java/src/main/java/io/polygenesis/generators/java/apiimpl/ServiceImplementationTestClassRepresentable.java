@@ -41,12 +41,12 @@ public class ServiceImplementationTestClassRepresentable
    * Instantiates a new Service test implementation class representable.
    *
    * @param fromDataTypeToJavaConverter the from data type to java converter
-   * @param serviceImplementationMethodRepresentable the api impl method projection converter
+   * @param serviceMethodImplementationRepresentable the api impl method projection converter
    */
   public ServiceImplementationTestClassRepresentable(
       FromDataTypeToJavaConverter fromDataTypeToJavaConverter,
-      ServiceImplementationMethodRepresentable serviceImplementationMethodRepresentable) {
-    super(fromDataTypeToJavaConverter, serviceImplementationMethodRepresentable);
+      ServiceMethodImplementationRepresentable serviceMethodImplementationRepresentable) {
+    super(fromDataTypeToJavaConverter, serviceMethodImplementationRepresentable);
   }
 
   // ===============================================================================================

@@ -34,7 +34,7 @@
 <#list method.annotations as annotation>
   ${ annotation }
 </#list>
-  ${ method.modifiers }<#if method.modifiers != ""> </#if>${ method.returnValue} ${ method.methodName }(<@printParameters method.parameterRepresentations></@printParameters>) {
+  ${ method.modifiers }<#if method.modifiers != ""> </#if><#if method.returnValue != "">${ method.returnValue } </#if>${ method.methodName }(<@printParameters method.parameterRepresentations></@printParameters>) {
 ${ method.implementation }
   }
 </#macro>

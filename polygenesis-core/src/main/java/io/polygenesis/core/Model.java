@@ -20,18 +20,19 @@
 
 package io.polygenesis.core;
 
+import io.polygenesis.commons.valueobjects.ObjectName;
+
 /**
  * Contract for PolyGenesis Models.
  *
- * @param <T> the type parameter for model repository
  * @author Christos Tsakostas
  */
-public interface Model<T extends ModelRepository> {
+public interface Model {
 
   /**
-   * Answers the model's repository.
+   * Gets object name.
    *
-   * @return the T
+   * @return the object name
    */
-  T repository();
+  ObjectName getObjectName();
 }

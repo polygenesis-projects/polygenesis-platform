@@ -22,10 +22,9 @@ package io.polygenesis.models.rest;
 
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
-import io.polygenesis.core.Function;
-import io.polygenesis.core.Thing;
 import io.polygenesis.core.ThingRepository;
 import io.polygenesis.models.api.Service;
+import io.polygenesis.models.api.ServiceMethod;
 import io.polygenesis.models.api.ServiceModelRepository;
 import java.util.LinkedHashSet;
 import java.util.Optional;
@@ -80,15 +79,16 @@ public class ResourceDeducer {
         .forEach(
             thing -> {
               Set<Endpoint> endpoints = new LinkedHashSet<>();
+              Set<Service> services = serviceModelRepository.getServicesBy(thing.getThingName());
 
-              fillEndpoints(endpoints, thing, serviceModelRepository);
+              fillEndpoints(endpoints, services);
 
               resources.add(
                   new Resource(
                       thing.makePackageName(rootPackageName, thing),
                       new ObjectName(thing.getThingName().getText()),
                       endpoints,
-                      serviceModelRepository.getServicesBy(thing.getThingName())));
+                      services));
             });
 
     return resources;
@@ -102,65 +102,33 @@ public class ResourceDeducer {
    * Fill endpoints.
    *
    * @param endpoints the endpoints
-   * @param thing the thing
-   * @param serviceModelRepository the service model repository
+   * @param services the services
    */
-  private void fillEndpoints(
-      Set<Endpoint> endpoints, Thing thing, ServiceModelRepository serviceModelRepository) {
-    thing
-        .getFunctions()
-        .forEach(
-            function ->
-                fillEndpointForFunction(
-                    endpoints, function, getServiceFor(function, serviceModelRepository)));
-
-    // TODO: must implement service has function first!
-    //    thing.getChildren()
-    //        .forEach(thingChild -> fillEndpoints(endpoints, thingChild, serviceModelRepository));
-    //
-    //    thing.getVirtualChildren()
-    //        .forEach(thingChild -> fillEndpoints(endpoints, thingChild, serviceModelRepository));
+  private void fillEndpoints(Set<Endpoint> endpoints, Set<Service> services) {
+    services.forEach(
+        service -> {
+          service
+              .getServiceMethods()
+              .forEach(
+                  serviceMethod -> {
+                    fillEndpointForServiceMethod(endpoints, service, serviceMethod);
+                  });
+        });
   }
 
   /**
-   * Fill endpoint for function.
+   * Fill endpoint for service method.
    *
    * @param endpoints the endpoints
-   * @param function the function
    * @param service the service
+   * @param serviceMethod the service method
    */
-  private void fillEndpointForFunction(
-      Set<Endpoint> endpoints, Function function, Service service) {
-    Optional<Endpoint> optionalEndpoint = endpointDeducer.deduceFromFunction(function, service);
+  private void fillEndpointForServiceMethod(
+      Set<Endpoint> endpoints, Service service, ServiceMethod serviceMethod) {
+    Optional<Endpoint> optionalEndpoint =
+        endpointDeducer.deduceFromServiceMethod(serviceMethod, service);
     if (optionalEndpoint.isPresent()) {
       endpoints.add(optionalEndpoint.get());
-    }
-  }
-
-  /**
-   * Gets service for.
-   *
-   * @param function the function
-   * @param serviceModelRepository the service model repository
-   * @return the service for
-   */
-  private Service getServiceFor(Function function, ServiceModelRepository serviceModelRepository) {
-    if (serviceModelRepository.getServices().isEmpty()) {
-      throw new IllegalStateException(
-          "serviceModelRepository is create. Check the order of the decucers.");
-    }
-
-    Optional<Service> optionalService =
-        serviceModelRepository
-            .getServicesBy(function.getThing().getThingName())
-            .stream()
-            .filter(service -> service.contains(function))
-            .findFirst();
-
-    if (optionalService.isPresent()) {
-      return optionalService.get();
-    } else {
-      throw new IllegalStateException("Could not find Service for Function");
     }
   }
 }

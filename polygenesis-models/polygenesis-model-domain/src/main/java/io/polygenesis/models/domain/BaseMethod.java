@@ -20,9 +20,83 @@
 
 package io.polygenesis.models.domain;
 
+import com.oregor.ddd4j.check.assertion.Assertion;
+import io.polygenesis.core.Function;
+import io.polygenesis.core.FunctionProvider;
+import java.util.Objects;
+
 /**
  * The type Abstract method.
  *
  * @author Christos Tsakostas
  */
-public abstract class BaseMethod {}
+public abstract class BaseMethod implements FunctionProvider {
+
+  // ===============================================================================================
+  // STATE
+  // ===============================================================================================
+
+  private Function function;
+
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
+  /**
+   * Instantiates a new Base method.
+   *
+   * @param function the function
+   */
+  public BaseMethod(Function function) {
+    setFunction(function);
+  }
+
+  // ===============================================================================================
+  // GETTERS
+  // ===============================================================================================
+
+  /**
+   * Gets function.
+   *
+   * @return the function
+   */
+  @Override
+  public Function getFunction() {
+    return function;
+  }
+
+  // ===============================================================================================
+  // GUARDS
+  // ===============================================================================================
+
+  /**
+   * Sets function.
+   *
+   * @param function the function
+   */
+  private void setFunction(Function function) {
+    Assertion.isNotNull(function, "function is required");
+    this.function = function;
+  }
+
+  // ===============================================================================================
+  // OVERRIDES
+  // ===============================================================================================
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    BaseMethod that = (BaseMethod) o;
+    return Objects.equals(function, that.function);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(function);
+  }
+}

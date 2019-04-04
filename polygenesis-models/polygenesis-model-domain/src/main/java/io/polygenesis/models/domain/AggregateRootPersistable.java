@@ -117,6 +117,11 @@ public class AggregateRootPersistable extends AggregateRoot {
   // ===============================================================================================
 
   @Override
+  public Optional<Persistence> getOptionalPersistence() {
+    return Optional.of(getPersistence());
+  }
+
+  @Override
   public boolean equals(Object o) {
     if (this == o) {
       return true;

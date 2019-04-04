@@ -39,20 +39,25 @@ public final class DomainDeducerFactory {
   // ===============================================================================================
 
   static {
+    DomainObjectConstructorDeducer domainObjectConstructorDeducer =
+        new DomainObjectConstructorDeducer();
+
     AggregateEntityPropertyDeducer aggregateEntityPropertyDeducer =
         new AggregateEntityPropertyDeducer();
 
     AggregateEntityDeducer aggregateEntityDeducer =
-        new AggregateEntityDeducer(aggregateEntityPropertyDeducer);
+        new AggregateEntityDeducer(domainObjectConstructorDeducer, aggregateEntityPropertyDeducer);
 
     AggregateRootPropertyDeducer aggregateRootPropertyDeducer =
         new AggregateRootPropertyDeducer(aggregateEntityDeducer);
 
-    AggregateConstructorDeducer aggregateConstructorDeducer =
-        new AggregateConstructorDeducer(aggregateRootPropertyDeducer);
+    StateMutationMethodDeducer stateMutationMethodDeducer = new StateMutationMethodDeducer();
 
     aggregateRootDeducer =
-        new AggregateRootDeducer(aggregateConstructorDeducer, aggregateRootPropertyDeducer);
+        new AggregateRootDeducer(
+            domainObjectConstructorDeducer,
+            aggregateRootPropertyDeducer,
+            stateMutationMethodDeducer);
   }
 
   // ===============================================================================================

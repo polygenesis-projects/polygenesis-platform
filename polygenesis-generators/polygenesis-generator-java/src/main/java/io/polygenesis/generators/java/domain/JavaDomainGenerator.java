@@ -31,6 +31,7 @@ import io.polygenesis.generators.java.domain.aggregateroot.AggregateRootIdExport
 import io.polygenesis.generators.java.domain.domainevent.DomainEventExporter;
 import io.polygenesis.generators.java.domain.persistence.PersistenceExporter;
 import io.polygenesis.generators.java.domain.service.DomainServiceExporter;
+import io.polygenesis.generators.java.domain.supportiveentity.SupportiveEntityExporter;
 import io.polygenesis.generators.java.domain.valueobject.ValueObjectExporter;
 import io.polygenesis.models.domain.AggregateEntity;
 import io.polygenesis.models.domain.AggregateEntityCollection;
@@ -38,6 +39,7 @@ import io.polygenesis.models.domain.AggregateRootPersistable;
 import io.polygenesis.models.domain.DomainModelRepository;
 import io.polygenesis.models.domain.DomainServiceRepository;
 import io.polygenesis.models.domain.PropertyType;
+import io.polygenesis.models.domain.SupportiveEntityModelRepository;
 import io.polygenesis.models.domain.ValueObject;
 import java.nio.file.Path;
 import java.util.Set;
@@ -58,6 +60,7 @@ public class JavaDomainGenerator extends AbstractGenerator {
   private final DomainEventExporter domainEventExporter;
   private final PersistenceExporter persistenceExporter;
   private final DomainServiceExporter domainServiceExporter;
+  private final SupportiveEntityExporter supportiveEntityExporter;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -76,6 +79,7 @@ public class JavaDomainGenerator extends AbstractGenerator {
    * @param domainEventExporter the domain event exporter
    * @param persistenceExporter the persistence exporter
    * @param domainServiceExporter the domain service exporter
+   * @param supportiveEntityExporter the helper entity exporter
    */
   public JavaDomainGenerator(
       Path generationPath,
@@ -87,7 +91,8 @@ public class JavaDomainGenerator extends AbstractGenerator {
       ValueObjectExporter valueObjectExporter,
       DomainEventExporter domainEventExporter,
       PersistenceExporter persistenceExporter,
-      DomainServiceExporter domainServiceExporter) {
+      DomainServiceExporter domainServiceExporter,
+      SupportiveEntityExporter supportiveEntityExporter) {
     super(generationPath);
     this.rootPackageName = rootPackageName;
     this.aggregateRootExporter = aggregateRootExporter;
@@ -98,6 +103,7 @@ public class JavaDomainGenerator extends AbstractGenerator {
     this.domainEventExporter = domainEventExporter;
     this.persistenceExporter = persistenceExporter;
     this.domainServiceExporter = domainServiceExporter;
+    this.supportiveEntityExporter = supportiveEntityExporter;
   }
 
   // ===============================================================================================
@@ -121,7 +127,7 @@ public class JavaDomainGenerator extends AbstractGenerator {
   public void generate(Set<ModelRepository> modelRepositories) {
     CoreRegistry.getModelRepositoryResolver()
         .resolve(modelRepositories, DomainModelRepository.class)
-        .getAggregateRoots()
+        .getItems()
         .forEach(
             aggregateRoot -> {
               aggregateRootExporter.export(
@@ -189,10 +195,19 @@ public class JavaDomainGenerator extends AbstractGenerator {
 
     CoreRegistry.getModelRepositoryResolver()
         .resolve(modelRepositories, DomainServiceRepository.class)
-        .getDomainServices()
+        .getItems()
         .forEach(
             domainService -> {
               domainServiceExporter.export(getGenerationPath(), domainService);
+            });
+
+    CoreRegistry.getModelRepositoryResolver()
+        .resolve(modelRepositories, SupportiveEntityModelRepository.class)
+        .getItems()
+        .forEach(
+            helperEntity -> {
+              supportiveEntityExporter.export(
+                  getGenerationPath(), helperEntity, getRootPackageName());
             });
   }
 }

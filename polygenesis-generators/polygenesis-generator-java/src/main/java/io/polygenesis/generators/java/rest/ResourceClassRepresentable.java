@@ -108,23 +108,30 @@ public class ResourceClassRepresentable extends AbstractClassRepresentable<Resou
     PackageName rootPackageName = (PackageName) args[0];
     Set<String> imports = new TreeSet<>();
 
+    imports.add(String.format("%s.RestConstants", rootPackageName.getText()));
     imports.add("org.springframework.web.bind.annotation.RestController");
     imports.add("org.springframework.web.bind.annotation.RequestMapping");
     imports.add("com.oregor.ddd4j.rest.AbstractRestController");
-    imports.add(String.format("%s.RestConstants", rootPackageName.getText()));
+    imports.add("javax.servlet.http.HttpServletRequest");
+    imports.add("com.oregor.ddd4j.check.assertion.Assertion");
 
     source
         .getEndpoints()
         .forEach(
             endpoint -> {
+              imports.addAll(endpointMethodRepresentable.imports(endpoint));
+
               if (endpoint.getHttpMethod().equals(HttpMethod.POST)) {
                 imports.add("org.springframework.web.bind.annotation.PostMapping");
                 imports.add("org.springframework.web.bind.annotation.RequestBody");
               } else if (endpoint.getHttpMethod().equals(HttpMethod.PUT)) {
                 imports.add("org.springframework.web.bind.annotation.PutMapping");
                 imports.add("org.springframework.web.bind.annotation.RequestBody");
+                imports.add("org.springframework.web.bind.annotation.PathVariable");
               } else if (endpoint.getHttpMethod().equals(HttpMethod.GET)) {
                 imports.add("org.springframework.web.bind.annotation.GetMapping");
+                imports.add("org.springframework.web.bind.annotation.RequestParam");
+                imports.add("org.springframework.web.bind.annotation.PathVariable");
               } else if (endpoint.getHttpMethod().equals(HttpMethod.DELETE)) {
                 imports.add("org.springframework.web.bind.annotation.DeleteMapping");
               }

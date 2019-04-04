@@ -59,11 +59,12 @@ public class ThingBuilder {
 
   private String contextName;
   private ThingName thingName;
-  private ThingScopeType thingScopeType = ThingScopeType.ACROSS_LAYERS;
+  private ThingScopeType thingScopeType = ThingScopeType.DOMAIN_AGGREGATE_ROOT;
   private ThingBusinessType thingBusinessType = ThingBusinessType.ANY;
   private Set<ThingProperty> thingProperties = new LinkedHashSet<>();
   private Boolean multiTenant = false;
   private Thing parentThing;
+  private Set<ThingLayerType> layerTypes = Thing.allLayers();
 
   // ===============================================================================================
   // SETTERS
@@ -144,6 +145,17 @@ public class ThingBuilder {
     return this;
   }
 
+  /**
+   * Sets layer types.
+   *
+   * @param layerTypes the layer types
+   * @return the layer types
+   */
+  public ThingBuilder setLayerTypes(Set<ThingLayerType> layerTypes) {
+    this.layerTypes = layerTypes;
+    return this;
+  }
+
   // ===============================================================================================
   // CREATION
   // ===============================================================================================
@@ -161,6 +173,7 @@ public class ThingBuilder {
         thingName,
         thingProperties,
         multiTenant,
-        parentThing != null ? Optional.of(parentThing) : Optional.empty());
+        parentThing != null ? Optional.of(parentThing) : Optional.empty(),
+        layerTypes);
   }
 }

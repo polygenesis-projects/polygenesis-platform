@@ -37,7 +37,7 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class AggregateEntity extends BaseDomainObject<AggregateEntity>
+public class AggregateEntity extends BaseDomainEntity<AggregateEntity>
     implements DomainObjectProperty<DataGroup> {
 
   // ===============================================================================================
@@ -108,4 +108,9 @@ public class AggregateEntity extends BaseDomainObject<AggregateEntity>
   public Data getTypeParameterData() {
     throw new UnsupportedOperationException();
   }
+
+  // ===============================================================================================
+  // OVERRIDES
+  // ===============================================================================================
+
 }

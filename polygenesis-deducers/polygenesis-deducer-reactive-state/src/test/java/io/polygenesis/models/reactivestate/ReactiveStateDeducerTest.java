@@ -58,8 +58,8 @@ public class ReactiveStateDeducerTest {
         reactiveStateDeducer.deduce(thingRepository, modelRepositories());
 
     assertThat(reactiveStateModelRepository).isNotNull();
-    assertThat(reactiveStateModelRepository.getStores()).isNotNull();
-    assertThat(reactiveStateModelRepository.getStores().size()).isEqualTo(0);
+    assertThat(reactiveStateModelRepository.getItems()).isNotNull();
+    assertThat(reactiveStateModelRepository.getItems().size()).isEqualTo(0);
   }
 
   private Set<ModelRepository> modelRepositories() {

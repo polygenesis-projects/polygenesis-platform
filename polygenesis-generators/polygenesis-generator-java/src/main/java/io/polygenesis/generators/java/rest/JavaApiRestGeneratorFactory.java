@@ -24,6 +24,7 @@ import io.polygenesis.commons.freemarker.FreemarkerConfig;
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
+import io.polygenesis.implementations.java.rest.EndpointImplementationRegistry;
 import io.polygenesis.representations.java.FromDataTypeToJavaConverter;
 import java.nio.file.Path;
 
@@ -51,8 +52,12 @@ public final class JavaApiRestGeneratorFactory {
 
     FromDataTypeToJavaConverter fromDataTypeToJavaConverter = new FromDataTypeToJavaConverter();
 
+    EndpointImplementationRegistry endpointImplementationRegistry =
+        new EndpointImplementationRegistry();
+
     EndpointMethodRepresentable endpointMethodRepresentable =
-        new EndpointMethodRepresentable(fromDataTypeToJavaConverter);
+        new EndpointMethodRepresentable(
+            fromDataTypeToJavaConverter, freemarkerService, endpointImplementationRegistry);
 
     ResourceClassRepresentable resourceClassRepresentable =
         new ResourceClassRepresentable(fromDataTypeToJavaConverter, endpointMethodRepresentable);

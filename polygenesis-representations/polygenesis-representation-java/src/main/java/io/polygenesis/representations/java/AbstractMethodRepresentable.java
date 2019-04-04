@@ -30,17 +30,11 @@ import java.util.stream.Collectors;
  * @param <S> the type parameter
  * @author Christos Tsakostas
  */
-public abstract class AbstractMethodRepresentable<S> implements MethodRepresentable<S> {
+public abstract class AbstractMethodRepresentable<S> extends AbstractRepresentable
+    implements MethodRepresentable<S> {
 
   /** The constant MODIFIER_PUBLIC. */
   protected static final String MODIFIER_PUBLIC = "public";
-
-  // ===============================================================================================
-  // DEPENDENCIES
-  // ===============================================================================================
-
-  /** The From data type to java converter. */
-  protected final FromDataTypeToJavaConverter fromDataTypeToJavaConverter;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -52,7 +46,7 @@ public abstract class AbstractMethodRepresentable<S> implements MethodRepresenta
    * @param fromDataTypeToJavaConverter the from data type to java converter
    */
   public AbstractMethodRepresentable(FromDataTypeToJavaConverter fromDataTypeToJavaConverter) {
-    this.fromDataTypeToJavaConverter = fromDataTypeToJavaConverter;
+    super(fromDataTypeToJavaConverter);
   }
 
   // ===============================================================================================
@@ -63,6 +57,7 @@ public abstract class AbstractMethodRepresentable<S> implements MethodRepresenta
   public MethodRepresentation create(S source, Object... args) {
     return new MethodRepresentation(
         methodType(source, args),
+        imports(source, args),
         annotations(source, args),
         description(source, args),
         modifiers(source, args),
@@ -75,20 +70,6 @@ public abstract class AbstractMethodRepresentable<S> implements MethodRepresenta
   // ===============================================================================================
   // PROTECTED
   // ===============================================================================================
-
-  /**
-   * Gets full parameters comma separated.
-   *
-   * @param parameterRepresentations the parameter representations
-   * @return the full parameters comma separated
-   */
-  protected String getFullParametersCommaSeparated(
-      Set<ParameterRepresentation> parameterRepresentations) {
-    return parameterRepresentations
-        .stream()
-        .map(parameterRepresentation -> parameterRepresentation.getFullRepresentation())
-        .collect(Collectors.joining(", "));
-  }
 
   /**
    * Gets parameters comma separated.

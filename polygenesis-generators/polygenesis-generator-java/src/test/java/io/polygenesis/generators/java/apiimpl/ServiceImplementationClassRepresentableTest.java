@@ -39,14 +39,14 @@ import org.junit.Test;
 public class ServiceImplementationClassRepresentableTest {
 
   private FromDataTypeToJavaConverter fromDataTypeToJavaConverter;
-  private ServiceImplementationMethodRepresentable methodProjectionMaker;
+  private ServiceMethodImplementationRepresentable methodProjectionMaker;
   private ServiceImplementationClassRepresentable serviceImplementationClassRepresentable;
 
   /** Sets up. */
   @Before
   public void setUp() {
     fromDataTypeToJavaConverter = mock(FromDataTypeToJavaConverter.class);
-    methodProjectionMaker = mock(ServiceImplementationMethodRepresentable.class);
+    methodProjectionMaker = mock(ServiceMethodImplementationRepresentable.class);
     serviceImplementationClassRepresentable =
         new ServiceImplementationClassRepresentable(
             fromDataTypeToJavaConverter, methodProjectionMaker);

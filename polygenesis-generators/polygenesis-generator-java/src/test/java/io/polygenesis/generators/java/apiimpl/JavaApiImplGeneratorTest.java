@@ -33,7 +33,8 @@ import io.polygenesis.core.ModelRepository;
 import io.polygenesis.core.ThingName;
 import io.polygenesis.models.api.Service;
 import io.polygenesis.models.api.ServiceModelRepository;
-import io.polygenesis.models.apiimpl.AggregateRootConverter;
+import io.polygenesis.models.apiimpl.DomainEntityConverter;
+import io.polygenesis.models.apiimpl.DomainEntityConverterModelRepository;
 import io.polygenesis.models.apiimpl.ServiceImplementation;
 import io.polygenesis.models.apiimpl.ServiceImplementationModelRepository;
 import io.polygenesis.models.domain.AggregateRoot;
@@ -57,7 +58,7 @@ public class JavaApiImplGeneratorTest {
   private PackageName rootPackageName;
   private ServiceImplementationExporter serviceImplementationExporter;
   private ServiceImplementationTestExporter serviceImplementationTestExporter;
-  private AggregateRootConverterExporter aggregateRootConverterExporter;
+  private DomainObjectConverterExporter domainObjectConverterExporter;
   private JavaApiImplGenerator javaApiImplGenerator;
 
   /**
@@ -71,14 +72,14 @@ public class JavaApiImplGeneratorTest {
     rootPackageName = new PackageName("com.oregor");
     serviceImplementationExporter = mock(ServiceImplementationExporter.class);
     serviceImplementationTestExporter = mock(ServiceImplementationTestExporter.class);
-    aggregateRootConverterExporter = mock(AggregateRootConverterExporter.class);
+    domainObjectConverterExporter = mock(DomainObjectConverterExporter.class);
     javaApiImplGenerator =
         new JavaApiImplGenerator(
             generationPath,
             rootPackageName,
             serviceImplementationExporter,
             serviceImplementationTestExporter,
-            aggregateRootConverterExporter);
+            domainObjectConverterExporter);
   }
 
   /** Should generate. */
@@ -87,11 +88,7 @@ public class JavaApiImplGeneratorTest {
     javaApiImplGenerator.generate(createModelRepositories());
 
     verify(serviceImplementationExporter)
-        .export(
-            eq(generationPath),
-            eq(rootPackageName),
-            any(ServiceImplementation.class),
-            any(AggregateRoot.class));
+        .export(eq(generationPath), any(ServiceImplementation.class));
   }
 
   /** Should fail on missing service model repository. */
@@ -112,6 +109,7 @@ public class JavaApiImplGeneratorTest {
         Arrays.asList(
             createServiceModelRepository(),
             createDomainModelRepository(),
+            createDomainEntityConverterModelRepository(),
             createServiceImplementationModelRepository()));
   }
 
@@ -135,9 +133,14 @@ public class JavaApiImplGeneratorTest {
     return new DomainModelRepository(aggregateRoots);
   }
 
+  private DomainEntityConverterModelRepository createDomainEntityConverterModelRepository() {
+    Set<DomainEntityConverter> domainEntityConverters = new LinkedHashSet<>();
+
+    return new DomainEntityConverterModelRepository(domainEntityConverters);
+  }
+
   private ServiceImplementationModelRepository createServiceImplementationModelRepository() {
     Set<ServiceImplementation> serviceImplementations = new LinkedHashSet<>();
-    Set<AggregateRootConverter> aggregateRootConverters = new LinkedHashSet<>();
 
     ServiceImplementation serviceImplementation = mock(ServiceImplementation.class);
     Service service = mock(Service.class);
@@ -146,7 +149,6 @@ public class JavaApiImplGeneratorTest {
 
     serviceImplementations.add(serviceImplementation);
 
-    return new ServiceImplementationModelRepository(
-        serviceImplementations, aggregateRootConverters);
+    return new ServiceImplementationModelRepository(serviceImplementations);
   }
 }

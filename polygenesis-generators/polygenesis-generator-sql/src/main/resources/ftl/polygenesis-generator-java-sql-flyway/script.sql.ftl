@@ -17,7 +17,7 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-<#list representation.tables as table >
+<#list representation.items as table >
 -- -------------------------------------------------------------------------------------------------
 -- ${ textConverter.toUpperUnderscore(table.tableName.text) }
 -- -------------------------------------------------------------------------------------------------

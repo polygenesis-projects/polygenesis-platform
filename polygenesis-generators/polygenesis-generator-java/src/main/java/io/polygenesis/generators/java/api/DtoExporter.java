@@ -70,8 +70,14 @@ public class DtoExporter {
    * @param service the service
    */
   public void export(Path generationPath, Service service) {
-
-    service.getDtos().forEach(dto -> export(generationPath, dto));
+    service
+        .getDtos()
+        .forEach(
+            dto -> {
+              if (!dto.getVirtual()) {
+                export(generationPath, dto);
+              }
+            });
   }
 
   // ===============================================================================================
@@ -79,11 +85,6 @@ public class DtoExporter {
   // ===============================================================================================
 
   private void export(Path generationPath, Dto dto) {
-    // TODO: getOriginatingDataGroup() should not be DataArray
-    if (dto.getOriginatingDataGroup().isDataArray()) {
-      return;
-    }
-
     Map<String, Object> dataModel = new HashMap<>();
     dataModel.put("representation", dtoClassRepresentable.create(dto));
 
@@ -97,7 +98,7 @@ public class DtoExporter {
     return Paths.get(
         generationPath.toString(),
         "src/main/java",
-        dto.getPackageName().toPath().toString(),
-        TextConverter.toUpperCamel(dto.getOriginatingDataGroup().getDataType()) + ".java");
+        dto.getDataGroup().getPackageName().toPath().toString(),
+        TextConverter.toUpperCamel(dto.getDataGroup().getObjectName().getText()) + ".java");
   }
 }

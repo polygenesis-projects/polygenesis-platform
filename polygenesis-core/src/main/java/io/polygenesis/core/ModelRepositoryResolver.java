@@ -20,6 +20,7 @@
 
 package io.polygenesis.core;
 
+import com.oregor.ddd4j.check.assertion.Assertion;
 import java.util.Optional;
 import java.util.Set;
 
@@ -45,13 +46,19 @@ public class ModelRepositoryResolver {
   @SuppressWarnings("unchecked")
   public <T extends ModelRepository> T resolve(
       Set<ModelRepository> modelRepositories, Class<T> clazz) {
+    Assertion.isNotNull(modelRepositories, "modelRepositories is required");
+    Assertion.isNotNull(clazz, "clazz is required");
 
     Optional<T> optionalClazz =
         modelRepositories
             .stream()
             .filter(
-                modelRepository ->
-                    modelRepository.getClass().getCanonicalName().equals(clazz.getCanonicalName()))
+                modelRepository -> {
+                  return modelRepository
+                      .getClass()
+                      .getCanonicalName()
+                      .equals(clazz.getCanonicalName());
+                })
             .map(modelRepository -> (T) modelRepository)
             .findFirst();
 

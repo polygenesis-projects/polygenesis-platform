@@ -23,6 +23,7 @@ package io.polygenesis.models.domain;
 import com.oregor.ddd4j.check.assertion.Assertion;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
+import io.polygenesis.core.Model;
 import io.polygenesis.core.data.Data;
 import io.polygenesis.core.data.DataBusinessType;
 import io.polygenesis.core.data.DataGroup;
@@ -39,8 +40,8 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class AggregateRoot extends BaseDomainObject<AggregateRoot>
-    implements DomainObjectProperty<DataGroup> {
+public class AggregateRoot extends BaseDomainEntity<AggregateRoot>
+    implements DomainObjectProperty<DataGroup>, Model {
 
   // ===============================================================================================
   // STATE
@@ -134,6 +135,50 @@ public class AggregateRoot extends BaseDomainObject<AggregateRoot>
    */
   public Set<FactoryMethod> getFactoryMethods() {
     return factoryMethods;
+  }
+
+  // ===============================================================================================
+  // QUERIES
+  // ===============================================================================================
+
+  /**
+   * Aggregate root id aggregate root id.
+   *
+   * @return the aggregate root id
+   */
+  public AggregateRootId aggregateRootId() {
+    return getProperties()
+        .stream()
+        .filter(property -> property.getPropertyType().equals(PropertyType.AGGREGATE_ROOT_ID))
+        .map(AggregateRootId.class::cast)
+        .findFirst()
+        .orElseThrow(
+            () ->
+                new IllegalStateException(
+                    String.format(
+                        "No AggregateRootId defined for AggregateRoot=%s",
+                        getObjectName().getText())));
+  }
+
+  /**
+   * Contains domain entity.
+   *
+   * @param domainEntity the domain entity
+   * @return the boolean
+   */
+  public boolean contains(BaseDomainEntity<?> domainEntity) {
+    return getProperties()
+        .stream()
+        .filter(
+            domainObjectProperty ->
+                domainObjectProperty
+                    .getPropertyType()
+                    .equals(PropertyType.AGGREGATE_ENTITY_COLLECTION))
+        .map(AggregateEntityCollection.class::cast)
+        .filter(
+            aggregateEntityCollection ->
+                aggregateEntityCollection.getAggregateEntity().equals(domainEntity))
+        .anyMatch(aggregateEntityCollection -> true);
   }
 
   // ===============================================================================================

@@ -28,7 +28,7 @@ import ${ import };
 /**
  * ${ projection.description }
  *
- * @author PolyGenesis
+ * @author ${ authorService.getAuthor() }
  */
 @RestController
 @RequestMapping(RestConstants.CONTEXT_REQUEST_MAPPING)

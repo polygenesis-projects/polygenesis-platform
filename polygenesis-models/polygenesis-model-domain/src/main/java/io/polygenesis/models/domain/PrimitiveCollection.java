@@ -28,7 +28,7 @@ import io.polygenesis.core.data.DataArray;
  *
  * @author Christos Tsakostas
  */
-public class PrimitiveCollection extends BaseProperty<DataArray> {
+public class PrimitiveCollection extends BaseProperty<PrimitiveCollection, DataArray> {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -44,7 +44,7 @@ public class PrimitiveCollection extends BaseProperty<DataArray> {
   }
 
   // ===============================================================================================
-  // ABSTRACT IMPLEMENTATIONS
+  // IMPLEMENTATIONS
   // ===============================================================================================
 
   @Override

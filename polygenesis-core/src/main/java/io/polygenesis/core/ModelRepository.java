@@ -20,13 +20,32 @@
 
 package io.polygenesis.core;
 
+import io.polygenesis.commons.valueobjects.ObjectName;
+import java.util.Optional;
+import java.util.Set;
+
 /**
- * In-memory repository for the instances of a {@link Model}.
+ * In-memory repository for the instances of a Model.
  *
  * <p>The implementation is up to the model.
  *
+ * @param <T> the type parameter
  * @author Christos Tsakostas
- * @see ThingRepository
- * @see ThingRepositoryImpl
  */
-public interface ModelRepository {}
+public interface ModelRepository<T extends Model> {
+
+  /**
+   * Gets items.
+   *
+   * @return the items
+   */
+  Set<T> getItems();
+
+  /**
+   * Gets item by object name.
+   *
+   * @param objectName the object name
+   * @return the item by object name
+   */
+  Optional<T> getItemByObjectName(ObjectName objectName);
+}

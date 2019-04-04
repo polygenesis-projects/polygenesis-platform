@@ -28,7 +28,7 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public interface ThingRepository extends ModelRepository {
+public interface ThingRepository extends ModelRepository<Thing> {
 
   /**
    * Gets api things.
@@ -45,11 +45,11 @@ public interface ThingRepository extends ModelRepository {
   Set<Thing> getDomainServiceThings();
 
   /**
-   * Gets abstract domain aggregate root things.
+   * Gets domain model things.
    *
-   * @return the abstract domain aggregate root things
+   * @return the domain model things
    */
-  Set<Thing> getAbstractDomainAggregateRootThings();
+  Set<Thing> getDomainModelThings();
 
   /**
    * Gets thing by name.
@@ -67,4 +67,12 @@ public interface ThingRepository extends ModelRepository {
    * @return the thing function
    */
   Optional<Function> getThingFunction(ThingName thingName, FunctionName functionName);
+
+  /**
+   * Is virtual child boolean.
+   *
+   * @param thingToCheck the thing to check
+   * @return the boolean
+   */
+  Boolean isVirtualChild(Thing thingToCheck);
 }

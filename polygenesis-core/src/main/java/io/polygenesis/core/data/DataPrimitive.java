@@ -144,19 +144,6 @@ public class DataPrimitive extends Data {
   }
 
   // ===============================================================================================
-  // QUERIES
-  // ===============================================================================================
-
-  /**
-   * Checks if primitive model is thing identity.
-   *
-   * @return the thing identity flag
-   */
-  public Boolean getThingIdentity() {
-    return getDataBusinessType().equals(DataBusinessType.THING_IDENTITY);
-  }
-
-  // ===============================================================================================
   // ABSTRACT IMPLEMENTATION
   // ===============================================================================================
 

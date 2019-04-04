@@ -39,8 +39,9 @@ public class AggregateRootDeducer {
   // ===============================================================================================
   // DEPENDENCIES
   // ===============================================================================================
-  private final AggregateConstructorDeducer aggregateConstructorDeducer;
+  private final DomainObjectConstructorDeducer domainObjectConstructorDeducer;
   private final AggregateRootPropertyDeducer aggregateRootPropertyDeducer;
+  private final StateMutationMethodDeducer stateMutationMethodDeducer;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -49,14 +50,17 @@ public class AggregateRootDeducer {
   /**
    * Instantiates a new Aggregate root deducer.
    *
-   * @param aggregateConstructorDeducer the aggregate constructor deducer
+   * @param domainObjectConstructorDeducer the domain object constructor deducer
    * @param aggregateRootPropertyDeducer the aggregate root property deducer
+   * @param stateMutationMethodDeducer the state mutation method deducer
    */
   public AggregateRootDeducer(
-      AggregateConstructorDeducer aggregateConstructorDeducer,
-      AggregateRootPropertyDeducer aggregateRootPropertyDeducer) {
-    this.aggregateConstructorDeducer = aggregateConstructorDeducer;
+      DomainObjectConstructorDeducer domainObjectConstructorDeducer,
+      AggregateRootPropertyDeducer aggregateRootPropertyDeducer,
+      StateMutationMethodDeducer stateMutationMethodDeducer) {
+    this.domainObjectConstructorDeducer = domainObjectConstructorDeducer;
     this.aggregateRootPropertyDeducer = aggregateRootPropertyDeducer;
+    this.stateMutationMethodDeducer = stateMutationMethodDeducer;
   }
 
   // ===============================================================================================
@@ -75,17 +79,19 @@ public class AggregateRootDeducer {
     Set<AggregateRoot> aggregateRoots = new LinkedHashSet<>();
 
     thingRepository
-        .getAbstractDomainAggregateRootThings()
+        .getDomainModelThings()
+        .stream()
+        .filter(
+            thing ->
+                thing.getThingScopeType().equals(ThingScopeType.DOMAIN_AGGREGATE_ROOT)
+                    || thing
+                        .getThingScopeType()
+                        .equals(ThingScopeType.DOMAIN_ABSTRACT_AGGREGATE_ROOT))
         .forEach(
             thing -> {
-              makeAggregateRoot(aggregateRoots, thing, rootPackageName);
-            });
-
-    thingRepository
-        .getApiThings()
-        .forEach(
-            thing -> {
-              makeAggregateRoot(aggregateRoots, thing, rootPackageName);
+              if (!thing.getOptionalParent().isPresent() || thingRepository.isVirtualChild(thing)) {
+                makeAggregateRoot(aggregateRoots, thing, rootPackageName);
+              }
             });
 
     return aggregateRoots;
@@ -98,6 +104,7 @@ public class AggregateRootDeducer {
   /**
    * Make aggregate root aggregate root.
    *
+   * @param aggregateRoots the aggregate roots
    * @param thing the thing
    * @param rootPackageName the root package name
    * @return the aggregate root
@@ -111,9 +118,11 @@ public class AggregateRootDeducer {
     Set<DomainObjectProperty> properties =
         aggregateRootPropertyDeducer.deduceFrom(thing, rootPackageName);
 
-    Set<Constructor> constructors = aggregateConstructorDeducer.deduceFrom(thing, rootPackageName);
+    Set<Constructor> constructors =
+        domainObjectConstructorDeducer.deduceConstructorFromFunctionCreate(thing, rootPackageName);
 
-    Set<StateMutationMethod> stateMutationMethods = new LinkedHashSet<>();
+    Set<StateMutationMethod> stateMutationMethods =
+        stateMutationMethodDeducer.deduce(thing, properties);
     Set<StateQueryMethod> stateQueryMethods = new LinkedHashSet<>();
     Set<FactoryMethod> factoryMethods = new LinkedHashSet<>();
 
@@ -127,7 +136,7 @@ public class AggregateRootDeducer {
 
     aggregateRoots.add(
         new AggregateRootPersistable(
-            thing.getThingScopeType().equals(ThingScopeType.ABSTRACT_DOMAIN_AGGREGATE_ROOT)
+            thing.getThingScopeType().equals(ThingScopeType.DOMAIN_ABSTRACT_AGGREGATE_ROOT)
                 ? InstantiationType.ABSTRACT
                 : InstantiationType.CONCRETE,
             makeSuperclass(),
@@ -141,6 +150,7 @@ public class AggregateRootDeducer {
             thing.getMultiTenant(),
             persistence));
 
+    // TODO: check if the following should be removed
     thing
         .getVirtualChildren()
         .forEach(
@@ -189,7 +199,7 @@ public class AggregateRootDeducer {
             InstantiationType.ABSTRACT,
             Optional.empty(),
             new ObjectName("AggregateRoot"),
-            new PackageName("com.oregor.ddd4j.core"),
+            new PackageName("com.oregor.ddd4j.domain"),
             new LinkedHashSet<>(),
             new LinkedHashSet<>(),
             new LinkedHashSet<>(),

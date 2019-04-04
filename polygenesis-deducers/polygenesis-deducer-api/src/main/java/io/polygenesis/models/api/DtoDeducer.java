@@ -22,6 +22,8 @@ package io.polygenesis.models.api;
 
 import static java.util.stream.Collectors.toCollection;
 
+import io.polygenesis.commons.text.TextConverter;
+import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.Argument;
 import io.polygenesis.core.Function;
@@ -44,7 +46,7 @@ public class DtoDeducer {
   // ===============================================================================================
 
   /**
-   * Deduce request dto dto.
+   * Deduce request dto.
    *
    * @param function the function
    * @param rootPackageName the root package name
@@ -52,28 +54,34 @@ public class DtoDeducer {
    */
   public Dto deduceRequestDto(Function function, PackageName rootPackageName) {
 
-    if (function.getArguments() == null || function.getArguments().isEmpty()) {
-      throw new IllegalArgumentException(
-          String.format(
-              "Api Functions must have one argument. Thing name=%s, function=%s",
-              function.getThing().getThingName().getText(), function.getName().getText()));
+    DataGroup originatingDataGroup = null;
+    Boolean virtual = false;
+
+    if (function.getArguments() != null && function.getArguments().size() == 1) {
+      Argument argument =
+          function.getArguments().stream().findFirst().orElseThrow(IllegalArgumentException::new);
+      if (argument.getData().isDataGroup()) {
+        originatingDataGroup = argument.getData().getAsDataGroup();
+      }
     }
 
-    if (function.getArguments().size() > 1) {
-      throw new IllegalArgumentException(
-          String.format(
-              "Only one argument is currently supported. Thing name=%s, function=%s",
-              function.getThing().getThingName().getText(), function.getName().getText()));
-    }
+    if (originatingDataGroup == null) {
+      virtual = true;
 
-    Argument argument =
-        function.getArguments().stream().findFirst().orElseThrow(IllegalArgumentException::new);
+      DataGroup finalDataGroup =
+          new DataGroup(
+              new ObjectName(
+                  String.format(
+                      "%s%sVirtualRequest",
+                      TextConverter.toUpperCamel(function.getName().getText()),
+                      TextConverter.toUpperCamel(function.getThing().getThingName().getText()))),
+              function.getThing().makePackageName(rootPackageName, function.getThing()));
 
-    if (!argument.getData().isDataGroup()) {
-      throw new IllegalArgumentException(
-          String.format(
-              "Argument model must be DataGroup. Thing name=%s, function=%s",
-              function.getThing().getThingName().getText(), function.getName().getText()));
+      if (function.getArguments() != null) {
+        function.getArguments().forEach(argument -> finalDataGroup.addData(argument.getData()));
+      }
+
+      originatingDataGroup = finalDataGroup;
     }
 
     DtoType dtoType;
@@ -85,13 +93,7 @@ public class DtoDeducer {
       dtoType = DtoType.API_REQUEST;
     }
 
-    Dto dto =
-        new Dto(
-            dtoType,
-            argument.getData().getAsDataGroup().getObjectName(),
-            function.getThing().makePackageName(rootPackageName, function.getThing()),
-            argument.getData().getAsDataGroup().getModels(),
-            argument.getData().getAsDataGroup());
+    Dto dto = new Dto(dtoType, originatingDataGroup.getAsDataGroup(), virtual);
 
     makeAssertionsForRequestDto(dto, function);
 
@@ -99,7 +101,7 @@ public class DtoDeducer {
   }
 
   /**
-   * Deduce response dto dto.
+   * Deduce response dto.
    *
    * @param function the function
    * @param rootPackageName the root package name
@@ -107,18 +109,30 @@ public class DtoDeducer {
    */
   public Dto deduceResponseDto(Function function, PackageName rootPackageName) {
 
-    if (function.getReturnValue() == null) {
-      throw new IllegalArgumentException(
-          String.format(
-              "Api Functions must have return value. Thing name=%s, function=%s",
-              function.getThing().getThingName().getText(), function.getName().getText()));
+    DataGroup originatingDataGroup = null;
+    Boolean virtual = false;
+
+    if (function.getReturnValue() != null && function.getReturnValue().getData().isDataGroup()) {
+      originatingDataGroup = function.getReturnValue().getData().getAsDataGroup();
     }
 
-    if (!function.getReturnValue().getData().isDataGroup()) {
-      throw new IllegalArgumentException(
-          String.format(
-              "ReturnValue model must be DataGroup. Thing name=%s, function=%s",
-              function.getThing().getThingName().getText(), function.getName().getText()));
+    if (originatingDataGroup == null) {
+      virtual = true;
+
+      DataGroup virtualResponseDataGroup =
+          new DataGroup(
+              new ObjectName(
+                  String.format(
+                      "%s%sVirtualResponse",
+                      TextConverter.toUpperCamel(function.getName().getText()),
+                      TextConverter.toUpperCamel(function.getThing().getThingName().getText()))),
+              function.getThing().makePackageName(rootPackageName, function.getThing()));
+
+      if (function.getReturnValue() != null) {
+        virtualResponseDataGroup.addData(function.getReturnValue().getData());
+      }
+
+      originatingDataGroup = virtualResponseDataGroup;
     }
 
     DtoType dtoType;
@@ -130,13 +144,7 @@ public class DtoDeducer {
       dtoType = DtoType.API_RESPONSE;
     }
 
-    Dto dto =
-        new Dto(
-            dtoType,
-            function.getReturnValue().getData().getAsDataGroup().getObjectName(),
-            function.getThing().makePackageName(rootPackageName, function.getThing()),
-            function.getReturnValue().getData().getAsDataGroup().getModels(),
-            function.getReturnValue().getData().getAsDataGroup());
+    Dto dto = new Dto(dtoType, originatingDataGroup, virtual);
 
     makeAssertionsForResponseDto(dto, function);
 
@@ -146,19 +154,18 @@ public class DtoDeducer {
   /**
    * Deduce set.
    *
-   * @param methods the methods
-   * @param rootPackageName the root package name
+   * @param serviceMethods the methods
    * @return the set
    */
-  public Set<Dto> deduceAllDtosInMethods(Set<Method> methods, PackageName rootPackageName) {
+  public Set<Dto> deduceAllDtosInMethods(Set<ServiceMethod> serviceMethods) {
     Set<Dto> dtos = new LinkedHashSet<>();
 
-    methods
+    serviceMethods
         .stream()
         .forEach(
             method -> {
-              addDto(dtos, method.getRequestDto(), rootPackageName);
-              addDto(dtos, method.getResponseDto(), rootPackageName);
+              addDto(dtos, method.getRequestDto());
+              addDto(dtos, method.getResponseDto());
             });
 
     return dtos;
@@ -174,49 +181,39 @@ public class DtoDeducer {
    * @param dtos the dtos
    * @param dto the dto
    */
-  private void addDto(Set<Dto> dtos, Dto dto, PackageName rootPackageName) {
+  private void addDto(Set<Dto> dtos, Dto dto) {
     dtos.add(dto);
 
     if (dto.getArrayElementAsOptional().isPresent()) {
       Data arrayElement = dto.getArrayElementAsOptional().get();
       if (arrayElement.isDataGroup()) {
-        addDto(
-            dtos,
-            new Dto(
-                DtoType.COLLECTION_RECORD,
-                arrayElement.getAsDataGroup().getObjectName(),
-                dto.getPackageName(),
-                arrayElement.getAsDataGroup().getModels(),
-                (DataGroup) arrayElement),
-            rootPackageName);
+        addDto(dtos, new Dto(DtoType.COLLECTION_RECORD, arrayElement.getAsDataGroup(), false));
       }
     }
 
     // Add model group children of DataGroup recursively
-    dto.getOriginatingDataGroup()
+    dto.getDataGroup()
         .getModels()
         .forEach(
             model -> {
               // TODO
               // if (model.isDataGroup() || model.isDataArray()) {
               if (model.isDataGroup()) {
+                DataGroup dataGroup = model.getAsDataGroup();
+
                 DtoType dtoType;
                 if (dto.getDtoType().equals(DtoType.API_COLLECTION_REQUEST)
                     || dto.getDtoType().equals(DtoType.API_PAGED_COLLECTION_REQUEST)) {
                   dtoType = DtoType.COLLECTION_RECORD;
                 } else {
                   dtoType = DtoType.INTERNAL;
+                  dataGroup =
+                      dataGroup.withNewObjectName(
+                          new ObjectName(
+                              String.format("%sDto", dataGroup.getObjectName().getText())));
                 }
 
-                addDto(
-                    dtos,
-                    new Dto(
-                        dtoType,
-                        model.getAsDataGroup().getObjectName(),
-                        dto.getPackageName(),
-                        model.getAsDataGroup().getModels(),
-                        model.getAsDataGroup()),
-                    rootPackageName);
+                addDto(dtos, new Dto(dtoType, dataGroup, false));
               }
             });
   }
@@ -261,7 +258,7 @@ public class DtoDeducer {
       Dto dto, Function function, DataBusinessType dataBusinessType) {
 
     Set<DataPrimitive> modelPrimitives =
-        dto.getOriginatingDataGroup()
+        dto.getDataGroup()
             .getModels()
             .stream()
             .filter(model -> model.isDataPrimitive())
@@ -272,8 +269,9 @@ public class DtoDeducer {
     if (modelPrimitives.isEmpty()) {
       throw new IllegalStateException(
           String.format(
-              "No %s found in Request Dto. Thing name=%s, function=%s",
+              "No %s found in Dto=%s. Thing name=%s, function=%s",
               dataBusinessType.name(),
+              dto.getDataGroup().getObjectName().getText(),
               function.getThing().getThingName().getText(),
               function.getName().getText()));
     }
@@ -281,8 +279,9 @@ public class DtoDeducer {
     if (modelPrimitives.size() > 1) {
       throw new IllegalStateException(
           String.format(
-              "More than one %s found in Request Dto. Thing name=%s, function=%s",
+              "More than one %s found in Dto=%s. Thing name=%s, function=%s",
               dataBusinessType.name(),
+              dto.getDataGroup().getObjectName().getText(),
               function.getThing().getThingName().getText(),
               function.getName().getText()));
     }

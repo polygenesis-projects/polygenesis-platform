@@ -52,14 +52,26 @@ public class AppScaffolder extends AbstractScaffolder {
   @Override
   public void scaffold(
       Path generationPath, ProjectDescription projectDescription, Map<String, Object> dataModel) {
+
+    // Check if Layer is enabled
+    if (!projectDescription.getLayers().contains(Layer.APP)) {
+      return;
+    }
+
     Path modulePath =
         Paths.get(generationPath.toString(), projectDescription.getModulePrefix() + "-app");
 
     ensureSources(modulePath, projectDescription);
 
-    exportApplicationYml(modulePath, dataModel);
-    exportConfigApplicationDevYml(modulePath, dataModel);
-    exportConfigApplicationCiYml(modulePath, dataModel);
+    if (projectDescription
+        .getLayers()
+        .contains(Layer.SECONDARY_ADAPTER_PERSISTENCE_SPRING_DATA_JPA)) {
+      exportApplicationYml(modulePath, dataModel);
+      exportConfigApplicationDevYml(modulePath, dataModel);
+      exportConfigApplicationCiYml(modulePath, dataModel);
+    } else {
+      exportApplicationNakedYml(modulePath, dataModel);
+    }
 
     freemarkerService.export(
         dataModel,
@@ -104,5 +116,12 @@ public class AppScaffolder extends AbstractScaffolder {
         dataModel,
         "polygenesis-scaffolder-java-microservice/app/resources/config/application-ci.yml.ftl",
         Paths.get(modulePath.toString(), "src/main/resources/config", "application-ci.yml"));
+  }
+
+  private void exportApplicationNakedYml(Path modulePath, Map<String, Object> dataModel) {
+    freemarkerService.export(
+        dataModel,
+        "polygenesis-scaffolder-java-microservice/app/resources/application-naked.yml.ftl",
+        Paths.get(modulePath.toString(), "src/main/resources", "application.yml"));
   }
 }

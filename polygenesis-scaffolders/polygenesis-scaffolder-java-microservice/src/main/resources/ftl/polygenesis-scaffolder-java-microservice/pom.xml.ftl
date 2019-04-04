@@ -6,13 +6,26 @@
   <packaging>pom</packaging>
   <modules>
 <#if projectDescription.microservice>
-    <module>${ projectDescription.modulePrefix }-api</module>
-    <module>${ projectDescription.modulePrefix }-api-impl</module>
+<#list projectDescription.layers as layer>
+  <#if layer == 'APP'>
     <module>${ projectDescription.modulePrefix }-app</module>
+  <#elseif layer == 'API'>
+    <module>${ projectDescription.modulePrefix }-api</module>
+  <#elseif layer == 'API_IMPL'>
+    <module>${ projectDescription.modulePrefix }-api-impl</module>
+  <#elseif layer == 'DOMAIN_MODEL'>
     <module>${ projectDescription.modulePrefix }-domain-model</module>
+  <#elseif layer == 'DOMAIN_SERVICES'>
     <module>${ projectDescription.modulePrefix }-domain-services-impl</module>
+  <#elseif layer == 'PROJECTION_MODEL'>
+  </#if>
+</#list>
+  <#if projectDescription.hasPrimaryAdapters()>
     <module>${ projectDescription.modulePrefix }-primary-adapters</module>
+  </#if>
+  <#if projectDescription.hasSecondaryAdapters()>
     <module>${ projectDescription.modulePrefix }-secondary-adapters</module>
+  </#if>
 </#if>
 <#list projectDescription.extraModules as extraModule>
     <module>${ projectDescription.modulePrefix }-${ extraModule }</module>
@@ -21,7 +34,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.1.1.RELEASE</version>
+    <version>2.1.3.RELEASE</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
   <groupId>${ projectDescription.groupId }</groupId>
@@ -109,6 +122,10 @@
     <versions-maven-plugin.version>2.7</versions-maven-plugin.version>
     <querydsl-apt-maven-plugin.version>1.1.3</querydsl-apt-maven-plugin.version>
 
+    <!--SPRING SECURITY OAUTH2-->
+    <spring-security-oauth2.version>2.3.5.RELEASE</spring-security-oauth2.version>
+    <spring-security-oauth2-autoconfigure.version>2.1.3.RELEASE</spring-security-oauth2-autoconfigure.version>
+
     <!--APACHE-->
     <commons-lang3.version>3.5</commons-lang3.version>
     <commons-io-version>2.4</commons-io-version>
@@ -135,6 +152,29 @@
 
   <dependencyManagement>
     <dependencies>
+      <!--APACHE-->
+      <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-lang3</artifactId>
+        <#noparse>
+        <version>${commons-lang3.version}</version>
+        </#noparse>
+      </dependency>
+      <dependency>
+        <groupId>commons-io</groupId>
+        <artifactId>commons-io</artifactId>
+        <#noparse>
+        <version>${commons-io-version}</version>
+        </#noparse>
+      </dependency>
+      <dependency>
+        <groupId>commons-validator</groupId>
+        <artifactId>commons-validator</artifactId>
+        <#noparse>
+        <version>${commons-validator.version}</version>
+        </#noparse>
+      </dependency>
+
 <#if projectDescription.microservice>
       <!--API-->
       <dependency>

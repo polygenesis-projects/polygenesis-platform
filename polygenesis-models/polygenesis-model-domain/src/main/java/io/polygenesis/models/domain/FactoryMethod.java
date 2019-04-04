@@ -20,9 +20,25 @@
 
 package io.polygenesis.models.domain;
 
+import io.polygenesis.core.Function;
+
 /**
  * The type Factory method.
  *
  * @author Christos Tsakostas
  */
-public class FactoryMethod extends BaseMethod {}
+public class FactoryMethod extends BaseMethod {
+
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
+  /**
+   * Instantiates a new Factory method.
+   *
+   * @param function the function
+   */
+  public FactoryMethod(Function function) {
+    super(function);
+  }
+}

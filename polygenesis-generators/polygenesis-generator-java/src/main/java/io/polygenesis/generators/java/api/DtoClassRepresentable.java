@@ -22,7 +22,6 @@ package io.polygenesis.generators.java.api;
 
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.data.Data;
-import io.polygenesis.core.data.DataArray;
 import io.polygenesis.core.data.DataGroup;
 import io.polygenesis.models.api.Dto;
 import io.polygenesis.models.api.DtoType;
@@ -32,6 +31,7 @@ import io.polygenesis.representations.java.AbstractClassRepresentable;
 import io.polygenesis.representations.java.ConstructorRepresentation;
 import io.polygenesis.representations.java.FromDataTypeToJavaConverter;
 import io.polygenesis.representations.java.MethodRepresentation;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -93,12 +93,15 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
     Set<FieldRepresentation> fieldRepresentations = new LinkedHashSet<>();
 
     source
-        .getOriginatingDataGroup()
+        .getDataGroup()
         .getModels()
         .forEach(
             model -> {
               fieldRepresentations.add(
-                  new FieldRepresentation(makeVariableDataType(model), makeVariableName(model)));
+                  new FieldRepresentation(
+                      makeVariableDataType(
+                          model.isDataGroup() ? model.getAsDataGroup().asDto() : model),
+                      makeVariableName(model)));
             });
 
     return fieldRepresentations;
@@ -109,11 +112,13 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
     Set<ConstructorRepresentation> constructorRepresentations = new LinkedHashSet<>();
 
     // ---------------------------------------------------------------------------------------------
-    // Create create constructor
+    // Create empty constructor
     // ---------------------------------------------------------------------------------------------
     constructorRepresentations.add(
-        createConstructorWithSetters(
-            source.getOriginatingDataGroup().getDataType(), new LinkedHashSet<>()));
+        createEmptyConstructorWithImplementation(
+            source.getDataGroup().getObjectName().getText(),
+            new LinkedHashSet<>(Collections.singletonList("@SuppressWarnings(\"CPD-START\")")),
+            "\t\tsuper();"));
 
     // ---------------------------------------------------------------------------------------------
     // Create constructor with parameters
@@ -122,13 +127,15 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
 
     constructorRepresentations.add(
         createConstructorWithSettersFromFieldRepresentations(
-            source.getOriginatingDataGroup().getDataType(), fieldRepresentations));
+            source.getDataGroup().getObjectName().getText(), fieldRepresentations));
 
     // ---------------------------------------------------------------------------------------------
     // Create constructor for collection response
     // ---------------------------------------------------------------------------------------------
-    if (source.getDtoType().equals(DtoType.API_COLLECTION_RESPONSE)
-        || source.getDtoType().equals(DtoType.API_PAGED_COLLECTION_RESPONSE)) {
+    if ((source.getDtoType().equals(DtoType.API_COLLECTION_RESPONSE)
+            || source.getDtoType().equals(DtoType.API_PAGED_COLLECTION_RESPONSE))
+        // TODO: needs more investigation
+        && source.getArrayElementAsOptional().isPresent()) {
       constructorRepresentations.add(createConstructorForCollectionResponse(source));
     }
 
@@ -143,7 +150,7 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
 
   @Override
   public String packageName(Dto source, Object... args) {
-    return source.getPackageName().getText();
+    return source.getDataGroup().getPackageName().getText();
   }
 
   @Override
@@ -160,6 +167,7 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
     }
 
     source
+        .getDataGroup()
         .getModels()
         .stream()
         .filter(model -> model.isDataArray())
@@ -167,13 +175,23 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
         .ifPresent(model -> imports.add("java.util.List"));
 
     source
+        .getDataGroup()
+        .getModels()
+        .stream()
+        .filter(model -> model.isDataMap())
+        .findFirst()
+        .ifPresent(model -> imports.add("java.util.Map"));
+
+    source
+        .getDataGroup()
         .getModels()
         .stream()
         .filter(model -> model.isDataGroup())
         .map(DataGroup.class::cast)
+        .map(dataGroup -> dataGroup.asDto())
         .forEach(
             dataGroup -> {
-              if (!dataGroup.getPackageName().equals(source.getPackageName())) {
+              if (!dataGroup.getPackageName().equals(source.getDataGroup().getPackageName())) {
                 imports.add(
                     makeCanonicalObjectName(dataGroup.getPackageName(), dataGroup.getDataType()));
               }
@@ -194,7 +212,7 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
     stringBuilder.append("The ");
 
     stringBuilder.append(
-        TextConverter.toUpperCamelSpaces(source.getOriginatingDataGroup().getDataType()));
+        TextConverter.toUpperCamelSpaces(source.getDataGroup().getObjectName().getText()));
 
     stringBuilder.append(".");
 
@@ -211,13 +229,20 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
     StringBuilder stringBuilder = new StringBuilder();
 
     stringBuilder.append(
-        TextConverter.toUpperCamel(source.getOriginatingDataGroup().getDataType()));
+        TextConverter.toUpperCamel(source.getDataGroup().getObjectName().getText()));
 
     return stringBuilder.toString();
   }
 
   @Override
   public String fullObjectName(Dto source, Object... args) {
+    // TODO: needs more investigation
+    if ((source.getDtoType().equals(DtoType.API_COLLECTION_RESPONSE)
+            || source.getDtoType().equals(DtoType.API_PAGED_COLLECTION_RESPONSE))
+        && !source.getArrayElementAsOptional().isPresent()) {
+      return simpleObjectName(source, args);
+    }
+
     if (mapDtoTypeToClass.containsKey(source.getDtoType())) {
       StringBuilder stringBuilder = new StringBuilder();
 
@@ -236,7 +261,7 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
 
           stringBuilder.append(">");
         } else {
-          throw new IllegalArgumentException();
+          throw new IllegalArgumentException("No ArrayElement found");
         }
       }
 
@@ -279,7 +304,7 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
     String description =
         String.format(
             "Instantiates a new %s.",
-            TextConverter.toUpperCamelSpaces(source.getOriginatingDataGroup().getDataType()));
+            TextConverter.toUpperCamelSpaces(source.getDataGroup().getObjectName().getText()));
 
     return new ConstructorRepresentation(
         new LinkedHashSet<>(),
@@ -287,32 +312,5 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
         MODIFIER_PUBLIC,
         parameterRepresentations,
         "\t\tsuper(items, totalPages, totalElements, pageNumber, pageSize);");
-  }
-
-  /**
-   * Make variable data type string.
-   *
-   * @param model the model
-   * @return the string
-   */
-  private String makeVariableDataType(Data model) {
-    if (model.isDataArray()) {
-      return String.format(
-          "List<%s>",
-          fromDataTypeToJavaConverter.getDeclaredVariableType(
-              ((DataArray) model).getArrayElement().getDataType()));
-    } else {
-      return fromDataTypeToJavaConverter.getDeclaredVariableType(model.getDataType());
-    }
-  }
-
-  /**
-   * Make variable name string.
-   *
-   * @param model the model
-   * @return the string
-   */
-  private String makeVariableName(Data model) {
-    return model.getVariableName().getText();
   }
 }

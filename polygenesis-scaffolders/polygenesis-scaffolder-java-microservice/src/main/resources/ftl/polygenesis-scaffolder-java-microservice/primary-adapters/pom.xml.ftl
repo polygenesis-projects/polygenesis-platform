@@ -33,8 +33,15 @@
   <packaging>pom</packaging>
 
   <modules>
+<#list projectDescription.layers as layer>
+  <#if layer == 'PRIMARY_ADAPTER_REST_SPRING'>
     <module>${ projectDescription.modulePrefix }-rest-spring</module>
+  <#elseif layer == 'PRIMARY_ADAPTER_REST_CLIENT_SPRING'>
+    <module>${ projectDescription.modulePrefix }-rest-client-spring</module>
+  <#elseif layer == 'PRIMARY_ADAPTER_SUBSCRIBER_ACTIVEMQ'>
     <module>${ projectDescription.modulePrefix }-subscriber-activemq</module>
+  </#if>
+</#list>
   </modules>
 
   <dependencies>

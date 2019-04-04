@@ -40,6 +40,8 @@ public enum DomainObjectType {
   AGGREGATE_ROOT,
   /** Aggregate entity domain object type. */
   AGGREGATE_ENTITY,
+  /** Helper entity domain object type. */
+  HELPER_ENTITY,
   /** Value object domain object type. */
   VALUE_OBJECT,
   /** Domain event domain object type. */

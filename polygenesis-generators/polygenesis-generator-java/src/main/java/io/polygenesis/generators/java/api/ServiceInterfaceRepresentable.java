@@ -63,7 +63,7 @@ public class ServiceInterfaceRepresentable extends AbstractInterfaceRepresentabl
   @Override
   public Set<MethodRepresentation> methodRepresentations(Service source, Object... args) {
     return source
-        .getMethods()
+        .getServiceMethods()
         .stream()
         .map(method -> method.getFunction())
         .map(function -> functionToMethodRepresentationConverter.create(function))
@@ -80,10 +80,13 @@ public class ServiceInterfaceRepresentable extends AbstractInterfaceRepresentabl
     Set<String> imports = new TreeSet<>();
 
     source
-        .getMethods()
+        .getServiceMethods()
         .forEach(
             method -> {
-              if (method.getFunction().getReturnValue().getData().isDataGroup()) {
+              imports.addAll(functionToMethodRepresentationConverter.imports(method.getFunction()));
+
+              if (method.getFunction().getReturnValue() != null
+                  && method.getFunction().getReturnValue().getData().isDataGroup()) {
                 DataGroup dataGroup =
                     method.getFunction().getReturnValue().getData().getAsDataGroup();
 

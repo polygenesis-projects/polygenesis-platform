@@ -39,19 +39,17 @@ public class AggregateEntityDeducer {
   // ===============================================================================================
   // DEPENDENCIES
   // ===============================================================================================
-
+  private final DomainObjectConstructorDeducer domainObjectConstructorDeducer;
   private final AggregateEntityPropertyDeducer aggregateEntityPropertyDeducer;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
-  /**
-   * Instantiates a new Aggregate entity deducer.
-   *
-   * @param aggregateEntityPropertyDeducer the aggregate entity property deducer
-   */
-  public AggregateEntityDeducer(AggregateEntityPropertyDeducer aggregateEntityPropertyDeducer) {
+  public AggregateEntityDeducer(
+      DomainObjectConstructorDeducer domainObjectConstructorDeducer,
+      AggregateEntityPropertyDeducer aggregateEntityPropertyDeducer) {
+    this.domainObjectConstructorDeducer = domainObjectConstructorDeducer;
     this.aggregateEntityPropertyDeducer = aggregateEntityPropertyDeducer;
   }
 
@@ -118,19 +116,9 @@ public class AggregateEntityDeducer {
         new ObjectName(thingChild.getThingName().getText()),
         thingParent.makePackageName(rootPackageName, thingParent),
         aggregateEntityPropertyDeducer.deduceFrom(thingParent, thingChild, rootPackageName),
-        constructors(),
+        domainObjectConstructorDeducer.deduceConstructorFromFunctionCreate(
+            thingChild, rootPackageName),
         thingParent.getMultiTenant());
-  }
-
-  /**
-   * Constructors set.
-   *
-   * @return the set
-   */
-  private Set<Constructor> constructors() {
-    Set<Constructor> constructors = new LinkedHashSet<>();
-
-    return constructors;
   }
 
   /**
@@ -161,7 +149,7 @@ public class AggregateEntityDeducer {
             InstantiationType.ABSTRACT,
             Optional.empty(),
             new ObjectName("AggregateEntity"),
-            new PackageName("com.oregor.ddd4j.core"),
+            new PackageName("com.oregor.ddd4j.domain"),
             new LinkedHashSet<>(),
             new LinkedHashSet<>(),
             multiTenant));

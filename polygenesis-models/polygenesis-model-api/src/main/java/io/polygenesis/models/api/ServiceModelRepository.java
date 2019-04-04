@@ -22,7 +22,7 @@ package io.polygenesis.models.api;
 
 import static java.util.stream.Collectors.toCollection;
 
-import com.oregor.ddd4j.check.assertion.Assertion;
+import io.polygenesis.core.AbstractModelRepository;
 import io.polygenesis.core.ModelRepository;
 import io.polygenesis.core.ThingName;
 import java.util.LinkedHashSet;
@@ -33,9 +33,8 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class ServiceModelRepository implements ModelRepository {
-
-  private Set<Service> services;
+public class ServiceModelRepository extends AbstractModelRepository<Service>
+    implements ModelRepository<Service> {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -44,10 +43,10 @@ public class ServiceModelRepository implements ModelRepository {
   /**
    * Instantiates a new Service model repository.
    *
-   * @param services the services
+   * @param items the items
    */
-  public ServiceModelRepository(Set<Service> services) {
-    setServices(services);
+  public ServiceModelRepository(Set<Service> items) {
+    super(items);
   }
 
   // ===============================================================================================
@@ -61,36 +60,9 @@ public class ServiceModelRepository implements ModelRepository {
    * @return the services by
    */
   public Set<Service> getServicesBy(ThingName thingName) {
-    return services
+    return getItems()
         .stream()
         .filter(service -> service.getThingName().equals(thingName))
         .collect(toCollection(LinkedHashSet::new));
-  }
-
-  // ===============================================================================================
-  // GETTERS
-  // ===============================================================================================
-
-  /**
-   * Gets services.
-   *
-   * @return the services
-   */
-  public Set<Service> getServices() {
-    return services;
-  }
-
-  // ===============================================================================================
-  // GUARDS
-  // ===============================================================================================
-
-  /**
-   * Sets services.
-   *
-   * @param services the services
-   */
-  private void setServices(Set<Service> services) {
-    Assertion.isNotNull(services, "services is required");
-    this.services = services;
   }
 }

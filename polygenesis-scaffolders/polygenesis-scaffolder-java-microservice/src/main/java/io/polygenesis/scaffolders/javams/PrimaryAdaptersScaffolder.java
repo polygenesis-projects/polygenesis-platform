@@ -34,6 +34,7 @@ import java.util.Map;
 public class PrimaryAdaptersScaffolder extends AbstractScaffolder {
 
   private final PrimaryAdapterRestScaffolder primaryAdapterRestScaffolder;
+  private final PrimaryAdapterRestClientScaffolder primaryAdapterRestClientScaffolder;
   private final PrimaryAdapterSubscriberScaffolder primaryAdapterSubscriberScaffolder;
 
   // ===============================================================================================
@@ -45,14 +46,17 @@ public class PrimaryAdaptersScaffolder extends AbstractScaffolder {
    *
    * @param freemarkerService the freemarker service
    * @param primaryAdapterRestScaffolder the primary adapter rest scaffolder
-   * @param primaryAdapterSubscriberScaffolder the primary subscriber scaffolder
+   * @param primaryAdapterRestClientScaffolder the primary adapter rest client scaffolder
+   * @param primaryAdapterSubscriberScaffolder the primary adapter subscriber scaffolder
    */
   public PrimaryAdaptersScaffolder(
       FreemarkerService freemarkerService,
       PrimaryAdapterRestScaffolder primaryAdapterRestScaffolder,
+      PrimaryAdapterRestClientScaffolder primaryAdapterRestClientScaffolder,
       PrimaryAdapterSubscriberScaffolder primaryAdapterSubscriberScaffolder) {
     super(freemarkerService);
     this.primaryAdapterRestScaffolder = primaryAdapterRestScaffolder;
+    this.primaryAdapterRestClientScaffolder = primaryAdapterRestClientScaffolder;
     this.primaryAdapterSubscriberScaffolder = primaryAdapterSubscriberScaffolder;
   }
 
@@ -63,6 +67,14 @@ public class PrimaryAdaptersScaffolder extends AbstractScaffolder {
   @Override
   public void scaffold(
       Path generationPath, ProjectDescription projectDescription, Map<String, Object> dataModel) {
+
+    // Check if Layer is enabled
+    if (!projectDescription.getLayers().contains(Layer.PRIMARY_ADAPTER_SUBSCRIBER_ACTIVEMQ)
+        && !projectDescription.getLayers().contains(Layer.PRIMARY_ADAPTER_REST_SPRING)
+        && !projectDescription.getLayers().contains(Layer.PRIMARY_ADAPTER_REST_CLIENT_SPRING)) {
+      return;
+    }
+
     Path modulePath =
         Paths.get(
             generationPath.toString(), projectDescription.getModulePrefix() + "-primary-adapters");
@@ -74,6 +86,7 @@ public class PrimaryAdaptersScaffolder extends AbstractScaffolder {
         Paths.get(modulePath.toString(), "pom.xml"));
 
     primaryAdapterRestScaffolder.scaffold(generationPath, projectDescription, dataModel);
+    primaryAdapterRestClientScaffolder.scaffold(generationPath, projectDescription, dataModel);
     primaryAdapterSubscriberScaffolder.scaffold(generationPath, projectDescription, dataModel);
   }
 }

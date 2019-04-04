@@ -20,12 +20,15 @@
 
 package io.polygenesis.models.ui.container;
 
+import io.polygenesis.commons.valueobjects.ObjectName;
+import io.polygenesis.core.Model;
+
 /**
  * The type Layout container.
  *
  * @author Christos Tsakostas
  */
-public class LayoutContainer extends InlineContainer {
+public class LayoutContainer extends InlineContainer implements Model {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -44,6 +47,15 @@ public class LayoutContainer extends InlineContainer {
   public LayoutContainer(
       ContainerName containerName, Top top, Right right, Bottom bottom, Left left, Center center) {
     super(containerName, top, right, bottom, left, center);
+  }
+
+  // ===============================================================================================
+  // IMPLEMENTATIONS
+  // ===============================================================================================
+
+  @Override
+  public ObjectName getObjectName() {
+    return null;
   }
 
   // ===============================================================================================

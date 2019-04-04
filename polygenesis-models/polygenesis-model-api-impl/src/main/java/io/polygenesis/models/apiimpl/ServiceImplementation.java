@@ -20,9 +20,15 @@
 
 package io.polygenesis.models.apiimpl;
 
+import com.oregor.ddd4j.check.assertion.Assertion;
+import io.polygenesis.commons.valueobjects.ObjectName;
+import io.polygenesis.core.Model;
 import io.polygenesis.models.api.Service;
-import io.polygenesis.models.domain.AggregateRoot;
+import io.polygenesis.models.domain.AggregateRootPersistable;
+import io.polygenesis.models.domain.BaseDomainEntity;
+import java.util.LinkedHashSet;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -30,12 +36,15 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class ServiceImplementation {
+public class ServiceImplementation implements Model {
 
   private Service service;
-  private Set<Dependency> dependencies;
-  private AggregateRoot aggregateRoot;
-  private AggregateRootConverter aggregateRootConverter;
+  private Set<ServiceDependency> dependencies;
+  private Set<ServiceMethodImplementation> serviceMethodImplementations;
+
+  private Optional<BaseDomainEntity<?>> optionalDomainEntity;
+  private Optional<AggregateRootPersistable> optionalParentAggregateRoot;
+  private Set<DomainEntityConverter> domainEntityConverters;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -46,18 +55,69 @@ public class ServiceImplementation {
    *
    * @param service the service
    * @param dependencies the dependencies
-   * @param aggregateRoot the aggregate root
-   * @param aggregateRootConverter the aggregate root converter
+   * @param serviceMethodImplementations the service method implementations
    */
   public ServiceImplementation(
       Service service,
-      Set<Dependency> dependencies,
-      AggregateRoot aggregateRoot,
-      AggregateRootConverter aggregateRootConverter) {
+      Set<ServiceDependency> dependencies,
+      Set<ServiceMethodImplementation> serviceMethodImplementations) {
+    this(
+        service,
+        dependencies,
+        serviceMethodImplementations,
+        Optional.empty(),
+        Optional.empty(),
+        new LinkedHashSet<>());
+  }
+
+  /**
+   * Instantiates a new Service implementation.
+   *
+   * @param service the service
+   * @param dependencies the dependencies
+   * @param serviceMethodImplementations the service method implementations
+   * @param optionalDomainEntity the optional domain entity
+   * @param optionalParentAggregateRoot the optional parent aggregate root
+   * @param domainEntityConverters the domain entity converters
+   */
+  public ServiceImplementation(
+      Service service,
+      Set<ServiceDependency> dependencies,
+      Set<ServiceMethodImplementation> serviceMethodImplementations,
+      Optional<BaseDomainEntity<?>> optionalDomainEntity,
+      Optional<AggregateRootPersistable> optionalParentAggregateRoot,
+      Set<DomainEntityConverter> domainEntityConverters) {
     setService(service);
     setDependencies(dependencies);
-    setAggregateRoot(aggregateRoot);
-    setAggregateRootConverter(aggregateRootConverter);
+    setServiceMethodImplementations(serviceMethodImplementations);
+    this.optionalDomainEntity = optionalDomainEntity;
+    this.optionalParentAggregateRoot = optionalParentAggregateRoot;
+    setDomainEntityConverters(domainEntityConverters);
+  }
+
+  // ===============================================================================================
+  // IMPLEMENTATIONS
+  // ===============================================================================================
+
+  @Override
+  public ObjectName getObjectName() {
+    throw new UnsupportedOperationException();
+  }
+
+  // ===============================================================================================
+  // QUERIES
+  // ===============================================================================================
+
+  /**
+   * Domain object converter domain object converter.
+   *
+   * @return the domain object converter
+   */
+  public DomainEntityConverter domainObjectConverter() {
+    return domainEntityConverters
+        .stream()
+        .findFirst()
+        .orElseThrow(() -> new IllegalArgumentException());
   }
 
   // ===============================================================================================
@@ -78,26 +138,44 @@ public class ServiceImplementation {
    *
    * @return the dependencies
    */
-  public Set<Dependency> getDependencies() {
+  public Set<ServiceDependency> getDependencies() {
     return dependencies;
   }
 
   /**
-   * Gets aggregate root.
+   * Gets service method implementations.
    *
-   * @return the aggregate root
+   * @return the service method implementations
    */
-  public AggregateRoot getAggregateRoot() {
-    return aggregateRoot;
+  public Set<ServiceMethodImplementation> getServiceMethodImplementations() {
+    return serviceMethodImplementations;
   }
 
   /**
-   * Gets aggregate root converter.
+   * Gets optional domain entity.
    *
-   * @return the aggregate root converter
+   * @return the optional domain entity
    */
-  public AggregateRootConverter getAggregateRootConverter() {
-    return aggregateRootConverter;
+  public Optional<BaseDomainEntity<?>> getOptionalDomainEntity() {
+    return optionalDomainEntity;
+  }
+
+  /**
+   * Gets optional parent aggregate root.
+   *
+   * @return the optional parent aggregate root
+   */
+  public Optional<AggregateRootPersistable> getOptionalParentAggregateRoot() {
+    return optionalParentAggregateRoot;
+  }
+
+  /**
+   * Gets domain entity converters.
+   *
+   * @return the domain entity converters
+   */
+  public Set<DomainEntityConverter> getDomainEntityConverters() {
+    return domainEntityConverters;
   }
 
   // ===============================================================================================
@@ -110,6 +188,7 @@ public class ServiceImplementation {
    * @param service the service
    */
   private void setService(Service service) {
+    Assertion.isNotNull(service, "service is required");
     this.service = service;
   }
 
@@ -118,26 +197,51 @@ public class ServiceImplementation {
    *
    * @param dependencies the dependencies
    */
-  private void setDependencies(Set<Dependency> dependencies) {
+  private void setDependencies(Set<ServiceDependency> dependencies) {
+    Assertion.isNotNull(dependencies, "dependencies is required");
     this.dependencies = dependencies;
   }
 
   /**
-   * Sets aggregate root.
+   * Sets service method implementations.
    *
-   * @param aggregateRoot the aggregate root
+   * @param serviceMethodImplementations the service method implementations
    */
-  private void setAggregateRoot(AggregateRoot aggregateRoot) {
-    this.aggregateRoot = aggregateRoot;
+  private void setServiceMethodImplementations(
+      Set<ServiceMethodImplementation> serviceMethodImplementations) {
+    Assertion.isNotNull(serviceMethodImplementations, "serviceMethodImplementations is required");
+    this.serviceMethodImplementations = serviceMethodImplementations;
   }
 
   /**
-   * Sets aggregate root converter.
+   * Sets optional domain entity.
    *
-   * @param aggregateRootConverter the aggregate root converter
+   * @param optionalDomainEntity the optional domain entity
    */
-  private void setAggregateRootConverter(AggregateRootConverter aggregateRootConverter) {
-    this.aggregateRootConverter = aggregateRootConverter;
+  public void setOptionalDomainEntity(Optional<BaseDomainEntity<?>> optionalDomainEntity) {
+    Assertion.isNotNull(optionalDomainEntity, "optionalDomainEntity is required");
+    this.optionalDomainEntity = optionalDomainEntity;
+  }
+
+  /**
+   * Sets optional parent aggregate root.
+   *
+   * @param optionalParentAggregateRoot the optional parent aggregate root
+   */
+  public void setOptionalParentAggregateRoot(
+      Optional<AggregateRootPersistable> optionalParentAggregateRoot) {
+    Assertion.isNotNull(optionalParentAggregateRoot, "optionalParentAggregateRoot is required");
+    this.optionalParentAggregateRoot = optionalParentAggregateRoot;
+  }
+
+  /**
+   * Sets aggregate root converters.
+   *
+   * @param domainEntityConverters the aggregate root converters
+   */
+  private void setDomainEntityConverters(Set<DomainEntityConverter> domainEntityConverters) {
+    Assertion.isNotNull(domainEntityConverters, "domainEntityConverters is required");
+    this.domainEntityConverters = domainEntityConverters;
   }
 
   // ===============================================================================================
@@ -155,12 +259,20 @@ public class ServiceImplementation {
     ServiceImplementation that = (ServiceImplementation) o;
     return Objects.equals(service, that.service)
         && Objects.equals(dependencies, that.dependencies)
-        && Objects.equals(aggregateRoot, that.aggregateRoot)
-        && Objects.equals(aggregateRootConverter, that.aggregateRootConverter);
+        && Objects.equals(serviceMethodImplementations, that.serviceMethodImplementations)
+        && Objects.equals(optionalDomainEntity, that.optionalDomainEntity)
+        && Objects.equals(optionalParentAggregateRoot, that.optionalParentAggregateRoot)
+        && Objects.equals(domainEntityConverters, that.domainEntityConverters);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(service, dependencies, aggregateRoot, aggregateRootConverter);
+    return Objects.hash(
+        service,
+        dependencies,
+        serviceMethodImplementations,
+        optionalDomainEntity,
+        optionalParentAggregateRoot,
+        domainEntityConverters);
   }
 }

@@ -22,13 +22,11 @@ package io.polygenesis.codegen;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.Deducer;
 import io.polygenesis.core.Generator;
 import io.polygenesis.generators.angular.AngularGeneratorFactory;
-import io.polygenesis.models.api.ApiDeducerFactory;
 import io.polygenesis.models.reactivestate.ReactiveStateFactory;
-import io.polygenesis.models.ui.UiDeducerFactory;
+import io.polygenesis.models.ui.UiFeatureDeducerFactory;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
@@ -52,18 +50,10 @@ public class GenesisTest {
 
     Genesis genesis = new Genesis();
 
-    Set<Deducer> deducers =
-        new LinkedHashSet<>(
-            Arrays.asList(
-                ApiDeducerFactory.newInstance(new PackageName("com.oregor")),
-                ReactiveStateFactory.newInstance(),
-                UiDeducerFactory.newInstance()));
+    Set<Deducer> deducers = GenesisDefault.angularDeducers();
 
     Set<Generator> generators =
-        new LinkedHashSet<>(
-            Arrays.asList(
-                AngularGeneratorFactory.newInstance(
-                    Paths.get("tmp/polygenesis-angular-generator"))));
+        GenesisDefault.angularGenerators("tmp/polygenesis-angular-generator");
 
     genesis.generate(genesisRequest, deducers, generators);
   }
@@ -106,7 +96,8 @@ public class GenesisTest {
 
     Set<Deducer> deducers =
         new LinkedHashSet<>(
-            Arrays.asList(ReactiveStateFactory.newInstance(), UiDeducerFactory.newInstance()));
+            Arrays.asList(
+                ReactiveStateFactory.newInstance(), UiFeatureDeducerFactory.newInstance()));
 
     Set<Generator> generators = new LinkedHashSet<>(Arrays.asList());
 

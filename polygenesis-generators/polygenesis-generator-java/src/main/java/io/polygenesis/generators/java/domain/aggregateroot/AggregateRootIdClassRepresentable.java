@@ -112,9 +112,9 @@ public class AggregateRootIdClassRepresentable extends AbstractClassRepresentabl
     Set<String> imports = new TreeSet<>();
 
     if (source.getMultiTenant()) {
-      imports.add("com.oregor.ddd4j.core.AggregateRootIdWithTenantId");
+      imports.add("com.oregor.ddd4j.domain.AggregateRootIdWithTenantId");
     } else {
-      imports.add("com.oregor.ddd4j.core.AggregateRootId");
+      imports.add("com.oregor.ddd4j.domain.AggregateRootId");
     }
 
     imports.add("javax.persistence.Embeddable");

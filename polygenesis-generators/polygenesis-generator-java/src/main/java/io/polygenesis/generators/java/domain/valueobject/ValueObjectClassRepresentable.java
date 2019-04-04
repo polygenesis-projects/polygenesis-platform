@@ -75,9 +75,11 @@ public class ValueObjectClassRepresentable extends AbstractClassRepresentable<Va
     // ---------------------------------------------------------------------------------------------
     Set<FieldRepresentation> fieldRepresentations = fieldRepresentations(source);
 
-    constructorRepresentations.add(
-        createConstructorWithSettersFromFieldRepresentations(
-            source.getData().getDataType(), fieldRepresentations));
+    if (!fieldRepresentations.isEmpty()) {
+      constructorRepresentations.add(
+          createConstructorWithSettersFromFieldRepresentations(
+              source.getData().getDataType(), fieldRepresentations));
+    }
 
     return constructorRepresentations;
   }

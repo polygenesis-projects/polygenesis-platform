@@ -33,8 +33,13 @@
   <packaging>pom</packaging>
 
   <modules>
+<#list projectDescription.layers as layer>
+  <#if layer == 'SECONDARY_ADAPTER_PERSISTENCE_SPRING_DATA_JPA'>
     <module>${ projectDescription.modulePrefix }-persistence-rdbms</module>
+  <#elseif layer == 'SECONDARY_ADAPTER_PUBLISHER_ACTIVEMQ'>
     <module>${ projectDescription.modulePrefix }-publisher-activemq</module>
+  </#if>
+</#list>
   </modules>
 
   <dependencies>

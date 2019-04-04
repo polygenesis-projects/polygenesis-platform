@@ -21,6 +21,9 @@
 package io.polygenesis.commons.text;
 
 import com.google.common.base.CaseFormat;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 import org.atteo.evo.inflector.English;
 
@@ -38,9 +41,21 @@ import org.atteo.evo.inflector.English;
  */
 public final class TextConverter {
 
+  // ===============================================================================================
+  // STATIC
+  // ===============================================================================================
+  private static final Set<String> pluralBlacklist = new LinkedHashSet<>(Arrays.asList("jms"));
+
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
   private TextConverter() {
     throw new IllegalStateException("Utility class");
   }
+
+  // ===============================================================================================
+  // FUNCTIONALITY
+  // ===============================================================================================
 
   /**
    * To lower camel string.
@@ -140,6 +155,9 @@ public final class TextConverter {
    * @return the string
    */
   public static String toPlural(String input) {
+    if (pluralBlacklist.contains(input.toLowerCase())) {
+      return input;
+    }
     return English.plural(input);
   }
 

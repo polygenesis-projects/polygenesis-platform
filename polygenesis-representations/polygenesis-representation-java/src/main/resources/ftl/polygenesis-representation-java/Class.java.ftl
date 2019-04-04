@@ -30,7 +30,7 @@ import ${ import };
 /**
  * ${ representation.description }
  *
- * @author PolyGenesis
+ * @author ${ authorService.getAuthor() }
  */
 <#list representation.annotations as annotation>
 ${ annotation }
@@ -45,27 +45,56 @@ ${ representation.modifiers }<#if representation.modifiers != ""> </#if>class ${
   </#list>
   private ${ fieldRepresentation.dataType } ${ fieldRepresentation.variableName };
 </#list>
-<#if representation.constructorRepresentations?size gt 0>
+<#if representation.getMethodRepresentationsBy('CONSTRUCTOR')?size gt 0>
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
-  <#list representation.constructorRepresentations as constructor>
-    <@printConstructor constructor>
-    </@printConstructor>
+  <#list representation.getMethodRepresentationsBy('CONSTRUCTOR') as method>
+    <@printMethod method>
+    </@printMethod>
+    <#sep>
+
+    </#sep>
+  </#list>
+<#else>
+  <#if representation.constructorRepresentations?size gt 0>
+
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
+    <#list representation.constructorRepresentations as constructor>
+      <@printConstructor constructor>
+      </@printConstructor>
+      <#sep>
+
+      </#sep>
+    </#list>
+  </#if>
+</#if>
+<#if representation.getMethodRepresentationsBy('MODIFY')?size gt 0>
+
+  // ===============================================================================================
+  // STATE MUTATION
+  // ===============================================================================================
+
+  <#list representation.getMethodRepresentationsBy('MODIFY') as method>
+    <@printMethod method>
+    </@printMethod>
     <#sep>
 
     </#sep>
   </#list>
 </#if>
-<#if representation.getGetters()?size gt 0>
+<#if representation.getMethodRepresentationsBy('GETTER')?size gt 0>
 
   // ===============================================================================================
   // GETTERS
   // ===============================================================================================
 
-  <#list representation.getGetters() as method>
+  <#list representation.getMethodRepresentationsBy('GETTER') as method>
     <@printMethod method>
     </@printMethod>
     <#sep>
@@ -73,13 +102,13 @@ ${ representation.modifiers }<#if representation.modifiers != ""> </#if>class ${
     </#sep>
   </#list>
 </#if>
-<#if representation.getSetters()?size gt 0>
+<#if representation.getMethodRepresentationsBy('SETTER')?size gt 0>
 
   // ===============================================================================================
   // SETTERS
   // ===============================================================================================
 
-  <#list representation.getSetters() as method>
+  <#list representation.getMethodRepresentationsBy('SETTER') as method>
     <@printMethod method>
     </@printMethod>
     <#sep>
@@ -87,13 +116,13 @@ ${ representation.modifiers }<#if representation.modifiers != ""> </#if>class ${
     </#sep>
   </#list>
 </#if>
-<#if representation.getGuards()?size gt 0>
+<#if representation.getMethodRepresentationsBy('GUARD')?size gt 0>
 
   // ===============================================================================================
   // GUARDS
   // ===============================================================================================
 
-  <#list representation.getGuards() as method>
+  <#list representation.getMethodRepresentationsBy('GUARD') as method>
     <@printMethod method>
     </@printMethod>
     <#sep>
@@ -101,13 +130,13 @@ ${ representation.modifiers }<#if representation.modifiers != ""> </#if>class ${
     </#sep>
   </#list>
 </#if>
-<#if representation.getAnys()?size gt 0>
+<#if representation.getMethodRepresentationsBy('ANY')?size gt 0>
 
   // ===============================================================================================
   // ANY
   // ===============================================================================================
 
-  <#list representation.getAnys() as method>
+  <#list representation.getMethodRepresentationsBy('ANY') as method>
     <@printMethod method>
     </@printMethod>
     <#sep>
@@ -115,13 +144,13 @@ ${ representation.modifiers }<#if representation.modifiers != ""> </#if>class ${
     </#sep>
   </#list>
 </#if>
-<#if representation.getTests()?size gt 0>
+<#if representation.getMethodRepresentationsBy('TEST')?size gt 0>
 
   // ===============================================================================================
   // TEST CASES
   // ===============================================================================================
 
-  <#list representation.getTests() as method>
+  <#list representation.getMethodRepresentationsBy('TEST') as method>
     <@printMethod method>
     </@printMethod>
     <#sep>

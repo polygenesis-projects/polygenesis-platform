@@ -24,9 +24,11 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import io.polygenesis.commons.path.PathService;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -91,6 +93,31 @@ public class FreemarkerService {
       Map<String, Object> dataModel, String ftlTemplate, Path generationFilePath) {
     if (!Files.exists(generationFilePath)) {
       export(dataModel, ftlTemplate, generationFilePath);
+    }
+  }
+
+  /**
+   * Export to memory string.
+   *
+   * @param dataModel the data model
+   * @param ftlTemplate the ftl template
+   * @return the string
+   */
+  public String exportToString(Map<String, Object> dataModel, String ftlTemplate) {
+    try {
+      Template template = configuration.getTemplate(ftlTemplate);
+
+      ByteArrayOutputStream baos = new ByteArrayOutputStream();
+      OutputStreamWriter writer = new OutputStreamWriter(baos);
+
+      template.process(dataModel, writer);
+
+      writer.flush();
+      writer.close();
+
+      return baos.toString();
+    } catch (IOException | TemplateException e) {
+      throw new IllegalStateException(e.getMessage(), e);
     }
   }
 }

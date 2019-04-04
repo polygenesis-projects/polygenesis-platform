@@ -29,7 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * The type Rdbms test
  *
- * @author PolyGenesis
+ * @author ${ authorService.getAuthor() }
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = RdbmsTestConfig.class,

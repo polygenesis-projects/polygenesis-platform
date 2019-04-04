@@ -21,14 +21,11 @@
 package io.polygenesis.models.api;
 
 import com.oregor.ddd4j.check.assertion.Assertion;
-import io.polygenesis.commons.valueobjects.ObjectName;
-import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.data.Data;
 import io.polygenesis.core.data.DataArray;
 import io.polygenesis.core.data.DataGroup;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 
 /**
  * The type Dto.
@@ -42,11 +39,8 @@ public class Dto {
   // ===============================================================================================
 
   private DtoType dtoType;
-  private ObjectName objectName;
-  private PackageName packageName;
-  private Set<Data> models;
-  // TODO: remove
-  private DataGroup originatingDataGroup;
+  private DataGroup dataGroup;
+  private Boolean virtual;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -56,22 +50,13 @@ public class Dto {
    * Instantiates a new Dto.
    *
    * @param dtoType the dto type
-   * @param objectName the object name
-   * @param packageName the package name
-   * @param models the models
-   * @param originatingDataGroup the originating data group
+   * @param dataGroup the data group
+   * @param virtual the virtual
    */
-  public Dto(
-      DtoType dtoType,
-      ObjectName objectName,
-      PackageName packageName,
-      Set<Data> models,
-      DataGroup originatingDataGroup) {
+  public Dto(DtoType dtoType, DataGroup dataGroup, Boolean virtual) {
     setDtoType(dtoType);
-    setObjectName(objectName);
-    setPackageName(packageName);
-    setModels(models);
-    setOriginatingDataGroup(originatingDataGroup);
+    setDataGroup(dataGroup);
+    setVirtual(virtual);
   }
 
   // ===============================================================================================
@@ -88,39 +73,21 @@ public class Dto {
   }
 
   /**
-   * Gets object name.
+   * Gets data group.
    *
-   * @return the object name
+   * @return the data group
    */
-  public ObjectName getObjectName() {
-    return objectName;
+  public DataGroup getDataGroup() {
+    return dataGroup;
   }
 
   /**
-   * Gets package name.
+   * Gets virtual.
    *
-   * @return the package name
+   * @return the virtual
    */
-  public PackageName getPackageName() {
-    return packageName;
-  }
-
-  /**
-   * Gets models.
-   *
-   * @return the models
-   */
-  public Set<Data> getModels() {
-    return models;
-  }
-
-  /**
-   * Gets originating data group.
-   *
-   * @return the originating data group
-   */
-  public DataGroup getOriginatingDataGroup() {
-    return originatingDataGroup;
+  public Boolean getVirtual() {
+    return virtual;
   }
 
   // ===============================================================================================
@@ -133,20 +100,36 @@ public class Dto {
    * @return the array element as optional
    */
   public Optional<Data> getArrayElementAsOptional() {
-    return getOriginatingDataGroup()
+    return getDataGroup()
         .getModels()
         .stream()
         .filter(model -> model.isDataArray())
         .map(DataArray.class::cast)
+        .filter(dataArray -> dataArray.getArrayElement() != null)
         .map(dataArray -> dataArray.getArrayElement())
         .findFirst();
+  }
 
-    // TODO: fix as getOriginatingDataGroup() cannot be DataArray
-    //    if (getOriginatingDataGroup().isDataArray()) {
-    //      return Optional.of(((DataArray) getOriginatingDataGroup()).getArrayElement());
-    //    } else {
-    //      return Optional.empty();
-    //    }
+  /**
+   * Gets thing identity as optional.
+   *
+   * @return the optional thing identity
+   */
+  public Optional<Data> getThingIdentityAsOptional() {
+    return getDataGroup().getModels().stream().filter(data -> data.isThingIdentity()).findFirst();
+  }
+
+  /**
+   * Gets parent thing identity as optional.
+   *
+   * @return the parent thing identity as optional
+   */
+  public Optional<Data> getParentThingIdentityAsOptional() {
+    return getDataGroup()
+        .getModels()
+        .stream()
+        .filter(data -> data.isParentThingIdentity())
+        .findFirst();
   }
 
   // ===============================================================================================
@@ -164,43 +147,23 @@ public class Dto {
   }
 
   /**
-   * Sets object name.
+   * Sets data group.
    *
-   * @param objectName the object name
+   * @param dataGroup the data group
    */
-  private void setObjectName(ObjectName objectName) {
-    Assertion.isNotNull(objectName, "objectName is required");
-    this.objectName = objectName;
+  public void setDataGroup(DataGroup dataGroup) {
+    Assertion.isNotNull(dataGroup, "dataGroup is required");
+    this.dataGroup = dataGroup;
   }
 
   /**
-   * Sets package name.
+   * Sets virtual.
    *
-   * @param packageName the package name
+   * @param virtual the virtual
    */
-  private void setPackageName(PackageName packageName) {
-    Assertion.isNotNull(packageName, "packageName is required");
-    this.packageName = packageName;
-  }
-
-  /**
-   * Sets models.
-   *
-   * @param models the models
-   */
-  private void setModels(Set<Data> models) {
-    Assertion.isNotNull(models, "models is required");
-    this.models = models;
-  }
-
-  /**
-   * Sets originating data group.
-   *
-   * @param originatingDataGroup the originating data group
-   */
-  private void setOriginatingDataGroup(DataGroup originatingDataGroup) {
-    Assertion.isNotNull(originatingDataGroup, "originatingDataGroup is required");
-    this.originatingDataGroup = originatingDataGroup;
+  private void setVirtual(Boolean virtual) {
+    Assertion.isNotNull(virtual, "virtual is required");
+    this.virtual = virtual;
   }
 
   // ===============================================================================================
@@ -217,14 +180,12 @@ public class Dto {
     }
     Dto dto = (Dto) o;
     return dtoType == dto.dtoType
-        && Objects.equals(objectName, dto.objectName)
-        && Objects.equals(packageName, dto.packageName)
-        && Objects.equals(models, dto.models)
-        && Objects.equals(originatingDataGroup, dto.originatingDataGroup);
+        && Objects.equals(dataGroup, dto.dataGroup)
+        && Objects.equals(virtual, dto.virtual);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(dtoType, objectName, packageName, models, originatingDataGroup);
+    return Objects.hash(dtoType, dataGroup, virtual);
   }
 }

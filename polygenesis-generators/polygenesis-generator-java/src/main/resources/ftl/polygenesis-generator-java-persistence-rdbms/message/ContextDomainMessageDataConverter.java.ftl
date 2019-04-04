@@ -21,13 +21,13 @@
 package ${ packageName };
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.oregor.ddd4j.core.AbstractDomainMessageDataConverter;
+import com.oregor.ddd4j.domain.AbstractDomainMessageDataConverter;
 import org.springframework.stereotype.Component;
 
 /**
  * The type Context domain message data converter.
  *
- * @author PolyGenesis
+ * @author ${ authorService.getAuthor() }
  */
 @Component
 public class ${ fullObjectName } {

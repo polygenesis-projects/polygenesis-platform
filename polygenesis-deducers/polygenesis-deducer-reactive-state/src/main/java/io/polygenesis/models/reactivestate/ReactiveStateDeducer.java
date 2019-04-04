@@ -65,7 +65,7 @@ public class ReactiveStateDeducer implements Deducer<ReactiveStateModelRepositor
         CoreRegistry.getModelRepositoryResolver()
             .resolve(modelRepositories, ServiceModelRepository.class);
 
-    if (serviceModelRepository.getServices().isEmpty()) {
+    if (serviceModelRepository.getItems().isEmpty()) {
       throw new IllegalStateException(String.format("serviceModelRepository cannot be empty."));
     }
 
