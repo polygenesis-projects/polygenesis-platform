@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 OREGOR LTD
+ * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -79,7 +79,7 @@ public class DomainMessageDataConverterExporter {
     dataModel.put(
         "fullObjectName",
         TextConverter.toUpperCamel(context.getText() + "DomainMessageDataConverter")
-            + " extends \n\t\tAbstractDomainMessageDataConverter<"
+            + " extends \n\t\tDomainMessageDataConverter<"
             + TextConverter.toUpperCamel(context.getText())
             + "DomainMessageData>");
 

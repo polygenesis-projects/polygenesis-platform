@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 OREGOR LTD
+ * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,6 +47,7 @@ public class PersistenceInterfaceRepresentable extends AbstractInterfaceRepresen
    * @param fromDataTypeToJavaConverter the from data type to java converter
    * @param functionToMethodRepresentationConverter the function to method representation converter
    */
+  @SuppressWarnings("CPD-START")
   public PersistenceInterfaceRepresentable(
       FromDataTypeToJavaConverter fromDataTypeToJavaConverter,
       FunctionToMethodRepresentationConverter functionToMethodRepresentationConverter) {
@@ -71,7 +72,11 @@ public class PersistenceInterfaceRepresentable extends AbstractInterfaceRepresen
   public Set<String> imports(Persistence source, Object... args) {
     Set<String> imports = new TreeSet<>();
 
-    imports.add("com.oregor.ddd4j.domain.Persistence");
+    if (source.getMultiTenant()) {
+      imports.add("com.oregor.trinity4j.domain.TenantRepository");
+    } else {
+      imports.add("com.oregor.trinity4j.domain.Repository");
+    }
 
     return imports;
   }
@@ -81,6 +86,7 @@ public class PersistenceInterfaceRepresentable extends AbstractInterfaceRepresen
     return new LinkedHashSet<>();
   }
 
+  @SuppressWarnings("CPD-END")
   @Override
   public String description(Persistence source, Object... args) {
     StringBuilder stringBuilder = new StringBuilder();
@@ -112,14 +118,27 @@ public class PersistenceInterfaceRepresentable extends AbstractInterfaceRepresen
   public String fullObjectName(Persistence source, Object... args) {
     StringBuilder stringBuilder = new StringBuilder();
 
-    stringBuilder.append(TextConverter.toUpperCamel(source.getObjectName().getText()));
-    stringBuilder.append(" extends ");
-    stringBuilder.append("Persistence<");
-    stringBuilder.append(TextConverter.toUpperCamel(source.getAggregateRootObjectName().getText()));
-    stringBuilder.append(", ");
-    stringBuilder.append(
-        TextConverter.toUpperCamel(source.getAggregateRootIdObjectName().getText()));
-    stringBuilder.append(">");
+    if (source.getMultiTenant()) {
+      stringBuilder.append(TextConverter.toUpperCamel(source.getObjectName().getText()));
+      stringBuilder.append(" extends ");
+      stringBuilder.append("TenantRepository<");
+      stringBuilder.append(
+          TextConverter.toUpperCamel(source.getAggregateRootObjectName().getText()));
+      stringBuilder.append(", ");
+      stringBuilder.append(
+          TextConverter.toUpperCamel(source.getAggregateRootIdObjectName().getText()));
+      stringBuilder.append(">");
+    } else {
+      stringBuilder.append(TextConverter.toUpperCamel(source.getObjectName().getText()));
+      stringBuilder.append(" extends ");
+      stringBuilder.append("Repository<");
+      stringBuilder.append(
+          TextConverter.toUpperCamel(source.getAggregateRootObjectName().getText()));
+      stringBuilder.append(", ");
+      stringBuilder.append(
+          TextConverter.toUpperCamel(source.getAggregateRootIdObjectName().getText()));
+      stringBuilder.append(">");
+    }
 
     return stringBuilder.toString();
   }

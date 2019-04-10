@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 OREGOR LTD
+ * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ package io.polygenesis.models.domain;
 
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.Deducer;
+import io.polygenesis.core.Model;
 import io.polygenesis.core.ModelRepository;
 import io.polygenesis.core.ThingRepository;
 import java.util.Set;
@@ -60,7 +61,7 @@ public class DomainDeducer implements Deducer<DomainModelRepository> {
 
   @Override
   public DomainModelRepository deduce(
-      ThingRepository thingRepository, Set<ModelRepository> modelRepositories) {
+      ThingRepository thingRepository, Set<ModelRepository<? extends Model>> modelRepositories) {
     return new DomainModelRepository(
         aggregateRootDeducer.deduceFrom(thingRepository, rootPackageName));
   }

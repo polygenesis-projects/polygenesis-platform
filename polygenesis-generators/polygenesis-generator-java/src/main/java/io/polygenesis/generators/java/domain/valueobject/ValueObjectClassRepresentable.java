@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 OREGOR LTD
+ * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -100,7 +100,7 @@ public class ValueObjectClassRepresentable extends AbstractClassRepresentable<Va
     Set<String> imports = new LinkedHashSet<>();
 
     imports.addAll(imports(source.getData()));
-    imports.add("com.oregor.ddd4j.check.assertion.Assertion");
+    imports.add("com.oregor.trinity4j.commons.assertion.Assertion");
     imports.add("javax.persistence.Embeddable");
 
     return imports;

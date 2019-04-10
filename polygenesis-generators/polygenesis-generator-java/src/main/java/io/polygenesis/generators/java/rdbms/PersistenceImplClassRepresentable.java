@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 OREGOR LTD
+ * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -98,7 +98,12 @@ public class PersistenceImplClassRepresentable extends AbstractClassRepresentabl
             stringBuilder.toString(),
             MODIFIER_PUBLIC,
             parameterRepresentations,
-            "\t\tsuper(repository, domainMessageDataRepository, domainMessageDataConverter);");
+            String.format(
+                "\t\tsuper(%s, %s, %s, %s.class);",
+                "repository",
+                "domainMessageDataRepository",
+                "domainMessageDataConverter",
+                TextConverter.toUpperCamel(source.getAggregateRootIdObjectName().getText())));
 
     return new LinkedHashSet<>(Arrays.asList(constructorRepresentation));
   }
@@ -123,9 +128,9 @@ public class PersistenceImplClassRepresentable extends AbstractClassRepresentabl
     String context = TextConverter.toUpperCamel(contextName.getText());
 
     if (source.getMultiTenant()) {
-      imports.add("com.oregor.ddd4j.domain.AbstractJpaPersistenceWithTenant");
+      imports.add("com.oregor.trinity4j.domain.AbstractJpaTenantRepository");
     } else {
-      imports.add("com.oregor.ddd4j.domain.AbstractJpaPersistence");
+      imports.add("com.oregor.trinity4j.domain.AbstractJpaRepository");
     }
 
     imports.add(rootPackageName.getText() + "." + context + "DomainMessageData");
@@ -177,9 +182,9 @@ public class PersistenceImplClassRepresentable extends AbstractClassRepresentabl
     stringBuilder.append("Impl");
 
     if (source.getMultiTenant()) {
-      stringBuilder.append("\n\t\textends AbstractJpaPersistenceWithTenant<");
+      stringBuilder.append("\n\t\textends AbstractJpaTenantRepository<");
     } else {
-      stringBuilder.append("\n\t\textends AbstractJpaPersistence<");
+      stringBuilder.append("\n\t\textends AbstractJpaRepository<");
     }
 
     ObjectName contextName = (ObjectName) args[1];

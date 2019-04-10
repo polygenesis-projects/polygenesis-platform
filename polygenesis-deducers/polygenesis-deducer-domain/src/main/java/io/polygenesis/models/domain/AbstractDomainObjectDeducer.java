@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 OREGOR LTD
+ * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,9 +50,9 @@ public class AbstractDomainObjectDeducer {
    * @param rootPackageName the root package name
    * @return the set
    */
-  protected Set<DomainObjectProperty> deduceFromFunctionArguments(
+  protected Set<DomainObjectProperty<? extends Data>> deduceFromFunctionArguments(
       Function function, PackageName rootPackageName) {
-    Set<DomainObjectProperty> properties = new LinkedHashSet<>();
+    Set<DomainObjectProperty<? extends Data>> properties = new LinkedHashSet<>();
 
     // Add Aggregate Root ID if the thing is not abstract
     if (function.getThing().getThingScopeType().equals(ThingScopeType.DOMAIN_AGGREGATE_ROOT)
@@ -95,8 +95,8 @@ public class AbstractDomainObjectDeducer {
    * @param thing the thing
    * @return the set
    */
-  protected Set<DomainObjectProperty> deduceFromThingProperties(Thing thing) {
-    Set<DomainObjectProperty> properties = new LinkedHashSet<>();
+  protected Set<DomainObjectProperty<? extends Data>> deduceFromThingProperties(Thing thing) {
+    Set<DomainObjectProperty<? extends Data>> properties = new LinkedHashSet<>();
 
     thing
         .getThingProperties()
@@ -119,7 +119,7 @@ public class AbstractDomainObjectDeducer {
   // PRIVATE
   // ===============================================================================================
 
-  private DomainObjectProperty makeDomainObjectProperty(Data model) {
+  private DomainObjectProperty<? extends Data> makeDomainObjectProperty(Data model) {
     switch (model.getDataPrimaryType()) {
       case ARRAY:
         DataArray dataArray = model.getAsDataArray();

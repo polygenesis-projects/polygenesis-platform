@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 OREGOR LTD
+ * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,10 +20,11 @@
 
 package io.polygenesis.codegen;
 
-import com.oregor.ddd4j.check.assertion.Assertion;
+import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.core.CoreRegistry;
 import io.polygenesis.core.Deducer;
 import io.polygenesis.core.Generator;
+import io.polygenesis.core.Model;
 import io.polygenesis.core.ModelRepository;
 import io.polygenesis.core.ThingRepository;
 import io.polygenesis.core.deducer.InclusionOrExclusionType;
@@ -50,7 +51,9 @@ public class Genesis {
    * @param generators the generators
    */
   public void generate(
-      GenesisRequest genesisRequest, Set<Deducer> deducers, Set<Generator> generators) {
+      GenesisRequest genesisRequest,
+      Set<Deducer<? extends ModelRepository<? extends Model>>> deducers,
+      Set<Generator> generators) {
     Assertion.isNotNull(deducers, "Deducers is required");
     Assertion.isNotNull(generators, "Generators is required");
 
@@ -75,7 +78,9 @@ public class Genesis {
    * @param generators the generators
    */
   public void generate(
-      ThingRepository thingRepository, Set<Deducer> deducers, Set<Generator> generators) {
+      ThingRepository thingRepository,
+      Set<Deducer<? extends ModelRepository<? extends Model>>> deducers,
+      Set<Generator> generators) {
     generate(deduceModelRepositories(thingRepository, deducers), generators);
   }
 
@@ -85,7 +90,8 @@ public class Genesis {
    * @param modelRepositories the model repositories
    * @param generators the generators
    */
-  public void generate(Set<ModelRepository> modelRepositories, Set<Generator> generators) {
+  public void generate(
+      Set<ModelRepository<? extends Model>> modelRepositories, Set<Generator> generators) {
     if (generators.isEmpty()) {
       throw new IllegalArgumentException("generators cannot be empty");
     }
@@ -100,12 +106,14 @@ public class Genesis {
    * @param deducers the deducers
    * @return the set
    */
-  public Set<ModelRepository> deduceModelRepositories(
-      ThingRepository thingRepository, Set<Deducer> deducers) {
-    Set<ModelRepository> modelRepositories = new LinkedHashSet<>();
+  public Set<ModelRepository<? extends Model>> deduceModelRepositories(
+      ThingRepository thingRepository,
+      Set<Deducer<? extends ModelRepository<? extends Model>>> deducers) {
+    Set<ModelRepository<? extends Model>> modelRepositories = new LinkedHashSet<>();
     deducers.forEach(
         deducer -> {
-          ModelRepository modelRepository = deducer.deduce(thingRepository, modelRepositories);
+          ModelRepository<? extends Model> modelRepository =
+              deducer.deduce(thingRepository, modelRepositories);
           if (modelRepository == null) {
             throw new IllegalArgumentException(
                 String.format(

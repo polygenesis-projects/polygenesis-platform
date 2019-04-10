@@ -8,24 +8,20 @@
 <#if projectDescription.microservice>
 <#list projectDescription.layers as layer>
   <#if layer == 'APP'>
-    <module>${ projectDescription.modulePrefix }-app</module>
+    <module>${ projectDescription.modulePrefix }-service</module>
   <#elseif layer == 'API'>
     <module>${ projectDescription.modulePrefix }-api</module>
+    <module>${ projectDescription.modulePrefix }-api-clients</module>
   <#elseif layer == 'API_IMPL'>
-    <module>${ projectDescription.modulePrefix }-api-impl</module>
+    <module>${ projectDescription.modulePrefix }-api-detail</module>
   <#elseif layer == 'DOMAIN_MODEL'>
-    <module>${ projectDescription.modulePrefix }-domain-model</module>
-  <#elseif layer == 'DOMAIN_SERVICES'>
-    <module>${ projectDescription.modulePrefix }-domain-services-impl</module>
+    <module>${ projectDescription.modulePrefix }-domain</module>
+    <module>${ projectDescription.modulePrefix }-domain-details</module>
   <#elseif layer == 'PROJECTION_MODEL'>
   </#if>
 </#list>
-  <#if projectDescription.hasPrimaryAdapters()>
-    <module>${ projectDescription.modulePrefix }-primary-adapters</module>
-  </#if>
-  <#if projectDescription.hasSecondaryAdapters()>
-    <module>${ projectDescription.modulePrefix }-secondary-adapters</module>
-  </#if>
+    <module>${ projectDescription.modulePrefix }-aux</module>
+    <module>${ projectDescription.modulePrefix }-aux-details</module>
 </#if>
 <#list projectDescription.extraModules as extraModule>
     <module>${ projectDescription.modulePrefix }-${ extraModule }</module>
@@ -144,7 +140,7 @@
     <evo-inflector.version>1.2.2</evo-inflector.version>
 
     <!--OREGOR-->
-    <oregor-ddd4j.version>0.0.2-SNAPSHOT</oregor-ddd4j.version>
+    <trinity4j.version>0.0.2-SNAPSHOT</trinity4j.version>
   </properties>
 
   <dependencies>
@@ -185,41 +181,41 @@
         </#noparse>
       </dependency>
 
-      <!--API IMPLEMENTATION-->
+      <!--DOMAIN-->
       <dependency>
         <groupId>${ projectDescription.groupId }</groupId>
-        <artifactId>${ projectDescription.modulePrefix }-api-impl</artifactId>
-        <#noparse>
-        <version>${project.version}</version>
-        </#noparse>
-      </dependency>
-
-      <!--DOMAIN MODEL-->
-      <dependency>
-        <groupId>${ projectDescription.groupId }</groupId>
-        <artifactId>${ projectDescription.modulePrefix }-domain-model</artifactId>
-        <#noparse>
-        <version>${project.version}</version>
-        </#noparse>
-      </dependency>
-
-      <!--DOMAIN SERVICES IMPLEMENTATION-->
-      <dependency>
-        <groupId>${ projectDescription.groupId }</groupId>
-        <artifactId>${ projectDescription.modulePrefix }-domain-services-impl</artifactId>
+        <artifactId>${ projectDescription.modulePrefix }-domain</artifactId>
         <#noparse>
           <version>${project.version}</version>
         </#noparse>
       </dependency>
 
+      <!--AUXILIARY-->
+      <dependency>
+        <groupId>${ projectDescription.groupId }</groupId>
+        <artifactId>${ projectDescription.modulePrefix }-aux</artifactId>
+        <#noparse>
+          <version>${project.version}</version>
+        </#noparse>
+      </dependency>
+
+      <!--API DETAIL-->
+      <dependency>
+        <groupId>${ projectDescription.groupId }</groupId>
+        <artifactId>${ projectDescription.modulePrefix }-api-detail</artifactId>
+        <#noparse>
+        <version>${project.version}</version>
+        </#noparse>
+      </dependency>
+
       <!-- ===================================================================================== -->
-      <!-- PRIMARY ADAPTERS                                                                      -->
+      <!-- API CLIENTS                                                                           -->
       <!-- ===================================================================================== -->
 
       <!--REST SPRING-->
       <dependency>
-        <groupId>${ projectDescription.groupId }.${ projectDescription.modulePrefix }-primary-adapters</groupId>
-        <artifactId>${ projectDescription.modulePrefix }-rest-spring</artifactId>
+        <groupId>${ projectDescription.groupId }.${ projectDescription.modulePrefix }-api-clients</groupId>
+        <artifactId>${ projectDescription.modulePrefix }-api-rest</artifactId>
         <#noparse>
         <version>${project.version}</version>
         </#noparse>
@@ -227,29 +223,33 @@
 
       <!--SUBSCRIBER ACTIVEMQ-->
       <dependency>
-        <groupId>${ projectDescription.groupId }.${ projectDescription.modulePrefix }-primary-adapters</groupId>
-        <artifactId>${ projectDescription.modulePrefix }-subscriber-activemq</artifactId>
+        <groupId>${ projectDescription.groupId }.${ projectDescription.modulePrefix }-api-clients</groupId>
+        <artifactId>${ projectDescription.modulePrefix }-api-subscriber-activemq</artifactId>
         <#noparse>
         <version>${project.version}</version>
         </#noparse>
       </dependency>
 
       <!-- ===================================================================================== -->
-      <!-- SECONDARY ADAPTERS                                                                    -->
+      <!-- DOMAIN DETAILS                                                                        -->
       <!-- ===================================================================================== -->
 
       <!--PERSISTENCE RDBMS-->
       <dependency>
-        <groupId>${ projectDescription.groupId }.${ projectDescription.modulePrefix }-secondary-adapters</groupId>
-        <artifactId>${ projectDescription.modulePrefix }-persistence-rdbms</artifactId>
+        <groupId>${ projectDescription.groupId }.${ projectDescription.modulePrefix }-domain-details</groupId>
+        <artifactId>${ projectDescription.modulePrefix }-domain-persistence-rdbms</artifactId>
         <#noparse>
-        <version>${project.version}</version>
+          <version>${project.version}</version>
         </#noparse>
       </dependency>
 
+      <!-- ===================================================================================== -->
+      <!-- AUXILIARY DETAILS                                                                     -->
+      <!-- ===================================================================================== -->
+
       <!--PUBLISHER ACTIVEMQ-->
       <dependency>
-        <groupId>${ projectDescription.groupId }.${ projectDescription.modulePrefix }-secondary-adapters</groupId>
+        <groupId>${ projectDescription.groupId }.${ projectDescription.modulePrefix }-aux-details</groupId>
         <artifactId>${ projectDescription.modulePrefix }-publisher-activemq</artifactId>
         <#noparse>
         <version>${project.version}</version>
@@ -260,10 +260,10 @@
       <!-- OREGOR                                                                                -->
       <!-- ===================================================================================== -->
       <dependency>
-        <groupId>com.oregor.ddd4j</groupId>
-        <artifactId>ddd4j-bom</artifactId>
+        <groupId>com.oregor.trinity4j</groupId>
+        <artifactId>trinity4j-bom</artifactId>
         <#noparse>
-          <version>${oregor-ddd4j.version}</version>
+          <version>${trinity4j.version}</version>
         </#noparse>
         <type>pom</type>
         <scope>import</scope>

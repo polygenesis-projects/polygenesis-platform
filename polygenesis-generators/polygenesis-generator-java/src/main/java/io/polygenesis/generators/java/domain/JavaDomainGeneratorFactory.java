@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 OREGOR LTD
+ * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -66,6 +66,7 @@ public final class JavaDomainGeneratorFactory {
   private static PersistenceExporter persistenceExporter;
   private static DomainServiceExporter domainServiceExporter;
   private static SupportiveEntityExporter supportiveEntityExporter;
+  private static ConstantsExporter constantsExporter;
 
   // ===============================================================================================
   // STATIC INITIALIZATION OF DEPENDENCIES
@@ -142,6 +143,8 @@ public final class JavaDomainGeneratorFactory {
 
     supportiveEntityExporter =
         new SupportiveEntityExporter(freemarkerService, supportiveEntityClassRepresentable);
+
+    constantsExporter = new ConstantsExporter(freemarkerService);
   }
 
   // ===============================================================================================
@@ -160,11 +163,15 @@ public final class JavaDomainGeneratorFactory {
    * New instance java api generator.
    *
    * @param generationPath the generation path
+   * @param rootPackageName the root package name
+   * @param tablePrefix the table prefix
    * @return the java api generator
    */
-  public static JavaDomainGenerator newInstance(Path generationPath, PackageName rootPackageName) {
+  public static JavaDomainGenerator newInstance(
+      Path generationPath, PackageName rootPackageName, String tablePrefix) {
     return new JavaDomainGenerator(
         generationPath,
+        tablePrefix,
         rootPackageName,
         aggregateRootExporter,
         aggregateRootIdExporter,
@@ -174,6 +181,7 @@ public final class JavaDomainGeneratorFactory {
         domainEventExporter,
         persistenceExporter,
         domainServiceExporter,
-        supportiveEntityExporter);
+        supportiveEntityExporter,
+        constantsExporter);
   }
 }

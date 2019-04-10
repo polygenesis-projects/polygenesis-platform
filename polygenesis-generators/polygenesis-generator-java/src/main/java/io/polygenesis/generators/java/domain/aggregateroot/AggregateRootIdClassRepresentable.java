@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 OREGOR LTD
+ * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,7 +60,8 @@ public class AggregateRootIdClassRepresentable extends AbstractClassRepresentabl
 
   @Override
   public Set<FieldRepresentation> fieldRepresentations(AggregateRoot source, Object... args) {
-    return new LinkedHashSet<>();
+    return new LinkedHashSet<>(
+        Arrays.asList(new FieldRepresentation("static final long", "serialVersionUID = 1L")));
   }
 
   @Override
@@ -112,9 +113,9 @@ public class AggregateRootIdClassRepresentable extends AbstractClassRepresentabl
     Set<String> imports = new TreeSet<>();
 
     if (source.getMultiTenant()) {
-      imports.add("com.oregor.ddd4j.domain.AggregateRootIdWithTenantId");
+      imports.add("com.oregor.trinity4j.domain.TenantAggregateRootId");
     } else {
-      imports.add("com.oregor.ddd4j.domain.AggregateRootId");
+      imports.add("com.oregor.trinity4j.domain.AggregateRootId");
     }
 
     imports.add("javax.persistence.Embeddable");
@@ -165,7 +166,7 @@ public class AggregateRootIdClassRepresentable extends AbstractClassRepresentabl
     stringBuilder.append(" extends ");
 
     if (source.getMultiTenant()) {
-      stringBuilder.append("AggregateRootIdWithTenantId");
+      stringBuilder.append("TenantAggregateRootId");
     } else {
       stringBuilder.append("AggregateRootId");
     }

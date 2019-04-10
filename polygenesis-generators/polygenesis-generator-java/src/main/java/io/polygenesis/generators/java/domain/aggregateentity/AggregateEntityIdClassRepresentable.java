@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 OREGOR LTD
+ * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -101,7 +101,7 @@ public class AggregateEntityIdClassRepresentable
   public Set<String> imports(AggregateEntity source, Object... args) {
     Set<String> imports = new TreeSet<>();
 
-    imports.add("com.oregor.ddd4j.domain.AggregateEntityId");
+    imports.add("com.oregor.trinity4j.domain.AggregateEntityId");
     imports.add("javax.persistence.Embeddable");
     imports.add("java.util.UUID");
 

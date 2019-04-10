@@ -15,7 +15,6 @@
     <module>polygenesis-implementations</module>
     <module>polygenesis-models</module>
     <module>polygenesis-representations</module>
-    <module>polygenesis-scaffolders</module>
   </modules>
   <parent>
     <groupId>org.springframework.boot</groupId>
@@ -34,7 +33,7 @@
   <inceptionYear>2015</inceptionYear>
 
   <organization>
-    <name>OREGOR LTD</name>
+    <name>Christos Tsakostas, OREGOR LTD</name>
     <url>https://www.oregor.com</url>
   </organization>
 
@@ -120,8 +119,8 @@
     <!--INFLECTOR-->
     <evo-inflector.version>1.2.2</evo-inflector.version>
 
-    <!--OREGOR-->
-    <oregor-ddd4j.version>0.0.1</oregor-ddd4j.version>
+    <!--TRINITY-->
+    <trinity-scaffolder-java.version>0.0.4</trinity-scaffolder-java.version>
 
     <!--TEST-->
     <junit.version>4.12</junit.version>
@@ -179,13 +178,11 @@
         <version>${evo-inflector.version}</version>
       </dependency>
 
-      <!--OREGOR-->
+      <!--TRINITY-->
       <dependency>
-        <groupId>com.oregor.ddd4j</groupId>
-        <artifactId>ddd4j-bom</artifactId>
-        <version>${oregor-ddd4j.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
+        <groupId>com.oregor.trinity.scaffolder.java</groupId>
+        <artifactId>trinity-scaffolder-java-core</artifactId>
+        <version>${trinity-scaffolder-java.version}</version>
       </dependency>
 
       <!--TEST-->
@@ -354,14 +351,6 @@
         <artifactId>polygenesis-generator-sql</artifactId>
         <version>${project.version}</version>
       </dependency>
-
-      <!--POLYGENESIS SCAFFOLDERS-->
-      <dependency>
-        <groupId>io.polygenesis.scaffolders</groupId>
-        <artifactId>polygenesis-scaffolder-java-microservice</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-
     </dependencies>
   </dependencyManagement>
 
@@ -383,6 +372,11 @@
             <source>${java.version}</source>
             <target>${java.version}</target>
             <encoding>${project.build.sourceEncoding}</encoding>
+            <showWarnings>true</showWarnings>
+            <compilerArgs>
+              <arg>-Xlint:all</arg>
+              <arg>-Werror</arg>
+            </compilerArgs>
           </configuration>
         </plugin>
         <!-- ===================================================================== -->

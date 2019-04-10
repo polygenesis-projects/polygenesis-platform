@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 OREGOR LTD
+ * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,6 +48,7 @@ public class SpringDataRepositoryInterfaceRepresentable
    * @param fromDataTypeToJavaConverter the from data type to java converter
    * @param functionToMethodRepresentationConverter the function to method representation converter
    */
+  @SuppressWarnings("CPD-START")
   public SpringDataRepositoryInterfaceRepresentable(
       FromDataTypeToJavaConverter fromDataTypeToJavaConverter,
       FunctionToMethodRepresentationConverter functionToMethodRepresentationConverter) {
@@ -73,9 +74,9 @@ public class SpringDataRepositoryInterfaceRepresentable
     Set<String> imports = new TreeSet<>();
 
     if (source.getMultiTenant()) {
-      imports.add("com.oregor.ddd4j.domain.SpringDataRepositoryWithTenant");
+      imports.add("com.oregor.trinity4j.domain.SpringDataTenantRepository");
     } else {
-      imports.add("com.oregor.ddd4j.domain.SpringDataRepository");
+      imports.add("com.oregor.trinity4j.domain.SpringDataRepository");
     }
 
     return imports;
@@ -86,6 +87,7 @@ public class SpringDataRepositoryInterfaceRepresentable
     return new LinkedHashSet<>();
   }
 
+  @SuppressWarnings("CPD-END")
   @Override
   public String description(Persistence source, Object... args) {
     StringBuilder stringBuilder = new StringBuilder();
@@ -126,7 +128,7 @@ public class SpringDataRepositoryInterfaceRepresentable
     stringBuilder.append(" ");
 
     if (source.getMultiTenant()) {
-      stringBuilder.append("SpringDataRepositoryWithTenant<");
+      stringBuilder.append("SpringDataTenantRepository<");
     } else {
       stringBuilder.append("SpringDataRepository<");
     }

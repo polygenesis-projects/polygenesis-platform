@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 OREGOR LTD
+ * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@
 package io.polygenesis.models.domain;
 
 import io.polygenesis.core.Function;
+import io.polygenesis.core.data.Data;
 import java.util.Set;
 
 /**
@@ -30,7 +31,7 @@ import java.util.Set;
  */
 public class Constructor extends BaseMethod {
 
-  private Set<DomainObjectProperty> properties;
+  private Set<DomainObjectProperty<? extends Data>> properties;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -42,7 +43,7 @@ public class Constructor extends BaseMethod {
    * @param function the function
    * @param properties the properties
    */
-  public Constructor(Function function, Set<DomainObjectProperty> properties) {
+  public Constructor(Function function, Set<DomainObjectProperty<? extends Data>> properties) {
     super(function);
     setProperties(properties);
   }
@@ -56,7 +57,7 @@ public class Constructor extends BaseMethod {
    *
    * @return the properties
    */
-  public Set<DomainObjectProperty> getProperties() {
+  public Set<DomainObjectProperty<? extends Data>> getProperties() {
     return properties;
   }
 
@@ -69,7 +70,7 @@ public class Constructor extends BaseMethod {
    *
    * @param properties the properties
    */
-  private void setProperties(Set<DomainObjectProperty> properties) {
+  private void setProperties(Set<DomainObjectProperty<? extends Data>> properties) {
     this.properties = properties;
   }
 }

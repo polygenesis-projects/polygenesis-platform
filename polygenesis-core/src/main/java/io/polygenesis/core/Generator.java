@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 OREGOR LTD
+ * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,5 +35,5 @@ public interface Generator {
    * @param modelRepositories the model repositories
    * @see ModelRepository
    */
-  void generate(Set<ModelRepository> modelRepositories);
+  void generate(Set<ModelRepository<? extends Model>> modelRepositories);
 }

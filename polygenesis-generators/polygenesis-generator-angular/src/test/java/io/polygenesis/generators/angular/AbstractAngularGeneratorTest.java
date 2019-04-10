@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 OREGOR LTD
+ * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@
 
 package io.polygenesis.generators.angular;
 
+import io.polygenesis.core.Model;
 import io.polygenesis.core.ModelRepository;
 import io.polygenesis.models.reactivestate.ReactiveStateModelRepository;
 import io.polygenesis.models.ui.UiFeatureModelRepository;
@@ -31,8 +32,8 @@ import java.util.Set;
 /** @author Christos Tsakostas */
 public abstract class AbstractAngularGeneratorTest {
 
-  protected Set<ModelRepository> getModelRepositories() {
-    Set<ModelRepository> modelRepositories =
+  protected Set<ModelRepository<? extends Model>> getModelRepositories() {
+    Set<ModelRepository<? extends Model>> modelRepositories =
         new LinkedHashSet<>(
             Arrays.asList(
                 new ReactiveStateModelRepository(new LinkedHashSet<>()),

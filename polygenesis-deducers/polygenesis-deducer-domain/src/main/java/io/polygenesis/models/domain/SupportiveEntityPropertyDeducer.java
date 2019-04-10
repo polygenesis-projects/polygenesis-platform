@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 OREGOR LTD
+ * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ package io.polygenesis.models.domain;
 
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.Thing;
+import io.polygenesis.core.data.Data;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -45,8 +46,9 @@ public class SupportiveEntityPropertyDeducer extends BasePropertyDeducer {
    * @param rootPackageName the root package name
    * @return the set
    */
-  public Set<DomainObjectProperty> deduceFrom(Thing thing, PackageName rootPackageName) {
-    Set<DomainObjectProperty> properties = new LinkedHashSet<>();
+  public Set<DomainObjectProperty<? extends Data>> deduceFrom(
+      Thing thing, PackageName rootPackageName) {
+    Set<DomainObjectProperty<? extends Data>> properties = new LinkedHashSet<>();
 
     ensureThingProperties(thing);
 
@@ -66,8 +68,9 @@ public class SupportiveEntityPropertyDeducer extends BasePropertyDeducer {
   // PRIVATE
   // ===============================================================================================
 
-  protected void assertThatThingIdentityExists(Thing thing, Set<DomainObjectProperty> properties) {
-    Optional<DomainObjectProperty> optionalDomainObjectProperty =
+  protected void assertThatThingIdentityExists(
+      Thing thing, Set<DomainObjectProperty<? extends Data>> properties) {
+    Optional<DomainObjectProperty<? extends Data>> optionalDomainObjectProperty =
         properties
             .stream()
             .filter(

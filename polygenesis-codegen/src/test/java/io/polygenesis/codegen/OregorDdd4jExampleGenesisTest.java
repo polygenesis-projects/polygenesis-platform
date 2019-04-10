@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 OREGOR LTD
+ * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,14 +20,17 @@
 
 package io.polygenesis.codegen;
 
+import com.oregor.trinity.scaffolder.java.core.ProjectDescription;
+import com.oregor.trinity.scaffolder.java.core.ProjectDescriptionBuilder;
+import com.oregor.trinity.scaffolder.java.core.TrinityScaffolderJava;
+import com.oregor.trinity.scaffolder.java.core.TrinityScaffolderJavaFactory;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.Deducer;
 import io.polygenesis.core.Generator;
+import io.polygenesis.core.Model;
+import io.polygenesis.core.ModelRepository;
 import io.polygenesis.core.Thing;
 import io.polygenesis.core.ThingRepositoryImpl;
-import io.polygenesis.scaffolders.javams.ProjectDescription;
-import io.polygenesis.scaffolders.javams.ScaffolderJavaMicroservice;
-import io.polygenesis.scaffolders.javams.ScaffolderJavaMicroserviceFactory;
 import java.nio.file.Paths;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -36,8 +39,7 @@ import org.junit.Test;
 /**
  * Angular:
  *
- * <p>ng new --routing=true --style=scss oregor-ddd4j-example-angular && cd
- * oregor-ddd4j-example-angular
+ * <p>ng new --routing=true --style=scss trinity4j-example-angular && cd trinity4j-example-angular
  *
  * @author Christos Tsakostas
  */
@@ -45,14 +47,14 @@ public class OregorDdd4jExampleGenesisTest {
 
   private static final String ANGULAR_EXPORT_PATH =
       "/Users/tsakostas/work/repo/github/polygenesis/polygenesis-platform/polygenesis-codegen/"
-          + "tmp/oregor-ddd4j-example-angular/src";
+          + "tmp/trinity4j-example-angular/src";
 
   private static final String JAVA_EXPORT_PATH =
       "/Users/tsakostas/work/repo/github/polygenesis/polygenesis-platform/polygenesis-codegen/tmp";
-  private static final String JAVA_PROJECT_FOLDER = "oregor-ddd4j-example";
+  private static final String JAVA_PROJECT_FOLDER = "trinity4j-example";
   private static final String JAVA_MODULE_PREFIX = "example";
   /** The constant JAVA_ROOT_PACKAGE. */
-  public static final String JAVA_ROOT_PACKAGE = "com.oregor.ddd4j.example";
+  public static final String JAVA_ROOT_PACKAGE = "com.oregor.trinity4j.example";
 
   public static final String JAVA_CONTEXT = "example";
 
@@ -64,45 +66,43 @@ public class OregorDdd4jExampleGenesisTest {
     generateJava();
 
     // Scaffold Angular:
-    // ng new --routing=true --style=scss oregor-ddd4j-example-angular && cd
-    // oregor-ddd4j-example-angular
+    // ng new --routing=true --style=scss trinity4j-example-angular && cd
+    // trinity4j-example-angular
     generateAngular();
   }
 
   private void scaffoldJava() {
-    ScaffolderJavaMicroservice scaffolderJavaMicroservice =
-        ScaffolderJavaMicroserviceFactory.newInstance(Paths.get(JAVA_EXPORT_PATH));
+    TrinityScaffolderJava trinityScaffolderJava = TrinityScaffolderJavaFactory.newInstance();
 
     ProjectDescription projectDescription = makeProjectDescription();
 
-    scaffolderJavaMicroservice.scaffold(
+    trinityScaffolderJava.scaffold(
         Paths.get(JAVA_EXPORT_PATH, JAVA_PROJECT_FOLDER), projectDescription);
   }
 
   private ProjectDescription makeProjectDescription() {
-    ProjectDescription projectDescription = new ProjectDescription();
-
-    projectDescription.setContext(TextConverter.toLowerHyphen("ddd4j-example"));
-    projectDescription.setTablePrefix(TABLE_PREFIX);
-    projectDescription.setGroupId(JAVA_ROOT_PACKAGE);
-    projectDescription.setArtifactId("oregor-ddd4j-example");
-    projectDescription.setModulePrefix(JAVA_MODULE_PREFIX);
-    projectDescription.setVersion("0.0.1-SNAPSHOT");
-    projectDescription.setName("OREGOR DDD4J Example Microservice");
-    projectDescription.setDescription("Example microservice demonstrating the usage of DDD4J");
-    projectDescription.setUrl("https://www.oregor.com");
-    projectDescription.setInceptionYear("2019");
-    projectDescription.setOrganizationName("OREGOR LTD");
-    projectDescription.setOrganizationUrl("https://www.oregor.com");
-    projectDescription.setLicenseName("The Apache License, Version 2.0");
-    projectDescription.setLicenseUrl("http://www.apache.org/licenses/LICENSE-2.0.txt");
-    projectDescription.setDistributionProfile("ossrh-oregor");
-
-    projectDescription.setScmConnection(
-        "scm:git:git://github.com/oregor-projects/oregor-ddd4j-example.git");
-    projectDescription.setScmDeveloperConnection(
-        "scm:git:git@github.com:oregor-projects/oregor-ddd4j-example.git");
-    projectDescription.setScmUrl("https://github.com/oregor-projects/oregor-ddd4j-example");
+    ProjectDescription projectDescription =
+        new ProjectDescriptionBuilder()
+            .setContext(TextConverter.toLowerHyphen("trinity4j-example"))
+            .setTablePrefix(TABLE_PREFIX)
+            .setGroupId(JAVA_ROOT_PACKAGE)
+            .setArtifactId("trinity4j-example")
+            .setModulePrefix(JAVA_MODULE_PREFIX)
+            .setVersion("0.0.1-SNAPSHOT")
+            .setName("OREGOR TRINITY4J Example Microservice")
+            .setDescription("Example microservice demonstrating the usage of TRINITY4J")
+            .setUrl("https://www.oregor.com")
+            .setInceptionYear("2019")
+            .setOrganizationName("OREGOR LTD")
+            .setOrganizationUrl("https://www.oregor.com")
+            .setLicenseName("The Apache License, Version 2.0")
+            .setLicenseUrl("http://www.apache.org/licenses/LICENSE-2.0.txt")
+            .setDistributionProfile("ossrh-oregor")
+            .setScmConnection("scm:git:git://github.com/oregor-projects/trinity4j-example.git")
+            .setScmDeveloperConnection(
+                "scm:git:git@github.com:oregor-projects/trinity4j-example.git")
+            .setScmUrl("https://github.com/oregor-projects/trinity4j-example")
+            .createProjectDescription();
 
     return projectDescription;
   }
@@ -110,7 +110,8 @@ public class OregorDdd4jExampleGenesisTest {
   private void generateJava() {
     Genesis genesis = new Genesis();
 
-    Set<Deducer> deducers = GenesisDefault.javaDeducers(JAVA_ROOT_PACKAGE);
+    Set<Deducer<? extends ModelRepository<? extends Model>>> deducers =
+        GenesisDefault.javaDeducers(JAVA_ROOT_PACKAGE);
 
     Set<Generator> generators =
         GenesisDefault.javaGenerators(
@@ -132,7 +133,8 @@ public class OregorDdd4jExampleGenesisTest {
 
     Genesis genesis = new Genesis();
 
-    Set<Deducer> deducers = GenesisDefault.angularDeducers();
+    Set<Deducer<? extends ModelRepository<? extends Model>>> deducers =
+        GenesisDefault.angularDeducers();
     Set<Generator> generators = GenesisDefault.angularGenerators(ANGULAR_EXPORT_PATH);
 
     Set<Thing> allThings = new LinkedHashSet<>();

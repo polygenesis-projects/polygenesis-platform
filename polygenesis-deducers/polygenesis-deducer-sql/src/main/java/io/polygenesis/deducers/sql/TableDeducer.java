@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 OREGOR LTD
+ * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -147,7 +147,8 @@ public class TableDeducer {
   // ===============================================================================================
   // PRIVATE
   // ===============================================================================================
-  protected Set<Column> getColumnsByProperties(Set<DomainObjectProperty> properties) {
+  protected Set<Column> getColumnsByProperties(
+      Set<DomainObjectProperty<? extends Data>> properties) {
     Set<Column> columns = new LinkedHashSet<>();
 
     properties.forEach(
@@ -310,7 +311,7 @@ public class TableDeducer {
    * @return the table for primitive collection
    */
   private Table getTableForPrimitiveCollection(
-      BaseDomainObject<?> baseDomainObject, DomainObjectProperty property) {
+      BaseDomainObject<?> baseDomainObject, DomainObjectProperty<? extends Data> property) {
     Set<Column> columns = new LinkedHashSet<>();
 
     addAggregateRootIdInColumnSetWithoutPrimaryKey(columns, baseDomainObject);
@@ -335,7 +336,7 @@ public class TableDeducer {
    * @return the table for value object collection
    */
   private Table getTableForValueObjectCollection(
-      BaseDomainObject<?> baseDomainObject, DomainObjectProperty property) {
+      BaseDomainObject<?> baseDomainObject, DomainObjectProperty<? extends Data> property) {
     Set<Column> columns = new LinkedHashSet<>();
 
     return new Table(
@@ -358,7 +359,7 @@ public class TableDeducer {
   private Table getTableForAggregateEntityCollection(
       BaseDomainObject<?> baseDomainObjectParent,
       BaseDomainObject<?> baseDomainObjectChild,
-      DomainObjectProperty property) {
+      DomainObjectProperty<? extends Data> property) {
     Set<Column> columns = new LinkedHashSet<>();
 
     addAggregateRootIdInColumnSetAsPrimaryKey(columns, baseDomainObjectParent);

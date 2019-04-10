@@ -12,12 +12,6 @@
   <artifactId>polygenesis-scaffolder-java-microservice</artifactId>
 
   <dependencies>
-    <!--POLYGENESIS CORE-->
-    <dependency>
-      <groupId>io.polygenesis</groupId>
-      <artifactId>polygenesis-core</artifactId>
-    </dependency>
-
     <!--POLYGENESIS COMMONS-->
     <dependency>
       <groupId>io.polygenesis</groupId>
@@ -38,5 +32,23 @@
       <type>test-jar</type>
     </dependency>
   </dependencies>
+
+  <build>
+    <finalName>polygenesis-scaffolder-java</finalName>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifest>
+              <addClasspath>true</addClasspath>
+              <mainClass>io.polygenesis.scaffolders.javams.TrinityScaffolderJavaCli</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 
 </project>

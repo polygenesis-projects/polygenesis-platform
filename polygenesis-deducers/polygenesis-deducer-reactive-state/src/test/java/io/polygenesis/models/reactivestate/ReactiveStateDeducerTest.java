@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 OREGOR LTD
+ * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ package io.polygenesis.models.reactivestate;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
+import io.polygenesis.core.Model;
 import io.polygenesis.core.ModelRepository;
 import io.polygenesis.core.ThingRepository;
 import io.polygenesis.core.ThingRepositoryImpl;
@@ -62,8 +63,8 @@ public class ReactiveStateDeducerTest {
     assertThat(reactiveStateModelRepository.getItems().size()).isEqualTo(0);
   }
 
-  private Set<ModelRepository> modelRepositories() {
-    Set<ModelRepository> modelRepositories = new LinkedHashSet<>();
+  private Set<ModelRepository<? extends Model>> modelRepositories() {
+    Set<ModelRepository<? extends Model>> modelRepositories = new LinkedHashSet<>();
 
     Set<Service> services = new LinkedHashSet<>();
     services.add(mock(Service.class));

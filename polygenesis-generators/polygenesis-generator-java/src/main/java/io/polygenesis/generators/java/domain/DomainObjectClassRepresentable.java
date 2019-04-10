@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 OREGOR LTD
+ * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ package io.polygenesis.generators.java.domain;
 
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.commons.valueobjects.PackageName;
+import io.polygenesis.core.data.Data;
 import io.polygenesis.core.data.DataArray;
 import io.polygenesis.core.data.DataGroup;
 import io.polygenesis.core.data.DataPrimitive;
@@ -240,7 +241,7 @@ public abstract class DomainObjectClassRepresentable<S extends BaseDomainObject<
             });
 
     // Additional imports
-    imports.add("com.oregor.ddd4j.check.assertion.Assertion");
+    imports.add("com.oregor.trinity4j.commons.assertion.Assertion");
 
     // SuperClass
     if (source.hasSuperclass()) {
@@ -259,11 +260,11 @@ public abstract class DomainObjectClassRepresentable<S extends BaseDomainObject<
         imports.add("javax.persistence.Entity");
         imports.add("javax.persistence.Table");
       } else {
-        imports.add("com.oregor.ddd4j.domain.AggregateRootId");
+        imports.add("com.oregor.trinity4j.domain.AggregateRootId");
         imports.add("javax.persistence.MappedSuperclass");
       }
     } else {
-      imports.add("com.oregor.ddd4j.domain.SupportiveEntity");
+      imports.add("com.oregor.trinity4j.domain.SupportiveEntity");
     }
 
     return imports;
@@ -468,7 +469,7 @@ public abstract class DomainObjectClassRepresentable<S extends BaseDomainObject<
    * @param property the property
    * @return the string
    */
-  protected String makeVariableDataType(DomainObjectProperty property) {
+  protected String makeVariableDataType(DomainObjectProperty<? extends Data> property) {
     switch (property.getPropertyType()) {
       case ABSTRACT_AGGREGATE_ROOT_ID:
         return ((AbstractAggregateRootId) property).getGenericTypeParameter().getText();
@@ -494,7 +495,7 @@ public abstract class DomainObjectClassRepresentable<S extends BaseDomainObject<
    * @param property the property
    * @return the string
    */
-  protected String makeVariableName(DomainObjectProperty property) {
+  protected String makeVariableName(DomainObjectProperty<? extends Data> property) {
     return property.getData().getVariableName().getText();
   }
 
@@ -505,7 +506,7 @@ public abstract class DomainObjectClassRepresentable<S extends BaseDomainObject<
    * @return the set
    */
   protected Set<ParameterRepresentation> makeConstructorParameterRepresentation(
-      Set<DomainObjectProperty> properties) {
+      Set<DomainObjectProperty<? extends Data>> properties) {
     Set<ParameterRepresentation> parameterRepresentations = new LinkedHashSet<>();
 
     properties

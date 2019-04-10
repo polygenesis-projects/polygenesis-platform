@@ -33,8 +33,8 @@ public class OregorGenesisScaffolderTest {
   @Test
   public void shouldGenerateForAnnotationsAndStateDeducer() {
 
-    ScaffolderJavaMicroservice scaffolderJavaMicroservice =
-        ScaffolderJavaMicroserviceFactory.newInstance(Paths.get(EXPORT_PATH));
+    TrinityScaffolderJava trinityScaffolderJava =
+        TrinityScaffolderJavaFactory.newInstance(Paths.get(EXPORT_PATH));
 
     String projectFolder = "oregor-genesis";
 
@@ -82,6 +82,6 @@ public class OregorGenesisScaffolderTest {
         "scm:git:git@gitlab.com:oregor/oregor-genesis.git");
     projectDescription.setScmUrl("https://gitlab.com/oregor/oregor-genesis");
 
-    scaffolderJavaMicroservice.scaffold(Paths.get(EXPORT_PATH, projectFolder), projectDescription);
+    trinityScaffolderJava.scaffold(Paths.get(EXPORT_PATH, projectFolder), projectDescription);
   }
 }

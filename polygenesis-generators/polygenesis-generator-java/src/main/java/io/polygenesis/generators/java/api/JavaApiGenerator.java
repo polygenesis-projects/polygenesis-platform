@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 OREGOR LTD
+ * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ package io.polygenesis.generators.java.api;
 
 import io.polygenesis.core.AbstractGenerator;
 import io.polygenesis.core.CoreRegistry;
+import io.polygenesis.core.Model;
 import io.polygenesis.core.ModelRepository;
 import io.polygenesis.models.api.ServiceModelRepository;
 import java.nio.file.Path;
@@ -62,7 +63,7 @@ public class JavaApiGenerator extends AbstractGenerator {
   // ===============================================================================================
 
   @Override
-  public void generate(Set<ModelRepository> modelRepositories) {
+  public void generate(Set<ModelRepository<? extends Model>> modelRepositories) {
     initializeModelRepositories(modelRepositories);
 
     serviceModelRepository
@@ -79,7 +80,8 @@ public class JavaApiGenerator extends AbstractGenerator {
    *
    * @param modelRepositories the model repositories
    */
-  private void initializeModelRepositories(Set<ModelRepository> modelRepositories) {
+  private void initializeModelRepositories(
+      Set<ModelRepository<? extends Model>> modelRepositories) {
     serviceModelRepository =
         CoreRegistry.getModelRepositoryResolver()
             .resolve(modelRepositories, ServiceModelRepository.class);

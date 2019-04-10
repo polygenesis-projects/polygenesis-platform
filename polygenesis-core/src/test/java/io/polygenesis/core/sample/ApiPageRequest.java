@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 OREGOR LTD
+ * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,8 @@ package io.polygenesis.core.sample;
 
 /** @author Christos Tsakostas */
 public class ApiPageRequest extends ApiRequest {
+
+  private static final long serialVersionUID = 1L;
 
   private int page;
 

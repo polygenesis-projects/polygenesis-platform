@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 OREGOR LTD
+ * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,9 +20,10 @@
 
 package io.polygenesis.models.reactivestate;
 
-import com.oregor.ddd4j.check.assertion.Assertion;
+import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.core.CoreRegistry;
 import io.polygenesis.core.Deducer;
+import io.polygenesis.core.Model;
 import io.polygenesis.core.ModelRepository;
 import io.polygenesis.core.ThingRepository;
 import io.polygenesis.models.api.ServiceModelRepository;
@@ -58,7 +59,7 @@ public class ReactiveStateDeducer implements Deducer<ReactiveStateModelRepositor
 
   @Override
   public ReactiveStateModelRepository deduce(
-      ThingRepository thingRepository, Set<ModelRepository> modelRepositories) {
+      ThingRepository thingRepository, Set<ModelRepository<? extends Model>> modelRepositories) {
     Set<Store> stores = new LinkedHashSet<>();
 
     ServiceModelRepository serviceModelRepository =

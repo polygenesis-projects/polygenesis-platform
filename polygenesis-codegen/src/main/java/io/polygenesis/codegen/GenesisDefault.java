@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 OREGOR LTD
+ * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,13 +24,15 @@ import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.Deducer;
 import io.polygenesis.core.Generator;
+import io.polygenesis.core.Model;
+import io.polygenesis.core.ModelRepository;
 import io.polygenesis.deducers.apiimpl.DomainEntityConverterDeducerFactory;
 import io.polygenesis.deducers.apiimpl.ServiceImplementationDeducerFactory;
 import io.polygenesis.deducers.sql.SqlIndexDeducerFactory;
 import io.polygenesis.deducers.sql.SqlTableDeducerFactory;
 import io.polygenesis.generators.angular.AngularGeneratorFactory;
 import io.polygenesis.generators.java.api.JavaApiGeneratorFactory;
-import io.polygenesis.generators.java.apiimpl.JavaApiImplGeneratorFactory;
+import io.polygenesis.generators.java.apidetail.JavaApiDetailGeneratorFactory;
 import io.polygenesis.generators.java.domain.JavaDomainGeneratorFactory;
 import io.polygenesis.generators.java.domainserviceimpl.DomainServiceImplementationGeneratorFactory;
 import io.polygenesis.generators.java.rdbms.JavaRdbmsGeneratorFactory;
@@ -62,7 +64,8 @@ public class GenesisDefault {
    * @param rootPackageName the root package name
    * @return the set
    */
-  public static Set<Deducer> javaDeducers(String rootPackageName) {
+  public static Set<Deducer<? extends ModelRepository<? extends Model>>> javaDeducers(
+      String rootPackageName) {
     PackageName packageName = new PackageName(rootPackageName);
 
     return new LinkedHashSet<>(
@@ -102,34 +105,40 @@ public class GenesisDefault {
         Arrays.asList(
             JavaApiGeneratorFactory.newInstance(
                 Paths.get(exportPath, projectFolder, modulePrefix + "-api")),
-            JavaApiImplGeneratorFactory.newInstance(
-                Paths.get(exportPath, projectFolder, modulePrefix + "-api-impl"), packageName),
+            JavaApiDetailGeneratorFactory.newInstance(
+                Paths.get(exportPath, projectFolder, modulePrefix + "-api-detail"), packageName),
             JavaApiRestGeneratorFactory.newInstance(
                 Paths.get(
                     exportPath,
                     projectFolder,
-                    modulePrefix + "-primary-adapters",
-                    modulePrefix + "-rest-spring"),
+                    modulePrefix + "-api-clients",
+                    modulePrefix + "-api-client-rest-spring"),
                 packageName,
                 new ObjectName(context)),
             JavaRdbmsGeneratorFactory.newInstance(
                 Paths.get(
                     exportPath,
                     projectFolder,
-                    modulePrefix + "-secondary-adapters",
-                    modulePrefix + "-persistence-rdbms"),
+                    modulePrefix + "-domain-details",
+                    modulePrefix + "-domain-detail-repository-springdatajpa"),
                 packageName,
                 new ObjectName(context)),
             JavaDomainGeneratorFactory.newInstance(
-                Paths.get(exportPath, projectFolder, modulePrefix + "-domain-model"), packageName),
+                Paths.get(exportPath, projectFolder, modulePrefix + "-domain"),
+                packageName,
+                tablePrefix),
             DomainServiceImplementationGeneratorFactory.newInstance(
-                Paths.get(exportPath, projectFolder, modulePrefix + "-domain-services-impl")),
+                Paths.get(
+                    exportPath,
+                    projectFolder,
+                    modulePrefix + "-domain-details",
+                    modulePrefix + "-domain-detail-services")),
             SqlGeneratorFactory.newInstance(
                 Paths.get(
                     exportPath,
                     projectFolder,
-                    modulePrefix + "-secondary-adapters",
-                    modulePrefix + "-persistence-rdbms"),
+                    modulePrefix + "-domain-details",
+                    modulePrefix + "-domain-detail-repository-springdatajpa"),
                 tablePrefix)));
   }
 
@@ -138,7 +147,7 @@ public class GenesisDefault {
    *
    * @return the set
    */
-  public static Set<Deducer> angularDeducers() {
+  public static Set<Deducer<? extends ModelRepository<? extends Model>>> angularDeducers() {
     PackageName packageName = new PackageName("com.oregor.dummy");
 
     return new LinkedHashSet<>(

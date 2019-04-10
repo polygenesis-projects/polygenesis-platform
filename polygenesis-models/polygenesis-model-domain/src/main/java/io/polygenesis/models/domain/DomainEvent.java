@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 OREGOR LTD
+ * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ package io.polygenesis.models.domain;
 
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
+import io.polygenesis.core.data.Data;
 import java.util.Optional;
 import java.util.Set;
 
@@ -51,7 +52,7 @@ public class DomainEvent extends BaseDomainObject<DomainEvent> {
       Optional<DomainEvent> optionalSuperClass,
       ObjectName objectName,
       PackageName packageName,
-      Set<DomainObjectProperty> properties,
+      Set<DomainObjectProperty<? extends Data>> properties,
       Set<Constructor> constructors,
       Boolean multiTenant) {
     super(

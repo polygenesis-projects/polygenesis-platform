@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 OREGOR LTD
+ * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ package io.polygenesis.models.domain;
 
 import io.polygenesis.core.Thing;
 import io.polygenesis.core.ThingProperty;
+import io.polygenesis.core.data.Data;
 import io.polygenesis.core.data.DataBusinessType;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -71,7 +72,7 @@ public abstract class BasePropertyDeducer {
    * @param thingProperty the thing property
    * @return the base property
    */
-  protected BaseProperty thingPropertyToBaseProperty(ThingProperty thingProperty) {
+  protected BaseProperty<? extends Data> thingPropertyToBaseProperty(ThingProperty thingProperty) {
 
     switch (thingProperty.getData().getDataBusinessType()) {
       case THING_IDENTITY:

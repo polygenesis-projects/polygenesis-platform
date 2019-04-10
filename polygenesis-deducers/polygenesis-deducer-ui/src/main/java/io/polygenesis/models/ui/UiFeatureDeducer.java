@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 OREGOR LTD
+ * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@
 package io.polygenesis.models.ui;
 
 import io.polygenesis.core.Deducer;
+import io.polygenesis.core.Model;
 import io.polygenesis.core.ModelRepository;
 import io.polygenesis.core.ThingRepository;
 import java.util.LinkedHashSet;
@@ -53,7 +54,7 @@ public class UiFeatureDeducer implements Deducer<UiFeatureModelRepository> {
   // ===============================================================================================
   @Override
   public UiFeatureModelRepository deduce(
-      ThingRepository thingRepository, Set<ModelRepository> modelRepositories) {
+      ThingRepository thingRepository, Set<ModelRepository<? extends Model>> modelRepositories) {
     Set<Feature> features = new LinkedHashSet<>();
 
     thingRepository

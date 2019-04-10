@@ -32,10 +32,10 @@
   <artifactId>${ projectDescription.modulePrefix }-api</artifactId>
 
   <dependencies>
-    <!--OREGOR-DDD4J-->
+    <!--TRINITY4J-->
     <dependency>
-      <groupId>com.oregor.ddd4j</groupId>
-      <artifactId>ddd4j-api</artifactId>
+      <groupId>com.oregor.trinity4j</groupId>
+      <artifactId>trinity4j-api</artifactId>
     </dependency>
 
     <!--TEST-->
