@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 OREGOR LTD
+ * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.AbstractGenerator;
 import io.polygenesis.core.CoreRegistry;
+import io.polygenesis.core.Model;
 import io.polygenesis.core.ModelRepository;
 import io.polygenesis.models.domain.AggregateRootPersistable;
 import io.polygenesis.models.domain.DomainModelRepository;
@@ -123,7 +124,7 @@ public class JavaRdbmsGenerator extends AbstractGenerator {
   // ===============================================================================================
 
   @Override
-  public void generate(Set<ModelRepository> modelRepositories) {
+  public void generate(Set<ModelRepository<? extends Model>> modelRepositories) {
     DomainModelRepository domainModelRepository =
         CoreRegistry.getModelRepositoryResolver()
             .resolve(modelRepositories, DomainModelRepository.class);

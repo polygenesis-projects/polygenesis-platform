@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 OREGOR LTD
+ * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.Thing;
 import io.polygenesis.core.ThingRepository;
 import io.polygenesis.core.ThingScopeType;
+import io.polygenesis.core.data.Data;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -115,7 +116,7 @@ public class AggregateRootDeducer {
 
     ObjectName aggregateRootObjectName = makeAggregateRootName(thing);
 
-    Set<DomainObjectProperty> properties =
+    Set<DomainObjectProperty<? extends Data>> properties =
         aggregateRootPropertyDeducer.deduceFrom(thing, rootPackageName);
 
     Set<Constructor> constructors =
@@ -139,7 +140,7 @@ public class AggregateRootDeducer {
             thing.getThingScopeType().equals(ThingScopeType.DOMAIN_ABSTRACT_AGGREGATE_ROOT)
                 ? InstantiationType.ABSTRACT
                 : InstantiationType.CONCRETE,
-            makeSuperclass(),
+            makeSuperclass(thing.getMultiTenant()),
             aggregateRootObjectName,
             packageName,
             properties,
@@ -193,13 +194,13 @@ public class AggregateRootDeducer {
    *
    * @return the aggregate root
    */
-  private Optional<AggregateRoot> makeSuperclass() {
+  private Optional<AggregateRoot> makeSuperclass(Boolean multiTenant) {
     return Optional.of(
         new AggregateRoot(
             InstantiationType.ABSTRACT,
             Optional.empty(),
-            new ObjectName("AggregateRoot"),
-            new PackageName("com.oregor.ddd4j.domain"),
+            multiTenant ? new ObjectName("TenantAggregateRoot") : new ObjectName("AggregateRoot"),
+            new PackageName("com.oregor.trinity4j.domain"),
             new LinkedHashSet<>(),
             new LinkedHashSet<>(),
             new LinkedHashSet<>(),

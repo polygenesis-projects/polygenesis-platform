@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 OREGOR LTD
+ * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -111,9 +111,9 @@ public class ResourceClassRepresentable extends AbstractClassRepresentable<Resou
     imports.add(String.format("%s.RestConstants", rootPackageName.getText()));
     imports.add("org.springframework.web.bind.annotation.RestController");
     imports.add("org.springframework.web.bind.annotation.RequestMapping");
-    imports.add("com.oregor.ddd4j.rest.AbstractRestController");
+    imports.add("com.oregor.trinity4j.api.AbstractRestController");
     imports.add("javax.servlet.http.HttpServletRequest");
-    imports.add("com.oregor.ddd4j.check.assertion.Assertion");
+    imports.add("com.oregor.trinity4j.commons.assertion.Assertion");
 
     source
         .getEndpoints()

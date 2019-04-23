@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 OREGOR LTD
+ * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ import static org.mockito.Mockito.verify;
 
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
+import io.polygenesis.core.Model;
 import io.polygenesis.core.ModelRepository;
 import io.polygenesis.models.rest.Resource;
 import io.polygenesis.models.rest.RestModelRepository;
@@ -96,7 +97,7 @@ public class JavaApiRestGeneratorTest {
   // PRIVATE
   // ===============================================================================================
 
-  private Set<ModelRepository> createModelRepositories() {
+  private Set<ModelRepository<? extends Model>> createModelRepositories() {
     Set<Resource> resources = new LinkedHashSet<>();
 
     Resource resource = mock(Resource.class);

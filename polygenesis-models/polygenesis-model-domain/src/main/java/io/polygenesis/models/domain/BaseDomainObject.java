@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 OREGOR LTD
+ * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,9 +20,10 @@
 
 package io.polygenesis.models.domain;
 
-import com.oregor.ddd4j.check.assertion.Assertion;
+import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
+import io.polygenesis.core.data.Data;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -44,7 +45,7 @@ public abstract class BaseDomainObject<T> {
   private Optional<T> optionalSuperClass;
   private ObjectName objectName;
   private PackageName packageName;
-  private Set<DomainObjectProperty> properties;
+  private Set<DomainObjectProperty<? extends Data>> properties;
   private Set<Constructor> constructors;
   private Boolean multiTenant;
 
@@ -70,7 +71,7 @@ public abstract class BaseDomainObject<T> {
       Optional<T> optionalSuperClass,
       ObjectName objectName,
       PackageName packageName,
-      Set<DomainObjectProperty> properties,
+      Set<DomainObjectProperty<? extends Data>> properties,
       Set<Constructor> constructors,
       Boolean multiTenant) {
     setDomainObjectType(domainObjectType);
@@ -168,7 +169,7 @@ public abstract class BaseDomainObject<T> {
    *
    * @return the properties
    */
-  public Set<DomainObjectProperty> getProperties() {
+  public Set<DomainObjectProperty<? extends Data>> getProperties() {
     return properties;
   }
 
@@ -249,7 +250,7 @@ public abstract class BaseDomainObject<T> {
    *
    * @param properties the properties
    */
-  public void setProperties(Set<DomainObjectProperty> properties) {
+  public void setProperties(Set<DomainObjectProperty<? extends Data>> properties) {
     Assertion.isNotNull(properties, "properties is required");
     this.properties = properties;
   }

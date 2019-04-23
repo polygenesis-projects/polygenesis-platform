@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 OREGOR LTD
+ * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@
 
 package io.polygenesis.models.domain;
 
-import com.oregor.ddd4j.check.assertion.Assertion;
+import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.core.data.Data;
 import io.polygenesis.core.data.DataArray;
 import java.util.Objects;
@@ -30,7 +30,7 @@ import java.util.Objects;
  *
  * @author Christos Tsakostas
  */
-public class AggregateEntityCollection extends BaseProperty<AggregateEntityCollection, DataArray> {
+public class AggregateEntityCollection extends BaseProperty<DataArray> {
 
   // ===============================================================================================
   // STATE

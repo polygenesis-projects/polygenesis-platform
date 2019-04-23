@@ -63,14 +63,14 @@
       <artifactId>${ projectDescription.modulePrefix }-api</artifactId>
     </dependency>
 
-    <!--OREGOR-DDD4J-->
+    <!--TRINITY4J-->
     <dependency>
-      <groupId>com.oregor.ddd4j</groupId>
-      <artifactId>ddd4j-primary-adapter-rest-spring</artifactId>
+      <groupId>com.oregor.trinity4j</groupId>
+      <artifactId>trinity4j-primary-adapter-rest-spring</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.oregor.ddd4j</groupId>
-      <artifactId>ddd4j-core</artifactId>
+      <groupId>com.oregor.trinity4j</groupId>
+      <artifactId>trinity4j-core</artifactId>
     </dependency>
 
     <!--TEST-->

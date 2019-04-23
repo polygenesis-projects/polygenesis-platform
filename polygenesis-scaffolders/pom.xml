@@ -12,8 +12,8 @@
   <groupId>io.polygenesis.scaffolders</groupId>
   <artifactId>polygenesis-scaffolders</artifactId>
   <packaging>pom</packaging>
+
   <modules>
-    <module>polygenesis-scaffolder-java-microservice</module>
   </modules>
 
 </project>

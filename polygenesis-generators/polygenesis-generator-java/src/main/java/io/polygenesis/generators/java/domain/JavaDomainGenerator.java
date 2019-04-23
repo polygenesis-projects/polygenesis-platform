@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 OREGOR LTD
+ * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ package io.polygenesis.generators.java.domain;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.AbstractGenerator;
 import io.polygenesis.core.CoreRegistry;
+import io.polygenesis.core.Model;
 import io.polygenesis.core.ModelRepository;
 import io.polygenesis.generators.java.domain.aggregateentity.AggregateEntityExporter;
 import io.polygenesis.generators.java.domain.aggregateentity.AggregateEntityIdExporter;
@@ -51,6 +52,8 @@ import java.util.Set;
  */
 public class JavaDomainGenerator extends AbstractGenerator {
 
+  private final String tablePrefix;
+
   private final PackageName rootPackageName;
   private final AggregateRootExporter aggregateRootExporter;
   private final AggregateRootIdExporter aggregateRootIdExporter;
@@ -61,6 +64,7 @@ public class JavaDomainGenerator extends AbstractGenerator {
   private final PersistenceExporter persistenceExporter;
   private final DomainServiceExporter domainServiceExporter;
   private final SupportiveEntityExporter supportiveEntityExporter;
+  private final ConstantsExporter constantsExporter;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -70,6 +74,7 @@ public class JavaDomainGenerator extends AbstractGenerator {
    * Instantiates a new Java domain generator.
    *
    * @param generationPath the generation path
+   * @param tablePrefix the table prefix
    * @param rootPackageName the root package name
    * @param aggregateRootExporter the aggregate root exporter
    * @param aggregateRootIdExporter the aggregate root id exporter
@@ -79,10 +84,12 @@ public class JavaDomainGenerator extends AbstractGenerator {
    * @param domainEventExporter the domain event exporter
    * @param persistenceExporter the persistence exporter
    * @param domainServiceExporter the domain service exporter
-   * @param supportiveEntityExporter the helper entity exporter
+   * @param supportiveEntityExporter the supportive entity exporter
+   * @param constantsExporter the constants exporter
    */
   public JavaDomainGenerator(
       Path generationPath,
+      String tablePrefix,
       PackageName rootPackageName,
       AggregateRootExporter aggregateRootExporter,
       AggregateRootIdExporter aggregateRootIdExporter,
@@ -92,8 +99,10 @@ public class JavaDomainGenerator extends AbstractGenerator {
       DomainEventExporter domainEventExporter,
       PersistenceExporter persistenceExporter,
       DomainServiceExporter domainServiceExporter,
-      SupportiveEntityExporter supportiveEntityExporter) {
+      SupportiveEntityExporter supportiveEntityExporter,
+      ConstantsExporter constantsExporter) {
     super(generationPath);
+    this.tablePrefix = tablePrefix;
     this.rootPackageName = rootPackageName;
     this.aggregateRootExporter = aggregateRootExporter;
     this.aggregateRootIdExporter = aggregateRootIdExporter;
@@ -104,6 +113,7 @@ public class JavaDomainGenerator extends AbstractGenerator {
     this.persistenceExporter = persistenceExporter;
     this.domainServiceExporter = domainServiceExporter;
     this.supportiveEntityExporter = supportiveEntityExporter;
+    this.constantsExporter = constantsExporter;
   }
 
   // ===============================================================================================
@@ -119,12 +129,21 @@ public class JavaDomainGenerator extends AbstractGenerator {
     return rootPackageName;
   }
 
+  /**
+   * Gets table prefix.
+   *
+   * @return the table prefix
+   */
+  public String getTablePrefix() {
+    return tablePrefix;
+  }
+
   // ===============================================================================================
   // OVERRIDES
   // ===============================================================================================
 
   @Override
-  public void generate(Set<ModelRepository> modelRepositories) {
+  public void generate(Set<ModelRepository<? extends Model>> modelRepositories) {
     CoreRegistry.getModelRepositoryResolver()
         .resolve(modelRepositories, DomainModelRepository.class)
         .getItems()
@@ -209,5 +228,7 @@ public class JavaDomainGenerator extends AbstractGenerator {
               supportiveEntityExporter.export(
                   getGenerationPath(), helperEntity, getRootPackageName());
             });
+
+    constantsExporter.export(getGenerationPath(), getRootPackageName(), getTablePrefix());
   }
 }

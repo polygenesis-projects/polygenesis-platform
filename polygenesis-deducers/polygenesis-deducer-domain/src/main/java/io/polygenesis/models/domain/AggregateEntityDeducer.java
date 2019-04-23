@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 OREGOR LTD
+ * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -149,7 +149,7 @@ public class AggregateEntityDeducer {
             InstantiationType.ABSTRACT,
             Optional.empty(),
             new ObjectName("AggregateEntity"),
-            new PackageName("com.oregor.ddd4j.domain"),
+            new PackageName("com.oregor.trinity4j.domain"),
             new LinkedHashSet<>(),
             new LinkedHashSet<>(),
             multiTenant));

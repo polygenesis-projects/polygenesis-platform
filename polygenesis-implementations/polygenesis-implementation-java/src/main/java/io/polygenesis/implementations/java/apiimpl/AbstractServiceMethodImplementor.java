@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 OREGOR LTD
+ * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@
 package io.polygenesis.implementations.java.apiimpl;
 
 import io.polygenesis.commons.text.TextConverter;
+import io.polygenesis.core.data.Data;
 import io.polygenesis.models.api.ServiceMethod;
 import io.polygenesis.models.apiimpl.ServiceImplementation;
 import io.polygenesis.models.domain.AggregateRootPersistable;
@@ -221,7 +222,8 @@ public abstract class AbstractServiceMethodImplementor {
    * @param domainObject the domain object
    * @return the set
    */
-  private Set<DomainObjectProperty> propertiesOfConstructorFor(BaseDomainObject<?> domainObject) {
+  private Set<DomainObjectProperty<? extends Data>> propertiesOfConstructorFor(
+      BaseDomainObject<?> domainObject) {
     return domainObject
         .getConstructors()
         .stream()

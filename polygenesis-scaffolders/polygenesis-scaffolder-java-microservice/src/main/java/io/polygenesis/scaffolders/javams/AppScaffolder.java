@@ -59,7 +59,7 @@ public class AppScaffolder extends AbstractScaffolder {
     }
 
     Path modulePath =
-        Paths.get(generationPath.toString(), projectDescription.getModulePrefix() + "-app");
+        Paths.get(generationPath.toString(), projectDescription.getModulePrefix() + "-service");
 
     ensureSources(modulePath, projectDescription);
 

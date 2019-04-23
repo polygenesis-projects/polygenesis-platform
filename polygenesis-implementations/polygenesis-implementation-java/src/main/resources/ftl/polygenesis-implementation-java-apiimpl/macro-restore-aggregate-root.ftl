@@ -2,7 +2,7 @@
  ==========================LICENSE_START=================================
  PolyGenesis Platform
  ========================================================================
- Copyright (C) 2015 - 2019 OREGOR LTD
+ Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
  ========================================================================
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
+
 <#macro restoreAggregateRoot persistenceVariable aggregateRootIdDataType aggregateRootDataType aggregateRootVariable requestDto thingIdentity multiTenant>
   <#if multiTenant>
     ${ aggregateRootDataType } ${ aggregateRootVariable } = ${ persistenceVariable }.restore(new ${ aggregateRootIdDataType }(UUID.fromString(${ requestDto.dataGroup.objectName.text }.get${ textConverter.toUpperCamel( thingIdentity.variableName.text) }()), UUID.fromString(${ requestDto.dataGroup.objectName.text }.getTenantId()))).orElseThrow(() -> new IllegalArgumentException("Cannot restore ${ aggregateRootVariable }"));

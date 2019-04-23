@@ -32,15 +32,15 @@ public class Ddd4jScaffolderTest {
 
   @Test
   public void shouldScaffoldDdd4j() {
-    ScaffolderJavaMicroservice scaffolderJavaMicroservice =
-        ScaffolderJavaMicroserviceFactory.newInstance(Paths.get(EXPORT_PATH));
+    TrinityScaffolderJava trinityScaffolderJava =
+        TrinityScaffolderJavaFactory.newInstance(Paths.get(EXPORT_PATH));
 
-    String projectFolder = "oregor-ddd4j";
+    String projectFolder = "trinity4j";
 
     ProjectDescription projectDescription = new ProjectDescription();
-    projectDescription.setGroupId("com.oregor.ddd4j");
-    projectDescription.setArtifactId("oregor-ddd4j");
-    projectDescription.setModulePrefix("ddd4j");
+    projectDescription.setGroupId("com.oregor.trinity4j");
+    projectDescription.setArtifactId("trinity4j");
+    projectDescription.setModulePrefix("trinity4j");
     projectDescription.setVersion("0.0.1-SNAPSHOT");
     projectDescription.setName("OREGOR Domain Driven Design (DDD)");
     projectDescription.setDescription(
@@ -54,16 +54,16 @@ public class Ddd4jScaffolderTest {
     projectDescription.setDistributionProfile("ossrh-oregor");
 
     projectDescription.setScmConnection(
-        "scm:git:git://github.com/oregor-projects/oregor-ddd4j.git");
+        "scm:git:git://github.com/oregor-projects/trinity4j.git");
     projectDescription.setScmDeveloperConnection(
-        "scm:git:git@github.com:oregor-projects/oregor-ddd4j.git");
-    projectDescription.setScmUrl("http://github.com/oregor-projects/oregor-ddd4j/tree/master");
+        "scm:git:git@github.com:oregor-projects/trinity4j.git");
+    projectDescription.setScmUrl("http://github.com/oregor-projects/trinity4j/tree/master");
 
     projectDescription.setExtraModules(
         new LinkedHashSet<>(Arrays.asList("core", "spring-data-jpa")));
 
     projectDescription.setMicroservice(false);
 
-    scaffolderJavaMicroservice.scaffold(Paths.get(EXPORT_PATH, projectFolder), projectDescription);
+    trinityScaffolderJava.scaffold(Paths.get(EXPORT_PATH, projectFolder), projectDescription);
   }
 }

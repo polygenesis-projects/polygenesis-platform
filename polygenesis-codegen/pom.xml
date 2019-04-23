@@ -63,10 +63,10 @@
       <artifactId>polygenesis-generator-sql</artifactId>
     </dependency>
 
-    <!--POLYGENESIS SCAFFOLDERS-->
+    <!--TRINITY SCAFFOLDER-->
     <dependency>
-      <groupId>io.polygenesis.scaffolders</groupId>
-      <artifactId>polygenesis-scaffolder-java-microservice</artifactId>
+      <groupId>com.oregor.trinity.scaffolder.java</groupId>
+      <artifactId>trinity-scaffolder-java-core</artifactId>
     </dependency>
 
     <!--TEST-->

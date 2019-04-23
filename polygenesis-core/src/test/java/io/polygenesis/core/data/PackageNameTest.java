@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 OREGOR LTD
+ * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,18 +32,18 @@ public class PackageNameTest {
 
   @Test
   public void shouldInitialize() {
-    Assertions.assertThat(new PackageName("com.oregor.ddd4j")).isNotNull();
+    Assertions.assertThat(new PackageName("com.oregor.trinity4j")).isNotNull();
     assertThat(new PackageName("com.oregor")).isNotNull();
     assertThat(new PackageName("com")).isNotNull();
   }
 
   @Test
   public void shouldFail() {
-    assertThatThrownBy(() -> new PackageName("com.oregor.ddd4j."))
+    assertThatThrownBy(() -> new PackageName("com.oregor.trinity4j."))
         .isInstanceOf(IllegalArgumentException.class);
-    assertThatThrownBy(() -> new PackageName("com.oregor.ddd4j.."))
+    assertThatThrownBy(() -> new PackageName("com.oregor.trinity4j.."))
         .isInstanceOf(IllegalArgumentException.class);
-    assertThatThrownBy(() -> new PackageName("com.-.ddd4j"))
+    assertThatThrownBy(() -> new PackageName("com.-.trinity4j"))
         .isInstanceOf(IllegalArgumentException.class);
   }
 }

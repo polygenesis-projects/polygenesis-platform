@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 OREGOR LTD
+ * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import io.polygenesis.core.Deducer;
 import io.polygenesis.core.Generator;
+import io.polygenesis.core.Model;
+import io.polygenesis.core.ModelRepository;
 import io.polygenesis.generators.angular.AngularGeneratorFactory;
 import io.polygenesis.models.reactivestate.ReactiveStateFactory;
 import io.polygenesis.models.ui.UiFeatureDeducerFactory;
@@ -50,7 +52,8 @@ public class GenesisTest {
 
     Genesis genesis = new Genesis();
 
-    Set<Deducer> deducers = GenesisDefault.angularDeducers();
+    Set<Deducer<? extends ModelRepository<? extends Model>>> deducers =
+        GenesisDefault.angularDeducers();
 
     Set<Generator> generators =
         GenesisDefault.angularGenerators("tmp/polygenesis-angular-generator");
@@ -70,7 +73,7 @@ public class GenesisTest {
 
     Genesis genesis = new Genesis();
 
-    Set<Deducer> deducers = new LinkedHashSet<>();
+    Set<Deducer<? extends ModelRepository<? extends Model>>> deducers = new LinkedHashSet<>();
 
     Set<Generator> generators =
         new LinkedHashSet<>(
@@ -94,7 +97,7 @@ public class GenesisTest {
 
     Genesis genesis = new Genesis();
 
-    Set<Deducer> deducers =
+    Set<Deducer<? extends ModelRepository<? extends Model>>> deducers =
         new LinkedHashSet<>(
             Arrays.asList(
                 ReactiveStateFactory.newInstance(), UiFeatureDeducerFactory.newInstance()));

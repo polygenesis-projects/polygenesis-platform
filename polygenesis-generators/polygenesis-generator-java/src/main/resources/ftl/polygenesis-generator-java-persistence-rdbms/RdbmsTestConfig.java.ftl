@@ -2,7 +2,7 @@
  ==========================LICENSE_START=================================
  PolyGenesis Platform
  ========================================================================
- Copyright (C) 2015 - 2019 OREGOR LTD
+ Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
  ========================================================================
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-
 package ${ packageName };
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -36,15 +35,15 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @SpringBootConfiguration
 @EnableAutoConfiguration
 @ComponentScan(basePackages = {
-    "com.oregor.ddd4j",
+    "com.oregor.trinity4j",
     "${ packageName }"
 })
 @EntityScan(basePackages = {
-    "com.oregor.ddd4j",
+    "com.oregor.trinity4j",
     "${ packageName }"
 })
 @EnableJpaRepositories(basePackages = {
-    "com.oregor.ddd4j",
+    "com.oregor.trinity4j",
     "${ packageName }"
 })
 public class RdbmsTestConfig {

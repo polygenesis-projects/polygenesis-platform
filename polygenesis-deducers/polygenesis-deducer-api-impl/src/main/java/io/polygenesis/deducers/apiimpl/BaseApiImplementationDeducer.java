@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 OREGOR LTD
+ * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.core.Thing;
 import io.polygenesis.models.apiimpl.DomainEntityConverter;
 import io.polygenesis.models.domain.AggregateEntityCollection;
+import io.polygenesis.models.domain.AggregateRoot;
 import io.polygenesis.models.domain.AggregateRootPersistable;
 import io.polygenesis.models.domain.BaseDomainEntity;
 import io.polygenesis.models.domain.DomainModelRepository;
@@ -45,20 +46,20 @@ public abstract class BaseApiImplementationDeducer {
    * @param domainModelRepository the domain model repository
    * @return the optional domain object
    */
-  protected Optional<BaseDomainEntity> getOptionalDomainEntity(
+  protected Optional<BaseDomainEntity<?>> getOptionalDomainEntity(
       Thing thing, DomainModelRepository domainModelRepository) {
     ObjectName objectName = new ObjectName(thing.getThingName().getText());
 
-    Optional<BaseDomainEntity> optionalBaseDomainEntity =
+    Optional<AggregateRoot> optionalAggregateRoot =
         domainModelRepository
             .getItems()
             .stream()
             .filter(aggregateRoot -> aggregateRoot.getObjectName().equals(objectName))
-            .map(aggregateRoot -> (BaseDomainEntity) aggregateRoot)
             .findFirst();
 
-    if (optionalBaseDomainEntity.isPresent()) {
-      return optionalBaseDomainEntity;
+    if (optionalAggregateRoot.isPresent()) {
+      AggregateRoot aggregateRoot = optionalAggregateRoot.get();
+      return Optional.of(aggregateRoot);
     }
 
     Optional<AggregateEntityCollection> optionalAggregateEntityCollection =

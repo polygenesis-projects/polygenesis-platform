@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 OREGOR LTD
+ * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ import java.util.Set;
  * @param <R> the type parameter ModelRepository
  * @author Christos Tsakostas
  */
-public interface Deducer<R extends ModelRepository> {
+public interface Deducer<R extends ModelRepository<? extends Model>> {
 
   /**
    * Deduces a model's repository.
@@ -37,5 +37,6 @@ public interface Deducer<R extends ModelRepository> {
    * @param modelRepositories the model repositories
    * @return the ModelRepository
    */
-  R deduce(ThingRepository thingRepository, Set<ModelRepository> modelRepositories);
+  R deduce(
+      ThingRepository thingRepository, Set<ModelRepository<? extends Model>> modelRepositories);
 }

@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 OREGOR LTD
+ * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,7 +43,8 @@ public class JavaDomainGeneratorFactoryTest {
   @Test
   public void shouldCreateNewInstance() {
     JavaDomainGenerator javaApiGenerator =
-        JavaDomainGeneratorFactory.newInstance(Paths.get("tmp"), new PackageName("com.oregor"));
+        JavaDomainGeneratorFactory.newInstance(
+            Paths.get("tmp"), new PackageName("com.oregor"), "prf_");
     Assertions.assertThat(javaApiGenerator).isNotNull();
   }
 }

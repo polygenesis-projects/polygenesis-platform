@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 OREGOR LTD
+ * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 import io.polygenesis.commons.valueobjects.PackageName;
+import io.polygenesis.core.Model;
 import io.polygenesis.core.ModelRepository;
 import io.polygenesis.core.Thing;
 import io.polygenesis.core.ThingRepository;
@@ -46,7 +47,7 @@ public class ApiDeducerTest {
   private ServiceDeducer serviceDeducer;
   private Thing thing;
   private ThingRepository thingRepository;
-  private Set<ModelRepository> modelRepositories;
+  private Set<ModelRepository<? extends Model>> modelRepositories;
   private ApiDeducer apiDeducer;
 
   @Before

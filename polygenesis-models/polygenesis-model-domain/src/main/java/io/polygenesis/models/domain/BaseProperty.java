@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 OREGOR LTD
+ * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@
 
 package io.polygenesis.models.domain;
 
-import com.oregor.ddd4j.check.assertion.Assertion;
+import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.core.data.Data;
 import java.util.Objects;
 
@@ -30,7 +30,7 @@ import java.util.Objects;
  * @param <D> the type parameter
  * @author Christos Tsakostas
  */
-public abstract class BaseProperty<T, D extends Data> implements DomainObjectProperty<D> {
+public abstract class BaseProperty<D extends Data> implements DomainObjectProperty<D> {
 
   // ===============================================================================================
   // STATE
@@ -126,7 +126,7 @@ public abstract class BaseProperty<T, D extends Data> implements DomainObjectPro
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    BaseProperty<?, ?> that = (BaseProperty<?, ?>) o;
+    BaseProperty<? extends Data> that = (BaseProperty<? extends Data>) o;
     return propertyType == that.propertyType && Objects.equals(data, that.data);
   }
 

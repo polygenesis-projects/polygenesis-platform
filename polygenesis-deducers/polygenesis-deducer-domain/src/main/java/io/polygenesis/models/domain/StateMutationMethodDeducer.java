@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 OREGOR LTD
+ * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,7 @@ import io.polygenesis.core.FunctionName;
 import io.polygenesis.core.Goal;
 import io.polygenesis.core.ReturnValue;
 import io.polygenesis.core.Thing;
+import io.polygenesis.core.data.Data;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -48,7 +49,8 @@ public class StateMutationMethodDeducer {
    * @param properties the properties
    * @return the set
    */
-  public Set<StateMutationMethod> deduce(Thing thing, Set<DomainObjectProperty> properties) {
+  public Set<StateMutationMethod> deduce(
+      Thing thing, Set<DomainObjectProperty<? extends Data>> properties) {
     Set<StateMutationMethod> stateMutationMethods = new LinkedHashSet<>();
 
     properties.forEach(

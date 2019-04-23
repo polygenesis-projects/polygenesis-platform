@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 OREGOR LTD
+ * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ package io.polygenesis.models.domain;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.Thing;
+import io.polygenesis.core.data.Data;
 import io.polygenesis.core.data.DataGroup;
 import io.polygenesis.core.data.VariableName;
 import java.util.LinkedHashSet;
@@ -46,9 +47,9 @@ public class AggregateEntityPropertyDeducer extends BasePropertyDeducer {
    * @param thingChild the thingChild
    * @return the set
    */
-  public Set<DomainObjectProperty> deduceFrom(
+  public Set<DomainObjectProperty<? extends Data>> deduceFrom(
       Thing thingParent, Thing thingChild, PackageName rootPackageName) {
-    Set<DomainObjectProperty> properties = new LinkedHashSet<>();
+    Set<DomainObjectProperty<? extends Data>> properties = new LinkedHashSet<>();
 
     ensureThingProperties(thingChild);
 

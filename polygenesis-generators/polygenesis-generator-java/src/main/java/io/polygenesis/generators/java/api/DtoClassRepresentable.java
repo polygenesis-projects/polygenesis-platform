@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 OREGOR LTD
+ * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,16 +52,17 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
   private static Map<DtoType, String> mapDtoTypeToClass = new HashMap<>();
 
   static {
-    mapDtoTypeToInclude.put(DtoType.API_REQUEST, "com.oregor.ddd4j.api.ApiRequest");
+    mapDtoTypeToInclude.put(DtoType.API_REQUEST, "com.oregor.trinity4j.api.ApiRequest");
     mapDtoTypeToInclude.put(
-        DtoType.API_COLLECTION_REQUEST, "com.oregor.ddd4j.api.ApiCollectionRequest");
+        DtoType.API_COLLECTION_REQUEST, "com.oregor.trinity4j.api.ApiCollectionRequest");
     mapDtoTypeToInclude.put(
-        DtoType.API_PAGED_COLLECTION_REQUEST, "com.oregor.ddd4j.api.ApiPagedCollectionRequest");
-    mapDtoTypeToInclude.put(DtoType.API_RESPONSE, "com.oregor.ddd4j.api.ApiResponse");
+        DtoType.API_PAGED_COLLECTION_REQUEST, "com.oregor.trinity4j.api.ApiPagedCollectionRequest");
+    mapDtoTypeToInclude.put(DtoType.API_RESPONSE, "com.oregor.trinity4j.api.ApiResponse");
     mapDtoTypeToInclude.put(
-        DtoType.API_COLLECTION_RESPONSE, "com.oregor.ddd4j.api.ApiCollectionResponse");
+        DtoType.API_COLLECTION_RESPONSE, "com.oregor.trinity4j.api.ApiCollectionResponse");
     mapDtoTypeToInclude.put(
-        DtoType.API_PAGED_COLLECTION_RESPONSE, "com.oregor.ddd4j.api.ApiPagedCollectionResponse");
+        DtoType.API_PAGED_COLLECTION_RESPONSE,
+        "com.oregor.trinity4j.api.ApiPagedCollectionResponse");
 
     mapDtoTypeToClass.put(DtoType.API_REQUEST, "ApiRequest");
     mapDtoTypeToClass.put(DtoType.API_COLLECTION_REQUEST, "ApiCollectionRequest");

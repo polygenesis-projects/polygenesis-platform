@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 OREGOR LTD
+ * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@
 
 package io.polygenesis.core;
 
-import com.oregor.ddd4j.check.assertion.Assertion;
+import io.polygenesis.commons.assertion.Assertion;
 import java.util.Optional;
 import java.util.Set;
 
@@ -44,8 +44,8 @@ public class ModelRepositoryResolver {
    * @return the t
    */
   @SuppressWarnings("unchecked")
-  public <T extends ModelRepository> T resolve(
-      Set<ModelRepository> modelRepositories, Class<T> clazz) {
+  public <T extends ModelRepository<? extends Model>> T resolve(
+      Set<ModelRepository<? extends Model>> modelRepositories, Class<T> clazz) {
     Assertion.isNotNull(modelRepositories, "modelRepositories is required");
     Assertion.isNotNull(clazz, "clazz is required");
 
