@@ -34,6 +34,7 @@ import io.polygenesis.core.ThingRepositoryImpl;
 import java.nio.file.Paths;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -43,6 +44,7 @@ import org.junit.Test;
  *
  * @author Christos Tsakostas
  */
+@Ignore
 public class OregorDdd4jExampleGenesisTest {
 
   private static final String ANGULAR_EXPORT_PATH =
