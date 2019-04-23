@@ -22,7 +22,6 @@ package io.polygenesis.deducers.apiimpl;
 
 import io.polygenesis.models.api.Service;
 import io.polygenesis.models.apiimpl.ServiceMethodImplementation;
-import io.polygenesis.models.apiimpl.ServiceMethodImplementationType;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -48,11 +47,8 @@ public class ServiceMethodImplementationDeducer {
     service
         .getServiceMethods()
         .forEach(
-            serviceMethod -> {
-              serviceMethodImplementations.add(
-                  new ServiceMethodImplementation(
-                      serviceMethod, ServiceMethodImplementationType.UNKNOWN));
-            });
+            serviceMethod ->
+                serviceMethodImplementations.add(new ServiceMethodImplementation(serviceMethod)));
 
     return serviceMethodImplementations;
   }

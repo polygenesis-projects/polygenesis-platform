@@ -27,4 +27,4 @@ import io.polygenesis.core.Deducer;
  *
  * @author Christos Tsakostas
  */
-public interface RestDeducer extends Deducer<RestModelRepository> {}
+public interface RestDeducer extends Deducer<RestMetamodelRepository> {}

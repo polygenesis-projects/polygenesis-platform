@@ -28,8 +28,7 @@ import io.polygenesis.core.Deducer;
 import io.polygenesis.core.Function;
 import io.polygenesis.core.FunctionName;
 import io.polygenesis.core.Goal;
-import io.polygenesis.core.Model;
-import io.polygenesis.core.ModelRepository;
+import io.polygenesis.core.MetamodelRepository;
 import io.polygenesis.core.ReturnValue;
 import io.polygenesis.core.Thing;
 import io.polygenesis.core.ThingBuilder;
@@ -39,12 +38,12 @@ import io.polygenesis.core.data.Data;
 import io.polygenesis.core.data.DataGroup;
 import io.polygenesis.models.api.Dto;
 import io.polygenesis.models.api.Service;
-import io.polygenesis.models.api.ServiceModelRepository;
+import io.polygenesis.models.api.ServiceMetamodelRepository;
 import io.polygenesis.models.apiimpl.DomainEntityConverter;
+import io.polygenesis.models.apiimpl.DomainEntityConverterMetamodelRepository;
 import io.polygenesis.models.apiimpl.DomainEntityConverterMethod;
-import io.polygenesis.models.apiimpl.DomainEntityConverterModelRepository;
 import io.polygenesis.models.domain.BaseDomainEntity;
-import io.polygenesis.models.domain.DomainModelRepository;
+import io.polygenesis.models.domain.DomainMetamodelRepository;
 import io.polygenesis.models.domain.PropertyType;
 import io.polygenesis.models.domain.ValueObject;
 import java.util.Arrays;
@@ -58,29 +57,30 @@ import java.util.Set;
  * @author Christos Tsakostas
  */
 public class DomainEntityConverterDeducer extends BaseApiImplementationDeducer
-    implements Deducer<DomainEntityConverterModelRepository> {
+    implements Deducer<DomainEntityConverterMetamodelRepository> {
 
   // ===============================================================================================
   // OVERRIDES
   // ===============================================================================================
 
+  @SuppressWarnings("rawtypes")
   @Override
-  public DomainEntityConverterModelRepository deduce(
-      ThingRepository thingRepository, Set<ModelRepository<? extends Model>> modelRepositories) {
+  public DomainEntityConverterMetamodelRepository deduce(
+      ThingRepository thingRepository, Set<MetamodelRepository> modelRepositories) {
     Set<DomainEntityConverter> domainEntityConverters = new LinkedHashSet<>();
 
-    ServiceModelRepository serviceModelRepository =
-        CoreRegistry.getModelRepositoryResolver()
-            .resolve(modelRepositories, ServiceModelRepository.class);
+    ServiceMetamodelRepository serviceModelRepository =
+        CoreRegistry.getMetamodelRepositoryResolver()
+            .resolve(modelRepositories, ServiceMetamodelRepository.class);
 
-    DomainModelRepository domainModelRepository =
-        CoreRegistry.getModelRepositoryResolver()
-            .resolve(modelRepositories, DomainModelRepository.class);
+    DomainMetamodelRepository domainModelRepository =
+        CoreRegistry.getMetamodelRepositoryResolver()
+            .resolve(modelRepositories, DomainMetamodelRepository.class);
 
     fillDomainEntityConverters(
         domainEntityConverters, thingRepository, serviceModelRepository, domainModelRepository);
 
-    return new DomainEntityConverterModelRepository(domainEntityConverters);
+    return new DomainEntityConverterMetamodelRepository(domainEntityConverters);
   }
 
   // ===============================================================================================
@@ -98,13 +98,13 @@ public class DomainEntityConverterDeducer extends BaseApiImplementationDeducer
   protected void fillDomainEntityConverters(
       Set<DomainEntityConverter> domainEntityConverters,
       ThingRepository thingRepository,
-      ServiceModelRepository serviceModelRepository,
-      DomainModelRepository domainModelRepository) {
+      ServiceMetamodelRepository serviceModelRepository,
+      DomainMetamodelRepository domainModelRepository) {
     thingRepository
         .getApiThings()
         .forEach(
             thing -> {
-              Optional<BaseDomainEntity<?>> optionalDomainObject =
+              Optional<BaseDomainEntity> optionalDomainObject =
                   getOptionalDomainEntity(thing, domainModelRepository);
 
               if (optionalDomainObject.isPresent()) {
@@ -124,12 +124,10 @@ public class DomainEntityConverterDeducer extends BaseApiImplementationDeducer
    * @return the domain entity converter
    */
   public DomainEntityConverter deduceDomainEntityConverter(
-      BaseDomainEntity<?> domainEntity, Set<Service> services) {
+      BaseDomainEntity domainEntity, Set<Service> services) {
     Set<DomainEntityConverterMethod> methods = new LinkedHashSet<>();
 
     deduceValueObjectFromDto(methods, domainEntity, services);
-    // TODO
-    // deduceFetchOneDtoFromDomainObject(domainEntity, services);
     deduceFetchCollectionDtoFromDomainObject(methods, domainEntity, services);
 
     return new DomainEntityConverter(domainEntity, methods);
@@ -148,7 +146,7 @@ public class DomainEntityConverterDeducer extends BaseApiImplementationDeducer
    */
   private void deduceValueObjectFromDto(
       Set<DomainEntityConverterMethod> methods,
-      BaseDomainEntity<?> domainObject,
+      BaseDomainEntity domainObject,
       Set<Service> services) {
 
     domainObject
@@ -159,16 +157,15 @@ public class DomainEntityConverterDeducer extends BaseApiImplementationDeducer
                 ValueObject valueObject = (ValueObject) property;
 
                 services.forEach(
-                    service -> {
-                      service
-                          .getDtos()
-                          .forEach(
-                              dto -> {
-                                if (dto.getDataGroup().equals(valueObject.getData().asDto())) {
-                                  makeValueObjectConversion(methods, dto, valueObject);
-                                }
-                              });
-                    });
+                    service ->
+                        service
+                            .getDtos()
+                            .forEach(
+                                dto -> {
+                                  if (dto.getDataGroup().equals(valueObject.getData().asDto())) {
+                                    makeValueObjectConversion(methods, dto, valueObject);
+                                  }
+                                }));
               }
             });
   }
@@ -205,25 +202,6 @@ public class DomainEntityConverterDeducer extends BaseApiImplementationDeducer
     methods.add(new DomainEntityConverterMethod(functionToDto, valueObject, dto));
   }
 
-  // TODO
-  //  private void deduceFetchOneDtoFromDomainObject(
-  //      Set<DomainEntityConverterMethod> methods,
-  //      BaseDomainEntity<?> domainObject,
-  //      Set<Service> services) {
-  //
-  //    services.forEach(
-  //        service -> {
-  //          service
-  //              .getServiceMethods()
-  //              .stream()
-  //              .filter(method -> method.getFunction().getGoal().isFetchOne())
-  //              .forEach(
-  //                  method -> {
-  //                    // TODO
-  //                  });
-  //        });
-  //  }
-
   /**
    * Deduce fetch collection dto from domain object.
    *
@@ -233,31 +211,30 @@ public class DomainEntityConverterDeducer extends BaseApiImplementationDeducer
    */
   private void deduceFetchCollectionDtoFromDomainObject(
       Set<DomainEntityConverterMethod> methods,
-      BaseDomainEntity<?> domainObject,
+      BaseDomainEntity domainObject,
       Set<Service> services) {
 
     services.forEach(
-        service -> {
-          service
-              .getServiceMethods()
-              .stream()
-              .filter(
-                  method ->
-                      method.getFunction().getGoal().isFetchCollection()
-                          || method.getFunction().getGoal().isFetchPagedCollection())
-              .forEach(
-                  method -> {
-                    Dto dtoCollectionRecord =
-                        findDtoInServiceFromDataGroup(
-                            service,
-                            method
-                                .getResponseDto()
-                                .getArrayElementAsOptional()
-                                .orElseThrow(IllegalArgumentException::new));
+        service ->
+            service
+                .getServiceMethods()
+                .stream()
+                .filter(
+                    method ->
+                        method.getFunction().getGoal().isFetchCollection()
+                            || method.getFunction().getGoal().isFetchPagedCollection())
+                .forEach(
+                    method -> {
+                      Dto dtoCollectionRecord =
+                          findDtoInServiceFromDataGroup(
+                              service,
+                              method
+                                  .getResponseDto()
+                                  .getArrayElementAsOptional()
+                                  .orElseThrow(IllegalArgumentException::new));
 
-                    makeCollectionRecord(methods, dtoCollectionRecord, domainObject);
-                  });
-        });
+                      makeCollectionRecord(methods, dtoCollectionRecord, domainObject);
+                    }));
   }
 
   /**
@@ -270,7 +247,7 @@ public class DomainEntityConverterDeducer extends BaseApiImplementationDeducer
   private void makeCollectionRecord(
       Set<DomainEntityConverterMethod> methods,
       Dto dtoCollectionRecord,
-      BaseDomainEntity<?> domainObject) {
+      BaseDomainEntity domainObject) {
 
     Thing thing = ThingBuilder.generic().setThingName(new ThingName("Converter")).createThing();
 
@@ -295,7 +272,7 @@ public class DomainEntityConverterDeducer extends BaseApiImplementationDeducer
    * @param domainObject the domain object
    * @return the data group
    */
-  private DataGroup transformDomainObjectToDataGroup(BaseDomainEntity<?> domainObject) {
+  private DataGroup transformDomainObjectToDataGroup(BaseDomainEntity domainObject) {
 
     DataGroup dataGroup =
         new DataGroup(

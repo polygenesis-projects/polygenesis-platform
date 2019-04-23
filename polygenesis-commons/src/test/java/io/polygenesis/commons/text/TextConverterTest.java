@@ -131,4 +131,9 @@ public class TextConverterTest {
     assertThat(TextConverter.toLowerCamel("some_thing")).isEqualTo("someThing");
     assertThat(TextConverter.toLowerCamel("some thing")).isEqualTo("someThing");
   }
+
+  @Test
+  public void shouldNotPluralizeIfInBlackList() {
+    assertThat(TextConverter.toPlural("jms")).isEqualTo("jms");
+  }
 }

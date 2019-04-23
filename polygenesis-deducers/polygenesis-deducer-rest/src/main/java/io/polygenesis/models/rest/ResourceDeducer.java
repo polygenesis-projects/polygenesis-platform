@@ -24,8 +24,8 @@ import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.ThingRepository;
 import io.polygenesis.models.api.Service;
+import io.polygenesis.models.api.ServiceMetamodelRepository;
 import io.polygenesis.models.api.ServiceMethod;
-import io.polygenesis.models.api.ServiceModelRepository;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -70,7 +70,7 @@ public class ResourceDeducer {
    */
   public Set<Resource> deduceFrom(
       ThingRepository thingRepository,
-      ServiceModelRepository serviceModelRepository,
+      ServiceMetamodelRepository serviceModelRepository,
       PackageName rootPackageName) {
     Set<Resource> resources = new LinkedHashSet<>();
 

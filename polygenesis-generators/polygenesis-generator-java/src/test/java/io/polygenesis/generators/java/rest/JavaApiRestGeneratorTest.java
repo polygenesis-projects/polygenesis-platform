@@ -28,10 +28,9 @@ import static org.mockito.Mockito.verify;
 
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
-import io.polygenesis.core.Model;
-import io.polygenesis.core.ModelRepository;
+import io.polygenesis.core.MetamodelRepository;
 import io.polygenesis.models.rest.Resource;
-import io.polygenesis.models.rest.RestModelRepository;
+import io.polygenesis.models.rest.RestMetamodelRepository;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -89,7 +88,7 @@ public class JavaApiRestGeneratorTest {
     assertThatThrownBy(() -> javaApiRestGenerator.generate(new LinkedHashSet<>()))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessageContaining(
-            "No Model Repository found for Class=io.polygenesis.models.rest.RestModelRepository "
+            "No Metamodel Repository found for Class=io.polygenesis.models.rest.RestMetamodelRepository "
                 + "in provided modelRepositories");
   }
 
@@ -97,13 +96,14 @@ public class JavaApiRestGeneratorTest {
   // PRIVATE
   // ===============================================================================================
 
-  private Set<ModelRepository<? extends Model>> createModelRepositories() {
+  @SuppressWarnings("rawtypes")
+  private Set<MetamodelRepository> createModelRepositories() {
     Set<Resource> resources = new LinkedHashSet<>();
 
     Resource resource = mock(Resource.class);
     resources.add(resource);
 
-    RestModelRepository restModelRepository = new RestModelRepository(resources);
+    RestMetamodelRepository restModelRepository = new RestMetamodelRepository(resources);
 
     return new LinkedHashSet<>(Arrays.asList(restModelRepository));
   }

@@ -23,20 +23,19 @@ package io.polygenesis.deducers.apiimpl;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.core.CoreRegistry;
 import io.polygenesis.core.Deducer;
-import io.polygenesis.core.Model;
-import io.polygenesis.core.ModelRepository;
+import io.polygenesis.core.MetamodelRepository;
 import io.polygenesis.core.ThingRepository;
 import io.polygenesis.core.data.VariableName;
 import io.polygenesis.models.api.Service;
-import io.polygenesis.models.api.ServiceModelRepository;
+import io.polygenesis.models.api.ServiceMetamodelRepository;
 import io.polygenesis.models.apiimpl.DomainEntityConverter;
-import io.polygenesis.models.apiimpl.DomainEntityConverterModelRepository;
+import io.polygenesis.models.apiimpl.DomainEntityConverterMetamodelRepository;
 import io.polygenesis.models.apiimpl.ServiceDependency;
 import io.polygenesis.models.apiimpl.ServiceImplementation;
-import io.polygenesis.models.apiimpl.ServiceImplementationModelRepository;
+import io.polygenesis.models.apiimpl.ServiceImplementationMetamodelRepository;
 import io.polygenesis.models.domain.AggregateRootPersistable;
 import io.polygenesis.models.domain.BaseDomainEntity;
-import io.polygenesis.models.domain.DomainModelRepository;
+import io.polygenesis.models.domain.DomainMetamodelRepository;
 import io.polygenesis.models.domain.Persistence;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
@@ -49,7 +48,7 @@ import java.util.Set;
  * @author Christos Tsakostas
  */
 public class ServiceImplementationDeducer extends BaseApiImplementationDeducer
-    implements Deducer<ServiceImplementationModelRepository> {
+    implements Deducer<ServiceImplementationMetamodelRepository> {
 
   // ===============================================================================================
   // DEPENDENCIES
@@ -75,20 +74,21 @@ public class ServiceImplementationDeducer extends BaseApiImplementationDeducer
   // IMPLEMENTATIONS
   // ===============================================================================================
 
+  @SuppressWarnings("rawtypes")
   @Override
-  public ServiceImplementationModelRepository deduce(
-      ThingRepository thingRepository, Set<ModelRepository<? extends Model>> modelRepositories) {
-    ServiceModelRepository serviceModelRepository =
-        CoreRegistry.getModelRepositoryResolver()
-            .resolve(modelRepositories, ServiceModelRepository.class);
+  public ServiceImplementationMetamodelRepository deduce(
+      ThingRepository thingRepository, Set<MetamodelRepository> modelRepositories) {
+    ServiceMetamodelRepository serviceModelRepository =
+        CoreRegistry.getMetamodelRepositoryResolver()
+            .resolve(modelRepositories, ServiceMetamodelRepository.class);
 
-    DomainModelRepository domainModelRepository =
-        CoreRegistry.getModelRepositoryResolver()
-            .resolve(modelRepositories, DomainModelRepository.class);
+    DomainMetamodelRepository domainModelRepository =
+        CoreRegistry.getMetamodelRepositoryResolver()
+            .resolve(modelRepositories, DomainMetamodelRepository.class);
 
-    DomainEntityConverterModelRepository domainEntityConverterModelRepository =
-        CoreRegistry.getModelRepositoryResolver()
-            .resolve(modelRepositories, DomainEntityConverterModelRepository.class);
+    DomainEntityConverterMetamodelRepository domainEntityConverterModelRepository =
+        CoreRegistry.getMetamodelRepositoryResolver()
+            .resolve(modelRepositories, DomainEntityConverterMetamodelRepository.class);
 
     Set<ServiceImplementation> serviceImplementations = new LinkedHashSet<>();
     fillServiceImplementations(
@@ -97,7 +97,7 @@ public class ServiceImplementationDeducer extends BaseApiImplementationDeducer
         domainEntityConverterModelRepository,
         domainModelRepository);
 
-    return new ServiceImplementationModelRepository(serviceImplementations);
+    return new ServiceImplementationMetamodelRepository(serviceImplementations);
   }
 
   // ===============================================================================================
@@ -114,9 +114,9 @@ public class ServiceImplementationDeducer extends BaseApiImplementationDeducer
    */
   private void fillServiceImplementations(
       Set<ServiceImplementation> serviceImplementations,
-      ServiceModelRepository serviceModelRepository,
-      DomainEntityConverterModelRepository domainEntityConverterModelRepository,
-      DomainModelRepository domainModelRepository) {
+      ServiceMetamodelRepository serviceModelRepository,
+      DomainEntityConverterMetamodelRepository domainEntityConverterModelRepository,
+      DomainMetamodelRepository domainModelRepository) {
     serviceModelRepository
         .getItems()
         .forEach(
@@ -139,7 +139,7 @@ public class ServiceImplementationDeducer extends BaseApiImplementationDeducer
   private ServiceImplementation makeServiceImplementation(
       Service service,
       Set<DomainEntityConverter> domainEntityConverters,
-      DomainModelRepository domainModelRepository) {
+      DomainMetamodelRepository domainModelRepository) {
 
     Optional<DomainEntityConverter> optionalDomainEntityConverter =
         getOptionalDomainObjectConverter(
@@ -169,7 +169,7 @@ public class ServiceImplementationDeducer extends BaseApiImplementationDeducer
    */
   public ServiceImplementation makeServiceImplementation(
       Service service,
-      BaseDomainEntity<?> domainEntity,
+      BaseDomainEntity domainEntity,
       Optional<AggregateRootPersistable> optionalParentAggregateRoot,
       DomainEntityConverter domainEntityConverter) {
 
@@ -195,13 +195,14 @@ public class ServiceImplementationDeducer extends BaseApiImplementationDeducer
    * @return the set
    */
   private Set<ServiceDependency> dependencies(
-      BaseDomainEntity<?> domainEntity,
+      BaseDomainEntity domainEntity,
       DomainEntityConverter domainEntityConverter,
       Optional<AggregateRootPersistable> optionalAggregateRootPersistable) {
     Set<ServiceDependency> dependencies = new LinkedHashSet<>();
 
     if (domainEntity.getOptionalPersistence().isPresent()) {
-      Persistence persistence = domainEntity.getOptionalPersistence().get();
+      Persistence persistence =
+          domainEntity.getOptionalPersistence().orElseThrow(IllegalArgumentException::new);
 
       dependencies.add(
           new ServiceDependency(

@@ -27,7 +27,7 @@ import io.polygenesis.models.domain.AggregateEntityCollection;
 import io.polygenesis.models.domain.AggregateRoot;
 import io.polygenesis.models.domain.AggregateRootPersistable;
 import io.polygenesis.models.domain.BaseDomainEntity;
-import io.polygenesis.models.domain.DomainModelRepository;
+import io.polygenesis.models.domain.DomainMetamodelRepository;
 import io.polygenesis.models.domain.PropertyType;
 import java.util.Optional;
 import java.util.Set;
@@ -46,8 +46,8 @@ public abstract class BaseApiImplementationDeducer {
    * @param domainModelRepository the domain model repository
    * @return the optional domain object
    */
-  protected Optional<BaseDomainEntity<?>> getOptionalDomainEntity(
-      Thing thing, DomainModelRepository domainModelRepository) {
+  protected Optional<BaseDomainEntity> getOptionalDomainEntity(
+      Thing thing, DomainMetamodelRepository domainModelRepository) {
     ObjectName objectName = new ObjectName(thing.getThingName().getText());
 
     Optional<AggregateRoot> optionalAggregateRoot =
@@ -111,7 +111,7 @@ public abstract class BaseApiImplementationDeducer {
    * @return the optional
    */
   protected Optional<AggregateRootPersistable> aggregateRootParent(
-      DomainModelRepository domainModelRepository, BaseDomainEntity<?> domainEntity) {
+      DomainMetamodelRepository domainModelRepository, BaseDomainEntity domainEntity) {
 
     return domainModelRepository
         .getItems()

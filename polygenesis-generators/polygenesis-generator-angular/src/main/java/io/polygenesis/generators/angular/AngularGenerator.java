@@ -23,14 +23,13 @@ package io.polygenesis.generators.angular;
 import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.core.AbstractGenerator;
 import io.polygenesis.core.CoreRegistry;
-import io.polygenesis.core.Model;
-import io.polygenesis.core.ModelRepository;
+import io.polygenesis.core.MetamodelRepository;
 import io.polygenesis.generators.angular.once.OnceExporter;
 import io.polygenesis.generators.angular.reactivestate.StoreExporter;
 import io.polygenesis.generators.angular.ui.UiExporter;
-import io.polygenesis.models.reactivestate.ReactiveStateModelRepository;
-import io.polygenesis.models.ui.UiFeatureModelRepository;
-import io.polygenesis.models.ui.UiLayoutContainerModelRepository;
+import io.polygenesis.models.reactivestate.ReactiveStateMetamodelRepository;
+import io.polygenesis.models.ui.UiFeatureMetamodelRepository;
+import io.polygenesis.models.ui.UiLayoutContainerMetamodelRepository;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Set;
@@ -46,8 +45,8 @@ public class AngularGenerator extends AbstractGenerator {
   private final StoreExporter storeExporter;
   private final UiExporter uiExporter;
 
-  private ReactiveStateModelRepository reactiveStateModelRepository;
-  private UiFeatureModelRepository uiFeatureModelRepository;
+  private ReactiveStateMetamodelRepository reactiveStateModelRepository;
+  private UiFeatureMetamodelRepository uiFeatureModelRepository;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -82,16 +81,17 @@ public class AngularGenerator extends AbstractGenerator {
   // OVERRIDES
   // ===============================================================================================
 
+  @SuppressWarnings("rawtypes")
   @Override
-  public void generate(Set<ModelRepository<? extends Model>> modelRepositories) {
+  public void generate(Set<MetamodelRepository> modelRepositories) {
     initializeModelRepositories(modelRepositories);
 
     Path generationPathApp = Paths.get(getGenerationPath().toString(), "app");
 
     onceExporter.export(
         getGenerationPath(),
-        CoreRegistry.getModelRepositoryResolver()
-            .resolve(modelRepositories, UiLayoutContainerModelRepository.class));
+        CoreRegistry.getMetamodelRepositoryResolver()
+            .resolve(modelRepositories, UiLayoutContainerMetamodelRepository.class));
 
     reactiveStateModelRepository
         .getItems()
@@ -111,14 +111,14 @@ public class AngularGenerator extends AbstractGenerator {
    *
    * @param modelRepositories the model repositories
    */
-  private void initializeModelRepositories(
-      Set<ModelRepository<? extends Model>> modelRepositories) {
+  @SuppressWarnings("rawtypes")
+  private void initializeModelRepositories(Set<MetamodelRepository> modelRepositories) {
     reactiveStateModelRepository =
-        CoreRegistry.getModelRepositoryResolver()
-            .resolve(modelRepositories, ReactiveStateModelRepository.class);
+        CoreRegistry.getMetamodelRepositoryResolver()
+            .resolve(modelRepositories, ReactiveStateMetamodelRepository.class);
 
     uiFeatureModelRepository =
-        CoreRegistry.getModelRepositoryResolver()
-            .resolve(modelRepositories, UiFeatureModelRepository.class);
+        CoreRegistry.getMetamodelRepositoryResolver()
+            .resolve(modelRepositories, UiFeatureMetamodelRepository.class);
   }
 }

@@ -21,6 +21,7 @@
 package io.polygenesis.core.data;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import io.polygenesis.commons.test.AbstractEqualityTest;
 import java.util.LinkedHashSet;
@@ -41,6 +42,15 @@ public class DataPrimitiveTest extends AbstractEqualityTest<DataPrimitive> {
     assertThat(dataPrimitive.getAnnotations().size()).isEqualTo(0);
 
     assertThat(dataPrimitive.isThingIdentity()).isFalse();
+
+    assertThat(dataPrimitive.getAsDataPrimitive()).isNotNull();
+
+    assertThatThrownBy(() -> dataPrimitive.getAsDataArray())
+        .isInstanceOf(IllegalStateException.class);
+    assertThatThrownBy(() -> dataPrimitive.getAsDataGroup())
+        .isInstanceOf(IllegalStateException.class);
+    assertThatThrownBy(() -> dataPrimitive.getAsDataMap())
+        .isInstanceOf(IllegalStateException.class);
   }
 
   @Test

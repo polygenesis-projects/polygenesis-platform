@@ -45,6 +45,8 @@ public abstract class AbstractClassRepresentable<S> extends AbstractRepresentabl
   /** The constant MODIFIER_PUBLIC. */
   protected static final String MODIFIER_PUBLIC = "public";
 
+  private static final String INSTANTIATES_A_NEW_S = "Instantiates a new %s.";
+
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
@@ -171,10 +173,10 @@ public abstract class AbstractClassRepresentable<S> extends AbstractRepresentabl
   protected ConstructorRepresentation createEmptyConstructorWithImplementation(
       String dataType, Set<String> annotations, String implementation) {
     String description =
-        String.format("Instantiates a new %s.", TextConverter.toUpperCamelSpaces(dataType));
+        String.format(INSTANTIATES_A_NEW_S, TextConverter.toUpperCamelSpaces(dataType));
 
     return new ConstructorRepresentation(
-        annotations, description, "public", new LinkedHashSet<>(), implementation);
+        annotations, description, MODIFIER_PUBLIC, new LinkedHashSet<>(), implementation);
   }
 
   /**
@@ -190,10 +192,14 @@ public abstract class AbstractClassRepresentable<S> extends AbstractRepresentabl
       Set<ParameterRepresentation> parameterRepresentations,
       String implementation) {
     String description =
-        String.format("Instantiates a new %s.", TextConverter.toUpperCamelSpaces(dataType));
+        String.format(INSTANTIATES_A_NEW_S, TextConverter.toUpperCamelSpaces(dataType));
 
     return new ConstructorRepresentation(
-        new LinkedHashSet<>(), description, "public", parameterRepresentations, implementation);
+        new LinkedHashSet<>(),
+        description,
+        MODIFIER_PUBLIC,
+        parameterRepresentations,
+        implementation);
   }
 
   /**
@@ -206,12 +212,12 @@ public abstract class AbstractClassRepresentable<S> extends AbstractRepresentabl
   protected ConstructorRepresentation createConstructorWithSetters(
       String dataType, Set<ParameterRepresentation> parameterRepresentations) {
     String description =
-        String.format("Instantiates a new %s.", TextConverter.toUpperCamelSpaces(dataType));
+        String.format(INSTANTIATES_A_NEW_S, TextConverter.toUpperCamelSpaces(dataType));
 
     return new ConstructorRepresentation(
         new LinkedHashSet<>(),
         description,
-        "public",
+        MODIFIER_PUBLIC,
         parameterRepresentations,
         constructorImplementationWithSetters(parameterRepresentations));
   }
@@ -226,12 +232,12 @@ public abstract class AbstractClassRepresentable<S> extends AbstractRepresentabl
   protected ConstructorRepresentation createConstructorWithDirectAssignment(
       String dataType, Set<ParameterRepresentation> parameterRepresentations) {
     String description =
-        String.format("Instantiates a new %s.", TextConverter.toUpperCamelSpaces(dataType));
+        String.format(INSTANTIATES_A_NEW_S, TextConverter.toUpperCamelSpaces(dataType));
 
     return new ConstructorRepresentation(
         new LinkedHashSet<>(),
         description,
-        "public",
+        MODIFIER_PUBLIC,
         parameterRepresentations,
         constructorImplementationWithDirectAssignment(parameterRepresentations));
   }
@@ -289,7 +295,7 @@ public abstract class AbstractClassRepresentable<S> extends AbstractRepresentabl
 
     fieldRepresentations
         .stream()
-        .limit(fieldRepresentations.size() - 1)
+        .limit(fieldRepresentations.size() - 1L)
         .forEach(
             fieldRepresentation -> {
               methodRepresentations.add(
@@ -301,7 +307,7 @@ public abstract class AbstractClassRepresentable<S> extends AbstractRepresentabl
     FieldRepresentation fieldRepresentationLast =
         fieldRepresentations
             .stream()
-            .skip(fieldRepresentations.size() - 1)
+            .skip(fieldRepresentations.size() - 1L)
             .findFirst()
             .orElseThrow(IllegalArgumentException::new);
     methodRepresentations.add(createGetterMethod(fieldRepresentationLast, new LinkedHashSet<>()));
@@ -348,7 +354,7 @@ public abstract class AbstractClassRepresentable<S> extends AbstractRepresentabl
         String.format(
             "Gets the %s.",
             TextConverter.toUpperCamelSpaces(fieldRepresentation.getVariableName())),
-        "public",
+        MODIFIER_PUBLIC,
         String.format("get%s", TextConverter.toUpperCamel(fieldRepresentation.getVariableName())),
         new LinkedHashSet<>(),
         fieldRepresentation.getDataType(),
@@ -414,7 +420,7 @@ public abstract class AbstractClassRepresentable<S> extends AbstractRepresentabl
         modifiers = "private";
         break;
       case SETTER:
-        modifiers = "public";
+        modifiers = MODIFIER_PUBLIC;
         break;
       default:
         throw new IllegalArgumentException();

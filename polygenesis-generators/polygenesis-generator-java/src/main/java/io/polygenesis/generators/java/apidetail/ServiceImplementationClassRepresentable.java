@@ -118,8 +118,7 @@ public class ServiceImplementationClassRepresentable
 
   @Override
   public Set<String> imports(ServiceImplementation source, Object... args) {
-    // TODO: inherit imports from Service Interface
-    // Set<String> imports = super.projectImports(source.getService());
+    // TODO: inherit imports from Service Interface ?
     Set<String> imports = new LinkedHashSet<>();
 
     source
@@ -215,7 +214,7 @@ public class ServiceImplementationClassRepresentable
    * @param domainObject the aggregate root
    * @return the set
    */
-  protected Set<String> detectImportsForDomainEntity(BaseDomainEntity<?> domainObject) {
+  protected Set<String> detectImportsForDomainEntity(BaseDomainEntity domainObject) {
     Set<String> imports = new LinkedHashSet<>();
 
     // TODO: refactor the following implementation

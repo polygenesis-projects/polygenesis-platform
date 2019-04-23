@@ -24,9 +24,8 @@ import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.AbstractGenerator;
 import io.polygenesis.core.CoreRegistry;
-import io.polygenesis.core.Model;
-import io.polygenesis.core.ModelRepository;
-import io.polygenesis.models.rest.RestModelRepository;
+import io.polygenesis.core.MetamodelRepository;
+import io.polygenesis.models.rest.RestMetamodelRepository;
 import java.nio.file.Path;
 import java.util.Set;
 
@@ -98,10 +97,11 @@ public class JavaApiRestGenerator extends AbstractGenerator {
   // OVERRIDES
   // ===============================================================================================
 
+  @SuppressWarnings("rawtypes")
   @Override
-  public void generate(Set<ModelRepository<? extends Model>> modelRepositories) {
-    CoreRegistry.getModelRepositoryResolver()
-        .resolve(modelRepositories, RestModelRepository.class)
+  public void generate(Set<MetamodelRepository> modelRepositories) {
+    CoreRegistry.getMetamodelRepositoryResolver()
+        .resolve(modelRepositories, RestMetamodelRepository.class)
         .getItems()
         .forEach(
             resource -> {

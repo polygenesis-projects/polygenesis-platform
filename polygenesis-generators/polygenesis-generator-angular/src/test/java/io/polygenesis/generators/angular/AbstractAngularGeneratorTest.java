@@ -20,11 +20,10 @@
 
 package io.polygenesis.generators.angular;
 
-import io.polygenesis.core.Model;
-import io.polygenesis.core.ModelRepository;
-import io.polygenesis.models.reactivestate.ReactiveStateModelRepository;
-import io.polygenesis.models.ui.UiFeatureModelRepository;
-import io.polygenesis.models.ui.UiLayoutContainerModelRepository;
+import io.polygenesis.core.MetamodelRepository;
+import io.polygenesis.models.reactivestate.ReactiveStateMetamodelRepository;
+import io.polygenesis.models.ui.UiFeatureMetamodelRepository;
+import io.polygenesis.models.ui.UiLayoutContainerMetamodelRepository;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -32,13 +31,14 @@ import java.util.Set;
 /** @author Christos Tsakostas */
 public abstract class AbstractAngularGeneratorTest {
 
-  protected Set<ModelRepository<? extends Model>> getModelRepositories() {
-    Set<ModelRepository<? extends Model>> modelRepositories =
+  @SuppressWarnings("rawtypes")
+  protected Set<MetamodelRepository> getModelRepositories() {
+    Set<MetamodelRepository> modelRepositories =
         new LinkedHashSet<>(
             Arrays.asList(
-                new ReactiveStateModelRepository(new LinkedHashSet<>()),
-                new UiFeatureModelRepository(new LinkedHashSet<>()),
-                new UiLayoutContainerModelRepository(new LinkedHashSet<>())));
+                new ReactiveStateMetamodelRepository(new LinkedHashSet<>()),
+                new UiFeatureMetamodelRepository(new LinkedHashSet<>()),
+                new UiLayoutContainerMetamodelRepository(new LinkedHashSet<>())));
 
     return modelRepositories;
   }

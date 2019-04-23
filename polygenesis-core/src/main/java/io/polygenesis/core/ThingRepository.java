@@ -28,7 +28,7 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public interface ThingRepository extends ModelRepository<Thing> {
+public interface ThingRepository extends MetamodelRepository<Thing> {
 
   /**
    * Gets api things.

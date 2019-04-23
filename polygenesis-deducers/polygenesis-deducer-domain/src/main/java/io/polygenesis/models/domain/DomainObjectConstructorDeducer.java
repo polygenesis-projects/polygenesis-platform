@@ -52,29 +52,11 @@ public class DomainObjectConstructorDeducer extends AbstractDomainObjectDeducer 
         .stream()
         .filter(function -> function.getGoal().isCreate())
         .forEach(
-            function -> {
-              constructors.add(
-                  new Constructor(
-                      function, deduceFromFunctionArguments(function, rootPackageName)));
-            });
+            function ->
+                constructors.add(
+                    new Constructor(
+                        function, deduceFromFunctionArguments(function, rootPackageName))));
 
     return constructors;
-  }
-
-  /**
-   * Deduce constructor from thing properties set.
-   *
-   * @param thing the thing
-   * @return the set
-   */
-  public Set<Constructor> deduceConstructorFromThingProperties(Thing thing) {
-    //    Set<Constructor> constructors = new LinkedHashSet<>();
-    //
-    //    constructors.add(
-    //        new Constructor(deduceFromThingProperties(thing)));
-    //
-    //    return constructors;
-
-    throw new UnsupportedOperationException();
   }
 }

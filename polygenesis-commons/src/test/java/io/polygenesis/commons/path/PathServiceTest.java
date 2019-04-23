@@ -20,15 +20,25 @@
 
 package io.polygenesis.commons.path;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.file.Paths;
+import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 
 /** @author Christos Tsakostas */
 public class PathServiceTest {
 
+  /**
+   * Should fail to instantiate.
+   *
+   * @throws NoSuchMethodException the no such method exception
+   */
   @Test
   public void shouldFailToInstantiate() throws NoSuchMethodException {
     Constructor<PathService> constructor = PathService.class.getDeclaredConstructor();
@@ -37,8 +47,30 @@ public class PathServiceTest {
     assertThatThrownBy(constructor::newInstance).isInstanceOf(InvocationTargetException.class);
   }
 
+  /** Should successfully ensure path. */
   @Test
-  public void ensurePath() {
-    // TODO
+  public void shouldSuccessfullyEnsurePath() throws IOException {
+    FileUtils.deleteDirectory(new File("tmp"));
+
+    PathService.ensurePath(Paths.get("tmp"));
+    assertThat(new File("tmp")).exists();
+  }
+
+  /** Should fail to ensure path for null input. */
+  @Test
+  public void shouldFailToEnsurePathForNullInput() {
+    assertThatThrownBy(() -> PathService.ensurePath(null))
+        .isInstanceOf(IllegalArgumentException.class);
+  }
+
+  /** Should fail to ensure path for invalid input. */
+  @Test
+  public void shouldFailToEnsurePathForInvalidInput() {
+    StringBuilder invalidPath = new StringBuilder();
+    for (int i = 0; i < 1024; i++) {
+      invalidPath.append("a");
+    }
+    assertThatThrownBy(() -> PathService.ensurePath(Paths.get(invalidPath.toString())))
+        .isInstanceOf(IllegalArgumentException.class);
   }
 }

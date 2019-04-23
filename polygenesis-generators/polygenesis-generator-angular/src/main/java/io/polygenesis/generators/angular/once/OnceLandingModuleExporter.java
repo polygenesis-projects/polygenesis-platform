@@ -37,22 +37,21 @@ public class OnceLandingModuleExporter {
   // FREEMARKER TEMPLATES
   // ===============================================================================================
 
+  private static final String FTL_LANDING_CONTAINER =
+      "polygenesis-angular-generator/src/app/landing/containers/landing-container";
+
   private static final String FTL_LANDING_MODULE_TS =
       "polygenesis-angular-generator/src/app/landing/landing.module.ts.ftl";
   private static final String FTL_LANDING_ROUTING_MODULE_TS =
       "polygenesis-angular-generator/src/app/landing/landing-routing.module.ts.ftl";
   private static final String FTL_LANDING_COMPONENT_HTML =
-      "polygenesis-angular-generator/src/app/landing/containers/landing-container/landing-container"
-          + ".component.html.ftl";
+      FTL_LANDING_CONTAINER + "/landing-container.component.html.ftl";
   private static final String FTL_LANDING_COMPONENT_SCSS =
-      "polygenesis-angular-generator/src/app/landing/containers/landing-container/landing-container"
-          + ".component.scss.ftl";
+      FTL_LANDING_CONTAINER + "/landing-container.component.scss.ftl";
   private static final String FTL_LANDING_COMPONENT_TS =
-      "polygenesis-angular-generator/src/app/landing/containers/landing-container/landing-container"
-          + ".component.ts.ftl";
+      FTL_LANDING_CONTAINER + "/landing-container.component.ts.ftl";
   private static final String FTL_LANDING_COMPONENT_SPEC_TS =
-      "polygenesis-angular-generator/src/app/landing/containers/landing-container/landing-container"
-          + ".component.spec.ts.ftl";
+      FTL_LANDING_CONTAINER + "/landing-container.component.spec.ts.ftl";
 
   // ===============================================================================================
   // OUTPUT FILES

@@ -23,6 +23,7 @@ package io.polygenesis.commons.valueobjects;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.polygenesis.commons.test.AbstractEqualityTest;
+import java.nio.file.Paths;
 import org.junit.Test;
 
 /** @author Christos Tsakostas */
@@ -32,8 +33,17 @@ public class PackageNameTest extends AbstractEqualityTest<PackageName> {
   public void shouldSucceedToInstantiate() {
     PackageName packageName = new PackageName("abc");
 
-    assertThat(packageName).isNotNull();
     assertThat(packageName.getText()).isEqualTo("abc");
+    assertThat(packageName.toPath()).isEqualTo(Paths.get("abc"));
+  }
+
+  @Test
+  public void shouldSucceedToInstantiateWithSubPackage() {
+    PackageName packageName = new PackageName("abc");
+    PackageName newPackageName = packageName.withSubPackage("sub");
+
+    assertThat(newPackageName.getText()).isEqualTo("abc.sub");
+    assertThat(newPackageName.toPath()).isEqualTo(Paths.get("abc", "sub"));
   }
 
   @Override

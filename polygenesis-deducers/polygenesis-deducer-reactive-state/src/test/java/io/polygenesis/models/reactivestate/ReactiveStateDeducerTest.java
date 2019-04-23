@@ -23,12 +23,11 @@ package io.polygenesis.models.reactivestate;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
-import io.polygenesis.core.Model;
-import io.polygenesis.core.ModelRepository;
+import io.polygenesis.core.MetamodelRepository;
 import io.polygenesis.core.ThingRepository;
 import io.polygenesis.core.ThingRepositoryImpl;
 import io.polygenesis.models.api.Service;
-import io.polygenesis.models.api.ServiceModelRepository;
+import io.polygenesis.models.api.ServiceMetamodelRepository;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import org.junit.Test;
@@ -55,7 +54,7 @@ public class ReactiveStateDeducerTest {
     ReactiveStateDeducer reactiveStateDeducer = new ReactiveStateDeducer(storeDeducer);
     ThingRepository thingRepository = new ThingRepositoryImpl(new LinkedHashSet<>());
 
-    ReactiveStateModelRepository reactiveStateModelRepository =
+    ReactiveStateMetamodelRepository reactiveStateModelRepository =
         reactiveStateDeducer.deduce(thingRepository, modelRepositories());
 
     assertThat(reactiveStateModelRepository).isNotNull();
@@ -63,12 +62,13 @@ public class ReactiveStateDeducerTest {
     assertThat(reactiveStateModelRepository.getItems().size()).isEqualTo(0);
   }
 
-  private Set<ModelRepository<? extends Model>> modelRepositories() {
-    Set<ModelRepository<? extends Model>> modelRepositories = new LinkedHashSet<>();
+  @SuppressWarnings("rawtypes")
+  private Set<MetamodelRepository> modelRepositories() {
+    Set<MetamodelRepository> modelRepositories = new LinkedHashSet<>();
 
     Set<Service> services = new LinkedHashSet<>();
     services.add(mock(Service.class));
-    ServiceModelRepository serviceModelRepository = new ServiceModelRepository(services);
+    ServiceMetamodelRepository serviceModelRepository = new ServiceMetamodelRepository(services);
     modelRepositories.add(serviceModelRepository);
 
     return modelRepositories;

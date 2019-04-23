@@ -44,6 +44,9 @@ import java.util.Set;
  */
 public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
 
+  private static final String INTEGER = "Integer";
+  private static final String LONG = "Long";
+
   // ===============================================================================================
   // STATIC
   // ===============================================================================================
@@ -258,7 +261,11 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
           stringBuilder.append("<");
 
           stringBuilder.append(
-              TextConverter.toUpperCamel(source.getArrayElementAsOptional().get().getDataType()));
+              TextConverter.toUpperCamel(
+                  source
+                      .getArrayElementAsOptional()
+                      .orElseThrow(IllegalArgumentException::new)
+                      .getDataType()));
 
           stringBuilder.append(">");
         } else {
@@ -294,13 +301,13 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
             String.format("List<%s>", TextConverter.toUpperCamel(arrayElement.getDataType())),
             "items"));
 
-    parameterRepresentations.add(new ParameterRepresentation("Integer", "totalPages"));
+    parameterRepresentations.add(new ParameterRepresentation(INTEGER, "totalPages"));
 
-    parameterRepresentations.add(new ParameterRepresentation("Long", "totalElements"));
+    parameterRepresentations.add(new ParameterRepresentation(LONG, "totalElements"));
 
-    parameterRepresentations.add(new ParameterRepresentation("Integer", "pageNumber"));
+    parameterRepresentations.add(new ParameterRepresentation(INTEGER, "pageNumber"));
 
-    parameterRepresentations.add(new ParameterRepresentation("Integer", "pageSize"));
+    parameterRepresentations.add(new ParameterRepresentation(INTEGER, "pageSize"));
 
     String description =
         String.format(

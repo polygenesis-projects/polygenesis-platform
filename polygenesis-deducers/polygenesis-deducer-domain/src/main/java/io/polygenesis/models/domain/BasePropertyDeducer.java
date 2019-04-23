@@ -22,7 +22,6 @@ package io.polygenesis.models.domain;
 
 import io.polygenesis.core.Thing;
 import io.polygenesis.core.ThingProperty;
-import io.polygenesis.core.data.Data;
 import io.polygenesis.core.data.DataBusinessType;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -72,7 +71,8 @@ public abstract class BasePropertyDeducer {
    * @param thingProperty the thing property
    * @return the base property
    */
-  protected BaseProperty<? extends Data> thingPropertyToBaseProperty(ThingProperty thingProperty) {
+  @SuppressWarnings("rawtypes")
+  protected BaseProperty thingPropertyToBaseProperty(ThingProperty thingProperty) {
 
     switch (thingProperty.getData().getDataBusinessType()) {
       case THING_IDENTITY:

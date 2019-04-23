@@ -21,6 +21,7 @@
 package io.polygenesis.core.data;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import io.polygenesis.commons.test.AbstractEqualityTest;
 import io.polygenesis.commons.valueobjects.ObjectName;
@@ -62,6 +63,15 @@ public class DataGroupTest extends AbstractEqualityTest<DataGroup> {
     assertThat(childDataArray.isDataPrimitive()).isFalse();
     assertThat(childDataGroup.isDataPrimitive()).isFalse();
     assertThat(childDataPrimitive.isDataPrimitive()).isTrue();
+
+    assertThat(dataGroup.getAsDataGroup()).isNotNull();
+    assertThat(dataGroup.asDto()).isNotNull();
+    assertThat(dataGroup.getDataType()).isEqualTo("someClass");
+
+    assertThatThrownBy(() -> dataGroup.getAsDataArray()).isInstanceOf(IllegalStateException.class);
+    assertThatThrownBy(() -> dataGroup.getAsDataPrimitive())
+        .isInstanceOf(IllegalStateException.class);
+    assertThatThrownBy(() -> dataGroup.getAsDataMap()).isInstanceOf(IllegalStateException.class);
   }
 
   @Override

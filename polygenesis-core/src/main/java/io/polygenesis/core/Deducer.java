@@ -25,18 +25,18 @@ import java.util.Set;
 /**
  * Contract for PolyGenesis Deducers.
  *
- * @param <R> the type parameter ModelRepository
+ * @param <R> the type parameter MetamodelRepository
  * @author Christos Tsakostas
  */
-public interface Deducer<R extends ModelRepository<? extends Model>> {
+public interface Deducer<R extends MetamodelRepository<? extends Metamodel>> {
 
   /**
    * Deduces a model's repository.
    *
    * @param thingRepository the thing repository
    * @param modelRepositories the model repositories
-   * @return the ModelRepository
+   * @return the MetamodelRepository
    */
-  R deduce(
-      ThingRepository thingRepository, Set<ModelRepository<? extends Model>> modelRepositories);
+  @SuppressWarnings("rawtypes")
+  R deduce(ThingRepository thingRepository, Set<MetamodelRepository> modelRepositories);
 }

@@ -20,8 +20,6 @@
 
 package io.polygenesis.deducers.apiimpl;
 
-import io.polygenesis.commons.valueobjects.PackageName;
-
 /**
  * The type Api impl deducer factory.
  *
@@ -46,6 +44,7 @@ public class ServiceImplementationDeducerFactory {
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
+
   private ServiceImplementationDeducerFactory() {
     throw new IllegalStateException("Utility class");
   }
@@ -57,10 +56,9 @@ public class ServiceImplementationDeducerFactory {
   /**
    * New instance api impl deducer.
    *
-   * @param packageName the package name
    * @return the api impl deducer
    */
-  public static ServiceImplementationDeducer newInstance(PackageName packageName) {
+  public static ServiceImplementationDeducer newInstance() {
     return new ServiceImplementationDeducer(serviceMethodImplementationDeducer);
   }
 }

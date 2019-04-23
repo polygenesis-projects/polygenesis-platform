@@ -57,7 +57,7 @@ public class FromDataTypeToJavaConverter {
     String candidate = TextConverter.toUpperCamel(dataType);
 
     return Stream.of(PrimitiveType.values())
-        .filter(value -> value.name().equals(candidate.toUpperCase()))
+        .filter(value -> value.name().equalsIgnoreCase(candidate))
         .findFirst()
         .map(primaryType -> dataTypeMap.get(primaryType))
         .orElseGet(() -> candidate);
@@ -76,8 +76,5 @@ public class FromDataTypeToJavaConverter {
     dataTypeMap.put(PrimitiveType.LONG, "Long");
     dataTypeMap.put(PrimitiveType.BOOLEAN, "Boolean");
     dataTypeMap.put(PrimitiveType.DATETIME, "LocalDateTime");
-
-    // TODO another map for arrays
-    // dataTypeMap.put(PrimitiveType.ARRAY, "java.util.List");
   }
 }

@@ -185,7 +185,8 @@ public class DtoDeducer {
     dtos.add(dto);
 
     if (dto.getArrayElementAsOptional().isPresent()) {
-      Data arrayElement = dto.getArrayElementAsOptional().get();
+      Data arrayElement =
+          dto.getArrayElementAsOptional().orElseThrow(IllegalArgumentException::new);
       if (arrayElement.isDataGroup()) {
         addDto(dtos, new Dto(DtoType.COLLECTION_RECORD, arrayElement.getAsDataGroup(), false));
       }
@@ -196,8 +197,7 @@ public class DtoDeducer {
         .getModels()
         .forEach(
             model -> {
-              // TODO
-              // if (model.isDataGroup() || model.isDataArray()) {
+              // TODO: check if model array element children should be added as well
               if (model.isDataGroup()) {
                 DataGroup dataGroup = model.getAsDataGroup();
 

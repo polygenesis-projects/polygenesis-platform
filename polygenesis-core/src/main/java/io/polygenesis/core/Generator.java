@@ -30,10 +30,11 @@ import java.util.Set;
 public interface Generator {
 
   /**
-   * Generate code based on Model Repositories.
+   * Generate code based on Metamodel Repositories.
    *
    * @param modelRepositories the model repositories
-   * @see ModelRepository
+   * @see MetamodelRepository
    */
-  void generate(Set<ModelRepository<? extends Model>> modelRepositories);
+  @SuppressWarnings("rawtypes")
+  void generate(Set<MetamodelRepository> modelRepositories);
 }

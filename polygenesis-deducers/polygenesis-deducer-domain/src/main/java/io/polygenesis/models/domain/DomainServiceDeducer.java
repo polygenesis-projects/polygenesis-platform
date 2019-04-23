@@ -23,8 +23,7 @@ package io.polygenesis.models.domain;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.Deducer;
-import io.polygenesis.core.Model;
-import io.polygenesis.core.ModelRepository;
+import io.polygenesis.core.MetamodelRepository;
 import io.polygenesis.core.ThingRepository;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -71,9 +70,10 @@ public class DomainServiceDeducer implements Deducer<DomainServiceRepository> {
   // OVERRIDES
   // ===============================================================================================
 
+  @SuppressWarnings("rawtypes")
   @Override
   public DomainServiceRepository deduce(
-      ThingRepository thingRepository, Set<ModelRepository<? extends Model>> modelRepositories) {
+      ThingRepository thingRepository, Set<MetamodelRepository> modelRepositories) {
     Set<DomainService> domainServices = new LinkedHashSet<>();
 
     thingRepository

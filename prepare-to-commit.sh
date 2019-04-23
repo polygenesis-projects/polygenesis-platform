@@ -22,7 +22,7 @@ set -e
 
 ./mvnw fmt:format
 
-./mvnw clean install -P validate-license,validate-code-format,validate-code-style,validate-code-bugs,validate-code \
+./mvnw clean install -P validate-license,validate-code-format,validate-code-style,validate-code-bugs,validate-code,docs \
  -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 
 ./mvnw test -B

@@ -31,12 +31,6 @@
       <artifactId>polygenesis-commons</artifactId>
     </dependency>
 
-    <!--ANNOTATIONS-->
-    <dependency>
-      <groupId>io.polygenesis</groupId>
-      <artifactId>polygenesis-annotations</artifactId>
-    </dependency>
-
     <!--TEST-->
     <dependency>
       <groupId>io.polygenesis</groupId>

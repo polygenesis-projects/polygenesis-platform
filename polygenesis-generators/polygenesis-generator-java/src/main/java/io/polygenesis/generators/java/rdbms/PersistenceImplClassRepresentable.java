@@ -177,27 +177,31 @@ public class PersistenceImplClassRepresentable extends AbstractClassRepresentabl
   @Override
   public String fullObjectName(Persistence source, Object... args) {
     StringBuilder stringBuilder = new StringBuilder();
+    String changeLineAndTwoTabs = "\n\t\t";
 
     stringBuilder.append(TextConverter.toUpperCamel(source.getObjectName().getText()));
     stringBuilder.append("Impl");
 
+    stringBuilder.append(changeLineAndTwoTabs);
     if (source.getMultiTenant()) {
-      stringBuilder.append("\n\t\textends AbstractJpaTenantRepository<");
+      stringBuilder.append("extends AbstractJpaTenantRepository<");
     } else {
-      stringBuilder.append("\n\t\textends AbstractJpaRepository<");
+      stringBuilder.append("extends AbstractJpaRepository<");
     }
 
     ObjectName contextName = (ObjectName) args[1];
     String context = TextConverter.toUpperCamel(contextName.getText());
 
     stringBuilder.append(
-        "\n\t\t" + TextConverter.toUpperCamel(source.getAggregateRootObjectName().getText()) + ",");
+        changeLineAndTwoTabs
+            + TextConverter.toUpperCamel(source.getAggregateRootObjectName().getText())
+            + ",");
     stringBuilder.append(
-        "\n\t\t"
+        changeLineAndTwoTabs
             + TextConverter.toUpperCamel(source.getAggregateRootObjectName().getText())
             + "Id,");
-    stringBuilder.append("\n\t\t" + context + "DomainMessageData>");
-    stringBuilder.append("\n\t\timplements ");
+    stringBuilder.append(changeLineAndTwoTabs + context + "DomainMessageData>");
+    stringBuilder.append(changeLineAndTwoTabs + "implements ");
     stringBuilder.append(TextConverter.toUpperCamel(source.getObjectName().getText()));
 
     return stringBuilder.toString();

@@ -44,34 +44,6 @@ public class DataGroup extends Data {
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
-  /** Instantiates a new data group. */
-  public DataGroup() {
-    this(
-        DataSource.user(),
-        null,
-        DataBusinessType.ANY,
-        DataValidator.empty(),
-        null,
-        null,
-        new LinkedHashSet<>());
-  }
-
-  /**
-   * Instantiates a new data group.
-   *
-   * @param variableName the variable name
-   */
-  public DataGroup(VariableName variableName) {
-    this(
-        DataSource.user(),
-        variableName,
-        DataBusinessType.ANY,
-        DataValidator.empty(),
-        null,
-        null,
-        new LinkedHashSet<>());
-  }
-
   /**
    * Instantiates a new data group.
    *
@@ -149,23 +121,6 @@ public class DataGroup extends Data {
         getDataBusinessType(),
         getDataValidator(),
         objectName,
-        getPackageName(),
-        getModels());
-  }
-
-  /**
-   * With new variable name data group.
-   *
-   * @param variableName the variable name
-   * @return the data group
-   */
-  public DataGroup withNewVariableName(VariableName variableName) {
-    return new DataGroup(
-        getDataSource(),
-        variableName,
-        getDataBusinessType(),
-        getDataValidator(),
-        getObjectName(),
         getPackageName(),
         getModels());
   }

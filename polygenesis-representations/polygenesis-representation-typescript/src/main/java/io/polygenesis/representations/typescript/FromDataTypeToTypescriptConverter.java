@@ -72,15 +72,9 @@ public class FromDataTypeToTypescriptConverter {
     dataTypeMap = new HashMap<>();
 
     dataTypeMap.put(PrimitiveType.VOID, "void");
-
     dataTypeMap.put(PrimitiveType.STRING, "string");
-
     dataTypeMap.put(PrimitiveType.INTEGER, "number");
     dataTypeMap.put(PrimitiveType.LONG, "number");
-
     dataTypeMap.put(PrimitiveType.BOOLEAN, "boolean");
-
-    // TODO another map for arrays
-    // dataTypeMap.put(PrimitiveType.ARRAY, "java.util.List");
   }
 }

@@ -23,7 +23,6 @@ package io.polygenesis.deducers.apiimpl;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import io.polygenesis.commons.valueobjects.PackageName;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import org.junit.Test;
@@ -41,7 +40,6 @@ public class ServiceImplementationDeducerFactoryTest {
 
   @Test
   public void shouldCreateNewInstance() {
-    assertThat(ServiceImplementationDeducerFactory.newInstance(new PackageName("com.oregor")))
-        .isNotNull();
+    assertThat(ServiceImplementationDeducerFactory.newInstance()).isNotNull();
   }
 }

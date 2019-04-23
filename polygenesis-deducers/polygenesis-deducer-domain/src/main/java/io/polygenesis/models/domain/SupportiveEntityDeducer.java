@@ -23,8 +23,7 @@ package io.polygenesis.models.domain;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.Deducer;
-import io.polygenesis.core.Model;
-import io.polygenesis.core.ModelRepository;
+import io.polygenesis.core.MetamodelRepository;
 import io.polygenesis.core.Thing;
 import io.polygenesis.core.ThingRepository;
 import io.polygenesis.core.ThingScopeType;
@@ -36,7 +35,7 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class SupportiveEntityDeducer implements Deducer<SupportiveEntityModelRepository> {
+public class SupportiveEntityDeducer implements Deducer<SupportiveEntityMetamodelRepository> {
 
   // ===============================================================================================
   // DEPENDENCIES
@@ -69,9 +68,10 @@ public class SupportiveEntityDeducer implements Deducer<SupportiveEntityModelRep
   // FUNCTIONALITY
   // ===============================================================================================
 
+  @SuppressWarnings("rawtypes")
   @Override
-  public SupportiveEntityModelRepository deduce(
-      ThingRepository thingRepository, Set<ModelRepository<? extends Model>> modelRepositories) {
+  public SupportiveEntityMetamodelRepository deduce(
+      ThingRepository thingRepository, Set<MetamodelRepository> modelRepositories) {
     Set<SupportiveEntity> helperEntities = new LinkedHashSet<>();
 
     thingRepository
@@ -80,7 +80,7 @@ public class SupportiveEntityDeducer implements Deducer<SupportiveEntityModelRep
         .filter(thing -> thing.getThingScopeType().equals(ThingScopeType.DOMAIN_SUPPORTIVE_ENTITY))
         .forEach(thing -> makeSupportiveEntity(helperEntities, thing, rootPackageName));
 
-    return new SupportiveEntityModelRepository(helperEntities);
+    return new SupportiveEntityMetamodelRepository(helperEntities);
   }
 
   // ===============================================================================================

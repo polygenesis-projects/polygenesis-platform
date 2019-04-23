@@ -20,14 +20,13 @@
 
 package io.polygenesis.models.domain;
 
-import io.polygenesis.annotations.core.GoalType;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.Function;
 import io.polygenesis.core.FunctionName;
 import io.polygenesis.core.Goal;
+import io.polygenesis.core.GoalType;
 import io.polygenesis.core.ReturnValue;
 import io.polygenesis.core.Thing;
-import io.polygenesis.core.data.Data;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -49,8 +48,8 @@ public class StateMutationMethodDeducer {
    * @param properties the properties
    * @return the set
    */
-  public Set<StateMutationMethod> deduce(
-      Thing thing, Set<DomainObjectProperty<? extends Data>> properties) {
+  @SuppressWarnings("rawtypes")
+  public Set<StateMutationMethod> deduce(Thing thing, Set<DomainObjectProperty> properties) {
     Set<StateMutationMethod> stateMutationMethods = new LinkedHashSet<>();
 
     properties.forEach(

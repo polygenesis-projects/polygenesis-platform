@@ -21,18 +21,43 @@
 package io.polygenesis.core.data;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import io.polygenesis.commons.test.AbstractEqualityTest;
 import org.junit.Test;
 
 /** @author Christos Tsakostas */
-public class DataArrayTest {
+public class DataArrayTest extends AbstractEqualityTest<DataArray> {
 
   @Test
   public void shouldInitializeDataArray() {
-    DataArray dataArray = new DataArray(new VariableName("someVariableName"));
+    DataArray dataArray = createObject1();
 
     assertThat(dataArray).isNotNull();
     assertThat(dataArray.getDataType()).isEqualTo(DataPrimaryType.ARRAY.name());
     assertThat(dataArray.getVariableName()).isEqualTo(new VariableName("someVariableNames"));
+    assertThat(dataArray.getArrayElement())
+        .isEqualTo(DataPrimitive.of(PrimitiveType.STRING, new VariableName("var1")));
+
+    assertThat(dataArray.getAsDataArray()).isNotNull();
+
+    assertThatThrownBy(() -> dataArray.getAsDataGroup()).isInstanceOf(IllegalStateException.class);
+    assertThatThrownBy(() -> dataArray.getAsDataPrimitive())
+        .isInstanceOf(IllegalStateException.class);
+    assertThatThrownBy(() -> dataArray.getAsDataMap()).isInstanceOf(IllegalStateException.class);
+  }
+
+  @Override
+  public DataArray createObject1() {
+    return new DataArray(
+        new VariableName("someVariableName"),
+        DataPrimitive.of(PrimitiveType.STRING, new VariableName("var1")));
+  }
+
+  @Override
+  public DataArray createObject2() {
+    return new DataArray(
+        new VariableName("someVariableName"),
+        DataPrimitive.of(PrimitiveType.STRING, new VariableName("var2")));
   }
 }

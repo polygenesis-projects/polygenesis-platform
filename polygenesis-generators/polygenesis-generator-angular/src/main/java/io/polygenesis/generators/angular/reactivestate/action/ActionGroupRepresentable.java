@@ -94,16 +94,16 @@ public class ActionGroupRepresentable {
         .getActions()
         .forEach(
             action -> {
-              if (action.getPayloadModel().getModel().isDataGroup()) {
+              if (action.getPayloadModel().getData().isDataGroup()) {
                 importObjects.put(
                     new LinkedHashSet<>(
                         Arrays.asList(
                             TextConverter.toUpperCamel(
-                                action.getPayloadModel().getModel().getDataType()))),
+                                action.getPayloadModel().getData().getDataType()))),
                     String.format(
                         "../models/%s.model",
                         TextConverter.toLowerHyphen(
-                            action.getPayloadModel().getModel().getDataType())));
+                            action.getPayloadModel().getData().getDataType())));
               }
             });
 
@@ -130,7 +130,7 @@ public class ActionGroupRepresentable {
                           getEnumerationName(featureName),
                           TextConverter.toUpperCamel(action.getName().getText())),
                       fromDataTypeToTypescriptConverter.getDeclaredVariableType(
-                          action.getPayloadModel().getModel())));
+                          action.getPayloadModel().getData())));
             });
 
     return actionClasses;

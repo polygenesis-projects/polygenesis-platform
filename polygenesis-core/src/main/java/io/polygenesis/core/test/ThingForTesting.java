@@ -20,13 +20,13 @@
 
 package io.polygenesis.core.test;
 
-import io.polygenesis.annotations.core.GoalType;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.Argument;
 import io.polygenesis.core.Function;
 import io.polygenesis.core.FunctionName;
 import io.polygenesis.core.Goal;
+import io.polygenesis.core.GoalType;
 import io.polygenesis.core.ReturnValue;
 import io.polygenesis.core.Thing;
 import io.polygenesis.core.ThingBuilder;
@@ -46,7 +46,14 @@ import java.util.LinkedHashSet;
  */
 public class ThingForTesting {
 
+  public static final String BUSINESS = "business";
+  public static final String BUSINESS_ID = "businessId";
+  public static final String NAME = "name";
   public static final String ROOT_PACKAGE = "com.oregor.trinity4j.example";
+
+  private ThingForTesting() {
+    super();
+  }
 
   /**
    * Create thing.
@@ -54,7 +61,7 @@ public class ThingForTesting {
    * @return the thing
    */
   public static Thing create() {
-    Thing business = ThingBuilder.generic().setThingName(new ThingName("business")).createThing();
+    Thing business = ThingBuilder.generic().setThingName(new ThingName(BUSINESS)).createThing();
 
     business.addFunction(functionCreate(business));
     business.addFunction(functionFetchOne(business));
@@ -77,10 +84,11 @@ public class ThingForTesting {
     // ---------------------------------------------------------------------------------------------
     DataGroup argumentDataGroup =
         new DataGroup(
-            new ObjectName("CreateBusinessRequest"), new PackageName(ROOT_PACKAGE + ".business"));
+            new ObjectName("CreateBusinessRequest"),
+            new PackageName(ROOT_PACKAGE + "." + BUSINESS));
 
     // name
-    argumentDataGroup.addData(DataPrimitive.of(PrimitiveType.STRING, new VariableName("name")));
+    argumentDataGroup.addData(DataPrimitive.of(PrimitiveType.STRING, new VariableName(NAME)));
 
     // postal address
     argumentDataGroup.addData(postalAddress());
@@ -90,11 +98,12 @@ public class ThingForTesting {
     // ---------------------------------------------------------------------------------------------
     DataGroup returnValueDataGroup =
         new DataGroup(
-            new ObjectName("CreateBusinessResponse"), new PackageName(ROOT_PACKAGE + ".business"));
+            new ObjectName("CreateBusinessResponse"),
+            new PackageName(ROOT_PACKAGE + "." + BUSINESS));
 
     returnValueDataGroup.addData(
         DataPrimitive.ofDataBusinessType(
-            DataBusinessType.THING_IDENTITY, PrimitiveType.STRING, new VariableName("businessId")));
+            DataBusinessType.THING_IDENTITY, PrimitiveType.STRING, new VariableName(BUSINESS_ID)));
 
     // ---------------------------------------------------------------------------------------------
 
@@ -116,24 +125,25 @@ public class ThingForTesting {
     // ---------------------------------------------------------------------------------------------
     DataGroup argumentDataGroup =
         new DataGroup(
-            new ObjectName("FetchBusinessRequest"), new PackageName(ROOT_PACKAGE + ".business"));
+            new ObjectName("FetchBusinessRequest"), new PackageName(ROOT_PACKAGE + "." + BUSINESS));
 
     // ---------------------------------------------------------------------------------------------
 
     argumentDataGroup.addData(
         DataPrimitive.ofDataBusinessType(
-            DataBusinessType.THING_IDENTITY, PrimitiveType.STRING, new VariableName("businessId")));
+            DataBusinessType.THING_IDENTITY, PrimitiveType.STRING, new VariableName(BUSINESS_ID)));
 
     // ---------------------------------------------------------------------------------------------
     // RETURN VALUE
     // ---------------------------------------------------------------------------------------------
     DataGroup returnValueDataGroup =
         new DataGroup(
-            new ObjectName("FetchBusinessResponse"), new PackageName(ROOT_PACKAGE + ".business"));
+            new ObjectName("FetchBusinessResponse"),
+            new PackageName(ROOT_PACKAGE + "." + BUSINESS));
 
     // ---------------------------------------------------------------------------------------------
 
-    returnValueDataGroup.addData(DataPrimitive.of(PrimitiveType.STRING, new VariableName("name")));
+    returnValueDataGroup.addData(DataPrimitive.of(PrimitiveType.STRING, new VariableName(NAME)));
 
     // ---------------------------------------------------------------------------------------------
     return new Function(
@@ -155,13 +165,13 @@ public class ThingForTesting {
     DataGroup argumentDataGroup =
         new DataGroup(
             new ObjectName("FetchBusinessCollectionRequest"),
-            new PackageName(ROOT_PACKAGE + ".business"));
+            new PackageName(ROOT_PACKAGE + "." + BUSINESS));
 
     // ---------------------------------------------------------------------------------------------
 
     argumentDataGroup.addData(
         DataPrimitive.ofDataBusinessType(
-            DataBusinessType.THING_IDENTITY, PrimitiveType.STRING, new VariableName("businessId")));
+            DataBusinessType.THING_IDENTITY, PrimitiveType.STRING, new VariableName(BUSINESS_ID)));
 
     // ---------------------------------------------------------------------------------------------
     // RETURN VALUE
@@ -169,11 +179,11 @@ public class ThingForTesting {
     DataGroup returnValueDataGroup =
         new DataGroup(
             new ObjectName("FetchBusinessCollectionResponse"),
-            new PackageName(ROOT_PACKAGE + ".business"));
+            new PackageName(ROOT_PACKAGE + "." + BUSINESS));
 
     // ---------------------------------------------------------------------------------------------
 
-    returnValueDataGroup.addData(DataPrimitive.of(PrimitiveType.STRING, new VariableName("name")));
+    returnValueDataGroup.addData(DataPrimitive.of(PrimitiveType.STRING, new VariableName(NAME)));
 
     // ---------------------------------------------------------------------------------------------
     return new Function(
@@ -194,20 +204,22 @@ public class ThingForTesting {
     // ---------------------------------------------------------------------------------------------
     DataGroup argumentDataGroup1 =
         new DataGroup(
-            new ObjectName("CreateBusinessRequest1"), new PackageName(ROOT_PACKAGE + ".business"));
+            new ObjectName("CreateBusinessRequest1"),
+            new PackageName(ROOT_PACKAGE + "." + BUSINESS));
 
     // name
-    argumentDataGroup1.addData(DataPrimitive.of(PrimitiveType.STRING, new VariableName("name")));
+    argumentDataGroup1.addData(DataPrimitive.of(PrimitiveType.STRING, new VariableName(NAME)));
 
     // ---------------------------------------------------------------------------------------------
     // ARGUMENTS - 2
     // ---------------------------------------------------------------------------------------------
     DataGroup argumentDataGroup2 =
         new DataGroup(
-            new ObjectName("CreateBusinessRequest2"), new PackageName(ROOT_PACKAGE + ".business"));
+            new ObjectName("CreateBusinessRequest2"),
+            new PackageName(ROOT_PACKAGE + "." + BUSINESS));
 
     // name
-    argumentDataGroup2.addData(DataPrimitive.of(PrimitiveType.STRING, new VariableName("name")));
+    argumentDataGroup2.addData(DataPrimitive.of(PrimitiveType.STRING, new VariableName(NAME)));
 
     // ---------------------------------------------------------------------------------------------
 
@@ -230,11 +242,11 @@ public class ThingForTesting {
     DataGroup returnValueDataGroup =
         new DataGroup(
             new ObjectName("FetchBusinessCollectionResponse"),
-            new PackageName(ROOT_PACKAGE + ".business"));
+            new PackageName(ROOT_PACKAGE + "." + BUSINESS));
 
     // ---------------------------------------------------------------------------------------------
 
-    returnValueDataGroup.addData(DataPrimitive.of(PrimitiveType.STRING, new VariableName("name")));
+    returnValueDataGroup.addData(DataPrimitive.of(PrimitiveType.STRING, new VariableName(NAME)));
 
     // ---------------------------------------------------------------------------------------------
 
@@ -253,7 +265,7 @@ public class ThingForTesting {
     // ---------------------------------------------------------------------------------------------
     // PRIMITIVE
     // ---------------------------------------------------------------------------------------------
-    DataPrimitive dataPrimitive = DataPrimitive.of(PrimitiveType.STRING, new VariableName("name"));
+    DataPrimitive dataPrimitive = DataPrimitive.of(PrimitiveType.STRING, new VariableName(NAME));
 
     // ---------------------------------------------------------------------------------------------
 

@@ -28,8 +28,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 import io.polygenesis.commons.valueobjects.PackageName;
-import io.polygenesis.core.Model;
-import io.polygenesis.core.ModelRepository;
+import io.polygenesis.core.MetamodelRepository;
 import io.polygenesis.core.Thing;
 import io.polygenesis.core.ThingRepository;
 import io.polygenesis.core.ThingRepositoryImpl;
@@ -47,7 +46,10 @@ public class ApiDeducerTest {
   private ServiceDeducer serviceDeducer;
   private Thing thing;
   private ThingRepository thingRepository;
-  private Set<ModelRepository<? extends Model>> modelRepositories;
+
+  @SuppressWarnings("rawtypes")
+  private Set<MetamodelRepository> modelRepositories;
+
   private ApiDeducer apiDeducer;
 
   @Before
@@ -66,7 +68,7 @@ public class ApiDeducerTest {
     given(serviceDeducer.deduceFrom(thing, rootPackageName))
         .willReturn(new LinkedHashSet<>(Arrays.asList(service)));
 
-    ServiceModelRepository serviceModelRepository =
+    ServiceMetamodelRepository serviceModelRepository =
         apiDeducer.deduce(thingRepository, modelRepositories);
 
     verify(serviceDeducer).deduceFrom(eq(thing), eq(rootPackageName));

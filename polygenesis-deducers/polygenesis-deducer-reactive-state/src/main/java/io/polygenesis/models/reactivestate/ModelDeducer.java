@@ -22,12 +22,12 @@ package io.polygenesis.models.reactivestate;
 
 import io.polygenesis.core.Thing;
 import io.polygenesis.models.api.Service;
-import io.polygenesis.models.api.ServiceModelRepository;
+import io.polygenesis.models.api.ServiceMetamodelRepository;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
- * The type Model deducer.
+ * The type Metamodel deducer.
  *
  * @author Christos Tsakostas
  */
@@ -44,7 +44,7 @@ public class ModelDeducer {
    * @param serviceModelRepository the service model repository
    * @return the set
    */
-  public Set<Model> deduce(Thing thing, ServiceModelRepository serviceModelRepository) {
+  public Set<Model> deduce(Thing thing, ServiceMetamodelRepository serviceModelRepository) {
     Set<Model> models = new LinkedHashSet<>();
 
     Set<Service> services = serviceModelRepository.getServicesBy(thing.getThingName());

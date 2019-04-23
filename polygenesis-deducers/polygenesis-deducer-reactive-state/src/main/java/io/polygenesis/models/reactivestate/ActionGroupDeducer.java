@@ -20,16 +20,15 @@
 
 package io.polygenesis.models.reactivestate;
 
-import io.polygenesis.annotations.core.GGoalStandardType;
-import io.polygenesis.annotations.core.GoalType;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.FunctionName;
+import io.polygenesis.core.GoalType;
 import io.polygenesis.core.Thing;
 import io.polygenesis.core.data.DataPrimitive;
 import io.polygenesis.core.data.PrimitiveType;
 import io.polygenesis.core.data.VariableName;
 import io.polygenesis.models.api.Service;
-import io.polygenesis.models.api.ServiceModelRepository;
+import io.polygenesis.models.api.ServiceMetamodelRepository;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -66,7 +65,7 @@ public class ActionGroupDeducer {
    * @param serviceModelRepository the service model repository
    * @return the set
    */
-  public Set<ActionGroup> deduce(Thing thing, ServiceModelRepository serviceModelRepository) {
+  public Set<ActionGroup> deduce(Thing thing, ServiceMetamodelRepository serviceModelRepository) {
     Set<ActionGroup> actionGroups = new LinkedHashSet<>();
 
     Set<Service> services = serviceModelRepository.getServicesBy(thing.getThingName());
@@ -123,28 +122,6 @@ public class ActionGroupDeducer {
   // PRIVATE
   // ===============================================================================================
 
-  //  private Set<Action> deduceApiActions(Function function) {
-  //    Set<Action> actions = new LinkedHashSet<>();
-  //
-  //    if (goalToActionTypeMap.containsKey(function.getGoal().getOriginal())) {
-  //      goalToActionTypeMap
-  //          .get(function.getGoal().getOriginal())
-  //          .forEach(actionType -> actions.add(createAction(function, actionType)));
-  //
-  //      LOG.debug(
-  //          "Actions were successfully deduced for Function={} and Goal={}",
-  //          function.getName().getOriginal(),
-  //          function.getGoal().getOriginal());
-  //    } else {
-  //      LOG.debug(
-  //          "No Actions could be deduced for Function={} and Goal={}",
-  //          function.getName().getOriginal(),
-  //          function.getGoal().getOriginal());
-  //    }
-  //
-  //    return actions;
-  //  }
-
   /**
    * Create action.
    *
@@ -179,7 +156,7 @@ public class ActionGroupDeducer {
             Arrays.asList(ActionType.SUBMIT, ActionType.ON_SUCCESS, ActionType.ON_FAILURE)));
 
     goalToActionTypeMap.put(
-        GGoalStandardType.CMD_RESET,
-        new LinkedHashSet<>(Collections.singletonList(ActionType.SUBMIT)));
+        // TODO
+        "RESET", new LinkedHashSet<>(Collections.singletonList(ActionType.SUBMIT)));
   }
 }

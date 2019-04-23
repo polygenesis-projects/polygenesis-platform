@@ -22,9 +22,8 @@ package io.polygenesis.generators.sql;
 
 import io.polygenesis.core.AbstractGenerator;
 import io.polygenesis.core.CoreRegistry;
-import io.polygenesis.core.Model;
-import io.polygenesis.core.ModelRepository;
-import io.polygenesis.models.sql.SqlTableModelRepository;
+import io.polygenesis.core.MetamodelRepository;
+import io.polygenesis.models.sql.SqlTableMetamodelRepository;
 import java.nio.file.Path;
 import java.util.Set;
 
@@ -76,11 +75,12 @@ public class SqlGenerator extends AbstractGenerator {
   // OVERRIDES
   // ===============================================================================================
 
+  @SuppressWarnings("rawtypes")
   @Override
-  public void generate(Set<ModelRepository<? extends Model>> modelRepositories) {
-    SqlTableModelRepository sqlTableModelRepository =
-        CoreRegistry.getModelRepositoryResolver()
-            .resolve(modelRepositories, SqlTableModelRepository.class);
+  public void generate(Set<MetamodelRepository> modelRepositories) {
+    SqlTableMetamodelRepository sqlTableModelRepository =
+        CoreRegistry.getMetamodelRepositoryResolver()
+            .resolve(modelRepositories, SqlTableMetamodelRepository.class);
 
     if (sqlTableModelRepository.getItems().size() == 1) {
       return;
