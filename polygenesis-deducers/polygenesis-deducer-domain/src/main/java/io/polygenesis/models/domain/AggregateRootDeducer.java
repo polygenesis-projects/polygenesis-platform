@@ -25,9 +25,7 @@ import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.Thing;
 import io.polygenesis.core.ThingRepository;
 import io.polygenesis.core.ThingScopeType;
-import io.polygenesis.core.data.Data;
 import java.util.LinkedHashSet;
-import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -90,7 +88,7 @@ public class AggregateRootDeducer {
                         .equals(ThingScopeType.DOMAIN_ABSTRACT_AGGREGATE_ROOT))
         .forEach(
             thing -> {
-              if (!thing.getOptionalParent().isPresent() || thingRepository.isVirtualChild(thing)) {
+              if (thing.getOptionalParent() == null || thingRepository.isVirtualChild(thing)) {
                 makeAggregateRoot(aggregateRoots, thing, rootPackageName);
               }
             });
@@ -110,13 +108,14 @@ public class AggregateRootDeducer {
    * @param rootPackageName the root package name
    * @return the aggregate root
    */
+  @SuppressWarnings("rawtypes")
   protected void makeAggregateRoot(
       Set<AggregateRoot> aggregateRoots, Thing thing, PackageName rootPackageName) {
     PackageName packageName = thing.makePackageName(rootPackageName, thing);
 
     ObjectName aggregateRootObjectName = makeAggregateRootName(thing);
 
-    Set<DomainObjectProperty<? extends Data>> properties =
+    Set<DomainObjectProperty> properties =
         aggregateRootPropertyDeducer.deduceFrom(thing, rootPackageName);
 
     Set<Constructor> constructors =
@@ -140,15 +139,15 @@ public class AggregateRootDeducer {
             thing.getThingScopeType().equals(ThingScopeType.DOMAIN_ABSTRACT_AGGREGATE_ROOT)
                 ? InstantiationType.ABSTRACT
                 : InstantiationType.CONCRETE,
-            makeSuperclass(thing.getMultiTenant()),
             aggregateRootObjectName,
             packageName,
             properties,
             constructors,
+            thing.getMultiTenant(),
             stateMutationMethods,
             stateQueryMethods,
             factoryMethods,
-            thing.getMultiTenant(),
+            makeSuperclass(thing.getMultiTenant()),
             persistence));
 
     // TODO: check if the following should be removed
@@ -194,18 +193,16 @@ public class AggregateRootDeducer {
    *
    * @return the aggregate root
    */
-  private Optional<AggregateRoot> makeSuperclass(Boolean multiTenant) {
-    return Optional.of(
-        new AggregateRoot(
-            InstantiationType.ABSTRACT,
-            Optional.empty(),
-            multiTenant ? new ObjectName("TenantAggregateRoot") : new ObjectName("AggregateRoot"),
-            new PackageName("com.oregor.trinity4j.domain"),
-            new LinkedHashSet<>(),
-            new LinkedHashSet<>(),
-            new LinkedHashSet<>(),
-            new LinkedHashSet<>(),
-            new LinkedHashSet<>(),
-            false));
+  private AggregateRoot makeSuperclass(Boolean multiTenant) {
+    return new AggregateRoot(
+        InstantiationType.ABSTRACT,
+        multiTenant ? new ObjectName("TenantAggregateRoot") : new ObjectName("AggregateRoot"),
+        new PackageName("com.oregor.trinity4j.domain"),
+        new LinkedHashSet<>(),
+        new LinkedHashSet<>(),
+        multiTenant,
+        new LinkedHashSet<>(),
+        new LinkedHashSet<>(),
+        new LinkedHashSet<>());
   }
 }

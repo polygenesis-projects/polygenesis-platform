@@ -1,0 +1,11 @@
+:icons: font
+
+= PolyGenesis Platform
+Christos Tsakostas, OREGOR LTD
+
+[abstract]
+PolyGenesis is an open source platform for Cross-Language Automated Code Generation, focused on DDD and UI.
+
+include::1-introduction/index.adoc[]
+
+include::2-getting-started/index.adoc[]

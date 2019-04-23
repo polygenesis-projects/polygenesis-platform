@@ -23,10 +23,9 @@ package io.polygenesis.models.reactivestate;
 import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.core.CoreRegistry;
 import io.polygenesis.core.Deducer;
-import io.polygenesis.core.Model;
-import io.polygenesis.core.ModelRepository;
+import io.polygenesis.core.MetamodelRepository;
 import io.polygenesis.core.ThingRepository;
-import io.polygenesis.models.api.ServiceModelRepository;
+import io.polygenesis.models.api.ServiceMetamodelRepository;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -35,7 +34,7 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class ReactiveStateDeducer implements Deducer<ReactiveStateModelRepository> {
+public class ReactiveStateDeducer implements Deducer<ReactiveStateMetamodelRepository> {
 
   private final StoreDeducer storeDeducer;
 
@@ -57,17 +56,18 @@ public class ReactiveStateDeducer implements Deducer<ReactiveStateModelRepositor
   // OVERRIDES
   // ===============================================================================================
 
+  @SuppressWarnings("rawtypes")
   @Override
-  public ReactiveStateModelRepository deduce(
-      ThingRepository thingRepository, Set<ModelRepository<? extends Model>> modelRepositories) {
+  public ReactiveStateMetamodelRepository deduce(
+      ThingRepository thingRepository, Set<MetamodelRepository> modelRepositories) {
     Set<Store> stores = new LinkedHashSet<>();
 
-    ServiceModelRepository serviceModelRepository =
-        CoreRegistry.getModelRepositoryResolver()
-            .resolve(modelRepositories, ServiceModelRepository.class);
+    ServiceMetamodelRepository serviceModelRepository =
+        CoreRegistry.getMetamodelRepositoryResolver()
+            .resolve(modelRepositories, ServiceMetamodelRepository.class);
 
     if (serviceModelRepository.getItems().isEmpty()) {
-      throw new IllegalStateException(String.format("serviceModelRepository cannot be empty."));
+      throw new IllegalStateException("ServiceModelRepository cannot be empty.");
     }
 
     thingRepository
@@ -75,6 +75,6 @@ public class ReactiveStateDeducer implements Deducer<ReactiveStateModelRepositor
         .forEach(
             thing -> stores.add(storeDeducer.deduceStoreFromThing(thing, serviceModelRepository)));
 
-    return new ReactiveStateModelRepository(stores);
+    return new ReactiveStateMetamodelRepository(stores);
   }
 }

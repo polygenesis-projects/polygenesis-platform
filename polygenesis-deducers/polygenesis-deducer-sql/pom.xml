@@ -14,12 +14,12 @@
   <dependencies>
     <!--MODELS-->
     <dependency>
-      <groupId>io.polygenesis.models</groupId>
-      <artifactId>polygenesis-model-domain</artifactId>
+      <groupId>io.polygenesis.metamodels</groupId>
+      <artifactId>polygenesis-metamodel-domain</artifactId>
     </dependency>
     <dependency>
-      <groupId>io.polygenesis.models</groupId>
-      <artifactId>polygenesis-model-sql</artifactId>
+      <groupId>io.polygenesis.metamodels</groupId>
+      <artifactId>polygenesis-metamodel-sql</artifactId>
     </dependency>
 
     <!--TEST-->

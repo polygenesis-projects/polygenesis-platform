@@ -37,24 +37,6 @@ public class DataArray extends Data {
   // ===============================================================================================
 
   /**
-   * Instantiates a new data array.
-   *
-   * @param arrayElement the array element
-   */
-  public DataArray(Data arrayElement) {
-    this(DataSource.user(), null, DataBusinessType.ANY, DataValidator.empty(), arrayElement);
-  }
-
-  /**
-   * Instantiates a new data array.
-   *
-   * @param variableName the variable name
-   */
-  public DataArray(VariableName variableName) {
-    this(DataSource.user(), variableName, DataBusinessType.ANY, DataValidator.empty(), null);
-  }
-
-  /**
    * Instantiates a new Data array.
    *
    * @param variableName the variable name

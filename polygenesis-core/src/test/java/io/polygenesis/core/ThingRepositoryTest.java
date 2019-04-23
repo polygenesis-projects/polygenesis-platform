@@ -22,7 +22,6 @@ package io.polygenesis.core;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.polygenesis.annotations.core.GoalType;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import org.junit.Test;

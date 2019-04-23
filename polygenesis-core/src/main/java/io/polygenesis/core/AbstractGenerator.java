@@ -66,7 +66,7 @@ public abstract class AbstractGenerator implements Generator {
   private void setGenerationPath(Path generationPath) {
     Assertion.isNotNull(generationPath, "Generation Path is required");
     try {
-      if (!Files.exists(generationPath)) {
+      if (!generationPath.toFile().exists()) {
         Files.createDirectories(generationPath);
       }
     } catch (IOException e) {

@@ -21,7 +21,7 @@
 package io.polygenesis.models.reactivestate;
 
 import io.polygenesis.core.Thing;
-import io.polygenesis.models.api.ServiceModelRepository;
+import io.polygenesis.models.api.ServiceMetamodelRepository;
 import java.util.Set;
 
 /**
@@ -74,7 +74,8 @@ public class StoreDeducer {
    * @param serviceModelRepository the service model repository
    * @return the store
    */
-  public Store deduceStoreFromThing(Thing thing, ServiceModelRepository serviceModelRepository) {
+  public Store deduceStoreFromThing(
+      Thing thing, ServiceMetamodelRepository serviceModelRepository) {
     Set<ActionGroup> actionGroups = actionGroupDeducer.deduce(thing, serviceModelRepository);
     Set<EffectGroup> effectGroups = effectGroupDeducer.deduce(thing);
     Set<Model> models = modelDeducer.deduce(thing, serviceModelRepository);

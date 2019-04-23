@@ -10,7 +10,7 @@ else
 fi
 
 
-if [ "$TRAVIS_BRANCH" = 'dev' ] && [ "$TRAVIS_PULL_REQUEST" == 'false' ]; then
+if [ "$TRAVIS_BRANCH" = 'refactor' ] && [ "$TRAVIS_PULL_REQUEST" == 'false' ]; then
     ./mvnw clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar \
       -Dsonar.projectKey=polygenesis-projects_polygenesis-platform \
       -Dsonar.organization=polygenesis-projects \

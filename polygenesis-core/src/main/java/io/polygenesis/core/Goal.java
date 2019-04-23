@@ -20,7 +20,6 @@
 
 package io.polygenesis.core;
 
-import io.polygenesis.annotations.core.GoalType;
 import io.polygenesis.commons.text.AbstractText;
 import io.polygenesis.commons.text.TextConverter;
 

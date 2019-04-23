@@ -21,7 +21,6 @@
 package io.polygenesis.implementations.java.apiimpl;
 
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.data.Data;
 import io.polygenesis.models.api.ServiceMethod;
 import io.polygenesis.models.apiimpl.ServiceImplementation;
 import io.polygenesis.models.domain.AggregateRootPersistable;
@@ -193,11 +192,16 @@ public abstract class AbstractServiceMethodImplementor {
   private AggregateRootPersistable retrieveAggregateRoot(
       ServiceImplementation serviceImplementation) {
     if (serviceImplementation.getOptionalParentAggregateRoot().isPresent()) {
-      return serviceImplementation.getOptionalParentAggregateRoot().get();
+      return serviceImplementation
+          .getOptionalParentAggregateRoot()
+          .orElseThrow(IllegalArgumentException::new);
     }
 
     if (serviceImplementation.getOptionalDomainEntity().isPresent()) {
-      BaseDomainEntity<?> domainEntity = serviceImplementation.getOptionalDomainEntity().get();
+      BaseDomainEntity domainEntity =
+          serviceImplementation
+              .getOptionalDomainEntity()
+              .orElseThrow(IllegalArgumentException::new);
 
       if (domainEntity instanceof AggregateRootPersistable) {
         return (AggregateRootPersistable) domainEntity;
@@ -211,7 +215,7 @@ public abstract class AbstractServiceMethodImplementor {
     } else {
       throw new IllegalArgumentException(
           String.format(
-              "No Domain Entity exists for service implementation",
+              "No Domain Entity exists for service implementation with name=%s",
               serviceImplementation.getService().getServiceName().getText()));
     }
   }
@@ -222,8 +226,8 @@ public abstract class AbstractServiceMethodImplementor {
    * @param domainObject the domain object
    * @return the set
    */
-  private Set<DomainObjectProperty<? extends Data>> propertiesOfConstructorFor(
-      BaseDomainObject<?> domainObject) {
+  @SuppressWarnings("rawtypes")
+  private Set<DomainObjectProperty> propertiesOfConstructorFor(BaseDomainObject domainObject) {
     return domainObject
         .getConstructors()
         .stream()

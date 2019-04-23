@@ -27,7 +27,6 @@ import io.polygenesis.commons.valueobjects.PackageName;
 import java.util.EnumSet;
 import java.util.LinkedHashSet;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -43,7 +42,7 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class Thing implements Model {
+public class Thing implements Metamodel {
 
   private ThingScopeType thingScopeType;
   private ThingBusinessType thingBusinessType;
@@ -54,7 +53,7 @@ public class Thing implements Model {
   private Boolean multiTenant;
   private Set<Thing> children;
   private Set<Thing> virtualChildren;
-  private Optional<Thing> optionalParent;
+  private Thing optionalParent;
   private Set<ThingLayerType> layerTypes;
 
   // ===============================================================================================
@@ -74,7 +73,7 @@ public class Thing implements Model {
         thingName,
         new LinkedHashSet<>(),
         false,
-        Optional.empty(),
+        null,
         allLayers());
   }
 
@@ -92,7 +91,7 @@ public class Thing implements Model {
         thingName,
         new LinkedHashSet<>(),
         multiTenant,
-        Optional.empty(),
+        null,
         allLayers());
   }
 
@@ -110,7 +109,7 @@ public class Thing implements Model {
         thingName,
         new LinkedHashSet<>(),
         parentThing.getMultiTenant(),
-        Optional.empty(),
+        null,
         allLayers());
   }
 
@@ -133,7 +132,7 @@ public class Thing implements Model {
       ThingName thingName,
       Set<ThingProperty> thingProperties,
       Boolean multiTenant,
-      Optional<Thing> optionalParent,
+      Thing optionalParent,
       Set<ThingLayerType> layerTypes) {
     setThingScopeType(thingScopeType);
     setThingBusinessType(thingBusinessType);
@@ -144,8 +143,11 @@ public class Thing implements Model {
     setMultiTenant(multiTenant);
     setChildren(new LinkedHashSet<>());
     setVirtualChildren(new LinkedHashSet<>());
-    setOptionalParent(optionalParent);
     setLayerTypes(layerTypes);
+
+    if (optionalParent != null) {
+      setOptionalParent(optionalParent);
+    }
   }
 
   // ===============================================================================================
@@ -185,18 +187,16 @@ public class Thing implements Model {
    * @param thing the thing
    */
   public void addChild(Thing thing) {
-    Assertion.isTrue(
-        thing
-            .getOptionalParent()
-            .orElseThrow(
-                () ->
-                    new IllegalArgumentException(
-                        String.format(
-                            "The parent of %s is not set", thing.getThingName().getText())))
-            .equals(this),
-        String.format(
-            "The parent of %s is not set equal to %s",
-            thing.getThingName().getText(), getThingName().getText()));
+    Assertion.isNotNull(
+        thing.getOptionalParent(),
+        String.format("The parent of %s is not set", thing.getThingName().getText()));
+
+    if (!thing.getOptionalParent().equals(this)) {
+      throw new IllegalArgumentException(
+          String.format(
+              "The parent of %s is not set equal to %s",
+              thing.getThingName().getText(), getThingName().getText()));
+    }
 
     getChildren().add(thing);
   }
@@ -207,18 +207,16 @@ public class Thing implements Model {
    * @param thing the thing
    */
   public void addVirtualChild(Thing thing) {
-    Assertion.isTrue(
-        thing
-            .getOptionalParent()
-            .orElseThrow(
-                () ->
-                    new IllegalArgumentException(
-                        String.format(
-                            "The parent of %s is not set", thing.getThingName().getText())))
-            .equals(this),
-        String.format(
-            "The parent of %s is not set equal to %s",
-            thing.getThingName().getText(), getThingName().getText()));
+    Assertion.isNotNull(
+        thing.getOptionalParent(),
+        String.format("The parent of %s is not set", thing.getThingName().getText()));
+
+    if (!thing.getOptionalParent().equals(this)) {
+      throw new IllegalArgumentException(
+          String.format(
+              "The parent of %s is not set equal to %s",
+              thing.getThingName().getText(), getThingName().getText()));
+    }
 
     getVirtualChildren().add(thing);
   }
@@ -235,8 +233,8 @@ public class Thing implements Model {
    * @return the package name
    */
   public PackageName makePackageName(PackageName rootPackageName, Thing thing) {
-    if (thing.getOptionalParent().isPresent()) {
-      return makePackageName(rootPackageName, thing.getOptionalParent().get());
+    if (thing.getOptionalParent() != null) {
+      return makePackageName(rootPackageName, thing.getOptionalParent());
     }
 
     return new PackageName(
@@ -343,7 +341,7 @@ public class Thing implements Model {
    *
    * @return the optional parent
    */
-  public Optional<Thing> getOptionalParent() {
+  public Thing getOptionalParent() {
     return optionalParent;
   }
 
@@ -454,7 +452,7 @@ public class Thing implements Model {
    *
    * @param optionalParent the optional parent
    */
-  private void setOptionalParent(Optional<Thing> optionalParent) {
+  private void setOptionalParent(Thing optionalParent) {
     Assertion.isNotNull(optionalParent, "optionalParent is required");
     this.optionalParent = optionalParent;
   }

@@ -20,8 +20,6 @@
 
 package io.polygenesis.deducers.apiimpl;
 
-import io.polygenesis.commons.valueobjects.PackageName;
-
 /**
  * The type Api impl deducer factory.
  *
@@ -48,7 +46,12 @@ public class DomainEntityConverterDeducerFactory {
   // GETTERS
   // ===============================================================================================
 
-  public static DomainEntityConverterDeducer newInstance(PackageName packageName) {
+  /**
+   * New instance domain entity converter deducer.
+   *
+   * @return the domain entity converter deducer
+   */
+  public static DomainEntityConverterDeducer newInstance() {
     return new DomainEntityConverterDeducer();
   }
 }

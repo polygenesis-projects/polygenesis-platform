@@ -22,7 +22,6 @@ package io.polygenesis.core;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.polygenesis.annotations.core.GoalType;
 import io.polygenesis.commons.test.AbstractEqualityTest;
 import io.polygenesis.core.data.DataBusinessType;
 import io.polygenesis.core.data.DataPrimitive;

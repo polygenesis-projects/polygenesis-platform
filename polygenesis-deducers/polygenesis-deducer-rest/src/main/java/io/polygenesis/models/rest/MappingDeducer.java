@@ -20,9 +20,9 @@
 
 package io.polygenesis.models.rest;
 
-import io.polygenesis.annotations.core.GoalType;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.Function;
+import io.polygenesis.core.GoalType;
 import io.polygenesis.core.Thing;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
@@ -142,9 +142,8 @@ public class MappingDeducer {
    * @param thing the thing
    */
   private void fillParentPathContent(Set<PathContent> pathContents, Thing thing) {
-    if (thing.getOptionalParent().isPresent()) {
-      pathContents.addAll(
-          getMappingForResourceWithId(thing.getOptionalParent().get()).getPathContents());
+    if (thing.getOptionalParent() != null) {
+      pathContents.addAll(getMappingForResourceWithId(thing.getOptionalParent()).getPathContents());
     }
   }
 }

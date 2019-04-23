@@ -20,14 +20,90 @@
 
 package io.polygenesis.commons.freemarker;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
+import org.apache.commons.io.FileUtils;
+import org.junit.Before;
 import org.junit.Test;
 
 /** @author Christos Tsakostas */
 public class FreemarkerServiceTest {
 
-  @Test
-  public void export() {}
+  private Template template;
+  private Configuration configuration;
+  private FreemarkerService freemarkerService;
+
+  @Before
+  public void setUp() {
+    template = mock(Template.class);
+    configuration = mock(Configuration.class);
+    freemarkerService = new FreemarkerService(configuration);
+  }
 
   @Test
-  public void exportIfNotExists() {}
+  public void shouldSucceedToExport() throws IOException {
+    FileUtils.deleteDirectory(new File("tmp"));
+
+    Map<String, Object> dataModel = new HashMap<>();
+    String ftlTemplate = "some.ftl";
+    Path generationFilePath = Paths.get("tmp", "Export.java");
+
+    given(configuration.getTemplate(ftlTemplate)).willReturn(template);
+
+    freemarkerService.export(dataModel, ftlTemplate, generationFilePath);
+
+    verify(configuration).getTemplate(eq(ftlTemplate));
+  }
+
+  @Test
+  public void shouldFailToExport() throws IOException {
+    FileUtils.deleteDirectory(new File("folder-no-file"));
+
+    Map<String, Object> dataModel = new HashMap<>();
+    String ftlTemplate = "some.ftl";
+    Path generationFilePath = Paths.get("folder-no-file");
+
+    assertThatThrownBy(() -> freemarkerService.export(dataModel, ftlTemplate, generationFilePath))
+        .isInstanceOf(IllegalArgumentException.class);
+  }
+
+  @Test
+  public void shouldSucceedToExportIfNotExists() throws IOException {
+    FileUtils.deleteDirectory(new File("tmp"));
+
+    Map<String, Object> dataModel = new HashMap<>();
+    String ftlTemplate = "some.ftl";
+    Path generationFilePath = Paths.get("tmp", "Export.java");
+
+    given(configuration.getTemplate(ftlTemplate)).willReturn(template);
+
+    freemarkerService.exportIfNotExists(dataModel, ftlTemplate, generationFilePath);
+    verify(configuration).getTemplate(eq(ftlTemplate));
+  }
+
+  @Test
+  public void shouldSucceedToExportToString() throws IOException {
+    Map<String, Object> dataModel = new HashMap<>();
+    String ftlTemplate = "some.ftl";
+    given(configuration.getTemplate(ftlTemplate)).willReturn(template);
+
+    String output = freemarkerService.exportToString(dataModel, ftlTemplate);
+
+    verify(configuration).getTemplate(eq(ftlTemplate));
+
+    assertThat(output).isNotNull();
+  }
 }

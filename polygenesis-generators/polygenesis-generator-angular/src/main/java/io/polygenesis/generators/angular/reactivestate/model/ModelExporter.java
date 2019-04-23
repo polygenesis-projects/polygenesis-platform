@@ -31,7 +31,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * The type Model exporter.
+ * The type Metamodel exporter.
  *
  * @author Christos Tsakostas
  */
@@ -52,7 +52,7 @@ public class ModelExporter {
   // ===============================================================================================
 
   /**
-   * Instantiates a new Model exporter.
+   * Instantiates a new Metamodel exporter.
    *
    * @param freemarkerService the freemarker service
    * @param modelRepresentable the model representable
@@ -94,6 +94,6 @@ public class ModelExporter {
    */
   private String makeModelFileName(Model model) {
     return String.format(
-        "%s.%s", TextConverter.toLowerHyphen(model.getModel().getDataType()), POSTFIX_MODEL_TS);
+        "%s.%s", TextConverter.toLowerHyphen(model.getData().getDataType()), POSTFIX_MODEL_TS);
   }
 }

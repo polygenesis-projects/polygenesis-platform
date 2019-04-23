@@ -20,7 +20,6 @@
 
 package io.polygenesis.core.dsl;
 
-import io.polygenesis.annotations.core.GoalType;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
@@ -28,6 +27,7 @@ import io.polygenesis.core.Argument;
 import io.polygenesis.core.Function;
 import io.polygenesis.core.FunctionName;
 import io.polygenesis.core.Goal;
+import io.polygenesis.core.GoalType;
 import io.polygenesis.core.ReturnValue;
 import io.polygenesis.core.Thing;
 import io.polygenesis.core.data.Data;
@@ -115,12 +115,12 @@ public class FunctionBuilder {
 
     // ---------------------------------------------------------------------------------------------
     // Add Parent Thing Identity if Any
-    if (thing.getOptionalParent().isPresent()) {
-      argumentDataGroup.addData(makeParentThingIdentity(thing.getOptionalParent().get()));
+    if (thing.getOptionalParent() != null) {
+      argumentDataGroup.addData(makeParentThingIdentity(thing.getOptionalParent()));
     }
 
     // ---------------------------------------------------------------------------------------------
-    models.forEach(model -> argumentDataGroup.addData(model));
+    models.forEach(argumentDataGroup::addData);
     // ---------------------------------------------------------------------------------------------
 
     // ---------------------------------------------------------------------------------------------
@@ -180,8 +180,8 @@ public class FunctionBuilder {
 
     // ---------------------------------------------------------------------------------------------
     // Add Parent Thing Identity if Any
-    if (thing.getOptionalParent().isPresent()) {
-      argumentDataGroup.addData(makeParentThingIdentity(thing.getOptionalParent().get()));
+    if (thing.getOptionalParent() != null) {
+      argumentDataGroup.addData(makeParentThingIdentity(thing.getOptionalParent()));
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -189,7 +189,7 @@ public class FunctionBuilder {
     argumentDataGroup.addData(makeThingIdentity(thing));
 
     // ---------------------------------------------------------------------------------------------
-    models.forEach(model -> argumentDataGroup.addData(model));
+    models.forEach(argumentDataGroup::addData);
     // ---------------------------------------------------------------------------------------------
 
     // ---------------------------------------------------------------------------------------------
@@ -249,8 +249,8 @@ public class FunctionBuilder {
 
     // ---------------------------------------------------------------------------------------------
     // Add Parent Thing Identity if Any
-    if (thing.getOptionalParent().isPresent()) {
-      argumentDataGroup.addData(makeParentThingIdentity(thing.getOptionalParent().get()));
+    if (thing.getOptionalParent() != null) {
+      argumentDataGroup.addData(makeParentThingIdentity(thing.getOptionalParent()));
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -268,7 +268,7 @@ public class FunctionBuilder {
             thing.makePackageName(rootPackageNameVo, thing));
 
     // ---------------------------------------------------------------------------------------------
-    models.forEach(model -> returnValueDataGroup.addData(model));
+    models.forEach(returnValueDataGroup::addData);
     // ---------------------------------------------------------------------------------------------
 
     // ---------------------------------------------------------------------------------------------
@@ -308,8 +308,8 @@ public class FunctionBuilder {
 
     // ---------------------------------------------------------------------------------------------
     // Add Parent Thing Identity if Any
-    if (thing.getOptionalParent().isPresent()) {
-      argumentDataGroup.addData(makeParentThingIdentity(thing.getOptionalParent().get()));
+    if (thing.getOptionalParent() != null) {
+      argumentDataGroup.addData(makeParentThingIdentity(thing.getOptionalParent()));
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -334,7 +334,7 @@ public class FunctionBuilder {
             thing.makePackageName(rootPackageNameVo, thing));
 
     // ---------------------------------------------------------------------------------------------
-    models.forEach(model -> arrayElement.addData(model));
+    models.forEach(arrayElement::addData);
     // ---------------------------------------------------------------------------------------------
 
     String arrayDataTypeAndVariableName =

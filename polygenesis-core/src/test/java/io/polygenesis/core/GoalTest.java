@@ -22,7 +22,6 @@ package io.polygenesis.core;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.polygenesis.annotations.core.GoalType;
 import io.polygenesis.commons.test.AbstractEqualityTest;
 import org.junit.Test;
 
@@ -33,6 +32,60 @@ public class GoalTest extends AbstractEqualityTest<Goal> {
   public void shouldInitialize() {
     Goal goal = new Goal(GoalType.CREATE);
     assertThat(goal).isNotNull();
+  }
+
+  @Test
+  public void shouldInitializeWithCustomGoal() {
+    Goal goal = new Goal("someCustomGoal");
+    assertThat(goal).isNotNull();
+  }
+
+  @Test
+  public void shouldBeCreate() {
+    Goal goal = new Goal(GoalType.CREATE);
+
+    assertThat(goal.isCommand()).isTrue();
+    assertThat(goal.isCreate()).isTrue();
+  }
+
+  @Test
+  public void shouldBeModify() {
+    Goal goal = new Goal(GoalType.MODIFY);
+
+    assertThat(goal.isCommand()).isTrue();
+    assertThat(goal.isModify()).isTrue();
+  }
+
+  @Test
+  public void shouldBeDelete() {
+    Goal goal = new Goal(GoalType.DELETE);
+
+    assertThat(goal.isCommand()).isTrue();
+    assertThat(goal.isDelete()).isTrue();
+  }
+
+  @Test
+  public void shouldBeFetchOne() {
+    Goal goal = new Goal(GoalType.FETCH_ONE);
+
+    assertThat(goal.isCommand()).isFalse();
+    assertThat(goal.isFetchOne()).isTrue();
+  }
+
+  @Test
+  public void shouldBeFetchCollection() {
+    Goal goal = new Goal(GoalType.FETCH_COLLECTION);
+
+    assertThat(goal.isCommand()).isFalse();
+    assertThat(goal.isFetchCollection()).isTrue();
+  }
+
+  @Test
+  public void shouldBeFetchPagedCollection() {
+    Goal goal = new Goal(GoalType.FETCH_PAGED_COLLECTION);
+
+    assertThat(goal.isCommand()).isFalse();
+    assertThat(goal.isFetchPagedCollection()).isTrue();
   }
 
   @Override

@@ -36,6 +36,14 @@ public class ContextNameTest extends AbstractEqualityTest<ContextName> {
     assertThat(contextName.getText()).isEqualTo("abc");
   }
 
+  @Test
+  public void shouldInstantiateDefaultContext() {
+    ContextName contextName = ContextName.defaultContext();
+
+    assertThat(contextName).isNotNull();
+    assertThat(contextName.getText()).isEqualTo("defaultContext");
+  }
+
   @Override
   public ContextName createObject1() {
     return new ContextName("xxx");

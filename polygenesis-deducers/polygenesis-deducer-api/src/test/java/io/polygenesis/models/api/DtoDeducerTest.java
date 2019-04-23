@@ -66,9 +66,6 @@ public class DtoDeducerTest {
     assertThat(dtoResponse).isNotNull();
   }
 
-  @Test
-  public void shouldDeduceAllDtosInMethods() {}
-
   // ===============================================================================================
   // PRIVATE
   // ===============================================================================================

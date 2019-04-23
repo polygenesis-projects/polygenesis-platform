@@ -26,10 +26,9 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-import io.polygenesis.core.Model;
-import io.polygenesis.core.ModelRepository;
+import io.polygenesis.core.MetamodelRepository;
 import io.polygenesis.models.api.Service;
-import io.polygenesis.models.api.ServiceModelRepository;
+import io.polygenesis.models.api.ServiceMetamodelRepository;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -67,7 +66,7 @@ public class JavaApiGeneratorTest {
     assertThatThrownBy(() -> javaApiGenerator.generate(new LinkedHashSet<>()))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessageContaining(
-            "No Model Repository found for Class=io.polygenesis.models.api.ServiceModelRepository "
+            "No Metamodel Repository found for Class=io.polygenesis.models.api.ServiceMetamodelRepository "
                 + "in provided modelRepositories");
   }
 
@@ -75,13 +74,14 @@ public class JavaApiGeneratorTest {
   // PRIVATE
   // ===============================================================================================
 
-  private Set<ModelRepository<? extends Model>> createModelRepositories() {
+  @SuppressWarnings("rawtypes")
+  private Set<MetamodelRepository> createModelRepositories() {
     Set<Service> services = new LinkedHashSet<>();
 
     Service service = mock(Service.class);
     services.add(service);
 
-    ServiceModelRepository serviceModelRepository = new ServiceModelRepository(services);
+    ServiceMetamodelRepository serviceModelRepository = new ServiceMetamodelRepository(services);
 
     return new LinkedHashSet<>(Arrays.asList(serviceModelRepository));
   }

@@ -23,7 +23,11 @@ package io.polygenesis.core.data.validation;
 import io.polygenesis.commons.assertion.Assertion;
 import java.util.Objects;
 
-/** The type Maximum length validation. */
+/**
+ * The type Maximum length validation.
+ *
+ * @author Christos Tsakostas
+ */
 public class MaximumLengthValidation extends Validation {
 
   // ===============================================================================================
@@ -68,7 +72,7 @@ public class MaximumLengthValidation extends Validation {
    *
    * @param maximumLength the maximum length
    */
-  public void setMaximumLength(Integer maximumLength) {
+  private void setMaximumLength(Integer maximumLength) {
     Assertion.isNotNull(maximumLength, "maximumLength is required");
     this.maximumLength = maximumLength;
   }

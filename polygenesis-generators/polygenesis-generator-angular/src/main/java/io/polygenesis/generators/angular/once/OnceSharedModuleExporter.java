@@ -22,7 +22,7 @@ package io.polygenesis.generators.angular.once;
 
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.generators.angular.ui.container.UiContainerExporter;
-import io.polygenesis.models.ui.UiLayoutContainerModelRepository;
+import io.polygenesis.models.ui.UiLayoutContainerMetamodelRepository;
 import io.polygenesis.models.ui.container.AbstractContainerWithElements;
 import io.polygenesis.models.ui.container.LayoutContainer;
 import java.nio.file.Path;
@@ -85,7 +85,7 @@ public class OnceSharedModuleExporter {
    * @param uiLayoutContainerModelRepository the ui layout container model repository
    */
   public void export(
-      Path generationPath, UiLayoutContainerModelRepository uiLayoutContainerModelRepository) {
+      Path generationPath, UiLayoutContainerMetamodelRepository uiLayoutContainerModelRepository) {
     Map<String, Object> dataModel = new HashMap<>();
     dataModel.put("layouts", uiLayoutContainerModelRepository.getItems());
 

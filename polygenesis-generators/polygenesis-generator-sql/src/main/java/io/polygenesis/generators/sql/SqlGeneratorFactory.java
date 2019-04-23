@@ -40,9 +40,7 @@ public final class SqlGeneratorFactory {
     FreemarkerService freemarkerService =
         new FreemarkerService(FreemarkerConfig.getInstance().getConfiguration());
 
-    ScriptRepresentable scriptRepresentable = new ScriptRepresentable();
-
-    scriptExporter = new ScriptExporter(freemarkerService, scriptRepresentable);
+    scriptExporter = new ScriptExporter(freemarkerService);
   }
 
   // ===============================================================================================

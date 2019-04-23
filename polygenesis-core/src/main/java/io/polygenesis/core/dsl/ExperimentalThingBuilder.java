@@ -20,7 +20,6 @@
 
 package io.polygenesis.core.dsl;
 
-import io.polygenesis.annotations.core.GoalType;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
@@ -28,6 +27,7 @@ import io.polygenesis.core.Argument;
 import io.polygenesis.core.Function;
 import io.polygenesis.core.FunctionName;
 import io.polygenesis.core.Goal;
+import io.polygenesis.core.GoalType;
 import io.polygenesis.core.ReturnValue;
 import io.polygenesis.core.Thing;
 import io.polygenesis.core.ThingBuilder;
@@ -141,7 +141,7 @@ public class ExperimentalThingBuilder {
             this.packageName);
 
     // ---------------------------------------------------------------------------------------------
-    models.forEach(model -> argumentDataGroup.addData(model));
+    models.forEach(argumentDataGroup::addData);
     // ---------------------------------------------------------------------------------------------
 
     // ---------------------------------------------------------------------------------------------
@@ -209,7 +209,7 @@ public class ExperimentalThingBuilder {
                     "%sId", TextConverter.toLowerCamel(thing.getThingName().getText())))));
 
     // ---------------------------------------------------------------------------------------------
-    models.forEach(model -> argumentDataGroup.addData(model));
+    models.forEach(argumentDataGroup::addData);
     // ---------------------------------------------------------------------------------------------
 
     // ---------------------------------------------------------------------------------------------
@@ -288,7 +288,7 @@ public class ExperimentalThingBuilder {
             this.packageName);
 
     // ---------------------------------------------------------------------------------------------
-    models.forEach(model -> returnValueDataGroup.addData(model));
+    models.forEach(returnValueDataGroup::addData);
     // ---------------------------------------------------------------------------------------------
 
     // ---------------------------------------------------------------------------------------------
@@ -347,7 +347,7 @@ public class ExperimentalThingBuilder {
         new DataGroup(new ObjectName(arrayElementDataTypeAndVariableName), this.packageName);
 
     // ---------------------------------------------------------------------------------------------
-    models.forEach(model -> arrayElement.addData(model));
+    models.forEach(arrayElement::addData);
     // ---------------------------------------------------------------------------------------------
 
     String arrayDataTypeAndVariableName =

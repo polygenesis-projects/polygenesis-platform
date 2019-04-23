@@ -61,7 +61,8 @@ public class AggregateEntityIdClassRepresentable
 
   @Override
   public Set<FieldRepresentation> fieldRepresentations(AggregateEntity source, Object... args) {
-    return new LinkedHashSet<>();
+    return new LinkedHashSet<>(
+        Arrays.asList(new FieldRepresentation("static final long", "serialVersionUID = 1L")));
   }
 
   @Override

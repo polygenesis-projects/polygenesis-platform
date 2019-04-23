@@ -22,12 +22,11 @@ package io.polygenesis.deducers.sql;
 
 import io.polygenesis.core.CoreRegistry;
 import io.polygenesis.core.Deducer;
-import io.polygenesis.core.Model;
-import io.polygenesis.core.ModelRepository;
+import io.polygenesis.core.MetamodelRepository;
 import io.polygenesis.core.ThingRepository;
-import io.polygenesis.models.domain.DomainModelRepository;
+import io.polygenesis.models.domain.DomainMetamodelRepository;
 import io.polygenesis.models.sql.Index;
-import io.polygenesis.models.sql.SqlIndexModelRepository;
+import io.polygenesis.models.sql.SqlIndexMetamodelRepository;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -36,7 +35,7 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class SqlIndexDeducer implements Deducer<SqlIndexModelRepository> {
+public class SqlIndexDeducer implements Deducer<SqlIndexMetamodelRepository> {
 
   // ===============================================================================================
   // DEPENDENCIES
@@ -60,24 +59,25 @@ public class SqlIndexDeducer implements Deducer<SqlIndexModelRepository> {
   // OVERRIDES
   // ===============================================================================================
 
+  @SuppressWarnings("rawtypes")
   @Override
-  public SqlIndexModelRepository deduce(
-      ThingRepository thingRepository, Set<ModelRepository<? extends Model>> modelRepositories) {
+  public SqlIndexMetamodelRepository deduce(
+      ThingRepository thingRepository, Set<MetamodelRepository> modelRepositories) {
     if (thingRepository.getApiThings().isEmpty()) {
       throw new IllegalArgumentException("thingRepository cannot be empty");
     }
 
     Set<Index> indices = new LinkedHashSet<>();
 
-    CoreRegistry.getModelRepositoryResolver()
-        .resolve(modelRepositories, DomainModelRepository.class)
+    CoreRegistry.getMetamodelRepositoryResolver()
+        .resolve(modelRepositories, DomainMetamodelRepository.class)
         .getItems()
         .forEach(
             aggregateRoot -> {
               indices.add(indexDeducer.deduce());
             });
 
-    return new SqlIndexModelRepository(indices);
+    return new SqlIndexMetamodelRepository(indices);
   }
 
   // ===============================================================================================

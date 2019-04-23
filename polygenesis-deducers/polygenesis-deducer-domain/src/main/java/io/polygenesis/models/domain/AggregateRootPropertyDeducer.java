@@ -22,7 +22,6 @@ package io.polygenesis.models.domain;
 
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.Thing;
-import io.polygenesis.core.data.Data;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -58,9 +57,9 @@ public class AggregateRootPropertyDeducer extends AbstractDomainObjectDeducer {
    * @param rootPackageName the root package name
    * @return the set
    */
-  public Set<DomainObjectProperty<? extends Data>> deduceFrom(
-      Thing thing, PackageName rootPackageName) {
-    Set<DomainObjectProperty<? extends Data>> properties = new LinkedHashSet<>();
+  @SuppressWarnings("rawtypes")
+  public Set<DomainObjectProperty> deduceFrom(Thing thing, PackageName rootPackageName) {
+    Set<DomainObjectProperty> properties = new LinkedHashSet<>();
 
     if (thing.getThingProperties().isEmpty()) {
       thing
@@ -69,7 +68,8 @@ public class AggregateRootPropertyDeducer extends AbstractDomainObjectDeducer {
               function ->
                   properties.addAll(deduceFromFunctionArguments(function, rootPackageName)));
     } else {
-      properties.addAll(deduceFromThingProperties(thing));
+      throw new UnsupportedOperationException(
+          "Thing properties are automatically extracted from functions.");
     }
 
     properties.addAll(

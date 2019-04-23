@@ -29,10 +29,32 @@ public class FreemarkerAuthorService {
 
   private static String author = "PolyGenesis Platform";
 
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
+  private FreemarkerAuthorService() {
+    throw new IllegalStateException("Utility class");
+  }
+
+  // ===============================================================================================
+  // STATIC METHODS
+  // ===============================================================================================
+
+  /**
+   * Gets author.
+   *
+   * @return the author
+   */
   public static String getAuthor() {
     return author;
   }
 
+  /**
+   * Sets author.
+   *
+   * @param author the author
+   */
   public static void setAuthor(String author) {
     FreemarkerAuthorService.author = author;
   }

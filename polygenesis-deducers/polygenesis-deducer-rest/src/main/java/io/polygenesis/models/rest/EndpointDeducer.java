@@ -20,8 +20,8 @@
 
 package io.polygenesis.models.rest;
 
-import io.polygenesis.annotations.core.GoalType;
 import io.polygenesis.commons.text.TextConverter;
+import io.polygenesis.core.GoalType;
 import io.polygenesis.models.api.Service;
 import io.polygenesis.models.api.ServiceMethod;
 import java.util.HashMap;

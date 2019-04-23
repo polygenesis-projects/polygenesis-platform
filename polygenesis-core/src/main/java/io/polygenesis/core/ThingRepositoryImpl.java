@@ -23,6 +23,7 @@ package io.polygenesis.core;
 import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import java.util.LinkedHashSet;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -117,7 +118,7 @@ public class ThingRepositoryImpl implements ThingRepository {
         .stream()
         .flatMap(thing -> thing.getVirtualChildren().stream())
         .filter(thing -> thing.equals(thingToCheck))
-        .anyMatch(thing -> thing != null);
+        .anyMatch(Objects::nonNull);
   }
 
   // ===============================================================================================
@@ -128,10 +129,7 @@ public class ThingRepositoryImpl implements ThingRepository {
     Assertion.isNotNull(things, "things is required");
     Set<Thing> thingsAll = new LinkedHashSet<>();
 
-    things.forEach(
-        thing -> {
-          fillThings(thingsAll, thing);
-        });
+    things.forEach(thing -> fillThings(thingsAll, thing));
 
     this.things = thingsAll;
   }

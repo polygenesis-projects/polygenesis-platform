@@ -23,10 +23,9 @@ package io.polygenesis.generators.java.apidetail;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.AbstractGenerator;
 import io.polygenesis.core.CoreRegistry;
-import io.polygenesis.core.Model;
-import io.polygenesis.core.ModelRepository;
-import io.polygenesis.models.apiimpl.DomainEntityConverterModelRepository;
-import io.polygenesis.models.apiimpl.ServiceImplementationModelRepository;
+import io.polygenesis.core.MetamodelRepository;
+import io.polygenesis.models.apiimpl.DomainEntityConverterMetamodelRepository;
+import io.polygenesis.models.apiimpl.ServiceImplementationMetamodelRepository;
 import java.nio.file.Path;
 import java.util.Set;
 
@@ -85,11 +84,12 @@ public class JavaApiDetailGenerator extends AbstractGenerator {
   // OVERRIDES
   // ===============================================================================================
 
+  @SuppressWarnings("rawtypes")
   @Override
-  public void generate(Set<ModelRepository<? extends Model>> modelRepositories) {
-    ServiceImplementationModelRepository serviceImplementationModelRepository =
-        CoreRegistry.getModelRepositoryResolver()
-            .resolve(modelRepositories, ServiceImplementationModelRepository.class);
+  public void generate(Set<MetamodelRepository> modelRepositories) {
+    ServiceImplementationMetamodelRepository serviceImplementationModelRepository =
+        CoreRegistry.getMetamodelRepositoryResolver()
+            .resolve(modelRepositories, ServiceImplementationMetamodelRepository.class);
 
     if (serviceImplementationModelRepository.getItems().isEmpty()) {
       throw new IllegalStateException();
@@ -103,9 +103,9 @@ public class JavaApiDetailGenerator extends AbstractGenerator {
               serviceImplementationTestExporter.export(getGenerationPath(), serviceImplementation);
             });
 
-    DomainEntityConverterModelRepository domainEntityConverterModelRepository =
-        CoreRegistry.getModelRepositoryResolver()
-            .resolve(modelRepositories, DomainEntityConverterModelRepository.class);
+    DomainEntityConverterMetamodelRepository domainEntityConverterModelRepository =
+        CoreRegistry.getMetamodelRepositoryResolver()
+            .resolve(modelRepositories, DomainEntityConverterMetamodelRepository.class);
 
     domainEntityConverterModelRepository
         .getItems()

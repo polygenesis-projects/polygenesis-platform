@@ -22,14 +22,13 @@ package io.polygenesis.deducers.sql;
 
 import io.polygenesis.core.CoreRegistry;
 import io.polygenesis.core.Deducer;
-import io.polygenesis.core.Model;
-import io.polygenesis.core.ModelRepository;
+import io.polygenesis.core.MetamodelRepository;
 import io.polygenesis.core.ThingRepository;
-import io.polygenesis.models.domain.DomainModelRepository;
+import io.polygenesis.models.domain.DomainMetamodelRepository;
 import io.polygenesis.models.sql.Column;
 import io.polygenesis.models.sql.ColumnDataType;
 import io.polygenesis.models.sql.RequiredType;
-import io.polygenesis.models.sql.SqlTableModelRepository;
+import io.polygenesis.models.sql.SqlTableMetamodelRepository;
 import io.polygenesis.models.sql.Table;
 import io.polygenesis.models.sql.TableName;
 import java.util.LinkedHashSet;
@@ -40,7 +39,7 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class SqlTableDeducer implements Deducer<SqlTableModelRepository> {
+public class SqlTableDeducer implements Deducer<SqlTableMetamodelRepository> {
 
   // ===============================================================================================
   // DEPENDENCIES
@@ -59,17 +58,18 @@ public class SqlTableDeducer implements Deducer<SqlTableModelRepository> {
   // OVERRIDES
   // ===============================================================================================
 
+  @SuppressWarnings("rawtypes")
   @Override
-  public SqlTableModelRepository deduce(
-      ThingRepository thingRepository, Set<ModelRepository<? extends Model>> modelRepositories) {
+  public SqlTableMetamodelRepository deduce(
+      ThingRepository thingRepository, Set<MetamodelRepository> modelRepositories) {
     if (thingRepository.getApiThings().isEmpty()) {
       throw new IllegalArgumentException("thingRepository cannot be empty");
     }
 
     Set<Table> tables = new LinkedHashSet<>();
 
-    CoreRegistry.getModelRepositoryResolver()
-        .resolve(modelRepositories, DomainModelRepository.class)
+    CoreRegistry.getMetamodelRepositoryResolver()
+        .resolve(modelRepositories, DomainMetamodelRepository.class)
         .getItems()
         .forEach(
             aggregateRoot -> {
@@ -78,7 +78,7 @@ public class SqlTableDeducer implements Deducer<SqlTableModelRepository> {
 
     tables.add(createDomainMessageTable());
 
-    return new SqlTableModelRepository(tables);
+    return new SqlTableMetamodelRepository(tables);
   }
 
   // ===============================================================================================

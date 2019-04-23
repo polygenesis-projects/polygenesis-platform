@@ -26,7 +26,6 @@ import io.polygenesis.core.Thing;
 import io.polygenesis.core.data.DataArray;
 import io.polygenesis.core.data.DataGroup;
 import java.util.LinkedHashSet;
-import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -112,13 +111,13 @@ public class AggregateEntityDeducer {
       Thing thingParent, Thing thingChild, PackageName rootPackageName) {
     return new AggregateEntity(
         InstantiationType.CONCRETE,
-        makeSuperclass(thingParent.getMultiTenant()),
         new ObjectName(thingChild.getThingName().getText()),
         thingParent.makePackageName(rootPackageName, thingParent),
         aggregateEntityPropertyDeducer.deduceFrom(thingParent, thingChild, rootPackageName),
         domainObjectConstructorDeducer.deduceConstructorFromFunctionCreate(
             thingChild, rootPackageName),
-        thingParent.getMultiTenant());
+        thingParent.getMultiTenant(),
+        makeSuperclass(thingParent.getMultiTenant()));
   }
 
   /**
@@ -143,15 +142,13 @@ public class AggregateEntityDeducer {
    *
    * @return the optional
    */
-  private Optional<AggregateEntity> makeSuperclass(Boolean multiTenant) {
-    return Optional.of(
-        new AggregateEntity(
-            InstantiationType.ABSTRACT,
-            Optional.empty(),
-            new ObjectName("AggregateEntity"),
-            new PackageName("com.oregor.trinity4j.domain"),
-            new LinkedHashSet<>(),
-            new LinkedHashSet<>(),
-            multiTenant));
+  private AggregateEntity makeSuperclass(Boolean multiTenant) {
+    return new AggregateEntity(
+        InstantiationType.ABSTRACT,
+        new ObjectName("AggregateEntity"),
+        new PackageName("com.oregor.trinity4j.domain"),
+        new LinkedHashSet<>(),
+        new LinkedHashSet<>(),
+        multiTenant);
   }
 }

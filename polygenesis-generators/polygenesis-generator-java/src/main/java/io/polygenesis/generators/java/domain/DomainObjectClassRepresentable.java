@@ -22,7 +22,6 @@ package io.polygenesis.generators.java.domain;
 
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.commons.valueobjects.PackageName;
-import io.polygenesis.core.data.Data;
 import io.polygenesis.core.data.DataArray;
 import io.polygenesis.core.data.DataGroup;
 import io.polygenesis.core.data.DataPrimitive;
@@ -49,7 +48,7 @@ import java.util.TreeSet;
  * @param <S> the type parameter
  * @author Christos Tsakostas
  */
-public abstract class DomainObjectClassRepresentable<S extends BaseDomainObject<?>>
+public abstract class DomainObjectClassRepresentable<S extends BaseDomainObject>
     extends AbstractClassRepresentable<S> {
 
   // ===============================================================================================
@@ -180,7 +179,6 @@ public abstract class DomainObjectClassRepresentable<S extends BaseDomainObject<
 
   @Override
   public Set<String> imports(S source, Object... args) {
-    PackageName rootPackageName = (PackageName) args[0];
     Set<String> imports = new TreeSet<>();
 
     source
@@ -190,62 +188,29 @@ public abstract class DomainObjectClassRepresentable<S extends BaseDomainObject<
             property -> !property.getPropertyType().equals(PropertyType.ABSTRACT_AGGREGATE_ROOT_ID))
         .forEach(
             property -> {
-              if (property.getPropertyType().equals(PropertyType.PRIMITIVE_COLLECTION)
-                  || property.getPropertyType().equals(PropertyType.VALUE_OBJECT_COLLECTION)) {
-                imports.add("java.util.List");
-                imports.add("javax.persistence.ElementCollection");
-                imports.add("javax.persistence.CollectionTable");
-                imports.add("javax.persistence.JoinColumn");
-                imports.add("javax.persistence.JoinColumns");
-                imports.add("javax.persistence.Column");
-              }
-
-              if (property.getPropertyType().equals(PropertyType.AGGREGATE_ENTITY_COLLECTION)) {
-                imports.add("java.util.List");
-                imports.add("javax.persistence.CascadeType");
-                imports.add("javax.persistence.FetchType");
-                imports.add("javax.persistence.OneToMany");
-              }
-
-              if (property.getPropertyType().equals(PropertyType.REFERENCE_TO_AGGREGATE_ROOT)) {
-                imports.add("javax.persistence.FetchType");
-                imports.add("javax.persistence.JoinColumn");
-                imports.add("javax.persistence.JoinColumns");
-                imports.add("javax.persistence.ManyToOne");
-              }
+              imports.addAll(importsPrimitiveOrValueObjectCollection(property));
+              imports.addAll(importsAggregateEntityCollection(property));
+              imports.addAll(importsReferenceToAggregateRoot(property));
 
               if (!property.getPropertyType().equals(PropertyType.AGGREGATE_ENTITY)
                   && !property.getPropertyType().equals(PropertyType.AGGREGATE_ENTITY_COLLECTION)) {
-
-                if (property.getData().isDataPrimitive()) {
-                  DataPrimitive dataPrimitive = property.getData().getAsDataPrimitive();
-                  if (dataPrimitive.getPrimitiveType().equals(PrimitiveType.DATETIME)) {
-                    imports.add("java.time.LocalDateTime");
-                  }
-                }
-
-                if (property.getData().isDataGroup()) {
-                  imports.add("javax.persistence.Embedded");
-                  imports.add("javax.persistence.AttributeOverride");
-                  imports.add("javax.persistence.Column");
-
-                  DataGroup dataGroup = property.getData().getAsDataGroup();
-                  if (!dataGroup.getPackageName().equals(source.getPackageName())) {
-                    imports.add(
-                        dataGroup.getPackageName().getText()
-                            + "."
-                            + TextConverter.toUpperCamel(dataGroup.getDataType()));
-                  }
-                }
+                imports.addAll(importsPrimitive(property));
+                imports.addAll(importsValueObject(source, property));
               }
             });
 
-    // Additional imports
     imports.add("com.oregor.trinity4j.commons.assertion.Assertion");
+    imports.addAll(importsSuperClass(source));
+    imports.addAll(importsSupportiveEntity(source, args));
 
-    // SuperClass
+    return imports;
+  }
+
+  private Set<String> importsSuperClass(S source) {
+    Set<String> imports = new TreeSet<>();
+
     if (source.hasSuperclass()) {
-      BaseDomainObject<?> superClass = (BaseDomainObject<?>) source.getSuperClass();
+      BaseDomainObject superClass = source.getSuperClass();
 
       imports.add(
           String.format(
@@ -253,6 +218,13 @@ public abstract class DomainObjectClassRepresentable<S extends BaseDomainObject<
               superClass.getPackageName().getText(),
               TextConverter.toUpperCamel(superClass.getObjectName().getText())));
     }
+
+    return imports;
+  }
+
+  private Set<String> importsSupportiveEntity(S source, Object... args) {
+    Set<String> imports = new TreeSet<>();
+    PackageName rootPackageName = (PackageName) args[0];
 
     if (!source.getDomainObjectType().equals(DomainObjectType.HELPER_ENTITY)) {
       if (source.getInstantiationType().equals(InstantiationType.CONCRETE)) {
@@ -270,24 +242,104 @@ public abstract class DomainObjectClassRepresentable<S extends BaseDomainObject<
     return imports;
   }
 
+  @SuppressWarnings("rawtypes")
+  private Set<String> importsPrimitiveOrValueObjectCollection(DomainObjectProperty property) {
+    Set<String> imports = new TreeSet<>();
+
+    if (property.getPropertyType().equals(PropertyType.PRIMITIVE_COLLECTION)
+        || property.getPropertyType().equals(PropertyType.VALUE_OBJECT_COLLECTION)) {
+      imports.add("java.util.List");
+      imports.add("javax.persistence.ElementCollection");
+      imports.add("javax.persistence.CollectionTable");
+      imports.add("javax.persistence.JoinColumn");
+      imports.add("javax.persistence.JoinColumns");
+      imports.add("javax.persistence.Column");
+    }
+
+    return imports;
+  }
+
+  @SuppressWarnings("rawtypes")
+  private Set<String> importsAggregateEntityCollection(DomainObjectProperty property) {
+    Set<String> imports = new TreeSet<>();
+
+    if (property.getPropertyType().equals(PropertyType.AGGREGATE_ENTITY_COLLECTION)) {
+      imports.add("java.util.List");
+      imports.add("javax.persistence.CascadeType");
+      imports.add("javax.persistence.FetchType");
+      imports.add("javax.persistence.OneToMany");
+    }
+
+    return imports;
+  }
+
+  @SuppressWarnings("rawtypes")
+  private Set<String> importsReferenceToAggregateRoot(DomainObjectProperty property) {
+    Set<String> imports = new TreeSet<>();
+
+    if (property.getPropertyType().equals(PropertyType.REFERENCE_TO_AGGREGATE_ROOT)) {
+      imports.add("javax.persistence.FetchType");
+      imports.add("javax.persistence.JoinColumn");
+      imports.add("javax.persistence.JoinColumns");
+      imports.add("javax.persistence.ManyToOne");
+    }
+
+    return imports;
+  }
+
+  @SuppressWarnings("rawtypes")
+  private Set<String> importsPrimitive(DomainObjectProperty property) {
+    Set<String> imports = new TreeSet<>();
+
+    if (property.getData().isDataPrimitive()) {
+      DataPrimitive dataPrimitive = property.getData().getAsDataPrimitive();
+      if (dataPrimitive.getPrimitiveType().equals(PrimitiveType.DATETIME)) {
+        imports.add("java.time.LocalDateTime");
+      }
+    }
+
+    return imports;
+  }
+
+  @SuppressWarnings("rawtypes")
+  private Set<String> importsValueObject(S source, DomainObjectProperty property) {
+    Set<String> imports = new TreeSet<>();
+
+    if (property.getData().isDataGroup()) {
+      imports.add("javax.persistence.Embedded");
+      imports.add("javax.persistence.AttributeOverride");
+      imports.add("javax.persistence.Column");
+
+      DataGroup dataGroup = property.getData().getAsDataGroup();
+      if (!dataGroup.getPackageName().equals(source.getPackageName())) {
+        imports.add(
+            dataGroup.getPackageName().getText()
+                + "."
+                + TextConverter.toUpperCamel(dataGroup.getDataType()));
+      }
+    }
+
+    return imports;
+  }
+
   @Override
   public Set<String> annotations(S source, Object... args) {
-    return null;
+    return new LinkedHashSet<>();
   }
 
   @Override
   public String description(S source, Object... args) {
-    return null;
+    return "Not set yet";
   }
 
   @Override
   public String modifiers(S source, Object... args) {
-    return null;
+    return MODIFIER_PUBLIC;
   }
 
   @Override
   public String simpleObjectName(S source, Object... args) {
-    return null;
+    return "empty simpleObjectName";
   }
 
   @Override
@@ -308,7 +360,7 @@ public abstract class DomainObjectClassRepresentable<S extends BaseDomainObject<
 
     stringBuilder.append(" extends ");
     if (source.hasSuperclass()) {
-      BaseDomainObject<?> superClass = (BaseDomainObject<?>) source.getSuperClass();
+      BaseDomainObject superClass = source.getSuperClass();
 
       stringBuilder.append(TextConverter.toUpperCamel(superClass.getObjectName().getText()));
     } else {
@@ -348,11 +400,11 @@ public abstract class DomainObjectClassRepresentable<S extends BaseDomainObject<
               if (model.isDataPrimitive()) {
                 StringBuilder stringBuilder = new StringBuilder();
 
-                stringBuilder.append("@AttributeOverride(\n");
+                stringBuilder.append(String.format("@AttributeOverride(%n"));
 
                 stringBuilder.append(
                     String.format(
-                        "\t\t\tname = \"%s\",\n",
+                        "\t\t\tname = \"%s\",%n",
                         TextConverter.toLowerCamel(model.getVariableName().getText())));
 
                 stringBuilder.append(
@@ -389,18 +441,18 @@ public abstract class DomainObjectClassRepresentable<S extends BaseDomainObject<
             TextConverter.toLowerUnderscore(dataArray.getVariableName().getText()));
 
     StringBuilder stringBuilder = new StringBuilder();
-    stringBuilder.append("@CollectionTable(\n");
+    stringBuilder.append(String.format("@CollectionTable(%n"));
     stringBuilder.append(
-        String.format("\t\t\tname = Constants.DEFAULT_TABLE_PREFIX + \"%s\",\n", tableName));
-    stringBuilder.append(String.format("\t\t\tjoinColumns = {\n"));
+        String.format("\t\t\tname = Constants.DEFAULT_TABLE_PREFIX + \"%s\",%n", tableName));
+    stringBuilder.append(String.format("\t\t\tjoinColumns = {%n"));
     stringBuilder.append(String.format("\t\t\t\t\t@JoinColumn(name = \"%s\")", "root_id"));
     if (source.getMultiTenant()) {
-      stringBuilder.append(",\n");
-      stringBuilder.append(String.format("\t\t\t\t\t@JoinColumn(name = \"%s\")\n", "tenant_id"));
+      stringBuilder.append(String.format(",%n"));
+      stringBuilder.append(String.format("\t\t\t\t\t@JoinColumn(name = \"%s\")%n", "tenant_id"));
     } else {
-      stringBuilder.append("\n");
+      stringBuilder.append(String.format("%n"));
     }
-    stringBuilder.append(String.format("\t\t\t}\n"));
+    stringBuilder.append(String.format("\t\t\t}%n"));
     stringBuilder.append("\t)");
 
     annotations.add(stringBuilder.toString());
@@ -422,14 +474,14 @@ public abstract class DomainObjectClassRepresentable<S extends BaseDomainObject<
   protected Set<String> makeAnnotationsForAggregateEntityCollection(S source) {
     StringBuilder stringBuilder = new StringBuilder();
 
-    stringBuilder.append("@OneToMany(\n");
+    stringBuilder.append(String.format("@OneToMany(%n"));
     stringBuilder.append(
         String.format(
-            "\t\t\tmappedBy = \"%s\",\n",
+            "\t\t\tmappedBy = \"%s\",%n",
             TextConverter.toLowerCamel(source.getObjectName().getText())));
-    stringBuilder.append("\t\t\tcascade = CascadeType.ALL,\n");
-    stringBuilder.append("\t\t\torphanRemoval = true,\n");
-    stringBuilder.append("\t\t\tfetch = FetchType.EAGER\n");
+    stringBuilder.append(String.format("\t\t\tcascade = CascadeType.ALL,%n"));
+    stringBuilder.append(String.format("\t\t\torphanRemoval = true,%n"));
+    stringBuilder.append(String.format("\t\t\tfetch = FetchType.EAGER%n"));
     stringBuilder.append("\t)");
 
     Set<String> annotations = new LinkedHashSet<>();
@@ -446,14 +498,14 @@ public abstract class DomainObjectClassRepresentable<S extends BaseDomainObject<
   protected Set<String> makeAnnotationsForReferenceToAggregateRoot(S source) {
     StringBuilder stringBuilder = new StringBuilder();
 
-    stringBuilder.append("@ManyToOne(fetch = FetchType.LAZY)\n");
-    stringBuilder.append("\t@JoinColumns({\n");
+    stringBuilder.append(String.format("@ManyToOne(fetch = FetchType.LAZY)%n"));
+    stringBuilder.append(String.format("\t@JoinColumns({%n"));
     stringBuilder.append("\t\t\t@JoinColumn(name = \"root_id\")");
     if (source.getMultiTenant()) {
-      stringBuilder.append(",\n");
-      stringBuilder.append("\t\t\t@JoinColumn(name = \"tenant_id\")\n");
+      stringBuilder.append(String.format(",%n"));
+      stringBuilder.append(String.format("\t\t\t@JoinColumn(name = \"tenant_id\")%n"));
     } else {
-      stringBuilder.append("\n");
+      stringBuilder.append(String.format("%n"));
     }
     stringBuilder.append("\t})");
 
@@ -469,7 +521,8 @@ public abstract class DomainObjectClassRepresentable<S extends BaseDomainObject<
    * @param property the property
    * @return the string
    */
-  protected String makeVariableDataType(DomainObjectProperty<? extends Data> property) {
+  @SuppressWarnings("rawtypes")
+  protected String makeVariableDataType(DomainObjectProperty property) {
     switch (property.getPropertyType()) {
       case ABSTRACT_AGGREGATE_ROOT_ID:
         return ((AbstractAggregateRootId) property).getGenericTypeParameter().getText();
@@ -495,7 +548,8 @@ public abstract class DomainObjectClassRepresentable<S extends BaseDomainObject<
    * @param property the property
    * @return the string
    */
-  protected String makeVariableName(DomainObjectProperty<? extends Data> property) {
+  @SuppressWarnings("rawtypes")
+  protected String makeVariableName(DomainObjectProperty property) {
     return property.getData().getVariableName().getText();
   }
 
@@ -505,8 +559,9 @@ public abstract class DomainObjectClassRepresentable<S extends BaseDomainObject<
    * @param properties the properties
    * @return the set
    */
+  @SuppressWarnings("rawtypes")
   protected Set<ParameterRepresentation> makeConstructorParameterRepresentation(
-      Set<DomainObjectProperty<? extends Data>> properties) {
+      Set<DomainObjectProperty> properties) {
     Set<ParameterRepresentation> parameterRepresentations = new LinkedHashSet<>();
 
     properties

@@ -22,8 +22,7 @@ package io.polygenesis.models.api;
 
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.Deducer;
-import io.polygenesis.core.Model;
-import io.polygenesis.core.ModelRepository;
+import io.polygenesis.core.MetamodelRepository;
 import io.polygenesis.core.ThingRepository;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -33,7 +32,7 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class ApiDeducer implements Deducer<ServiceModelRepository> {
+public class ApiDeducer implements Deducer<ServiceMetamodelRepository> {
 
   // ===============================================================================================
   // DEPENDENCIES
@@ -73,9 +72,10 @@ public class ApiDeducer implements Deducer<ServiceModelRepository> {
   // OVERRIDES
   // ===============================================================================================
 
+  @SuppressWarnings("rawtypes")
   @Override
-  public ServiceModelRepository deduce(
-      ThingRepository thingRepository, Set<ModelRepository<? extends Model>> modelRepositories) {
+  public ServiceMetamodelRepository deduce(
+      ThingRepository thingRepository, Set<MetamodelRepository> modelRepositories) {
     if (thingRepository.getApiThings().isEmpty()) {
       throw new IllegalArgumentException("thingRepository cannot be empty");
     }
@@ -84,11 +84,8 @@ public class ApiDeducer implements Deducer<ServiceModelRepository> {
 
     thingRepository
         .getApiThings()
-        .forEach(
-            thing -> {
-              services.addAll(serviceDeducer.deduceFrom(thing, getRootPackageName()));
-            });
+        .forEach(thing -> services.addAll(serviceDeducer.deduceFrom(thing, getRootPackageName())));
 
-    return new ServiceModelRepository(services);
+    return new ServiceMetamodelRepository(services);
   }
 }

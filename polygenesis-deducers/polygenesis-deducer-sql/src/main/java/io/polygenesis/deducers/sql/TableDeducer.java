@@ -45,6 +45,11 @@ import java.util.Set;
  */
 public class TableDeducer {
 
+  private static final String CANNOT_CONVERT_TO_SQL_COLUMN =
+      "Cannot convert to SQL column property=%s with type=%s";
+
+  private static final String DOUBLE_S = "%s_%s";
+
   // ===============================================================================================
   // DEPENDENCIES
   // ===============================================================================================
@@ -117,7 +122,7 @@ public class TableDeducer {
                 default:
                   throw new IllegalArgumentException(
                       String.format(
-                          "Cannot convert to SQL column property=%s with type=%s",
+                          CANNOT_CONVERT_TO_SQL_COLUMN,
                           property.getData().getVariableName().getText(),
                           property.getPropertyType().name()));
               }
@@ -147,8 +152,8 @@ public class TableDeducer {
   // ===============================================================================================
   // PRIVATE
   // ===============================================================================================
-  protected Set<Column> getColumnsByProperties(
-      Set<DomainObjectProperty<? extends Data>> properties) {
+  @SuppressWarnings("rawtypes")
+  protected Set<Column> getColumnsByProperties(Set<DomainObjectProperty> properties) {
     Set<Column> columns = new LinkedHashSet<>();
 
     properties.forEach(
@@ -178,7 +183,7 @@ public class TableDeducer {
             default:
               throw new IllegalArgumentException(
                   String.format(
-                      "Cannot convert to SQL column property=%s with type=%s",
+                      CANNOT_CONVERT_TO_SQL_COLUMN,
                       property.getData().getVariableName().getText(),
                       property.getPropertyType().name()));
           }
@@ -193,7 +198,7 @@ public class TableDeducer {
    * @param baseDomainObject the base domain object
    * @return the tables by properties
    */
-  protected Set<Table> getTablesByProperties(BaseDomainObject<?> baseDomainObject) {
+  protected Set<Table> getTablesByProperties(BaseDomainObject baseDomainObject) {
     Set<Table> tables = new LinkedHashSet<>();
 
     baseDomainObject
@@ -227,7 +232,7 @@ public class TableDeducer {
                 default:
                   throw new IllegalArgumentException(
                       String.format(
-                          "Cannot convert to SQL column property=%s with type=%s",
+                          CANNOT_CONVERT_TO_SQL_COLUMN,
                           property.getData().getVariableName().getText(),
                           property.getPropertyType().name()));
               }
@@ -310,8 +315,9 @@ public class TableDeducer {
    * @param property the property
    * @return the table for primitive collection
    */
+  @SuppressWarnings("rawtypes")
   private Table getTableForPrimitiveCollection(
-      BaseDomainObject<?> baseDomainObject, DomainObjectProperty<? extends Data> property) {
+      BaseDomainObject baseDomainObject, DomainObjectProperty property) {
     Set<Column> columns = new LinkedHashSet<>();
 
     addAggregateRootIdInColumnSetWithoutPrimaryKey(columns, baseDomainObject);
@@ -321,7 +327,7 @@ public class TableDeducer {
     return new Table(
         new TableName(
             String.format(
-                "%s_%s",
+                DOUBLE_S,
                 TextConverter.toLowerUnderscore(baseDomainObject.getObjectName().getText()),
                 TextConverter.toLowerUnderscore(property.getData().getVariableName().getText()))),
         columns,
@@ -335,14 +341,15 @@ public class TableDeducer {
    * @param property the property
    * @return the table for value object collection
    */
+  @SuppressWarnings("rawtypes")
   private Table getTableForValueObjectCollection(
-      BaseDomainObject<?> baseDomainObject, DomainObjectProperty<? extends Data> property) {
+      BaseDomainObject baseDomainObject, DomainObjectProperty property) {
     Set<Column> columns = new LinkedHashSet<>();
 
     return new Table(
         new TableName(
             String.format(
-                "%s_%s",
+                DOUBLE_S,
                 TextConverter.toLowerUnderscore(baseDomainObject.getObjectName().getText()),
                 TextConverter.toLowerUnderscore(property.getData().getVariableName().getText()))),
         columns,
@@ -356,10 +363,11 @@ public class TableDeducer {
    * @param property the property
    * @return the table for aggregate entity collection
    */
+  @SuppressWarnings("rawtypes")
   private Table getTableForAggregateEntityCollection(
-      BaseDomainObject<?> baseDomainObjectParent,
-      BaseDomainObject<?> baseDomainObjectChild,
-      DomainObjectProperty<? extends Data> property) {
+      BaseDomainObject baseDomainObjectParent,
+      BaseDomainObject baseDomainObjectChild,
+      DomainObjectProperty property) {
     Set<Column> columns = new LinkedHashSet<>();
 
     addAggregateRootIdInColumnSetAsPrimaryKey(columns, baseDomainObjectParent);
@@ -373,7 +381,7 @@ public class TableDeducer {
     return new Table(
         new TableName(
             String.format(
-                "%s_%s",
+                DOUBLE_S,
                 TextConverter.toLowerUnderscore(baseDomainObjectParent.getObjectName().getText()),
                 TextConverter.toLowerUnderscore(property.getData().getVariableName().getText()))),
         columns,
@@ -387,7 +395,7 @@ public class TableDeducer {
    * @param baseDomainObject the aggregate root
    */
   private void addAggregateRootIdInColumnSetAsPrimaryKey(
-      Set<Column> columns, BaseDomainObject<?> baseDomainObject) {
+      Set<Column> columns, BaseDomainObject baseDomainObject) {
     addAggregateRootIdInColumnSet(columns, baseDomainObject, true);
   }
 
@@ -398,7 +406,7 @@ public class TableDeducer {
    * @param baseDomainObject the aggregate root
    */
   private void addAggregateRootIdInColumnSetWithoutPrimaryKey(
-      Set<Column> columns, BaseDomainObject<?> baseDomainObject) {
+      Set<Column> columns, BaseDomainObject baseDomainObject) {
     addAggregateRootIdInColumnSet(columns, baseDomainObject, false);
   }
 
@@ -410,7 +418,7 @@ public class TableDeducer {
    * @param addAsPrimaryKey the add as primary key
    */
   private void addAggregateRootIdInColumnSet(
-      Set<Column> columns, BaseDomainObject<?> baseDomainObject, boolean addAsPrimaryKey) {
+      Set<Column> columns, BaseDomainObject baseDomainObject, boolean addAsPrimaryKey) {
     // Add Object Id
     columns.add(
         new Column("root_id", ColumnDataType.BINARY, 16, RequiredType.REQUIRED, addAsPrimaryKey));

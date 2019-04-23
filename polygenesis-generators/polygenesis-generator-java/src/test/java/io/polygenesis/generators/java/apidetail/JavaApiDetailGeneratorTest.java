@@ -29,17 +29,16 @@ import static org.mockito.Mockito.verify;
 
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
-import io.polygenesis.core.Model;
-import io.polygenesis.core.ModelRepository;
+import io.polygenesis.core.MetamodelRepository;
 import io.polygenesis.core.ThingName;
 import io.polygenesis.models.api.Service;
-import io.polygenesis.models.api.ServiceModelRepository;
+import io.polygenesis.models.api.ServiceMetamodelRepository;
 import io.polygenesis.models.apiimpl.DomainEntityConverter;
-import io.polygenesis.models.apiimpl.DomainEntityConverterModelRepository;
+import io.polygenesis.models.apiimpl.DomainEntityConverterMetamodelRepository;
 import io.polygenesis.models.apiimpl.ServiceImplementation;
-import io.polygenesis.models.apiimpl.ServiceImplementationModelRepository;
+import io.polygenesis.models.apiimpl.ServiceImplementationMetamodelRepository;
 import io.polygenesis.models.domain.AggregateRoot;
-import io.polygenesis.models.domain.DomainModelRepository;
+import io.polygenesis.models.domain.DomainMetamodelRepository;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -98,14 +97,15 @@ public class JavaApiDetailGeneratorTest {
 
     assertThatThrownBy(() -> javaApiDetailGenerator.generate(new LinkedHashSet<>()))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessageContaining("No Model Repository found for");
+        .hasMessageContaining("No Metamodel Repository found for");
   }
 
   // ===============================================================================================
   // PRIVATE
   // ===============================================================================================
 
-  private Set<ModelRepository<? extends Model>> createModelRepositories() {
+  @SuppressWarnings("rawtypes")
+  private Set<MetamodelRepository> createModelRepositories() {
     return new LinkedHashSet<>(
         Arrays.asList(
             createServiceModelRepository(),
@@ -114,33 +114,33 @@ public class JavaApiDetailGeneratorTest {
             createServiceImplementationModelRepository()));
   }
 
-  private ServiceModelRepository createServiceModelRepository() {
+  private ServiceMetamodelRepository createServiceModelRepository() {
     Set<Service> services = new LinkedHashSet<>();
 
     Service service = mock(Service.class);
     given(service.getThingName()).willReturn(new ThingName("someThing"));
     services.add(service);
 
-    return new ServiceModelRepository(services);
+    return new ServiceMetamodelRepository(services);
   }
 
-  private DomainModelRepository createDomainModelRepository() {
+  private DomainMetamodelRepository createDomainModelRepository() {
     Set<AggregateRoot> aggregateRoots = new LinkedHashSet<>();
 
     AggregateRoot aggregateRoot = mock(AggregateRoot.class);
     given(aggregateRoot.getObjectName()).willReturn(new ObjectName("someThing"));
     aggregateRoots.add(aggregateRoot);
 
-    return new DomainModelRepository(aggregateRoots);
+    return new DomainMetamodelRepository(aggregateRoots);
   }
 
-  private DomainEntityConverterModelRepository createDomainEntityConverterModelRepository() {
+  private DomainEntityConverterMetamodelRepository createDomainEntityConverterModelRepository() {
     Set<DomainEntityConverter> domainEntityConverters = new LinkedHashSet<>();
 
-    return new DomainEntityConverterModelRepository(domainEntityConverters);
+    return new DomainEntityConverterMetamodelRepository(domainEntityConverters);
   }
 
-  private ServiceImplementationModelRepository createServiceImplementationModelRepository() {
+  private ServiceImplementationMetamodelRepository createServiceImplementationModelRepository() {
     Set<ServiceImplementation> serviceImplementations = new LinkedHashSet<>();
 
     ServiceImplementation serviceImplementation = mock(ServiceImplementation.class);
@@ -150,6 +150,6 @@ public class JavaApiDetailGeneratorTest {
 
     serviceImplementations.add(serviceImplementation);
 
-    return new ServiceImplementationModelRepository(serviceImplementations);
+    return new ServiceImplementationMetamodelRepository(serviceImplementations);
   }
 }

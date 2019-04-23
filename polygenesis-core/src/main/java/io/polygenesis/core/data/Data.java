@@ -23,7 +23,8 @@ package io.polygenesis.core.data;
 import java.util.Objects;
 
 /**
- * This is the base class for {@link DataPrimitive}, {@link DataGroup}, and {@link DataArray}*.
+ * This is the base class for {@link DataPrimitive}, {@link DataGroup}, {@link DataArray}, {@link
+ * DataMap}, and {@link DataReferenceToThing}.
  *
  * <p>References:
  *
@@ -147,7 +148,7 @@ public abstract class Data {
       return (DataPrimitive) this;
     } else {
       throw new IllegalStateException(
-          String.format("Model of type=%s is not a DataPrimitive", getDataPrimaryType().name()));
+          String.format("Data of type=%s is not a DataPrimitive", getDataPrimaryType().name()));
     }
   }
 
@@ -161,7 +162,7 @@ public abstract class Data {
       return (DataGroup) this;
     } else {
       throw new IllegalStateException(
-          String.format("Model of type=%s is not a DataGroup", getDataPrimaryType().name()));
+          String.format("Data of type=%s is not a DataGroup", getDataPrimaryType().name()));
     }
   }
 
@@ -175,7 +176,7 @@ public abstract class Data {
       return DataArray.class.cast(this);
     } else {
       throw new IllegalStateException(
-          String.format("Model of type=%s is not a DataArray", getDataPrimaryType().name()));
+          String.format("Data of type=%s is not a DataArray", getDataPrimaryType().name()));
     }
   }
 
@@ -189,7 +190,7 @@ public abstract class Data {
       return (DataMap) this;
     } else {
       throw new IllegalStateException(
-          String.format("Model of type=%s is not a DataMap", getDataPrimaryType().name()));
+          String.format("Data of type=%s is not a DataMap", getDataPrimaryType().name()));
     }
   }
 

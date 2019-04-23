@@ -23,7 +23,7 @@ package io.polygenesis.models.reactivestate;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
-import io.polygenesis.models.api.ServiceModelRepository;
+import io.polygenesis.models.api.ServiceMetamodelRepository;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -35,7 +35,7 @@ public class StoreDeducerTest extends AbstractReactiveStateTest {
   private EffectGroupDeducer effectGroupDeducer;
   private ModelDeducer modelDeducer;
   private ReducerGroupDeducer reducerGroupDeducer;
-  private ServiceModelRepository serviceModelRepository;
+  private ServiceMetamodelRepository serviceModelRepository;
   private StoreDeducer storeDeducer;
 
   @Before
@@ -45,7 +45,7 @@ public class StoreDeducerTest extends AbstractReactiveStateTest {
     effectGroupDeducer = new EffectGroupDeducer();
     modelDeducer = new ModelDeducer();
     reducerGroupDeducer = new ReducerGroupDeducer();
-    serviceModelRepository = mock(ServiceModelRepository.class);
+    serviceModelRepository = mock(ServiceMetamodelRepository.class);
 
     storeDeducer =
         new StoreDeducer(

@@ -21,8 +21,7 @@
 package io.polygenesis.models.ui;
 
 import io.polygenesis.core.Deducer;
-import io.polygenesis.core.Model;
-import io.polygenesis.core.ModelRepository;
+import io.polygenesis.core.MetamodelRepository;
 import io.polygenesis.core.ThingRepository;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -32,7 +31,7 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class UiFeatureDeducer implements Deducer<UiFeatureModelRepository> {
+public class UiFeatureDeducer implements Deducer<UiFeatureMetamodelRepository> {
 
   private final FeatureDeducer featureDeducer;
 
@@ -52,15 +51,17 @@ public class UiFeatureDeducer implements Deducer<UiFeatureModelRepository> {
   // ===============================================================================================
   // OVERRIDES
   // ===============================================================================================
+
+  @SuppressWarnings("rawtypes")
   @Override
-  public UiFeatureModelRepository deduce(
-      ThingRepository thingRepository, Set<ModelRepository<? extends Model>> modelRepositories) {
+  public UiFeatureMetamodelRepository deduce(
+      ThingRepository thingRepository, Set<MetamodelRepository> modelRepositories) {
     Set<Feature> features = new LinkedHashSet<>();
 
     thingRepository
         .getApiThings()
         .forEach(thing -> features.add(featureDeducer.deduceFeatureFromThing(thing)));
 
-    return new UiFeatureModelRepository(features);
+    return new UiFeatureMetamodelRepository(features);
   }
 }

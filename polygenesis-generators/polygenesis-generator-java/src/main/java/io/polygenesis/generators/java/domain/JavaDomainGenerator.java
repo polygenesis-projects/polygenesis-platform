@@ -23,8 +23,7 @@ package io.polygenesis.generators.java.domain;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.AbstractGenerator;
 import io.polygenesis.core.CoreRegistry;
-import io.polygenesis.core.Model;
-import io.polygenesis.core.ModelRepository;
+import io.polygenesis.core.MetamodelRepository;
 import io.polygenesis.generators.java.domain.aggregateentity.AggregateEntityExporter;
 import io.polygenesis.generators.java.domain.aggregateentity.AggregateEntityIdExporter;
 import io.polygenesis.generators.java.domain.aggregateroot.AggregateRootExporter;
@@ -37,10 +36,10 @@ import io.polygenesis.generators.java.domain.valueobject.ValueObjectExporter;
 import io.polygenesis.models.domain.AggregateEntity;
 import io.polygenesis.models.domain.AggregateEntityCollection;
 import io.polygenesis.models.domain.AggregateRootPersistable;
-import io.polygenesis.models.domain.DomainModelRepository;
+import io.polygenesis.models.domain.DomainMetamodelRepository;
 import io.polygenesis.models.domain.DomainServiceRepository;
 import io.polygenesis.models.domain.PropertyType;
-import io.polygenesis.models.domain.SupportiveEntityModelRepository;
+import io.polygenesis.models.domain.SupportiveEntityMetamodelRepository;
 import io.polygenesis.models.domain.ValueObject;
 import java.nio.file.Path;
 import java.util.Set;
@@ -142,10 +141,11 @@ public class JavaDomainGenerator extends AbstractGenerator {
   // OVERRIDES
   // ===============================================================================================
 
+  @SuppressWarnings("rawtypes")
   @Override
-  public void generate(Set<ModelRepository<? extends Model>> modelRepositories) {
-    CoreRegistry.getModelRepositoryResolver()
-        .resolve(modelRepositories, DomainModelRepository.class)
+  public void generate(Set<MetamodelRepository> modelRepositories) {
+    CoreRegistry.getMetamodelRepositoryResolver()
+        .resolve(modelRepositories, DomainMetamodelRepository.class)
         .getItems()
         .forEach(
             aggregateRoot -> {
@@ -206,13 +206,13 @@ public class JavaDomainGenerator extends AbstractGenerator {
                   .getProperties()
                   .forEach(
                       property -> {
-                        if (property instanceof ValueObject) {
+                        if (property.getPropertyType().equals(PropertyType.VALUE_OBJECT)) {
                           valueObjectExporter.export(getGenerationPath(), (ValueObject) property);
                         }
                       });
             });
 
-    CoreRegistry.getModelRepositoryResolver()
+    CoreRegistry.getMetamodelRepositoryResolver()
         .resolve(modelRepositories, DomainServiceRepository.class)
         .getItems()
         .forEach(
@@ -220,8 +220,8 @@ public class JavaDomainGenerator extends AbstractGenerator {
               domainServiceExporter.export(getGenerationPath(), domainService);
             });
 
-    CoreRegistry.getModelRepositoryResolver()
-        .resolve(modelRepositories, SupportiveEntityModelRepository.class)
+    CoreRegistry.getMetamodelRepositoryResolver()
+        .resolve(modelRepositories, SupportiveEntityMetamodelRepository.class)
         .getItems()
         .forEach(
             helperEntity -> {

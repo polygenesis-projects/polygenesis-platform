@@ -21,7 +21,7 @@
 package io.polygenesis.generators.sql;
 
 import io.polygenesis.commons.freemarker.FreemarkerService;
-import io.polygenesis.models.sql.SqlTableModelRepository;
+import io.polygenesis.models.sql.SqlTableMetamodelRepository;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -39,7 +39,6 @@ public class ScriptExporter {
   // ===============================================================================================
 
   private final FreemarkerService freemarkerService;
-  private final ScriptRepresentable scriptRepresentable;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -49,12 +48,9 @@ public class ScriptExporter {
    * Instantiates a new Script exporter.
    *
    * @param freemarkerService the freemarker service
-   * @param scriptRepresentable the script representable
    */
-  public ScriptExporter(
-      FreemarkerService freemarkerService, ScriptRepresentable scriptRepresentable) {
+  public ScriptExporter(FreemarkerService freemarkerService) {
     this.freemarkerService = freemarkerService;
-    this.scriptRepresentable = scriptRepresentable;
   }
 
   // ===============================================================================================
@@ -69,10 +65,10 @@ public class ScriptExporter {
    * @param tablePrefix the table prefix
    */
   public void export(
-      Path generationPath, SqlTableModelRepository sqlTableModelRepository, String tablePrefix) {
+      Path generationPath,
+      SqlTableMetamodelRepository sqlTableModelRepository,
+      String tablePrefix) {
     Map<String, Object> dataModel = new HashMap<>();
-    // TODO
-    dataModel.put("representation", scriptRepresentable.create());
     dataModel.put("representation", sqlTableModelRepository);
     dataModel.put("tablePrefix", tablePrefix);
 

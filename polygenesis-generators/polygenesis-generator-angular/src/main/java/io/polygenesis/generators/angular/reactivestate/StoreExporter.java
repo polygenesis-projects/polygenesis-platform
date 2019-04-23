@@ -138,7 +138,7 @@ public class StoreExporter {
         .getModels()
         .forEach(
             model -> {
-              if (model.getModel().isDataGroup()) {
+              if (model.getData().isDataGroup()) {
                 modelExporter.exportModels(modelsPath, model);
               } else {
                 throw new IllegalArgumentException();

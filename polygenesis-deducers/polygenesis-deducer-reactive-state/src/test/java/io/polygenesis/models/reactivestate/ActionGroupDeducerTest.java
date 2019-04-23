@@ -23,7 +23,7 @@ package io.polygenesis.models.reactivestate;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
-import io.polygenesis.models.api.ServiceModelRepository;
+import io.polygenesis.models.api.ServiceMetamodelRepository;
 import java.util.Set;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,12 +31,12 @@ import org.junit.Test;
 /** @author Christos Tsakostas */
 public class ActionGroupDeducerTest extends AbstractReactiveStateTest {
 
-  private ServiceModelRepository serviceModelRepository;
+  private ServiceMetamodelRepository serviceModelRepository;
   private ActionGroupDeducer actionGroupDeducer;
 
   @Before
   public void setUp() {
-    serviceModelRepository = mock(ServiceModelRepository.class);
+    serviceModelRepository = mock(ServiceMetamodelRepository.class);
     actionGroupDeducer = new ActionGroupDeducer();
   }
 

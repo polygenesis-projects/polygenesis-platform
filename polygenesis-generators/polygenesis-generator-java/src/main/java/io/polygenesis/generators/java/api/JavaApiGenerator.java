@@ -22,9 +22,8 @@ package io.polygenesis.generators.java.api;
 
 import io.polygenesis.core.AbstractGenerator;
 import io.polygenesis.core.CoreRegistry;
-import io.polygenesis.core.Model;
-import io.polygenesis.core.ModelRepository;
-import io.polygenesis.models.api.ServiceModelRepository;
+import io.polygenesis.core.MetamodelRepository;
+import io.polygenesis.models.api.ServiceMetamodelRepository;
 import java.nio.file.Path;
 import java.util.Set;
 
@@ -38,7 +37,7 @@ public class JavaApiGenerator extends AbstractGenerator {
   private final ServiceExporter serviceExporter;
   private final DtoExporter dtoExporter;
 
-  private ServiceModelRepository serviceModelRepository;
+  private ServiceMetamodelRepository serviceModelRepository;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -62,8 +61,9 @@ public class JavaApiGenerator extends AbstractGenerator {
   // OVERRIDES
   // ===============================================================================================
 
+  @SuppressWarnings("rawtypes")
   @Override
-  public void generate(Set<ModelRepository<? extends Model>> modelRepositories) {
+  public void generate(Set<MetamodelRepository> modelRepositories) {
     initializeModelRepositories(modelRepositories);
 
     serviceModelRepository
@@ -80,10 +80,10 @@ public class JavaApiGenerator extends AbstractGenerator {
    *
    * @param modelRepositories the model repositories
    */
-  private void initializeModelRepositories(
-      Set<ModelRepository<? extends Model>> modelRepositories) {
+  @SuppressWarnings("rawtypes")
+  private void initializeModelRepositories(Set<MetamodelRepository> modelRepositories) {
     serviceModelRepository =
-        CoreRegistry.getModelRepositoryResolver()
-            .resolve(modelRepositories, ServiceModelRepository.class);
+        CoreRegistry.getMetamodelRepositoryResolver()
+            .resolve(modelRepositories, ServiceMetamodelRepository.class);
   }
 }

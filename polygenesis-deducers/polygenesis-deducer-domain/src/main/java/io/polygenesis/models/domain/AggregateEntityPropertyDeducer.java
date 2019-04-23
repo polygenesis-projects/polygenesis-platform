@@ -23,7 +23,6 @@ package io.polygenesis.models.domain;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.Thing;
-import io.polygenesis.core.data.Data;
 import io.polygenesis.core.data.DataGroup;
 import io.polygenesis.core.data.VariableName;
 import java.util.LinkedHashSet;
@@ -47,9 +46,10 @@ public class AggregateEntityPropertyDeducer extends BasePropertyDeducer {
    * @param thingChild the thingChild
    * @return the set
    */
-  public Set<DomainObjectProperty<? extends Data>> deduceFrom(
+  @SuppressWarnings("rawtypes")
+  public Set<DomainObjectProperty> deduceFrom(
       Thing thingParent, Thing thingChild, PackageName rootPackageName) {
-    Set<DomainObjectProperty<? extends Data>> properties = new LinkedHashSet<>();
+    Set<DomainObjectProperty> properties = new LinkedHashSet<>();
 
     ensureThingProperties(thingChild);
 

@@ -30,7 +30,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
- * The type Model representable.
+ * The type Metamodel representable.
  *
  * @author Christos Tsakostas
  */
@@ -47,7 +47,7 @@ public class ModelRepresentable {
   // ===============================================================================================
 
   /**
-   * Instantiates a new Model representable.
+   * Instantiates a new Metamodel representable.
    *
    * @param fromDataTypeToTypescriptConverter the from data type to typescript converter
    */
@@ -67,7 +67,7 @@ public class ModelRepresentable {
    */
   public ModelRepresentation create(Model model) {
     return new ModelRepresentation(
-        TextConverter.toUpperCamel(model.getModel().getDataType()), fieldRepresentations(model));
+        TextConverter.toUpperCamel(model.getData().getDataType()), fieldRepresentations(model));
   }
 
   // ===============================================================================================
@@ -83,8 +83,8 @@ public class ModelRepresentable {
   private Set<FieldRepresentation> fieldRepresentations(Model payloadModel) {
     Set<FieldRepresentation> fieldRepresentations = new LinkedHashSet<>();
 
-    if (payloadModel.getModel().isDataGroup()) {
-      DataGroup dataGroup = (DataGroup) payloadModel.getModel();
+    if (payloadModel.getData().isDataGroup()) {
+      DataGroup dataGroup = (DataGroup) payloadModel.getData();
 
       dataGroup
           .getModels()

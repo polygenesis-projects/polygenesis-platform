@@ -14,8 +14,8 @@
   <dependencies>
     <!--MODEL-->
     <dependency>
-      <groupId>io.polygenesis.models</groupId>
-      <artifactId>polygenesis-model-domain</artifactId>
+      <groupId>io.polygenesis.metamodels</groupId>
+      <artifactId>polygenesis-metamodel-domain</artifactId>
     </dependency>
 
     <!--TEST-->

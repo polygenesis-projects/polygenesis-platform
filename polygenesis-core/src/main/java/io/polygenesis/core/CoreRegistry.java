@@ -20,18 +20,6 @@
 
 package io.polygenesis.core;
 
-import io.polygenesis.core.deducer.AnnotationsThingDeducerImpl;
-import io.polygenesis.core.deducer.ClassScanner;
-import io.polygenesis.core.deducer.DataDeducer;
-import io.polygenesis.core.deducer.FieldsInInterfaceMethodAnalyzer;
-import io.polygenesis.core.deducer.FunctionIdentifier;
-import io.polygenesis.core.deducer.JavaDataTypeConverter;
-import io.polygenesis.core.deducer.MethodAnalyzer;
-import io.polygenesis.core.deducer.RecursiveObjectFiller;
-import io.polygenesis.core.deducer.ThingDeducer;
-import io.polygenesis.core.deducer.ThingScanner;
-import io.polygenesis.core.deducer.TypesAnalyzer;
-
 /**
  * Singletons of PolyGenesis Core Services and Components.
  *
@@ -43,34 +31,10 @@ public final class CoreRegistry {
     throw new IllegalStateException("Utility class");
   }
 
-  private static final ThingDeducer thingDeducer;
-  private static final ModelRepositoryResolver modelRepositoryResolver;
+  private static final MetamodelRepositoryResolver metamodelRepositoryResolver;
 
   static {
-    ClassScanner classScanner = new ClassScanner();
-
-    ThingScanner thingScanner = new ThingScanner();
-
-    MethodAnalyzer methodAnalyzer = new MethodAnalyzer();
-
-    TypesAnalyzer typesAnalyzer = new TypesAnalyzer();
-
-    FieldsInInterfaceMethodAnalyzer fieldsInInterfaceMethodAnalyzer =
-        new FieldsInInterfaceMethodAnalyzer();
-
-    RecursiveObjectFiller recursiveObjectFiller =
-        new RecursiveObjectFiller(typesAnalyzer, fieldsInInterfaceMethodAnalyzer);
-
-    JavaDataTypeConverter javaDataTypeConverter = new JavaDataTypeConverter();
-
-    DataDeducer dataDeducer = new DataDeducer(javaDataTypeConverter);
-
-    FunctionIdentifier functionIdentifier =
-        new FunctionIdentifier(methodAnalyzer, recursiveObjectFiller, dataDeducer);
-
-    thingDeducer = new AnnotationsThingDeducerImpl(classScanner, thingScanner, functionIdentifier);
-
-    modelRepositoryResolver = new ModelRepositoryResolver();
+    metamodelRepositoryResolver = new MetamodelRepositoryResolver();
   }
 
   // ===============================================================================================
@@ -78,20 +42,11 @@ public final class CoreRegistry {
   // ===============================================================================================
 
   /**
-   * Gets thing deducer.
-   *
-   * @return the thing deducer
-   */
-  public static ThingDeducer getThingDeducer() {
-    return thingDeducer;
-  }
-
-  /**
    * Gets model repository resolver.
    *
    * @return the model repository resolver
    */
-  public static ModelRepositoryResolver getModelRepositoryResolver() {
-    return modelRepositoryResolver;
+  public static MetamodelRepositoryResolver getMetamodelRepositoryResolver() {
+    return metamodelRepositoryResolver;
   }
 }

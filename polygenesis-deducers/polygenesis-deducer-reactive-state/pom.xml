@@ -14,12 +14,12 @@
   <dependencies>
     <!--MODELS-->
     <dependency>
-      <groupId>io.polygenesis.models</groupId>
-      <artifactId>polygenesis-model-api</artifactId>
+      <groupId>io.polygenesis.metamodels</groupId>
+      <artifactId>polygenesis-metamodel-api</artifactId>
     </dependency>
     <dependency>
-      <groupId>io.polygenesis.models</groupId>
-      <artifactId>polygenesis-model-reactive-state</artifactId>
+      <groupId>io.polygenesis.metamodels</groupId>
+      <artifactId>polygenesis-metamodel-reactive-state</artifactId>
     </dependency>
 
     <!--TEST-->

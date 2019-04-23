@@ -20,8 +20,8 @@
 
 package io.polygenesis.implementations.java.domain;
 
-import io.polygenesis.annotations.core.GoalType;
 import io.polygenesis.commons.freemarker.FreemarkerService;
+import io.polygenesis.core.GoalType;
 import io.polygenesis.core.ThingScopeType;
 import io.polygenesis.implementations.java.AbstractMethodImplementorRegistry;
 import io.polygenesis.implementations.java.ScopeGoalTuple;

@@ -14,12 +14,12 @@
   <dependencies>
     <!--POLYGENESIS MODELS-->
     <dependency>
-      <groupId>io.polygenesis.models</groupId>
-      <artifactId>polygenesis-model-reactive-state</artifactId>
+      <groupId>io.polygenesis.metamodels</groupId>
+      <artifactId>polygenesis-metamodel-reactive-state</artifactId>
     </dependency>
     <dependency>
-      <groupId>io.polygenesis.models</groupId>
-      <artifactId>polygenesis-model-ui</artifactId>
+      <groupId>io.polygenesis.metamodels</groupId>
+      <artifactId>polygenesis-metamodel-ui</artifactId>
     </dependency>
 
     <!--POLYGENESIS REPRESENTATIONS-->

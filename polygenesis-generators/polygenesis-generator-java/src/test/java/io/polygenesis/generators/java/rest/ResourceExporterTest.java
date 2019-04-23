@@ -20,8 +20,11 @@
 
 package io.polygenesis.generators.java.rest;
 
+import static org.mockito.ArgumentMatchers.anyMap;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.valueobjects.ObjectName;
@@ -65,11 +68,10 @@ public class ResourceExporterTest {
 
     resourceExporter.export(generationPath, resource, rootPackageName);
 
-    // TODO: test
-    //    verify(freemarkerService)
-    //        .export(
-    //            any(HashMap.class),
-    //            eq("polygenesis-representation-java/Class.java.ftl"),
-    //            eq(Paths.get("tmp/src/main/java/com/oregor/SomeResourceRestService.java")));
+    verify(freemarkerService)
+        .export(
+            anyMap(),
+            eq("polygenesis-representation-java/Class.java.ftl"),
+            eq(Paths.get("tmp/src/main/java/com/oregor/SomeResourceRestService.java")));
   }
 }

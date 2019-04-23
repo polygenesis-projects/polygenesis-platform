@@ -20,6 +20,7 @@
 
 package io.polygenesis.commons.assertion;
 
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.lang.reflect.Constructor;
@@ -29,6 +30,11 @@ import org.junit.Test;
 /** @author Christos Tsakostas */
 public class AssertionTest {
 
+  /**
+   * Should fail to instantiate.
+   *
+   * @throws NoSuchMethodException the no such method exception
+   */
   @Test
   public void shouldFailToInstantiate() throws NoSuchMethodException {
     Constructor<Assertion> constructor = Assertion.class.getDeclaredConstructor();
@@ -39,11 +45,13 @@ public class AssertionTest {
 
   // ===============================================================================================
 
+  /** Should succeed is null. */
   @Test
   public void shouldSucceedIsNull() {
-    Assertion.isNull(null, "is null");
+    assertThatCode(() -> Assertion.isNull(null, "is null")).doesNotThrowAnyException();
   }
 
+  /** Should fail is null. */
   @Test
   public void shouldFailIsNull() {
     assertThatThrownBy(() -> Assertion.isNull(new Object(), "is null"))
@@ -52,11 +60,14 @@ public class AssertionTest {
 
   // ===============================================================================================
 
+  /** Should succeed is not null. */
   @Test
   public void shouldSucceedIsNotNull() {
-    Assertion.isNotNull(new Object(), "is not null");
+    assertThatCode(() -> Assertion.isNotNull(new Object(), "is not null"))
+        .doesNotThrowAnyException();
   }
 
+  /** Should fail is not null. */
   @Test
   public void shouldFailIsNotNull() {
     assertThatThrownBy(() -> Assertion.isNotNull(null, "is not null"))
@@ -65,17 +76,20 @@ public class AssertionTest {
 
   // ===============================================================================================
 
+  /** Should succeed is not empty. */
   @Test
   public void shouldSucceedIsNotEmpty() {
-    Assertion.isNotEmpty("xxx", "not empty");
+    assertThatCode(() -> Assertion.isNotEmpty("xxx", "not empty")).doesNotThrowAnyException();
   }
 
+  /** Should fail is not empty for null input. */
   @Test
   public void shouldFailIsNotEmptyForNullInput() {
     assertThatThrownBy(() -> Assertion.isNotEmpty(null, "not empty"))
         .isInstanceOf(IllegalArgumentException.class);
   }
 
+  /** Should fail is not empty for empty input. */
   @Test
   public void shouldFailIsNotEmptyForEmptyInput() {
     assertThatThrownBy(() -> Assertion.isNotEmpty("", "not empty"))
@@ -84,11 +98,13 @@ public class AssertionTest {
 
   // ===============================================================================================
 
+  /** Should succeed is true. */
   @Test
   public void shouldSucceedIsTrue() {
-    Assertion.isTrue(1 == 1, "wrong condition");
+    assertThatCode(() -> Assertion.isTrue(1 == 1, "wrong condition")).doesNotThrowAnyException();
   }
 
+  /** Should fail is true. */
   @Test
   public void shouldFailIsTrue() {
     assertThatThrownBy(() -> Assertion.isTrue(1 == 2, "wrong condition"))
@@ -97,11 +113,13 @@ public class AssertionTest {
 
   // ===============================================================================================
 
+  /** Should succeed is false. */
   @Test
   public void shouldSucceedIsFalse() {
-    Assertion.isFalse(1 == 2, "wrong condition");
+    assertThatCode(() -> Assertion.isFalse(1 == 2, "wrong condition")).doesNotThrowAnyException();
   }
 
+  /** Should fail is false. */
   @Test
   public void shouldFailIsFalse() {
     assertThatThrownBy(() -> Assertion.isFalse(1 == 1, "wrong condition"))

@@ -23,7 +23,6 @@ package io.polygenesis.models.domain;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.Function;
-import io.polygenesis.core.Thing;
 import io.polygenesis.core.ThingScopeType;
 import io.polygenesis.core.data.Data;
 import io.polygenesis.core.data.DataArray;
@@ -50,9 +49,10 @@ public class AbstractDomainObjectDeducer {
    * @param rootPackageName the root package name
    * @return the set
    */
-  protected Set<DomainObjectProperty<? extends Data>> deduceFromFunctionArguments(
+  @SuppressWarnings("rawtypes")
+  protected Set<DomainObjectProperty> deduceFromFunctionArguments(
       Function function, PackageName rootPackageName) {
-    Set<DomainObjectProperty<? extends Data>> properties = new LinkedHashSet<>();
+    Set<DomainObjectProperty> properties = new LinkedHashSet<>();
 
     // Add Aggregate Root ID if the thing is not abstract
     if (function.getThing().getThingScopeType().equals(ThingScopeType.DOMAIN_AGGREGATE_ROOT)
@@ -89,37 +89,12 @@ public class AbstractDomainObjectDeducer {
     return properties;
   }
 
-  /**
-   * Deduce from thing properties set.
-   *
-   * @param thing the thing
-   * @return the set
-   */
-  protected Set<DomainObjectProperty<? extends Data>> deduceFromThingProperties(Thing thing) {
-    Set<DomainObjectProperty<? extends Data>> properties = new LinkedHashSet<>();
-
-    thing
-        .getThingProperties()
-        .stream()
-        .map(thingProperty -> thingProperty.getData())
-        .forEach(
-            data -> {
-              // TODO: check if more restrictions are required here
-              properties.add(makeDomainObjectProperty(data));
-            });
-
-    // TODO
-    if (1 == 1) {
-      throw new UnsupportedOperationException();
-    }
-    return properties;
-  }
-
   // ===============================================================================================
   // PRIVATE
   // ===============================================================================================
 
-  private DomainObjectProperty<? extends Data> makeDomainObjectProperty(Data model) {
+  @SuppressWarnings("rawtypes")
+  private DomainObjectProperty makeDomainObjectProperty(Data model) {
     switch (model.getDataPrimaryType()) {
       case ARRAY:
         DataArray dataArray = model.getAsDataArray();

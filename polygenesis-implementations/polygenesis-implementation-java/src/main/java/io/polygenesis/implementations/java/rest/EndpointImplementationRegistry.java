@@ -20,9 +20,9 @@
 
 package io.polygenesis.implementations.java.rest;
 
-import io.polygenesis.annotations.core.GoalType;
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.text.TextConverter;
+import io.polygenesis.core.GoalType;
 import io.polygenesis.core.ThingScopeType;
 import io.polygenesis.implementations.java.ScopeGoalTuple;
 import io.polygenesis.models.rest.Endpoint;

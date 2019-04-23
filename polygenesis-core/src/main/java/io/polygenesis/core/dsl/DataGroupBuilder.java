@@ -87,10 +87,7 @@ public class DataGroupBuilder {
   public final DataGroup build() {
     DataGroup dataGroup = new DataGroup(new ObjectName(name), new PackageName("com.oregor"));
 
-    models.forEach(
-        model -> {
-          dataGroup.addData(model);
-        });
+    models.forEach(dataGroup::addData);
 
     return dataGroup;
   }

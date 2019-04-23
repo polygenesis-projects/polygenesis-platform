@@ -22,8 +22,7 @@ package io.polygenesis.models.domain;
 
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.Deducer;
-import io.polygenesis.core.Model;
-import io.polygenesis.core.ModelRepository;
+import io.polygenesis.core.MetamodelRepository;
 import io.polygenesis.core.ThingRepository;
 import java.util.Set;
 
@@ -32,7 +31,7 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class DomainDeducer implements Deducer<DomainModelRepository> {
+public class DomainDeducer implements Deducer<DomainMetamodelRepository> {
 
   // ===============================================================================================
   // DEPENDENCIES
@@ -59,10 +58,11 @@ public class DomainDeducer implements Deducer<DomainModelRepository> {
   // OVERRIDES
   // ===============================================================================================
 
+  @SuppressWarnings("rawtypes")
   @Override
-  public DomainModelRepository deduce(
-      ThingRepository thingRepository, Set<ModelRepository<? extends Model>> modelRepositories) {
-    return new DomainModelRepository(
+  public DomainMetamodelRepository deduce(
+      ThingRepository thingRepository, Set<MetamodelRepository> modelRepositories) {
+    return new DomainMetamodelRepository(
         aggregateRootDeducer.deduceFrom(thingRepository, rootPackageName));
   }
 }

@@ -22,7 +22,6 @@ package io.polygenesis.core;
 
 import io.polygenesis.commons.valueobjects.ContextName;
 import java.util.LinkedHashSet;
-import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -173,7 +172,7 @@ public class ThingBuilder {
         thingName,
         thingProperties,
         multiTenant,
-        parentThing != null ? Optional.of(parentThing) : Optional.empty(),
+        parentThing,
         layerTypes);
   }
 }

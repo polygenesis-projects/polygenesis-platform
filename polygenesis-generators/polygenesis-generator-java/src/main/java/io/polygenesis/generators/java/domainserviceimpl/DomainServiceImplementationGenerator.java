@@ -22,8 +22,7 @@ package io.polygenesis.generators.java.domainserviceimpl;
 
 import io.polygenesis.core.AbstractGenerator;
 import io.polygenesis.core.CoreRegistry;
-import io.polygenesis.core.Model;
-import io.polygenesis.core.ModelRepository;
+import io.polygenesis.core.MetamodelRepository;
 import io.polygenesis.models.domain.DomainServiceRepository;
 import java.nio.file.Path;
 import java.util.Set;
@@ -62,9 +61,10 @@ public class DomainServiceImplementationGenerator extends AbstractGenerator {
   // OVERRIDES
   // ===============================================================================================
 
+  @SuppressWarnings("rawtypes")
   @Override
-  public void generate(Set<ModelRepository<? extends Model>> modelRepositories) {
-    CoreRegistry.getModelRepositoryResolver()
+  public void generate(Set<MetamodelRepository> modelRepositories) {
+    CoreRegistry.getMetamodelRepositoryResolver()
         .resolve(modelRepositories, DomainServiceRepository.class)
         .getItems()
         .forEach(
