@@ -22,6 +22,7 @@ package io.polygenesis.generators.angular.ui.container;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import io.polygenesis.generators.angular.exporters.ui.container.UiContainerFolderType;
 import org.junit.Test;
 
 /** @author Christos Tsakostas */

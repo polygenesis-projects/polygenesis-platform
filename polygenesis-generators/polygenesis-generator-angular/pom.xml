@@ -22,10 +22,10 @@
       <artifactId>polygenesis-metamodel-ui</artifactId>
     </dependency>
 
-    <!--POLYGENESIS REPRESENTATIONS-->
+    <!--POLYGENESIS GENERATORS COMMONS-->
     <dependency>
-      <groupId>io.polygenesis.representations</groupId>
-      <artifactId>polygenesis-representation-typescript</artifactId>
+      <groupId>io.polygenesis.generators</groupId>
+      <artifactId>polygenesis-generator-commons</artifactId>
     </dependency>
 
     <!--TEST-->

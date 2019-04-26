@@ -24,10 +24,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
+import io.polygenesis.generators.java.exporters.apidetail.ServiceImplementationClassRepresentable;
+import io.polygenesis.generators.java.exporters.apidetail.ServiceMethodImplementationRepresentable;
+import io.polygenesis.generators.java.skeletons.FromDataTypeToJavaConverter;
 import io.polygenesis.models.api.Service;
 import io.polygenesis.models.api.ServiceName;
 import io.polygenesis.models.apiimpl.ServiceImplementation;
-import io.polygenesis.representations.java.FromDataTypeToJavaConverter;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -9,10 +9,10 @@ PolyGenesis is a novel approach to automatic programming, inspired by Domain-Dri
 
 === 10,000ft View
 
+image::../images/polygenesis-platform.png[PolyGenesis Platform]
+
 It all starts with the *Things*, *Functions* and *Goals* definitions.
 Input is provided via DSL.
-
-image::../images/polygenesis-platform.png[PolyGenesis Platform]
 
 The *Metamodels* model the concept that needs to be generated (i.e. API, REST, Persistence etc.)
 

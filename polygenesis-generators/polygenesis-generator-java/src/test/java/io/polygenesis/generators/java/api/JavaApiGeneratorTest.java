@@ -27,6 +27,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 import io.polygenesis.core.MetamodelRepository;
+import io.polygenesis.generators.java.exporters.api.DtoExporter;
+import io.polygenesis.generators.java.exporters.api.JavaApiGenerator;
+import io.polygenesis.generators.java.exporters.api.ServiceExporter;
 import io.polygenesis.models.api.Service;
 import io.polygenesis.models.api.ServiceMetamodelRepository;
 import java.nio.file.Path;
