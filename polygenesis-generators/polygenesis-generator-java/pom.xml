@@ -30,16 +30,10 @@
       <artifactId>polygenesis-metamodel-domain</artifactId>
     </dependency>
 
-    <!--POLYGENESIS REPRESENTATIONS-->
+    <!--POLYGENESIS GENERATORS COMMONS-->
     <dependency>
-      <groupId>io.polygenesis.representations</groupId>
-      <artifactId>polygenesis-representation-java</artifactId>
-    </dependency>
-
-    <!--POLYGENESIS IMPLEMENTATIONS-->
-    <dependency>
-      <groupId>io.polygenesis.implementations</groupId>
-      <artifactId>polygenesis-implementation-java</artifactId>
+      <groupId>io.polygenesis.generators</groupId>
+      <artifactId>polygenesis-generator-commons</artifactId>
     </dependency>
 
     <!--TEST-->

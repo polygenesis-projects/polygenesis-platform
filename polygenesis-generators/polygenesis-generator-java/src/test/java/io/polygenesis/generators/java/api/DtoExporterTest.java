@@ -42,6 +42,8 @@ import io.polygenesis.core.data.DataGroup;
 import io.polygenesis.core.data.DataPrimitive;
 import io.polygenesis.core.data.PrimitiveType;
 import io.polygenesis.core.data.VariableName;
+import io.polygenesis.generators.java.exporters.api.DtoClassRepresentable;
+import io.polygenesis.generators.java.exporters.api.DtoExporter;
 import io.polygenesis.models.api.Dto;
 import io.polygenesis.models.api.DtoType;
 import io.polygenesis.models.api.Service;
