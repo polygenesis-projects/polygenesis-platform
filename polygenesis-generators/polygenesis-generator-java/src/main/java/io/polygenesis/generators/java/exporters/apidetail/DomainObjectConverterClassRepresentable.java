@@ -30,6 +30,7 @@ import io.polygenesis.generators.java.skeletons.ConstructorRepresentation;
 import io.polygenesis.generators.java.skeletons.FromDataTypeToJavaConverter;
 import io.polygenesis.generators.java.skeletons.MethodRepresentation;
 import io.polygenesis.models.apiimpl.DomainEntityConverter;
+import io.polygenesis.models.apiimpl.DomainEntityConverterMethod;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.TreeSet;
@@ -115,7 +116,7 @@ public class DomainObjectConverterClassRepresentable
         source
             .getMethods()
             .stream()
-            .map(domainObjectConverterMethod -> domainObjectConverterMethod.getFunction())
+            .map(DomainEntityConverterMethod::getFunction)
             .flatMap(function -> function.getArguments().stream())
             .map(Argument::getData)
             .filter(Data::isDataGroup)
@@ -127,7 +128,7 @@ public class DomainObjectConverterClassRepresentable
         source
             .getMethods()
             .stream()
-            .map(domainObjectConverterMethod -> domainObjectConverterMethod.getFunction())
+            .map(DomainEntityConverterMethod::getFunction)
             .filter(function -> function.getReturnValue() != null)
             .map(function -> function.getReturnValue().getData())
             .filter(Data::isDataGroup)
