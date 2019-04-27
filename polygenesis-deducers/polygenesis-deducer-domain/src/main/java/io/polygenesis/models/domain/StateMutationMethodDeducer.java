@@ -20,6 +20,8 @@
 
 package io.polygenesis.models.domain;
 
+import static io.polygenesis.models.domain.PropertyType.AGGREGATE_ENTITY_COLLECTION;
+
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.Function;
 import io.polygenesis.core.FunctionName;
@@ -54,14 +56,10 @@ public class StateMutationMethodDeducer {
 
     properties.forEach(
         property -> {
-          switch (property.getPropertyType()) {
-            case AGGREGATE_ENTITY_COLLECTION:
-              stateMutationMethods.addAll(
-                  forAggregateEntityCollection(
-                      thing, AggregateEntityCollection.class.cast(property)));
-              break;
-            default:
-              break;
+          if (property.getPropertyType().equals(AGGREGATE_ENTITY_COLLECTION)) {
+            stateMutationMethods.addAll(
+                forAggregateEntityCollection(
+                    thing, AggregateEntityCollection.class.cast(property)));
           }
         });
 

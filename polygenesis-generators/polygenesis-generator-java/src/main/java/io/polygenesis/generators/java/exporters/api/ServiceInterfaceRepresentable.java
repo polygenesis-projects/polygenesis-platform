@@ -23,12 +23,14 @@ package io.polygenesis.generators.java.exporters.api;
 import static java.util.stream.Collectors.toCollection;
 
 import io.polygenesis.commons.text.TextConverter;
+import io.polygenesis.core.Argument;
 import io.polygenesis.core.data.DataGroup;
 import io.polygenesis.generators.java.skeletons.AbstractInterfaceRepresentable;
 import io.polygenesis.generators.java.skeletons.FromDataTypeToJavaConverter;
 import io.polygenesis.generators.java.skeletons.FunctionToMethodRepresentationConverter;
 import io.polygenesis.generators.java.skeletons.MethodRepresentation;
 import io.polygenesis.models.api.Service;
+import io.polygenesis.models.api.ServiceMethod;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.TreeSet;
@@ -65,8 +67,8 @@ public class ServiceInterfaceRepresentable extends AbstractInterfaceRepresentabl
     return source
         .getServiceMethods()
         .stream()
-        .map(method -> method.getFunction())
-        .map(function -> functionToMethodRepresentationConverter.create(function))
+        .map(ServiceMethod::getFunction)
+        .map(functionToMethodRepresentationConverter::create)
         .collect(toCollection(LinkedHashSet::new));
   }
 
@@ -101,7 +103,7 @@ public class ServiceInterfaceRepresentable extends AbstractInterfaceRepresentabl
                   .getArguments()
                   .stream()
                   .filter(argument -> argument.getData().isDataGroup())
-                  .map(argument -> argument.getData())
+                  .map(Argument::getData)
                   .map(DataGroup.class::cast)
                   .forEach(
                       dataGroup -> {

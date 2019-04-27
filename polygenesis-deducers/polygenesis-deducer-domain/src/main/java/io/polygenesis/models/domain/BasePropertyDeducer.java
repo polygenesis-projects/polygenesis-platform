@@ -20,8 +20,14 @@
 
 package io.polygenesis.models.domain;
 
+import static io.polygenesis.core.data.DataBusinessType.THING_IDENTITY;
+import static io.polygenesis.core.data.DataPrimaryType.PRIMITIVE;
+
+import io.polygenesis.core.Argument;
+import io.polygenesis.core.Function;
 import io.polygenesis.core.Thing;
 import io.polygenesis.core.ThingProperty;
+import io.polygenesis.core.data.Data;
 import io.polygenesis.core.data.DataBusinessType;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -49,10 +55,10 @@ public abstract class BasePropertyDeducer {
       thing
           .getFunctions()
           .stream()
-          .map(function -> function.getArguments())
-          .flatMap(arguments -> arguments.stream().map(argument -> argument.getData()))
-          .filter(data -> data.isDataGroup())
-          .map(data -> data.getAsDataGroup())
+          .map(Function::getArguments)
+          .flatMap(arguments -> arguments.stream().map(Argument::getData))
+          .filter(Data::isDataGroup)
+          .map(Data::getAsDataGroup)
           .flatMap(dataGroup -> dataGroup.getModels().stream())
           // TODO
           .filter(
@@ -74,16 +80,12 @@ public abstract class BasePropertyDeducer {
   @SuppressWarnings("rawtypes")
   protected BaseProperty thingPropertyToBaseProperty(ThingProperty thingProperty) {
 
-    switch (thingProperty.getData().getDataBusinessType()) {
-      case THING_IDENTITY:
-        switch (thingProperty.getData().getDataPrimaryType()) {
-          case PRIMITIVE:
-            return new SupportiveEntityId(thingProperty.getData().getAsDataPrimitive());
-          default:
-            throw new UnsupportedOperationException();
-        }
-      default:
-        break;
+    if (thingProperty.getData().getDataBusinessType().equals(THING_IDENTITY)) {
+      if (thingProperty.getData().getDataPrimaryType().equals(PRIMITIVE)) {
+        return new SupportiveEntityId(thingProperty.getData().getAsDataPrimitive());
+      } else {
+        throw new UnsupportedOperationException();
+      }
     }
 
     switch (thingProperty.getData().getDataPrimaryType()) {

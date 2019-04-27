@@ -94,7 +94,7 @@ public class ResourceClassRepresentable extends AbstractClassRepresentable<Resou
     return source
         .getEndpoints()
         .stream()
-        .map(endpoint -> endpointMethodRepresentable.create(endpoint))
+        .map(endpointMethodRepresentable::create)
         .collect(toCollection(LinkedHashSet::new));
   }
 

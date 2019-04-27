@@ -20,7 +20,6 @@
 
 package io.polygenesis.models.domain;
 
-import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.Thing;
 import java.util.LinkedHashSet;
 import java.util.Optional;
@@ -42,11 +41,10 @@ public class SupportiveEntityPropertyDeducer extends BasePropertyDeducer {
    * Deduce from set.
    *
    * @param thing the thing
-   * @param rootPackageName the root package name
    * @return the set
    */
   @SuppressWarnings("rawtypes")
-  public Set<DomainObjectProperty> deduceFrom(Thing thing, PackageName rootPackageName) {
+  public Set<DomainObjectProperty> deduceFrom(Thing thing) {
     Set<DomainObjectProperty> properties = new LinkedHashSet<>();
 
     ensureThingProperties(thing);
@@ -55,7 +53,7 @@ public class SupportiveEntityPropertyDeducer extends BasePropertyDeducer {
         thing
             .getThingProperties()
             .stream()
-            .map(thingProperty -> thingPropertyToBaseProperty(thingProperty))
+            .map(this::thingPropertyToBaseProperty)
             .collect(Collectors.toCollection(LinkedHashSet::new)));
 
     assertThatThingIdentityExists(thing, properties);

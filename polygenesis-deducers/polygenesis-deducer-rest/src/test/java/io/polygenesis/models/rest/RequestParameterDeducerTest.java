@@ -38,8 +38,7 @@ public class RequestParameterDeducerTest extends AbstractRestDeducerTest {
 
   @Test
   public void deduceFrom() {
-    Set<RequestParameter> requestParameters =
-        requestParameterDeducer.deduceFrom(makeFunctionFetchPagedCollection());
+    Set<RequestParameter> requestParameters = requestParameterDeducer.deduceFrom();
 
     // TODO
     assertThat(requestParameters).isNotNull();

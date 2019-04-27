@@ -55,10 +55,7 @@ public abstract class AbstractServiceMethodImplementor {
       ServiceImplementation serviceImplementation,
       ServiceMethod serviceMethod,
       MethodRepresentation methodRepresentation) {
-    Map<String, Object> dataModel =
-        defaultDataModel(serviceImplementation, serviceMethod, methodRepresentation);
-
-    return dataModel;
+    return defaultDataModel(serviceImplementation, serviceMethod, methodRepresentation);
   }
 
   /**

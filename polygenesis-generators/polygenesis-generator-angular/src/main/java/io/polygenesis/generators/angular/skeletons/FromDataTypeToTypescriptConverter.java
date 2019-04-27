@@ -23,8 +23,7 @@ package io.polygenesis.generators.angular.skeletons;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.data.Data;
 import io.polygenesis.core.data.PrimitiveType;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.EnumMap;
 import java.util.stream.Stream;
 
 /**
@@ -38,7 +37,7 @@ public class FromDataTypeToTypescriptConverter {
   // STATIC
   // ===============================================================================================
 
-  private static Map<PrimitiveType, String> dataTypeMap;
+  private static EnumMap<PrimitiveType, String> dataTypeMap;
 
   static {
     initialize();
@@ -58,7 +57,7 @@ public class FromDataTypeToTypescriptConverter {
     String candidate = TextConverter.toUpperCamel(model.getDataType());
 
     return Stream.of(PrimitiveType.values())
-        .filter(value -> value.name().equals(candidate.toUpperCase()))
+        .filter(value -> value.name().equalsIgnoreCase(candidate))
         .findFirst()
         .map(primaryType -> dataTypeMap.get(primaryType))
         .orElseGet(() -> candidate);
@@ -69,7 +68,7 @@ public class FromDataTypeToTypescriptConverter {
   // ===============================================================================================
 
   private static void initialize() {
-    dataTypeMap = new HashMap<>();
+    dataTypeMap = new EnumMap<>(PrimitiveType.class);
 
     dataTypeMap.put(PrimitiveType.VOID, "void");
     dataTypeMap.put(PrimitiveType.STRING, "string");

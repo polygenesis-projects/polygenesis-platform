@@ -59,9 +59,7 @@ public class FunctionToMethodRepresentationConverter extends AbstractMethodRepre
 
   @Override
   public Set<String> imports(Function source, Object... args) {
-    Set<String> imports = new LinkedHashSet<>();
-
-    return imports;
+    return new LinkedHashSet<>();
   }
 
   @Override
@@ -96,13 +94,12 @@ public class FunctionToMethodRepresentationConverter extends AbstractMethodRepre
     source
         .getArguments()
         .forEach(
-            argument -> {
-              parameterRepresentations.add(
-                  new ParameterRepresentation(
-                      fromDataTypeToJavaConverter.getDeclaredVariableType(
-                          argument.getData().getDataType()),
-                      argument.getData().getVariableName().getText()));
-            });
+            argument ->
+                parameterRepresentations.add(
+                    new ParameterRepresentation(
+                        fromDataTypeToJavaConverter.getDeclaredVariableType(
+                            argument.getData().getDataType()),
+                        argument.getData().getVariableName().getText())));
 
     return parameterRepresentations;
   }

@@ -72,10 +72,7 @@ public class SqlIndexDeducer implements Deducer<SqlIndexMetamodelRepository> {
     CoreRegistry.getMetamodelRepositoryResolver()
         .resolve(modelRepositories, DomainMetamodelRepository.class)
         .getItems()
-        .forEach(
-            aggregateRoot -> {
-              indices.add(indexDeducer.deduce());
-            });
+        .forEach(aggregateRoot -> indices.add(indexDeducer.deduce()));
 
     return new SqlIndexMetamodelRepository(indices);
   }

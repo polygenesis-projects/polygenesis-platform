@@ -30,6 +30,7 @@ import io.polygenesis.core.data.DataSource;
 import io.polygenesis.core.data.DataValidator;
 import io.polygenesis.core.data.VariableName;
 import java.util.LinkedHashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -139,6 +140,7 @@ public class AggregateEntity extends BaseDomainEntity implements DomainObjectPro
   // IMPLEMENTATIONS
   // ===============================================================================================
 
+  @SuppressWarnings("CPD-START")
   @Override
   public boolean hasSuperclass() {
     return getSuperClass() != null;
@@ -172,4 +174,24 @@ public class AggregateEntity extends BaseDomainEntity implements DomainObjectPro
   // OVERRIDES
   // ===============================================================================================
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    if (!super.equals(o)) {
+      return false;
+    }
+    AggregateEntity that = (AggregateEntity) o;
+    return Objects.equals(superClass, that.superClass);
+  }
+
+  @Override
+  @SuppressWarnings("CPD-END")
+  public int hashCode() {
+    return Objects.hash(super.hashCode(), superClass);
+  }
 }

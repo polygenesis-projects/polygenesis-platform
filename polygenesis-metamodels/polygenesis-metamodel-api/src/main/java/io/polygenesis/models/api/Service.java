@@ -23,7 +23,6 @@ package io.polygenesis.models.api;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.CqsType;
-import io.polygenesis.core.Function;
 import io.polygenesis.core.Metamodel;
 import io.polygenesis.core.ThingName;
 import java.util.Objects;
@@ -79,25 +78,6 @@ public class Service implements Metamodel {
   @Override
   public ObjectName getObjectName() {
     return new ObjectName(serviceName.getText());
-  }
-
-  // ===============================================================================================
-  // QUERIES
-  // ===============================================================================================
-
-  /**
-   * Contains function.
-   *
-   * @param function the function
-   * @return the boolean
-   */
-  public boolean contains(Function function) {
-
-    return getServiceMethods()
-        .stream()
-        .filter(method -> method.getFunction().equals(function))
-        .findFirst()
-        .isPresent();
   }
 
   // ===============================================================================================

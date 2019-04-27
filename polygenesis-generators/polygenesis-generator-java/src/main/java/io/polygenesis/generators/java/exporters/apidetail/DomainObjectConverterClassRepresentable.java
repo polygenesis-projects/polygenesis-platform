@@ -21,6 +21,8 @@
 package io.polygenesis.generators.java.exporters.apidetail;
 
 import io.polygenesis.commons.text.TextConverter;
+import io.polygenesis.core.Argument;
+import io.polygenesis.core.data.Data;
 import io.polygenesis.core.data.DataGroup;
 import io.polygenesis.generators.commons.representations.FieldRepresentation;
 import io.polygenesis.generators.java.skeletons.AbstractClassRepresentable;
@@ -89,9 +91,8 @@ public class DomainObjectConverterClassRepresentable
     source
         .getMethods()
         .forEach(
-            method -> {
-              methodRepresentations.add(domainObjectConverterMethodRepresentable.create(method));
-            });
+            method ->
+                methodRepresentations.add(domainObjectConverterMethodRepresentable.create(method)));
 
     return methodRepresentations;
   }
@@ -116,8 +117,8 @@ public class DomainObjectConverterClassRepresentable
             .stream()
             .map(domainObjectConverterMethod -> domainObjectConverterMethod.getFunction())
             .flatMap(function -> function.getArguments().stream())
-            .map(argument -> argument.getData())
-            .filter(data -> data.isDataGroup())
+            .map(Argument::getData)
+            .filter(Data::isDataGroup)
             .map(DataGroup.class::cast)
             .filter(dataGroup -> !dataGroup.getPackageName().equals(source.getPackageName()))
             .collect(Collectors.toSet()));
@@ -129,19 +130,18 @@ public class DomainObjectConverterClassRepresentable
             .map(domainObjectConverterMethod -> domainObjectConverterMethod.getFunction())
             .filter(function -> function.getReturnValue() != null)
             .map(function -> function.getReturnValue().getData())
-            .filter(data -> data.isDataGroup())
+            .filter(Data::isDataGroup)
             .map(DataGroup.class::cast)
             .filter(dataGroup -> !dataGroup.getPackageName().equals(source.getPackageName()))
             .collect(Collectors.toSet()));
 
     candidates.forEach(
-        candidate -> {
-          imports.add(
-              String.format(
-                  "%s.%s",
-                  candidate.getPackageName().getText(),
-                  TextConverter.toUpperCamel(candidate.getObjectName().getText())));
-        });
+        candidate ->
+            imports.add(
+                String.format(
+                    "%s.%s",
+                    candidate.getPackageName().getText(),
+                    TextConverter.toUpperCamel(candidate.getObjectName().getText()))));
 
     return imports;
   }

@@ -96,7 +96,7 @@ public class EndpointDeducer {
               serviceMethod,
               httpMethod,
               mappingDeducer.deduceFrom(serviceMethod.getFunction(), httpMethod),
-              requestParameterDeducer.deduceFrom(serviceMethod.getFunction())));
+              requestParameterDeducer.deduceFrom()));
     } else {
       return Optional.empty();
     }

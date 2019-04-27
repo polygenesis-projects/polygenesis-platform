@@ -86,10 +86,7 @@ public class DomainServiceDeducer implements Deducer<DomainServiceRepository> {
                       new PackageName(
                           String.format("%s.%s", getRootPackageName().getText(), "service")));
 
-              thing
-                  .getFunctions()
-                  .stream()
-                  .forEach(function -> domainService.appendFunction(function));
+              thing.getFunctions().stream().forEach(domainService::appendFunction);
 
               domainServices.add(domainService);
             });

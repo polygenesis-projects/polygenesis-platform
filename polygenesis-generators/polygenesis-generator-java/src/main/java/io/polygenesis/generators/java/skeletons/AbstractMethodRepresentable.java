@@ -81,7 +81,7 @@ public abstract class AbstractMethodRepresentable<S> extends AbstractRepresentab
       Set<ParameterRepresentation> parameterRepresentations) {
     return parameterRepresentations
         .stream()
-        .map(parameterRepresentation -> parameterRepresentation.getVariableName())
+        .map(ParameterRepresentation::getVariableName)
         .collect(Collectors.joining(", "));
   }
 }

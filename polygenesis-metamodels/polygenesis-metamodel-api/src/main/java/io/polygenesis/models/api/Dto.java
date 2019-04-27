@@ -103,10 +103,10 @@ public class Dto {
     return getDataGroup()
         .getModels()
         .stream()
-        .filter(model -> model.isDataArray())
+        .filter(Data::isDataArray)
         .map(DataArray.class::cast)
         .filter(dataArray -> dataArray.getArrayElement() != null)
-        .map(dataArray -> dataArray.getArrayElement())
+        .map(DataArray::getArrayElement)
         .findFirst();
   }
 
@@ -125,11 +125,7 @@ public class Dto {
    * @return the parent thing identity as optional
    */
   public Optional<Data> getParentThingIdentityAsOptional() {
-    return getDataGroup()
-        .getModels()
-        .stream()
-        .filter(data -> data.isParentThingIdentity())
-        .findFirst();
+    return getDataGroup().getModels().stream().filter(Data::isParentThingIdentity).findFirst();
   }
 
   // ===============================================================================================

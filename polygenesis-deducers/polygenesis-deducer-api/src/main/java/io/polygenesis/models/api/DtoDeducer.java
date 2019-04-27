@@ -261,7 +261,7 @@ public class DtoDeducer {
         dto.getDataGroup()
             .getModels()
             .stream()
-            .filter(model -> model.isDataPrimitive())
+            .filter(Data::isDataPrimitive)
             .map(DataPrimitive.class::cast)
             .filter(model -> model.getDataBusinessType().equals(dataBusinessType))
             .collect(toCollection(LinkedHashSet::new));

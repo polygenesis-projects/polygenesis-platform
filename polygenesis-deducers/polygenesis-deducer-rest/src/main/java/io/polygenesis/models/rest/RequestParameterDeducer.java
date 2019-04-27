@@ -20,7 +20,6 @@
 
 package io.polygenesis.models.rest;
 
-import io.polygenesis.core.Function;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -38,12 +37,10 @@ public class RequestParameterDeducer {
   /**
    * Deduce from set.
    *
-   * @param function the function
    * @return the set
    */
-  public Set<RequestParameter> deduceFrom(Function function) {
-    Set<RequestParameter> requestParameters = new LinkedHashSet<>();
-
-    return requestParameters;
+  public Set<RequestParameter> deduceFrom() {
+    // TODO
+    return new LinkedHashSet<>();
   }
 }

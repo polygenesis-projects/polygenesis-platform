@@ -89,12 +89,11 @@ public class ModelRepresentable {
       dataGroup
           .getModels()
           .forEach(
-              model -> {
-                fieldRepresentations.add(
-                    new FieldRepresentation(
-                        fromDataTypeToTypescriptConverter.getDeclaredVariableType(model),
-                        model.getVariableName().getText()));
-              });
+              model ->
+                  fieldRepresentations.add(
+                      new FieldRepresentation(
+                          fromDataTypeToTypescriptConverter.getDeclaredVariableType(model),
+                          model.getVariableName().getText())));
 
     } else {
       throw new IllegalArgumentException();

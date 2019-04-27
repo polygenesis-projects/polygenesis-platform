@@ -121,17 +121,16 @@ public class ActionGroupRepresentable {
     actionGroup
         .getActions()
         .forEach(
-            action -> {
-              actionClasses.add(
-                  new ActionClass(
-                      TextConverter.toUpperCamel(action.getName().getText()),
-                      String.format(
-                          "%s.%s",
-                          getEnumerationName(featureName),
-                          TextConverter.toUpperCamel(action.getName().getText())),
-                      fromDataTypeToTypescriptConverter.getDeclaredVariableType(
-                          action.getPayloadModel().getData())));
-            });
+            action ->
+                actionClasses.add(
+                    new ActionClass(
+                        TextConverter.toUpperCamel(action.getName().getText()),
+                        String.format(
+                            "%s.%s",
+                            getEnumerationName(featureName),
+                            TextConverter.toUpperCamel(action.getName().getText())),
+                        fromDataTypeToTypescriptConverter.getDeclaredVariableType(
+                            action.getPayloadModel().getData()))));
 
     return actionClasses;
   }

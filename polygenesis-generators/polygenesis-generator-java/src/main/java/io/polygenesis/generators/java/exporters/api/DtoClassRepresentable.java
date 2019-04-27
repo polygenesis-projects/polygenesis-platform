@@ -32,9 +32,8 @@ import io.polygenesis.generators.java.skeletons.MethodRepresentation;
 import io.polygenesis.models.api.Dto;
 import io.polygenesis.models.api.DtoType;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.LinkedHashSet;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -51,8 +50,8 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
   // STATIC
   // ===============================================================================================
 
-  private static Map<DtoType, String> mapDtoTypeToInclude = new HashMap<>();
-  private static Map<DtoType, String> mapDtoTypeToClass = new HashMap<>();
+  private static EnumMap<DtoType, String> mapDtoTypeToInclude = new EnumMap<>(DtoType.class);
+  private static EnumMap<DtoType, String> mapDtoTypeToClass = new EnumMap<>(DtoType.class);
 
   static {
     mapDtoTypeToInclude.put(DtoType.API_REQUEST, "com.oregor.trinity4j.api.ApiRequest");
@@ -100,13 +99,12 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
         .getDataGroup()
         .getModels()
         .forEach(
-            model -> {
-              fieldRepresentations.add(
-                  new FieldRepresentation(
-                      makeVariableDataType(
-                          model.isDataGroup() ? model.getAsDataGroup().asDto() : model),
-                      makeVariableName(model)));
-            });
+            model ->
+                fieldRepresentations.add(
+                    new FieldRepresentation(
+                        makeVariableDataType(
+                            model.isDataGroup() ? model.getAsDataGroup().asDto() : model),
+                        makeVariableName(model))));
 
     return fieldRepresentations;
   }
@@ -174,7 +172,7 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
         .getDataGroup()
         .getModels()
         .stream()
-        .filter(model -> model.isDataArray())
+        .filter(Data::isDataArray)
         .findFirst()
         .ifPresent(model -> imports.add("java.util.List"));
 
@@ -182,7 +180,7 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
         .getDataGroup()
         .getModels()
         .stream()
-        .filter(model -> model.isDataMap())
+        .filter(Data::isDataMap)
         .findFirst()
         .ifPresent(model -> imports.add("java.util.Map"));
 
@@ -190,9 +188,9 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
         .getDataGroup()
         .getModels()
         .stream()
-        .filter(model -> model.isDataGroup())
+        .filter(Data::isDataGroup)
         .map(DataGroup.class::cast)
-        .map(dataGroup -> dataGroup.asDto())
+        .map(DataGroup::asDto)
         .forEach(
             dataGroup -> {
               if (!dataGroup.getPackageName().equals(source.getDataGroup().getPackageName())) {

@@ -106,14 +106,12 @@ public class ResourceDeducer {
    */
   private void fillEndpoints(Set<Endpoint> endpoints, Set<Service> services) {
     services.forEach(
-        service -> {
-          service
-              .getServiceMethods()
-              .forEach(
-                  serviceMethod -> {
-                    fillEndpointForServiceMethod(endpoints, service, serviceMethod);
-                  });
-        });
+        service ->
+            service
+                .getServiceMethods()
+                .forEach(
+                    serviceMethod ->
+                        fillEndpointForServiceMethod(endpoints, service, serviceMethod)));
   }
 
   /**

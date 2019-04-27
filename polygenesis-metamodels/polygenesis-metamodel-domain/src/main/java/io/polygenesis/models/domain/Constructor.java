@@ -21,6 +21,7 @@
 package io.polygenesis.models.domain;
 
 import io.polygenesis.core.Function;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -75,5 +76,29 @@ public class Constructor extends BaseMethod {
   @SuppressWarnings("rawtypes")
   private void setProperties(Set<DomainObjectProperty> properties) {
     this.properties = properties;
+  }
+
+  // ===============================================================================================
+  // OVERRIDES
+  // ===============================================================================================
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    if (!super.equals(o)) {
+      return false;
+    }
+    Constructor that = (Constructor) o;
+    return Objects.equals(properties, that.properties);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(super.hashCode(), properties);
   }
 }

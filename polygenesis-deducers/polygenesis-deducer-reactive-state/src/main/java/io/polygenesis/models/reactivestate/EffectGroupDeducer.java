@@ -42,8 +42,6 @@ public class EffectGroupDeducer {
    * @return the set
    */
   public Set<EffectGroup> deduce(Thing thing) {
-    Set<EffectGroup> effectGroups = new LinkedHashSet<>();
-
-    return effectGroups;
+    return new LinkedHashSet<>();
   }
 }

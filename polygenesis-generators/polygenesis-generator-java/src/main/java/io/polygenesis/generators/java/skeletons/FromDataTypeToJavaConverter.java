@@ -22,8 +22,7 @@ package io.polygenesis.generators.java.skeletons;
 
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.data.PrimitiveType;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.EnumMap;
 import java.util.stream.Stream;
 
 /**
@@ -37,7 +36,7 @@ public class FromDataTypeToJavaConverter {
   // STATIC
   // ===============================================================================================
 
-  private static Map<PrimitiveType, String> dataTypeMap;
+  private static EnumMap<PrimitiveType, String> dataTypeMap;
 
   static {
     initialize();
@@ -68,7 +67,7 @@ public class FromDataTypeToJavaConverter {
   // ===============================================================================================
 
   private static void initialize() {
-    dataTypeMap = new HashMap<>();
+    dataTypeMap = new EnumMap<>(PrimitiveType.class);
 
     dataTypeMap.put(PrimitiveType.VOID, "void");
     dataTypeMap.put(PrimitiveType.STRING, "String");

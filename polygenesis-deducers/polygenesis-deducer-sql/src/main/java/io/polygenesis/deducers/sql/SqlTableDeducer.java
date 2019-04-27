@@ -71,10 +71,7 @@ public class SqlTableDeducer implements Deducer<SqlTableMetamodelRepository> {
     CoreRegistry.getMetamodelRepositoryResolver()
         .resolve(modelRepositories, DomainMetamodelRepository.class)
         .getItems()
-        .forEach(
-            aggregateRoot -> {
-              tables.addAll(tableDeducer.deduce(aggregateRoot));
-            });
+        .forEach(aggregateRoot -> tables.addAll(tableDeducer.deduce(aggregateRoot)));
 
     tables.add(createDomainMessageTable());
 

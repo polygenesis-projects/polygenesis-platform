@@ -277,6 +277,7 @@ public class AggregateRoot extends BaseDomainEntity
   // IMPLEMENTATIONS
   // ===============================================================================================
 
+  @SuppressWarnings("CPD-START")
   @Override
   public boolean hasSuperclass() {
     return getSuperClass() != null;
@@ -329,6 +330,7 @@ public class AggregateRoot extends BaseDomainEntity
   }
 
   @Override
+  @SuppressWarnings("CPD-END")
   public int hashCode() {
     return Objects.hash(
         super.hashCode(), stateMutationMethods, stateQueryMethods, factoryMethods, superClass);
