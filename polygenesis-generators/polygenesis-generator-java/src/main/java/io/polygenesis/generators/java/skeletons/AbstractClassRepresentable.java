@@ -24,6 +24,7 @@ import static java.util.stream.Collectors.toCollection;
 
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.commons.valueobjects.PackageName;
+import io.polygenesis.core.data.Data;
 import io.polygenesis.core.data.DataGroup;
 import io.polygenesis.generators.commons.representations.FieldRepresentation;
 import io.polygenesis.generators.commons.representations.ParameterRepresentation;
@@ -105,13 +106,12 @@ public abstract class AbstractClassRepresentable<S> extends AbstractRepresentabl
     modelGroup
         .getModels()
         .stream()
-        .filter(model -> model.isDataGroup())
+        .filter(Data::isDataGroup)
         .map(DataGroup.class::cast)
         .filter(model -> !model.getPackageName().equals(modelGroup.getPackageName()))
         .forEach(
-            model -> {
-              imports.add(makeCanonicalObjectName(model.getPackageName(), model.getDataType()));
-            });
+            model ->
+                imports.add(makeCanonicalObjectName(model.getPackageName(), model.getDataType())));
 
     return imports;
   }
@@ -152,12 +152,11 @@ public abstract class AbstractClassRepresentable<S> extends AbstractRepresentabl
     modelGroup
         .getModels()
         .forEach(
-            model -> {
-              variables.add(
-                  new FieldRepresentation(
-                      fromDataTypeToJavaConverter.getDeclaredVariableType(model.getDataType()),
-                      model.getVariableName().getText()));
-            });
+            model ->
+                variables.add(
+                    new FieldRepresentation(
+                        fromDataTypeToJavaConverter.getDeclaredVariableType(model.getDataType()),
+                        model.getVariableName().getText())));
 
     return variables;
   }

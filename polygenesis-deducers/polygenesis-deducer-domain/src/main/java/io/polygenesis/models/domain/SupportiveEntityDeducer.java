@@ -100,7 +100,7 @@ public class SupportiveEntityDeducer implements Deducer<SupportiveEntityMetamode
         new SupportiveEntity(
             new ObjectName(thing.getThingName().getText()),
             new PackageName(String.format("%s.%s", rootPackageName.getText(), "supportive")),
-            supportiveEntityPropertyDeducer.deduceFrom(thing, rootPackageName),
+            supportiveEntityPropertyDeducer.deduceFrom(thing),
             domainObjectConstructorDeducer.deduceConstructorFromFunctionCreate(
                 thing, rootPackageName)));
   }

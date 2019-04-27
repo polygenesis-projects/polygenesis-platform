@@ -215,19 +215,15 @@ public class JavaDomainGenerator extends AbstractGenerator {
     CoreRegistry.getMetamodelRepositoryResolver()
         .resolve(modelRepositories, DomainServiceRepository.class)
         .getItems()
-        .forEach(
-            domainService -> {
-              domainServiceExporter.export(getGenerationPath(), domainService);
-            });
+        .forEach(domainService -> domainServiceExporter.export(getGenerationPath(), domainService));
 
     CoreRegistry.getMetamodelRepositoryResolver()
         .resolve(modelRepositories, SupportiveEntityMetamodelRepository.class)
         .getItems()
         .forEach(
-            helperEntity -> {
-              supportiveEntityExporter.export(
-                  getGenerationPath(), helperEntity, getRootPackageName());
-            });
+            helperEntity ->
+                supportiveEntityExporter.export(
+                    getGenerationPath(), helperEntity, getRootPackageName()));
 
     constantsExporter.export(getGenerationPath(), getRootPackageName(), getTablePrefix());
   }

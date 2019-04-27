@@ -156,12 +156,11 @@ public abstract class DomainObjectClassRepresentable<S extends BaseDomainObject>
     source
         .getConstructors()
         .forEach(
-            constructor -> {
-              constructorRepresentations.add(
-                  createConstructorWithSetters(
-                      source.getObjectName().getText(),
-                      makeConstructorParameterRepresentation(constructor.getProperties())));
-            });
+            constructor ->
+                constructorRepresentations.add(
+                    createConstructorWithSetters(
+                        source.getObjectName().getText(),
+                        makeConstructorParameterRepresentation(constructor.getProperties()))));
 
     return constructorRepresentations;
   }

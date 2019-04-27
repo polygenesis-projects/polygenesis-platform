@@ -123,13 +123,12 @@ public class StateMutationMethodRepresentable
         .getFunction()
         .getArguments()
         .forEach(
-            argument -> {
-              parameterRepresentations.add(
-                  new ParameterRepresentation(
-                      fromDataTypeToJavaConverter.getDeclaredVariableType(
-                          argument.getData().getDataType()),
-                      argument.getData().getVariableName().getText()));
-            });
+            argument ->
+                parameterRepresentations.add(
+                    new ParameterRepresentation(
+                        fromDataTypeToJavaConverter.getDeclaredVariableType(
+                            argument.getData().getDataType()),
+                        argument.getData().getVariableName().getText())));
 
     return parameterRepresentations;
   }

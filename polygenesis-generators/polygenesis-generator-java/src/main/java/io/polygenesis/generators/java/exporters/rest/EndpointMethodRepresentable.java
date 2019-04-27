@@ -112,9 +112,7 @@ public class EndpointMethodRepresentable extends AbstractMethodRepresentable<End
 
   @Override
   public Set<String> imports(Endpoint source, Object... args) {
-    Set<String> imports = new LinkedHashSet<>();
-
-    return imports;
+    return new LinkedHashSet<>();
   }
 
   @Override
@@ -313,7 +311,7 @@ public class EndpointMethodRepresentable extends AbstractMethodRepresentable<End
       Set<ParameterRepresentation> parameterRepresentations) {
     return parameterRepresentations
         .stream()
-        .map(parameterRepresentation -> parameterRepresentation.getVariableName())
+        .map(ParameterRepresentation::getVariableName)
         .filter(variableName -> !variableName.equals("httpServletRequest"))
         .collect(Collectors.joining(", "));
   }

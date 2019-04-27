@@ -23,7 +23,6 @@ package io.polygenesis.generators.java.exporters.domain.supportiveentity;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.generators.java.exporters.domain.ConstructorRepresentable;
 import io.polygenesis.generators.java.exporters.domain.DomainObjectClassRepresentable;
-import io.polygenesis.generators.java.skeletons.ConstructorRepresentation;
 import io.polygenesis.generators.java.skeletons.FromDataTypeToJavaConverter;
 import io.polygenesis.generators.java.skeletons.MethodRepresentation;
 import io.polygenesis.models.domain.InstantiationType;
@@ -67,12 +66,6 @@ public class SupportiveEntityClassRepresentable
   // ===============================================================================================
 
   @Override
-  public Set<ConstructorRepresentation> constructorRepresentations(
-      SupportiveEntity source, Object... args) {
-    return super.constructorRepresentations(source, args);
-  }
-
-  @Override
   public Set<MethodRepresentation> methodRepresentations(SupportiveEntity source, Object... args) {
     Set<MethodRepresentation> methodRepresentations = new LinkedHashSet<>();
 
@@ -84,12 +77,6 @@ public class SupportiveEntityClassRepresentable
             constructor -> methodRepresentations.add(constructorRepresentable.create(constructor)));
 
     return methodRepresentations;
-  }
-
-  @Override
-  public Set<String> annotations(SupportiveEntity source, Object... args) {
-    Set<String> annotations = new LinkedHashSet<>();
-    return annotations;
   }
 
   @Override

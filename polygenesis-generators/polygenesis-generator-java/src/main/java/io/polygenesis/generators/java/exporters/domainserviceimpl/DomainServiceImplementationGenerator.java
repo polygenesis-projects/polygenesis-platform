@@ -68,8 +68,7 @@ public class DomainServiceImplementationGenerator extends AbstractGenerator {
         .resolve(modelRepositories, DomainServiceRepository.class)
         .getItems()
         .forEach(
-            domainService -> {
-              domainServiceImplementationExporter.export(getGenerationPath(), domainService);
-            });
+            domainService ->
+                domainServiceImplementationExporter.export(getGenerationPath(), domainService));
   }
 }

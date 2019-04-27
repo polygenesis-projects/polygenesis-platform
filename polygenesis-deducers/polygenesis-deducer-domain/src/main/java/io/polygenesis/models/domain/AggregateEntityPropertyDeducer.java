@@ -59,7 +59,7 @@ public class AggregateEntityPropertyDeducer extends BasePropertyDeducer {
         thingChild
             .getThingProperties()
             .stream()
-            .map(thingProperty -> thingPropertyToBaseProperty(thingProperty))
+            .map(this::thingPropertyToBaseProperty)
             .collect(Collectors.toCollection(LinkedHashSet::new)));
 
     return properties;

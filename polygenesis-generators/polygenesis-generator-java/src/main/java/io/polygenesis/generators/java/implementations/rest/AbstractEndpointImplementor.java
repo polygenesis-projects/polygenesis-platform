@@ -46,9 +46,7 @@ public abstract class AbstractEndpointImplementor {
    */
   protected Map<String, Object> aggregateRootDataModel(
       Endpoint endpoint, MethodRepresentation methodRepresentation) {
-    Map<String, Object> dataModel = defaultDataModel(endpoint, methodRepresentation);
-
-    return dataModel;
+    return defaultDataModel(endpoint, methodRepresentation);
   }
 
   /**

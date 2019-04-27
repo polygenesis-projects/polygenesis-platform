@@ -20,7 +20,6 @@
 
 package io.polygenesis.models.reactivestate;
 
-import io.polygenesis.core.Thing;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -38,12 +37,10 @@ public class ReducerGroupDeducer {
   /**
    * Deduce set.
    *
-   * @param thing the thing
    * @return the set
    */
-  public Set<ReducerGroup> deduce(Thing thing) {
-    Set<ReducerGroup> reducerGroups = new LinkedHashSet<>();
-
-    return reducerGroups;
+  public Set<ReducerGroup> deduce() {
+    // TODO
+    return new LinkedHashSet<>();
   }
 }

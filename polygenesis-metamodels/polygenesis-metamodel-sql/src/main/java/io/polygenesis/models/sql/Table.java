@@ -77,7 +77,7 @@ public class Table implements Metamodel {
   public Set<Column> getPrimaryKeys() {
     return columns
         .stream()
-        .filter(column -> column.getPrimaryKey())
+        .filter(Column::getPrimaryKey)
         .collect(Collectors.toCollection(LinkedHashSet::new));
   }
 
@@ -87,7 +87,7 @@ public class Table implements Metamodel {
    * @return the boolean
    */
   public boolean hasPrimaryKeys() {
-    return columns.stream().anyMatch(column -> column.getPrimaryKey());
+    return columns.stream().anyMatch(Column::getPrimaryKey);
   }
 
   // ===============================================================================================

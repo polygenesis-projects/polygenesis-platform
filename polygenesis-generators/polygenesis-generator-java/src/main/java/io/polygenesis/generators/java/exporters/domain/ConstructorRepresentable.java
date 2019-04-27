@@ -119,13 +119,12 @@ public class ConstructorRepresentable extends AbstractMethodRepresentable<Constr
     source
         .getProperties()
         .forEach(
-            property -> {
-              parameterRepresentations.add(
-                  new ParameterRepresentation(
-                      fromDataTypeToJavaConverter.getDeclaredVariableType(
-                          property.getData().getDataType()),
-                      property.getData().getVariableName().getText()));
-            });
+            property ->
+                parameterRepresentations.add(
+                    new ParameterRepresentation(
+                        fromDataTypeToJavaConverter.getDeclaredVariableType(
+                            property.getData().getDataType()),
+                        property.getData().getVariableName().getText())));
 
     return parameterRepresentations;
   }

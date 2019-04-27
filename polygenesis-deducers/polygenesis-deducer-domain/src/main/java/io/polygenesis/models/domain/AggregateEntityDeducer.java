@@ -94,9 +94,8 @@ public class AggregateEntityDeducer {
     thing
         .getChildren()
         .forEach(
-            thingChild -> {
-              aggregateEntities.add(deduceAggregateEntity(thing, thingChild, rootPackageName));
-            });
+            thingChild ->
+                aggregateEntities.add(deduceAggregateEntity(thing, thingChild, rootPackageName)));
 
     return aggregateEntities;
   }

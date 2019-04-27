@@ -79,7 +79,7 @@ public class StoreDeducer {
     Set<ActionGroup> actionGroups = actionGroupDeducer.deduce(thing, serviceModelRepository);
     Set<EffectGroup> effectGroups = effectGroupDeducer.deduce(thing);
     Set<Model> models = modelDeducer.deduce(thing, serviceModelRepository);
-    Set<ReducerGroup> reducerGroups = reducerGroupDeducer.deduce(thing);
+    Set<ReducerGroup> reducerGroups = reducerGroupDeducer.deduce();
 
     return new Store(
         featureNameDeducer.from(thing), actionGroups, effectGroups, models, reducerGroups);

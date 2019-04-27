@@ -50,14 +50,13 @@ public class ActionIndexRepresentable {
     Map<String, String> importAliases = new LinkedHashMap<>();
 
     actionGroups.forEach(
-        actionGroup -> {
-          importAliases.put(
-              actionGroup.getActionGroupName().getText(),
-              String.format(
-                  "%s.%s",
-                  TextConverter.toLowerHyphen(actionGroup.getActionGroupName().getText()),
-                  POSTFIX_ACTIONS));
-        });
+        actionGroup ->
+            importAliases.put(
+                actionGroup.getActionGroupName().getText(),
+                String.format(
+                    "%s.%s",
+                    TextConverter.toLowerHyphen(actionGroup.getActionGroupName().getText()),
+                    POSTFIX_ACTIONS)));
 
     return new ActionIndexRepresentation(importAliases);
   }

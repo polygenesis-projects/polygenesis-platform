@@ -57,16 +57,13 @@ public class ContainerDeducer {
    * @return the container
    */
   public AbstractContainer deduceContainerFromThingFunction(Feature feature, Function function) {
-    InlineContainer container =
-        new InlineContainer(
-            new ContainerName(function.getName().getText()),
-            new Top(null, null, null, null, null, null, null),
-            new Right(null, null, null, null, null, null, null),
-            new Bottom(null, null, null, null, null, null, null),
-            new Left(null, null, null, null, null, null, null),
-            new Center(null, null, null, null, null, null, null));
-
-    return container;
+    return new InlineContainer(
+        new ContainerName(function.getName().getText()),
+        new Top(null, null, null, null, null, null, null),
+        new Right(null, null, null, null, null, null, null),
+        new Bottom(null, null, null, null, null, null, null),
+        new Left(null, null, null, null, null, null, null),
+        new Center(null, null, null, null, null, null, null));
   }
 
   // ===============================================================================================
