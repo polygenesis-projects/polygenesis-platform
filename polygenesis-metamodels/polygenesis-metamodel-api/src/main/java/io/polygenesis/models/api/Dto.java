@@ -116,7 +116,7 @@ public class Dto {
    * @return the optional thing identity
    */
   public Optional<Data> getThingIdentityAsOptional() {
-    return getDataGroup().getModels().stream().filter(data -> data.isThingIdentity()).findFirst();
+    return getDataGroup().getModels().stream().filter(Data::isThingIdentity).findFirst();
   }
 
   /**
