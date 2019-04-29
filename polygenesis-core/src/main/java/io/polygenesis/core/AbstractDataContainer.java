@@ -25,11 +25,11 @@ import io.polygenesis.core.data.Data;
 import java.util.Objects;
 
 /**
- * The base class for Function Input / Output and Thing Properties.
+ * The base class for any {@link Data} containers.
  *
  * @author Christos Tsakostas
  */
-abstract class AbstractDataContainer {
+public abstract class AbstractDataContainer {
 
   private Data data;
 
@@ -42,7 +42,7 @@ abstract class AbstractDataContainer {
    *
    * @param data the data
    */
-  AbstractDataContainer(Data data) {
+  public AbstractDataContainer(Data data) {
     setData(data);
   }
 
