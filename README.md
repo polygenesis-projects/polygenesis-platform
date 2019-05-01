@@ -6,8 +6,10 @@
 
 PolyGenesis is an open source platform for Cross-Language Automated Code Generation, focused on DDD and UI.
 
-# *************************************************************
-# WORK IN PROGRESS
-# *************************************************************
+PolyGenesis metamodels and generators are heavily based on the Trinity Architecture.
+To learn more about the Trinity Architecture go to: https://medium.com/oregor/the-trinity-architecture-c89ed5743c1e
+
+## 
+## WORK IN PROGRESS
 
 
