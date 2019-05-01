@@ -292,6 +292,10 @@ public abstract class AbstractClassRepresentable<S> extends AbstractRepresentabl
       Set<FieldRepresentation> fieldRepresentations) {
     Set<MethodRepresentation> methodRepresentations = new LinkedHashSet<>();
 
+    if (fieldRepresentations.isEmpty()) {
+      return methodRepresentations;
+    }
+
     fieldRepresentations
         .stream()
         .limit(fieldRepresentations.size() - 1L)
