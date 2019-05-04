@@ -91,6 +91,7 @@ public class ServiceImplementationDeducer extends BaseApiImplementationDeducer
             .resolve(modelRepositories, DomainEntityConverterMetamodelRepository.class);
 
     Set<ServiceImplementation> serviceImplementations = new LinkedHashSet<>();
+
     fillServiceImplementations(
         serviceImplementations,
         serviceModelRepository,
@@ -154,7 +155,8 @@ public class ServiceImplementationDeducer extends BaseApiImplementationDeducer
           aggregateRootParent(domainModelRepository, domainEntityConverter.getDomainEntity()),
           domainEntityConverter);
     } else {
-      return new ServiceImplementation(service, new LinkedHashSet<>(), new LinkedHashSet<>());
+      return new ServiceImplementation(
+          service, new LinkedHashSet<>(), serviceMethodImplementationDeducer.deduce(service));
     }
   }
 
