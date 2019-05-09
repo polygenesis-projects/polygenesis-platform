@@ -18,20 +18,37 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.core;
+package io.polygenesis.models.domain;
+
+import io.polygenesis.core.data.Data;
+import io.polygenesis.core.data.DataGroup;
 
 /**
- * The enum Thing layer type.
+ * The type Tenant id.
  *
  * @author Christos Tsakostas
  */
-public enum ThingLayerType {
-  /** User interface thing layer type. */
-  USER_INTERFACE,
-  /** Rest thing layer type. */
-  REST,
-  /** Api thing layer type. */
-  API,
-  /** Domain thing layer type. */
-  DOMAIN
+public class TenantId extends BaseProperty<DataGroup> {
+
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
+  /**
+   * Instantiates a new Tenant id.
+   *
+   * @param data the data
+   */
+  public TenantId(DataGroup data) {
+    super(PropertyType.TENANT_ID, data);
+  }
+
+  // ===============================================================================================
+  // IMPLEMENTATIONS
+  // ===============================================================================================
+
+  @Override
+  public Data getTypeParameterData() {
+    throw new UnsupportedOperationException();
+  }
 }

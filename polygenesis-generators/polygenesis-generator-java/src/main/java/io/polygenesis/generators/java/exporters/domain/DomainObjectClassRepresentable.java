@@ -23,6 +23,7 @@ package io.polygenesis.generators.java.exporters.domain;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.data.DataArray;
+import io.polygenesis.core.data.DataBusinessType;
 import io.polygenesis.core.data.DataGroup;
 import io.polygenesis.core.data.DataPrimitive;
 import io.polygenesis.core.data.PrimitiveType;
@@ -85,6 +86,7 @@ public abstract class DomainObjectClassRepresentable<S extends BaseDomainObject>
                           makeAnnotationsForReferenceToAggregateRoot(source)));
                   break;
                 case AGGREGATE_ROOT_ID:
+                case TENANT_ID:
                 case ABSTRACT_AGGREGATE_ROOT_ID:
                 case SUPPORTIVE_ENTITY_ID:
                   break;
@@ -446,11 +448,15 @@ public abstract class DomainObjectClassRepresentable<S extends BaseDomainObject>
     stringBuilder.append(String.format("\t\t\tjoinColumns = {%n"));
     stringBuilder.append(String.format("\t\t\t\t\t@JoinColumn(name = \"%s\")", "root_id"));
     if (source.getMultiTenant()) {
-      stringBuilder.append(String.format(",%n"));
-      stringBuilder.append(String.format("\t\t\t\t\t@JoinColumn(name = \"%s\")%n", "tenant_id"));
+      // TODO
+      stringBuilder.append("");
+      //      stringBuilder.append(String.format(",%n"));
+      //      stringBuilder.append(String.format("\t\t\t\t\t@JoinColumn(name = \"%s\")%n",
+      // "tenant_id"));
     } else {
       stringBuilder.append(String.format("%n"));
     }
+
     stringBuilder.append(String.format("\t\t\t}%n"));
     stringBuilder.append("\t)");
 
@@ -501,8 +507,10 @@ public abstract class DomainObjectClassRepresentable<S extends BaseDomainObject>
     stringBuilder.append(String.format("\t@JoinColumns({%n"));
     stringBuilder.append("\t\t\t@JoinColumn(name = \"root_id\")");
     if (source.getMultiTenant()) {
-      stringBuilder.append(String.format(",%n"));
-      stringBuilder.append(String.format("\t\t\t@JoinColumn(name = \"tenant_id\")%n"));
+      // TODO
+      stringBuilder.append("");
+      //      stringBuilder.append(String.format(",%n"));
+      //      stringBuilder.append(String.format("\t\t\t@JoinColumn(name = \"tenant_id\")%n"));
     } else {
       stringBuilder.append(String.format("%n"));
     }
@@ -570,13 +578,23 @@ public abstract class DomainObjectClassRepresentable<S extends BaseDomainObject>
               if (property.getPropertyType().equals(PropertyType.AGGREGATE_ROOT_ID)) {
                 parameterRepresentations.add(
                     new ParameterRepresentation(
-                        makeVariableDataType(property), makeVariableName(property), true));
+                        makeVariableDataType(property),
+                        makeVariableName(property),
+                        DataBusinessType.THING_IDENTITY));
               } else if (property
                   .getPropertyType()
                   .equals(PropertyType.ABSTRACT_AGGREGATE_ROOT_ID)) {
                 parameterRepresentations.add(
                     new ParameterRepresentation(
-                        makeVariableDataType(property), makeVariableName(property), true));
+                        makeVariableDataType(property),
+                        makeVariableName(property),
+                        DataBusinessType.THING_IDENTITY));
+              } else if (property.getPropertyType().equals(PropertyType.TENANT_ID)) {
+                parameterRepresentations.add(
+                    new ParameterRepresentation(
+                        makeVariableDataType(property),
+                        makeVariableName(property),
+                        DataBusinessType.TENANT_IDENTITY));
               } else {
                 parameterRepresentations.add(
                     new ParameterRepresentation(

@@ -13,10 +13,10 @@
   <artifactId>polygenesis-generator-commons</artifactId>
 
   <dependencies>
-    <!--POLYGENESIS COMMONS-->
+    <!--POLYGENESIS CORE-->
     <dependency>
       <groupId>io.polygenesis</groupId>
-      <artifactId>polygenesis-commons</artifactId>
+      <artifactId>polygenesis-core</artifactId>
     </dependency>
 
     <!--TEST-->

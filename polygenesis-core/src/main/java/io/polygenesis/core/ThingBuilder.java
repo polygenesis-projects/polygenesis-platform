@@ -63,7 +63,6 @@ public class ThingBuilder {
   private Set<ThingProperty> thingProperties = new LinkedHashSet<>();
   private Boolean multiTenant = false;
   private Thing parentThing;
-  private Set<ThingLayerType> layerTypes = Thing.allLayers();
 
   // ===============================================================================================
   // SETTERS
@@ -144,17 +143,6 @@ public class ThingBuilder {
     return this;
   }
 
-  /**
-   * Sets layer types.
-   *
-   * @param layerTypes the layer types
-   * @return the layer types
-   */
-  public ThingBuilder setLayerTypes(Set<ThingLayerType> layerTypes) {
-    this.layerTypes = layerTypes;
-    return this;
-  }
-
   // ===============================================================================================
   // CREATION
   // ===============================================================================================
@@ -172,7 +160,6 @@ public class ThingBuilder {
         thingName,
         thingProperties,
         multiTenant,
-        parentThing,
-        layerTypes);
+        parentThing);
   }
 }

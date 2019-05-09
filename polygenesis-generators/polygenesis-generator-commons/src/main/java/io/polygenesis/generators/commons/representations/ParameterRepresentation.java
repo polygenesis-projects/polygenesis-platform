@@ -21,6 +21,7 @@
 package io.polygenesis.generators.commons.representations;
 
 import io.polygenesis.commons.text.TextConverter;
+import io.polygenesis.core.data.DataBusinessType;
 import java.util.Set;
 
 /**
@@ -49,10 +50,11 @@ public class ParameterRepresentation extends AbstractDataRepresentation {
    *
    * @param dataType the data type
    * @param variableName the variable name
-   * @param isThingIdentity the is thing identity
+   * @param dataBusinessType the data business type
    */
-  public ParameterRepresentation(String dataType, String variableName, Boolean isThingIdentity) {
-    super(dataType, variableName, isThingIdentity);
+  public ParameterRepresentation(
+      String dataType, String variableName, DataBusinessType dataBusinessType) {
+    super(dataType, variableName, dataBusinessType);
   }
 
   /**
@@ -72,11 +74,14 @@ public class ParameterRepresentation extends AbstractDataRepresentation {
    * @param dataType the data type
    * @param variableName the variable name
    * @param annotations the annotations
-   * @param isThingIdentity the is thing identity
+   * @param dataBusinessType the data business type
    */
   public ParameterRepresentation(
-      String dataType, String variableName, Set<String> annotations, Boolean isThingIdentity) {
-    super(dataType, variableName, annotations, isThingIdentity);
+      String dataType,
+      String variableName,
+      Set<String> annotations,
+      DataBusinessType dataBusinessType) {
+    super(dataType, variableName, annotations, dataBusinessType);
   }
 
   // ===============================================================================================

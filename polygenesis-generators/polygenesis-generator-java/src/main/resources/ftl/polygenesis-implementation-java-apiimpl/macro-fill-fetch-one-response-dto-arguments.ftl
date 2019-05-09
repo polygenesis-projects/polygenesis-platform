@@ -17,7 +17,6 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-
 <#macro fillFetchOneResponseDtoArguments responseDto aggregateRootVariable converterVariable>
 <#list responseDto.dataGroup.models as data >
   <#switch data.dataPrimaryType>

@@ -17,7 +17,6 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-
 <#include "../polygenesis-implementation-java-shared/macro-assertions-for-parameters.ftl">
 <#include "macro-restore-aggregate-root.ftl">
 <#include "macro-store-aggregate-root.ftl">
@@ -30,4 +29,4 @@
 
 <@storeAggregateRoot persistenceVariable aggregateRootVariable></@storeAggregateRoot>
 
-    return new ${ representation.returnValue }(${ aggregateRootVariable }.getId().getRootId().toString());
+    return new ${ representation.returnValue }(${ aggregateRootVariable }.getId().getUuid().toString());

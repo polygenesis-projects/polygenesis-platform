@@ -17,12 +17,14 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-
 <#include "../polygenesis-implementation-java-shared/macro-assertions-for-parameters.ftl">
 <@assertionsForParameters representation.parameterRepresentations></@assertionsForParameters>
 
     return new ${ textConverter.toUpperCamel(to.dataGroup.dataType) }(
     <#list to.dataGroup.models as data>
+      <#if data.dataBusinessType == 'THING_IDENTITY'>
+        ${ from.data.variableName.text }.getId().getUuid().toString()<#sep>,</#sep>
+      <#else>
       <#switch data.dataPrimaryType>
         <#case 'PRIMITIVE'>
         ${ from.data.variableName.text }.get${ textConverter.toUpperCamel(data.variableName.text) }()<#sep>,</#sep>
@@ -33,6 +35,7 @@
         <#default>
         // Data Primary Type = ${ data.dataPrimaryType } is not supported
       </#switch>
+      </#if>
     </#list>
 <#--<#list from.properties as property>-->
   <#--<#switch property.propertyType>-->

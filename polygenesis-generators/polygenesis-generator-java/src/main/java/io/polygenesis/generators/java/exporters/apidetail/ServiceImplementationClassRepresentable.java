@@ -149,6 +149,9 @@ public class ServiceImplementationClassRepresentable
       imports.add("com.oregor.trinity4j.domain.Paginated");
     }
 
+    // TODO: check for multi tenant
+    imports.add("com.oregor.trinity4j.domain.TenantId");
+
     return imports;
   }
 

@@ -20,6 +20,8 @@
 
 package io.polygenesis.generators.commons.representations;
 
+import io.polygenesis.commons.assertion.Assertion;
+import io.polygenesis.core.data.DataBusinessType;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -35,7 +37,7 @@ public class AbstractDataRepresentation {
   private String dataType;
   private String variableName;
   private Set<String> annotations;
-  private Boolean isThingIdentity;
+  private DataBusinessType dataBusinessType;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -48,7 +50,7 @@ public class AbstractDataRepresentation {
    * @param variableName the variable name
    */
   public AbstractDataRepresentation(String dataType, String variableName) {
-    this(dataType, variableName, new LinkedHashSet<>(), false);
+    this(dataType, variableName, new LinkedHashSet<>(), DataBusinessType.ANY);
   }
 
   /**
@@ -56,10 +58,11 @@ public class AbstractDataRepresentation {
    *
    * @param dataType the data type
    * @param variableName the variable name
-   * @param isThingIdentity the is thing identity
+   * @param dataBusinessType the data business type
    */
-  public AbstractDataRepresentation(String dataType, String variableName, Boolean isThingIdentity) {
-    this(dataType, variableName, new LinkedHashSet<>(), isThingIdentity);
+  public AbstractDataRepresentation(
+      String dataType, String variableName, DataBusinessType dataBusinessType) {
+    this(dataType, variableName, new LinkedHashSet<>(), dataBusinessType);
   }
 
   /**
@@ -70,7 +73,7 @@ public class AbstractDataRepresentation {
    * @param annotations the annotations
    */
   public AbstractDataRepresentation(String dataType, String variableName, Set<String> annotations) {
-    this(dataType, variableName, annotations, false);
+    this(dataType, variableName, annotations, DataBusinessType.ANY);
   }
 
   /**
@@ -79,14 +82,17 @@ public class AbstractDataRepresentation {
    * @param dataType the data type
    * @param variableName the variable name
    * @param annotations the annotations
-   * @param isThingIdentity the is thing identity
+   * @param dataBusinessType the data business type
    */
   public AbstractDataRepresentation(
-      String dataType, String variableName, Set<String> annotations, Boolean isThingIdentity) {
+      String dataType,
+      String variableName,
+      Set<String> annotations,
+      DataBusinessType dataBusinessType) {
     setDataType(dataType);
     setVariableName(variableName);
     setAnnotations(annotations);
-    setThingIdentity(isThingIdentity);
+    setDataBusinessType(dataBusinessType);
   }
 
   // ===============================================================================================
@@ -143,12 +149,12 @@ public class AbstractDataRepresentation {
   }
 
   /**
-   * Gets thing identity.
+   * Gets data business type.
    *
-   * @return the thing identity
+   * @return the data business type
    */
-  public Boolean getThingIdentity() {
-    return isThingIdentity;
+  public DataBusinessType getDataBusinessType() {
+    return dataBusinessType;
   }
 
   // ===============================================================================================
@@ -160,7 +166,8 @@ public class AbstractDataRepresentation {
    *
    * @param dataType the data type
    */
-  public void setDataType(String dataType) {
+  private void setDataType(String dataType) {
+    Assertion.isNotNull(dataType, "dataType is required");
     this.dataType = dataType;
   }
 
@@ -169,7 +176,8 @@ public class AbstractDataRepresentation {
    *
    * @param variableName the variable name
    */
-  public void setVariableName(String variableName) {
+  private void setVariableName(String variableName) {
+    Assertion.isNotNull(variableName, "variableName is required");
     this.variableName = variableName;
   }
 
@@ -178,17 +186,19 @@ public class AbstractDataRepresentation {
    *
    * @param annotations the annotations
    */
-  public void setAnnotations(Set<String> annotations) {
+  private void setAnnotations(Set<String> annotations) {
+    Assertion.isNotNull(annotations, "annotations is required");
     this.annotations = annotations;
   }
 
   /**
-   * Sets thing identity.
+   * Sets data business type.
    *
-   * @param thingIdentity the thing identity
+   * @param dataBusinessType the data business type
    */
-  public void setThingIdentity(Boolean thingIdentity) {
-    isThingIdentity = thingIdentity;
+  private void setDataBusinessType(DataBusinessType dataBusinessType) {
+    Assertion.isNotNull(dataBusinessType, "dataBusinessType is required");
+    this.dataBusinessType = dataBusinessType;
   }
 
   // ===============================================================================================
@@ -207,11 +217,11 @@ public class AbstractDataRepresentation {
     return Objects.equals(dataType, that.dataType)
         && Objects.equals(variableName, that.variableName)
         && Objects.equals(annotations, that.annotations)
-        && Objects.equals(isThingIdentity, that.isThingIdentity);
+        && dataBusinessType == that.dataBusinessType;
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(dataType, variableName, annotations, isThingIdentity);
+    return Objects.hash(dataType, variableName, annotations, dataBusinessType);
   }
 }
