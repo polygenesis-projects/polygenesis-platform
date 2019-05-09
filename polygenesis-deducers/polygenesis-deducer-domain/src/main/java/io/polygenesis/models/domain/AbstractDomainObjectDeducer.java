@@ -58,6 +58,10 @@ public class AbstractDomainObjectDeducer {
     if (function.getThing().getThingScopeType().equals(ThingScopeType.DOMAIN_AGGREGATE_ROOT)
         && function.getGoal().isCreate()) {
       properties.add(makeAggregateRootId(function, rootPackageName));
+
+      if (function.getThing().getMultiTenant()) {
+        properties.add(makeTenantId());
+      }
     }
 
     if (function.getArguments() != null) {
@@ -141,6 +145,13 @@ public class AbstractDomainObjectDeducer {
     throw new UnsupportedOperationException();
   }
 
+  /**
+   * Make aggregate root id aggregate root id.
+   *
+   * @param function the function
+   * @param rootPackageName the root package name
+   * @return the aggregate root id
+   */
   private AggregateRootId makeAggregateRootId(Function function, PackageName rootPackageName) {
     DataGroup dataGroup =
         new DataGroup(
@@ -148,6 +159,18 @@ public class AbstractDomainObjectDeducer {
             function.getThing().makePackageName(rootPackageName, function.getThing()));
 
     return new AggregateRootId(dataGroup);
+  }
+
+  /**
+   * Make tenant id tenant id.
+   *
+   * @return the tenant id
+   */
+  private TenantId makeTenantId() {
+    DataGroup dataGroup =
+        new DataGroup(new ObjectName("TenantId"), new PackageName("com.oregor.trinity4j.domain"));
+
+    return new TenantId(dataGroup);
   }
 
   // ===============================================================================================

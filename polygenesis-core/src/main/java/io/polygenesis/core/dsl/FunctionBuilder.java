@@ -334,6 +334,10 @@ public class FunctionBuilder {
             thing.makePackageName(rootPackageNameVo, thing));
 
     // ---------------------------------------------------------------------------------------------
+    arrayElement.addData(
+        DataPrimitive.ofDataBusinessType(
+            DataBusinessType.THING_IDENTITY, PrimitiveType.STRING, new VariableName("rootId")));
+
     models.forEach(arrayElement::addData);
     // ---------------------------------------------------------------------------------------------
 

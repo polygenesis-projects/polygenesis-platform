@@ -77,23 +77,11 @@ public class AggregateRootIdClassRepresentable extends AbstractClassRepresentabl
     // ---------------------------------------------------------------------------------------------
     // Create constructor with parameters
     // ---------------------------------------------------------------------------------------------
-
-    if (source.getMultiTenant()) {
-      constructorRepresentations.add(
-          createConstructorWithImplementation(
-              source.getObjectName().getText(),
-              new LinkedHashSet<>(
-                  Arrays.asList(
-                      new ParameterRepresentation("UUID", "rootId"),
-                      new ParameterRepresentation("UUID", "tenantId"))),
-              "\t\tsuper(rootId, tenantId);"));
-    } else {
-      constructorRepresentations.add(
-          createConstructorWithImplementation(
-              source.getObjectName().getText(),
-              new LinkedHashSet<>(Arrays.asList(new ParameterRepresentation("UUID", "rootId"))),
-              "\t\tsuper(rootId);"));
-    }
+    constructorRepresentations.add(
+        createConstructorWithImplementation(
+            source.getObjectName().getText(),
+            new LinkedHashSet<>(Arrays.asList(new ParameterRepresentation("UUID", "rootId"))),
+            "\t\tsuper(rootId);"));
 
     return constructorRepresentations;
   }
@@ -112,12 +100,7 @@ public class AggregateRootIdClassRepresentable extends AbstractClassRepresentabl
   public Set<String> imports(AggregateRoot source, Object... args) {
     Set<String> imports = new TreeSet<>();
 
-    if (source.getMultiTenant()) {
-      imports.add("com.oregor.trinity4j.domain.TenantAggregateRootId");
-    } else {
-      imports.add("com.oregor.trinity4j.domain.AggregateRootId");
-    }
-
+    imports.add("com.oregor.trinity4j.domain.AggregateRootId");
     imports.add("javax.persistence.Embeddable");
     imports.add("java.util.UUID");
 
@@ -165,11 +148,7 @@ public class AggregateRootIdClassRepresentable extends AbstractClassRepresentabl
     stringBuilder.append("Id");
     stringBuilder.append(" extends ");
 
-    if (source.getMultiTenant()) {
-      stringBuilder.append("TenantAggregateRootId");
-    } else {
-      stringBuilder.append("AggregateRootId");
-    }
+    stringBuilder.append("AggregateRootId");
 
     return stringBuilder.toString();
   }

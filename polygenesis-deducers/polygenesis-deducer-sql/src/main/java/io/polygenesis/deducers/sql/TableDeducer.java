@@ -92,6 +92,7 @@ public class TableDeducer {
             property -> {
               switch (property.getPropertyType()) {
                 case AGGREGATE_ROOT_ID:
+                case TENANT_ID:
                   break;
                 case PRIMITIVE:
                   aggregateRootColumns.add(getColumnForPrimitive(property.getData(), ""));

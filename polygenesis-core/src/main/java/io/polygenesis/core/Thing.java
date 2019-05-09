@@ -24,7 +24,6 @@ import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.commons.valueobjects.ContextName;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
-import java.util.EnumSet;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -54,7 +53,6 @@ public class Thing implements Metamodel {
   private Set<Thing> children;
   private Set<Thing> virtualChildren;
   private Thing optionalParent;
-  private Set<ThingLayerType> layerTypes;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -73,8 +71,7 @@ public class Thing implements Metamodel {
         thingName,
         new LinkedHashSet<>(),
         false,
-        null,
-        allLayers());
+        null);
   }
 
   /**
@@ -91,8 +88,7 @@ public class Thing implements Metamodel {
         thingName,
         new LinkedHashSet<>(),
         multiTenant,
-        null,
-        allLayers());
+        null);
   }
 
   /**
@@ -109,8 +105,7 @@ public class Thing implements Metamodel {
         thingName,
         new LinkedHashSet<>(),
         parentThing.getMultiTenant(),
-        null,
-        allLayers());
+        null);
   }
 
   /**
@@ -123,7 +118,6 @@ public class Thing implements Metamodel {
    * @param thingProperties the thing properties
    * @param multiTenant the multi tenant
    * @param optionalParent the optional parent
-   * @param layerTypes the layer types
    */
   public Thing(
       ThingScopeType thingScopeType,
@@ -132,8 +126,7 @@ public class Thing implements Metamodel {
       ThingName thingName,
       Set<ThingProperty> thingProperties,
       Boolean multiTenant,
-      Thing optionalParent,
-      Set<ThingLayerType> layerTypes) {
+      Thing optionalParent) {
     setThingScopeType(thingScopeType);
     setThingBusinessType(thingBusinessType);
     setContextName(contextName);
@@ -143,7 +136,6 @@ public class Thing implements Metamodel {
     setMultiTenant(multiTenant);
     setChildren(new LinkedHashSet<>());
     setVirtualChildren(new LinkedHashSet<>());
-    setLayerTypes(layerTypes);
 
     if (optionalParent != null) {
       setOptionalParent(optionalParent);
@@ -345,15 +337,6 @@ public class Thing implements Metamodel {
     return optionalParent;
   }
 
-  /**
-   * Gets layer types.
-   *
-   * @return the layer types
-   */
-  public Set<ThingLayerType> getLayerTypes() {
-    return layerTypes;
-  }
-
   // ===============================================================================================
   // GUARDS
   // ===============================================================================================
@@ -457,29 +440,6 @@ public class Thing implements Metamodel {
     this.optionalParent = optionalParent;
   }
 
-  /**
-   * Sets layer types.
-   *
-   * @param layerTypes the layer types
-   */
-  private void setLayerTypes(Set<ThingLayerType> layerTypes) {
-    Assertion.isNotNull(layerTypes, "layerTypes is required");
-    this.layerTypes = layerTypes;
-  }
-
-  // ===============================================================================================
-  // INITIALIZATION METHODS
-  // ===============================================================================================
-
-  /**
-   * All layers set.
-   *
-   * @return the set
-   */
-  public static Set<ThingLayerType> allLayers() {
-    return EnumSet.allOf(ThingLayerType.class);
-  }
-
   // ===============================================================================================
   // OVERRIDES
   // ===============================================================================================
@@ -500,8 +460,7 @@ public class Thing implements Metamodel {
         && Objects.equals(thingProperties, thing.thingProperties)
         && Objects.equals(multiTenant, thing.multiTenant)
         && Objects.equals(children, thing.children)
-        && Objects.equals(virtualChildren, thing.virtualChildren)
-        && Objects.equals(layerTypes, thing.layerTypes);
+        && Objects.equals(virtualChildren, thing.virtualChildren);
   }
 
   @Override
@@ -514,7 +473,6 @@ public class Thing implements Metamodel {
         thingProperties,
         multiTenant,
         children,
-        virtualChildren,
-        layerTypes);
+        virtualChildren);
   }
 }

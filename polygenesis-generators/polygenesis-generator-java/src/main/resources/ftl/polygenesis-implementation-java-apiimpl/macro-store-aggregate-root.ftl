@@ -17,7 +17,6 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-
 <#macro storeAggregateRoot persistenceVariable aggregateRootVariable>
     ${ persistenceVariable }.store(${ aggregateRootVariable });
 </#macro>

@@ -17,10 +17,10 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-
 <#macro restoreAggregateRoot persistenceVariable aggregateRootIdDataType aggregateRootDataType aggregateRootVariable requestDto thingIdentity multiTenant>
   <#if multiTenant>
-    ${ aggregateRootDataType } ${ aggregateRootVariable } = ${ persistenceVariable }.restore(new ${ aggregateRootIdDataType }(UUID.fromString(${ requestDto.dataGroup.objectName.text }.get${ textConverter.toUpperCamel( thingIdentity.variableName.text) }()), UUID.fromString(${ requestDto.dataGroup.objectName.text }.getTenantId()))).orElseThrow(() -> new IllegalArgumentException("Cannot restore ${ aggregateRootVariable }"));
+<#--    ${ aggregateRootDataType } ${ aggregateRootVariable } = ${ persistenceVariable }.restore(new ${ aggregateRootIdDataType }(UUID.fromString(${ requestDto.dataGroup.objectName.text }.get${ textConverter.toUpperCamel( thingIdentity.variableName.text) }()), UUID.fromString(${ requestDto.dataGroup.objectName.text }.getTenantId()))).orElseThrow(() -> new IllegalArgumentException("Cannot restore ${ aggregateRootVariable }"));-->
+    ${ aggregateRootDataType } ${ aggregateRootVariable } = ${ persistenceVariable }.restore(new ${ aggregateRootIdDataType }(UUID.fromString(${ requestDto.dataGroup.objectName.text }.get${ textConverter.toUpperCamel( thingIdentity.variableName.text) }()))).orElseThrow(() -> new IllegalArgumentException("Cannot restore ${ aggregateRootVariable }"));
   <#else>
     ${ aggregateRootDataType } ${ aggregateRootVariable } = ${ persistenceVariable }.restore(new ${ aggregateRootIdDataType }(UUID.fromString(${ requestDto.dataGroup.objectName.text }.get${ textConverter.toUpperCamel( thingIdentity.variableName.text) }()))).orElseThrow(() -> new IllegalArgumentException("Cannot restore ${ aggregateRootVariable }"));
   </#if>

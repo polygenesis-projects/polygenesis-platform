@@ -91,10 +91,6 @@ public class JavaApiDetailGenerator extends AbstractGenerator {
         CoreRegistry.getMetamodelRepositoryResolver()
             .resolve(modelRepositories, ServiceImplementationMetamodelRepository.class);
 
-    if (serviceImplementationModelRepository.getItems().isEmpty()) {
-      throw new IllegalStateException();
-    }
-
     serviceImplementationModelRepository
         .getItems()
         .forEach(

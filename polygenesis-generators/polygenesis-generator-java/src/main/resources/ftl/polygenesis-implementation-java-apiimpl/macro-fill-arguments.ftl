@@ -17,16 +17,19 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-
 <#macro fillArguments properties persistenceVariable requestDto converterVariable multiTenant>
     <#list properties as property>
       <#switch property.propertyType>
         <#case 'AGGREGATE_ROOT_ID'>
           <#if multiTenant>
-        ${ persistenceVariable }.nextId(UUID.fromString(${ requestDto.dataGroup.objectName.text }.getTenantId()))<#sep>,</#sep>
+<#--        ${ persistenceVariable }.nextId(UUID.fromString(${ requestDto.dataGroup.objectName.text }.getTenantId()))<#sep>,</#sep>-->
+        ${ persistenceVariable }.nextId()<#sep>,</#sep>
           <#else>
         ${ persistenceVariable }.nextId()<#sep>,</#sep>
           </#if>
+          <#break>
+        <#case 'TENANT_ID'>
+        new TenantId(UUID.fromString(${ requestDto.dataGroup.objectName.text }.getTenantId()))<#sep>,</#sep>
           <#break>
         <#case 'PRIMITIVE'>
         ${ requestDto.dataGroup.objectName.text }.get${ textConverter.toUpperCamel(property.data.variableName.text) }()<#sep>,</#sep>

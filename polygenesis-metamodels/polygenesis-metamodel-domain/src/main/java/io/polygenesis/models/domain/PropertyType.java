@@ -44,6 +44,8 @@ public enum PropertyType {
   REFERENCE,
   /** Supportive entity id property type. */
   SUPPORTIVE_ENTITY_ID,
+  /** Tenant id property type. */
+  TENANT_ID,
   /** Value object property type. */
   VALUE_OBJECT,
   /** Value object collection property type. */

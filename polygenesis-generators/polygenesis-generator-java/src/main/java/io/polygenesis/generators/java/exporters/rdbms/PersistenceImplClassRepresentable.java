@@ -99,11 +99,11 @@ public class PersistenceImplClassRepresentable extends AbstractClassRepresentabl
             MODIFIER_PUBLIC,
             parameterRepresentations,
             String.format(
-                "\t\tsuper(%s, %s, %s, %s.class);",
+                "\t\tsuper(%s.class, %s, %s, %s);",
+                TextConverter.toUpperCamel(source.getAggregateRootIdObjectName().getText()),
                 "repository",
                 "domainMessageDataRepository",
-                "domainMessageDataConverter",
-                TextConverter.toUpperCamel(source.getAggregateRootIdObjectName().getText())));
+                "domainMessageDataConverter"));
 
     return new LinkedHashSet<>(Arrays.asList(constructorRepresentation));
   }
