@@ -33,6 +33,7 @@ public enum PrimitiveType {
   DATE,
   DATETIME,
   FLOAT,
+  DECIMAL,
   INTEGER,
   LONG,
   STRING,

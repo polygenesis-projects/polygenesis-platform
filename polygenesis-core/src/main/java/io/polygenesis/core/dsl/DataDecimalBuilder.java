@@ -18,64 +18,75 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.deducers.sql;
+package io.polygenesis.core.dsl;
 
-import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.data.Data;
+import io.polygenesis.core.data.DataPrimitive;
 import io.polygenesis.core.data.PrimitiveType;
-import io.polygenesis.models.sql.ColumnDataType;
-import java.util.HashMap;
-import java.util.Map;
+import io.polygenesis.core.data.VariableName;
 
 /**
- * The type From data type to sql column converter.
+ * The type Data decimal builder.
  *
  * @author Christos Tsakostas
  */
-public class FromDataTypeToSqlColumnConverter {
+public class DataDecimalBuilder {
+
+  private final DataPrimitive model;
+
+  // Keep a back reference to the DataBuilder.
+  private final DataBuilder dataBuilder;
 
   // ===============================================================================================
-  // STATIC
+  // CONSTRUCTOR(S)
   // ===============================================================================================
 
-  private static Map<String, ColumnDataType> dataTypeMap;
-
-  static {
-    initialize();
+  private DataDecimalBuilder(DataBuilder dataBuilder, String propertyName) {
+    this.dataBuilder = dataBuilder;
+    model = DataPrimitive.of(PrimitiveType.DECIMAL, new VariableName(propertyName));
   }
 
   // ===============================================================================================
-  // FUNCTIONALITY
+  // START
   // ===============================================================================================
 
   /**
-   * Gets column data type by.
+   * Create data decimal builder.
    *
-   * @param model the model
-   * @return the column data type by
+   * @param dataBuilder the data builder
+   * @param propertyName the property name
+   * @return the data decimal builder
    */
-  public ColumnDataType getColumnDataTypeBy(Data model) {
-    if (dataTypeMap.containsKey(model.getDataType())) {
-      return dataTypeMap.get(model.getDataType());
-    } else {
-      throw new IllegalArgumentException(
-          String.format(
-              "Cannot get ColumnDataType for primitive data type=%s",
-              TextConverter.toUpperCamel(model.getDataType())));
-    }
+  public static DataDecimalBuilder create(DataBuilder dataBuilder, String propertyName) {
+    return new DataDecimalBuilder(dataBuilder, propertyName);
   }
 
   // ===============================================================================================
-  // PRIVATE
+  // WITH
   // ===============================================================================================
 
-  private static void initialize() {
-    dataTypeMap = new HashMap<>();
-    dataTypeMap.put(PrimitiveType.STRING.name(), ColumnDataType.VARCHAR);
-    dataTypeMap.put(PrimitiveType.INTEGER.name(), ColumnDataType.INTEGER);
-    dataTypeMap.put(PrimitiveType.LONG.name(), ColumnDataType.BIG_INTEGER);
-    dataTypeMap.put(PrimitiveType.BOOLEAN.name(), ColumnDataType.BIT);
-    dataTypeMap.put(PrimitiveType.DATETIME.name(), ColumnDataType.DATETIME);
-    dataTypeMap.put(PrimitiveType.DECIMAL.name(), ColumnDataType.DECIMAL);
+  // ===============================================================================================
+  // GETTERS
+  // ===============================================================================================
+
+  /**
+   * Gets model.
+   *
+   * @return the model
+   */
+  final DataPrimitive getModel() {
+    return model;
+  }
+
+  // ===============================================================================================
+  // END
+  // ===============================================================================================
+
+  /**
+   * Build data builder.
+   *
+   * @return the data builder
+   */
+  public final DataBuilder build() {
+    return dataBuilder;
   }
 }

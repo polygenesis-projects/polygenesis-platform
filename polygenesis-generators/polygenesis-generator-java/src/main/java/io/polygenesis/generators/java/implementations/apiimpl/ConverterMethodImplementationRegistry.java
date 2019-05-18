@@ -22,7 +22,7 @@ package io.polygenesis.generators.java.implementations.apiimpl;
 
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.ThingScopeType;
+import io.polygenesis.core.ThingType;
 import io.polygenesis.generators.java.implementations.ScopeGoalTuple;
 import io.polygenesis.generators.java.skeletons.MethodRepresentation;
 import io.polygenesis.models.apiimpl.DomainEntityConverterMethod;
@@ -46,16 +46,16 @@ public class ConverterMethodImplementationRegistry {
 
   static {
     scopeAndGoalMap.put(
-        new ScopeGoalTuple(ThingScopeType.DOMAIN_AGGREGATE_ROOT, "CONVERT_DTO_TO_VO"),
+        new ScopeGoalTuple(ThingType.DOMAIN_AGGREGATE_ROOT, "CONVERT_DTO_TO_VO"),
         new ConvertDtoToVo());
 
     scopeAndGoalMap.put(
-        new ScopeGoalTuple(ThingScopeType.DOMAIN_AGGREGATE_ROOT, "CONVERT_VO_TO_DTO"),
+        new ScopeGoalTuple(ThingType.DOMAIN_AGGREGATE_ROOT, "CONVERT_VO_TO_DTO"),
         new ConvertVoToDto());
 
     scopeAndGoalMap.put(
         new ScopeGoalTuple(
-            ThingScopeType.DOMAIN_AGGREGATE_ROOT, "CONVERT_DOMAIN_OBJECT_TO_COLLECTION_RECORD"),
+            ThingType.DOMAIN_AGGREGATE_ROOT, "CONVERT_DOMAIN_OBJECT_TO_COLLECTION_RECORD"),
         new ConvertDomainObjectToCollectionRecord());
   }
 
@@ -95,7 +95,7 @@ public class ConverterMethodImplementationRegistry {
       DomainEntityConverterMethod domainEntityConverterMethod) {
     return scopeAndGoalMap.containsKey(
         new ScopeGoalTuple(
-            domainEntityConverterMethod.getFunction().getThing().getThingScopeType(),
+            domainEntityConverterMethod.getFunction().getThing().getThingType(),
             TextConverter.toUpperUnderscore(
                 domainEntityConverterMethod.getFunction().getGoal().getText())));
   }
@@ -108,7 +108,7 @@ public class ConverterMethodImplementationRegistry {
       DomainEntityConverterMethod domainEntityConverterMethod) {
     return scopeAndGoalMap.get(
         new ScopeGoalTuple(
-            domainEntityConverterMethod.getFunction().getThing().getThingScopeType(),
+            domainEntityConverterMethod.getFunction().getThing().getThingType(),
             TextConverter.toUpperUnderscore(
                 domainEntityConverterMethod.getFunction().getGoal().getText())));
   }

@@ -76,9 +76,9 @@ public class ThingRepositoryImpl implements ThingRepository {
         .stream()
         .filter(
             thing ->
-                thing.getThingScopeType().equals(ThingScopeType.DOMAIN_AGGREGATE_ROOT)
-                    || thing.getThingScopeType().equals(ThingScopeType.DOMAIN_AGGREGATE_ENTITY)
-                    || thing.getThingScopeType().equals(ThingScopeType.DOMAIN_SUPPORTIVE_ENTITY))
+                thing.getThingType().equals(ThingType.DOMAIN_AGGREGATE_ROOT)
+                    || thing.getThingType().equals(ThingType.DOMAIN_AGGREGATE_ENTITY)
+                    || thing.getThingType().equals(ThingType.DOMAIN_SUPPORTIVE_ENTITY))
         .collect(Collectors.toCollection(LinkedHashSet::new));
   }
 
@@ -86,7 +86,7 @@ public class ThingRepositoryImpl implements ThingRepository {
   public Set<Thing> getDomainServiceThings() {
     return things
         .stream()
-        .filter(thing -> thing.getThingScopeType().equals(ThingScopeType.DOMAIN_SERVICE))
+        .filter(thing -> thing.getThingType().equals(ThingType.DOMAIN_SERVICE))
         .collect(Collectors.toCollection(LinkedHashSet::new));
   }
 
@@ -96,9 +96,9 @@ public class ThingRepositoryImpl implements ThingRepository {
         .stream()
         .filter(
             thing ->
-                thing.getThingScopeType().equals(ThingScopeType.DOMAIN_AGGREGATE_ROOT)
-                    || thing.getThingScopeType().equals(ThingScopeType.DOMAIN_AGGREGATE_ENTITY)
-                    || thing.getThingScopeType().equals(ThingScopeType.DOMAIN_SUPPORTIVE_ENTITY))
+                thing.getThingType().equals(ThingType.DOMAIN_AGGREGATE_ROOT)
+                    || thing.getThingType().equals(ThingType.DOMAIN_AGGREGATE_ENTITY)
+                    || thing.getThingType().equals(ThingType.DOMAIN_SUPPORTIVE_ENTITY))
         .collect(Collectors.toCollection(LinkedHashSet::new));
   }
 

@@ -5,6 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
   <packaging>pom</packaging>
   <modules>
+    <module>polygenesis-abstractions</module>
     <module>polygenesis-craftsman</module>
     <module>polygenesis-commons</module>
     <module>polygenesis-commons-test</module>
@@ -226,6 +227,13 @@
       <dependency>
         <groupId>io.polygenesis</groupId>
         <artifactId>polygenesis-core</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+
+      <!--POLYGENESIS ABSTRACTIONS-->
+      <dependency>
+        <groupId>io.polygenesis.abstractions</groupId>
+        <artifactId>polygenesis-abstraction-thing</artifactId>
         <version>${project.version}</version>
       </dependency>
 

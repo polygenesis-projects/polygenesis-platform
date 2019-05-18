@@ -22,7 +22,7 @@ package io.polygenesis.generators.java.implementations.domain.constructor;
 
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.core.GoalType;
-import io.polygenesis.core.ThingScopeType;
+import io.polygenesis.core.ThingType;
 import io.polygenesis.generators.java.implementations.AbstractMethodImplementorRegistry;
 import io.polygenesis.generators.java.implementations.ScopeGoalTuple;
 import io.polygenesis.models.domain.Constructor;
@@ -54,15 +54,15 @@ public class ConstructorImplementorRegistry extends AbstractMethodImplementorReg
   @Override
   public void initializeScopeAndGoalMap() {
     scopeAndGoalMap.put(
-        new ScopeGoalTuple(ThingScopeType.DOMAIN_AGGREGATE_ROOT, GoalType.CREATE.name()),
+        new ScopeGoalTuple(ThingType.DOMAIN_AGGREGATE_ROOT, GoalType.CREATE.name()),
         new AggregateRootConstructor());
 
     scopeAndGoalMap.put(
-        new ScopeGoalTuple(ThingScopeType.DOMAIN_AGGREGATE_ENTITY, GoalType.CREATE.name()),
+        new ScopeGoalTuple(ThingType.DOMAIN_AGGREGATE_ENTITY, GoalType.CREATE.name()),
         new AggregateEntityConstructor());
 
     scopeAndGoalMap.put(
-        new ScopeGoalTuple(ThingScopeType.DOMAIN_SUPPORTIVE_ENTITY, GoalType.CREATE.name()),
+        new ScopeGoalTuple(ThingType.DOMAIN_SUPPORTIVE_ENTITY, GoalType.CREATE.name()),
         new SupportiveEntityConstructor());
   }
 }

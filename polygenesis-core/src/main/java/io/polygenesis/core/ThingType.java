@@ -21,19 +21,14 @@
 package io.polygenesis.core;
 
 /**
- * The enum Thing business type.
+ * The enum Thing Scope Type.
  *
  * @author Christos Tsakostas
  */
-public enum ThingBusinessType {
-  /** Any thing business type. */
-  ANY,
-  /** User thing business type. */
-  USER,
-  /** Tenant thing business type. */
-  TENANT,
-  /** Login thing business type. */
-  LOGIN,
-  /** Register thing business type. */
-  REGISTER
+public enum ThingType {
+  DOMAIN_ABSTRACT_AGGREGATE_ROOT,
+  DOMAIN_AGGREGATE_ROOT,
+  DOMAIN_AGGREGATE_ENTITY,
+  DOMAIN_SUPPORTIVE_ENTITY,
+  DOMAIN_SERVICE
 }

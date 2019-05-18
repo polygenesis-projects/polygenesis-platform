@@ -20,7 +20,7 @@
 
 package io.polygenesis.generators.java.implementations;
 
-import io.polygenesis.core.ThingScopeType;
+import io.polygenesis.core.ThingType;
 import java.util.Objects;
 
 /**
@@ -30,7 +30,7 @@ import java.util.Objects;
  */
 public class ScopeGoalTuple {
 
-  private ThingScopeType thingScopeType;
+  private ThingType thingType;
   private String goal;
 
   // ===============================================================================================
@@ -40,11 +40,11 @@ public class ScopeGoalTuple {
   /**
    * Instantiates a new Scope goal tuple.
    *
-   * @param thingScopeType the thing scope type
+   * @param thingType the thing scope type
    * @param goal the goal
    */
-  public ScopeGoalTuple(ThingScopeType thingScopeType, String goal) {
-    this.thingScopeType = thingScopeType;
+  public ScopeGoalTuple(ThingType thingType, String goal) {
+    this.thingType = thingType;
     this.goal = goal;
   }
 
@@ -61,11 +61,11 @@ public class ScopeGoalTuple {
       return false;
     }
     ScopeGoalTuple that = (ScopeGoalTuple) o;
-    return thingScopeType == that.thingScopeType && Objects.equals(goal, that.goal);
+    return thingType == that.thingType && Objects.equals(goal, that.goal);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(thingScopeType, goal);
+    return Objects.hash(thingType, goal);
   }
 }

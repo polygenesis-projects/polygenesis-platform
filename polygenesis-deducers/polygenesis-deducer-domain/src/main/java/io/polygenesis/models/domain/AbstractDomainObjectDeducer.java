@@ -23,7 +23,7 @@ package io.polygenesis.models.domain;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.Function;
-import io.polygenesis.core.ThingScopeType;
+import io.polygenesis.core.ThingType;
 import io.polygenesis.core.data.Data;
 import io.polygenesis.core.data.DataArray;
 import io.polygenesis.core.data.DataBusinessType;
@@ -55,7 +55,7 @@ public class AbstractDomainObjectDeducer {
     Set<DomainObjectProperty> properties = new LinkedHashSet<>();
 
     // Add Aggregate Root ID if the thing is not abstract
-    if (function.getThing().getThingScopeType().equals(ThingScopeType.DOMAIN_AGGREGATE_ROOT)
+    if (function.getThing().getThingType().equals(ThingType.DOMAIN_AGGREGATE_ROOT)
         && function.getGoal().isCreate()) {
       properties.add(makeAggregateRootId(function, rootPackageName));
 

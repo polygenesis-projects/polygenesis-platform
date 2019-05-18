@@ -43,8 +43,7 @@ import java.util.Set;
  */
 public class Thing implements Metamodel {
 
-  private ThingScopeType thingScopeType;
-  private ThingBusinessType thingBusinessType;
+  private ThingType thingType;
   private ContextName contextName;
   private ThingName thingName;
   private Set<ThingProperty> thingProperties;
@@ -65,8 +64,7 @@ public class Thing implements Metamodel {
    */
   public Thing(ThingName thingName) {
     this(
-        ThingScopeType.DOMAIN_AGGREGATE_ROOT,
-        ThingBusinessType.ANY,
+        ThingType.DOMAIN_AGGREGATE_ROOT,
         ContextName.defaultContext(),
         thingName,
         new LinkedHashSet<>(),
@@ -82,8 +80,7 @@ public class Thing implements Metamodel {
    */
   public Thing(ThingName thingName, Boolean multiTenant) {
     this(
-        ThingScopeType.DOMAIN_AGGREGATE_ROOT,
-        ThingBusinessType.ANY,
+        ThingType.DOMAIN_AGGREGATE_ROOT,
         ContextName.defaultContext(),
         thingName,
         new LinkedHashSet<>(),
@@ -99,8 +96,7 @@ public class Thing implements Metamodel {
    */
   public Thing(ThingName thingName, Thing parentThing) {
     this(
-        ThingScopeType.DOMAIN_AGGREGATE_ROOT,
-        ThingBusinessType.ANY,
+        ThingType.DOMAIN_AGGREGATE_ROOT,
         ContextName.defaultContext(),
         thingName,
         new LinkedHashSet<>(),
@@ -111,8 +107,7 @@ public class Thing implements Metamodel {
   /**
    * Instantiates a new Thing.
    *
-   * @param thingScopeType the thing scope type
-   * @param thingBusinessType the thing business type
+   * @param thingType the thing scope type
    * @param contextName the context name
    * @param thingName the name
    * @param thingProperties the thing properties
@@ -120,15 +115,13 @@ public class Thing implements Metamodel {
    * @param optionalParent the optional parent
    */
   public Thing(
-      ThingScopeType thingScopeType,
-      ThingBusinessType thingBusinessType,
+      ThingType thingType,
       ContextName contextName,
       ThingName thingName,
       Set<ThingProperty> thingProperties,
       Boolean multiTenant,
       Thing optionalParent) {
-    setThingScopeType(thingScopeType);
-    setThingBusinessType(thingBusinessType);
+    setThingType(thingType);
     setContextName(contextName);
     setThingName(thingName);
     setThingProperties(thingProperties);
@@ -252,17 +245,8 @@ public class Thing implements Metamodel {
    *
    * @return the thing type
    */
-  public ThingScopeType getThingScopeType() {
-    return thingScopeType;
-  }
-
-  /**
-   * Gets thing business type.
-   *
-   * @return the thing business type
-   */
-  public ThingBusinessType getThingBusinessType() {
-    return thingBusinessType;
+  public ThingType getThingType() {
+    return thingType;
   }
 
   /**
@@ -344,21 +328,11 @@ public class Thing implements Metamodel {
   /**
    * Sets thing type.
    *
-   * @param thingScopeType the thing type
+   * @param thingType the thing type
    */
-  private void setThingScopeType(ThingScopeType thingScopeType) {
-    Assertion.isNotNull(thingScopeType, "thingScopeType is required");
-    this.thingScopeType = thingScopeType;
-  }
-
-  /**
-   * Sets thing business type.
-   *
-   * @param thingBusinessType the thing business type
-   */
-  private void setThingBusinessType(ThingBusinessType thingBusinessType) {
-    Assertion.isNotNull(thingBusinessType, "thingBusinessType is required");
-    this.thingBusinessType = thingBusinessType;
+  private void setThingType(ThingType thingType) {
+    Assertion.isNotNull(thingType, "thingType is required");
+    this.thingType = thingType;
   }
 
   /**
@@ -453,8 +427,7 @@ public class Thing implements Metamodel {
       return false;
     }
     Thing thing = (Thing) o;
-    return thingScopeType == thing.thingScopeType
-        && thingBusinessType == thing.thingBusinessType
+    return thingType == thing.thingType
         && Objects.equals(contextName, thing.contextName)
         && Objects.equals(thingName, thing.thingName)
         && Objects.equals(thingProperties, thing.thingProperties)
@@ -466,8 +439,7 @@ public class Thing implements Metamodel {
   @Override
   public int hashCode() {
     return Objects.hash(
-        thingScopeType,
-        thingBusinessType,
+        thingType,
         contextName,
         thingName,
         thingProperties,
