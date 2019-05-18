@@ -23,11 +23,13 @@ package io.polygenesis.models.reactivestate;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
+import io.polygenesis.abstraction.thing.ThingRepository;
+import io.polygenesis.abstraction.thing.ThingRepositoryImpl;
+import io.polygenesis.core.AbstractionRepository;
 import io.polygenesis.core.MetamodelRepository;
-import io.polygenesis.core.ThingRepository;
-import io.polygenesis.core.ThingRepositoryImpl;
 import io.polygenesis.models.api.Service;
 import io.polygenesis.models.api.ServiceMetamodelRepository;
+import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import org.junit.Test;
@@ -36,6 +38,7 @@ import org.junit.Test;
 public class ReactiveStateDeducerTest {
 
   @Test
+  @SuppressWarnings("rawtypes")
   public void deduce() {
     FeatureNameDeducer featureNameDeducer = new FeatureNameDeducer();
     ActionGroupDeducer actionGroupDeducer = new ActionGroupDeducer();
@@ -53,9 +56,11 @@ public class ReactiveStateDeducerTest {
 
     ReactiveStateDeducer reactiveStateDeducer = new ReactiveStateDeducer(storeDeducer);
     ThingRepository thingRepository = new ThingRepositoryImpl(new LinkedHashSet<>());
+    Set<AbstractionRepository> abstractionRepositories =
+        new LinkedHashSet<>(Arrays.asList(thingRepository));
 
     ReactiveStateMetamodelRepository reactiveStateModelRepository =
-        reactiveStateDeducer.deduce(thingRepository, modelRepositories());
+        reactiveStateDeducer.deduce(abstractionRepositories, modelRepositories());
 
     assertThat(reactiveStateModelRepository).isNotNull();
     assertThat(reactiveStateModelRepository.getItems()).isNotNull();

@@ -28,9 +28,9 @@ import java.util.Objects;
  * <p>References:
  *
  * <ul>
- * <li>https://en.wikibooks.org/wiki/Java_Programming/Primitive_Types
- * <li>https://en.wikipedia.org/wiki/Primitive_data_type
- * <li>https://docs.oracle.com/javase/tutorial/java/nutsandbolts/datatypes.html
+ *   <li>https://en.wikibooks.org/wiki/Java_Programming/Primitive_Types
+ *   <li>https://en.wikipedia.org/wiki/Primitive_data_type
+ *   <li>https://docs.oracle.com/javase/tutorial/java/nutsandbolts/datatypes.html
  * </ul>
  *
  * @author Christos Tsakostas
@@ -42,7 +42,6 @@ public abstract class Data {
   // ===============================================================================================
 
   private final DataPrimaryType dataPrimaryType;
-  private final DataSource dataSource;
   private final VariableName variableName;
   private final DataBusinessType dataBusinessType;
   private final DataValidator dataValidator;
@@ -55,19 +54,16 @@ public abstract class Data {
    * Instantiates a new Data.
    *
    * @param dataPrimaryType the data primary type
-   * @param dataSource the data source
    * @param variableName the variable name
    * @param dataBusinessType the data business type
    * @param dataValidator the data validator
    */
   public Data(
       DataPrimaryType dataPrimaryType,
-      DataSource dataSource,
       VariableName variableName,
       DataBusinessType dataBusinessType,
       DataValidator dataValidator) {
     this.dataPrimaryType = dataPrimaryType;
-    this.dataSource = dataSource;
     this.variableName = variableName;
     this.dataBusinessType = dataBusinessType;
     this.dataValidator = dataValidator;
@@ -95,15 +91,6 @@ public abstract class Data {
    */
   public DataPrimaryType getDataPrimaryType() {
     return dataPrimaryType;
-  }
-
-  /**
-   * Gets data source.
-   *
-   * @return the data source
-   */
-  public DataSource getDataSource() {
-    return dataSource;
   }
 
   /**
@@ -265,7 +252,6 @@ public abstract class Data {
     }
     Data data = (Data) o;
     return dataPrimaryType == data.dataPrimaryType
-        && Objects.equals(dataSource, data.dataSource)
         && Objects.equals(variableName, data.variableName)
         && dataBusinessType == data.dataBusinessType
         && Objects.equals(dataValidator, data.dataValidator);
@@ -273,6 +259,6 @@ public abstract class Data {
 
   @Override
   public int hashCode() {
-    return Objects.hash(dataPrimaryType, dataSource, variableName, dataBusinessType, dataValidator);
+    return Objects.hash(dataPrimaryType, variableName, dataBusinessType, dataValidator);
   }
 }

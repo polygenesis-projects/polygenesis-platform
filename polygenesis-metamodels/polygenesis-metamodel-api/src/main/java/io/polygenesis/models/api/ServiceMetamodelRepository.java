@@ -22,9 +22,9 @@ package io.polygenesis.models.api;
 
 import static java.util.stream.Collectors.toCollection;
 
+import io.polygenesis.abstraction.thing.ThingName;
 import io.polygenesis.core.AbstractMetamodelRepository;
 import io.polygenesis.core.MetamodelRepository;
-import io.polygenesis.core.ThingName;
 import java.util.LinkedHashSet;
 import java.util.Set;
 

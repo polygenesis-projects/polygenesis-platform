@@ -20,8 +20,8 @@
 
 package io.polygenesis.generators.java.exporters.apidetail;
 
+import io.polygenesis.abstraction.thing.Argument;
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.Argument;
 import io.polygenesis.core.data.Data;
 import io.polygenesis.core.data.DataGroup;
 import io.polygenesis.generators.commons.representations.FieldRepresentation;

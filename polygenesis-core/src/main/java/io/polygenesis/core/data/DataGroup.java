@@ -52,7 +52,6 @@ public class DataGroup extends Data {
    */
   public DataGroup(ObjectName objectName, PackageName packageName) {
     this(
-        DataSource.user(),
         new VariableName(objectName.getText()),
         DataBusinessType.ANY,
         DataValidator.empty(),
@@ -70,7 +69,6 @@ public class DataGroup extends Data {
    */
   public DataGroup(ObjectName objectName, PackageName packageName, VariableName variableName) {
     this(
-        DataSource.user(),
         variableName,
         DataBusinessType.ANY,
         DataValidator.empty(),
@@ -82,7 +80,6 @@ public class DataGroup extends Data {
   /**
    * Instantiates a new Data group.
    *
-   * @param dataSource the data source
    * @param variableName the variable name
    * @param dataBusinessType the data business type
    * @param dataValidator the data validator
@@ -91,14 +88,13 @@ public class DataGroup extends Data {
    * @param models the models
    */
   public DataGroup(
-      DataSource dataSource,
       VariableName variableName,
       DataBusinessType dataBusinessType,
       DataValidator dataValidator,
       ObjectName objectName,
       PackageName packageName,
       Set<Data> models) {
-    super(DataPrimaryType.OBJECT, dataSource, variableName, dataBusinessType, dataValidator);
+    super(DataPrimaryType.OBJECT, variableName, dataBusinessType, dataValidator);
     this.objectName = objectName;
     this.packageName = packageName;
     this.models = models;
@@ -116,7 +112,6 @@ public class DataGroup extends Data {
    */
   public DataGroup withNewObjectName(ObjectName objectName) {
     return new DataGroup(
-        getDataSource(),
         getVariableName(),
         getDataBusinessType(),
         getDataValidator(),
@@ -132,7 +127,6 @@ public class DataGroup extends Data {
    */
   public DataGroup asDto() {
     return new DataGroup(
-        getDataSource(),
         getVariableName(),
         getDataBusinessType(),
         getDataValidator(),

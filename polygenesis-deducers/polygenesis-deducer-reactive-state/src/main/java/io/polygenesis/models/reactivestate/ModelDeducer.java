@@ -20,7 +20,7 @@
 
 package io.polygenesis.models.reactivestate;
 
-import io.polygenesis.core.Thing;
+import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.models.api.Service;
 import io.polygenesis.models.api.ServiceMetamodelRepository;
 import java.util.LinkedHashSet;

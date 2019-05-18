@@ -23,10 +23,10 @@ package io.polygenesis.models.domain;
 import static io.polygenesis.core.data.DataBusinessType.THING_IDENTITY;
 import static io.polygenesis.core.data.DataPrimaryType.PRIMITIVE;
 
-import io.polygenesis.core.Argument;
-import io.polygenesis.core.Function;
-import io.polygenesis.core.Thing;
-import io.polygenesis.core.ThingProperty;
+import io.polygenesis.abstraction.thing.Argument;
+import io.polygenesis.abstraction.thing.Function;
+import io.polygenesis.abstraction.thing.Thing;
+import io.polygenesis.abstraction.thing.ThingProperty;
 import io.polygenesis.core.data.Data;
 import io.polygenesis.core.data.DataBusinessType;
 import java.util.LinkedHashSet;

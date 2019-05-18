@@ -20,7 +20,7 @@
 
 package io.polygenesis.models.ui;
 
-import io.polygenesis.core.Function;
+import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.models.ui.container.AbstractContainer;
 import io.polygenesis.models.ui.container.Bottom;
 import io.polygenesis.models.ui.container.Center;

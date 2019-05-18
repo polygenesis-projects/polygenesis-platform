@@ -22,11 +22,11 @@ package io.polygenesis.models.api;
 
 import static java.util.stream.Collectors.toCollection;
 
+import io.polygenesis.abstraction.thing.Argument;
+import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
-import io.polygenesis.core.Argument;
-import io.polygenesis.core.Function;
 import io.polygenesis.core.data.Data;
 import io.polygenesis.core.data.DataBusinessType;
 import io.polygenesis.core.data.DataGroup;

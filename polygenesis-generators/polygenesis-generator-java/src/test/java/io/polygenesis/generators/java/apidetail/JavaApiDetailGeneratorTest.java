@@ -27,10 +27,10 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
+import io.polygenesis.abstraction.thing.ThingName;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.MetamodelRepository;
-import io.polygenesis.core.ThingName;
 import io.polygenesis.generators.java.exporters.apidetail.DomainObjectConverterExporter;
 import io.polygenesis.generators.java.exporters.apidetail.JavaApiDetailGenerator;
 import io.polygenesis.generators.java.exporters.apidetail.ServiceImplementationExporter;

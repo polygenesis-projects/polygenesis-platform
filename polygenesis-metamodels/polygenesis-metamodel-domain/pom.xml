@@ -12,10 +12,10 @@
   <artifactId>polygenesis-metamodel-domain</artifactId>
 
   <dependencies>
-    <!--CORE-->
+    <!--ABSTRACTIONS-->
     <dependency>
-      <groupId>io.polygenesis</groupId>
-      <artifactId>polygenesis-core</artifactId>
+      <groupId>io.polygenesis.abstractions</groupId>
+      <artifactId>polygenesis-abstraction-thing</artifactId>
     </dependency>
 
     <!--TEST-->

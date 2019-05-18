@@ -48,7 +48,6 @@ public class DataMapTest extends AbstractEqualityTest<DataMap> {
   @Override
   public DataMap createObject1() {
     return new DataMap(
-        DataSource.user(),
         new VariableName("var1"),
         DataBusinessType.ANY,
         DataValidator.empty(),
@@ -59,7 +58,6 @@ public class DataMapTest extends AbstractEqualityTest<DataMap> {
   @Override
   public DataMap createObject2() {
     return new DataMap(
-        DataSource.user(),
         new VariableName("var2"),
         DataBusinessType.ANY,
         DataValidator.empty(),

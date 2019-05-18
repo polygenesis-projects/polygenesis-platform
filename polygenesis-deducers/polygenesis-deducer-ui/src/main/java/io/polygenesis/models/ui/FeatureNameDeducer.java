@@ -20,8 +20,8 @@
 
 package io.polygenesis.models.ui;
 
+import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.commons.valueobjects.FeatureName;
-import io.polygenesis.core.Thing;
 
 /**
  * Deduces a {@link FeatureName} provided a {@link Thing}.

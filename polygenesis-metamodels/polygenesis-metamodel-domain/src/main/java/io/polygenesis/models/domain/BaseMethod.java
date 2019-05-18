@@ -20,9 +20,9 @@
 
 package io.polygenesis.models.domain;
 
+import io.polygenesis.abstraction.thing.Function;
+import io.polygenesis.abstraction.thing.FunctionProvider;
 import io.polygenesis.commons.assertion.Assertion;
-import io.polygenesis.core.Function;
-import io.polygenesis.core.FunctionProvider;
 import java.util.Objects;
 
 /**

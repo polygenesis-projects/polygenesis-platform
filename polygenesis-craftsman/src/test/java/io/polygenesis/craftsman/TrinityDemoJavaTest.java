@@ -26,19 +26,21 @@ import com.oregor.trinity.scaffolder.java.core.ProjectDescription;
 import com.oregor.trinity.scaffolder.java.core.ProjectDescriptionBuilder;
 import com.oregor.trinity.scaffolder.java.core.TrinityScaffolderJava;
 import com.oregor.trinity.scaffolder.java.core.TrinityScaffolderJavaFactory;
+import io.polygenesis.abstraction.thing.FunctionBuilder;
+import io.polygenesis.abstraction.thing.Thing;
+import io.polygenesis.abstraction.thing.ThingBuilder;
+import io.polygenesis.abstraction.thing.ThingName;
+import io.polygenesis.abstraction.thing.ThingRepositoryImpl;
 import io.polygenesis.commons.valueobjects.PackageName;
+import io.polygenesis.core.AbstractionRepository;
 import io.polygenesis.core.Deducer;
 import io.polygenesis.core.Generator;
-import io.polygenesis.core.Thing;
-import io.polygenesis.core.ThingBuilder;
-import io.polygenesis.core.ThingName;
-import io.polygenesis.core.ThingRepositoryImpl;
 import io.polygenesis.core.data.Data;
 import io.polygenesis.core.dsl.DataBuilder;
-import io.polygenesis.core.dsl.FunctionBuilder;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import org.apache.commons.io.FileUtils;
@@ -122,7 +124,10 @@ public class TrinityDemoJavaTest {
 
     allThings.add(createTodo(new PackageName(JAVA_ROOT_PACKAGE)));
 
-    genesis.generate(new ThingRepositoryImpl(allThings), deducers, generators);
+    Set<AbstractionRepository> abstractionRepositories =
+        new LinkedHashSet<>(Arrays.asList(new ThingRepositoryImpl(allThings)));
+
+    genesis.generate(abstractionRepositories, deducers, generators);
   }
 
   private Thing createTodo(PackageName rootPackageName) {

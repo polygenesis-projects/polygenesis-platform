@@ -47,12 +47,7 @@ public class DataPrimitive extends Data {
    */
   public static DataPrimitive of(PrimitiveType primitiveType, VariableName variableName) {
     return new DataPrimitive(
-        DataSource.user(),
-        variableName,
-        DataBusinessType.ANY,
-        DataValidator.empty(),
-        primitiveType,
-        null);
+        variableName, DataBusinessType.ANY, DataValidator.empty(), primitiveType, null);
   }
 
   /**
@@ -66,12 +61,7 @@ public class DataPrimitive extends Data {
   public static DataPrimitive ofDataBusinessType(
       DataBusinessType dataBusinessType, PrimitiveType primitiveType, VariableName variableName) {
     return new DataPrimitive(
-        DataSource.user(),
-        variableName,
-        dataBusinessType,
-        DataValidator.empty(),
-        primitiveType,
-        null);
+        variableName, dataBusinessType, DataValidator.empty(), primitiveType, null);
   }
 
   // ===============================================================================================
@@ -91,32 +81,24 @@ public class DataPrimitive extends Data {
       VariableName variableName,
       Set<Annotation> annotations,
       DataBusinessType dataBusinessType) {
-    this(
-        DataSource.user(),
-        variableName,
-        dataBusinessType,
-        DataValidator.empty(),
-        primitiveType,
-        annotations);
+    this(variableName, dataBusinessType, DataValidator.empty(), primitiveType, annotations);
   }
 
   /**
    * Instantiates a new Data primitive.
    *
-   * @param dataSource the data source
    * @param variableName the variable name
    * @param dataBusinessType the data business type
    * @param primitiveType the primitive type
    * @param annotations the annotations
    */
   public DataPrimitive(
-      DataSource dataSource,
       VariableName variableName,
       DataBusinessType dataBusinessType,
       DataValidator dataValidator,
       PrimitiveType primitiveType,
       Set<Annotation> annotations) {
-    super(DataPrimaryType.PRIMITIVE, dataSource, variableName, dataBusinessType, dataValidator);
+    super(DataPrimaryType.PRIMITIVE, variableName, dataBusinessType, dataValidator);
     this.primitiveType = primitiveType;
     this.annotations = annotations;
   }

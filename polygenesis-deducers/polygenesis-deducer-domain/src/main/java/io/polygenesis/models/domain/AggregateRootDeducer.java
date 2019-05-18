@@ -20,12 +20,14 @@
 
 package io.polygenesis.models.domain;
 
+import io.polygenesis.abstraction.thing.Thing;
+import io.polygenesis.abstraction.thing.ThingRepository;
+import io.polygenesis.abstraction.thing.ThingType;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
-import io.polygenesis.core.Thing;
-import io.polygenesis.core.ThingRepository;
-import io.polygenesis.core.ThingType;
+import io.polygenesis.core.MetamodelType;
 import java.util.LinkedHashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -78,17 +80,15 @@ public class AggregateRootDeducer {
     Set<AggregateRoot> aggregateRoots = new LinkedHashSet<>();
 
     thingRepository
-        .getDomainModelThings()
+        .getAbstractionItemsByMetamodelType(MetamodelType.DOMAIN)
         .stream()
         .filter(
             thing ->
                 thing.getThingType().equals(ThingType.DOMAIN_AGGREGATE_ROOT)
-                    || thing
-                        .getThingType()
-                        .equals(ThingType.DOMAIN_ABSTRACT_AGGREGATE_ROOT))
+                    || thing.getThingType().equals(ThingType.DOMAIN_ABSTRACT_AGGREGATE_ROOT))
         .forEach(
             thing -> {
-              if (thing.getOptionalParent() == null || thingRepository.isVirtualChild(thing)) {
+              if (thing.getOptionalParent() == null || isVirtualChild(thingRepository, thing)) {
                 makeAggregateRoot(aggregateRoots, thing, rootPackageName);
               }
             });
@@ -109,7 +109,7 @@ public class AggregateRootDeducer {
    * @return the aggregate root
    */
   @SuppressWarnings("rawtypes")
-  protected void makeAggregateRoot(
+  private void makeAggregateRoot(
       Set<AggregateRoot> aggregateRoots, Thing thing, PackageName rootPackageName) {
     PackageName packageName = thing.makePackageName(rootPackageName, thing);
 
@@ -204,5 +204,21 @@ public class AggregateRootDeducer {
         new LinkedHashSet<>(),
         new LinkedHashSet<>(),
         new LinkedHashSet<>());
+  }
+
+  /**
+   * Is virtual child boolean.
+   *
+   * @param thingRepository the thing repository
+   * @param thingToCheck the thing to check
+   * @return the boolean
+   */
+  private Boolean isVirtualChild(ThingRepository thingRepository, Thing thingToCheck) {
+    return thingRepository
+        .getAllAbstractionItems()
+        .stream()
+        .flatMap(thing -> thing.getVirtualChildren().stream())
+        .filter(thing -> thing.equals(thingToCheck))
+        .anyMatch(Objects::nonNull);
   }
 }

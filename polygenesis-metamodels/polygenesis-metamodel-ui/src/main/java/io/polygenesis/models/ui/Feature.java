@@ -20,6 +20,7 @@
 
 package io.polygenesis.models.ui;
 
+import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.commons.valueobjects.ContextName;
 import io.polygenesis.commons.valueobjects.FeatureName;
@@ -30,10 +31,10 @@ import java.util.Set;
 
 /**
  * Encapsulates all of the UI models related to a Feature. A Feature is equivalent to a {@link
- * io.polygenesis.core.Thing} from the core model.
+ * Thing} from the core model.
  *
  * @author Christos Tsakostas
- * @see io.polygenesis.core.Thing
+ * @see Thing
  */
 public class Feature implements Metamodel {
 

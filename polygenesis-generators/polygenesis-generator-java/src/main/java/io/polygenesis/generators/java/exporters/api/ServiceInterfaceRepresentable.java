@@ -22,8 +22,8 @@ package io.polygenesis.generators.java.exporters.api;
 
 import static java.util.stream.Collectors.toCollection;
 
+import io.polygenesis.abstraction.thing.Argument;
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.Argument;
 import io.polygenesis.core.data.DataGroup;
 import io.polygenesis.generators.java.skeletons.AbstractInterfaceRepresentable;
 import io.polygenesis.generators.java.skeletons.FromDataTypeToJavaConverter;

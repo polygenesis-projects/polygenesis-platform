@@ -20,8 +20,8 @@
 
 package io.polygenesis.models.api;
 
+import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.commons.valueobjects.PackageName;
-import io.polygenesis.core.Thing;
 import java.util.Set;
 
 /**

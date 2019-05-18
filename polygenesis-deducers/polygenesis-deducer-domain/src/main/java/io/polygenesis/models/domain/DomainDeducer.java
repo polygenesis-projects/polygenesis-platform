@@ -20,10 +20,12 @@
 
 package io.polygenesis.models.domain;
 
+import io.polygenesis.abstraction.thing.ThingRepository;
 import io.polygenesis.commons.valueobjects.PackageName;
+import io.polygenesis.core.AbstractionRepository;
+import io.polygenesis.core.CoreRegistry;
 import io.polygenesis.core.Deducer;
 import io.polygenesis.core.MetamodelRepository;
-import io.polygenesis.core.ThingRepository;
 import java.util.Set;
 
 /**
@@ -61,8 +63,12 @@ public class DomainDeducer implements Deducer<DomainMetamodelRepository> {
   @SuppressWarnings("rawtypes")
   @Override
   public DomainMetamodelRepository deduce(
-      ThingRepository thingRepository, Set<MetamodelRepository> modelRepositories) {
+      Set<AbstractionRepository> abstractionRepositories,
+      Set<MetamodelRepository> modelRepositories) {
     return new DomainMetamodelRepository(
-        aggregateRootDeducer.deduceFrom(thingRepository, rootPackageName));
+        aggregateRootDeducer.deduceFrom(
+            CoreRegistry.getAbstractionRepositoryResolver()
+                .resolve(abstractionRepositories, ThingRepository.class),
+            rootPackageName));
   }
 }

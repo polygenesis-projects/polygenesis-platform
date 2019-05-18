@@ -20,10 +20,10 @@
 
 package io.polygenesis.generators.java.implementations.apiimpl;
 
+import io.polygenesis.abstraction.thing.ThingType;
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.GoalType;
-import io.polygenesis.core.ThingType;
 import io.polygenesis.generators.java.implementations.ScopeGoalTuple;
 import io.polygenesis.generators.java.skeletons.MethodRepresentation;
 import io.polygenesis.models.api.ServiceMethod;
@@ -61,8 +61,7 @@ public class ServiceMethodImplementationRegistry {
         new FetchOneAggregateRoot());
 
     scopeAndGoalMap.put(
-        new ScopeGoalTuple(
-            ThingType.DOMAIN_AGGREGATE_ROOT, GoalType.FETCH_PAGED_COLLECTION.name()),
+        new ScopeGoalTuple(ThingType.DOMAIN_AGGREGATE_ROOT, GoalType.FETCH_PAGED_COLLECTION.name()),
         new FetchPagedCollectionAggregateRoot());
 
     // ENTITY

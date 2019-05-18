@@ -20,7 +20,7 @@
 
 package io.polygenesis.models.ui;
 
-import io.polygenesis.core.Function;
+import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.models.ui.element.ElementGroup;
 import io.polygenesis.models.ui.element.ElementName;
 import java.util.LinkedHashSet;

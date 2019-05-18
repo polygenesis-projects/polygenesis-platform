@@ -20,10 +20,13 @@
 
 package io.polygenesis.models.api;
 
+import io.polygenesis.abstraction.thing.ThingRepository;
 import io.polygenesis.commons.valueobjects.PackageName;
+import io.polygenesis.core.AbstractionRepository;
+import io.polygenesis.core.CoreRegistry;
 import io.polygenesis.core.Deducer;
 import io.polygenesis.core.MetamodelRepository;
-import io.polygenesis.core.ThingRepository;
+import io.polygenesis.core.MetamodelType;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -75,15 +78,21 @@ public class ApiDeducer implements Deducer<ServiceMetamodelRepository> {
   @SuppressWarnings("rawtypes")
   @Override
   public ServiceMetamodelRepository deduce(
-      ThingRepository thingRepository, Set<MetamodelRepository> modelRepositories) {
-    if (thingRepository.getApiThings().isEmpty()) {
+      Set<AbstractionRepository> abstractionRepositories,
+      Set<MetamodelRepository> modelRepositories) {
+
+    ThingRepository thingRepository =
+        CoreRegistry.getAbstractionRepositoryResolver()
+            .resolve(abstractionRepositories, ThingRepository.class);
+
+    if (thingRepository.getAbstractionItemsByMetamodelType(MetamodelType.API).isEmpty()) {
       throw new IllegalArgumentException("thingRepository cannot be empty");
     }
 
     Set<Service> services = new LinkedHashSet<>();
 
     thingRepository
-        .getApiThings()
+        .getAbstractionItemsByMetamodelType(MetamodelType.API)
         .forEach(thing -> services.addAll(serviceDeducer.deduceFrom(thing, getRootPackageName())));
 
     return new ServiceMetamodelRepository(services);

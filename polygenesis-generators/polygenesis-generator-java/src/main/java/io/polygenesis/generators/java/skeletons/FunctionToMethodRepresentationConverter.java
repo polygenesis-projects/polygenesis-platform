@@ -20,8 +20,8 @@
 
 package io.polygenesis.generators.java.skeletons;
 
+import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.Function;
 import io.polygenesis.core.data.PrimitiveType;
 import io.polygenesis.generators.commons.representations.ParameterRepresentation;
 import java.util.LinkedHashSet;

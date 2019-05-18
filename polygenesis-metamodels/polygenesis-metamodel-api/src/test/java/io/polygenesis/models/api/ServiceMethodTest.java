@@ -20,16 +20,16 @@
 
 package io.polygenesis.models.api;
 
+import io.polygenesis.abstraction.thing.Function;
+import io.polygenesis.abstraction.thing.FunctionName;
+import io.polygenesis.abstraction.thing.Thing;
+import io.polygenesis.abstraction.thing.ThingBuilder;
+import io.polygenesis.abstraction.thing.ThingName;
 import io.polygenesis.commons.test.AbstractEqualityTest;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
-import io.polygenesis.core.Function;
-import io.polygenesis.core.FunctionName;
 import io.polygenesis.core.Goal;
 import io.polygenesis.core.GoalType;
-import io.polygenesis.core.Thing;
-import io.polygenesis.core.ThingBuilder;
-import io.polygenesis.core.ThingName;
 import io.polygenesis.core.data.DataGroup;
 import java.util.LinkedHashSet;
 

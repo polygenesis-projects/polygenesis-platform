@@ -22,11 +22,11 @@ package io.polygenesis.models.api;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import io.polygenesis.abstraction.thing.Function;
+import io.polygenesis.abstraction.thing.FunctionName;
+import io.polygenesis.abstraction.thing.Thing;
+import io.polygenesis.abstraction.thing.test.ThingForTesting;
 import io.polygenesis.commons.valueobjects.PackageName;
-import io.polygenesis.core.Function;
-import io.polygenesis.core.FunctionName;
-import io.polygenesis.core.Thing;
-import io.polygenesis.core.test.ThingForTesting;
 import org.junit.Before;
 import org.junit.Test;
 

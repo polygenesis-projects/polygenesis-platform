@@ -20,9 +20,9 @@
 
 package io.polygenesis.generators.java.implementations.domain;
 
+import io.polygenesis.abstraction.thing.ThingType;
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.core.GoalType;
-import io.polygenesis.core.ThingType;
 import io.polygenesis.generators.java.implementations.AbstractMethodImplementorRegistry;
 import io.polygenesis.generators.java.implementations.ScopeGoalTuple;
 import io.polygenesis.models.domain.StateMutationMethod;

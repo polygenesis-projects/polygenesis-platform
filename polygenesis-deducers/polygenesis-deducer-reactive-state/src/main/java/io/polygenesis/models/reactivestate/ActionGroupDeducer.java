@@ -20,10 +20,10 @@
 
 package io.polygenesis.models.reactivestate;
 
+import io.polygenesis.abstraction.thing.FunctionName;
+import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.FunctionName;
 import io.polygenesis.core.GoalType;
-import io.polygenesis.core.Thing;
 import io.polygenesis.core.data.DataPrimitive;
 import io.polygenesis.core.data.PrimitiveType;
 import io.polygenesis.core.data.VariableName;
