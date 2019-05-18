@@ -26,7 +26,7 @@ import io.polygenesis.core.Deducer;
 import io.polygenesis.core.MetamodelRepository;
 import io.polygenesis.core.Thing;
 import io.polygenesis.core.ThingRepository;
-import io.polygenesis.core.ThingScopeType;
+import io.polygenesis.core.ThingType;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -77,7 +77,7 @@ public class SupportiveEntityDeducer implements Deducer<SupportiveEntityMetamode
     thingRepository
         .getDomainModelThings()
         .stream()
-        .filter(thing -> thing.getThingScopeType().equals(ThingScopeType.DOMAIN_SUPPORTIVE_ENTITY))
+        .filter(thing -> thing.getThingType().equals(ThingType.DOMAIN_SUPPORTIVE_ENTITY))
         .forEach(thing -> makeSupportiveEntity(helperEntities, thing, rootPackageName));
 
     return new SupportiveEntityMetamodelRepository(helperEntities);

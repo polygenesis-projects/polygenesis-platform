@@ -58,8 +58,7 @@ public class ThingBuilder {
 
   private String contextName;
   private ThingName thingName;
-  private ThingScopeType thingScopeType = ThingScopeType.DOMAIN_AGGREGATE_ROOT;
-  private ThingBusinessType thingBusinessType = ThingBusinessType.ANY;
+  private ThingType thingType = ThingType.DOMAIN_AGGREGATE_ROOT;
   private Set<ThingProperty> thingProperties = new LinkedHashSet<>();
   private Boolean multiTenant = false;
   private Thing parentThing;
@@ -91,22 +90,11 @@ public class ThingBuilder {
   /**
    * Sets thing scope type.
    *
-   * @param thingScopeType the thing scope type
+   * @param thingType the thing scope type
    * @return the thing scope type
    */
-  public ThingBuilder setThingScopeType(ThingScopeType thingScopeType) {
-    this.thingScopeType = thingScopeType;
-    return this;
-  }
-
-  /**
-   * Sets thing business type.
-   *
-   * @param thingBusinessType the thing business type
-   * @return the thing business type
-   */
-  public ThingBuilder setThingBusinessType(ThingBusinessType thingBusinessType) {
-    this.thingBusinessType = thingBusinessType;
+  public ThingBuilder setThingType(ThingType thingType) {
+    this.thingType = thingType;
     return this;
   }
 
@@ -154,8 +142,7 @@ public class ThingBuilder {
    */
   public Thing createThing() {
     return new Thing(
-        thingScopeType,
-        thingBusinessType,
+        thingType,
         contextName != null ? new ContextName(contextName) : ContextName.defaultContext(),
         thingName,
         thingProperties,

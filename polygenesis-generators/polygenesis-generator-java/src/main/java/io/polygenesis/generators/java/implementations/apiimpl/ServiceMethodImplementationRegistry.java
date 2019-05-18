@@ -23,7 +23,7 @@ package io.polygenesis.generators.java.implementations.apiimpl;
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.GoalType;
-import io.polygenesis.core.ThingScopeType;
+import io.polygenesis.core.ThingType;
 import io.polygenesis.generators.java.implementations.ScopeGoalTuple;
 import io.polygenesis.generators.java.skeletons.MethodRepresentation;
 import io.polygenesis.models.api.ServiceMethod;
@@ -49,38 +49,38 @@ public class ServiceMethodImplementationRegistry {
   static {
     // AGGREGATE ROOT
     scopeAndGoalMap.put(
-        new ScopeGoalTuple(ThingScopeType.DOMAIN_AGGREGATE_ROOT, GoalType.CREATE.name()),
+        new ScopeGoalTuple(ThingType.DOMAIN_AGGREGATE_ROOT, GoalType.CREATE.name()),
         new CreateAggregateRoot());
 
     scopeAndGoalMap.put(
-        new ScopeGoalTuple(ThingScopeType.DOMAIN_AGGREGATE_ROOT, GoalType.MODIFY.name()),
+        new ScopeGoalTuple(ThingType.DOMAIN_AGGREGATE_ROOT, GoalType.MODIFY.name()),
         new UpdateAggregateRoot());
 
     scopeAndGoalMap.put(
-        new ScopeGoalTuple(ThingScopeType.DOMAIN_AGGREGATE_ROOT, GoalType.FETCH_ONE.name()),
+        new ScopeGoalTuple(ThingType.DOMAIN_AGGREGATE_ROOT, GoalType.FETCH_ONE.name()),
         new FetchOneAggregateRoot());
 
     scopeAndGoalMap.put(
         new ScopeGoalTuple(
-            ThingScopeType.DOMAIN_AGGREGATE_ROOT, GoalType.FETCH_PAGED_COLLECTION.name()),
+            ThingType.DOMAIN_AGGREGATE_ROOT, GoalType.FETCH_PAGED_COLLECTION.name()),
         new FetchPagedCollectionAggregateRoot());
 
     // ENTITY
     scopeAndGoalMap.put(
-        new ScopeGoalTuple(ThingScopeType.DOMAIN_AGGREGATE_ENTITY, GoalType.CREATE.name()),
+        new ScopeGoalTuple(ThingType.DOMAIN_AGGREGATE_ENTITY, GoalType.CREATE.name()),
         new CreateAggregateEntity());
 
     scopeAndGoalMap.put(
-        new ScopeGoalTuple(ThingScopeType.DOMAIN_AGGREGATE_ENTITY, GoalType.MODIFY.name()),
+        new ScopeGoalTuple(ThingType.DOMAIN_AGGREGATE_ENTITY, GoalType.MODIFY.name()),
         new UpdateAggregateEntity());
 
     scopeAndGoalMap.put(
-        new ScopeGoalTuple(ThingScopeType.DOMAIN_AGGREGATE_ENTITY, GoalType.FETCH_ONE.name()),
+        new ScopeGoalTuple(ThingType.DOMAIN_AGGREGATE_ENTITY, GoalType.FETCH_ONE.name()),
         new FetchOneAggregateEntity());
 
     scopeAndGoalMap.put(
         new ScopeGoalTuple(
-            ThingScopeType.DOMAIN_AGGREGATE_ENTITY, GoalType.FETCH_PAGED_COLLECTION.name()),
+            ThingType.DOMAIN_AGGREGATE_ENTITY, GoalType.FETCH_PAGED_COLLECTION.name()),
         new FetchPagedCollectionAggregateEntity());
   }
 
@@ -122,7 +122,7 @@ public class ServiceMethodImplementationRegistry {
   public boolean isServiceMethodSupported(ServiceMethod serviceMethod) {
     return scopeAndGoalMap.containsKey(
         new ScopeGoalTuple(
-            serviceMethod.getFunction().getThing().getThingScopeType(),
+            serviceMethod.getFunction().getThing().getThingType(),
             TextConverter.toUpperUnderscore(serviceMethod.getFunction().getGoal().getText())));
   }
 
@@ -139,7 +139,7 @@ public class ServiceMethodImplementationRegistry {
   private ServiceMethodImplementor serviceMethodImplementorFor(ServiceMethod serviceMethod) {
     return scopeAndGoalMap.get(
         new ScopeGoalTuple(
-            serviceMethod.getFunction().getThing().getThingScopeType(),
+            serviceMethod.getFunction().getThing().getThingType(),
             TextConverter.toUpperUnderscore(serviceMethod.getFunction().getGoal().getText())));
   }
 }

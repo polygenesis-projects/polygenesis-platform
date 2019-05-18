@@ -69,7 +69,7 @@ public abstract class AbstractMethodImplementorRegistry<T extends FunctionProvid
   public boolean isSupported(T methodProvider) {
     return scopeAndGoalMap.containsKey(
         new ScopeGoalTuple(
-            methodProvider.getFunction().getThing().getThingScopeType(),
+            methodProvider.getFunction().getThing().getThingType(),
             TextConverter.toUpperUnderscore(methodProvider.getFunction().getGoal().getText())));
   }
 
@@ -85,7 +85,7 @@ public abstract class AbstractMethodImplementorRegistry<T extends FunctionProvid
       return scopeAndGoalMap
           .get(
               new ScopeGoalTuple(
-                  methodProvider.getFunction().getThing().getThingScopeType(),
+                  methodProvider.getFunction().getThing().getThingType(),
                   TextConverter.toUpperUnderscore(
                       methodProvider.getFunction().getGoal().getText())))
           .implementationFor(freemarkerService, methodProvider, methodRepresentation);

@@ -92,6 +92,20 @@ public class DataBuilder {
   }
 
   /**
+   * With big decimal property data big decimal builder.
+   *
+   * @param propertyName the property name
+   * @return the data big decimal builder
+   */
+  public final DataDecimalBuilder withDecimalProperty(String propertyName) {
+    DataDecimalBuilder dataDecimalBuilder = DataDecimalBuilder.create(this, propertyName);
+
+    this.models.add(dataDecimalBuilder.getModel());
+
+    return dataDecimalBuilder;
+  }
+
+  /**
    * With reference to thing data builder.
    *
    * @param thing the thing

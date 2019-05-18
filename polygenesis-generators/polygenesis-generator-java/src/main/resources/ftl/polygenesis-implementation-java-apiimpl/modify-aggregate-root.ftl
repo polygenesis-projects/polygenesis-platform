@@ -26,4 +26,4 @@
 
 <@storeAggregateRoot persistenceVariable aggregateRootVariable></@storeAggregateRoot>
 
-    return new ${ representation.returnValue }(${ aggregateRootVariable }.getId().getUuid().toString());
+    return new ${ representation.returnValue }(${ aggregateRootVariable }.getId().getTypeId().toString());
