@@ -23,15 +23,14 @@ package io.polygenesis.core.data;
 import java.util.Objects;
 
 /**
- * This is the base class for {@link DataPrimitive}, {@link DataGroup}, {@link DataArray}, {@link
- * DataMap}, and {@link DataReferenceToThing}.
+ * This is the base class for any Data.
  *
  * <p>References:
  *
  * <ul>
- *   <li>https://en.wikibooks.org/wiki/Java_Programming/Primitive_Types
- *   <li>https://en.wikipedia.org/wiki/Primitive_data_type
- *   <li>https://docs.oracle.com/javase/tutorial/java/nutsandbolts/datatypes.html
+ * <li>https://en.wikibooks.org/wiki/Java_Programming/Primitive_Types
+ * <li>https://en.wikipedia.org/wiki/Primitive_data_type
+ * <li>https://docs.oracle.com/javase/tutorial/java/nutsandbolts/datatypes.html
  * </ul>
  *
  * @author Christos Tsakostas
