@@ -26,9 +26,9 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
+import io.polygenesis.abstraction.thing.Function;
+import io.polygenesis.abstraction.thing.test.ThingForTesting;
 import io.polygenesis.commons.valueobjects.PackageName;
-import io.polygenesis.core.Function;
-import io.polygenesis.core.test.ThingForTesting;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import org.junit.Before;

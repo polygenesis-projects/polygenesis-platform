@@ -20,20 +20,22 @@
 
 package io.polygenesis.deducers.apiimpl;
 
+import io.polygenesis.abstraction.thing.Argument;
+import io.polygenesis.abstraction.thing.Function;
+import io.polygenesis.abstraction.thing.FunctionName;
+import io.polygenesis.abstraction.thing.ReturnValue;
+import io.polygenesis.abstraction.thing.Thing;
+import io.polygenesis.abstraction.thing.ThingBuilder;
+import io.polygenesis.abstraction.thing.ThingName;
+import io.polygenesis.abstraction.thing.ThingRepository;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.commons.valueobjects.ObjectName;
-import io.polygenesis.core.Argument;
+import io.polygenesis.core.AbstractionRepository;
 import io.polygenesis.core.CoreRegistry;
 import io.polygenesis.core.Deducer;
-import io.polygenesis.core.Function;
-import io.polygenesis.core.FunctionName;
 import io.polygenesis.core.Goal;
 import io.polygenesis.core.MetamodelRepository;
-import io.polygenesis.core.ReturnValue;
-import io.polygenesis.core.Thing;
-import io.polygenesis.core.ThingBuilder;
-import io.polygenesis.core.ThingName;
-import io.polygenesis.core.ThingRepository;
+import io.polygenesis.core.MetamodelType;
 import io.polygenesis.core.data.Data;
 import io.polygenesis.core.data.DataGroup;
 import io.polygenesis.models.api.Dto;
@@ -66,7 +68,8 @@ public class DomainEntityConverterDeducer extends BaseApiImplementationDeducer
   @SuppressWarnings("rawtypes")
   @Override
   public DomainEntityConverterMetamodelRepository deduce(
-      ThingRepository thingRepository, Set<MetamodelRepository> modelRepositories) {
+      Set<AbstractionRepository> abstractionRepositories,
+      Set<MetamodelRepository> modelRepositories) {
     Set<DomainEntityConverter> domainEntityConverters = new LinkedHashSet<>();
 
     ServiceMetamodelRepository serviceModelRepository =
@@ -78,7 +81,11 @@ public class DomainEntityConverterDeducer extends BaseApiImplementationDeducer
             .resolve(modelRepositories, DomainMetamodelRepository.class);
 
     fillDomainEntityConverters(
-        domainEntityConverters, thingRepository, serviceModelRepository, domainModelRepository);
+        domainEntityConverters,
+        CoreRegistry.getAbstractionRepositoryResolver()
+            .resolve(abstractionRepositories, ThingRepository.class),
+        serviceModelRepository,
+        domainModelRepository);
 
     return new DomainEntityConverterMetamodelRepository(domainEntityConverters);
   }
@@ -101,7 +108,7 @@ public class DomainEntityConverterDeducer extends BaseApiImplementationDeducer
       ServiceMetamodelRepository serviceModelRepository,
       DomainMetamodelRepository domainModelRepository) {
     thingRepository
-        .getApiThings()
+        .getAbstractionItemsByMetamodelType(MetamodelType.API)
         .forEach(
             thing -> {
               Optional<BaseDomainEntity> optionalDomainObject =

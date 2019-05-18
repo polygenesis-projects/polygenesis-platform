@@ -20,8 +20,8 @@
 
 package io.polygenesis.models.ui;
 
+import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.commons.assertion.Assertion;
-import io.polygenesis.core.Thing;
 import io.polygenesis.models.ui.container.AbstractContainer;
 import java.util.LinkedHashSet;
 import java.util.Set;

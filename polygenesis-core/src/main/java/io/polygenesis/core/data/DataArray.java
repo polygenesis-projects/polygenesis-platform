@@ -43,27 +43,23 @@ public class DataArray extends Data {
    * @param arrayElement the array element
    */
   public DataArray(VariableName variableName, Data arrayElement) {
-    this(
-        DataSource.user(), variableName, DataBusinessType.ANY, DataValidator.empty(), arrayElement);
+    this(variableName, DataBusinessType.ANY, DataValidator.empty(), arrayElement);
   }
 
   /**
    * Instantiates a new Data array.
    *
-   * @param dataSource the data source
    * @param variableName the variable name
    * @param dataBusinessType the data business type
    * @param arrayElement the array element
    */
   public DataArray(
-      DataSource dataSource,
       VariableName variableName,
       DataBusinessType dataBusinessType,
       DataValidator dataValidator,
       Data arrayElement) {
     super(
         DataPrimaryType.ARRAY,
-        dataSource,
         variableName != null
             ? new VariableName(TextConverter.toPlural(variableName.getText()))
             : null,

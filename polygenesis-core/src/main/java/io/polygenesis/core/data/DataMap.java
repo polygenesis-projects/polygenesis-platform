@@ -43,7 +43,6 @@ public class DataMap extends Data {
   /**
    * Instantiates a new Data map.
    *
-   * @param dataSource the data source
    * @param variableName the variable name
    * @param dataBusinessType the data business type
    * @param dataValidator the data validator
@@ -51,13 +50,12 @@ public class DataMap extends Data {
    * @param value the value
    */
   public DataMap(
-      DataSource dataSource,
       VariableName variableName,
       DataBusinessType dataBusinessType,
       DataValidator dataValidator,
       Data key,
       Data value) {
-    super(DataPrimaryType.MAP, dataSource, variableName, dataBusinessType, dataValidator);
+    super(DataPrimaryType.MAP, variableName, dataBusinessType, dataValidator);
     this.key = key;
     this.value = value;
   }

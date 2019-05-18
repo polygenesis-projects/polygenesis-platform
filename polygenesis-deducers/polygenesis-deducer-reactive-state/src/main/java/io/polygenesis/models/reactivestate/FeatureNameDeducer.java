@@ -20,12 +20,12 @@
 
 package io.polygenesis.models.reactivestate;
 
+import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.commons.valueobjects.FeatureName;
-import io.polygenesis.core.Thing;
 
 /**
- * Deduces a {@link FeatureName} provided a {@link io.polygenesis.core.Thing}.
+ * Deduces a {@link FeatureName} provided a {@link Thing}.
  *
  * @author Christos Tsakostas
  */

@@ -31,15 +31,26 @@ public final class CoreRegistry {
     throw new IllegalStateException("Utility class");
   }
 
+  private static final AbstractionRepositoryResolver abstractionRepositoryResolver;
   private static final MetamodelRepositoryResolver metamodelRepositoryResolver;
 
   static {
+    abstractionRepositoryResolver = new AbstractionRepositoryResolver();
     metamodelRepositoryResolver = new MetamodelRepositoryResolver();
   }
 
   // ===============================================================================================
   // GETTERS
   // ===============================================================================================
+
+  /**
+   * Gets abstraction repository resolver.
+   *
+   * @return the abstraction repository resolver
+   */
+  public static AbstractionRepositoryResolver getAbstractionRepositoryResolver() {
+    return abstractionRepositoryResolver;
+  }
 
   /**
    * Gets model repository resolver.

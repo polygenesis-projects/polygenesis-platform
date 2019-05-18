@@ -20,7 +20,7 @@
 
 package io.polygenesis.models.domain;
 
-import io.polygenesis.core.Thing;
+import io.polygenesis.abstraction.thing.Thing;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;

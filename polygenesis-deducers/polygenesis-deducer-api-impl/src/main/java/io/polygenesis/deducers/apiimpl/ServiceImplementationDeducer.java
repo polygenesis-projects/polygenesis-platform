@@ -21,10 +21,10 @@
 package io.polygenesis.deducers.apiimpl;
 
 import io.polygenesis.commons.valueobjects.ObjectName;
+import io.polygenesis.core.AbstractionRepository;
 import io.polygenesis.core.CoreRegistry;
 import io.polygenesis.core.Deducer;
 import io.polygenesis.core.MetamodelRepository;
-import io.polygenesis.core.ThingRepository;
 import io.polygenesis.core.data.VariableName;
 import io.polygenesis.models.api.Service;
 import io.polygenesis.models.api.ServiceMetamodelRepository;
@@ -77,7 +77,8 @@ public class ServiceImplementationDeducer extends BaseApiImplementationDeducer
   @SuppressWarnings("rawtypes")
   @Override
   public ServiceImplementationMetamodelRepository deduce(
-      ThingRepository thingRepository, Set<MetamodelRepository> modelRepositories) {
+      Set<AbstractionRepository> abstractionRepositories,
+      Set<MetamodelRepository> modelRepositories) {
     ServiceMetamodelRepository serviceModelRepository =
         CoreRegistry.getMetamodelRepositoryResolver()
             .resolve(modelRepositories, ServiceMetamodelRepository.class);

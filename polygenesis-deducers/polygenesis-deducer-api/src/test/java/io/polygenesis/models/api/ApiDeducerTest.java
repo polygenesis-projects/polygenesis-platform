@@ -27,12 +27,13 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
+import io.polygenesis.abstraction.thing.Thing;
+import io.polygenesis.abstraction.thing.ThingRepository;
+import io.polygenesis.abstraction.thing.ThingRepositoryImpl;
+import io.polygenesis.abstraction.thing.test.ThingForTesting;
 import io.polygenesis.commons.valueobjects.PackageName;
+import io.polygenesis.core.AbstractionRepository;
 import io.polygenesis.core.MetamodelRepository;
-import io.polygenesis.core.Thing;
-import io.polygenesis.core.ThingRepository;
-import io.polygenesis.core.ThingRepositoryImpl;
-import io.polygenesis.core.test.ThingForTesting;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -48,6 +49,9 @@ public class ApiDeducerTest {
   private ThingRepository thingRepository;
 
   @SuppressWarnings("rawtypes")
+  private Set<AbstractionRepository> abstractionRepositories;
+
+  @SuppressWarnings("rawtypes")
   private Set<MetamodelRepository> modelRepositories;
 
   private ApiDeducer apiDeducer;
@@ -60,6 +64,7 @@ public class ApiDeducerTest {
     thingRepository = new ThingRepositoryImpl(new LinkedHashSet<>(Arrays.asList(thing)));
     modelRepositories = new LinkedHashSet<>();
     apiDeducer = new ApiDeducer(rootPackageName, serviceDeducer);
+    abstractionRepositories = new LinkedHashSet<>(Arrays.asList(thingRepository));
   }
 
   @Test
@@ -69,7 +74,7 @@ public class ApiDeducerTest {
         .willReturn(new LinkedHashSet<>(Arrays.asList(service)));
 
     ServiceMetamodelRepository serviceModelRepository =
-        apiDeducer.deduce(thingRepository, modelRepositories);
+        apiDeducer.deduce(abstractionRepositories, modelRepositories);
 
     verify(serviceDeducer).deduceFrom(eq(thing), eq(rootPackageName));
 
@@ -80,11 +85,12 @@ public class ApiDeducerTest {
 
   @Test
   public void shouldFailToDeduceForEmptyThingRepository() {
-
     assertThatThrownBy(
             () ->
                 apiDeducer.deduce(
-                    new ThingRepositoryImpl(new LinkedHashSet<>()), modelRepositories))
+                    new LinkedHashSet<>(
+                        Arrays.asList(new ThingRepositoryImpl(new LinkedHashSet<>()))),
+                    modelRepositories))
         .isInstanceOf(IllegalArgumentException.class);
   }
 }

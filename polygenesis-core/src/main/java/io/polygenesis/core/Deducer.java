@@ -33,10 +33,12 @@ public interface Deducer<R extends MetamodelRepository<? extends Metamodel>> {
   /**
    * Deduces a model's repository.
    *
-   * @param thingRepository the thing repository
-   * @param modelRepositories the model repositories
+   * @param abstractionRepositories the abstraction repositories
+   * @param metamodelRepositories the model repositories
    * @return the MetamodelRepository
    */
   @SuppressWarnings("rawtypes")
-  R deduce(ThingRepository thingRepository, Set<MetamodelRepository> modelRepositories);
+  R deduce(
+      Set<AbstractionRepository> abstractionRepositories,
+      Set<MetamodelRepository> metamodelRepositories);
 }

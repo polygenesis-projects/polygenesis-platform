@@ -20,13 +20,16 @@
 
 package io.polygenesis.models.domain;
 
+import io.polygenesis.abstraction.thing.Thing;
+import io.polygenesis.abstraction.thing.ThingRepository;
+import io.polygenesis.abstraction.thing.ThingType;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
+import io.polygenesis.core.AbstractionRepository;
+import io.polygenesis.core.CoreRegistry;
 import io.polygenesis.core.Deducer;
 import io.polygenesis.core.MetamodelRepository;
-import io.polygenesis.core.Thing;
-import io.polygenesis.core.ThingRepository;
-import io.polygenesis.core.ThingType;
+import io.polygenesis.core.MetamodelType;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -71,11 +74,13 @@ public class SupportiveEntityDeducer implements Deducer<SupportiveEntityMetamode
   @SuppressWarnings("rawtypes")
   @Override
   public SupportiveEntityMetamodelRepository deduce(
-      ThingRepository thingRepository, Set<MetamodelRepository> modelRepositories) {
+      Set<AbstractionRepository> abstractionRepositories,
+      Set<MetamodelRepository> modelRepositories) {
     Set<SupportiveEntity> helperEntities = new LinkedHashSet<>();
 
-    thingRepository
-        .getDomainModelThings()
+    CoreRegistry.getAbstractionRepositoryResolver()
+        .resolve(abstractionRepositories, ThingRepository.class)
+        .getAbstractionItemsByMetamodelType(MetamodelType.DOMAIN)
         .stream()
         .filter(thing -> thing.getThingType().equals(ThingType.DOMAIN_SUPPORTIVE_ENTITY))
         .forEach(thing -> makeSupportiveEntity(helperEntities, thing, rootPackageName));

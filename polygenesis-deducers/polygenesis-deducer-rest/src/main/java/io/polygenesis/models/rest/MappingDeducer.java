@@ -20,10 +20,10 @@
 
 package io.polygenesis.models.rest;
 
+import io.polygenesis.abstraction.thing.Function;
+import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.Function;
 import io.polygenesis.core.GoalType;
-import io.polygenesis.core.Thing;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;

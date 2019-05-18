@@ -20,10 +20,10 @@
 
 package io.polygenesis.models.domain;
 
+import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
-import io.polygenesis.core.Function;
 import io.polygenesis.core.Metamodel;
 import java.util.LinkedHashSet;
 import java.util.Objects;

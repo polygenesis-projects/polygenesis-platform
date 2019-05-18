@@ -20,11 +20,13 @@
 
 package io.polygenesis.models.reactivestate;
 
+import io.polygenesis.abstraction.thing.ThingRepository;
 import io.polygenesis.commons.assertion.Assertion;
+import io.polygenesis.core.AbstractionRepository;
 import io.polygenesis.core.CoreRegistry;
 import io.polygenesis.core.Deducer;
 import io.polygenesis.core.MetamodelRepository;
-import io.polygenesis.core.ThingRepository;
+import io.polygenesis.core.MetamodelType;
 import io.polygenesis.models.api.ServiceMetamodelRepository;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -59,7 +61,8 @@ public class ReactiveStateDeducer implements Deducer<ReactiveStateMetamodelRepos
   @SuppressWarnings("rawtypes")
   @Override
   public ReactiveStateMetamodelRepository deduce(
-      ThingRepository thingRepository, Set<MetamodelRepository> modelRepositories) {
+      Set<AbstractionRepository> abstractionRepositories,
+      Set<MetamodelRepository> modelRepositories) {
     Set<Store> stores = new LinkedHashSet<>();
 
     ServiceMetamodelRepository serviceModelRepository =
@@ -70,8 +73,9 @@ public class ReactiveStateDeducer implements Deducer<ReactiveStateMetamodelRepos
       throw new IllegalStateException("ServiceModelRepository cannot be empty.");
     }
 
-    thingRepository
-        .getApiThings()
+    CoreRegistry.getAbstractionRepositoryResolver()
+        .resolve(abstractionRepositories, ThingRepository.class)
+        .getAbstractionItemsByMetamodelType(MetamodelType.API)
         .forEach(
             thing -> stores.add(storeDeducer.deduceStoreFromThing(thing, serviceModelRepository)));
 

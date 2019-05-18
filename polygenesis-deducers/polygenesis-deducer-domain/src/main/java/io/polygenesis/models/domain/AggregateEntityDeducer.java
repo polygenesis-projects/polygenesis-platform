@@ -20,9 +20,9 @@
 
 package io.polygenesis.models.domain;
 
+import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
-import io.polygenesis.core.Thing;
 import io.polygenesis.core.data.DataArray;
 import io.polygenesis.core.data.DataGroup;
 import java.util.LinkedHashSet;
@@ -129,7 +129,6 @@ public class AggregateEntityDeducer {
     DataGroup dataGroup = aggregateEntity.getData();
 
     return new DataArray(
-        dataGroup.getDataSource(),
         dataGroup.getVariableName(),
         dataGroup.getDataBusinessType(),
         dataGroup.getDataValidator(),

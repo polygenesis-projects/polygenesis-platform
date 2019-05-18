@@ -25,15 +25,15 @@ import java.util.Optional;
 import java.util.Set;
 
 /** @author Christos Tsakostas */
-public class AnotherTestMetamodelRepository implements MetamodelRepository<Thing> {
+public class AnotherTestMetamodelRepository implements MetamodelRepository<AnotherTestMetamodel> {
 
   @Override
-  public Set<Thing> getItems() {
+  public Set<AnotherTestMetamodel> getItems() {
     return null;
   }
 
   @Override
-  public Optional<Thing> getItemByObjectName(ObjectName objectName) {
+  public Optional<AnotherTestMetamodel> getItemByObjectName(ObjectName objectName) {
     return Optional.empty();
   }
 }

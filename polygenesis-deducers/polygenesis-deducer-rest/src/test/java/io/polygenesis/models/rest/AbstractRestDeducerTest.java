@@ -20,13 +20,13 @@
 
 package io.polygenesis.models.rest;
 
-import io.polygenesis.core.Function;
-import io.polygenesis.core.FunctionName;
+import io.polygenesis.abstraction.thing.Function;
+import io.polygenesis.abstraction.thing.FunctionName;
+import io.polygenesis.abstraction.thing.Thing;
+import io.polygenesis.abstraction.thing.ThingBuilder;
+import io.polygenesis.abstraction.thing.ThingName;
 import io.polygenesis.core.Goal;
 import io.polygenesis.core.GoalType;
-import io.polygenesis.core.Thing;
-import io.polygenesis.core.ThingBuilder;
-import io.polygenesis.core.ThingName;
 import java.util.LinkedHashSet;
 
 /**

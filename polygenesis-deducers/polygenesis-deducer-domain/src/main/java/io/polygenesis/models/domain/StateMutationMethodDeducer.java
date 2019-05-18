@@ -22,13 +22,13 @@ package io.polygenesis.models.domain;
 
 import static io.polygenesis.models.domain.PropertyType.AGGREGATE_ENTITY_COLLECTION;
 
+import io.polygenesis.abstraction.thing.Function;
+import io.polygenesis.abstraction.thing.FunctionName;
+import io.polygenesis.abstraction.thing.ReturnValue;
+import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.Function;
-import io.polygenesis.core.FunctionName;
 import io.polygenesis.core.Goal;
 import io.polygenesis.core.GoalType;
-import io.polygenesis.core.ReturnValue;
-import io.polygenesis.core.Thing;
 import java.util.LinkedHashSet;
 import java.util.Set;
 

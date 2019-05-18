@@ -20,9 +20,9 @@
 
 package io.polygenesis.generators.java.implementations;
 
+import io.polygenesis.abstraction.thing.FunctionProvider;
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.FunctionProvider;
 import io.polygenesis.generators.java.skeletons.MethodRepresentation;
 import java.util.HashMap;
 import java.util.Map;

@@ -20,10 +20,11 @@
 
 package io.polygenesis.models.rest;
 
+import io.polygenesis.abstraction.thing.ThingRepository;
 import io.polygenesis.commons.valueobjects.PackageName;
+import io.polygenesis.core.AbstractionRepository;
 import io.polygenesis.core.CoreRegistry;
 import io.polygenesis.core.MetamodelRepository;
-import io.polygenesis.core.ThingRepository;
 import io.polygenesis.models.api.ServiceMetamodelRepository;
 import java.util.Set;
 
@@ -62,11 +63,13 @@ public class RestDeducerImpl implements RestDeducer {
   @SuppressWarnings("rawtypes")
   @Override
   public RestMetamodelRepository deduce(
-      ThingRepository thingRepository, Set<MetamodelRepository> modelRepositories) {
+      Set<AbstractionRepository> abstractionRepositories,
+      Set<MetamodelRepository> modelRepositories) {
 
     return new RestMetamodelRepository(
         resourceDeducer.deduceFrom(
-            thingRepository,
+            CoreRegistry.getAbstractionRepositoryResolver()
+                .resolve(abstractionRepositories, ThingRepository.class),
             CoreRegistry.getMetamodelRepositoryResolver()
                 .resolve(modelRepositories, ServiceMetamodelRepository.class),
             rootPackageName));

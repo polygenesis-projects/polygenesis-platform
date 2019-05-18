@@ -20,8 +20,8 @@
 
 package io.polygenesis.deducers.apiimpl;
 
+import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.commons.valueobjects.ObjectName;
-import io.polygenesis.core.Thing;
 import io.polygenesis.models.apiimpl.DomainEntityConverter;
 import io.polygenesis.models.domain.AggregateEntityCollection;
 import io.polygenesis.models.domain.AggregateRoot;

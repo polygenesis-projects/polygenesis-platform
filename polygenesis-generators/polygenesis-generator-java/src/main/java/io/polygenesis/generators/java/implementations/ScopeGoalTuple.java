@@ -20,7 +20,7 @@
 
 package io.polygenesis.generators.java.implementations;
 
-import io.polygenesis.core.ThingType;
+import io.polygenesis.abstraction.thing.ThingType;
 import java.util.Objects;
 
 /**

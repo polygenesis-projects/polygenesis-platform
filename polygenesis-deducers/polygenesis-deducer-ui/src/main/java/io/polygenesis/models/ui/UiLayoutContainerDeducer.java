@@ -20,9 +20,9 @@
 
 package io.polygenesis.models.ui;
 
+import io.polygenesis.core.AbstractionRepository;
 import io.polygenesis.core.Deducer;
 import io.polygenesis.core.MetamodelRepository;
-import io.polygenesis.core.ThingRepository;
 import io.polygenesis.models.ui.container.LayoutContainer;
 import java.util.Set;
 
@@ -55,7 +55,8 @@ public class UiLayoutContainerDeducer implements Deducer<UiLayoutContainerMetamo
   @SuppressWarnings("rawtypes")
   @Override
   public UiLayoutContainerMetamodelRepository deduce(
-      ThingRepository thingRepository, Set<MetamodelRepository> modelRepositories) {
+      Set<AbstractionRepository> abstractionRepositories,
+      Set<MetamodelRepository> modelRepositories) {
 
     Set<LayoutContainer> layoutContainers = layoutDeducer.deduceLayoutsFromFeatures();
 

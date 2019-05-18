@@ -20,19 +20,9 @@
 
 package io.polygenesis.core;
 
-import io.polygenesis.commons.valueobjects.ObjectName;
-
 /**
- * Contract for PolyGenesis Metamodels.
+ * Contract for Metamodels.
  *
  * @author Christos Tsakostas
  */
-public interface Metamodel {
-
-  /**
-   * Gets object name.
-   *
-   * @return the object name
-   */
-  ObjectName getObjectName();
-}
+public interface Metamodel extends Nameable {}

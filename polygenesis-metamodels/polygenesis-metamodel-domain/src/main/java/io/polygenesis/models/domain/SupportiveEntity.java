@@ -26,7 +26,6 @@ import io.polygenesis.core.Metamodel;
 import io.polygenesis.core.data.Data;
 import io.polygenesis.core.data.DataBusinessType;
 import io.polygenesis.core.data.DataGroup;
-import io.polygenesis.core.data.DataSource;
 import io.polygenesis.core.data.DataValidator;
 import io.polygenesis.core.data.VariableName;
 import java.util.LinkedHashSet;
@@ -93,7 +92,6 @@ public class SupportiveEntity extends BaseDomainEntity
     Set<Data> models = new LinkedHashSet<>();
 
     return new DataGroup(
-        DataSource.user(),
         new VariableName(getObjectName().getText()),
         DataBusinessType.ANY,
         DataValidator.empty(),
