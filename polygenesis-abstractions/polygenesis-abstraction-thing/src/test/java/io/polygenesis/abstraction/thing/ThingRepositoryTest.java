@@ -23,9 +23,7 @@ package io.polygenesis.abstraction.thing;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.polygenesis.commons.valueobjects.ObjectName;
-import io.polygenesis.core.Goal;
-import io.polygenesis.core.GoalType;
-import io.polygenesis.core.MetamodelType;
+import io.polygenesis.core.AbstractionScope;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import org.junit.Test;
@@ -38,8 +36,7 @@ public class ThingRepositoryTest {
     ThingRepository repository = new ThingRepositoryImpl(new LinkedHashSet<>());
 
     assertThat(repository).isNotNull();
-    assertThat(repository.getAbstractionItemsByMetamodelType(MetamodelType.API).size())
-        .isEqualTo(0);
+    assertThat(repository.getAbstractionItemsByScope(AbstractionScope.api()).size()).isEqualTo(0);
   }
 
   @Test
@@ -56,14 +53,12 @@ public class ThingRepositoryTest {
   private Set<Thing> createThings() {
     Set<Thing> things = new LinkedHashSet<>();
 
-    Thing someThing = ThingBuilder.generic().setThingName(new ThingName("someThing")).createThing();
+    Thing someThing =
+        ThingBuilder.endToEnd().setThingName(new ThingName("someThing")).createThing();
 
     Function someFunction =
         new Function(
-            someThing,
-            new Goal(GoalType.CREATE),
-            new FunctionName("someFunction"),
-            new LinkedHashSet<>());
+            someThing, Purpose.create(), new FunctionName("someFunction"), new LinkedHashSet<>());
 
     someThing.addFunction(someFunction);
 

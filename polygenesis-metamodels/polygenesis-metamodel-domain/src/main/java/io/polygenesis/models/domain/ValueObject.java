@@ -20,8 +20,8 @@
 
 package io.polygenesis.models.domain;
 
-import io.polygenesis.core.data.Data;
-import io.polygenesis.core.data.DataGroup;
+import io.polygenesis.abstraction.data.Data;
+import io.polygenesis.abstraction.data.DataGroup;
 
 /**
  * The type Value object.
@@ -41,6 +41,19 @@ public class ValueObject extends BaseProperty<DataGroup> {
    */
   public ValueObject(DataGroup data) {
     super(PropertyType.VALUE_OBJECT, data);
+  }
+
+  // ===============================================================================================
+  // STATE MUTATION
+  // ===============================================================================================
+
+  /**
+   * With variable name equal to object name value object.
+   *
+   * @return the value object
+   */
+  public ValueObject withVariableNameEqualToObjectName() {
+    return new ValueObject(getData().withVariableNameEqualToObjectName());
   }
 
   // ===============================================================================================

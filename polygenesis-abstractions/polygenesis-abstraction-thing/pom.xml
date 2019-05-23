@@ -13,10 +13,16 @@
   <artifactId>polygenesis-abstraction-thing</artifactId>
 
   <dependencies>
-    <!--POLYGENESIS CORE-->
+    <!--CORE-->
     <dependency>
       <groupId>io.polygenesis</groupId>
       <artifactId>polygenesis-core</artifactId>
+    </dependency>
+
+    <!--ABSTRACTION DATA-->
+    <dependency>
+      <groupId>io.polygenesis.abstractions</groupId>
+      <artifactId>polygenesis-abstraction-data</artifactId>
     </dependency>
 
     <!--TEST-->

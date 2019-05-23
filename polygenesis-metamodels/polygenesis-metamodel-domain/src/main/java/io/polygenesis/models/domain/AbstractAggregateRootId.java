@@ -20,9 +20,9 @@
 
 package io.polygenesis.models.domain;
 
+import io.polygenesis.abstraction.data.Data;
+import io.polygenesis.abstraction.data.DataGroup;
 import io.polygenesis.commons.assertion.Assertion;
-import io.polygenesis.core.data.Data;
-import io.polygenesis.core.data.DataGroup;
 import java.util.Objects;
 
 /**
@@ -46,7 +46,7 @@ public class AbstractAggregateRootId extends BaseProperty<DataGroup> {
    * Instantiates a new Abstract aggregate root id.
    *
    * @param data the data
-   * @param genericTypeParameter the generic type parameter
+   * @param genericTypeParameter the endToEnd type parameter
    */
   public AbstractAggregateRootId(DataGroup data, GenericTypeParameter genericTypeParameter) {
     super(PropertyType.ABSTRACT_AGGREGATE_ROOT_ID, data);
@@ -58,9 +58,9 @@ public class AbstractAggregateRootId extends BaseProperty<DataGroup> {
   // ===============================================================================================
 
   /**
-   * Gets generic type parameter.
+   * Gets endToEnd type parameter.
    *
-   * @return the generic type parameter
+   * @return the endToEnd type parameter
    */
   public GenericTypeParameter getGenericTypeParameter() {
     return genericTypeParameter;
@@ -71,9 +71,9 @@ public class AbstractAggregateRootId extends BaseProperty<DataGroup> {
   // ===============================================================================================
 
   /**
-   * Sets generic type parameter.
+   * Sets endToEnd type parameter.
    *
-   * @param genericTypeParameter the generic type parameter
+   * @param genericTypeParameter the endToEnd type parameter
    */
   private void setGenericTypeParameter(GenericTypeParameter genericTypeParameter) {
     Assertion.isNotNull(genericTypeParameter, "genericTypeParameter is required");

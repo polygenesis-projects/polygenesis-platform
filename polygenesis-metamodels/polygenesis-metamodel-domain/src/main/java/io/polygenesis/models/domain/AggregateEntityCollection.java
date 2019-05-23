@@ -20,9 +20,9 @@
 
 package io.polygenesis.models.domain;
 
+import io.polygenesis.abstraction.data.Data;
+import io.polygenesis.abstraction.data.DataArray;
 import io.polygenesis.commons.assertion.Assertion;
-import io.polygenesis.core.data.Data;
-import io.polygenesis.core.data.DataArray;
 import java.util.Objects;
 
 /**

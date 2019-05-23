@@ -20,25 +20,25 @@
 
 package io.polygenesis.models.reactivestate;
 
+import io.polygenesis.abstraction.data.DataPrimitive;
+import io.polygenesis.abstraction.data.DataPurpose;
+import io.polygenesis.abstraction.data.PrimitiveType;
+import io.polygenesis.abstraction.data.VariableName;
+import io.polygenesis.abstraction.thing.CqsType;
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.abstraction.thing.FunctionName;
+import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.ReturnValue;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.ThingBuilder;
 import io.polygenesis.abstraction.thing.ThingName;
-import io.polygenesis.core.Goal;
-import io.polygenesis.core.GoalType;
-import io.polygenesis.core.data.DataBusinessType;
-import io.polygenesis.core.data.DataPrimitive;
-import io.polygenesis.core.data.PrimitiveType;
-import io.polygenesis.core.data.VariableName;
 import java.util.LinkedHashSet;
 
 /** @author Christos Tsakostas */
 public abstract class AbstractReactiveStateTest {
 
   protected Thing createThing() {
-    Thing thing = ThingBuilder.generic().setThingName(new ThingName("someThing")).createThing();
+    Thing thing = ThingBuilder.endToEnd().setThingName(new ThingName("someThing")).createThing();
 
     // =============================================================================================
     // CREATE
@@ -46,31 +46,31 @@ public abstract class AbstractReactiveStateTest {
     Function createFunction =
         new Function(
             thing,
-            new Goal(GoalType.CREATE),
+            Purpose.create(),
             new FunctionName("createSomeThing"),
             new ReturnValue(
                 new DataPrimitive(
                     PrimitiveType.STRING,
                     new VariableName("response"),
                     new LinkedHashSet<>(),
-                    DataBusinessType.ANY)));
+                    DataPurpose.any())));
     thing.addFunction(createFunction);
 
     // =============================================================================================
-    // CUSTOM GOAL
+    // Custom Purpose
     // =============================================================================================
-    Function customGoalFunction =
+    Function customPurposeFunction =
         new Function(
             thing,
-            new Goal(GoalType.VALIDATE),
+            Purpose.custom("validate", CqsType.COMMAND),
             new FunctionName("createSomeThing"),
             new ReturnValue(
                 new DataPrimitive(
                     PrimitiveType.STRING,
                     new VariableName("response"),
                     new LinkedHashSet<>(),
-                    DataBusinessType.ANY)));
-    thing.addFunction(customGoalFunction);
+                    DataPurpose.any())));
+    thing.addFunction(customPurposeFunction);
 
     return thing;
   }

@@ -20,9 +20,10 @@
 
 package io.polygenesis.generators.java.exporters.api;
 
+import io.polygenesis.abstraction.data.Data;
+import io.polygenesis.abstraction.data.DataGroup;
+import io.polygenesis.abstraction.data.PrimitiveType;
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.data.Data;
-import io.polygenesis.core.data.DataGroup;
 import io.polygenesis.generators.commons.representations.FieldRepresentation;
 import io.polygenesis.generators.commons.representations.ParameterRepresentation;
 import io.polygenesis.generators.java.skeletons.AbstractClassRepresentable;
@@ -167,6 +168,36 @@ public class DtoClassRepresentable extends AbstractClassRepresentable<Dto> {
         || source.getDtoType().equals(DtoType.API_PAGED_COLLECTION_RESPONSE)) {
       imports.add("java.util.List");
     }
+
+    source
+        .getDataGroup()
+        .getModels()
+        .stream()
+        .filter(Data::isDataPrimitive)
+        .map(Data::getAsDataPrimitive)
+        .filter(dataPrimitive -> dataPrimitive.getPrimitiveType().equals(PrimitiveType.DECIMAL))
+        .findFirst()
+        .ifPresent(model -> imports.add("java.math.BigDecimal"));
+
+    source
+        .getDataGroup()
+        .getModels()
+        .stream()
+        .filter(Data::isDataPrimitive)
+        .map(Data::getAsDataPrimitive)
+        .filter(dataPrimitive -> dataPrimitive.getPrimitiveType().equals(PrimitiveType.UUID))
+        .findFirst()
+        .ifPresent(model -> imports.add("java.util.UUID"));
+
+    source
+        .getDataGroup()
+        .getModels()
+        .stream()
+        .filter(Data::isDataPrimitive)
+        .map(Data::getAsDataPrimitive)
+        .filter(dataPrimitive -> dataPrimitive.getPrimitiveType().equals(PrimitiveType.DATETIME))
+        .findFirst()
+        .ifPresent(model -> imports.add("java.time.LocalDateTime"));
 
     source
         .getDataGroup()

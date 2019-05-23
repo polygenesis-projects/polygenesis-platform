@@ -22,9 +22,9 @@ package io.polygenesis.models.api;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import io.polygenesis.abstraction.thing.CqsType;
 import io.polygenesis.abstraction.thing.ThingName;
 import io.polygenesis.commons.valueobjects.PackageName;
-import io.polygenesis.core.CqsType;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;

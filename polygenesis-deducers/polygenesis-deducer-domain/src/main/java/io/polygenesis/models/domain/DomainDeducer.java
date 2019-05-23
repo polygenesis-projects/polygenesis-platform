@@ -26,6 +26,7 @@ import io.polygenesis.core.AbstractionRepository;
 import io.polygenesis.core.CoreRegistry;
 import io.polygenesis.core.Deducer;
 import io.polygenesis.core.MetamodelRepository;
+import io.polygenesis.models.domain.aggregateroot.AggregateRootDeducer;
 import java.util.Set;
 
 /**

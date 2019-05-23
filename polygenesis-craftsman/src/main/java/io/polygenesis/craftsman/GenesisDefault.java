@@ -29,7 +29,9 @@ import io.polygenesis.deducers.apiimpl.ServiceImplementationDeducerFactory;
 import io.polygenesis.deducers.sql.SqlIndexDeducerFactory;
 import io.polygenesis.deducers.sql.SqlTableDeducerFactory;
 import io.polygenesis.generators.angular.AngularGeneratorFactory;
+import io.polygenesis.generators.java.exporters.api.JavaApiGenerator;
 import io.polygenesis.generators.java.exporters.api.JavaApiGeneratorFactory;
+import io.polygenesis.generators.java.exporters.apidetail.JavaApiDetailGenerator;
 import io.polygenesis.generators.java.exporters.apidetail.JavaApiDetailGeneratorFactory;
 import io.polygenesis.generators.java.exporters.domain.JavaDomainGeneratorFactory;
 import io.polygenesis.generators.java.exporters.domainserviceimpl.DomainServiceImplementationGeneratorFactory;
@@ -39,7 +41,8 @@ import io.polygenesis.generators.sql.SqlGeneratorFactory;
 import io.polygenesis.models.api.ApiDeducerFactory;
 import io.polygenesis.models.domain.DomainDeducerFactory;
 import io.polygenesis.models.domain.DomainServiceDeducerFactory;
-import io.polygenesis.models.domain.SupportiveEntityDeducerFactory;
+import io.polygenesis.models.domain.projection.ProjectionDeducerFactory;
+import io.polygenesis.models.domain.supportiveentity.SupportiveEntityDeducerFactory;
 import io.polygenesis.models.reactivestate.ReactiveStateFactory;
 import io.polygenesis.models.rest.RestDeducerFactory;
 import io.polygenesis.models.ui.UiFeatureDeducerFactory;
@@ -95,6 +98,7 @@ public class GenesisDefault {
             DomainServiceDeducerFactory.newInstance(packageName),
             DomainEntityConverterDeducerFactory.newInstance(),
             SupportiveEntityDeducerFactory.newInstance(packageName),
+            ProjectionDeducerFactory.newInstance(packageName),
             ServiceImplementationDeducerFactory.newInstance(),
             RestDeducerFactory.newInstance(packageName),
             SqlTableDeducerFactory.newInstance(),
@@ -123,10 +127,9 @@ public class GenesisDefault {
 
     return new LinkedHashSet<>(
         Arrays.asList(
-            JavaApiGeneratorFactory.newInstance(
-                Paths.get(exportPath, projectFolder, modulePrefix + "-" + API)),
-            JavaApiDetailGeneratorFactory.newInstance(
-                Paths.get(exportPath, projectFolder, modulePrefix + "-" + API_DETAIL), packageName),
+            javaApiGenerator(exportPath, projectFolder, modulePrefix + "-" + API),
+            javaApiDetailGenerator(
+                exportPath, projectFolder, modulePrefix + "-" + API_DETAIL, rootPackageName),
             JavaApiRestGeneratorFactory.newInstance(
                 Paths.get(
                     exportPath,
@@ -160,6 +163,36 @@ public class GenesisDefault {
                     modulePrefix + "-" + DOMAIN_DETAILS,
                     modulePrefix + "-" + DOMAIN_DETAIL_REPOSITORY_SPRING_DATA_JPA),
                 tablePrefix)));
+  }
+
+  /**
+   * Java api generator java api generator.
+   *
+   * @param exportPath the export path
+   * @param projectFolder the project folder
+   * @param modulePrefix the module prefix
+   * @return the java api generator
+   */
+  public static JavaApiGenerator javaApiGenerator(
+      String exportPath, String projectFolder, String modulePrefix) {
+    return JavaApiGeneratorFactory.newInstance(
+        Paths.get(exportPath, projectFolder, modulePrefix + "-" + API));
+  }
+
+  /**
+   * Java api detail generator java api detail generator.
+   *
+   * @param exportPath the export path
+   * @param projectFolder the project folder
+   * @param modulePrefix the module prefix
+   * @param rootPackageName the root package name
+   * @return the java api detail generator
+   */
+  public static JavaApiDetailGenerator javaApiDetailGenerator(
+      String exportPath, String projectFolder, String modulePrefix, String rootPackageName) {
+    return JavaApiDetailGeneratorFactory.newInstance(
+        Paths.get(exportPath, projectFolder, modulePrefix + "-" + API_DETAIL),
+        new PackageName(rootPackageName));
   }
 
   /**

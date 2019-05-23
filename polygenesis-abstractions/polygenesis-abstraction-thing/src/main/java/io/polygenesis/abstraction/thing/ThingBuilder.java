@@ -21,6 +21,8 @@
 package io.polygenesis.abstraction.thing;
 
 import io.polygenesis.commons.valueobjects.ContextName;
+import io.polygenesis.core.AbstractionScope;
+import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -36,20 +38,68 @@ public class ThingBuilder {
   // ===============================================================================================
 
   /**
-   * Prepare thing builder.
+   * End to end thing builder.
    *
    * @return the thing builder
    */
-  public static ThingBuilder generic() {
-    return new ThingBuilder();
+  public static ThingBuilder endToEnd() {
+    return new ThingBuilder(
+        new LinkedHashSet<>(
+            Arrays.asList(
+                AbstractionScope.api(),
+                AbstractionScope.apiDetail(),
+                AbstractionScope.apiClientRest(),
+                AbstractionScope.domainAggregateRoot())));
   }
 
-  // ===============================================================================================
-  // CONSTRUCTOR(S)
-  // ===============================================================================================
+  /**
+   * Projection thing builder.
+   *
+   * @return the thing builder
+   */
+  public static ThingBuilder projection() {
+    return new ThingBuilder(
+        new LinkedHashSet<>(Arrays.asList(AbstractionScope.api(), AbstractionScope.projection())));
+  }
 
-  private ThingBuilder() {
-    super();
+  /**
+   * Supportive entity thing builder.
+   *
+   * @return the thing builder
+   */
+  public static ThingBuilder supportiveEntity() {
+    return new ThingBuilder(
+        new LinkedHashSet<>(Arrays.asList(AbstractionScope.domainSupportiveEntity())));
+  }
+
+  /**
+   * Domain service thing builder.
+   *
+   * @return the thing builder
+   */
+  public static ThingBuilder domainService() {
+    return new ThingBuilder(new LinkedHashSet<>(Arrays.asList(AbstractionScope.domainService())));
+  }
+
+  /**
+   * Domain aggregate entity thing builder.
+   *
+   * @return the thing builder
+   */
+  public static ThingBuilder domainAggregateEntity() {
+    return new ThingBuilder(
+        new LinkedHashSet<>(Arrays.asList(AbstractionScope.domainAggregateEntity())));
+  }
+
+  /**
+   * Subscriber thing builder.
+   *
+   * @return the thing builder
+   */
+  public static ThingBuilder subscriber() {
+    return new ThingBuilder(
+        new LinkedHashSet<>(
+            Arrays.asList(AbstractionScope.api(), AbstractionScope.apiClientMessaging())));
   }
 
   // ===============================================================================================
@@ -58,10 +108,18 @@ public class ThingBuilder {
 
   private String contextName;
   private ThingName thingName;
-  private ThingType thingType = ThingType.DOMAIN_AGGREGATE_ROOT;
+  private Set<AbstractionScope> abstractionScopes;
   private Set<ThingProperty> thingProperties = new LinkedHashSet<>();
   private Boolean multiTenant = false;
   private Thing parentThing;
+
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
+  private ThingBuilder(Set<AbstractionScope> abstractionScopes) {
+    this.abstractionScopes = abstractionScopes;
+  }
 
   // ===============================================================================================
   // SETTERS
@@ -88,13 +146,13 @@ public class ThingBuilder {
   }
 
   /**
-   * Sets thing scope type.
+   * Sets abstraction scopes.
    *
-   * @param thingType the thing scope type
-   * @return the thing scope type
+   * @param abstractionScopes the abstraction scopes
+   * @return the abstraction scopes
    */
-  public ThingBuilder setThingType(ThingType thingType) {
-    this.thingType = thingType;
+  public ThingBuilder setAbstractionScopes(Set<AbstractionScope> abstractionScopes) {
+    this.abstractionScopes = abstractionScopes;
     return this;
   }
 
@@ -142,7 +200,7 @@ public class ThingBuilder {
    */
   public Thing createThing() {
     return new Thing(
-        thingType,
+        abstractionScopes,
         contextName != null ? new ContextName(contextName) : ContextName.defaultContext(),
         thingName,
         thingProperties,

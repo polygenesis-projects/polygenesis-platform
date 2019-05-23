@@ -20,9 +20,12 @@
 
 package io.polygenesis.deducers.apiimpl;
 
+import io.polygenesis.abstraction.data.Data;
+import io.polygenesis.abstraction.data.DataGroup;
 import io.polygenesis.abstraction.thing.Argument;
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.abstraction.thing.FunctionName;
+import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.ReturnValue;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.ThingBuilder;
@@ -31,13 +34,10 @@ import io.polygenesis.abstraction.thing.ThingRepository;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.core.AbstractionRepository;
+import io.polygenesis.core.AbstractionScope;
 import io.polygenesis.core.CoreRegistry;
 import io.polygenesis.core.Deducer;
-import io.polygenesis.core.Goal;
 import io.polygenesis.core.MetamodelRepository;
-import io.polygenesis.core.MetamodelType;
-import io.polygenesis.core.data.Data;
-import io.polygenesis.core.data.DataGroup;
 import io.polygenesis.models.api.Dto;
 import io.polygenesis.models.api.Service;
 import io.polygenesis.models.api.ServiceMetamodelRepository;
@@ -108,7 +108,7 @@ public class DomainEntityConverterDeducer extends BaseApiImplementationDeducer
       ServiceMetamodelRepository serviceModelRepository,
       DomainMetamodelRepository domainModelRepository) {
     thingRepository
-        .getAbstractionItemsByMetamodelType(MetamodelType.API)
+        .getAbstractionItemsByScope(AbstractionScope.api())
         .forEach(
             thing -> {
               Optional<BaseDomainEntity> optionalDomainObject =
@@ -186,27 +186,30 @@ public class DomainEntityConverterDeducer extends BaseApiImplementationDeducer
    */
   private void makeValueObjectConversion(
       Set<DomainEntityConverterMethod> methods, Dto dto, ValueObject valueObject) {
-    Thing thing = ThingBuilder.generic().setThingName(new ThingName("Converter")).createThing();
+    Thing thing = ThingBuilder.endToEnd().setThingName(new ThingName("Converter")).createThing();
+
+    Dto dtoToUse = dto.withVariableNameEqualToObjectName();
+    ValueObject valueObjectToUse = valueObject.withVariableNameEqualToObjectName();
 
     Function functionToVo =
         new Function(
             thing,
-            new Goal("CONVERT_DTO_TO_VO"),
+            Purpose.convertDtoToVo(),
             new FunctionName("convertToVo"),
-            new LinkedHashSet<>(Arrays.asList(new Argument(dto.getDataGroup()))),
-            new ReturnValue(valueObject.getData()));
+            new LinkedHashSet<>(Arrays.asList(new Argument(dtoToUse.getDataGroup()))),
+            new ReturnValue(valueObjectToUse.getData()));
 
-    methods.add(new DomainEntityConverterMethod(functionToVo, dto, valueObject));
+    methods.add(new DomainEntityConverterMethod(functionToVo, dtoToUse, valueObjectToUse));
 
     Function functionToDto =
         new Function(
             thing,
-            new Goal("CONVERT_VO_TO_DTO"),
+            Purpose.convertVoToDto(),
             new FunctionName("convertToDto"),
-            new LinkedHashSet<>(Arrays.asList(new Argument(valueObject.getData()))),
+            new LinkedHashSet<>(Arrays.asList(new Argument(valueObjectToUse.getData()))),
             new ReturnValue(dto.getDataGroup()));
 
-    methods.add(new DomainEntityConverterMethod(functionToDto, valueObject, dto));
+    methods.add(new DomainEntityConverterMethod(functionToDto, valueObjectToUse, dto));
   }
 
   /**
@@ -228,8 +231,8 @@ public class DomainEntityConverterDeducer extends BaseApiImplementationDeducer
                 .stream()
                 .filter(
                     method ->
-                        method.getFunction().getGoal().isFetchCollection()
-                            || method.getFunction().getGoal().isFetchPagedCollection())
+                        method.getFunction().getPurpose().isFetchCollection()
+                            || method.getFunction().getPurpose().isFetchPagedCollection())
                 .forEach(
                     method -> {
                       Dto dtoCollectionRecord =
@@ -256,12 +259,12 @@ public class DomainEntityConverterDeducer extends BaseApiImplementationDeducer
       Dto dtoCollectionRecord,
       BaseDomainEntity domainObject) {
 
-    Thing thing = ThingBuilder.generic().setThingName(new ThingName("Converter")).createThing();
+    Thing thing = ThingBuilder.endToEnd().setThingName(new ThingName("Converter")).createThing();
 
     Function function =
         new Function(
             thing,
-            new Goal("CONVERT_DOMAIN_OBJECT_TO_COLLECTION_RECORD"),
+            Purpose.convertDomainObjectToCollectionRecord(),
             new FunctionName(
                 String.format(
                     "convertTo%s",

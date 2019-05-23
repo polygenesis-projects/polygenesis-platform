@@ -20,7 +20,7 @@
 
 package io.polygenesis.generators.java.skeletons;
 
-import io.polygenesis.core.data.Data;
+import io.polygenesis.abstraction.data.Data;
 
 /**
  * The type Abstract representable.

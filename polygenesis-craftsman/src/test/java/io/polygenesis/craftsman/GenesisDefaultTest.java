@@ -45,7 +45,7 @@ public class GenesisDefaultTest {
 
   @Test
   public void javaDeducers() {
-    assertThat(GenesisDefault.javaDeducers("rootPackageName").size()).isEqualTo(9);
+    assertThat(GenesisDefault.javaDeducers("rootPackageName").size()).isEqualTo(10);
   }
 
   @Test

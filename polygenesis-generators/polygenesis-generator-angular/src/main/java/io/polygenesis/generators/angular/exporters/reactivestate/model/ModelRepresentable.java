@@ -20,8 +20,8 @@
 
 package io.polygenesis.generators.angular.exporters.reactivestate.model;
 
+import io.polygenesis.abstraction.data.DataGroup;
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.data.DataGroup;
 import io.polygenesis.generators.angular.skeletons.FromDataTypeToTypescriptConverter;
 import io.polygenesis.generators.angular.skeletons.model.ModelRepresentation;
 import io.polygenesis.generators.commons.representations.FieldRepresentation;

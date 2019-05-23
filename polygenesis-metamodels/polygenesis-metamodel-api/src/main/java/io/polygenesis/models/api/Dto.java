@@ -20,10 +20,10 @@
 
 package io.polygenesis.models.api;
 
+import io.polygenesis.abstraction.data.Data;
+import io.polygenesis.abstraction.data.DataArray;
+import io.polygenesis.abstraction.data.DataGroup;
 import io.polygenesis.commons.assertion.Assertion;
-import io.polygenesis.core.data.Data;
-import io.polygenesis.core.data.DataArray;
-import io.polygenesis.core.data.DataGroup;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -57,6 +57,19 @@ public class Dto {
     setDtoType(dtoType);
     setDataGroup(dataGroup);
     setVirtual(virtual);
+  }
+
+  // ===============================================================================================
+  // MUTATION
+  // ===============================================================================================
+
+  /**
+   * With variable name equal to object name dto.
+   *
+   * @return the dto
+   */
+  public Dto withVariableNameEqualToObjectName() {
+    return new Dto(getDtoType(), getDataGroup().withVariableNameEqualToObjectName(), getVirtual());
   }
 
   // ===============================================================================================

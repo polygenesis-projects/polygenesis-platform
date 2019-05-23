@@ -20,11 +20,10 @@
 
 package io.polygenesis.generators.java.implementations.rest;
 
-import io.polygenesis.abstraction.thing.ThingType;
+import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.commons.freemarker.FreemarkerService;
-import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.GoalType;
-import io.polygenesis.generators.java.implementations.ScopeGoalTuple;
+import io.polygenesis.core.AbstractionScope;
+import io.polygenesis.generators.java.implementations.ScopePurposeTuple;
 import io.polygenesis.generators.java.skeletons.MethodRepresentation;
 import io.polygenesis.models.rest.Endpoint;
 import java.util.HashMap;
@@ -43,42 +42,43 @@ public class EndpointImplementationRegistry {
   // ===============================================================================================
 
   @SuppressWarnings("CPD-START")
-  private static Map<ScopeGoalTuple, EndpointImplementor> scopeAndGoalMap = new HashMap<>();
+  private static Map<ScopePurposeTuple, EndpointImplementor> scopeAndPurposeMap = new HashMap<>();
 
   static {
     // AGGREGATE ROOT
-    scopeAndGoalMap.put(
-        new ScopeGoalTuple(ThingType.DOMAIN_AGGREGATE_ROOT, GoalType.CREATE.name()),
+    scopeAndPurposeMap.put(
+        new ScopePurposeTuple(AbstractionScope.domainAggregateRoot(), Purpose.create()),
         new CreateAggregateRoot());
 
-    scopeAndGoalMap.put(
-        new ScopeGoalTuple(ThingType.DOMAIN_AGGREGATE_ROOT, GoalType.MODIFY.name()),
+    scopeAndPurposeMap.put(
+        new ScopePurposeTuple(AbstractionScope.domainAggregateRoot(), Purpose.modify()),
         new UpdateAggregateRoot());
 
-    scopeAndGoalMap.put(
-        new ScopeGoalTuple(ThingType.DOMAIN_AGGREGATE_ROOT, GoalType.FETCH_ONE.name()),
+    scopeAndPurposeMap.put(
+        new ScopePurposeTuple(AbstractionScope.domainAggregateRoot(), Purpose.fetchOne()),
         new FetchOneAggregateRoot());
 
-    scopeAndGoalMap.put(
-        new ScopeGoalTuple(ThingType.DOMAIN_AGGREGATE_ROOT, GoalType.FETCH_PAGED_COLLECTION.name()),
+    scopeAndPurposeMap.put(
+        new ScopePurposeTuple(
+            AbstractionScope.domainAggregateRoot(), Purpose.fetchPagedCollection()),
         new FetchPagedCollectionAggregateRoot());
 
     // AGGREGATE ENTITY
-    scopeAndGoalMap.put(
-        new ScopeGoalTuple(ThingType.DOMAIN_AGGREGATE_ENTITY, GoalType.CREATE.name()),
+    scopeAndPurposeMap.put(
+        new ScopePurposeTuple(AbstractionScope.domainAggregateEntity(), Purpose.create()),
         new CreateAggregateEntity());
 
-    scopeAndGoalMap.put(
-        new ScopeGoalTuple(ThingType.DOMAIN_AGGREGATE_ENTITY, GoalType.MODIFY.name()),
+    scopeAndPurposeMap.put(
+        new ScopePurposeTuple(AbstractionScope.domainAggregateEntity(), Purpose.modify()),
         new UpdateAggregateEntity());
 
-    scopeAndGoalMap.put(
-        new ScopeGoalTuple(ThingType.DOMAIN_AGGREGATE_ENTITY, GoalType.FETCH_ONE.name()),
+    scopeAndPurposeMap.put(
+        new ScopePurposeTuple(AbstractionScope.domainAggregateEntity(), Purpose.fetchOne()),
         new FetchOneAggregateEntity());
 
-    scopeAndGoalMap.put(
-        new ScopeGoalTuple(
-            ThingType.DOMAIN_AGGREGATE_ENTITY, GoalType.FETCH_PAGED_COLLECTION.name()),
+    scopeAndPurposeMap.put(
+        new ScopePurposeTuple(
+            AbstractionScope.domainAggregateEntity(), Purpose.fetchPagedCollection()),
         new FetchPagedCollectionAggregateEntity());
   }
 
@@ -101,7 +101,10 @@ public class EndpointImplementationRegistry {
       MethodRepresentation methodRepresentation) {
     if (isEndpointSupported(endpoint)) {
       return Optional.of(
-          endpointImplementorFor(endpoint)
+          endpointImplementorFor(
+                  getAbstractionScopeAsOptional(endpoint)
+                      .orElseThrow(IllegalArgumentException::new),
+                  endpoint)
               .implementationFor(freemarkerService, endpoint, methodRepresentation));
     } else {
       return Optional.empty();
@@ -115,22 +118,32 @@ public class EndpointImplementationRegistry {
    * @return the boolean
    */
   public boolean isEndpointSupported(Endpoint endpoint) {
-    return scopeAndGoalMap.containsKey(
-        new ScopeGoalTuple(
-            endpoint.getServiceMethod().getFunction().getThing().getThingType(),
-            TextConverter.toUpperUnderscore(
-                endpoint.getServiceMethod().getFunction().getGoal().getText())));
+    return getAbstractionScopeAsOptional(endpoint).isPresent();
   }
 
   // ===============================================================================================
   // PRIVATE
   // ===============================================================================================
 
-  private EndpointImplementor endpointImplementorFor(Endpoint endpoint) {
-    return scopeAndGoalMap.get(
-        new ScopeGoalTuple(
-            endpoint.getServiceMethod().getFunction().getThing().getThingType(),
-            TextConverter.toUpperUnderscore(
-                endpoint.getServiceMethod().getFunction().getGoal().getText())));
+  private Optional<AbstractionScope> getAbstractionScopeAsOptional(Endpoint endpoint) {
+    return endpoint
+        .getServiceMethod()
+        .getFunction()
+        .getThing()
+        .getAbstractionsScopes()
+        .stream()
+        .filter(
+            abstractionScope ->
+                scopeAndPurposeMap.containsKey(
+                    new ScopePurposeTuple(
+                        abstractionScope, endpoint.getServiceMethod().getFunction().getPurpose())))
+        .findFirst();
+  }
+
+  private EndpointImplementor endpointImplementorFor(
+      AbstractionScope abstractionScope, Endpoint endpoint) {
+    return scopeAndPurposeMap.get(
+        new ScopePurposeTuple(
+            abstractionScope, endpoint.getServiceMethod().getFunction().getPurpose()));
   }
 }

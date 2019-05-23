@@ -20,8 +20,8 @@
 
 package io.polygenesis.generators.java.skeletons;
 
+import io.polygenesis.abstraction.data.PrimitiveType;
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.data.PrimitiveType;
 import java.util.EnumMap;
 import java.util.stream.Stream;
 
@@ -75,5 +75,7 @@ public class FromDataTypeToJavaConverter {
     dataTypeMap.put(PrimitiveType.LONG, "Long");
     dataTypeMap.put(PrimitiveType.BOOLEAN, "Boolean");
     dataTypeMap.put(PrimitiveType.DATETIME, "LocalDateTime");
+    dataTypeMap.put(PrimitiveType.DECIMAL, "BigDecimal");
+    dataTypeMap.put(PrimitiveType.UUID, "UUID");
   }
 }

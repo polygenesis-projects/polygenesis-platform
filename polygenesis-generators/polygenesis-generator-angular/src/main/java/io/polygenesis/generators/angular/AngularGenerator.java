@@ -45,9 +45,6 @@ public class AngularGenerator extends AbstractGenerator {
   private final StoreExporter storeExporter;
   private final UiExporter uiExporter;
 
-  private ReactiveStateMetamodelRepository reactiveStateModelRepository;
-  private UiFeatureMetamodelRepository uiFeatureModelRepository;
-
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
@@ -84,7 +81,6 @@ public class AngularGenerator extends AbstractGenerator {
   @SuppressWarnings("rawtypes")
   @Override
   public void generate(Set<MetamodelRepository> modelRepositories) {
-    initializeModelRepositories(modelRepositories);
 
     Path generationPathApp = Paths.get(getGenerationPath().toString(), "app");
 
@@ -93,32 +89,14 @@ public class AngularGenerator extends AbstractGenerator {
         CoreRegistry.getMetamodelRepositoryResolver()
             .resolve(modelRepositories, UiLayoutContainerMetamodelRepository.class));
 
-    reactiveStateModelRepository
+    CoreRegistry.getMetamodelRepositoryResolver()
+        .resolve(modelRepositories, ReactiveStateMetamodelRepository.class)
         .getItems()
         .forEach(store -> storeExporter.export(generationPathApp, store));
 
-    uiFeatureModelRepository
+    CoreRegistry.getMetamodelRepositoryResolver()
+        .resolve(modelRepositories, UiFeatureMetamodelRepository.class)
         .getItems()
         .forEach(feature -> uiExporter.export(getGenerationPath(), feature));
-  }
-
-  // ===============================================================================================
-  // PRIVATE
-  // ===============================================================================================
-
-  /**
-   * Initialize model repositories.
-   *
-   * @param modelRepositories the model repositories
-   */
-  @SuppressWarnings("rawtypes")
-  private void initializeModelRepositories(Set<MetamodelRepository> modelRepositories) {
-    reactiveStateModelRepository =
-        CoreRegistry.getMetamodelRepositoryResolver()
-            .resolve(modelRepositories, ReactiveStateMetamodelRepository.class);
-
-    uiFeatureModelRepository =
-        CoreRegistry.getMetamodelRepositoryResolver()
-            .resolve(modelRepositories, UiFeatureMetamodelRepository.class);
   }
 }

@@ -20,8 +20,8 @@
 
 package io.polygenesis.generators.java.exporters.apidetail;
 
+import io.polygenesis.abstraction.data.DataGroup;
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.data.DataGroup;
 import io.polygenesis.generators.commons.representations.FieldRepresentation;
 import io.polygenesis.generators.java.skeletons.AbstractClassRepresentable;
 import io.polygenesis.generators.java.skeletons.ConstructorRepresentation;
@@ -140,7 +140,7 @@ public class ServiceImplementationClassRepresentable
             .getService()
             .getServiceMethods()
             .stream()
-            .filter(method -> method.getFunction().getGoal().isFetchPagedCollection())
+            .filter(method -> method.getFunction().getPurpose().isFetchPagedCollection())
             .findFirst();
 
     if (optionalMethodFetchPagedCollection.isPresent()) {
@@ -255,8 +255,8 @@ public class ServiceImplementationClassRepresentable
             method -> {
               imports.addAll(serviceMethodImplementationRepresentable.imports(method));
 
-              if (method.getServiceMethod().getFunction().getGoal().isFetchOne()
-                  || method.getServiceMethod().getFunction().getGoal().isModify()) {
+              if (method.getServiceMethod().getFunction().getPurpose().isFetchOne()
+                  || method.getServiceMethod().getFunction().getPurpose().isModify()) {
                 imports.add("java.util.UUID");
               }
             });

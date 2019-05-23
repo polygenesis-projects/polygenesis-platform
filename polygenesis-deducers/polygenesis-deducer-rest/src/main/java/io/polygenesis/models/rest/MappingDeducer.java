@@ -23,7 +23,6 @@ package io.polygenesis.models.rest;
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.GoalType;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -78,16 +77,15 @@ public class MappingDeducer {
    * @return the mapping for get
    */
   private Mapping getMappingForGet(Function function) {
-    String goalType = TextConverter.toUpperUnderscore(function.getGoal().getText());
 
-    if (goalType.equals(GoalType.FETCH_ONE.name())) {
+    if (function.getPurpose().isFetchOne()) {
       return getMappingForResourceWithId(function.getThing());
-    } else if (goalType.equals(GoalType.FETCH_COLLECTION.name())
-        || goalType.equals(GoalType.FETCH_PAGED_COLLECTION.name())) {
+    } else if (function.getPurpose().isFetchCollection()
+        || function.getPurpose().isFetchPagedCollection()) {
       return getMappingForResource(function.getThing());
     } else {
       throw new IllegalStateException(
-          String.format("Cannot deduce REST mapping for=%s", function.getGoal().getText()));
+          String.format("Cannot deduce REST mapping for=%s", function.getPurpose().getText()));
     }
   }
 

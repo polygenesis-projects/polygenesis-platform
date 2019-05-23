@@ -20,18 +20,16 @@
 
 package io.polygenesis.abstraction.thing;
 
+import io.polygenesis.abstraction.data.Data;
+import io.polygenesis.abstraction.data.DataArray;
+import io.polygenesis.abstraction.data.DataGroup;
+import io.polygenesis.abstraction.data.DataPrimitive;
+import io.polygenesis.abstraction.data.DataPurpose;
+import io.polygenesis.abstraction.data.PrimitiveType;
+import io.polygenesis.abstraction.data.VariableName;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
-import io.polygenesis.core.Goal;
-import io.polygenesis.core.GoalType;
-import io.polygenesis.core.data.Data;
-import io.polygenesis.core.data.DataArray;
-import io.polygenesis.core.data.DataBusinessType;
-import io.polygenesis.core.data.DataGroup;
-import io.polygenesis.core.data.DataPrimitive;
-import io.polygenesis.core.data.PrimitiveType;
-import io.polygenesis.core.data.VariableName;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -90,13 +88,18 @@ public class FunctionBuilder {
     return this;
   }
 
+  public final FunctionBuilder withFunctionCreate(Set<Data> models) {
+    return withFunctionCreate("create", models);
+  }
+
   /**
    * With function create thing builder.
    *
    * @param models the models
    * @return the thing builder
    */
-  public final FunctionBuilder withFunctionCreate(Set<Data> models) {
+  @SuppressWarnings("CPD-START")
+  public final FunctionBuilder withFunctionCreate(String functionName, Set<Data> models) {
 
     // ---------------------------------------------------------------------------------------------
     // ARGUMENTS
@@ -105,72 +108,8 @@ public class FunctionBuilder {
         new DataGroup(
             new ObjectName(
                 String.format(
-                    "Create%sRequest", TextConverter.toUpperCamel(thing.getThingName().getText()))),
-            thing.makePackageName(rootPackageNameVo, thing));
-
-    // ---------------------------------------------------------------------------------------------
-    // Add Parent Thing Identity if Any
-    if (thing.getOptionalParent() != null) {
-      argumentDataGroup.addData(makeParentThingIdentity(thing.getOptionalParent()));
-    }
-
-    // ---------------------------------------------------------------------------------------------
-    models.forEach(argumentDataGroup::addData);
-    // ---------------------------------------------------------------------------------------------
-
-    // ---------------------------------------------------------------------------------------------
-    // RETURN VALUE
-    // ---------------------------------------------------------------------------------------------
-    DataGroup returnValueDataGroup =
-        new DataGroup(
-            new ObjectName(
-                String.format(
-                    "Create%sResponse",
-                    TextConverter.toUpperCamel(thing.getThingName().getText()))),
-            thing.makePackageName(rootPackageNameVo, thing));
-
-    // ---------------------------------------------------------------------------------------------
-
-    returnValueDataGroup.addData(
-        DataPrimitive.ofDataBusinessType(
-            DataBusinessType.THING_IDENTITY,
-            PrimitiveType.STRING,
-            new VariableName(
-                String.format(
-                    "%sId", TextConverter.toLowerCamel(thing.getThingName().getText())))));
-
-    // ---------------------------------------------------------------------------------------------
-    // FUNCTION
-    // ---------------------------------------------------------------------------------------------
-
-    Function function =
-        new Function(
-            thing,
-            new Goal(GoalType.CREATE),
-            new FunctionName("create"),
-            new LinkedHashSet<>(Arrays.asList(new Argument(argumentDataGroup))),
-            new ReturnValue(returnValueDataGroup));
-
-    this.functions.add(function);
-    return this;
-  }
-
-  /**
-   * With function modify thing builder.
-   *
-   * @param models the models
-   * @return the thing builder
-   */
-  public final FunctionBuilder withFunctionModify(Set<Data> models) {
-
-    // ---------------------------------------------------------------------------------------------
-    // ARGUMENTS
-    // ---------------------------------------------------------------------------------------------
-    DataGroup argumentDataGroup =
-        new DataGroup(
-            new ObjectName(
-                String.format(
-                    "Modify%sRequest", TextConverter.toUpperCamel(thing.getThingName().getText()))),
+                    "%s%sRequest",
+                    functionName, TextConverter.toUpperCamel(thing.getThingName().getText()))),
             thing.makePackageName(rootPackageNameVo, thing));
 
     // ---------------------------------------------------------------------------------------------
@@ -194,15 +133,15 @@ public class FunctionBuilder {
         new DataGroup(
             new ObjectName(
                 String.format(
-                    "Modify%sResponse",
-                    TextConverter.toUpperCamel(thing.getThingName().getText()))),
+                    "%s%sResponse",
+                    functionName, TextConverter.toUpperCamel(thing.getThingName().getText()))),
             thing.makePackageName(rootPackageNameVo, thing));
 
     // ---------------------------------------------------------------------------------------------
 
     returnValueDataGroup.addData(
         DataPrimitive.ofDataBusinessType(
-            DataBusinessType.THING_IDENTITY,
+            DataPurpose.thingIdentity(),
             PrimitiveType.STRING,
             new VariableName(
                 String.format(
@@ -215,8 +154,83 @@ public class FunctionBuilder {
     Function function =
         new Function(
             thing,
-            new Goal(GoalType.MODIFY),
-            new FunctionName("modify"),
+            Purpose.create(),
+            new FunctionName(functionName),
+            new LinkedHashSet<>(Arrays.asList(new Argument(argumentDataGroup))),
+            new ReturnValue(returnValueDataGroup));
+
+    this.functions.add(function);
+    return this;
+  }
+
+  public final FunctionBuilder withFunctionModify(Set<Data> models) {
+    return withFunctionModify("modify", models);
+  }
+
+  /**
+   * With function modify thing builder.
+   *
+   * @param models the models
+   * @return the thing builder
+   */
+  @SuppressWarnings("CPD-END")
+  public final FunctionBuilder withFunctionModify(String functionName, Set<Data> models) {
+
+    // ---------------------------------------------------------------------------------------------
+    // ARGUMENTS
+    // ---------------------------------------------------------------------------------------------
+    DataGroup argumentDataGroup =
+        new DataGroup(
+            new ObjectName(
+                String.format(
+                    "%s%sRequest",
+                    functionName, TextConverter.toUpperCamel(thing.getThingName().getText()))),
+            thing.makePackageName(rootPackageNameVo, thing));
+
+    // ---------------------------------------------------------------------------------------------
+    // Add Parent Thing Identity if Any
+    if (thing.getOptionalParent() != null) {
+      argumentDataGroup.addData(makeParentThingIdentity(thing.getOptionalParent()));
+    }
+
+    // ---------------------------------------------------------------------------------------------
+    // Add Thing Identity
+    argumentDataGroup.addData(makeThingIdentity(thing));
+
+    // ---------------------------------------------------------------------------------------------
+    models.forEach(argumentDataGroup::addData);
+    // ---------------------------------------------------------------------------------------------
+
+    // ---------------------------------------------------------------------------------------------
+    // RETURN VALUE
+    // ---------------------------------------------------------------------------------------------
+    DataGroup returnValueDataGroup =
+        new DataGroup(
+            new ObjectName(
+                String.format(
+                    "%s%sResponse",
+                    functionName, TextConverter.toUpperCamel(thing.getThingName().getText()))),
+            thing.makePackageName(rootPackageNameVo, thing));
+
+    // ---------------------------------------------------------------------------------------------
+
+    returnValueDataGroup.addData(
+        DataPrimitive.ofDataBusinessType(
+            DataPurpose.thingIdentity(),
+            PrimitiveType.STRING,
+            new VariableName(
+                String.format(
+                    "%sId", TextConverter.toLowerCamel(thing.getThingName().getText())))));
+
+    // ---------------------------------------------------------------------------------------------
+    // FUNCTION
+    // ---------------------------------------------------------------------------------------------
+
+    Function function =
+        new Function(
+            thing,
+            Purpose.modify(),
+            new FunctionName(functionName),
             new LinkedHashSet<>(Arrays.asList(new Argument(argumentDataGroup))),
             new ReturnValue(returnValueDataGroup));
 
@@ -273,7 +287,7 @@ public class FunctionBuilder {
     Function function =
         new Function(
             thing,
-            new Goal(GoalType.FETCH_ONE),
+            Purpose.fetchOne(),
             new FunctionName("fetch"),
             new LinkedHashSet<>(Arrays.asList(new Argument(argumentDataGroup))),
             new ReturnValue(returnValueDataGroup));
@@ -310,11 +324,11 @@ public class FunctionBuilder {
     // ---------------------------------------------------------------------------------------------
     argumentDataGroup.addData(
         DataPrimitive.ofDataBusinessType(
-            DataBusinessType.PAGE_NUMBER, PrimitiveType.INTEGER, new VariableName("pageNumber")));
+            DataPurpose.pageNumber(), PrimitiveType.INTEGER, new VariableName("pageNumber")));
 
     argumentDataGroup.addData(
         DataPrimitive.ofDataBusinessType(
-            DataBusinessType.PAGE_SIZE, PrimitiveType.INTEGER, new VariableName("pageSize")));
+            DataPurpose.pageSize(), PrimitiveType.INTEGER, new VariableName("pageSize")));
 
     // ---------------------------------------------------------------------------------------------
     // RETURN VALUE
@@ -331,7 +345,7 @@ public class FunctionBuilder {
     // ---------------------------------------------------------------------------------------------
     arrayElement.addData(
         DataPrimitive.ofDataBusinessType(
-            DataBusinessType.THING_IDENTITY, PrimitiveType.STRING, new VariableName("rootId")));
+            DataPurpose.thingIdentity(), PrimitiveType.STRING, new VariableName("rootId")));
 
     models.forEach(arrayElement::addData);
     // ---------------------------------------------------------------------------------------------
@@ -357,7 +371,7 @@ public class FunctionBuilder {
     Function function =
         new Function(
             thing,
-            new Goal(GoalType.FETCH_PAGED_COLLECTION),
+            Purpose.fetchPagedCollection(),
             new FunctionName("fetchCollection"),
             new LinkedHashSet<>(Arrays.asList(new Argument(argumentDataGroup))),
             new ReturnValue(dataGroupReturnValue));
@@ -391,7 +405,7 @@ public class FunctionBuilder {
    */
   private DataPrimitive makeThingIdentity(Thing thing) {
     return DataPrimitive.ofDataBusinessType(
-        DataBusinessType.THING_IDENTITY,
+        DataPurpose.thingIdentity(),
         PrimitiveType.STRING,
         new VariableName(
             String.format("%sId", TextConverter.toLowerCamel(thing.getThingName().getText()))));
@@ -405,7 +419,7 @@ public class FunctionBuilder {
    */
   private DataPrimitive makeParentThingIdentity(Thing parentThing) {
     return DataPrimitive.ofDataBusinessType(
-        DataBusinessType.PARENT_THING_IDENTITY,
+        DataPurpose.parentThingIdentity(),
         PrimitiveType.STRING,
         new VariableName(
             String.format(

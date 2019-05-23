@@ -22,15 +22,15 @@ package io.polygenesis.models.api;
 
 import static java.util.stream.Collectors.toCollection;
 
+import io.polygenesis.abstraction.data.Data;
+import io.polygenesis.abstraction.data.DataGroup;
+import io.polygenesis.abstraction.data.DataPrimitive;
+import io.polygenesis.abstraction.data.DataPurpose;
 import io.polygenesis.abstraction.thing.Argument;
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
-import io.polygenesis.core.data.Data;
-import io.polygenesis.core.data.DataBusinessType;
-import io.polygenesis.core.data.DataGroup;
-import io.polygenesis.core.data.DataPrimitive;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -85,9 +85,9 @@ public class DtoDeducer {
     }
 
     DtoType dtoType;
-    if (function.getGoal().isFetchCollection()) {
+    if (function.getPurpose().isFetchCollection()) {
       dtoType = DtoType.API_COLLECTION_REQUEST;
-    } else if (function.getGoal().isFetchPagedCollection()) {
+    } else if (function.getPurpose().isFetchPagedCollection()) {
       dtoType = DtoType.API_PAGED_COLLECTION_REQUEST;
     } else {
       dtoType = DtoType.API_REQUEST;
@@ -136,9 +136,9 @@ public class DtoDeducer {
     }
 
     DtoType dtoType;
-    if (function.getGoal().isFetchCollection()) {
+    if (function.getPurpose().isFetchCollection()) {
       dtoType = DtoType.API_COLLECTION_RESPONSE;
-    } else if (function.getGoal().isFetchPagedCollection()) {
+    } else if (function.getPurpose().isFetchPagedCollection()) {
       dtoType = DtoType.API_PAGED_COLLECTION_RESPONSE;
     } else {
       dtoType = DtoType.API_RESPONSE;
@@ -225,13 +225,13 @@ public class DtoDeducer {
    * @param function the function
    */
   private void makeAssertionsForRequestDto(Dto dto, Function function) {
-    if (function.getGoal().isFetchOne()) {
-      assertThatDtoHasOneDataBusinessTypeOf(dto, function, DataBusinessType.THING_IDENTITY);
+    if (function.getPurpose().isFetchOne()) {
+      assertThatDtoHasOneDataBusinessTypeOf(dto, function, DataPurpose.thingIdentity());
     }
 
-    if (function.getGoal().isFetchPagedCollection()) {
-      assertThatDtoHasOneDataBusinessTypeOf(dto, function, DataBusinessType.PAGE_NUMBER);
-      assertThatDtoHasOneDataBusinessTypeOf(dto, function, DataBusinessType.PAGE_SIZE);
+    if (function.getPurpose().isFetchPagedCollection()) {
+      assertThatDtoHasOneDataBusinessTypeOf(dto, function, DataPurpose.pageNumber());
+      assertThatDtoHasOneDataBusinessTypeOf(dto, function, DataPurpose.pageSize());
     }
   }
 
@@ -242,8 +242,8 @@ public class DtoDeducer {
    * @param function the function
    */
   private void makeAssertionsForResponseDto(Dto dto, Function function) {
-    if (function.getGoal().isCreate()) {
-      assertThatDtoHasOneDataBusinessTypeOf(dto, function, DataBusinessType.THING_IDENTITY);
+    if (function.getPurpose().isCreate()) {
+      assertThatDtoHasOneDataBusinessTypeOf(dto, function, DataPurpose.thingIdentity());
     }
   }
 
@@ -252,10 +252,10 @@ public class DtoDeducer {
    *
    * @param dto the dto
    * @param function the function
-   * @param dataBusinessType the data business type
+   * @param dataPurpose the data business type
    */
   private void assertThatDtoHasOneDataBusinessTypeOf(
-      Dto dto, Function function, DataBusinessType dataBusinessType) {
+      Dto dto, Function function, DataPurpose dataPurpose) {
 
     Set<DataPrimitive> modelPrimitives =
         dto.getDataGroup()
@@ -263,14 +263,14 @@ public class DtoDeducer {
             .stream()
             .filter(Data::isDataPrimitive)
             .map(DataPrimitive.class::cast)
-            .filter(model -> model.getDataBusinessType().equals(dataBusinessType))
+            .filter(model -> model.getDataPurpose().equals(dataPurpose))
             .collect(toCollection(LinkedHashSet::new));
 
     if (modelPrimitives.isEmpty()) {
       throw new IllegalStateException(
           String.format(
               "No %s found in Dto=%s. Thing name=%s, function=%s",
-              dataBusinessType.name(),
+              dataPurpose.getText(),
               dto.getDataGroup().getObjectName().getText(),
               function.getThing().getThingName().getText(),
               function.getName().getText()));
@@ -280,7 +280,7 @@ public class DtoDeducer {
       throw new IllegalStateException(
           String.format(
               "More than one %s found in Dto=%s. Thing name=%s, function=%s",
-              dataBusinessType.name(),
+              dataPurpose.getText(),
               dto.getDataGroup().getObjectName().getText(),
               function.getThing().getThingName().getText(),
               function.getName().getText()));

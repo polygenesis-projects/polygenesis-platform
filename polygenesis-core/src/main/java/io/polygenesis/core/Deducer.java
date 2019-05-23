@@ -23,19 +23,19 @@ package io.polygenesis.core;
 import java.util.Set;
 
 /**
- * Contract for PolyGenesis Deducers.
+ * The interface Deducer.
  *
- * @param <R> the type parameter MetamodelRepository
+ * @param <R> the type parameter
  * @author Christos Tsakostas
  */
 public interface Deducer<R extends MetamodelRepository<? extends Metamodel>> {
 
   /**
-   * Deduces a model's repository.
+   * Deduce MetamodelRepository.
    *
    * @param abstractionRepositories the abstraction repositories
-   * @param metamodelRepositories the model repositories
-   * @return the MetamodelRepository
+   * @param metamodelRepositories the metamodel repositories
+   * @return the r
    */
   @SuppressWarnings("rawtypes")
   R deduce(

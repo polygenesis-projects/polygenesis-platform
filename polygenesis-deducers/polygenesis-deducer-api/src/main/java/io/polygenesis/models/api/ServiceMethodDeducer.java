@@ -66,7 +66,7 @@ public class ServiceMethodDeducer {
     thing
         .getFunctions()
         .stream()
-        .filter(function -> function.getGoal().isCommand())
+        .filter(function -> function.getPurpose().isCommand())
         .forEach(
             function ->
                 serviceMethods.add(
@@ -89,7 +89,7 @@ public class ServiceMethodDeducer {
     thing
         .getFunctions()
         .stream()
-        .filter(function -> !function.getGoal().isCommand())
+        .filter(function -> !function.getPurpose().isCommand())
         .forEach(
             function ->
                 serviceMethods.add(

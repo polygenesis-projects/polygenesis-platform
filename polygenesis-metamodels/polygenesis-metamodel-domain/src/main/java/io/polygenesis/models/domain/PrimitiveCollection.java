@@ -20,8 +20,8 @@
 
 package io.polygenesis.models.domain;
 
-import io.polygenesis.core.data.Data;
-import io.polygenesis.core.data.DataArray;
+import io.polygenesis.abstraction.data.Data;
+import io.polygenesis.abstraction.data.DataArray;
 
 /**
  * The type Primitive collection.

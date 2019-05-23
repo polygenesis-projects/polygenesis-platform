@@ -22,13 +22,11 @@ package io.polygenesis.abstraction.thing;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import io.polygenesis.abstraction.data.DataPrimitive;
+import io.polygenesis.abstraction.data.DataPurpose;
+import io.polygenesis.abstraction.data.PrimitiveType;
+import io.polygenesis.abstraction.data.VariableName;
 import io.polygenesis.commons.test.AbstractEqualityTest;
-import io.polygenesis.core.Goal;
-import io.polygenesis.core.GoalType;
-import io.polygenesis.core.data.DataBusinessType;
-import io.polygenesis.core.data.DataPrimitive;
-import io.polygenesis.core.data.PrimitiveType;
-import io.polygenesis.core.data.VariableName;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import org.junit.Test;
@@ -38,7 +36,8 @@ public class ThingTest extends AbstractEqualityTest<Thing> {
 
   @Test
   public void shouldCreateThingWithName() {
-    Thing thing = ThingBuilder.generic().setThingName(new ThingName("someThingName")).createThing();
+    Thing thing =
+        ThingBuilder.endToEnd().setThingName(new ThingName("someThingName")).createThing();
 
     assertThat(thing).isNotNull();
 
@@ -60,8 +59,8 @@ public class ThingTest extends AbstractEqualityTest<Thing> {
 
   private Function createFunction1() {
     return new Function(
-        ThingBuilder.generic().setThingName(new ThingName("thingName")).createThing(),
-        new Goal(GoalType.MODIFY),
+        ThingBuilder.endToEnd().setThingName(new ThingName("thingName")).createThing(),
+        Purpose.modify(),
         new FunctionName("functionName"),
         new LinkedHashSet<>(),
         new ReturnValue(createDataPrimitive()));
@@ -69,8 +68,8 @@ public class ThingTest extends AbstractEqualityTest<Thing> {
 
   private Function createFunction2() {
     return new Function(
-        ThingBuilder.generic().setThingName(new ThingName("thingName")).createThing(),
-        new Goal(GoalType.MODIFY),
+        ThingBuilder.endToEnd().setThingName(new ThingName("thingName")).createThing(),
+        Purpose.modify(),
         new FunctionName("anotherFunctionName"),
         new LinkedHashSet<>(),
         new ReturnValue(createDataPrimitive()));
@@ -78,8 +77,8 @@ public class ThingTest extends AbstractEqualityTest<Thing> {
 
   private Function createFunction3() {
     return new Function(
-        ThingBuilder.generic().setThingName(new ThingName("thingName")).createThing(),
-        new Goal(GoalType.MODIFY),
+        ThingBuilder.endToEnd().setThingName(new ThingName("thingName")).createThing(),
+        Purpose.modify(),
         new FunctionName("someAnotherNewFunctionName"),
         new LinkedHashSet<>(),
         new ReturnValue(createDataPrimitive()));
@@ -90,7 +89,7 @@ public class ThingTest extends AbstractEqualityTest<Thing> {
         PrimitiveType.STRING,
         new VariableName("variableName"),
         new LinkedHashSet<>(),
-        DataBusinessType.ANY);
+        DataPurpose.any());
   }
 
   // ===============================================================================================
@@ -98,11 +97,11 @@ public class ThingTest extends AbstractEqualityTest<Thing> {
   // ===============================================================================================
   @Override
   public Thing createObject1() {
-    return ThingBuilder.generic().setThingName(new ThingName("xxx")).createThing();
+    return ThingBuilder.endToEnd().setThingName(new ThingName("xxx")).createThing();
   }
 
   @Override
   public Thing createObject2() {
-    return ThingBuilder.generic().setThingName(new ThingName("yyy")).createThing();
+    return ThingBuilder.endToEnd().setThingName(new ThingName("yyy")).createThing();
   }
 }

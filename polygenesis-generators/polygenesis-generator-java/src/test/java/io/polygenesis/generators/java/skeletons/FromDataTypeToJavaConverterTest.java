@@ -22,9 +22,9 @@ package io.polygenesis.generators.java.skeletons;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.polygenesis.core.data.DataPrimitive;
-import io.polygenesis.core.data.PrimitiveType;
-import io.polygenesis.core.data.VariableName;
+import io.polygenesis.abstraction.data.DataPrimitive;
+import io.polygenesis.abstraction.data.PrimitiveType;
+import io.polygenesis.abstraction.data.VariableName;
 import org.junit.Test;
 
 /** @author Christos Tsakostas */

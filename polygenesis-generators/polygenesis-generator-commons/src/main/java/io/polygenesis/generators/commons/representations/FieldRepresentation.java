@@ -20,7 +20,7 @@
 
 package io.polygenesis.generators.commons.representations;
 
-import io.polygenesis.core.data.DataBusinessType;
+import io.polygenesis.abstraction.data.DataPurpose;
 import java.util.Set;
 
 /**
@@ -49,11 +49,10 @@ public class FieldRepresentation extends AbstractDataRepresentation {
    *
    * @param dataType the data type
    * @param variableName the variable name
-   * @param dataBusinessType the data business type
+   * @param dataPurpose the data business type
    */
-  public FieldRepresentation(
-      String dataType, String variableName, DataBusinessType dataBusinessType) {
-    super(dataType, variableName, dataBusinessType);
+  public FieldRepresentation(String dataType, String variableName, DataPurpose dataPurpose) {
+    super(dataType, variableName, dataPurpose);
   }
 
   /**
@@ -64,7 +63,7 @@ public class FieldRepresentation extends AbstractDataRepresentation {
    * @param annotations the annotations
    */
   public FieldRepresentation(String dataType, String variableName, Set<String> annotations) {
-    super(dataType, variableName, annotations, DataBusinessType.ANY);
+    super(dataType, variableName, annotations, DataPurpose.any());
   }
 
   /**
@@ -73,14 +72,11 @@ public class FieldRepresentation extends AbstractDataRepresentation {
    * @param dataType the data type
    * @param variableName the variable name
    * @param annotations the annotations
-   * @param dataBusinessType the data business type
+   * @param dataPurpose the data business type
    */
   public FieldRepresentation(
-      String dataType,
-      String variableName,
-      Set<String> annotations,
-      DataBusinessType dataBusinessType) {
-    super(dataType, variableName, annotations, dataBusinessType);
+      String dataType, String variableName, Set<String> annotations, DataPurpose dataPurpose) {
+    super(dataType, variableName, annotations, dataPurpose);
   }
 
   // ===============================================================================================

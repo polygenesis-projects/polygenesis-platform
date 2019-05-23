@@ -20,10 +20,10 @@
 
 package io.polygenesis.models.apiimpl;
 
+import io.polygenesis.abstraction.data.VariableName;
 import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
-import io.polygenesis.core.data.VariableName;
 import java.util.Objects;
 
 /**

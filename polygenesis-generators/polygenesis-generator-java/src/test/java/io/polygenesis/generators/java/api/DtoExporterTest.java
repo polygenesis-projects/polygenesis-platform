@@ -25,9 +25,15 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import io.polygenesis.abstraction.data.DataGroup;
+import io.polygenesis.abstraction.data.DataPrimitive;
+import io.polygenesis.abstraction.data.PrimitiveType;
+import io.polygenesis.abstraction.data.VariableName;
 import io.polygenesis.abstraction.thing.Argument;
+import io.polygenesis.abstraction.thing.CqsType;
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.abstraction.thing.FunctionName;
+import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.ReturnValue;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.ThingBuilder;
@@ -35,13 +41,6 @@ import io.polygenesis.abstraction.thing.ThingName;
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
-import io.polygenesis.core.CqsType;
-import io.polygenesis.core.Goal;
-import io.polygenesis.core.GoalType;
-import io.polygenesis.core.data.DataGroup;
-import io.polygenesis.core.data.DataPrimitive;
-import io.polygenesis.core.data.PrimitiveType;
-import io.polygenesis.core.data.VariableName;
 import io.polygenesis.generators.java.exporters.api.DtoClassRepresentable;
 import io.polygenesis.generators.java.exporters.api.DtoExporter;
 import io.polygenesis.models.api.Dto;
@@ -155,14 +154,10 @@ public class DtoExporterTest {
   }
 
   private Function makeFunctionCreate() {
-    Thing thing = ThingBuilder.generic().setThingName(new ThingName("customer")).createThing();
+    Thing thing = ThingBuilder.endToEnd().setThingName(new ThingName("customer")).createThing();
     ReturnValue returnValue =
         new ReturnValue(DataPrimitive.of(PrimitiveType.STRING, new VariableName("someRet")));
     return new Function(
-        thing,
-        new Goal(GoalType.CREATE),
-        new FunctionName("create"),
-        new LinkedHashSet<>(),
-        returnValue);
+        thing, Purpose.create(), new FunctionName("create"), new LinkedHashSet<>(), returnValue);
   }
 }

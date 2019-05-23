@@ -20,11 +20,11 @@
 
 package io.polygenesis.generators.java.implementations.domain;
 
-import io.polygenesis.abstraction.thing.ThingType;
+import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.commons.freemarker.FreemarkerService;
-import io.polygenesis.core.GoalType;
+import io.polygenesis.core.AbstractionScope;
 import io.polygenesis.generators.java.implementations.AbstractMethodImplementorRegistry;
-import io.polygenesis.generators.java.implementations.ScopeGoalTuple;
+import io.polygenesis.generators.java.implementations.ScopePurposeTuple;
 import io.polygenesis.models.domain.StateMutationMethod;
 
 /**
@@ -53,21 +53,21 @@ public class StateMutationMethodImplementorRegistry
   // ===============================================================================================
 
   @Override
-  public void initializeScopeAndGoalMap() {
+  public void initializeScopeAndPurposeMap() {
     // AGGREGATE ROOT
-    scopeAndGoalMap.put(
-        new ScopeGoalTuple(
-            ThingType.DOMAIN_AGGREGATE_ROOT, GoalType.AGGREGATE_ROOT_CREATE_ENTITY.name()),
+    scopeAndPurposeMap.put(
+        new ScopePurposeTuple(
+            AbstractionScope.domainAggregateRoot(), Purpose.aggregateRootCreateEntity()),
         new CreateAggregateEntity());
 
-    scopeAndGoalMap.put(
-        new ScopeGoalTuple(
-            ThingType.DOMAIN_AGGREGATE_ROOT, GoalType.AGGREGATE_ROOT_UPDATE_ENTITY.name()),
+    scopeAndPurposeMap.put(
+        new ScopePurposeTuple(
+            AbstractionScope.domainAggregateRoot(), Purpose.aggregateRootUpdateEntity()),
         new UpdateAggregateEntity());
 
-    scopeAndGoalMap.put(
-        new ScopeGoalTuple(
-            ThingType.DOMAIN_AGGREGATE_ROOT, GoalType.AGGREGATE_ROOT_DELETE_ENTITY.name()),
+    scopeAndPurposeMap.put(
+        new ScopePurposeTuple(
+            AbstractionScope.domainAggregateRoot(), Purpose.aggregateRootDeleteEntity()),
         new DeleteAggregateEntity());
   }
 }

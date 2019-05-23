@@ -20,10 +20,10 @@
 
 package io.polygenesis.generators.java.exporters.rest;
 
+import io.polygenesis.abstraction.data.Data;
+import io.polygenesis.abstraction.data.PrimitiveType;
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.data.Data;
-import io.polygenesis.core.data.PrimitiveType;
 import io.polygenesis.generators.commons.representations.ParameterRepresentation;
 import io.polygenesis.generators.java.implementations.rest.EndpointImplementationRegistry;
 import io.polygenesis.generators.java.skeletons.AbstractMethodRepresentable;
@@ -164,14 +164,14 @@ public class EndpointMethodRepresentable extends AbstractMethodRepresentable<End
 
     switch (source.getHttpMethod()) {
       case GET:
-        if (source.getServiceMethod().getFunction().getGoal().isFetchOne()) {
+        if (source.getServiceMethod().getFunction().getPurpose().isFetchOne()) {
           parameterRepresentations.addAll(
               parameterRepresentationsForIdPathVariable(
                   thingIdentityData
                       .orElseThrow(IllegalArgumentException::new)
                       .getVariableName()
                       .getText()));
-        } else if (source.getServiceMethod().getFunction().getGoal().isFetchPagedCollection()) {
+        } else if (source.getServiceMethod().getFunction().getPurpose().isFetchPagedCollection()) {
           parameterRepresentations.addAll(parameterRepresentationsForPagedCollection());
         }
         break;
@@ -194,8 +194,8 @@ public class EndpointMethodRepresentable extends AbstractMethodRepresentable<End
         .forEach(
             argument -> {
               if (argument.getData().isDataGroup()
-                  && (source.getServiceMethod().getFunction().getGoal().isCreate()
-                      || source.getServiceMethod().getFunction().getGoal().isModify())) {
+                  && (source.getServiceMethod().getFunction().getPurpose().isCreate()
+                      || source.getServiceMethod().getFunction().getPurpose().isModify())) {
                 parameterRepresentations.add(
                     new ParameterRepresentation(
                         fromDataTypeToJavaConverter.getDeclaredVariableType(
@@ -242,7 +242,7 @@ public class EndpointMethodRepresentable extends AbstractMethodRepresentable<End
       stringBuilder.append("();\n");
 
       // -------------------------------------------------------------------------------------------
-      if (source.getServiceMethod().getFunction().getGoal().isFetchPagedCollection()) {
+      if (source.getServiceMethod().getFunction().getPurpose().isFetchPagedCollection()) {
         stringBuilder.append("\t\t");
         stringBuilder.append(
             TextConverter.toLowerCamel(
@@ -259,8 +259,8 @@ public class EndpointMethodRepresentable extends AbstractMethodRepresentable<End
     // ---------------------------------------------------------------------------------------------
 
     // ID
-    if (source.getServiceMethod().getFunction().getGoal().isFetchOne()
-        || source.getServiceMethod().getFunction().getGoal().isModify()) {
+    if (source.getServiceMethod().getFunction().getPurpose().isFetchOne()
+        || source.getServiceMethod().getFunction().getPurpose().isModify()) {
       Data data =
           source
               .getServiceMethod()

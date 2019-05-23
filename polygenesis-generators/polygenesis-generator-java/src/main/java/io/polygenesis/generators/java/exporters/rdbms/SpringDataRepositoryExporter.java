@@ -47,6 +47,13 @@ public class SpringDataRepositoryExporter {
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
+  /**
+   * Instantiates a new Spring data repository exporter.
+   *
+   * @param freemarkerService the freemarker service
+   * @param springDataRepositoryInterfaceRepresentable the spring data repository interface
+   *     representable
+   */
   public SpringDataRepositoryExporter(
       FreemarkerService freemarkerService,
       SpringDataRepositoryInterfaceRepresentable springDataRepositoryInterfaceRepresentable) {

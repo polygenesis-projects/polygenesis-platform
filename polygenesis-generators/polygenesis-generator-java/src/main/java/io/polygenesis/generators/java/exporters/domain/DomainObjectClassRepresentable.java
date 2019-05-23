@@ -20,13 +20,14 @@
 
 package io.polygenesis.generators.java.exporters.domain;
 
+import static io.polygenesis.models.domain.PropertyType.PROJECTION_ID;
+
+import io.polygenesis.abstraction.data.DataArray;
+import io.polygenesis.abstraction.data.DataGroup;
+import io.polygenesis.abstraction.data.DataPrimitive;
+import io.polygenesis.abstraction.data.DataPurpose;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.commons.valueobjects.PackageName;
-import io.polygenesis.core.data.DataArray;
-import io.polygenesis.core.data.DataBusinessType;
-import io.polygenesis.core.data.DataGroup;
-import io.polygenesis.core.data.DataPrimitive;
-import io.polygenesis.core.data.PrimitiveType;
 import io.polygenesis.generators.commons.representations.FieldRepresentation;
 import io.polygenesis.generators.commons.representations.ParameterRepresentation;
 import io.polygenesis.generators.java.skeletons.AbstractClassRepresentable;
@@ -86,9 +87,10 @@ public abstract class DomainObjectClassRepresentable<S extends BaseDomainObject>
                           makeAnnotationsForReferenceToAggregateRoot(source)));
                   break;
                 case AGGREGATE_ROOT_ID:
-                case TENANT_ID:
                 case ABSTRACT_AGGREGATE_ROOT_ID:
+                case PROJECTION_ID:
                 case SUPPORTIVE_ENTITY_ID:
+                case TENANT_ID:
                   break;
                 case PRIMITIVE:
                   fieldRepresentations.add(
@@ -294,8 +296,19 @@ public abstract class DomainObjectClassRepresentable<S extends BaseDomainObject>
 
     if (property.getData().isDataPrimitive()) {
       DataPrimitive dataPrimitive = property.getData().getAsDataPrimitive();
-      if (dataPrimitive.getPrimitiveType().equals(PrimitiveType.DATETIME)) {
-        imports.add("java.time.LocalDateTime");
+
+      switch (dataPrimitive.getPrimitiveType()) {
+        case DATETIME:
+          imports.add("java.time.LocalDateTime");
+          break;
+        case DECIMAL:
+          imports.add("java.math.BigDecimal");
+          break;
+        case UUID:
+          imports.add("java.util.UUID");
+          break;
+        default:
+          break;
       }
     }
 
@@ -365,7 +378,9 @@ public abstract class DomainObjectClassRepresentable<S extends BaseDomainObject>
 
       stringBuilder.append(TextConverter.toUpperCamel(superClass.getObjectName().getText()));
     } else {
-      throw new IllegalStateException();
+      throw new IllegalStateException(
+          String.format(
+              "No superclass defined for domain object=%s", source.getObjectName().getText()));
     }
 
     if (source.getInstantiationType().equals(InstantiationType.ABSTRACT)) {
@@ -575,26 +590,20 @@ public abstract class DomainObjectClassRepresentable<S extends BaseDomainObject>
         .stream()
         .forEach(
             property -> {
-              if (property.getPropertyType().equals(PropertyType.AGGREGATE_ROOT_ID)) {
+              if (property.getPropertyType().equals(PropertyType.AGGREGATE_ROOT_ID)
+                  || property.getPropertyType().equals(PropertyType.ABSTRACT_AGGREGATE_ROOT_ID)
+                  || property.getPropertyType().equals(PROJECTION_ID)) {
                 parameterRepresentations.add(
                     new ParameterRepresentation(
                         makeVariableDataType(property),
                         makeVariableName(property),
-                        DataBusinessType.THING_IDENTITY));
-              } else if (property
-                  .getPropertyType()
-                  .equals(PropertyType.ABSTRACT_AGGREGATE_ROOT_ID)) {
-                parameterRepresentations.add(
-                    new ParameterRepresentation(
-                        makeVariableDataType(property),
-                        makeVariableName(property),
-                        DataBusinessType.THING_IDENTITY));
+                        DataPurpose.thingIdentity()));
               } else if (property.getPropertyType().equals(PropertyType.TENANT_ID)) {
                 parameterRepresentations.add(
                     new ParameterRepresentation(
                         makeVariableDataType(property),
                         makeVariableName(property),
-                        DataBusinessType.TENANT_IDENTITY));
+                        DataPurpose.tenantIdentity()));
               } else {
                 parameterRepresentations.add(
                     new ParameterRepresentation(

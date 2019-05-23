@@ -20,8 +20,8 @@
 
 package io.polygenesis.generators.commons.representations;
 
+import io.polygenesis.abstraction.data.DataPurpose;
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.data.DataBusinessType;
 import java.util.Set;
 
 /**
@@ -50,11 +50,10 @@ public class ParameterRepresentation extends AbstractDataRepresentation {
    *
    * @param dataType the data type
    * @param variableName the variable name
-   * @param dataBusinessType the data business type
+   * @param dataPurpose the data business type
    */
-  public ParameterRepresentation(
-      String dataType, String variableName, DataBusinessType dataBusinessType) {
-    super(dataType, variableName, dataBusinessType);
+  public ParameterRepresentation(String dataType, String variableName, DataPurpose dataPurpose) {
+    super(dataType, variableName, dataPurpose);
   }
 
   /**
@@ -74,14 +73,11 @@ public class ParameterRepresentation extends AbstractDataRepresentation {
    * @param dataType the data type
    * @param variableName the variable name
    * @param annotations the annotations
-   * @param dataBusinessType the data business type
+   * @param dataPurpose the data business type
    */
   public ParameterRepresentation(
-      String dataType,
-      String variableName,
-      Set<String> annotations,
-      DataBusinessType dataBusinessType) {
-    super(dataType, variableName, annotations, dataBusinessType);
+      String dataType, String variableName, Set<String> annotations, DataPurpose dataPurpose) {
+    super(dataType, variableName, annotations, dataPurpose);
   }
 
   // ===============================================================================================

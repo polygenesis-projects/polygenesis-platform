@@ -20,12 +20,10 @@
 
 package io.polygenesis.deducers.sql;
 
-import io.polygenesis.abstraction.thing.ThingRepository;
 import io.polygenesis.core.AbstractionRepository;
 import io.polygenesis.core.CoreRegistry;
 import io.polygenesis.core.Deducer;
 import io.polygenesis.core.MetamodelRepository;
-import io.polygenesis.core.MetamodelType;
 import io.polygenesis.models.domain.DomainMetamodelRepository;
 import io.polygenesis.models.sql.Column;
 import io.polygenesis.models.sql.ColumnDataType;
@@ -65,13 +63,6 @@ public class SqlTableDeducer implements Deducer<SqlTableMetamodelRepository> {
   public SqlTableMetamodelRepository deduce(
       Set<AbstractionRepository> abstractionRepositories,
       Set<MetamodelRepository> modelRepositories) {
-
-    if (CoreRegistry.getAbstractionRepositoryResolver()
-        .resolve(abstractionRepositories, ThingRepository.class)
-        .getAbstractionItemsByMetamodelType(MetamodelType.API)
-        .isEmpty()) {
-      throw new IllegalArgumentException("thingRepository cannot be empty");
-    }
 
     Set<Table> tables = new LinkedHashSet<>();
 

@@ -22,10 +22,10 @@ package io.polygenesis.models.api;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import io.polygenesis.abstraction.data.DataGroup;
 import io.polygenesis.commons.test.AbstractEqualityTest;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
-import io.polygenesis.core.data.DataGroup;
 import org.junit.Test;
 
 /** @author Christos Tsakostas */

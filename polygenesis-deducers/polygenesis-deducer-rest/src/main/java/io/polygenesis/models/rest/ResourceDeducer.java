@@ -23,7 +23,7 @@ package io.polygenesis.models.rest;
 import io.polygenesis.abstraction.thing.ThingRepository;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
-import io.polygenesis.core.MetamodelType;
+import io.polygenesis.core.AbstractionScope;
 import io.polygenesis.models.api.Service;
 import io.polygenesis.models.api.ServiceMetamodelRepository;
 import io.polygenesis.models.api.ServiceMethod;
@@ -76,7 +76,7 @@ public class ResourceDeducer {
     Set<Resource> resources = new LinkedHashSet<>();
 
     thingRepository
-        .getAbstractionItemsByMetamodelType(MetamodelType.API)
+        .getAbstractionItemsByScope(AbstractionScope.api())
         .forEach(
             thing -> {
               Set<Endpoint> endpoints = new LinkedHashSet<>();

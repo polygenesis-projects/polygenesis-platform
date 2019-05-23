@@ -20,13 +20,13 @@
 
 package io.polygenesis.models.reactivestate;
 
+import io.polygenesis.abstraction.data.DataPrimitive;
+import io.polygenesis.abstraction.data.PrimitiveType;
+import io.polygenesis.abstraction.data.VariableName;
 import io.polygenesis.abstraction.thing.FunctionName;
+import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.GoalType;
-import io.polygenesis.core.data.DataPrimitive;
-import io.polygenesis.core.data.PrimitiveType;
-import io.polygenesis.core.data.VariableName;
 import io.polygenesis.models.api.Service;
 import io.polygenesis.models.api.ServiceMetamodelRepository;
 import java.util.Arrays;
@@ -43,15 +43,15 @@ import java.util.Set;
  */
 public class ActionGroupDeducer {
 
-  private static final Map<String, Set<ActionType>> goalToActionTypeMap;
+  private static final Map<Purpose, Set<ActionType>> purposeToActionTypeMap;
 
   // ===============================================================================================
   // STATIC
   // ===============================================================================================
 
   static {
-    goalToActionTypeMap = new LinkedHashMap<>();
-    initializeGoalToActionTypeMap();
+    purposeToActionTypeMap = new LinkedHashMap<>();
+    initializePurposeToActionTypeMap();
   }
 
   // ===============================================================================================
@@ -110,7 +110,7 @@ public class ActionGroupDeducer {
                                       TextConverter.toLowerCamel(
                                           ActionGroupType.API.name().toLowerCase()),
                                       TextConverter.toLowerHyphen(
-                                          method.getFunction().getGoal().getText()))),
+                                          method.getFunction().getPurpose().getText()))),
                               ActionGroupType.API,
                               actions));
                     }));
@@ -138,25 +138,24 @@ public class ActionGroupDeducer {
         model);
   }
 
-  /** Initializes {@link io.polygenesis.core.Goal} to {@link ActionType} map. */
-  private static void initializeGoalToActionTypeMap() {
-    goalToActionTypeMap.put(
-        GoalType.CREATE.name(),
+  /** Initializes {@link Purpose} to {@link ActionType} map. */
+  private static void initializePurposeToActionTypeMap() {
+    purposeToActionTypeMap.put(
+        Purpose.create(),
         new LinkedHashSet<>(
             Arrays.asList(ActionType.SUBMIT, ActionType.ON_SUCCESS, ActionType.ON_FAILURE)));
 
-    goalToActionTypeMap.put(
-        GoalType.MODIFY.name(),
+    purposeToActionTypeMap.put(
+        Purpose.modify(),
         new LinkedHashSet<>(
             Arrays.asList(ActionType.SUBMIT, ActionType.ON_SUCCESS, ActionType.ON_FAILURE)));
 
-    goalToActionTypeMap.put(
-        GoalType.DELETE.name(),
+    purposeToActionTypeMap.put(
+        Purpose.delete(),
         new LinkedHashSet<>(
             Arrays.asList(ActionType.SUBMIT, ActionType.ON_SUCCESS, ActionType.ON_FAILURE)));
 
-    goalToActionTypeMap.put(
-        // TODO
-        "RESET", new LinkedHashSet<>(Collections.singletonList(ActionType.SUBMIT)));
+    purposeToActionTypeMap.put(
+        Purpose.reset(), new LinkedHashSet<>(Collections.singletonList(ActionType.SUBMIT)));
   }
 }

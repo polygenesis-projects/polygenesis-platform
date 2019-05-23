@@ -20,8 +20,8 @@
 
 package io.polygenesis.models.domain;
 
-import io.polygenesis.core.data.Data;
-import io.polygenesis.core.data.DataGroup;
+import io.polygenesis.abstraction.data.Data;
+import io.polygenesis.abstraction.data.DataGroup;
 
 /**
  * The type Reference to aggregate root.

@@ -20,11 +20,11 @@
 
 package io.polygenesis.models.apiimpl;
 
+import io.polygenesis.abstraction.data.VariableName;
 import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.core.Metamodel;
-import io.polygenesis.core.data.VariableName;
 import io.polygenesis.models.domain.BaseDomainEntity;
 import java.util.Objects;
 import java.util.Set;

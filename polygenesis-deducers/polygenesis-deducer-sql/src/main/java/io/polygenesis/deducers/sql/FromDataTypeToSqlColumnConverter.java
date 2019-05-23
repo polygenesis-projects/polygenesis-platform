@@ -20,9 +20,9 @@
 
 package io.polygenesis.deducers.sql;
 
+import io.polygenesis.abstraction.data.Data;
+import io.polygenesis.abstraction.data.PrimitiveType;
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.data.Data;
-import io.polygenesis.core.data.PrimitiveType;
 import io.polygenesis.models.sql.ColumnDataType;
 import java.util.HashMap;
 import java.util.Map;
@@ -77,5 +77,6 @@ public class FromDataTypeToSqlColumnConverter {
     dataTypeMap.put(PrimitiveType.BOOLEAN.name(), ColumnDataType.BIT);
     dataTypeMap.put(PrimitiveType.DATETIME.name(), ColumnDataType.DATETIME);
     dataTypeMap.put(PrimitiveType.DECIMAL.name(), ColumnDataType.DECIMAL);
+    dataTypeMap.put(PrimitiveType.UUID.name(), ColumnDataType.BINARY);
   }
 }
