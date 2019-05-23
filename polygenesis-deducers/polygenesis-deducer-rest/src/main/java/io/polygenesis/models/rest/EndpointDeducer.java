@@ -20,8 +20,7 @@
 
 package io.polygenesis.models.rest;
 
-import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.GoalType;
+import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.models.api.Service;
 import io.polygenesis.models.api.ServiceMethod;
 import java.util.HashMap;
@@ -38,15 +37,15 @@ public class EndpointDeducer {
   // ===============================================================================================
   // STATIC
   // ===============================================================================================
-  private static Map<String, HttpMethod> goalToHttpMethod = new HashMap<>();
+  private static Map<Purpose, HttpMethod> purposeToHttpMethod = new HashMap<>();
 
   static {
-    goalToHttpMethod.put(GoalType.CREATE.name(), HttpMethod.POST);
-    goalToHttpMethod.put(GoalType.MODIFY.name(), HttpMethod.PUT);
-    goalToHttpMethod.put(GoalType.DELETE.name(), HttpMethod.DELETE);
-    goalToHttpMethod.put(GoalType.FETCH_ONE.name(), HttpMethod.GET);
-    goalToHttpMethod.put(GoalType.FETCH_COLLECTION.name(), HttpMethod.GET);
-    goalToHttpMethod.put(GoalType.FETCH_PAGED_COLLECTION.name(), HttpMethod.GET);
+    purposeToHttpMethod.put(Purpose.create(), HttpMethod.POST);
+    purposeToHttpMethod.put(Purpose.modify(), HttpMethod.PUT);
+    purposeToHttpMethod.put(Purpose.delete(), HttpMethod.DELETE);
+    purposeToHttpMethod.put(Purpose.fetchOne(), HttpMethod.GET);
+    purposeToHttpMethod.put(Purpose.fetchCollection(), HttpMethod.GET);
+    purposeToHttpMethod.put(Purpose.fetchPagedCollection(), HttpMethod.GET);
   }
 
   // ===============================================================================================
@@ -84,11 +83,8 @@ public class EndpointDeducer {
    * @return the optional endpoint
    */
   public Optional<Endpoint> deduceFromServiceMethod(ServiceMethod serviceMethod, Service service) {
-    String goalType =
-        TextConverter.toUpperUnderscore(serviceMethod.getFunction().getGoal().getText());
-
-    if (goalToHttpMethod.containsKey(goalType)) {
-      HttpMethod httpMethod = goalToHttpMethod.get(goalType);
+    if (purposeToHttpMethod.containsKey(serviceMethod.getFunction().getPurpose())) {
+      HttpMethod httpMethod = purposeToHttpMethod.get(serviceMethod.getFunction().getPurpose());
 
       return Optional.of(
           new Endpoint(

@@ -20,8 +20,8 @@
 
 package io.polygenesis.generators.java.exporters.domain;
 
+import io.polygenesis.abstraction.data.PrimitiveType;
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.data.PrimitiveType;
 import io.polygenesis.generators.commons.representations.ParameterRepresentation;
 import io.polygenesis.generators.java.implementations.domain.StateMutationMethodImplementorRegistry;
 import io.polygenesis.generators.java.skeletons.AbstractMethodRepresentable;

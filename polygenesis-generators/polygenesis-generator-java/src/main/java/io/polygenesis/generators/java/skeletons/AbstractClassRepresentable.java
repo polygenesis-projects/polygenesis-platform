@@ -22,11 +22,11 @@ package io.polygenesis.generators.java.skeletons;
 
 import static java.util.stream.Collectors.toCollection;
 
+import io.polygenesis.abstraction.data.Data;
+import io.polygenesis.abstraction.data.DataGroup;
+import io.polygenesis.abstraction.data.DataPurpose;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.commons.valueobjects.PackageName;
-import io.polygenesis.core.data.Data;
-import io.polygenesis.core.data.DataBusinessType;
-import io.polygenesis.core.data.DataGroup;
 import io.polygenesis.generators.commons.representations.FieldRepresentation;
 import io.polygenesis.generators.commons.representations.ParameterRepresentation;
 import java.util.Arrays;
@@ -489,7 +489,7 @@ public abstract class AbstractClassRepresentable<S> extends AbstractRepresentabl
                     fieldRepresentation.getDataType(),
                     fieldRepresentation.getVariableName(),
                     fieldRepresentation.getAnnotations(),
-                    fieldRepresentation.getDataBusinessType()))
+                    fieldRepresentation.getDataPurpose()))
         .collect(toCollection(LinkedHashSet::new));
   }
 
@@ -505,9 +505,7 @@ public abstract class AbstractClassRepresentable<S> extends AbstractRepresentabl
 
     parameterRepresentations.forEach(
         parameterRepresentation -> {
-          if (parameterRepresentation
-              .getDataBusinessType()
-              .equals(DataBusinessType.THING_IDENTITY)) {
+          if (parameterRepresentation.getDataPurpose().equals(DataPurpose.thingIdentity())) {
             stringBuilder.append("\t\t");
             stringBuilder.append("super(");
             stringBuilder.append(
@@ -519,8 +517,8 @@ public abstract class AbstractClassRepresentable<S> extends AbstractRepresentabl
                     .filter(
                         parameterRepresentation1 ->
                             parameterRepresentation1
-                                .getDataBusinessType()
-                                .equals(DataBusinessType.TENANT_IDENTITY))
+                                .getDataPurpose()
+                                .equals(DataPurpose.tenantIdentity()))
                     .findFirst();
 
             if (optionalTenantIdentity.isPresent()) {
@@ -538,10 +536,8 @@ public abstract class AbstractClassRepresentable<S> extends AbstractRepresentabl
             }
           }
 
-          if (!parameterRepresentation.getDataBusinessType().equals(DataBusinessType.THING_IDENTITY)
-              && !parameterRepresentation
-                  .getDataBusinessType()
-                  .equals(DataBusinessType.TENANT_IDENTITY)) {
+          if (!parameterRepresentation.getDataPurpose().equals(DataPurpose.thingIdentity())
+              && !parameterRepresentation.getDataPurpose().equals(DataPurpose.tenantIdentity())) {
             stringBuilder.append("\t\t");
             stringBuilder.append("set");
             stringBuilder.append(
@@ -569,9 +565,7 @@ public abstract class AbstractClassRepresentable<S> extends AbstractRepresentabl
 
     parameterRepresentations.forEach(
         parameterRepresentation -> {
-          if (parameterRepresentation
-              .getDataBusinessType()
-              .equals(DataBusinessType.THING_IDENTITY)) {
+          if (parameterRepresentation.getDataPurpose().equals(DataPurpose.thingIdentity())) {
             throw new UnsupportedOperationException();
           } else {
             stringBuilder.append("\t\t");

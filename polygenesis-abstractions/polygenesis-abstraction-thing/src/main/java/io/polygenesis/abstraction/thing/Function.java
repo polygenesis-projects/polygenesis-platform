@@ -21,16 +21,14 @@
 package io.polygenesis.abstraction.thing;
 
 import io.polygenesis.commons.assertion.Assertion;
-import io.polygenesis.core.Goal;
 import java.util.LinkedHashSet;
+import java.util.Objects;
 import java.util.Set;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * In the context of automatic programming, Function is defined as an activity expressing what has
- * to be done, with a {@link Goal}, written by a programmer in a specific programming language to or
- * the purpose of a {@link Thing}, which is characterized by a Name and Properties provided as
+ * to be done, with a {@link Purpose}, written by a programmer in a specific programming language to
+ * or the purpose of a {@link Thing}, which is characterized by a Name and Properties provided as
  * activity's optional arguments and return value.
  *
  * @author Christos Tsakostas
@@ -40,8 +38,8 @@ public class Function {
   /** The {@link Thing} the Function belongs to. */
   private Thing thing;
 
-  /** The {@link Goal} of the Function. */
-  private Goal goal;
+  /** The {@link Purpose} of the Function. */
+  private Purpose purpose;
 
   /**
    * The name of the Function.
@@ -60,9 +58,9 @@ public class Function {
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
-  private Function(Thing thing, Goal goal, FunctionName name) {
+  private Function(Thing thing, Purpose purpose, FunctionName name) {
     setThing(thing);
-    setGoal(goal);
+    setPurpose(purpose);
     setName(name);
   }
 
@@ -70,12 +68,12 @@ public class Function {
    * Instantiates a new Function with ReturnValue.
    *
    * @param thing the thing
-   * @param goal the goal
+   * @param purpose the purpose
    * @param name the name
    * @param returnValue the return value
    */
-  public Function(Thing thing, Goal goal, FunctionName name, ReturnValue returnValue) {
-    this(thing, goal, name);
+  public Function(Thing thing, Purpose purpose, FunctionName name, ReturnValue returnValue) {
+    this(thing, purpose, name);
     setReturnValue(returnValue);
     setArguments(new LinkedHashSet<>());
   }
@@ -84,12 +82,12 @@ public class Function {
    * Instantiates a new Function with Arguments.
    *
    * @param thing the thing
-   * @param goal the goal
+   * @param purpose the purpose
    * @param name the name
    * @param arguments the arguments
    */
-  public Function(Thing thing, Goal goal, FunctionName name, Set<Argument> arguments) {
-    this(thing, goal, name);
+  public Function(Thing thing, Purpose purpose, FunctionName name, Set<Argument> arguments) {
+    this(thing, purpose, name);
     setArguments(arguments);
   }
 
@@ -97,14 +95,18 @@ public class Function {
    * Instantiates a new Function with ReturnValue and Arguments.
    *
    * @param thing the thing
-   * @param goal the goal
+   * @param purpose the purpose
    * @param name the name
    * @param arguments the arguments
    * @param returnValue the return value
    */
   public Function(
-      Thing thing, Goal goal, FunctionName name, Set<Argument> arguments, ReturnValue returnValue) {
-    this(thing, goal, name, arguments);
+      Thing thing,
+      Purpose purpose,
+      FunctionName name,
+      Set<Argument> arguments,
+      ReturnValue returnValue) {
+    this(thing, purpose, name, arguments);
     setReturnValue(returnValue);
   }
 
@@ -122,12 +124,12 @@ public class Function {
   }
 
   /**
-   * Gets goal.
+   * Gets purpose.
    *
-   * @return the goal
+   * @return the purpose
    */
-  public Goal getGoal() {
-    return goal;
+  public Purpose getPurpose() {
+    return purpose;
   }
 
   /**
@@ -172,13 +174,13 @@ public class Function {
   }
 
   /**
-   * Sets goal.
+   * Sets purpose.
    *
-   * @param goal the goal
+   * @param purpose the purpose
    */
-  private void setGoal(Goal goal) {
-    Assertion.isNotNull(goal, "goal is required");
-    this.goal = goal;
+  private void setPurpose(Purpose purpose) {
+    Assertion.isNotNull(purpose, "purpose is required");
+    this.purpose = purpose;
   }
 
   /**
@@ -220,30 +222,18 @@ public class Function {
     if (this == o) {
       return true;
     }
-
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-
     Function function = (Function) o;
-
-    return new EqualsBuilder()
-        .append(thing, function.thing)
-        .append(goal, function.goal)
-        .append(name, function.name)
-        .append(returnValue, function.returnValue)
-        .append(arguments, function.arguments)
-        .isEquals();
+    return Objects.equals(purpose, function.purpose)
+        && Objects.equals(name, function.name)
+        && Objects.equals(returnValue, function.returnValue)
+        && Objects.equals(arguments, function.arguments);
   }
 
   @Override
   public int hashCode() {
-    return new HashCodeBuilder(17, 37)
-        .append(thing)
-        .append(goal)
-        .append(name)
-        .append(returnValue)
-        .append(arguments)
-        .toHashCode();
+    return Objects.hash(purpose, name, returnValue, arguments);
   }
 }

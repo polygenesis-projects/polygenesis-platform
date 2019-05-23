@@ -22,7 +22,7 @@
 
     return new ${ textConverter.toUpperCamel(to.dataGroup.dataType) }(
     <#list to.dataGroup.models as data>
-      <#if data.dataBusinessType == 'THING_IDENTITY'>
+      <#if data.dataPurpose.text == 'THING_IDENTITY'>
         ${ from.data.variableName.text }.getId().getTypeId().toString()<#sep>,</#sep>
       <#else>
       <#switch data.dataPrimaryType>

@@ -20,8 +20,8 @@
 
 package io.polygenesis.abstraction.thing;
 
-import io.polygenesis.core.AbstractDataContainer;
-import io.polygenesis.core.data.Data;
+import io.polygenesis.abstraction.data.AbstractDataContainer;
+import io.polygenesis.abstraction.data.Data;
 
 /**
  * The type Thing property.

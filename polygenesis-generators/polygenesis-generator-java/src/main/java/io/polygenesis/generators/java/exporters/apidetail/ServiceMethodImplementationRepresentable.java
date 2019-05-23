@@ -20,9 +20,9 @@
 
 package io.polygenesis.generators.java.exporters.apidetail;
 
+import io.polygenesis.abstraction.data.PrimitiveType;
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.data.PrimitiveType;
 import io.polygenesis.generators.commons.representations.ParameterRepresentation;
 import io.polygenesis.generators.java.implementations.apiimpl.ServiceMethodImplementationRegistry;
 import io.polygenesis.generators.java.skeletons.AbstractMethodRepresentable;

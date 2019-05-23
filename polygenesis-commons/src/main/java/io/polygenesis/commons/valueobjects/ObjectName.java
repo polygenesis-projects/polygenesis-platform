@@ -23,7 +23,7 @@ package io.polygenesis.commons.valueobjects;
 import io.polygenesis.commons.text.AbstractText;
 
 /**
- * The type Name.
+ * The type Object name.
  *
  * @author Christos Tsakostas
  */
@@ -36,7 +36,7 @@ public class ObjectName extends AbstractText {
   // ===============================================================================================
 
   /**
-   * Instantiates a new Name.
+   * Instantiates a new Object name.
    *
    * @param text the text
    */

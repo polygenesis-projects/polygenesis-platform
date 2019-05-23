@@ -24,6 +24,14 @@ import io.polygenesis.commons.freemarker.FreemarkerConfig;
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
+import io.polygenesis.generators.java.exporters.rdbms.projection.ProjectionRepositoryImplClassRepresentable;
+import io.polygenesis.generators.java.exporters.rdbms.projection.ProjectionRepositoryImplExporter;
+import io.polygenesis.generators.java.exporters.rdbms.projection.ProjectionSpringDataRepositoryExporter;
+import io.polygenesis.generators.java.exporters.rdbms.projection.ProjectionSpringDataRepositoryInterfaceRepresentable;
+import io.polygenesis.generators.java.exporters.rdbms.projection.testing.ProjectionRepositoryImplTestClassRepresentable;
+import io.polygenesis.generators.java.exporters.rdbms.projection.testing.ProjectionRepositoryImplTestExporter;
+import io.polygenesis.generators.java.exporters.rdbms.testing.PersistenceImplTestClassRepresentable;
+import io.polygenesis.generators.java.exporters.rdbms.testing.PersistenceImplTestExporter;
 import io.polygenesis.generators.java.skeletons.FromDataTypeToJavaConverter;
 import io.polygenesis.generators.java.skeletons.FunctionToMethodRepresentationConverter;
 import java.nio.file.Path;
@@ -38,15 +46,18 @@ public final class JavaRdbmsGeneratorFactory {
   // ===============================================================================================
   // DEPENDENCIES
   // ===============================================================================================
-  private static final PersistenceImplExporter persistenceImplExporter;
-  private static final PersistenceImplTestExporter persistenceImplTestExporter;
-  private static final DomainMessageDataExporter domainMessageDataExporter;
-  private static final DomainMessageDataConverterExporter domainMessageDataConverterExporter;
-  private static final DomainMessageDataRepositoryExporter domainMessageDataRepositoryExporter;
-  private static final SpringDataRepositoryExporter springDataRepositoryExporter;
-  private static final RdbmsTestExporter rdbmsTestExporter;
-  private static final RdbmsTestConfigExporter rdbmsTestConfigExporter;
-  private static final ApplicationCiRdbmsYmlExporter applicationCiRdbmsYmlExporter;
+  private static PersistenceImplExporter persistenceImplExporter;
+  private static PersistenceImplTestExporter persistenceImplTestExporter;
+  private static DomainMessageDataExporter domainMessageDataExporter;
+  private static DomainMessageDataConverterExporter domainMessageDataConverterExporter;
+  private static DomainMessageDataRepositoryExporter domainMessageDataRepositoryExporter;
+  private static SpringDataRepositoryExporter springDataRepositoryExporter;
+  private static RdbmsTestExporter rdbmsTestExporter;
+  private static RdbmsTestConfigExporter rdbmsTestConfigExporter;
+  private static ApplicationCiRdbmsYmlExporter applicationCiRdbmsYmlExporter;
+  private static ProjectionRepositoryImplExporter projectionRepositoryImplExporter;
+  private static ProjectionSpringDataRepositoryExporter projectionSpringDataRepositoryExporter;
+  private static ProjectionRepositoryImplTestExporter projectionRepositoryImplTestExporter;
 
   // ===============================================================================================
   // STATIC INITIALIZATION OF DEPENDENCIES
@@ -90,6 +101,22 @@ public final class JavaRdbmsGeneratorFactory {
     rdbmsTestConfigExporter = new RdbmsTestConfigExporter(freemarkerService);
 
     applicationCiRdbmsYmlExporter = new ApplicationCiRdbmsYmlExporter(freemarkerService);
+
+    projectionRepositoryImplExporter =
+        new ProjectionRepositoryImplExporter(
+            freemarkerService,
+            new ProjectionRepositoryImplClassRepresentable(fromDataTypeToJavaConverter));
+
+    projectionSpringDataRepositoryExporter =
+        new ProjectionSpringDataRepositoryExporter(
+            freemarkerService,
+            new ProjectionSpringDataRepositoryInterfaceRepresentable(
+                fromDataTypeToJavaConverter, functionToMethodRepresentationConverter));
+
+    projectionRepositoryImplTestExporter =
+        new ProjectionRepositoryImplTestExporter(
+            freemarkerService,
+            new ProjectionRepositoryImplTestClassRepresentable(fromDataTypeToJavaConverter));
   }
 
   // ===============================================================================================
@@ -126,6 +153,9 @@ public final class JavaRdbmsGeneratorFactory {
         springDataRepositoryExporter,
         rdbmsTestExporter,
         rdbmsTestConfigExporter,
-        applicationCiRdbmsYmlExporter);
+        applicationCiRdbmsYmlExporter,
+        projectionRepositoryImplExporter,
+        projectionSpringDataRepositoryExporter,
+        projectionRepositoryImplTestExporter);
   }
 }

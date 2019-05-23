@@ -15,6 +15,7 @@
 
   <modules>
     <module>polygenesis-abstraction-thing</module>
+    <module>polygenesis-abstraction-data</module>
   </modules>
 
 </project>

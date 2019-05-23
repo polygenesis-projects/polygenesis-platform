@@ -20,6 +20,8 @@
 
 package io.polygenesis.generators.java.exporters.domain.valueobject;
 
+import io.polygenesis.abstraction.data.Data;
+import io.polygenesis.abstraction.data.PrimitiveType;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.generators.commons.representations.FieldRepresentation;
 import io.polygenesis.generators.java.skeletons.AbstractClassRepresentable;
@@ -102,6 +104,36 @@ public class ValueObjectClassRepresentable extends AbstractClassRepresentable<Va
     imports.addAll(imports(source.getData()));
     imports.add("com.oregor.trinity4j.commons.assertion.Assertion");
     imports.add("javax.persistence.Embeddable");
+
+    source
+        .getData()
+        .getModels()
+        .stream()
+        .filter(Data::isDataPrimitive)
+        .map(Data::getAsDataPrimitive)
+        .filter(dataPrimitive -> dataPrimitive.getPrimitiveType().equals(PrimitiveType.DECIMAL))
+        .findFirst()
+        .ifPresent(model -> imports.add("java.math.BigDecimal"));
+
+    source
+        .getData()
+        .getModels()
+        .stream()
+        .filter(Data::isDataPrimitive)
+        .map(Data::getAsDataPrimitive)
+        .filter(dataPrimitive -> dataPrimitive.getPrimitiveType().equals(PrimitiveType.UUID))
+        .findFirst()
+        .ifPresent(model -> imports.add("java.util.UUID"));
+
+    source
+        .getData()
+        .getModels()
+        .stream()
+        .filter(Data::isDataPrimitive)
+        .map(Data::getAsDataPrimitive)
+        .filter(dataPrimitive -> dataPrimitive.getPrimitiveType().equals(PrimitiveType.DATETIME))
+        .findFirst()
+        .ifPresent(model -> imports.add("java.time.LocalDateTime"));
 
     return imports;
   }

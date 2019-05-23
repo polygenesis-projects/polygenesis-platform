@@ -21,7 +21,6 @@
 package io.polygenesis.models.api;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -81,16 +80,5 @@ public class ApiDeducerTest {
     assertThat(serviceModelRepository).isNotNull();
     assertThat(serviceModelRepository.getItems()).isNotNull();
     assertThat(serviceModelRepository.getItems().size()).isEqualTo(1);
-  }
-
-  @Test
-  public void shouldFailToDeduceForEmptyThingRepository() {
-    assertThatThrownBy(
-            () ->
-                apiDeducer.deduce(
-                    new LinkedHashSet<>(
-                        Arrays.asList(new ThingRepositoryImpl(new LinkedHashSet<>()))),
-                    modelRepositories))
-        .isInstanceOf(IllegalArgumentException.class);
   }
 }

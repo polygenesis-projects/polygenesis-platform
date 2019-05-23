@@ -48,10 +48,18 @@ public interface AbstractionRepository<T extends Abstraction> {
   Optional<T> getAbstractionItemByObjectName(ObjectName objectName);
 
   /**
-   * Gets abstraction items by metamodel type.
+   * Gets abstraction items by scope.
    *
-   * @param metamodelType the metamodel type
-   * @return the abstraction items by metamodel type
+   * @param abstractionScope the abstraction scope
+   * @return the abstraction items by scope
    */
-  Set<T> getAbstractionItemsByMetamodelType(MetamodelType metamodelType);
+  Set<T> getAbstractionItemsByScope(AbstractionScope abstractionScope);
+
+  /**
+   * Gets abstraction items by scopes.
+   *
+   * @param abstractionScopes the abstraction scopes
+   * @return the abstraction items by scopes
+   */
+  Set<T> getAbstractionItemsByScopes(Set<AbstractionScope> abstractionScopes);
 }

@@ -20,11 +20,11 @@
 
 package io.polygenesis.generators.java.implementations.domain.constructor;
 
-import io.polygenesis.abstraction.thing.ThingType;
+import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.commons.freemarker.FreemarkerService;
-import io.polygenesis.core.GoalType;
+import io.polygenesis.core.AbstractionScope;
 import io.polygenesis.generators.java.implementations.AbstractMethodImplementorRegistry;
-import io.polygenesis.generators.java.implementations.ScopeGoalTuple;
+import io.polygenesis.generators.java.implementations.ScopePurposeTuple;
 import io.polygenesis.models.domain.Constructor;
 
 /**
@@ -52,17 +52,17 @@ public class ConstructorImplementorRegistry extends AbstractMethodImplementorReg
   // ===============================================================================================
 
   @Override
-  public void initializeScopeAndGoalMap() {
-    scopeAndGoalMap.put(
-        new ScopeGoalTuple(ThingType.DOMAIN_AGGREGATE_ROOT, GoalType.CREATE.name()),
+  public void initializeScopeAndPurposeMap() {
+    scopeAndPurposeMap.put(
+        new ScopePurposeTuple(AbstractionScope.domainAggregateRoot(), Purpose.create()),
         new AggregateRootConstructor());
 
-    scopeAndGoalMap.put(
-        new ScopeGoalTuple(ThingType.DOMAIN_AGGREGATE_ENTITY, GoalType.CREATE.name()),
+    scopeAndPurposeMap.put(
+        new ScopePurposeTuple(AbstractionScope.domainAggregateEntity(), Purpose.create()),
         new AggregateEntityConstructor());
 
-    scopeAndGoalMap.put(
-        new ScopeGoalTuple(ThingType.DOMAIN_SUPPORTIVE_ENTITY, GoalType.CREATE.name()),
+    scopeAndPurposeMap.put(
+        new ScopePurposeTuple(AbstractionScope.domainAggregateEntity(), Purpose.create()),
         new SupportiveEntityConstructor());
   }
 }

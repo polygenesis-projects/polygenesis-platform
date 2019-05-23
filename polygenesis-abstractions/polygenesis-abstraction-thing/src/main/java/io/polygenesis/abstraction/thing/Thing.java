@@ -20,18 +20,19 @@
 
 package io.polygenesis.abstraction.thing;
 
+import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.commons.valueobjects.ContextName;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.Abstraction;
-import io.polygenesis.core.Goal;
+import io.polygenesis.core.AbstractionScope;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 
 /**
- * {@link Thing} is defined as a concept or an entity on or for which a {@link Goal} is defined.
+ * {@link Thing} is defined as a concept or an entity on or for which a {@link Purpose} is defined.
  * Most commonly, the names of the domain business concepts will be defined as things, being
  * concrete entities or more abstract concepts.
  *
@@ -45,7 +46,7 @@ import java.util.Set;
  */
 public class Thing implements Abstraction {
 
-  private ThingType thingType;
+  private Set<AbstractionScope> abstractionScopes = new LinkedHashSet<>();
   private ContextName contextName;
   private ThingName thingName;
   private Set<ThingProperty> thingProperties;
@@ -62,54 +63,7 @@ public class Thing implements Abstraction {
   /**
    * Instantiates a new Thing.
    *
-   * @param thingName the thing name
-   */
-  public Thing(ThingName thingName) {
-    this(
-        ThingType.DOMAIN_AGGREGATE_ROOT,
-        ContextName.defaultContext(),
-        thingName,
-        new LinkedHashSet<>(),
-        false,
-        null);
-  }
-
-  /**
-   * Instantiates a new Thing.
-   *
-   * @param thingName the thing name
-   * @param multiTenant the multi tenant
-   */
-  public Thing(ThingName thingName, Boolean multiTenant) {
-    this(
-        ThingType.DOMAIN_AGGREGATE_ROOT,
-        ContextName.defaultContext(),
-        thingName,
-        new LinkedHashSet<>(),
-        multiTenant,
-        null);
-  }
-
-  /**
-   * Instantiates a new Thing with parent.
-   *
-   * @param thingName the thing name
-   * @param parentThing the parent thing
-   */
-  public Thing(ThingName thingName, Thing parentThing) {
-    this(
-        ThingType.DOMAIN_AGGREGATE_ROOT,
-        ContextName.defaultContext(),
-        thingName,
-        new LinkedHashSet<>(),
-        parentThing.getMultiTenant(),
-        null);
-  }
-
-  /**
-   * Instantiates a new Thing.
-   *
-   * @param thingType the thing scope type
+   * @param abstractionScopes the abstraction scopes
    * @param contextName the context name
    * @param thingName the name
    * @param thingProperties the thing properties
@@ -117,13 +71,13 @@ public class Thing implements Abstraction {
    * @param optionalParent the optional parent
    */
   public Thing(
-      ThingType thingType,
+      Set<AbstractionScope> abstractionScopes,
       ContextName contextName,
       ThingName thingName,
       Set<ThingProperty> thingProperties,
       Boolean multiTenant,
       Thing optionalParent) {
-    setThingType(thingType);
+    setAbstractionScopes(abstractionScopes);
     setContextName(contextName);
     setThingName(thingName);
     setThingProperties(thingProperties);
@@ -157,6 +111,8 @@ public class Thing implements Abstraction {
    */
   public void addFunction(Function function) {
     this.functions.add(function);
+
+    addThingPropertiesFromFunction(function);
   }
 
   /**
@@ -166,6 +122,8 @@ public class Thing implements Abstraction {
    */
   public void addFunctions(Set<Function> functions) {
     this.functions.addAll(functions);
+
+    functions.forEach(function -> addThingPropertiesFromFunction(function));
   }
 
   /**
@@ -238,18 +196,14 @@ public class Thing implements Abstraction {
     return new ObjectName(getThingName().getText());
   }
 
+  @Override
+  public Set<AbstractionScope> getAbstractionsScopes() {
+    return abstractionScopes;
+  }
+
   // ===============================================================================================
   // GETTERS
   // ===============================================================================================
-
-  /**
-   * Gets thing type.
-   *
-   * @return the thing type
-   */
-  public ThingType getThingType() {
-    return thingType;
-  }
 
   /**
    * Gets context name.
@@ -328,13 +282,13 @@ public class Thing implements Abstraction {
   // ===============================================================================================
 
   /**
-   * Sets thing type.
+   * Sets abstraction scopes.
    *
-   * @param thingType the thing type
+   * @param abstractionScopes the abstraction scopes
    */
-  private void setThingType(ThingType thingType) {
-    Assertion.isNotNull(thingType, "thingType is required");
-    this.thingType = thingType;
+  public void setAbstractionScopes(Set<AbstractionScope> abstractionScopes) {
+    Assertion.isNotNull(abstractionScopes, "abstractionScopes is required");
+    this.abstractionScopes = abstractionScopes;
   }
 
   /**
@@ -417,6 +371,48 @@ public class Thing implements Abstraction {
   }
 
   // ===============================================================================================
+  // PRIVATE
+  // ===============================================================================================
+
+  private void addThingPropertiesFromFunction(Function function) {
+    Set<ThingProperty> newThingProperties = new LinkedHashSet<>();
+
+    function
+        .getArguments()
+        .stream()
+        .map(Argument::getData)
+        .filter(Data::isDataGroup)
+        .map(Data::getAsDataGroup)
+        .flatMap(dataGroup -> dataGroup.getModels().stream())
+        .forEach(data -> newThingProperties.add(new ThingProperty(data)));
+
+    thingProperties.addAll(newThingProperties);
+  }
+
+  //  protected void ensureThingProperties(Thing thing) {
+  //    if (thing.getThingProperties().isEmpty()) {
+  //      Set<ThingProperty> thingProperties = new LinkedHashSet<>();
+  //
+  //      thing
+  //          .getFunctions()
+  //          .stream()
+  //          .map(Function::getArguments)
+  //          .flatMap(arguments -> arguments.stream().map(Argument::getData))
+  //          .filter(Data::isDataGroup)
+  //          .map(Data::getAsDataGroup)
+  //          .flatMap(dataGroup -> dataGroup.getModels().stream())
+  //          // TODO
+  //          .filter(
+  //              data ->
+  //                  data.getDataPurpose().equals(DataPurpose.any())
+  //                      || data.getDataPurpose().equals(DataPurpose.referenceToThing()))
+  //          .forEach(data -> thingProperties.add(new ThingProperty(data)));
+  //
+  //      thing.assignThingProperties(thingProperties);
+  //    }
+  //  }
+
+  // ===============================================================================================
   // OVERRIDES
   // ===============================================================================================
 
@@ -429,10 +425,11 @@ public class Thing implements Abstraction {
       return false;
     }
     Thing thing = (Thing) o;
-    return thingType == thing.thingType
+    return Objects.equals(abstractionScopes, thing.abstractionScopes)
         && Objects.equals(contextName, thing.contextName)
         && Objects.equals(thingName, thing.thingName)
         && Objects.equals(thingProperties, thing.thingProperties)
+        && Objects.equals(functions, thing.functions)
         && Objects.equals(multiTenant, thing.multiTenant)
         && Objects.equals(children, thing.children)
         && Objects.equals(virtualChildren, thing.virtualChildren);
@@ -441,6 +438,13 @@ public class Thing implements Abstraction {
   @Override
   public int hashCode() {
     return Objects.hash(
-        thingType, contextName, thingName, thingProperties, multiTenant, children, virtualChildren);
+        abstractionScopes,
+        contextName,
+        thingName,
+        thingProperties,
+        functions,
+        multiTenant,
+        children,
+        virtualChildren);
   }
 }

@@ -22,10 +22,10 @@ package io.polygenesis.models.ui;
 
 import io.polygenesis.abstraction.thing.ThingRepository;
 import io.polygenesis.core.AbstractionRepository;
+import io.polygenesis.core.AbstractionScope;
 import io.polygenesis.core.CoreRegistry;
 import io.polygenesis.core.Deducer;
 import io.polygenesis.core.MetamodelRepository;
-import io.polygenesis.core.MetamodelType;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -64,7 +64,7 @@ public class UiFeatureDeducer implements Deducer<UiFeatureMetamodelRepository> {
 
     CoreRegistry.getAbstractionRepositoryResolver()
         .resolve(abstractionRepositories, ThingRepository.class)
-        .getAbstractionItemsByMetamodelType(MetamodelType.API)
+        .getAbstractionItemsByScope(AbstractionScope.api())
         .forEach(thing -> features.add(featureDeducer.deduceFeatureFromThing(thing)));
 
     return new UiFeatureMetamodelRepository(features);

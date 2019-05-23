@@ -20,14 +20,14 @@
 
 package io.polygenesis.models.domain;
 
+import io.polygenesis.abstraction.data.Data;
+import io.polygenesis.abstraction.data.DataGroup;
+import io.polygenesis.abstraction.data.DataPurpose;
+import io.polygenesis.abstraction.data.DataValidator;
+import io.polygenesis.abstraction.data.VariableName;
 import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
-import io.polygenesis.core.data.Data;
-import io.polygenesis.core.data.DataBusinessType;
-import io.polygenesis.core.data.DataGroup;
-import io.polygenesis.core.data.DataValidator;
-import io.polygenesis.core.data.VariableName;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -156,7 +156,7 @@ public class AggregateEntity extends BaseDomainEntity implements DomainObjectPro
 
     return new DataGroup(
         new VariableName(getObjectName().getText()),
-        DataBusinessType.ANY,
+        DataPurpose.any(),
         DataValidator.empty(),
         getObjectName(),
         getPackageName(),

@@ -25,8 +25,13 @@ import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.AbstractGenerator;
 import io.polygenesis.core.CoreRegistry;
 import io.polygenesis.core.MetamodelRepository;
+import io.polygenesis.generators.java.exporters.rdbms.projection.ProjectionRepositoryImplExporter;
+import io.polygenesis.generators.java.exporters.rdbms.projection.ProjectionSpringDataRepositoryExporter;
+import io.polygenesis.generators.java.exporters.rdbms.projection.testing.ProjectionRepositoryImplTestExporter;
+import io.polygenesis.generators.java.exporters.rdbms.testing.PersistenceImplTestExporter;
 import io.polygenesis.models.domain.AggregateRootPersistable;
 import io.polygenesis.models.domain.DomainMetamodelRepository;
+import io.polygenesis.models.domain.ProjectionMetamodelRepository;
 import java.nio.file.Path;
 import java.util.Set;
 
@@ -48,6 +53,9 @@ public class JavaRdbmsGenerator extends AbstractGenerator {
   private final RdbmsTestExporter rdbmsTestExporter;
   private final RdbmsTestConfigExporter rdbmsTestConfigExporter;
   private final ApplicationCiRdbmsYmlExporter applicationCiRdbmsYmlExporter;
+  private final ProjectionRepositoryImplExporter projectionRepositoryImplExporter;
+  private final ProjectionSpringDataRepositoryExporter projectionSpringDataRepositoryExporter;
+  private final ProjectionRepositoryImplTestExporter projectionRepositoryImplTestExporter;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -68,6 +76,9 @@ public class JavaRdbmsGenerator extends AbstractGenerator {
    * @param rdbmsTestExporter the rdbms test exporter
    * @param rdbmsTestConfigExporter the rdbms test config exporter
    * @param applicationCiRdbmsYmlExporter the application ci rdbms yml exporter
+   * @param projectionRepositoryImplExporter the projection repository impl exporter
+   * @param projectionSpringDataRepositoryExporter the projection spring data repository exporter
+   * @param projectionRepositoryImplTestExporter the projection repository impl test exporter
    */
   public JavaRdbmsGenerator(
       Path generationPath,
@@ -81,7 +92,10 @@ public class JavaRdbmsGenerator extends AbstractGenerator {
       SpringDataRepositoryExporter springDataRepositoryExporter,
       RdbmsTestExporter rdbmsTestExporter,
       RdbmsTestConfigExporter rdbmsTestConfigExporter,
-      ApplicationCiRdbmsYmlExporter applicationCiRdbmsYmlExporter) {
+      ApplicationCiRdbmsYmlExporter applicationCiRdbmsYmlExporter,
+      ProjectionRepositoryImplExporter projectionRepositoryImplExporter,
+      ProjectionSpringDataRepositoryExporter projectionSpringDataRepositoryExporter,
+      ProjectionRepositoryImplTestExporter projectionRepositoryImplTestExporter) {
     super(generationPath);
     this.rootPackageName = rootPackageName;
     this.contextName = contextName;
@@ -94,6 +108,9 @@ public class JavaRdbmsGenerator extends AbstractGenerator {
     this.rdbmsTestExporter = rdbmsTestExporter;
     this.rdbmsTestConfigExporter = rdbmsTestConfigExporter;
     this.applicationCiRdbmsYmlExporter = applicationCiRdbmsYmlExporter;
+    this.projectionRepositoryImplExporter = projectionRepositoryImplExporter;
+    this.projectionSpringDataRepositoryExporter = projectionSpringDataRepositoryExporter;
+    this.projectionRepositoryImplTestExporter = projectionRepositoryImplTestExporter;
   }
 
   // ===============================================================================================
@@ -125,14 +142,6 @@ public class JavaRdbmsGenerator extends AbstractGenerator {
   @SuppressWarnings("rawtypes")
   @Override
   public void generate(Set<MetamodelRepository> modelRepositories) {
-    DomainMetamodelRepository domainModelRepository =
-        CoreRegistry.getMetamodelRepositoryResolver()
-            .resolve(modelRepositories, DomainMetamodelRepository.class);
-
-    if (domainModelRepository.getItems().isEmpty()) {
-      return;
-    }
-
     domainMessageDataExporter.export(getGenerationPath(), getRootPackageName(), getContextName());
     domainMessageDataConverterExporter.export(
         getGenerationPath(), getRootPackageName(), getContextName());
@@ -142,7 +151,14 @@ public class JavaRdbmsGenerator extends AbstractGenerator {
     rdbmsTestConfigExporter.export(getGenerationPath(), getRootPackageName());
     applicationCiRdbmsYmlExporter.export(getGenerationPath());
 
-    domainModelRepository
+    aggregateRoots(modelRepositories);
+    projections(modelRepositories);
+  }
+
+  @SuppressWarnings("rawtypes")
+  private void aggregateRoots(Set<MetamodelRepository> modelRepositories) {
+    CoreRegistry.getMetamodelRepositoryResolver()
+        .resolve(modelRepositories, DomainMetamodelRepository.class)
         .getItems()
         .stream()
         .filter(aggregateRoot -> aggregateRoot instanceof AggregateRootPersistable)
@@ -163,6 +179,31 @@ public class JavaRdbmsGenerator extends AbstractGenerator {
 
               springDataRepositoryExporter.export(
                   getGenerationPath(), aggregateRoot.getPersistence());
+            });
+  }
+
+  @SuppressWarnings("rawtypes")
+  private void projections(Set<MetamodelRepository> modelRepositories) {
+    CoreRegistry.getMetamodelRepositoryResolver()
+        .resolve(modelRepositories, ProjectionMetamodelRepository.class)
+        .getItems()
+        .stream()
+        .forEach(
+            projection -> {
+              projectionRepositoryImplExporter.export(
+                  getGenerationPath(),
+                  projection.getPersistence(),
+                  getRootPackageName(),
+                  getContextName());
+
+              projectionRepositoryImplTestExporter.export(
+                  getGenerationPath(),
+                  projection.getPersistence(),
+                  getRootPackageName(),
+                  getContextName());
+
+              projectionSpringDataRepositoryExporter.export(
+                  getGenerationPath(), projection.getPersistence());
             });
   }
 }

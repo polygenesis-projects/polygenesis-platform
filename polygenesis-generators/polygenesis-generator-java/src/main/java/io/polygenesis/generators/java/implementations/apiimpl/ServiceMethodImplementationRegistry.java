@@ -20,11 +20,10 @@
 
 package io.polygenesis.generators.java.implementations.apiimpl;
 
-import io.polygenesis.abstraction.thing.ThingType;
+import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.commons.freemarker.FreemarkerService;
-import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.GoalType;
-import io.polygenesis.generators.java.implementations.ScopeGoalTuple;
+import io.polygenesis.core.AbstractionScope;
+import io.polygenesis.generators.java.implementations.ScopePurposeTuple;
 import io.polygenesis.generators.java.skeletons.MethodRepresentation;
 import io.polygenesis.models.api.ServiceMethod;
 import io.polygenesis.models.apiimpl.ServiceImplementation;
@@ -44,42 +43,44 @@ public class ServiceMethodImplementationRegistry {
   // ===============================================================================================
 
   @SuppressWarnings("CPD-START")
-  private static Map<ScopeGoalTuple, ServiceMethodImplementor> scopeAndGoalMap = new HashMap<>();
+  private static Map<ScopePurposeTuple, ServiceMethodImplementor> scopeAndPurposeMap =
+      new HashMap<>();
 
   static {
     // AGGREGATE ROOT
-    scopeAndGoalMap.put(
-        new ScopeGoalTuple(ThingType.DOMAIN_AGGREGATE_ROOT, GoalType.CREATE.name()),
+    scopeAndPurposeMap.put(
+        new ScopePurposeTuple(AbstractionScope.domainAggregateRoot(), Purpose.create()),
         new CreateAggregateRoot());
 
-    scopeAndGoalMap.put(
-        new ScopeGoalTuple(ThingType.DOMAIN_AGGREGATE_ROOT, GoalType.MODIFY.name()),
+    scopeAndPurposeMap.put(
+        new ScopePurposeTuple(AbstractionScope.domainAggregateRoot(), Purpose.modify()),
         new UpdateAggregateRoot());
 
-    scopeAndGoalMap.put(
-        new ScopeGoalTuple(ThingType.DOMAIN_AGGREGATE_ROOT, GoalType.FETCH_ONE.name()),
+    scopeAndPurposeMap.put(
+        new ScopePurposeTuple(AbstractionScope.domainAggregateRoot(), Purpose.fetchOne()),
         new FetchOneAggregateRoot());
 
-    scopeAndGoalMap.put(
-        new ScopeGoalTuple(ThingType.DOMAIN_AGGREGATE_ROOT, GoalType.FETCH_PAGED_COLLECTION.name()),
+    scopeAndPurposeMap.put(
+        new ScopePurposeTuple(
+            AbstractionScope.domainAggregateRoot(), Purpose.fetchPagedCollection()),
         new FetchPagedCollectionAggregateRoot());
 
     // ENTITY
-    scopeAndGoalMap.put(
-        new ScopeGoalTuple(ThingType.DOMAIN_AGGREGATE_ENTITY, GoalType.CREATE.name()),
+    scopeAndPurposeMap.put(
+        new ScopePurposeTuple(AbstractionScope.domainAggregateEntity(), Purpose.create()),
         new CreateAggregateEntity());
 
-    scopeAndGoalMap.put(
-        new ScopeGoalTuple(ThingType.DOMAIN_AGGREGATE_ENTITY, GoalType.MODIFY.name()),
+    scopeAndPurposeMap.put(
+        new ScopePurposeTuple(AbstractionScope.domainAggregateEntity(), Purpose.modify()),
         new UpdateAggregateEntity());
 
-    scopeAndGoalMap.put(
-        new ScopeGoalTuple(ThingType.DOMAIN_AGGREGATE_ENTITY, GoalType.FETCH_ONE.name()),
+    scopeAndPurposeMap.put(
+        new ScopePurposeTuple(AbstractionScope.domainAggregateEntity(), Purpose.fetchOne()),
         new FetchOneAggregateEntity());
 
-    scopeAndGoalMap.put(
-        new ScopeGoalTuple(
-            ThingType.DOMAIN_AGGREGATE_ENTITY, GoalType.FETCH_PAGED_COLLECTION.name()),
+    scopeAndPurposeMap.put(
+        new ScopePurposeTuple(
+            AbstractionScope.domainAggregateEntity(), Purpose.fetchPagedCollection()),
         new FetchPagedCollectionAggregateEntity());
   }
 
@@ -104,7 +105,10 @@ public class ServiceMethodImplementationRegistry {
       MethodRepresentation methodRepresentation) {
     if (isServiceMethodSupported(serviceMethod)) {
       return Optional.of(
-          serviceMethodImplementorFor(serviceMethod)
+          serviceMethodImplementorFor(
+                  getAbstractionScopeAsOptional(serviceMethod)
+                      .orElseThrow(IllegalArgumentException::new),
+                  serviceMethod)
               .implementationFor(
                   freemarkerService, serviceImplementation, serviceMethod, methodRepresentation));
     } else {
@@ -119,15 +123,26 @@ public class ServiceMethodImplementationRegistry {
    * @return the boolean
    */
   public boolean isServiceMethodSupported(ServiceMethod serviceMethod) {
-    return scopeAndGoalMap.containsKey(
-        new ScopeGoalTuple(
-            serviceMethod.getFunction().getThing().getThingType(),
-            TextConverter.toUpperUnderscore(serviceMethod.getFunction().getGoal().getText())));
+    return getAbstractionScopeAsOptional(serviceMethod).isPresent();
   }
 
   // ===============================================================================================
   // PRIVATE
   // ===============================================================================================
+
+  private Optional<AbstractionScope> getAbstractionScopeAsOptional(ServiceMethod serviceMethod) {
+    return serviceMethod
+        .getFunction()
+        .getThing()
+        .getAbstractionsScopes()
+        .stream()
+        .filter(
+            abstractionScope ->
+                scopeAndPurposeMap.containsKey(
+                    new ScopePurposeTuple(
+                        abstractionScope, serviceMethod.getFunction().getPurpose())))
+        .findFirst();
+  }
 
   /**
    * Service method implementor for service method implementor.
@@ -135,10 +150,9 @@ public class ServiceMethodImplementationRegistry {
    * @param serviceMethod the service method
    * @return the service method implementor
    */
-  private ServiceMethodImplementor serviceMethodImplementorFor(ServiceMethod serviceMethod) {
-    return scopeAndGoalMap.get(
-        new ScopeGoalTuple(
-            serviceMethod.getFunction().getThing().getThingType(),
-            TextConverter.toUpperUnderscore(serviceMethod.getFunction().getGoal().getText())));
+  private ServiceMethodImplementor serviceMethodImplementorFor(
+      AbstractionScope abstractionScope, ServiceMethod serviceMethod) {
+    return scopeAndPurposeMap.get(
+        new ScopePurposeTuple(abstractionScope, serviceMethod.getFunction().getPurpose()));
   }
 }

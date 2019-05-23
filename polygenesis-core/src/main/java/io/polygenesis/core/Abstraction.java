@@ -20,9 +20,19 @@
 
 package io.polygenesis.core;
 
+import java.util.Set;
+
 /**
  * The type Abstraction.
  *
  * @author Christos Tsakostas
  */
-public interface Abstraction extends Nameable {}
+public interface Abstraction extends Nameable {
+
+  /**
+   * Gets abstractions scopes.
+   *
+   * @return the abstractions scopes
+   */
+  Set<AbstractionScope> getAbstractionsScopes();
+}

@@ -26,6 +26,8 @@ import com.oregor.trinity.scaffolder.java.core.ProjectDescription;
 import com.oregor.trinity.scaffolder.java.core.ProjectDescriptionBuilder;
 import com.oregor.trinity.scaffolder.java.core.TrinityScaffolderJava;
 import com.oregor.trinity.scaffolder.java.core.TrinityScaffolderJavaFactory;
+import io.polygenesis.abstraction.data.Data;
+import io.polygenesis.abstraction.data.dsl.DataBuilder;
 import io.polygenesis.abstraction.thing.FunctionBuilder;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.ThingBuilder;
@@ -35,15 +37,11 @@ import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.AbstractionRepository;
 import io.polygenesis.core.Deducer;
 import io.polygenesis.core.Generator;
-import io.polygenesis.core.data.Data;
-import io.polygenesis.core.dsl.DataBuilder;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
-import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 
 /**
@@ -67,7 +65,7 @@ public class TrinityDemoJavaTest {
    */
   @Test
   public void shouldScaffoldAndGenerateSuccessfully() throws IOException {
-    FileUtils.deleteDirectory(new File(JAVA_EXPORT_PATH));
+    //    FileUtils.deleteDirectory(new File(JAVA_EXPORT_PATH));
 
     TrinityScaffolderJava trinityScaffolderJava = TrinityScaffolderJavaFactory.newInstance();
 
@@ -132,7 +130,7 @@ public class TrinityDemoJavaTest {
 
   private Thing createTodo(PackageName rootPackageName) {
     Thing task =
-        ThingBuilder.generic()
+        ThingBuilder.endToEnd()
             .setThingName(new ThingName("task"))
             .setMultiTenant(false)
             .createThing();

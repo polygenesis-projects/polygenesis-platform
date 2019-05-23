@@ -23,12 +23,10 @@ package io.polygenesis.generators.java.exporters.rdbms;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
-import io.polygenesis.generators.commons.representations.FieldRepresentation;
 import io.polygenesis.generators.commons.representations.ParameterRepresentation;
-import io.polygenesis.generators.java.skeletons.AbstractClassRepresentable;
+import io.polygenesis.generators.java.exporters.rdbms.shared.AbstractRepositoryImplClassRepresentable;
 import io.polygenesis.generators.java.skeletons.ConstructorRepresentation;
 import io.polygenesis.generators.java.skeletons.FromDataTypeToJavaConverter;
-import io.polygenesis.generators.java.skeletons.MethodRepresentation;
 import io.polygenesis.models.domain.Persistence;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
@@ -40,7 +38,7 @@ import java.util.TreeSet;
  *
  * @author Christos Tsakostas
  */
-public class PersistenceImplClassRepresentable extends AbstractClassRepresentable<Persistence> {
+public class PersistenceImplClassRepresentable extends AbstractRepositoryImplClassRepresentable {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -59,11 +57,6 @@ public class PersistenceImplClassRepresentable extends AbstractClassRepresentabl
   // ===============================================================================================
   // OVERRIDES
   // ===============================================================================================
-
-  @Override
-  public Set<FieldRepresentation> fieldRepresentations(Persistence source, Object... args) {
-    return new LinkedHashSet<>();
-  }
 
   @Override
   public Set<ConstructorRepresentation> constructorRepresentations(
@@ -109,16 +102,6 @@ public class PersistenceImplClassRepresentable extends AbstractClassRepresentabl
   }
 
   @Override
-  public Set<MethodRepresentation> methodRepresentations(Persistence source, Object... args) {
-    return new LinkedHashSet<>();
-  }
-
-  @Override
-  public String packageName(Persistence source, Object... args) {
-    return source.getPackageName().getText();
-  }
-
-  @Override
   public Set<String> imports(Persistence source, Object... args) {
     PackageName rootPackageName = (PackageName) args[0];
     ObjectName contextName = (ObjectName) args[1];
@@ -139,39 +122,6 @@ public class PersistenceImplClassRepresentable extends AbstractClassRepresentabl
     imports.add("org.springframework.stereotype.Repository");
 
     return imports;
-  }
-
-  @Override
-  public Set<String> annotations(Persistence source, Object... args) {
-    return new LinkedHashSet<>(Arrays.asList("@Repository"));
-  }
-
-  @Override
-  public String description(Persistence source, Object... args) {
-    StringBuilder stringBuilder = new StringBuilder();
-
-    stringBuilder.append("The ");
-
-    stringBuilder.append(TextConverter.toUpperCamelSpaces(source.getObjectName().getText()));
-
-    stringBuilder.append(" Implementation.");
-
-    return stringBuilder.toString();
-  }
-
-  @Override
-  public String modifiers(Persistence source, Object... args) {
-    return MODIFIER_PUBLIC;
-  }
-
-  @Override
-  public String simpleObjectName(Persistence source, Object... args) {
-    StringBuilder stringBuilder = new StringBuilder();
-
-    stringBuilder.append(TextConverter.toLowerCamel(source.getObjectName().getText()));
-    stringBuilder.append("Impl");
-
-    return stringBuilder.toString();
   }
 
   @Override

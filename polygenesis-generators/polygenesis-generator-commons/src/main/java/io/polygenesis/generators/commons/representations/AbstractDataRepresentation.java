@@ -20,8 +20,8 @@
 
 package io.polygenesis.generators.commons.representations;
 
+import io.polygenesis.abstraction.data.DataPurpose;
 import io.polygenesis.commons.assertion.Assertion;
-import io.polygenesis.core.data.DataBusinessType;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -37,7 +37,7 @@ public class AbstractDataRepresentation {
   private String dataType;
   private String variableName;
   private Set<String> annotations;
-  private DataBusinessType dataBusinessType;
+  private DataPurpose dataPurpose;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -50,7 +50,7 @@ public class AbstractDataRepresentation {
    * @param variableName the variable name
    */
   public AbstractDataRepresentation(String dataType, String variableName) {
-    this(dataType, variableName, new LinkedHashSet<>(), DataBusinessType.ANY);
+    this(dataType, variableName, new LinkedHashSet<>(), DataPurpose.any());
   }
 
   /**
@@ -58,11 +58,10 @@ public class AbstractDataRepresentation {
    *
    * @param dataType the data type
    * @param variableName the variable name
-   * @param dataBusinessType the data business type
+   * @param dataPurpose the data business type
    */
-  public AbstractDataRepresentation(
-      String dataType, String variableName, DataBusinessType dataBusinessType) {
-    this(dataType, variableName, new LinkedHashSet<>(), dataBusinessType);
+  public AbstractDataRepresentation(String dataType, String variableName, DataPurpose dataPurpose) {
+    this(dataType, variableName, new LinkedHashSet<>(), dataPurpose);
   }
 
   /**
@@ -73,7 +72,7 @@ public class AbstractDataRepresentation {
    * @param annotations the annotations
    */
   public AbstractDataRepresentation(String dataType, String variableName, Set<String> annotations) {
-    this(dataType, variableName, annotations, DataBusinessType.ANY);
+    this(dataType, variableName, annotations, DataPurpose.any());
   }
 
   /**
@@ -82,17 +81,14 @@ public class AbstractDataRepresentation {
    * @param dataType the data type
    * @param variableName the variable name
    * @param annotations the annotations
-   * @param dataBusinessType the data business type
+   * @param dataPurpose the data business type
    */
   public AbstractDataRepresentation(
-      String dataType,
-      String variableName,
-      Set<String> annotations,
-      DataBusinessType dataBusinessType) {
+      String dataType, String variableName, Set<String> annotations, DataPurpose dataPurpose) {
     setDataType(dataType);
     setVariableName(variableName);
     setAnnotations(annotations);
-    setDataBusinessType(dataBusinessType);
+    setDataPurpose(dataPurpose);
   }
 
   // ===============================================================================================
@@ -153,8 +149,8 @@ public class AbstractDataRepresentation {
    *
    * @return the data business type
    */
-  public DataBusinessType getDataBusinessType() {
-    return dataBusinessType;
+  public DataPurpose getDataPurpose() {
+    return dataPurpose;
   }
 
   // ===============================================================================================
@@ -194,11 +190,11 @@ public class AbstractDataRepresentation {
   /**
    * Sets data business type.
    *
-   * @param dataBusinessType the data business type
+   * @param dataPurpose the data business type
    */
-  private void setDataBusinessType(DataBusinessType dataBusinessType) {
-    Assertion.isNotNull(dataBusinessType, "dataBusinessType is required");
-    this.dataBusinessType = dataBusinessType;
+  private void setDataPurpose(DataPurpose dataPurpose) {
+    Assertion.isNotNull(dataPurpose, "dataPurpose is required");
+    this.dataPurpose = dataPurpose;
   }
 
   // ===============================================================================================
@@ -217,11 +213,11 @@ public class AbstractDataRepresentation {
     return Objects.equals(dataType, that.dataType)
         && Objects.equals(variableName, that.variableName)
         && Objects.equals(annotations, that.annotations)
-        && dataBusinessType == that.dataBusinessType;
+        && dataPurpose == that.dataPurpose;
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(dataType, variableName, annotations, dataBusinessType);
+    return Objects.hash(dataType, variableName, annotations, dataPurpose);
   }
 }

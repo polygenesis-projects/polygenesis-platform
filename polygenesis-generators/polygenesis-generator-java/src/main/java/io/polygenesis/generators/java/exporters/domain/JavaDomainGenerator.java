@@ -30,14 +30,19 @@ import io.polygenesis.generators.java.exporters.domain.aggregateroot.AggregateRo
 import io.polygenesis.generators.java.exporters.domain.aggregateroot.AggregateRootIdExporter;
 import io.polygenesis.generators.java.exporters.domain.domainevent.DomainEventExporter;
 import io.polygenesis.generators.java.exporters.domain.persistence.PersistenceExporter;
+import io.polygenesis.generators.java.exporters.domain.projection.ProjectionExporter;
+import io.polygenesis.generators.java.exporters.domain.projection.ProjectionIdExporter;
+import io.polygenesis.generators.java.exporters.domain.projection.ProjectionRepositoryExporter;
 import io.polygenesis.generators.java.exporters.domain.service.DomainServiceExporter;
 import io.polygenesis.generators.java.exporters.domain.supportiveentity.SupportiveEntityExporter;
 import io.polygenesis.generators.java.exporters.domain.valueobject.ValueObjectExporter;
 import io.polygenesis.models.domain.AggregateEntity;
 import io.polygenesis.models.domain.AggregateEntityCollection;
 import io.polygenesis.models.domain.AggregateRootPersistable;
+import io.polygenesis.models.domain.BaseDomainEntity;
 import io.polygenesis.models.domain.DomainMetamodelRepository;
 import io.polygenesis.models.domain.DomainServiceRepository;
+import io.polygenesis.models.domain.ProjectionMetamodelRepository;
 import io.polygenesis.models.domain.PropertyType;
 import io.polygenesis.models.domain.SupportiveEntityMetamodelRepository;
 import io.polygenesis.models.domain.ValueObject;
@@ -64,6 +69,9 @@ public class JavaDomainGenerator extends AbstractGenerator {
   private final DomainServiceExporter domainServiceExporter;
   private final SupportiveEntityExporter supportiveEntityExporter;
   private final ConstantsExporter constantsExporter;
+  private final ProjectionExporter projectionExporter;
+  private final ProjectionIdExporter projectionIdExporter;
+  private final ProjectionRepositoryExporter projectionRepositoryExporter;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -85,6 +93,9 @@ public class JavaDomainGenerator extends AbstractGenerator {
    * @param domainServiceExporter the domain service exporter
    * @param supportiveEntityExporter the supportive entity exporter
    * @param constantsExporter the constants exporter
+   * @param projectionExporter the projection exporter
+   * @param projectionIdExporter the projection id exporter
+   * @param projectionRepositoryExporter the projection repository exporter
    */
   public JavaDomainGenerator(
       Path generationPath,
@@ -99,7 +110,10 @@ public class JavaDomainGenerator extends AbstractGenerator {
       PersistenceExporter persistenceExporter,
       DomainServiceExporter domainServiceExporter,
       SupportiveEntityExporter supportiveEntityExporter,
-      ConstantsExporter constantsExporter) {
+      ConstantsExporter constantsExporter,
+      ProjectionExporter projectionExporter,
+      ProjectionIdExporter projectionIdExporter,
+      ProjectionRepositoryExporter projectionRepositoryExporter) {
     super(generationPath);
     this.tablePrefix = tablePrefix;
     this.rootPackageName = rootPackageName;
@@ -113,6 +127,9 @@ public class JavaDomainGenerator extends AbstractGenerator {
     this.domainServiceExporter = domainServiceExporter;
     this.supportiveEntityExporter = supportiveEntityExporter;
     this.constantsExporter = constantsExporter;
+    this.projectionExporter = projectionExporter;
+    this.projectionIdExporter = projectionIdExporter;
+    this.projectionRepositoryExporter = projectionRepositoryExporter;
   }
 
   // ===============================================================================================
@@ -202,6 +219,7 @@ public class JavaDomainGenerator extends AbstractGenerator {
                             aggregateRoot);
                       });
 
+              // Value Objects
               aggregateRoot
                   .getProperties()
                   .forEach(
@@ -226,5 +244,35 @@ public class JavaDomainGenerator extends AbstractGenerator {
                     getGenerationPath(), helperEntity, getRootPackageName()));
 
     constantsExporter.export(getGenerationPath(), getRootPackageName(), getTablePrefix());
+
+    generateProjections(modelRepositories);
+  }
+
+  @SuppressWarnings("rawtypes")
+  private void generateProjections(Set<MetamodelRepository> modelRepositories) {
+    CoreRegistry.getMetamodelRepositoryResolver()
+        .resolve(modelRepositories, ProjectionMetamodelRepository.class)
+        .getItems()
+        .forEach(
+            projection -> {
+              projectionIdExporter.export(getGenerationPath(), projection);
+              projectionExporter.export(getGenerationPath(), projection, getRootPackageName());
+              if (projection.getPersistence() != null) {
+                projectionRepositoryExporter.export(
+                    getGenerationPath(), projection.getPersistence());
+              }
+              exportValueObjects(projection);
+            });
+  }
+
+  private void exportValueObjects(BaseDomainEntity baseDomainEntity) {
+    baseDomainEntity
+        .getProperties()
+        .forEach(
+            property -> {
+              if (property.getPropertyType().equals(PropertyType.VALUE_OBJECT)) {
+                valueObjectExporter.export(getGenerationPath(), (ValueObject) property);
+              }
+            });
   }
 }

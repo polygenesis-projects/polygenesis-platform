@@ -22,6 +22,8 @@ package io.polygenesis.abstraction.thing;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import io.polygenesis.abstraction.data.Data;
+import io.polygenesis.abstraction.data.dsl.DataBuilder;
 import io.polygenesis.abstraction.thing.test.ThingForTesting;
 import java.util.Set;
 import org.assertj.core.api.Assertions;
@@ -37,5 +39,46 @@ public class FunctionBuilderTest {
 
     Assertions.assertThat(functions).isNotNull();
     assertThat(functions.size()).isEqualTo(0);
+  }
+
+  @Test
+  public void shouldCreateModify() {
+    Set<Function> functions =
+        FunctionBuilder.forThing(ThingForTesting.create(), "com.oregor")
+            .withFunctionModify(dataModifyDescription())
+            .build();
+
+    Assertions.assertThat(functions).isNotNull();
+    assertThat(functions.size()).isEqualTo(1);
+
+    Function function = functions.stream().findFirst().orElseThrow(IllegalStateException::new);
+    assertThat(function.getName()).isEqualTo(new FunctionName("modify"));
+    assertThat(function.getReturnValue().getData().getAsDataGroup().getObjectName().getText())
+        .isEqualTo("modifyBusinessResponse");
+  }
+
+  @Test
+  public void shouldCreateModifyWithCustomName() {
+    Set<Function> functions =
+        FunctionBuilder.forThing(ThingForTesting.create(), "com.oregor")
+            .withFunctionModify("modifyDescription", dataModifyDescription())
+            .build();
+
+    Assertions.assertThat(functions).isNotNull();
+    assertThat(functions.size()).isEqualTo(1);
+
+    Function function = functions.stream().findFirst().orElseThrow(IllegalStateException::new);
+    assertThat(function.getName().getText())
+        .isEqualTo(new FunctionName("modifyDescription").getText());
+    assertThat(function.getReturnValue().getData().getAsDataGroup().getObjectName().getText())
+        .isEqualTo("modifyDescriptionBusinessResponse");
+  }
+
+  private static Set<Data> dataModifyDescription() {
+    return DataBuilder.create().withTextProperty("description").build().build();
+  }
+
+  private static Set<Data> dataModifyDone() {
+    return DataBuilder.create().withBooleanProperty("done").build().build();
   }
 }

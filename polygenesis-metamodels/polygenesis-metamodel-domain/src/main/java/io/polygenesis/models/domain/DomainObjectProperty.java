@@ -20,7 +20,7 @@
 
 package io.polygenesis.models.domain;
 
-import io.polygenesis.core.data.Data;
+import io.polygenesis.abstraction.data.Data;
 
 /**
  * The interface DomainObjectProperty.

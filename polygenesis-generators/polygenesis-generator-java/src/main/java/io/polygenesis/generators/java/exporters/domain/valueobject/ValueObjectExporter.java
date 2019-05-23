@@ -78,6 +78,6 @@ public class ValueObjectExporter {
         generationPath.toString(),
         "src/main/java",
         valueObject.getData().getPackageName().toPath().toString(),
-        TextConverter.toUpperCamel(valueObject.getData().getVariableName().getText()) + ".java");
+        TextConverter.toUpperCamel(valueObject.getData().getObjectName().getText()) + ".java");
   }
 }

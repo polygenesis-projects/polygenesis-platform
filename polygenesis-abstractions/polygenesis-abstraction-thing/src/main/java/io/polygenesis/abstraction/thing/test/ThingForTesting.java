@@ -20,22 +20,21 @@
 
 package io.polygenesis.abstraction.thing.test;
 
+import io.polygenesis.abstraction.data.DataGroup;
+import io.polygenesis.abstraction.data.DataPrimitive;
+import io.polygenesis.abstraction.data.DataPurpose;
+import io.polygenesis.abstraction.data.PrimitiveType;
+import io.polygenesis.abstraction.data.VariableName;
 import io.polygenesis.abstraction.thing.Argument;
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.abstraction.thing.FunctionName;
+import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.ReturnValue;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.ThingBuilder;
 import io.polygenesis.abstraction.thing.ThingName;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
-import io.polygenesis.core.Goal;
-import io.polygenesis.core.GoalType;
-import io.polygenesis.core.data.DataBusinessType;
-import io.polygenesis.core.data.DataGroup;
-import io.polygenesis.core.data.DataPrimitive;
-import io.polygenesis.core.data.PrimitiveType;
-import io.polygenesis.core.data.VariableName;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 
@@ -61,7 +60,7 @@ public class ThingForTesting {
    * @return the thing
    */
   public static Thing create() {
-    Thing business = ThingBuilder.generic().setThingName(new ThingName(BUSINESS)).createThing();
+    Thing business = ThingBuilder.endToEnd().setThingName(new ThingName(BUSINESS)).createThing();
 
     business.addFunction(functionCreate(business));
     business.addFunction(functionFetchOne(business));
@@ -103,13 +102,13 @@ public class ThingForTesting {
 
     returnValueDataGroup.addData(
         DataPrimitive.ofDataBusinessType(
-            DataBusinessType.THING_IDENTITY, PrimitiveType.STRING, new VariableName(BUSINESS_ID)));
+            DataPurpose.thingIdentity(), PrimitiveType.STRING, new VariableName(BUSINESS_ID)));
 
     // ---------------------------------------------------------------------------------------------
 
     return new Function(
         business,
-        new Goal(GoalType.CREATE),
+        Purpose.create(),
         new FunctionName("create"),
         new LinkedHashSet<>(Arrays.asList(new Argument(argumentDataGroup))),
         new ReturnValue(returnValueDataGroup));
@@ -131,7 +130,7 @@ public class ThingForTesting {
 
     argumentDataGroup.addData(
         DataPrimitive.ofDataBusinessType(
-            DataBusinessType.THING_IDENTITY, PrimitiveType.STRING, new VariableName(BUSINESS_ID)));
+            DataPurpose.thingIdentity(), PrimitiveType.STRING, new VariableName(BUSINESS_ID)));
 
     // ---------------------------------------------------------------------------------------------
     // RETURN VALUE
@@ -148,7 +147,7 @@ public class ThingForTesting {
     // ---------------------------------------------------------------------------------------------
     return new Function(
         business,
-        new Goal(GoalType.FETCH_ONE),
+        Purpose.fetchOne(),
         new FunctionName("fetchOne"),
         new LinkedHashSet<>(Arrays.asList(new Argument(argumentDataGroup))),
         new ReturnValue(returnValueDataGroup));
@@ -171,7 +170,7 @@ public class ThingForTesting {
 
     argumentDataGroup.addData(
         DataPrimitive.ofDataBusinessType(
-            DataBusinessType.THING_IDENTITY, PrimitiveType.STRING, new VariableName(BUSINESS_ID)));
+            DataPurpose.thingIdentity(), PrimitiveType.STRING, new VariableName(BUSINESS_ID)));
 
     // ---------------------------------------------------------------------------------------------
     // RETURN VALUE
@@ -188,7 +187,7 @@ public class ThingForTesting {
     // ---------------------------------------------------------------------------------------------
     return new Function(
         business,
-        new Goal(GoalType.FETCH_COLLECTION),
+        Purpose.fetchCollection(),
         new FunctionName("fetchCollection"),
         new LinkedHashSet<>(Arrays.asList(new Argument(argumentDataGroup))),
         new ReturnValue(returnValueDataGroup));
@@ -225,7 +224,7 @@ public class ThingForTesting {
 
     return new Function(
         business,
-        new Goal(GoalType.CREATE),
+        Purpose.create(),
         new FunctionName("functionWithNoReturnValueAndManyArguments"),
         new LinkedHashSet<>(
             Arrays.asList(new Argument(argumentDataGroup1), new Argument(argumentDataGroup2))));
@@ -252,7 +251,7 @@ public class ThingForTesting {
 
     return new Function(
         business,
-        new Goal(GoalType.CREATE),
+        Purpose.create(),
         new FunctionName("functionWithNoArguments"),
         new ReturnValue(returnValueDataGroup));
   }
@@ -271,7 +270,7 @@ public class ThingForTesting {
 
     return new Function(
         business,
-        new Goal(GoalType.CREATE),
+        Purpose.create(),
         new FunctionName("functionWithPrimitives"),
         new LinkedHashSet<>(Arrays.asList(new Argument(dataPrimitive))),
         new ReturnValue(dataPrimitive));

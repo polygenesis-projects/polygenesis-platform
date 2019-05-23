@@ -20,17 +20,16 @@
 
 package io.polygenesis.models.api;
 
+import io.polygenesis.abstraction.data.DataGroup;
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.abstraction.thing.FunctionName;
+import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.ThingBuilder;
 import io.polygenesis.abstraction.thing.ThingName;
 import io.polygenesis.commons.test.AbstractEqualityTest;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
-import io.polygenesis.core.Goal;
-import io.polygenesis.core.GoalType;
-import io.polygenesis.core.data.DataGroup;
 import java.util.LinkedHashSet;
 
 /** @author Christos Tsakostas */
@@ -49,10 +48,9 @@ public class ServiceMethodTest extends AbstractEqualityTest<ServiceMethod> {
             new DataGroup(new ObjectName("xyz"), new PackageName("com.oregor")),
             false);
 
-    Thing thing = ThingBuilder.generic().setThingName(new ThingName("customer")).createThing();
+    Thing thing = ThingBuilder.endToEnd().setThingName(new ThingName("customer")).createThing();
     return new ServiceMethod(
-        new Function(
-            thing, new Goal(GoalType.CREATE), new FunctionName("create"), new LinkedHashSet<>()),
+        new Function(thing, Purpose.create(), new FunctionName("create"), new LinkedHashSet<>()),
         requestDto,
         responseDto);
   }
@@ -62,18 +60,17 @@ public class ServiceMethodTest extends AbstractEqualityTest<ServiceMethod> {
     Dto requestDto =
         new Dto(
             DtoType.API_REQUEST,
-            new DataGroup(new ObjectName("asd"), new PackageName("com.oregor")),
+            new DataGroup(new ObjectName("qwe"), new PackageName("com.oregor")),
             false);
     Dto responseDto =
         new Dto(
             DtoType.API_REQUEST,
-            new DataGroup(new ObjectName("xyz"), new PackageName("com.oregor")),
+            new DataGroup(new ObjectName("iop"), new PackageName("com.oregor")),
             false);
 
-    Thing thing = ThingBuilder.generic().setThingName(new ThingName("user")).createThing();
+    Thing thing = ThingBuilder.endToEnd().setThingName(new ThingName("user")).createThing();
     return new ServiceMethod(
-        new Function(
-            thing, new Goal(GoalType.CREATE), new FunctionName("create"), new LinkedHashSet<>()),
+        new Function(thing, Purpose.create(), new FunctionName("create"), new LinkedHashSet<>()),
         requestDto,
         responseDto);
   }

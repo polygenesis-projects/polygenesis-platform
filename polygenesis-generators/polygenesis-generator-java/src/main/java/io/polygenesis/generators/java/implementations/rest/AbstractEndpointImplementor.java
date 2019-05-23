@@ -20,7 +20,7 @@
 
 package io.polygenesis.generators.java.implementations.rest;
 
-import io.polygenesis.core.data.Data;
+import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.generators.java.skeletons.MethodRepresentation;
 import io.polygenesis.models.rest.Endpoint;
 import java.util.HashMap;

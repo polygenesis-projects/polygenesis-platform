@@ -22,10 +22,11 @@ package io.polygenesis.generators.java.implementations;
 
 import io.polygenesis.abstraction.thing.FunctionProvider;
 import io.polygenesis.commons.freemarker.FreemarkerService;
-import io.polygenesis.commons.text.TextConverter;
+import io.polygenesis.core.AbstractionScope;
 import io.polygenesis.generators.java.skeletons.MethodRepresentation;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * The type Abstract method registry.
@@ -41,24 +42,29 @@ public abstract class AbstractMethodImplementorRegistry<T extends FunctionProvid
 
   private final FreemarkerService freemarkerService;
 
-  /** The Scope and goal map. */
-  protected Map<ScopeGoalTuple, MethodImplementor<T>> scopeAndGoalMap = new HashMap<>();
+  /** The Scope and Purpose map. */
+  protected Map<ScopePurposeTuple, MethodImplementor<T>> scopeAndPurposeMap = new HashMap<>();
 
   // ===============================================================================================
   // CONSTRUCTORS
   // ===============================================================================================
 
+  /**
+   * Instantiates a new Abstract method implementor registry.
+   *
+   * @param freemarkerService the freemarker service
+   */
   public AbstractMethodImplementorRegistry(FreemarkerService freemarkerService) {
     this.freemarkerService = freemarkerService;
-    initializeScopeAndGoalMap();
+    initializeScopeAndPurposeMap();
   }
 
   // ===============================================================================================
   // FUNCTIONALITY
   // ===============================================================================================
 
-  /** Initialize scope and goal map. */
-  public abstract void initializeScopeAndGoalMap();
+  /** Initialize scope and purpose map. */
+  public abstract void initializeScopeAndPurposeMap();
 
   /**
    * Is supported boolean.
@@ -67,10 +73,7 @@ public abstract class AbstractMethodImplementorRegistry<T extends FunctionProvid
    * @return the boolean
    */
   public boolean isSupported(T methodProvider) {
-    return scopeAndGoalMap.containsKey(
-        new ScopeGoalTuple(
-            methodProvider.getFunction().getThing().getThingType(),
-            TextConverter.toUpperUnderscore(methodProvider.getFunction().getGoal().getText())));
+    return getAbstractionScopeAsOptional(methodProvider).isPresent();
   }
 
   /**
@@ -82,12 +85,12 @@ public abstract class AbstractMethodImplementorRegistry<T extends FunctionProvid
    */
   public String implementation(T methodProvider, MethodRepresentation methodRepresentation) {
     if (isSupported(methodProvider)) {
-      return scopeAndGoalMap
+      return scopeAndPurposeMap
           .get(
-              new ScopeGoalTuple(
-                  methodProvider.getFunction().getThing().getThingType(),
-                  TextConverter.toUpperUnderscore(
-                      methodProvider.getFunction().getGoal().getText())))
+              new ScopePurposeTuple(
+                  getAbstractionScopeAsOptional(methodProvider)
+                      .orElseThrow(IllegalArgumentException::new),
+                  methodProvider.getFunction().getPurpose()))
           .implementationFor(freemarkerService, methodProvider, methodRepresentation);
     } else {
       throw new UnsupportedOperationException(
@@ -95,5 +98,25 @@ public abstract class AbstractMethodImplementorRegistry<T extends FunctionProvid
               "No method implementation found for function with name=%s",
               methodProvider.getFunction().getName().getText()));
     }
+  }
+
+  /**
+   * Gets abstraction scope as optional.
+   *
+   * @param methodProvider the method provider
+   * @return the abstraction scope as optional
+   */
+  protected Optional<AbstractionScope> getAbstractionScopeAsOptional(T methodProvider) {
+    return methodProvider
+        .getFunction()
+        .getThing()
+        .getAbstractionsScopes()
+        .stream()
+        .filter(
+            abstractionScope ->
+                scopeAndPurposeMap.containsKey(
+                    new ScopePurposeTuple(
+                        abstractionScope, methodProvider.getFunction().getPurpose())))
+        .findFirst();
   }
 }

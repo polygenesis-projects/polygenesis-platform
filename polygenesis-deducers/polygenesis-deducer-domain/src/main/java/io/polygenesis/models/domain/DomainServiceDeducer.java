@@ -24,10 +24,10 @@ import io.polygenesis.abstraction.thing.ThingRepository;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.AbstractionRepository;
+import io.polygenesis.core.AbstractionScope;
 import io.polygenesis.core.CoreRegistry;
 import io.polygenesis.core.Deducer;
 import io.polygenesis.core.MetamodelRepository;
-import io.polygenesis.core.MetamodelType;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -82,7 +82,7 @@ public class DomainServiceDeducer implements Deducer<DomainServiceRepository> {
 
     CoreRegistry.getAbstractionRepositoryResolver()
         .resolve(abstractionRepositories, ThingRepository.class)
-        .getAbstractionItemsByMetamodelType(MetamodelType.DOMAIN_SERVICE)
+        .getAbstractionItemsByScope(AbstractionScope.domainService())
         .forEach(
             thing -> {
               DomainService domainService =

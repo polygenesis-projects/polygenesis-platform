@@ -20,12 +20,12 @@
 
 package io.polygenesis.deducers.sql;
 
+import io.polygenesis.abstraction.data.Data;
+import io.polygenesis.abstraction.data.DataGroup;
+import io.polygenesis.abstraction.data.DataPrimitive;
+import io.polygenesis.abstraction.data.PrimitiveType;
+import io.polygenesis.abstraction.data.VariableName;
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.data.Data;
-import io.polygenesis.core.data.DataGroup;
-import io.polygenesis.core.data.DataPrimitive;
-import io.polygenesis.core.data.PrimitiveType;
-import io.polygenesis.core.data.VariableName;
 import io.polygenesis.models.domain.AggregateEntityCollection;
 import io.polygenesis.models.domain.AggregateRoot;
 import io.polygenesis.models.domain.BaseDomainObject;

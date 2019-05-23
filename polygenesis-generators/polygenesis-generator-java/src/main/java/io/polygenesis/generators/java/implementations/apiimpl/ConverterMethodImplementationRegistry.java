@@ -20,10 +20,10 @@
 
 package io.polygenesis.generators.java.implementations.apiimpl;
 
-import io.polygenesis.abstraction.thing.ThingType;
+import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.commons.freemarker.FreemarkerService;
-import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.generators.java.implementations.ScopeGoalTuple;
+import io.polygenesis.core.AbstractionScope;
+import io.polygenesis.generators.java.implementations.ScopePurposeTuple;
 import io.polygenesis.generators.java.skeletons.MethodRepresentation;
 import io.polygenesis.models.apiimpl.DomainEntityConverterMethod;
 import java.util.HashMap;
@@ -41,21 +41,22 @@ public class ConverterMethodImplementationRegistry {
   // STATIC
   // ===============================================================================================
 
-  private static Map<ScopeGoalTuple, DomainObjectConverterMethodImplementor> scopeAndGoalMap =
+  private static Map<ScopePurposeTuple, DomainObjectConverterMethodImplementor> scopeAndPurposeMap =
       new HashMap<>();
 
   static {
-    scopeAndGoalMap.put(
-        new ScopeGoalTuple(ThingType.DOMAIN_AGGREGATE_ROOT, "CONVERT_DTO_TO_VO"),
+    scopeAndPurposeMap.put(
+        new ScopePurposeTuple(AbstractionScope.domainAggregateRoot(), Purpose.convertDtoToVo()),
         new ConvertDtoToVo());
 
-    scopeAndGoalMap.put(
-        new ScopeGoalTuple(ThingType.DOMAIN_AGGREGATE_ROOT, "CONVERT_VO_TO_DTO"),
+    scopeAndPurposeMap.put(
+        new ScopePurposeTuple(AbstractionScope.domainAggregateRoot(), Purpose.convertVoToDto()),
         new ConvertVoToDto());
 
-    scopeAndGoalMap.put(
-        new ScopeGoalTuple(
-            ThingType.DOMAIN_AGGREGATE_ROOT, "CONVERT_DOMAIN_OBJECT_TO_COLLECTION_RECORD"),
+    scopeAndPurposeMap.put(
+        new ScopePurposeTuple(
+            AbstractionScope.domainAggregateRoot(),
+            Purpose.convertDomainObjectToCollectionRecord()),
         new ConvertDomainObjectToCollectionRecord());
   }
 
@@ -77,7 +78,10 @@ public class ConverterMethodImplementationRegistry {
       MethodRepresentation methodRepresentation) {
     if (isConverterMethodSupported(domainEntityConverterMethod)) {
       return Optional.of(
-          domainObjectConverterMethodImplementorFor(domainEntityConverterMethod)
+          domainObjectConverterMethodImplementorFor(
+                  getAbstractionScopeAsOptional(domainEntityConverterMethod)
+                      .orElseThrow(IllegalArgumentException::new),
+                  domainEntityConverterMethod)
               .implementationFor(
                   freemarkerService, domainEntityConverterMethod, methodRepresentation));
     } else {
@@ -93,23 +97,32 @@ public class ConverterMethodImplementationRegistry {
    */
   public boolean isConverterMethodSupported(
       DomainEntityConverterMethod domainEntityConverterMethod) {
-    return scopeAndGoalMap.containsKey(
-        new ScopeGoalTuple(
-            domainEntityConverterMethod.getFunction().getThing().getThingType(),
-            TextConverter.toUpperUnderscore(
-                domainEntityConverterMethod.getFunction().getGoal().getText())));
+    return getAbstractionScopeAsOptional(domainEntityConverterMethod).isPresent();
   }
 
   // ===============================================================================================
   // PRIVATE
   // ===============================================================================================
 
-  private DomainObjectConverterMethodImplementor domainObjectConverterMethodImplementorFor(
+  private Optional<AbstractionScope> getAbstractionScopeAsOptional(
       DomainEntityConverterMethod domainEntityConverterMethod) {
-    return scopeAndGoalMap.get(
-        new ScopeGoalTuple(
-            domainEntityConverterMethod.getFunction().getThing().getThingType(),
-            TextConverter.toUpperUnderscore(
-                domainEntityConverterMethod.getFunction().getGoal().getText())));
+    return domainEntityConverterMethod
+        .getFunction()
+        .getThing()
+        .getAbstractionsScopes()
+        .stream()
+        .filter(
+            abstractionScope ->
+                scopeAndPurposeMap.containsKey(
+                    new ScopePurposeTuple(
+                        abstractionScope, domainEntityConverterMethod.getFunction().getPurpose())))
+        .findFirst();
+  }
+
+  private DomainObjectConverterMethodImplementor domainObjectConverterMethodImplementorFor(
+      AbstractionScope abstractionScope, DomainEntityConverterMethod domainEntityConverterMethod) {
+    return scopeAndPurposeMap.get(
+        new ScopePurposeTuple(
+            abstractionScope, domainEntityConverterMethod.getFunction().getPurpose()));
   }
 }

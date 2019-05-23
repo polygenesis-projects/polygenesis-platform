@@ -20,9 +20,9 @@
 
 package io.polygenesis.generators.angular.skeletons;
 
+import io.polygenesis.abstraction.data.Data;
+import io.polygenesis.abstraction.data.PrimitiveType;
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.core.data.Data;
-import io.polygenesis.core.data.PrimitiveType;
 import java.util.EnumMap;
 import java.util.stream.Stream;
 

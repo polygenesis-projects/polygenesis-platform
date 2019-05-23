@@ -32,12 +32,16 @@ public enum PropertyType {
   AGGREGATE_ROOT_ID,
   /** Aggregate entity property type. */
   AGGREGATE_ENTITY,
+  /** Aggregate entity id property type. */
+  AGGREGATE_ENTITY_ID,
   /** Aggregate entity collection property type. */
   AGGREGATE_ENTITY_COLLECTION,
   /** Primitive property type. */
   PRIMITIVE,
   /** Primitive collection property type. */
   PRIMITIVE_COLLECTION,
+  /** Projection id property type. */
+  PROJECTION_ID,
   /** Reference to aggregate root property type. */
   REFERENCE_TO_AGGREGATE_ROOT,
   /** Reference property type. */

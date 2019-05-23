@@ -20,10 +20,10 @@
 
 package io.polygenesis.models.api;
 
+import io.polygenesis.abstraction.thing.CqsType;
 import io.polygenesis.abstraction.thing.ThingName;
 import io.polygenesis.commons.test.AbstractEqualityTest;
 import io.polygenesis.commons.valueobjects.PackageName;
-import io.polygenesis.core.CqsType;
 import java.util.LinkedHashSet;
 
 /** @author Christos Tsakostas */

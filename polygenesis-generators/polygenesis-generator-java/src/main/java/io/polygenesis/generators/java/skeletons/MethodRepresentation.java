@@ -28,6 +28,8 @@ import java.util.Set;
 /**
  * The type Method representation.
  *
+ * <p>https://developer.mozilla.org/en-US/docs/Glossary/Signature/Function
+ *
  * @author Christos Tsakostas
  */
 public class MethodRepresentation {

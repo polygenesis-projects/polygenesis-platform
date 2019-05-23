@@ -21,6 +21,11 @@
 package io.polygenesis.models.domain;
 
 import io.polygenesis.commons.valueobjects.PackageName;
+import io.polygenesis.models.domain.aggregateroot.AggregateEntityDeducer;
+import io.polygenesis.models.domain.aggregateroot.AggregateEntityPropertyDeducer;
+import io.polygenesis.models.domain.aggregateroot.AggregateRootDeducer;
+import io.polygenesis.models.domain.aggregateroot.AggregateRootPropertyDeducer;
+import io.polygenesis.models.domain.aggregateroot.StateMutationMethodDeducer;
 
 /**
  * The type Domain deducer factory.
@@ -39,14 +44,11 @@ public final class DomainDeducerFactory {
   // ===============================================================================================
 
   static {
-    DomainObjectConstructorDeducer domainObjectConstructorDeducer =
-        new DomainObjectConstructorDeducer();
-
     AggregateEntityPropertyDeducer aggregateEntityPropertyDeducer =
         new AggregateEntityPropertyDeducer();
 
     AggregateEntityDeducer aggregateEntityDeducer =
-        new AggregateEntityDeducer(domainObjectConstructorDeducer, aggregateEntityPropertyDeducer);
+        new AggregateEntityDeducer(aggregateEntityPropertyDeducer);
 
     AggregateRootPropertyDeducer aggregateRootPropertyDeducer =
         new AggregateRootPropertyDeducer(aggregateEntityDeducer);
@@ -54,10 +56,7 @@ public final class DomainDeducerFactory {
     StateMutationMethodDeducer stateMutationMethodDeducer = new StateMutationMethodDeducer();
 
     aggregateRootDeducer =
-        new AggregateRootDeducer(
-            domainObjectConstructorDeducer,
-            aggregateRootPropertyDeducer,
-            stateMutationMethodDeducer);
+        new AggregateRootDeducer(aggregateRootPropertyDeducer, stateMutationMethodDeducer);
   }
 
   // ===============================================================================================

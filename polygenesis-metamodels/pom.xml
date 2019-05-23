@@ -17,8 +17,10 @@
     <module>polygenesis-metamodel-api</module>
     <module>polygenesis-metamodel-api-impl</module>
     <module>polygenesis-metamodel-domain</module>
+    <module>polygenesis-metamodel-messaging</module>
     <module>polygenesis-metamodel-reactive-state</module>
     <module>polygenesis-metamodel-rest</module>
+    <module>polygenesis-metamodel-spreadsheet</module>
     <module>polygenesis-metamodel-sql</module>
     <module>polygenesis-metamodel-ui</module>
   </modules>

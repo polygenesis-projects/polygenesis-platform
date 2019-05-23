@@ -20,13 +20,13 @@
 
 package io.polygenesis.models.rest;
 
+import io.polygenesis.abstraction.thing.CqsType;
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.abstraction.thing.FunctionName;
+import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.ThingBuilder;
 import io.polygenesis.abstraction.thing.ThingName;
-import io.polygenesis.core.Goal;
-import io.polygenesis.core.GoalType;
 import java.util.LinkedHashSet;
 
 /**
@@ -42,9 +42,8 @@ public abstract class AbstractRestDeducerTest {
    * @return the function
    */
   protected Function makeFunctionCreate() {
-    Thing thing = ThingBuilder.generic().setThingName(new ThingName("customer")).createThing();
-    return new Function(
-        thing, new Goal(GoalType.CREATE), new FunctionName("create"), new LinkedHashSet<>());
+    Thing thing = ThingBuilder.endToEnd().setThingName(new ThingName("customer")).createThing();
+    return new Function(thing, Purpose.create(), new FunctionName("create"), new LinkedHashSet<>());
   }
 
   /**
@@ -53,9 +52,8 @@ public abstract class AbstractRestDeducerTest {
    * @return the function
    */
   protected Function makeFunctionModify() {
-    Thing thing = ThingBuilder.generic().setThingName(new ThingName("customer")).createThing();
-    return new Function(
-        thing, new Goal(GoalType.MODIFY), new FunctionName("modify"), new LinkedHashSet<>());
+    Thing thing = ThingBuilder.endToEnd().setThingName(new ThingName("customer")).createThing();
+    return new Function(thing, Purpose.modify(), new FunctionName("modify"), new LinkedHashSet<>());
   }
 
   /**
@@ -64,9 +62,8 @@ public abstract class AbstractRestDeducerTest {
    * @return the function
    */
   protected Function makeFunctionDelete() {
-    Thing thing = ThingBuilder.generic().setThingName(new ThingName("customer")).createThing();
-    return new Function(
-        thing, new Goal(GoalType.MODIFY), new FunctionName("delete"), new LinkedHashSet<>());
+    Thing thing = ThingBuilder.endToEnd().setThingName(new ThingName("customer")).createThing();
+    return new Function(thing, Purpose.modify(), new FunctionName("delete"), new LinkedHashSet<>());
   }
 
   /**
@@ -75,9 +72,9 @@ public abstract class AbstractRestDeducerTest {
    * @return the function
    */
   protected Function makeFunctionFetchOne() {
-    Thing thing = ThingBuilder.generic().setThingName(new ThingName("customer")).createThing();
+    Thing thing = ThingBuilder.endToEnd().setThingName(new ThingName("customer")).createThing();
     return new Function(
-        thing, new Goal(GoalType.FETCH_ONE), new FunctionName("fetchOne"), new LinkedHashSet<>());
+        thing, Purpose.fetchOne(), new FunctionName("fetchOne"), new LinkedHashSet<>());
   }
 
   /**
@@ -86,10 +83,10 @@ public abstract class AbstractRestDeducerTest {
    * @return the function
    */
   protected Function makeFunctionFetchCollection() {
-    Thing thing = ThingBuilder.generic().setThingName(new ThingName("customer")).createThing();
+    Thing thing = ThingBuilder.endToEnd().setThingName(new ThingName("customer")).createThing();
     return new Function(
         thing,
-        new Goal(GoalType.FETCH_COLLECTION),
+        Purpose.fetchCollection(),
         new FunctionName("fetchCollection"),
         new LinkedHashSet<>());
   }
@@ -100,10 +97,10 @@ public abstract class AbstractRestDeducerTest {
    * @return the function
    */
   protected Function makeFunctionFetchPagedCollection() {
-    Thing thing = ThingBuilder.generic().setThingName(new ThingName("customer")).createThing();
+    Thing thing = ThingBuilder.endToEnd().setThingName(new ThingName("customer")).createThing();
     return new Function(
         thing,
-        new Goal(GoalType.FETCH_PAGED_COLLECTION),
+        Purpose.fetchPagedCollection(),
         new FunctionName("fetchCollection"),
         new LinkedHashSet<>());
   }
@@ -114,10 +111,10 @@ public abstract class AbstractRestDeducerTest {
    * @return the function
    */
   protected Function makeInvalidGetFunction() {
-    Thing thing = ThingBuilder.generic().setThingName(new ThingName("customer")).createThing();
+    Thing thing = ThingBuilder.endToEnd().setThingName(new ThingName("customer")).createThing();
     return new Function(
         thing,
-        new Goal("UnidentifiedGet"),
+        Purpose.custom("validate", CqsType.COMMAND),
         new FunctionName("fetchCollection"),
         new LinkedHashSet<>());
   }

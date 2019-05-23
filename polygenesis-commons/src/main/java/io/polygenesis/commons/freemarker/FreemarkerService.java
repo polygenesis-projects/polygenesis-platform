@@ -67,7 +67,6 @@ public class FreemarkerService {
    * @param generationFilePath the generation file path
    */
   public void export(Map<String, Object> dataModel, String ftlTemplate, Path generationFilePath) {
-
     try {
       PathService.ensurePath(generationFilePath.getParent());
 

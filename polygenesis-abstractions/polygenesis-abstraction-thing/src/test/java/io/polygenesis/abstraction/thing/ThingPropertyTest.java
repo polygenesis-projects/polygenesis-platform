@@ -20,10 +20,10 @@
 
 package io.polygenesis.abstraction.thing;
 
+import io.polygenesis.abstraction.data.DataPrimitive;
+import io.polygenesis.abstraction.data.PrimitiveType;
+import io.polygenesis.abstraction.data.VariableName;
 import io.polygenesis.commons.test.AbstractEqualityTest;
-import io.polygenesis.core.data.DataPrimitive;
-import io.polygenesis.core.data.PrimitiveType;
-import io.polygenesis.core.data.VariableName;
 
 /** @author Christos Tsakostas */
 public class ThingPropertyTest extends AbstractEqualityTest<ThingProperty> {

@@ -34,6 +34,12 @@ import io.polygenesis.generators.java.exporters.domain.aggregateroot.AggregateRo
 import io.polygenesis.generators.java.exporters.domain.domainevent.DomainEventExporter;
 import io.polygenesis.generators.java.exporters.domain.persistence.PersistenceExporter;
 import io.polygenesis.generators.java.exporters.domain.persistence.PersistenceInterfaceRepresentable;
+import io.polygenesis.generators.java.exporters.domain.projection.ProjectionClassRepresentable;
+import io.polygenesis.generators.java.exporters.domain.projection.ProjectionExporter;
+import io.polygenesis.generators.java.exporters.domain.projection.ProjectionIdClassRepresentable;
+import io.polygenesis.generators.java.exporters.domain.projection.ProjectionIdExporter;
+import io.polygenesis.generators.java.exporters.domain.projection.ProjectionRepositoryExporter;
+import io.polygenesis.generators.java.exporters.domain.projection.ProjectionRepositoryInterfaceRepresentable;
 import io.polygenesis.generators.java.exporters.domain.service.DomainServiceExporter;
 import io.polygenesis.generators.java.exporters.domain.service.DomainServiceInterfaceRepresentable;
 import io.polygenesis.generators.java.exporters.domain.supportiveentity.SupportiveEntityClassRepresentable;
@@ -67,6 +73,9 @@ public final class JavaDomainGeneratorFactory {
   private static DomainServiceExporter domainServiceExporter;
   private static SupportiveEntityExporter supportiveEntityExporter;
   private static ConstantsExporter constantsExporter;
+  private static ProjectionExporter projectionExporter;
+  private static ProjectionIdExporter projectionIdExporter;
+  private static ProjectionRepositoryExporter projectionRepositoryExporter;
 
   // ===============================================================================================
   // STATIC INITIALIZATION OF DEPENDENCIES
@@ -145,6 +154,20 @@ public final class JavaDomainGeneratorFactory {
         new SupportiveEntityExporter(freemarkerService, supportiveEntityClassRepresentable);
 
     constantsExporter = new ConstantsExporter(freemarkerService);
+
+    projectionExporter =
+        new ProjectionExporter(
+            freemarkerService, new ProjectionClassRepresentable(fromDataTypeToJavaConverter));
+
+    projectionIdExporter =
+        new ProjectionIdExporter(
+            freemarkerService, new ProjectionIdClassRepresentable(fromDataTypeToJavaConverter));
+
+    projectionRepositoryExporter =
+        new ProjectionRepositoryExporter(
+            freemarkerService,
+            new ProjectionRepositoryInterfaceRepresentable(
+                fromDataTypeToJavaConverter, functionToMethodRepresentationConverter));
   }
 
   // ===============================================================================================
@@ -182,6 +205,9 @@ public final class JavaDomainGeneratorFactory {
         persistenceExporter,
         domainServiceExporter,
         supportiveEntityExporter,
-        constantsExporter);
+        constantsExporter,
+        projectionExporter,
+        projectionIdExporter,
+        projectionRepositoryExporter);
   }
 }
