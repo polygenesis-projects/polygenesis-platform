@@ -22,6 +22,7 @@ package io.polygenesis.models.api;
 
 import io.polygenesis.abstraction.thing.CqsType;
 import io.polygenesis.abstraction.thing.ThingName;
+import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.Metamodel;
@@ -148,6 +149,7 @@ public class Service implements Metamodel {
    * @param packageName the package name
    */
   private void setPackageName(PackageName packageName) {
+    Assertion.isNotNull(packageName, "packageName is required");
     this.packageName = packageName;
   }
 
@@ -157,6 +159,7 @@ public class Service implements Metamodel {
    * @param serviceName the service name
    */
   private void setServiceName(ServiceName serviceName) {
+    Assertion.isNotNull(serviceName, "serviceName is required");
     this.serviceName = serviceName;
   }
 
@@ -166,6 +169,7 @@ public class Service implements Metamodel {
    * @param serviceMethods the methods
    */
   private void setServiceMethods(Set<ServiceMethod> serviceMethods) {
+    Assertion.isNotNull(serviceMethods, "serviceMethods is required");
     this.serviceMethods = serviceMethods;
   }
 
@@ -175,6 +179,7 @@ public class Service implements Metamodel {
    * @param cqrsType the cqrs type
    */
   private void setCqrsType(CqsType cqrsType) {
+    Assertion.isNotNull(cqrsType, "cqrsType is required");
     this.cqrsType = cqrsType;
   }
 
@@ -184,6 +189,7 @@ public class Service implements Metamodel {
    * @param thingName the thing name
    */
   private void setThingName(ThingName thingName) {
+    Assertion.isNotNull(thingName, "thingName is required");
     this.thingName = thingName;
   }
 
@@ -193,6 +199,7 @@ public class Service implements Metamodel {
    * @param dtos the dtos
    */
   private void setDtos(Set<Dto> dtos) {
+    Assertion.isNotNull(dtos, "dtos is required");
     this.dtos = dtos;
   }
 

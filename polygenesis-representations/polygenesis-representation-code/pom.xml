@@ -12,5 +12,26 @@
   <groupId>io.polygenesis.representations</groupId>
   <artifactId>polygenesis-representation-code</artifactId>
 
+  <dependencies>
+    <!--CORE-->
+    <dependency>
+      <groupId>io.polygenesis</groupId>
+      <artifactId>polygenesis-core</artifactId>
+    </dependency>
+
+    <!--ABSTRACTION DATA-->
+    <dependency>
+      <groupId>io.polygenesis.abstractions</groupId>
+      <artifactId>polygenesis-abstraction-data</artifactId>
+    </dependency>
+
+    <!--TEST-->
+    <dependency>
+      <groupId>io.polygenesis</groupId>
+      <artifactId>polygenesis-commons-test</artifactId>
+      <scope>test</scope>
+      <type>test-jar</type>
+    </dependency>
+  </dependencies>
 
 </project>

@@ -22,6 +22,7 @@ package io.polygenesis.generators.java.exporters.apidetail;
 
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.text.TextConverter;
+import io.polygenesis.generators.java.transformers.apidetail.DomainObjectConverterClassTransformer;
 import io.polygenesis.models.apiimpl.DomainEntityConverter;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -40,7 +41,7 @@ public class DomainObjectConverterExporter {
   // ===============================================================================================
 
   private final FreemarkerService freemarkerService;
-  private final DomainObjectConverterClassRepresentable domainObjectConverterClassRepresentable;
+  private final DomainObjectConverterClassTransformer domainObjectConverterClassRepresentable;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -54,7 +55,7 @@ public class DomainObjectConverterExporter {
    */
   public DomainObjectConverterExporter(
       FreemarkerService freemarkerService,
-      DomainObjectConverterClassRepresentable domainObjectConverterClassRepresentable) {
+      DomainObjectConverterClassTransformer domainObjectConverterClassRepresentable) {
     this.freemarkerService = freemarkerService;
     this.domainObjectConverterClassRepresentable = domainObjectConverterClassRepresentable;
   }

@@ -349,16 +349,23 @@
       <!--TRANSFORMERS-->
       <dependency>
         <groupId>io.polygenesis.transformers</groupId>
+        <artifactId>polygenesis-transformer-code</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.polygenesis.transformers</groupId>
         <artifactId>polygenesis-transformer-spreadsheet</artifactId>
         <version>${project.version}</version>
       </dependency>
 
-      <!--GENERATORS-->
+      <!--REPRESENTATIONS-->
       <dependency>
-        <groupId>io.polygenesis.generators</groupId>
-        <artifactId>polygenesis-generator-commons</artifactId>
+        <groupId>io.polygenesis.representations</groupId>
+        <artifactId>polygenesis-representation-code</artifactId>
         <version>${project.version}</version>
       </dependency>
+
+      <!--GENERATORS-->
       <dependency>
         <groupId>io.polygenesis.generators</groupId>
         <artifactId>polygenesis-generator-angular</artifactId>

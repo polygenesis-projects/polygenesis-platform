@@ -14,7 +14,8 @@
   <packaging>pom</packaging>
 
   <modules>
-    <module>polygenesis-transformers-api</module>
+    <module>polygenesis-transformer-code</module>
     <module>polygenesis-transformer-spreadsheet</module>
   </modules>
+
 </project>

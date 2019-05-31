@@ -23,9 +23,15 @@ package io.polygenesis.generators.java.exporters.apidetail;
 import io.polygenesis.commons.freemarker.FreemarkerConfig;
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.valueobjects.PackageName;
-import io.polygenesis.generators.java.implementations.apiimpl.ConverterMethodImplementationRegistry;
-import io.polygenesis.generators.java.implementations.apiimpl.ServiceMethodImplementationRegistry;
-import io.polygenesis.generators.java.skeletons.FromDataTypeToJavaConverter;
+import io.polygenesis.generators.java.exporters.apidetail.testing.ServiceImplementationTestExporter;
+import io.polygenesis.generators.java.transformers.apidetail.DomainObjectConverterClassTransformer;
+import io.polygenesis.generators.java.transformers.apidetail.DomainObjectConverterMethodTransformer;
+import io.polygenesis.generators.java.transformers.apidetail.ServiceImplementationClassTransformer;
+import io.polygenesis.generators.java.transformers.apidetail.ServiceImplementationTestClassTransformer;
+import io.polygenesis.generators.java.transformers.apidetail.ServiceMethodImplementationTransformer;
+import io.polygenesis.generators.java.transformers.apidetail.activities.ConverterMethodImplementationRegistry;
+import io.polygenesis.generators.java.transformers.apidetail.activities.ServiceMethodImplementationRegistry;
+import io.polygenesis.transformer.code.FromDataTypeToJavaConverter;
 import java.nio.file.Path;
 
 /**
@@ -55,20 +61,20 @@ public final class JavaApiDetailGeneratorFactory {
     ServiceMethodImplementationRegistry serviceMethodImplementationRegistry =
         new ServiceMethodImplementationRegistry();
 
-    ServiceMethodImplementationRepresentable apiImplMethodProjectionMaker =
-        new ServiceMethodImplementationRepresentable(
+    ServiceMethodImplementationTransformer apiImplMethodProjectionMaker =
+        new ServiceMethodImplementationTransformer(
             fromDataTypeToJavaConverter, serviceMethodImplementationRegistry, freemarkerService);
 
-    ServiceImplementationClassRepresentable serviceImplementationClassRepresentable =
-        new ServiceImplementationClassRepresentable(
+    ServiceImplementationClassTransformer serviceImplementationClassRepresentable =
+        new ServiceImplementationClassTransformer(
             fromDataTypeToJavaConverter, apiImplMethodProjectionMaker);
 
     serviceImplementationExporter =
         new ServiceImplementationExporter(
             freemarkerService, serviceImplementationClassRepresentable);
 
-    ServiceImplementationTestClassRepresentable serviceImplementationTestClassRepresentable =
-        new ServiceImplementationTestClassRepresentable(
+    ServiceImplementationTestClassTransformer serviceImplementationTestClassRepresentable =
+        new ServiceImplementationTestClassTransformer(
             fromDataTypeToJavaConverter, apiImplMethodProjectionMaker);
 
     serviceImplementationTestExporter =
@@ -78,12 +84,12 @@ public final class JavaApiDetailGeneratorFactory {
     ConverterMethodImplementationRegistry converterMethodImplementationRegistry =
         new ConverterMethodImplementationRegistry();
 
-    DomainObjectConverterMethodRepresentable domainObjectConverterMethodRepresentable =
-        new DomainObjectConverterMethodRepresentable(
+    DomainObjectConverterMethodTransformer domainObjectConverterMethodRepresentable =
+        new DomainObjectConverterMethodTransformer(
             fromDataTypeToJavaConverter, freemarkerService, converterMethodImplementationRegistry);
 
-    DomainObjectConverterClassRepresentable domainObjectConverterClassRepresentable =
-        new DomainObjectConverterClassRepresentable(
+    DomainObjectConverterClassTransformer domainObjectConverterClassRepresentable =
+        new DomainObjectConverterClassTransformer(
             fromDataTypeToJavaConverter, domainObjectConverterMethodRepresentable);
 
     domainObjectConverterExporter =

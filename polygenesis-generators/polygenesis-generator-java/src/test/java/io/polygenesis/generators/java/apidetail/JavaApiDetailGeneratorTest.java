@@ -34,7 +34,7 @@ import io.polygenesis.core.MetamodelRepository;
 import io.polygenesis.generators.java.exporters.apidetail.DomainObjectConverterExporter;
 import io.polygenesis.generators.java.exporters.apidetail.JavaApiDetailGenerator;
 import io.polygenesis.generators.java.exporters.apidetail.ServiceImplementationExporter;
-import io.polygenesis.generators.java.exporters.apidetail.ServiceImplementationTestExporter;
+import io.polygenesis.generators.java.exporters.apidetail.testing.ServiceImplementationTestExporter;
 import io.polygenesis.models.api.Service;
 import io.polygenesis.models.api.ServiceMetamodelRepository;
 import io.polygenesis.models.apiimpl.DomainEntityConverter;

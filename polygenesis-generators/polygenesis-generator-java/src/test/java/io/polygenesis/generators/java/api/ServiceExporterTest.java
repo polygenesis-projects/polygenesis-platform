@@ -27,8 +27,8 @@ import static org.mockito.Mockito.verify;
 
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.valueobjects.PackageName;
-import io.polygenesis.generators.java.exporters.api.ServiceExporter;
-import io.polygenesis.generators.java.exporters.api.ServiceInterfaceRepresentable;
+import io.polygenesis.generators.java.api.exporter.ServiceExporter;
+import io.polygenesis.generators.java.api.transformer.ServiceInterfaceTransformer;
 import io.polygenesis.models.api.Service;
 import io.polygenesis.models.api.ServiceName;
 import java.nio.file.Path;
@@ -42,7 +42,7 @@ public class ServiceExporterTest {
   private Path generationPath;
   private Service service;
   private FreemarkerService freemarkerService;
-  private ServiceInterfaceRepresentable serviceInterfaceRepresentable;
+  private ServiceInterfaceTransformer serviceInterfaceRepresentable;
   private ServiceExporter serviceExporter;
 
   @Before
@@ -50,7 +50,7 @@ public class ServiceExporterTest {
     generationPath = Paths.get("tmp");
     service = mock(Service.class);
     freemarkerService = mock(FreemarkerService.class);
-    serviceInterfaceRepresentable = mock(ServiceInterfaceRepresentable.class);
+    serviceInterfaceRepresentable = mock(ServiceInterfaceTransformer.class);
     serviceExporter = new ServiceExporter(freemarkerService, serviceInterfaceRepresentable);
   }
 

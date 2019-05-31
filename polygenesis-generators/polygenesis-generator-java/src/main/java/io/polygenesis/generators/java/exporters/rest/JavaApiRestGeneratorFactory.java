@@ -24,8 +24,11 @@ import io.polygenesis.commons.freemarker.FreemarkerConfig;
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
-import io.polygenesis.generators.java.implementations.rest.EndpointImplementationRegistry;
-import io.polygenesis.generators.java.skeletons.FromDataTypeToJavaConverter;
+import io.polygenesis.generators.java.transformers.rest.EndpointMethodTransformer;
+import io.polygenesis.generators.java.transformers.rest.ResourceClassTransformer;
+import io.polygenesis.generators.java.transformers.rest.ResourceTestClassTransformer;
+import io.polygenesis.generators.java.transformers.rest.activities.EndpointImplementationRegistry;
+import io.polygenesis.transformer.code.FromDataTypeToJavaConverter;
 import java.nio.file.Path;
 
 /**
@@ -55,18 +58,17 @@ public final class JavaApiRestGeneratorFactory {
     EndpointImplementationRegistry endpointImplementationRegistry =
         new EndpointImplementationRegistry();
 
-    EndpointMethodRepresentable endpointMethodRepresentable =
-        new EndpointMethodRepresentable(
+    EndpointMethodTransformer endpointMethodRepresentable =
+        new EndpointMethodTransformer(
             fromDataTypeToJavaConverter, freemarkerService, endpointImplementationRegistry);
 
-    ResourceClassRepresentable resourceClassRepresentable =
-        new ResourceClassRepresentable(fromDataTypeToJavaConverter, endpointMethodRepresentable);
+    ResourceClassTransformer resourceClassRepresentable =
+        new ResourceClassTransformer(fromDataTypeToJavaConverter, endpointMethodRepresentable);
 
     resourceExporter = new ResourceExporter(freemarkerService, resourceClassRepresentable);
 
-    ResourceTestClassRepresentable resourceTestClassRepresentable =
-        new ResourceTestClassRepresentable(
-            fromDataTypeToJavaConverter, endpointMethodRepresentable);
+    ResourceTestClassTransformer resourceTestClassRepresentable =
+        new ResourceTestClassTransformer(fromDataTypeToJavaConverter, endpointMethodRepresentable);
 
     resourceTestExporter =
         new ResourceTestExporter(freemarkerService, resourceTestClassRepresentable);

@@ -23,33 +23,35 @@ package io.polygenesis.generators.java.exporters.domain;
 import io.polygenesis.commons.freemarker.FreemarkerConfig;
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.valueobjects.PackageName;
-import io.polygenesis.generators.java.exporters.domain.aggregateentity.AggregateEntityClassRepresentable;
 import io.polygenesis.generators.java.exporters.domain.aggregateentity.AggregateEntityExporter;
-import io.polygenesis.generators.java.exporters.domain.aggregateentity.AggregateEntityIdClassRepresentable;
 import io.polygenesis.generators.java.exporters.domain.aggregateentity.AggregateEntityIdExporter;
-import io.polygenesis.generators.java.exporters.domain.aggregateroot.AggregateRootClassRepresentable;
 import io.polygenesis.generators.java.exporters.domain.aggregateroot.AggregateRootExporter;
-import io.polygenesis.generators.java.exporters.domain.aggregateroot.AggregateRootIdClassRepresentable;
 import io.polygenesis.generators.java.exporters.domain.aggregateroot.AggregateRootIdExporter;
 import io.polygenesis.generators.java.exporters.domain.domainevent.DomainEventExporter;
 import io.polygenesis.generators.java.exporters.domain.persistence.PersistenceExporter;
-import io.polygenesis.generators.java.exporters.domain.persistence.PersistenceInterfaceRepresentable;
-import io.polygenesis.generators.java.exporters.domain.projection.ProjectionClassRepresentable;
 import io.polygenesis.generators.java.exporters.domain.projection.ProjectionExporter;
-import io.polygenesis.generators.java.exporters.domain.projection.ProjectionIdClassRepresentable;
 import io.polygenesis.generators.java.exporters.domain.projection.ProjectionIdExporter;
 import io.polygenesis.generators.java.exporters.domain.projection.ProjectionRepositoryExporter;
-import io.polygenesis.generators.java.exporters.domain.projection.ProjectionRepositoryInterfaceRepresentable;
 import io.polygenesis.generators.java.exporters.domain.service.DomainServiceExporter;
-import io.polygenesis.generators.java.exporters.domain.service.DomainServiceInterfaceRepresentable;
-import io.polygenesis.generators.java.exporters.domain.supportiveentity.SupportiveEntityClassRepresentable;
 import io.polygenesis.generators.java.exporters.domain.supportiveentity.SupportiveEntityExporter;
-import io.polygenesis.generators.java.exporters.domain.valueobject.ValueObjectClassRepresentable;
 import io.polygenesis.generators.java.exporters.domain.valueobject.ValueObjectExporter;
 import io.polygenesis.generators.java.implementations.domain.StateMutationMethodImplementorRegistry;
 import io.polygenesis.generators.java.implementations.domain.constructor.ConstructorImplementorRegistry;
-import io.polygenesis.generators.java.skeletons.FromDataTypeToJavaConverter;
-import io.polygenesis.generators.java.skeletons.FunctionToMethodRepresentationConverter;
+import io.polygenesis.generators.java.transformers.domain.ConstructorTransformer;
+import io.polygenesis.generators.java.transformers.domain.StateMutationMethodTransformer;
+import io.polygenesis.generators.java.transformers.domain.aggregateentity.AggregateEntityClassTransformer;
+import io.polygenesis.generators.java.transformers.domain.aggregateentity.AggregateEntityIdClassTransformer;
+import io.polygenesis.generators.java.transformers.domain.aggregateroot.AggregateRootClassTransformer;
+import io.polygenesis.generators.java.transformers.domain.aggregateroot.AggregateRootIdClassTransformer;
+import io.polygenesis.generators.java.transformers.domain.persistence.PersistenceInterfaceTransformer;
+import io.polygenesis.generators.java.transformers.domain.projection.ProjectionClassTransformer;
+import io.polygenesis.generators.java.transformers.domain.projection.ProjectionIdClassTransformer;
+import io.polygenesis.generators.java.transformers.domain.projection.ProjectionRepositoryInterfaceTransformer;
+import io.polygenesis.generators.java.transformers.domain.service.DomainServiceInterfaceTransformer;
+import io.polygenesis.generators.java.transformers.domain.supportiveentity.SupportiveEntityClassTransformer;
+import io.polygenesis.generators.java.transformers.domain.valueobject.ValueObjectClassTransformer;
+import io.polygenesis.transformer.code.FromDataTypeToJavaConverter;
+import io.polygenesis.transformer.code.FunctionToMethodRepresentationTransformer;
 import java.nio.file.Path;
 
 /**
@@ -90,65 +92,64 @@ public final class JavaDomainGeneratorFactory {
     StateMutationMethodImplementorRegistry stateMutationMethodImplementorRegistry =
         new StateMutationMethodImplementorRegistry(freemarkerService);
 
-    StateMutationMethodRepresentable stateMutationMethodRepresentable =
-        new StateMutationMethodRepresentable(
+    StateMutationMethodTransformer stateMutationMethodRepresentable =
+        new StateMutationMethodTransformer(
             fromDataTypeToJavaConverter, stateMutationMethodImplementorRegistry);
 
-    AggregateRootClassRepresentable aggregateRootClassRepresentable =
-        new AggregateRootClassRepresentable(
+    AggregateRootClassTransformer aggregateRootClassRepresentable =
+        new AggregateRootClassTransformer(
             fromDataTypeToJavaConverter, stateMutationMethodRepresentable);
 
     aggregateRootExporter =
         new AggregateRootExporter(freemarkerService, aggregateRootClassRepresentable);
 
-    AggregateRootIdClassRepresentable aggregateRootIdClassRepresentable =
-        new AggregateRootIdClassRepresentable(fromDataTypeToJavaConverter);
+    AggregateRootIdClassTransformer aggregateRootIdClassRepresentable =
+        new AggregateRootIdClassTransformer(fromDataTypeToJavaConverter);
 
     aggregateRootIdExporter =
         new AggregateRootIdExporter(freemarkerService, aggregateRootIdClassRepresentable);
 
-    AggregateEntityClassRepresentable aggregateEntityClassRepresentable =
-        new AggregateEntityClassRepresentable(fromDataTypeToJavaConverter);
+    AggregateEntityClassTransformer aggregateEntityClassRepresentable =
+        new AggregateEntityClassTransformer(fromDataTypeToJavaConverter);
     aggregateEntityExporter =
         new AggregateEntityExporter(freemarkerService, aggregateEntityClassRepresentable);
 
-    AggregateEntityIdClassRepresentable aggregateEntityIdClassRepresentable =
-        new AggregateEntityIdClassRepresentable(fromDataTypeToJavaConverter);
+    AggregateEntityIdClassTransformer aggregateEntityIdClassRepresentable =
+        new AggregateEntityIdClassTransformer(fromDataTypeToJavaConverter);
     aggregateEntityIdExporter =
         new AggregateEntityIdExporter(freemarkerService, aggregateEntityIdClassRepresentable);
 
-    ValueObjectClassRepresentable valueObjectClassRepresentable =
-        new ValueObjectClassRepresentable(fromDataTypeToJavaConverter);
+    ValueObjectClassTransformer valueObjectClassRepresentable =
+        new ValueObjectClassTransformer(fromDataTypeToJavaConverter);
 
     valueObjectExporter = new ValueObjectExporter(freemarkerService, valueObjectClassRepresentable);
 
     domainEventExporter = new DomainEventExporter(freemarkerService);
 
-    FunctionToMethodRepresentationConverter functionToMethodRepresentationConverter =
-        new FunctionToMethodRepresentationConverter(fromDataTypeToJavaConverter);
+    FunctionToMethodRepresentationTransformer functionToMethodRepresentationTransformer =
+        new FunctionToMethodRepresentationTransformer(fromDataTypeToJavaConverter);
 
-    PersistenceInterfaceRepresentable persistenceInterfaceRepresentable =
-        new PersistenceInterfaceRepresentable(
-            fromDataTypeToJavaConverter, functionToMethodRepresentationConverter);
+    PersistenceInterfaceTransformer persistenceInterfaceRepresentable =
+        new PersistenceInterfaceTransformer(
+            fromDataTypeToJavaConverter, functionToMethodRepresentationTransformer);
 
     persistenceExporter =
         new PersistenceExporter(freemarkerService, persistenceInterfaceRepresentable);
 
-    DomainServiceInterfaceRepresentable domainServiceInterfaceRepresentable =
-        new DomainServiceInterfaceRepresentable(
-            fromDataTypeToJavaConverter, functionToMethodRepresentationConverter);
+    DomainServiceInterfaceTransformer domainServiceInterfaceRepresentable =
+        new DomainServiceInterfaceTransformer(
+            fromDataTypeToJavaConverter, functionToMethodRepresentationTransformer);
 
     domainServiceExporter =
         new DomainServiceExporter(freemarkerService, domainServiceInterfaceRepresentable);
 
     ConstructorImplementorRegistry constructorImplementorRegistry =
         new ConstructorImplementorRegistry(freemarkerService);
-    ConstructorRepresentable constructorRepresentable =
-        new ConstructorRepresentable(fromDataTypeToJavaConverter, constructorImplementorRegistry);
+    ConstructorTransformer constructorRepresentable =
+        new ConstructorTransformer(fromDataTypeToJavaConverter, constructorImplementorRegistry);
 
-    SupportiveEntityClassRepresentable supportiveEntityClassRepresentable =
-        new SupportiveEntityClassRepresentable(
-            fromDataTypeToJavaConverter, constructorRepresentable);
+    SupportiveEntityClassTransformer supportiveEntityClassRepresentable =
+        new SupportiveEntityClassTransformer(fromDataTypeToJavaConverter, constructorRepresentable);
 
     supportiveEntityExporter =
         new SupportiveEntityExporter(freemarkerService, supportiveEntityClassRepresentable);
@@ -157,17 +158,17 @@ public final class JavaDomainGeneratorFactory {
 
     projectionExporter =
         new ProjectionExporter(
-            freemarkerService, new ProjectionClassRepresentable(fromDataTypeToJavaConverter));
+            freemarkerService, new ProjectionClassTransformer(fromDataTypeToJavaConverter));
 
     projectionIdExporter =
         new ProjectionIdExporter(
-            freemarkerService, new ProjectionIdClassRepresentable(fromDataTypeToJavaConverter));
+            freemarkerService, new ProjectionIdClassTransformer(fromDataTypeToJavaConverter));
 
     projectionRepositoryExporter =
         new ProjectionRepositoryExporter(
             freemarkerService,
-            new ProjectionRepositoryInterfaceRepresentable(
-                fromDataTypeToJavaConverter, functionToMethodRepresentationConverter));
+            new ProjectionRepositoryInterfaceTransformer(
+                fromDataTypeToJavaConverter, functionToMethodRepresentationTransformer));
   }
 
   // ===============================================================================================

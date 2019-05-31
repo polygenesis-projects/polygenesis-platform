@@ -14,7 +14,6 @@
   <packaging>pom</packaging>
 
   <modules>
-    <module>polygenesis-representation-json</module>
     <module>polygenesis-representation-code</module>
   </modules>
 </project>

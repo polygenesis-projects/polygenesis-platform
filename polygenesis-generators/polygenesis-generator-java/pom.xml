@@ -12,7 +12,7 @@
   <artifactId>polygenesis-generator-java</artifactId>
 
   <dependencies>
-    <!--MODELS-->
+    <!--METAMODELS-->
     <dependency>
       <groupId>io.polygenesis.metamodels</groupId>
       <artifactId>polygenesis-metamodel-api</artifactId>
@@ -23,17 +23,21 @@
     </dependency>
     <dependency>
       <groupId>io.polygenesis.metamodels</groupId>
-      <artifactId>polygenesis-metamodel-rest</artifactId>
+      <artifactId>polygenesis-metamodel-domain</artifactId>
     </dependency>
     <dependency>
       <groupId>io.polygenesis.metamodels</groupId>
-      <artifactId>polygenesis-metamodel-domain</artifactId>
+      <artifactId>polygenesis-metamodel-messaging</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.polygenesis.metamodels</groupId>
+      <artifactId>polygenesis-metamodel-rest</artifactId>
     </dependency>
 
-    <!--POLYGENESIS GENERATORS COMMONS-->
+    <!--TRANSFORMERS-->
     <dependency>
-      <groupId>io.polygenesis.generators</groupId>
-      <artifactId>polygenesis-generator-commons</artifactId>
+      <groupId>io.polygenesis.transformers</groupId>
+      <artifactId>polygenesis-transformer-code</artifactId>
     </dependency>
 
     <!--TEST-->

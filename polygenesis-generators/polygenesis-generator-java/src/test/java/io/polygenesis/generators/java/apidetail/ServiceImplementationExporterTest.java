@@ -27,8 +27,8 @@ import static org.mockito.Mockito.verify;
 
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.valueobjects.PackageName;
-import io.polygenesis.generators.java.exporters.apidetail.ServiceImplementationClassRepresentable;
 import io.polygenesis.generators.java.exporters.apidetail.ServiceImplementationExporter;
+import io.polygenesis.generators.java.transformers.apidetail.ServiceImplementationClassTransformer;
 import io.polygenesis.models.api.Service;
 import io.polygenesis.models.api.ServiceName;
 import io.polygenesis.models.apiimpl.ServiceImplementation;
@@ -47,7 +47,7 @@ public class ServiceImplementationExporterTest {
   private Service service;
   private AggregateRoot aggregateRoot;
   private FreemarkerService freemarkerService;
-  private ServiceImplementationClassRepresentable serviceImplementationClassRepresentable;
+  private ServiceImplementationClassTransformer serviceImplementationClassRepresentable;
   private ServiceImplementationExporter serviceImplementationExporter;
 
   @Before
@@ -58,7 +58,7 @@ public class ServiceImplementationExporterTest {
     service = mock(Service.class);
     aggregateRoot = mock(AggregateRoot.class);
     freemarkerService = mock(FreemarkerService.class);
-    serviceImplementationClassRepresentable = mock(ServiceImplementationClassRepresentable.class);
+    serviceImplementationClassRepresentable = mock(ServiceImplementationClassTransformer.class);
 
     serviceImplementationExporter =
         new ServiceImplementationExporter(

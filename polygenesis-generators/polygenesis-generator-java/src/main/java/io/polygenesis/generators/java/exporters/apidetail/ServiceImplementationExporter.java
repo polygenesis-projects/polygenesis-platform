@@ -22,6 +22,7 @@ package io.polygenesis.generators.java.exporters.apidetail;
 
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.text.TextConverter;
+import io.polygenesis.generators.java.transformers.apidetail.ServiceImplementationClassTransformer;
 import io.polygenesis.models.api.Service;
 import io.polygenesis.models.apiimpl.ServiceImplementation;
 import java.nio.file.Path;
@@ -41,7 +42,7 @@ public class ServiceImplementationExporter {
   // ===============================================================================================
 
   private final FreemarkerService freemarkerService;
-  private final ServiceImplementationClassRepresentable serviceImplementationClassRepresentable;
+  private final ServiceImplementationClassTransformer serviceImplementationClassRepresentable;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -55,7 +56,7 @@ public class ServiceImplementationExporter {
    */
   public ServiceImplementationExporter(
       FreemarkerService freemarkerService,
-      ServiceImplementationClassRepresentable serviceImplementationClassRepresentable) {
+      ServiceImplementationClassTransformer serviceImplementationClassRepresentable) {
     this.freemarkerService = freemarkerService;
     this.serviceImplementationClassRepresentable = serviceImplementationClassRepresentable;
   }

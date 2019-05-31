@@ -24,13 +24,13 @@ import io.polygenesis.abstraction.data.DataGroup;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.generators.angular.skeletons.FromDataTypeToTypescriptConverter;
 import io.polygenesis.generators.angular.skeletons.model.ModelRepresentation;
-import io.polygenesis.generators.commons.representations.FieldRepresentation;
 import io.polygenesis.models.reactivestate.Model;
+import io.polygenesis.representations.code.FieldRepresentation;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
- * The type Metamodel representable.
+ * The type model representable.
  *
  * @author Christos Tsakostas
  */
@@ -47,7 +47,7 @@ public class ModelRepresentable {
   // ===============================================================================================
 
   /**
-   * Instantiates a new Metamodel representable.
+   * Instantiates a new model representable.
    *
    * @param fromDataTypeToTypescriptConverter the from data type to typescript converter
    */

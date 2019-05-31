@@ -21,7 +21,7 @@
 package io.polygenesis.generators.angular.skeletons.model;
 
 import io.polygenesis.commons.assertion.Assertion;
-import io.polygenesis.generators.commons.representations.FieldRepresentation;
+import io.polygenesis.representations.code.FieldRepresentation;
 import java.util.Objects;
 import java.util.Set;
 
