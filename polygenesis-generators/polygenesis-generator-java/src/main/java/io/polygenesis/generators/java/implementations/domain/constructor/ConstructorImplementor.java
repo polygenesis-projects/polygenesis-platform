@@ -21,8 +21,8 @@
 package io.polygenesis.generators.java.implementations.domain.constructor;
 
 import io.polygenesis.commons.freemarker.FreemarkerService;
-import io.polygenesis.generators.java.skeletons.MethodRepresentation;
 import io.polygenesis.models.domain.Constructor;
+import io.polygenesis.representations.code.MethodRepresentation;
 
 /**
  * The interface Constructor implementor.

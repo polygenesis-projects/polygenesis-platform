@@ -33,6 +33,7 @@ public class TrinityJavaMultiGeneratorEnablement {
   private boolean javaDomainGenerator = true;
   private boolean domainServiceImplementationGenerator = true;
   private boolean javaRdbmsGenerator = true;
+  private boolean apiClientMessaging = true;
 
   /** Instantiates a new Trinity java multi generator enablement. */
   public TrinityJavaMultiGeneratorEnablement() {
@@ -42,6 +43,7 @@ public class TrinityJavaMultiGeneratorEnablement {
     setJavaDomainGenerator(true);
     setDomainServiceImplementationGenerator(true);
     setJavaRdbmsGenerator(true);
+    setApiClientMessaging(true);
   }
 
   // ===============================================================================================
@@ -102,6 +104,15 @@ public class TrinityJavaMultiGeneratorEnablement {
     return javaRdbmsGenerator;
   }
 
+  /**
+   * Is api client messaging boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isApiClientMessaging() {
+    return apiClientMessaging;
+  }
+
   // ===============================================================================================
   // SETTERS
   // ===============================================================================================
@@ -159,5 +170,14 @@ public class TrinityJavaMultiGeneratorEnablement {
    */
   public void setJavaRdbmsGenerator(boolean javaRdbmsGenerator) {
     this.javaRdbmsGenerator = javaRdbmsGenerator;
+  }
+
+  /**
+   * Sets api client messaging.
+   *
+   * @param apiClientMessaging the api client messaging
+   */
+  public void setApiClientMessaging(boolean apiClientMessaging) {
+    this.apiClientMessaging = apiClientMessaging;
   }
 }

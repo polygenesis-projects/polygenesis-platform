@@ -24,6 +24,7 @@ import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
+import io.polygenesis.generators.java.transformers.rdbms.PersistenceImplClassTransformer;
 import io.polygenesis.models.domain.Persistence;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -42,7 +43,7 @@ public class PersistenceImplExporter {
   // ===============================================================================================
 
   private final FreemarkerService freemarkerService;
-  private final PersistenceImplClassRepresentable persistenceImplClassRepresentable;
+  private final PersistenceImplClassTransformer persistenceImplClassRepresentable;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -56,7 +57,7 @@ public class PersistenceImplExporter {
    */
   public PersistenceImplExporter(
       FreemarkerService freemarkerService,
-      PersistenceImplClassRepresentable persistenceImplClassRepresentable) {
+      PersistenceImplClassTransformer persistenceImplClassRepresentable) {
     this.freemarkerService = freemarkerService;
     this.persistenceImplClassRepresentable = persistenceImplClassRepresentable;
   }

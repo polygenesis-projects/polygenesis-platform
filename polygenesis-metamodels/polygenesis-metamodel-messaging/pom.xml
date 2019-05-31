@@ -13,7 +13,25 @@
   <artifactId>polygenesis-metamodel-messaging</artifactId>
 
   <dependencies>
+    <!--ABSTRACTIONS-->
+    <dependency>
+      <groupId>io.polygenesis.abstractions</groupId>
+      <artifactId>polygenesis-abstraction-thing</artifactId>
+    </dependency>
 
+    <!--MODELS-->
+    <dependency>
+      <groupId>io.polygenesis.metamodels</groupId>
+      <artifactId>polygenesis-metamodel-api</artifactId>
+    </dependency>
+
+    <!--TEST-->
+    <dependency>
+      <groupId>io.polygenesis</groupId>
+      <artifactId>polygenesis-commons-test</artifactId>
+      <scope>test</scope>
+      <type>test-jar</type>
+    </dependency>
   </dependencies>
 
 </project>

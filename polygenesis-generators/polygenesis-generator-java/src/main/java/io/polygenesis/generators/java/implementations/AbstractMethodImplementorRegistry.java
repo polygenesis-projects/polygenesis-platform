@@ -23,7 +23,7 @@ package io.polygenesis.generators.java.implementations;
 import io.polygenesis.abstraction.thing.FunctionProvider;
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.core.AbstractionScope;
-import io.polygenesis.generators.java.skeletons.MethodRepresentation;
+import io.polygenesis.representations.code.MethodRepresentation;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;

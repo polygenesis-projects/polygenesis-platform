@@ -38,9 +38,7 @@ public class AbstractionScope implements Serializable {
   public static final String API_DETAIL = "API_DETAIL";
   /** The constant API_CLIENT_REST. */
   public static final String API_CLIENT_REST = "API_CLIENT_REST";
-  /**
-   * The constant API_CLIENT_MESSAGING.
-   */
+  /** The constant API_CLIENT_MESSAGING. */
   public static final String API_CLIENT_MESSAGING = "API_CLIENT_MESSAGING";
 
   // ===============================================================================================
@@ -58,9 +56,7 @@ public class AbstractionScope implements Serializable {
   /** The constant DOMAIN_SUPPORTIVE_ENTITY. */
   public static final String DOMAIN_SUPPORTIVE_ENTITY = "DOMAIN_SUPPORTIVE_ENTITY";
 
-  /**
-   * The constant DOMAIN_DETAIL_PUBLISHER.
-   */
+  /** The constant DOMAIN_DETAIL_PUBLISHER. */
   public static final String DOMAIN_DETAIL_PUBLISHER = "DOMAIN_DETAIL_PUBLISHER";
 
   // ===============================================================================================
@@ -117,7 +113,6 @@ public class AbstractionScope implements Serializable {
     return new AbstractionScope(API_CLIENT_REST);
   }
 
-
   /**
    * Api client messaging abstraction scope.
    *
@@ -171,7 +166,6 @@ public class AbstractionScope implements Serializable {
   public static AbstractionScope domainService() {
     return new AbstractionScope(DOMAIN_SERVICE);
   }
-
 
   /**
    * Domain detail publisher abstraction scope.

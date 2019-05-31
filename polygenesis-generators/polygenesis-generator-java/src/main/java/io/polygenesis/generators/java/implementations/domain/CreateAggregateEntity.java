@@ -22,8 +22,8 @@ package io.polygenesis.generators.java.implementations.domain;
 
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.generators.java.implementations.MethodImplementor;
-import io.polygenesis.generators.java.skeletons.MethodRepresentation;
 import io.polygenesis.models.domain.StateMutationMethod;
+import io.polygenesis.representations.code.MethodRepresentation;
 import java.util.HashMap;
 import java.util.Map;
 

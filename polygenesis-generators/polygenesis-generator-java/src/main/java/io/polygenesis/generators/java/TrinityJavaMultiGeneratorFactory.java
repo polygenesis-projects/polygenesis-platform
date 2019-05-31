@@ -23,8 +23,8 @@ package io.polygenesis.generators.java;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.Generator;
-import io.polygenesis.generators.java.exporters.api.JavaApiGenerator;
-import io.polygenesis.generators.java.exporters.api.JavaApiGeneratorFactory;
+import io.polygenesis.generators.java.api.JavaApiGenerator;
+import io.polygenesis.generators.java.api.JavaApiGeneratorFactory;
 import io.polygenesis.generators.java.exporters.apidetail.JavaApiDetailGenerator;
 import io.polygenesis.generators.java.exporters.apidetail.JavaApiDetailGeneratorFactory;
 import io.polygenesis.generators.java.exporters.domain.JavaDomainGenerator;
@@ -35,6 +35,8 @@ import io.polygenesis.generators.java.exporters.rdbms.JavaRdbmsGenerator;
 import io.polygenesis.generators.java.exporters.rdbms.JavaRdbmsGeneratorFactory;
 import io.polygenesis.generators.java.exporters.rest.JavaApiRestGenerator;
 import io.polygenesis.generators.java.exporters.rest.JavaApiRestGeneratorFactory;
+import io.polygenesis.generators.java.messaging.MessagingGenerator;
+import io.polygenesis.generators.java.messaging.MessagingGeneratorFactory;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.LinkedHashSet;
@@ -55,6 +57,7 @@ public final class TrinityJavaMultiGeneratorFactory {
   private static final String API_DETAIL = "api-detail";
   private static final String API_CLIENTS = "api-clients";
   private static final String API_CLIENT_REST_SPRING = "api-client-rest-spring";
+  private static final String API_CLIENT_MESSAGING = "api-client-messaging";
   private static final String DOMAIN = "domain";
   private static final String DOMAIN_DETAILS = "domain-details";
   private static final String DOMAIN_DETAIL_SERVICES = "domain-detail-services";
@@ -132,6 +135,10 @@ public final class TrinityJavaMultiGeneratorFactory {
     if (trinityJavaMultiGeneratorEnablement.isJavaRdbmsGenerator()) {
       generators.add(
           javaRdbmsGenerator(exportPath, projectFolder, modulePrefix, context, rootPackageName));
+    }
+
+    if (trinityJavaMultiGeneratorEnablement.isApiClientMessaging()) {
+      generators.add(apiClientMessaging(exportPath, projectFolder, modulePrefix));
     }
 
     return new TrinityJavaMultiGenerator(generationPath, generators);
@@ -261,5 +268,23 @@ public final class TrinityJavaMultiGeneratorFactory {
             projectFolder,
             modulePrefix + "-" + DOMAIN_DETAILS,
             modulePrefix + "-" + DOMAIN_DETAIL_SERVICES));
+  }
+
+  /**
+   * Api client messaging messaging generator.
+   *
+   * @param exportPath the export path
+   * @param projectFolder the project folder
+   * @param modulePrefix the module prefix
+   * @return the messaging generator
+   */
+  public static MessagingGenerator apiClientMessaging(
+      String exportPath, String projectFolder, String modulePrefix) {
+    return MessagingGeneratorFactory.newInstance(
+        Paths.get(
+            exportPath,
+            projectFolder,
+            modulePrefix + "-" + API_CLIENTS,
+            modulePrefix + "-" + API_CLIENT_MESSAGING));
   }
 }

@@ -24,6 +24,7 @@ import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.AbstractGenerator;
 import io.polygenesis.core.CoreRegistry;
 import io.polygenesis.core.MetamodelRepository;
+import io.polygenesis.generators.java.exporters.apidetail.testing.ServiceImplementationTestExporter;
 import io.polygenesis.models.apiimpl.DomainEntityConverterMetamodelRepository;
 import io.polygenesis.models.apiimpl.ServiceImplementationMetamodelRepository;
 import java.nio.file.Path;

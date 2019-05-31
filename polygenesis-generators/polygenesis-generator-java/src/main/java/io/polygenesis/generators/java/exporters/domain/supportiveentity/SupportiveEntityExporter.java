@@ -23,6 +23,7 @@ package io.polygenesis.generators.java.exporters.domain.supportiveentity;
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.commons.valueobjects.PackageName;
+import io.polygenesis.generators.java.transformers.domain.supportiveentity.SupportiveEntityClassTransformer;
 import io.polygenesis.models.domain.SupportiveEntity;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -41,7 +42,7 @@ public class SupportiveEntityExporter {
   // ===============================================================================================
 
   private final FreemarkerService freemarkerService;
-  private final SupportiveEntityClassRepresentable supportiveEntityClassRepresentable;
+  private final SupportiveEntityClassTransformer supportiveEntityClassRepresentable;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -55,7 +56,7 @@ public class SupportiveEntityExporter {
    */
   public SupportiveEntityExporter(
       FreemarkerService freemarkerService,
-      SupportiveEntityClassRepresentable supportiveEntityClassRepresentable) {
+      SupportiveEntityClassTransformer supportiveEntityClassRepresentable) {
     this.freemarkerService = freemarkerService;
     this.supportiveEntityClassRepresentable = supportiveEntityClassRepresentable;
   }

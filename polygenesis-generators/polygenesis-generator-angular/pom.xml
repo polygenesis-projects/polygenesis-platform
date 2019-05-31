@@ -12,7 +12,7 @@
   <artifactId>polygenesis-generator-angular</artifactId>
 
   <dependencies>
-    <!--POLYGENESIS MODELS-->
+    <!--MODELS-->
     <dependency>
       <groupId>io.polygenesis.metamodels</groupId>
       <artifactId>polygenesis-metamodel-reactive-state</artifactId>
@@ -22,10 +22,10 @@
       <artifactId>polygenesis-metamodel-ui</artifactId>
     </dependency>
 
-    <!--POLYGENESIS GENERATORS COMMONS-->
+    <!--REPRESENTATIONS-->
     <dependency>
-      <groupId>io.polygenesis.generators</groupId>
-      <artifactId>polygenesis-generator-commons</artifactId>
+      <groupId>io.polygenesis.representations</groupId>
+      <artifactId>polygenesis-representation-code</artifactId>
     </dependency>
 
     <!--TEST-->

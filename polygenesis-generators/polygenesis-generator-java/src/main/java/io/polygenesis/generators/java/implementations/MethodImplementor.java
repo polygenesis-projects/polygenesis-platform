@@ -22,7 +22,7 @@ package io.polygenesis.generators.java.implementations;
 
 import io.polygenesis.abstraction.thing.FunctionProvider;
 import io.polygenesis.commons.freemarker.FreemarkerService;
-import io.polygenesis.generators.java.skeletons.MethodRepresentation;
+import io.polygenesis.representations.code.MethodRepresentation;
 
 /**
  * The interface Method implementor.

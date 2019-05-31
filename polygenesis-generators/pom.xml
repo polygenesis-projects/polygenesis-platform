@@ -15,7 +15,6 @@
 
   <modules>
     <module>polygenesis-generator-angular</module>
-    <module>polygenesis-generator-commons</module>
     <module>polygenesis-generator-java</module>
     <module>polygenesis-generator-spreadsheet</module>
     <module>polygenesis-generator-sql</module>

@@ -95,6 +95,32 @@ public class FreemarkerService {
   }
 
   /**
+   * Export to byte array output stream byte array output stream.
+   *
+   * @param dataModel the data model
+   * @param ftlTemplate the ftl template
+   * @return the byte array output stream
+   */
+  public ByteArrayOutputStream exportToByteArrayOutputStream(
+      Map<String, Object> dataModel, String ftlTemplate) {
+    try {
+      Template template = configuration.getTemplate(ftlTemplate);
+
+      ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+      OutputStreamWriter writer = new OutputStreamWriter(byteArrayOutputStream);
+
+      template.process(dataModel, writer);
+
+      writer.flush();
+      writer.close();
+
+      return byteArrayOutputStream;
+    } catch (IOException | TemplateException e) {
+      throw new IllegalStateException(e.getMessage(), e);
+    }
+  }
+
+  /**
    * Export to memory string.
    *
    * @param dataModel the data model
@@ -102,20 +128,6 @@ public class FreemarkerService {
    * @return the string
    */
   public String exportToString(Map<String, Object> dataModel, String ftlTemplate) {
-    try {
-      Template template = configuration.getTemplate(ftlTemplate);
-
-      ByteArrayOutputStream baos = new ByteArrayOutputStream();
-      OutputStreamWriter writer = new OutputStreamWriter(baos);
-
-      template.process(dataModel, writer);
-
-      writer.flush();
-      writer.close();
-
-      return baos.toString();
-    } catch (IOException | TemplateException e) {
-      throw new IllegalStateException(e.getMessage(), e);
-    }
+    return exportToByteArrayOutputStream(dataModel, ftlTemplate).toString();
   }
 }

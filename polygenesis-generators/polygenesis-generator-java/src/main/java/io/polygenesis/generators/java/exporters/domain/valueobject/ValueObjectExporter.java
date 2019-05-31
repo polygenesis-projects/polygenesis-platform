@@ -22,6 +22,7 @@ package io.polygenesis.generators.java.exporters.domain.valueobject;
 
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.text.TextConverter;
+import io.polygenesis.generators.java.transformers.domain.valueobject.ValueObjectClassTransformer;
 import io.polygenesis.models.domain.ValueObject;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -39,7 +40,7 @@ public class ValueObjectExporter {
   // DEPENDENCIES
   // ===============================================================================================
   private final FreemarkerService freemarkerService;
-  private final ValueObjectClassRepresentable valueObjectClassRepresentable;
+  private final ValueObjectClassTransformer valueObjectClassRepresentable;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -47,7 +48,7 @@ public class ValueObjectExporter {
 
   public ValueObjectExporter(
       FreemarkerService freemarkerService,
-      ValueObjectClassRepresentable valueObjectClassRepresentable) {
+      ValueObjectClassTransformer valueObjectClassRepresentable) {
     this.freemarkerService = freemarkerService;
     this.valueObjectClassRepresentable = valueObjectClassRepresentable;
   }

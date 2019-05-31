@@ -41,8 +41,8 @@ import io.polygenesis.abstraction.thing.ThingName;
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
-import io.polygenesis.generators.java.exporters.api.DtoClassRepresentable;
-import io.polygenesis.generators.java.exporters.api.DtoExporter;
+import io.polygenesis.generators.java.api.exporter.DtoExporter;
+import io.polygenesis.generators.java.api.transformer.DtoClassTransformer;
 import io.polygenesis.models.api.Dto;
 import io.polygenesis.models.api.DtoType;
 import io.polygenesis.models.api.Service;
@@ -61,7 +61,7 @@ public class DtoExporterTest {
   private Path generationPath;
   private Service service;
   private FreemarkerService freemarkerService;
-  private DtoClassRepresentable dtoClassRepresentable;
+  private DtoClassTransformer dtoClassRepresentable;
   private DtoExporter dtoExporter;
 
   @Before
@@ -69,7 +69,7 @@ public class DtoExporterTest {
     generationPath = Paths.get("tmp");
     service = makeService();
     freemarkerService = mock(FreemarkerService.class);
-    dtoClassRepresentable = mock(DtoClassRepresentable.class);
+    dtoClassRepresentable = mock(DtoClassTransformer.class);
     dtoExporter = new DtoExporter(freemarkerService, dtoClassRepresentable);
   }
 

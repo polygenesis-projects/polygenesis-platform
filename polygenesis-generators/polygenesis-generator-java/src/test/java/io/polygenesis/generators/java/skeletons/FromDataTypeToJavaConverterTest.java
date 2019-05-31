@@ -25,6 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import io.polygenesis.abstraction.data.DataPrimitive;
 import io.polygenesis.abstraction.data.PrimitiveType;
 import io.polygenesis.abstraction.data.VariableName;
+import io.polygenesis.transformer.code.FromDataTypeToJavaConverter;
 import org.junit.Test;
 
 /** @author Christos Tsakostas */
@@ -35,12 +36,12 @@ public class FromDataTypeToJavaConverterTest {
   @Test
   public void shouldGetCorrectDeclaredVariableType() {
     DataPrimitive model = DataPrimitive.of(PrimitiveType.INTEGER, new VariableName("var"));
-    assertThat(converter.getDeclaredVariableType(model.getDataType())).isEqualTo("Integer");
+    assertThat(converter.convert(model.getDataType())).isEqualTo("Integer");
 
     model = DataPrimitive.of(PrimitiveType.STRING, new VariableName("var"));
-    assertThat(converter.getDeclaredVariableType(model.getDataType())).isEqualTo("String");
+    assertThat(converter.convert(model.getDataType())).isEqualTo("String");
 
     model = DataPrimitive.of(PrimitiveType.BOOLEAN, new VariableName("var"));
-    assertThat(converter.getDeclaredVariableType(model.getDataType())).isEqualTo("Boolean");
+    assertThat(converter.convert(model.getDataType())).isEqualTo("Boolean");
   }
 }

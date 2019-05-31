@@ -23,6 +23,7 @@ package io.polygenesis.generators.java.exporters.rest;
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.commons.valueobjects.PackageName;
+import io.polygenesis.generators.java.transformers.rest.ResourceTestClassTransformer;
 import io.polygenesis.models.rest.Resource;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -41,7 +42,7 @@ public class ResourceTestExporter {
   // ===============================================================================================
 
   private final FreemarkerService freemarkerService;
-  private final ResourceTestClassRepresentable resourceTestClassRepresentable;
+  private final ResourceTestClassTransformer resourceTestClassRepresentable;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -55,7 +56,7 @@ public class ResourceTestExporter {
    */
   public ResourceTestExporter(
       FreemarkerService freemarkerService,
-      ResourceTestClassRepresentable resourceTestClassRepresentable) {
+      ResourceTestClassTransformer resourceTestClassRepresentable) {
     this.freemarkerService = freemarkerService;
     this.resourceTestClassRepresentable = resourceTestClassRepresentable;
   }

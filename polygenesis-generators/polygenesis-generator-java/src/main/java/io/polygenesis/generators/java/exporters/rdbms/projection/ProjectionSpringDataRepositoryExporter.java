@@ -22,6 +22,7 @@ package io.polygenesis.generators.java.exporters.rdbms.projection;
 
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.text.TextConverter;
+import io.polygenesis.generators.java.transformers.rdbms.projection.ProjectionSpringDataRepositoryInterfaceTransformer;
 import io.polygenesis.models.domain.Persistence;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -40,7 +41,7 @@ public class ProjectionSpringDataRepositoryExporter {
   // ===============================================================================================
 
   private final FreemarkerService freemarkerService;
-  private final ProjectionSpringDataRepositoryInterfaceRepresentable
+  private final ProjectionSpringDataRepositoryInterfaceTransformer
       projectionSpringDataRepositoryInterfaceRepresentable;
 
   // ===============================================================================================
@@ -56,7 +57,7 @@ public class ProjectionSpringDataRepositoryExporter {
    */
   public ProjectionSpringDataRepositoryExporter(
       FreemarkerService freemarkerService,
-      ProjectionSpringDataRepositoryInterfaceRepresentable
+      ProjectionSpringDataRepositoryInterfaceTransformer
           projectionSpringDataRepositoryInterfaceRepresentable) {
     this.freemarkerService = freemarkerService;
     this.projectionSpringDataRepositoryInterfaceRepresentable =
