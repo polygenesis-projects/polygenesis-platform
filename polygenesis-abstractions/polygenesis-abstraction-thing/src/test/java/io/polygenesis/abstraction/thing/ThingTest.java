@@ -26,6 +26,7 @@ import io.polygenesis.abstraction.data.DataPrimitive;
 import io.polygenesis.abstraction.data.DataPurpose;
 import io.polygenesis.abstraction.data.PrimitiveType;
 import io.polygenesis.abstraction.data.VariableName;
+import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
 import io.polygenesis.commons.test.AbstractEqualityTest;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -36,8 +37,7 @@ public class ThingTest extends AbstractEqualityTest<Thing> {
 
   @Test
   public void shouldCreateThingWithName() {
-    Thing thing =
-        ThingBuilder.endToEnd().setThingName(new ThingName("someThingName")).createThing();
+    Thing thing = ThingBuilder.endToEnd().setThingName("someThingName").createThing();
 
     assertThat(thing).isNotNull();
 
@@ -52,14 +52,14 @@ public class ThingTest extends AbstractEqualityTest<Thing> {
     thing.addFunction(function1);
     thing.addFunctions(functionSet);
 
-    assertThat(thing.getThingName()).isEqualTo(new ThingName("someThingName"));
+    assertThat(thing.getThingName().getText()).isEqualTo("someThingName");
     assertThat(thing.getChildren()).isEmpty();
     assertThat(thing.getFunctions().size()).isEqualTo(3);
   }
 
   private Function createFunction1() {
     return new Function(
-        ThingBuilder.endToEnd().setThingName(new ThingName("thingName")).createThing(),
+        ThingBuilder.endToEnd().setThingName("thingName").createThing(),
         Purpose.modify(),
         new FunctionName("functionName"),
         new LinkedHashSet<>(),
@@ -68,7 +68,7 @@ public class ThingTest extends AbstractEqualityTest<Thing> {
 
   private Function createFunction2() {
     return new Function(
-        ThingBuilder.endToEnd().setThingName(new ThingName("thingName")).createThing(),
+        ThingBuilder.endToEnd().setThingName("thingName").createThing(),
         Purpose.modify(),
         new FunctionName("anotherFunctionName"),
         new LinkedHashSet<>(),
@@ -77,7 +77,7 @@ public class ThingTest extends AbstractEqualityTest<Thing> {
 
   private Function createFunction3() {
     return new Function(
-        ThingBuilder.endToEnd().setThingName(new ThingName("thingName")).createThing(),
+        ThingBuilder.endToEnd().setThingName("thingName").createThing(),
         Purpose.modify(),
         new FunctionName("someAnotherNewFunctionName"),
         new LinkedHashSet<>(),
@@ -97,11 +97,11 @@ public class ThingTest extends AbstractEqualityTest<Thing> {
   // ===============================================================================================
   @Override
   public Thing createObject1() {
-    return ThingBuilder.endToEnd().setThingName(new ThingName("xxx")).createThing();
+    return ThingBuilder.endToEnd().setThingName("xxx").createThing();
   }
 
   @Override
   public Thing createObject2() {
-    return ThingBuilder.endToEnd().setThingName(new ThingName("yyy")).createThing();
+    return ThingBuilder.endToEnd().setThingName("yyy").createThing();
   }
 }

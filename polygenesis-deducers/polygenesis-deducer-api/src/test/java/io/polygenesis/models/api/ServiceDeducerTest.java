@@ -21,6 +21,8 @@
 package io.polygenesis.models.api;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
 import io.polygenesis.abstraction.thing.Thing;
@@ -34,16 +36,17 @@ import org.junit.Test;
 public class ServiceDeducerTest {
 
   private Thing thing;
-  private ServiceMethodDeducer serviceMethodDeducer;
   private DtoDeducer dtoDeducer;
   private ServiceDeducer serviceDeducer;
 
   @Before
   public void setUp() {
     thing = ThingForTesting.create();
-    serviceMethodDeducer = mock(ServiceMethodDeducer.class);
     dtoDeducer = mock(DtoDeducer.class);
-    serviceDeducer = new ServiceDeducer(serviceMethodDeducer, dtoDeducer);
+    serviceDeducer = new ServiceDeducer(dtoDeducer);
+
+    given(dtoDeducer.deduceRequestDto(any(), any())).willReturn(mock(Dto.class));
+    given(dtoDeducer.deduceResponseDto(any(), any())).willReturn(mock(Dto.class));
   }
 
   @Test
@@ -52,6 +55,6 @@ public class ServiceDeducerTest {
         serviceDeducer.deduceFrom(thing, new PackageName(ThingForTesting.ROOT_PACKAGE));
 
     assertThat(services).isNotNull();
-    assertThat(services.size()).isEqualTo(0);
+    assertThat(services.size()).isEqualTo(2);
   }
 }

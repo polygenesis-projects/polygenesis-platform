@@ -18,49 +18,64 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.deducers.messaging;
+package io.polygenesis.generators.java.messaging.activity;
 
-import io.polygenesis.commons.valueobjects.PackageName;
-import io.polygenesis.deducers.messaging.subscriber.SubscriberDeducer;
+import io.polygenesis.abstraction.thing.Purpose;
+import io.polygenesis.commons.freemarker.FreemarkerService;
+import io.polygenesis.models.messaging.subscriber.SubscriberMethod;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 /**
- * The type Messaging deducer factory.
+ * The type Subscriber activity registry.
  *
  * @author Christos Tsakostas
  */
-public final class MessagingDeducerFactory {
+public class SubscriberActivityRegistry {
 
   // ===============================================================================================
-  // DEPENDENCIES
+  // STATIC STATE
   // ===============================================================================================
-  private static SubscriberDeducer subscriberDeducer;
+  private static Map<Purpose, SubscriberActivity> purposeActivityMap = new HashMap<>();
 
   // ===============================================================================================
-  // STATIC INITIALIZATION OF DEPENDENCIES
+  // STATIC
   // ===============================================================================================
 
   static {
-    subscriberDeducer = new SubscriberDeducer();
+    purposeActivityMap.put(Purpose.process(), new ProcessSubscriberActivity());
   }
 
   // ===============================================================================================
-  // CONSTRUCTOR(S)
-  // ===============================================================================================
-  private MessagingDeducerFactory() {
-    throw new IllegalStateException("Utility class");
-  }
-
-  // ===============================================================================================
-  // GETTERS
+  // FUNCTIONALITY
   // ===============================================================================================
 
   /**
-   * New instance messaging deducer.
+   * Implementation optional.
    *
-   * @param packageName the package name
-   * @return the messaging deducer
+   * @param freemarkerService the freemarker service
+   * @param subscriberMethod the subscriber method
+   * @return the optional
    */
-  public static MessagingDeducer newInstance(PackageName packageName) {
-    return new MessagingDeducer(packageName, subscriberDeducer);
+  public Optional<String> implementation(
+      FreemarkerService freemarkerService, SubscriberMethod subscriberMethod) {
+    if (isActivitySupportedForFunction(subscriberMethod)) {
+      return Optional.of(activityFor(subscriberMethod).body(freemarkerService, subscriberMethod));
+    } else {
+      return Optional.empty();
+    }
+  }
+
+  // ===============================================================================================
+  // PRIVATE
+  // ===============================================================================================
+
+  private boolean isActivitySupportedForFunction(SubscriberMethod subscriberMethod) {
+    return purposeActivityMap.containsKey(subscriberMethod.getFunction().getPurpose());
+  }
+
+  private SubscriberActivity activityFor(SubscriberMethod subscriberMethod) {
+    return purposeActivityMap.get(subscriberMethod.getFunction().getPurpose());
   }
 }

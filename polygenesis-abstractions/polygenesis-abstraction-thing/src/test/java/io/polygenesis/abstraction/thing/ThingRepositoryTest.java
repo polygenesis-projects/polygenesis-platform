@@ -22,6 +22,7 @@ package io.polygenesis.abstraction.thing;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.core.AbstractionScope;
 import java.util.LinkedHashSet;
@@ -53,8 +54,7 @@ public class ThingRepositoryTest {
   private Set<Thing> createThings() {
     Set<Thing> things = new LinkedHashSet<>();
 
-    Thing someThing =
-        ThingBuilder.endToEnd().setThingName(new ThingName("someThing")).createThing();
+    Thing someThing = ThingBuilder.endToEnd().setThingName("someThing").createThing();
 
     Function someFunction =
         new Function(

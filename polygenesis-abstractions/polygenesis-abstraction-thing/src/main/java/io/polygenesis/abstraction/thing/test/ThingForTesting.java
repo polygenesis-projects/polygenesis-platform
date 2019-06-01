@@ -31,8 +31,7 @@ import io.polygenesis.abstraction.thing.FunctionName;
 import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.ReturnValue;
 import io.polygenesis.abstraction.thing.Thing;
-import io.polygenesis.abstraction.thing.ThingBuilder;
-import io.polygenesis.abstraction.thing.ThingName;
+import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import java.util.Arrays;
@@ -60,7 +59,7 @@ public class ThingForTesting {
    * @return the thing
    */
   public static Thing create() {
-    Thing business = ThingBuilder.endToEnd().setThingName(new ThingName(BUSINESS)).createThing();
+    Thing business = ThingBuilder.endToEnd().setThingName(BUSINESS).createThing();
 
     business.addFunction(functionCreate(business));
     business.addFunction(functionFetchOne(business));

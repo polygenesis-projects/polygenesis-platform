@@ -48,7 +48,7 @@ public class DomainObjectConverterClassTransformer
   // DEPENDENCIES
   // ===============================================================================================
 
-  private final DomainObjectConverterMethodTransformer domainObjectConverterMethodRepresentable;
+  private final DomainObjectConverterMethodTransformer domainObjectConverterMethodTransformer;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -58,14 +58,13 @@ public class DomainObjectConverterClassTransformer
    * Instantiates a new Aggregate root converter class representable.
    *
    * @param fromDataTypeToJavaConverter the from data type to java converter
-   * @param domainObjectConverterMethodRepresentable the aggregate root converter method
-   *     representable
+   * @param domainObjectConverterMethodTransformer the aggregate root converter method representable
    */
   public DomainObjectConverterClassTransformer(
       FromDataTypeToJavaConverter fromDataTypeToJavaConverter,
-      DomainObjectConverterMethodTransformer domainObjectConverterMethodRepresentable) {
+      DomainObjectConverterMethodTransformer domainObjectConverterMethodTransformer) {
     super(fromDataTypeToJavaConverter);
-    this.domainObjectConverterMethodRepresentable = domainObjectConverterMethodRepresentable;
+    this.domainObjectConverterMethodTransformer = domainObjectConverterMethodTransformer;
   }
 
   // ===============================================================================================
@@ -93,7 +92,7 @@ public class DomainObjectConverterClassTransformer
         .getMethods()
         .forEach(
             method ->
-                methodRepresentations.add(domainObjectConverterMethodRepresentable.create(method)));
+                methodRepresentations.add(domainObjectConverterMethodTransformer.create(method)));
 
     return methodRepresentations;
   }

@@ -20,12 +20,16 @@
 
 package io.polygenesis.models.api;
 
+import io.polygenesis.abstraction.data.Data;
+import io.polygenesis.abstraction.data.DataGroup;
 import io.polygenesis.abstraction.thing.CqsType;
+import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.abstraction.thing.ThingName;
 import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.Metamodel;
+import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -38,10 +42,11 @@ public class Service implements Metamodel {
 
   private PackageName packageName;
   private ServiceName serviceName;
-  private Set<ServiceMethod> serviceMethods;
   private CqsType cqrsType;
   private ThingName thingName;
-  private Set<Dto> dtos;
+
+  private Set<ServiceMethod> serviceMethods;
+  private Set<Dto> cachedDtos;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -52,24 +57,32 @@ public class Service implements Metamodel {
    *
    * @param packageName the package name
    * @param serviceName the service name
-   * @param serviceMethods the methods
    * @param cqrsType the cqrs type
    * @param thingName the thing name
-   * @param dtos the dtos
    */
   public Service(
-      PackageName packageName,
-      ServiceName serviceName,
-      Set<ServiceMethod> serviceMethods,
-      CqsType cqrsType,
-      ThingName thingName,
-      Set<Dto> dtos) {
+      PackageName packageName, ServiceName serviceName, CqsType cqrsType, ThingName thingName) {
     setPackageName(packageName);
     setServiceName(serviceName);
-    setServiceMethods(serviceMethods);
     setCqrsType(cqrsType);
     setThingName(thingName);
-    setDtos(dtos);
+
+    setServiceMethods(new LinkedHashSet<>());
+  }
+
+  // ===============================================================================================
+  // BEHAVIOR
+  // ===============================================================================================
+
+  /**
+   * Append service method.
+   *
+   * @param function the function
+   * @param requestDto the request dto
+   * @param responseDto the response dto
+   */
+  public void appendServiceMethod(Function function, Dto requestDto, Dto responseDto) {
+    serviceMethods.add(new ServiceMethod(this, function, requestDto, responseDto));
   }
 
   // ===============================================================================================
@@ -104,15 +117,6 @@ public class Service implements Metamodel {
   }
 
   /**
-   * Gets methods.
-   *
-   * @return the methods
-   */
-  public Set<ServiceMethod> getServiceMethods() {
-    return serviceMethods;
-  }
-
-  /**
    * Gets cqrs type.
    *
    * @return the cqrs type
@@ -131,12 +135,84 @@ public class Service implements Metamodel {
   }
 
   /**
+   * Gets methods.
+   *
+   * @return the methods
+   */
+  public Set<ServiceMethod> getServiceMethods() {
+    return serviceMethods;
+  }
+
+  // ===============================================================================================
+  // QUERIES
+  // ===============================================================================================
+
+  /**
    * Gets dtos.
    *
    * @return the dtos
    */
   public Set<Dto> getDtos() {
-    return dtos;
+    if (cachedDtos == null) {
+      cachedDtos = new LinkedHashSet<>();
+
+      serviceMethods
+          .stream()
+          .forEach(
+              method -> {
+                addDto(cachedDtos, method.getRequestDto());
+                addDto(cachedDtos, method.getResponseDto());
+              });
+    }
+
+    return cachedDtos;
+  }
+
+  // ===============================================================================================
+  // PRIVATE
+  // ===============================================================================================
+
+  /**
+   * Add dto.
+   *
+   * @param dtos the dtos
+   * @param dto the dto
+   */
+  private void addDto(Set<Dto> dtos, Dto dto) {
+    dtos.add(dto);
+
+    if (dto.getArrayElementAsOptional().isPresent()) {
+      Data arrayElement =
+          dto.getArrayElementAsOptional().orElseThrow(IllegalArgumentException::new);
+      if (arrayElement.isDataGroup()) {
+        addDto(dtos, new Dto(DtoType.COLLECTION_RECORD, arrayElement.getAsDataGroup(), false));
+      }
+    }
+
+    // Add model group children of DataGroup recursively
+    dto.getDataGroup()
+        .getModels()
+        .forEach(
+            model -> {
+              // TODO: check if model array element children should be added as well
+              if (model.isDataGroup()) {
+                DataGroup dataGroup = model.getAsDataGroup();
+
+                DtoType dtoType;
+                if (dto.getDtoType().equals(DtoType.API_COLLECTION_REQUEST)
+                    || dto.getDtoType().equals(DtoType.API_PAGED_COLLECTION_REQUEST)) {
+                  dtoType = DtoType.COLLECTION_RECORD;
+                } else {
+                  dtoType = DtoType.INTERNAL;
+                  dataGroup =
+                      dataGroup.withNewObjectName(
+                          new ObjectName(
+                              String.format("%sDto", dataGroup.getObjectName().getText())));
+                }
+
+                addDto(dtos, new Dto(dtoType, dataGroup, false));
+              }
+            });
   }
 
   // ===============================================================================================
@@ -164,16 +240,6 @@ public class Service implements Metamodel {
   }
 
   /**
-   * Sets methods.
-   *
-   * @param serviceMethods the methods
-   */
-  private void setServiceMethods(Set<ServiceMethod> serviceMethods) {
-    Assertion.isNotNull(serviceMethods, "serviceMethods is required");
-    this.serviceMethods = serviceMethods;
-  }
-
-  /**
    * Sets cqrs type.
    *
    * @param cqrsType the cqrs type
@@ -194,13 +260,13 @@ public class Service implements Metamodel {
   }
 
   /**
-   * Sets dtos.
+   * Sets methods.
    *
-   * @param dtos the dtos
+   * @param serviceMethods the methods
    */
-  private void setDtos(Set<Dto> dtos) {
-    Assertion.isNotNull(dtos, "dtos is required");
-    this.dtos = dtos;
+  private void setServiceMethods(Set<ServiceMethod> serviceMethods) {
+    Assertion.isNotNull(serviceMethods, "serviceMethods is required");
+    this.serviceMethods = serviceMethods;
   }
 
   // ===============================================================================================

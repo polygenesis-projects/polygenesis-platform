@@ -55,6 +55,7 @@ public class Thing implements Abstraction {
   private Set<Thing> children;
   private Set<Thing> virtualChildren;
   private Thing optionalParent;
+  private ThingMetadata thingMetadata;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -69,6 +70,7 @@ public class Thing implements Abstraction {
    * @param thingProperties the thing properties
    * @param multiTenant the multi tenant
    * @param optionalParent the optional parent
+   * @param thingMetadata the thing metadata
    */
   public Thing(
       Set<AbstractionScope> abstractionScopes,
@@ -76,7 +78,8 @@ public class Thing implements Abstraction {
       ThingName thingName,
       Set<ThingProperty> thingProperties,
       Boolean multiTenant,
-      Thing optionalParent) {
+      Thing optionalParent,
+      ThingMetadata thingMetadata) {
     setAbstractionScopes(abstractionScopes);
     setContextName(contextName);
     setThingName(thingName);
@@ -89,6 +92,8 @@ public class Thing implements Abstraction {
     if (optionalParent != null) {
       setOptionalParent(optionalParent);
     }
+
+    setThingMetadata(thingMetadata);
   }
 
   // ===============================================================================================
@@ -277,6 +282,33 @@ public class Thing implements Abstraction {
     return optionalParent;
   }
 
+  /**
+   * Gets thing metadata.
+   *
+   * @return the thing metadata
+   */
+  public ThingMetadata getThingMetadata() {
+    return thingMetadata;
+  }
+
+  // ===============================================================================================
+  // QUERIES
+  // ===============================================================================================
+
+  /**
+   * Gets function by name.
+   *
+   * @param functionName the function name
+   * @return the function by name
+   */
+  public Function getFunctionByName(String functionName) {
+    return getFunctions()
+        .stream()
+        .filter(function -> function.getName().getText().equals(functionName))
+        .findFirst()
+        .orElseThrow(IllegalArgumentException::new);
+  }
+
   // ===============================================================================================
   // GUARDS
   // ===============================================================================================
@@ -370,11 +402,25 @@ public class Thing implements Abstraction {
     this.optionalParent = optionalParent;
   }
 
+  /**
+   * Sets thing metadata.
+   *
+   * @param thingMetadata the thing metadata
+   */
+  private void setThingMetadata(ThingMetadata thingMetadata) {
+    Assertion.isNotNull(thingMetadata, "thingMetadata is required");
+    this.thingMetadata = thingMetadata;
+  }
+
   // ===============================================================================================
   // PRIVATE
   // ===============================================================================================
 
   private void addThingPropertiesFromFunction(Function function) {
+    if (!function.getPurpose().isCommand() && !function.getPurpose().isModify()) {
+      return;
+    }
+
     Set<ThingProperty> newThingProperties = new LinkedHashSet<>();
 
     function
@@ -432,7 +478,8 @@ public class Thing implements Abstraction {
         && Objects.equals(functions, thing.functions)
         && Objects.equals(multiTenant, thing.multiTenant)
         && Objects.equals(children, thing.children)
-        && Objects.equals(virtualChildren, thing.virtualChildren);
+        && Objects.equals(virtualChildren, thing.virtualChildren)
+        && Objects.equals(thingMetadata, thing.thingMetadata);
   }
 
   @Override
@@ -445,6 +492,7 @@ public class Thing implements Abstraction {
         functions,
         multiTenant,
         children,
-        virtualChildren);
+        virtualChildren,
+        thingMetadata);
   }
 }

@@ -26,6 +26,7 @@ import io.polygenesis.abstraction.data.DataPrimitive;
 import io.polygenesis.abstraction.data.DataPurpose;
 import io.polygenesis.abstraction.data.PrimitiveType;
 import io.polygenesis.abstraction.data.VariableName;
+import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
 import io.polygenesis.commons.test.AbstractEqualityTest;
 import java.util.LinkedHashSet;
 import org.junit.Test;
@@ -78,7 +79,7 @@ public class FunctionTest extends AbstractEqualityTest<Function> {
   @Override
   public Function createObject1() {
     return new Function(
-        ThingBuilder.endToEnd().setThingName(new ThingName("thingName")).createThing(),
+        ThingBuilder.endToEnd().setThingName("thingName").createThing(),
         Purpose.create(),
         new FunctionName("functionName"),
         new LinkedHashSet<>(),
@@ -88,7 +89,7 @@ public class FunctionTest extends AbstractEqualityTest<Function> {
   @Override
   public Function createObject2() {
     return new Function(
-        ThingBuilder.endToEnd().setThingName(new ThingName("thingName")).createThing(),
+        ThingBuilder.endToEnd().setThingName("thingName").createThing(),
         Purpose.create(),
         new FunctionName("anotherFunctionName"),
         new LinkedHashSet<>(),
@@ -101,7 +102,7 @@ public class FunctionTest extends AbstractEqualityTest<Function> {
 
   private Function createFunctionWithReturnValueAndNoArguments() {
     return new Function(
-        ThingBuilder.endToEnd().setThingName(new ThingName("thingName")).createThing(),
+        ThingBuilder.endToEnd().setThingName("thingName").createThing(),
         Purpose.create(),
         new FunctionName("functionName"),
         new ReturnValue(createDataPrimitive()));
@@ -109,7 +110,7 @@ public class FunctionTest extends AbstractEqualityTest<Function> {
 
   private Function createFunctionWithArgumentsAndNoReturnValue() {
     return new Function(
-        ThingBuilder.endToEnd().setThingName(new ThingName("thingName")).createThing(),
+        ThingBuilder.endToEnd().setThingName("thingName").createThing(),
         Purpose.create(),
         new FunctionName("functionName"),
         new LinkedHashSet<>());

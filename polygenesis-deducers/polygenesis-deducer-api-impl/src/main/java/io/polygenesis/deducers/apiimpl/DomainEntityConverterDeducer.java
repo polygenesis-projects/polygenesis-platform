@@ -28,9 +28,8 @@ import io.polygenesis.abstraction.thing.FunctionName;
 import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.ReturnValue;
 import io.polygenesis.abstraction.thing.Thing;
-import io.polygenesis.abstraction.thing.ThingBuilder;
-import io.polygenesis.abstraction.thing.ThingName;
 import io.polygenesis.abstraction.thing.ThingRepository;
+import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.core.AbstractionRepository;
@@ -186,7 +185,7 @@ public class DomainEntityConverterDeducer extends BaseApiImplementationDeducer
    */
   private void makeValueObjectConversion(
       Set<DomainEntityConverterMethod> methods, Dto dto, ValueObject valueObject) {
-    Thing thing = ThingBuilder.endToEnd().setThingName(new ThingName("Converter")).createThing();
+    Thing thing = ThingBuilder.endToEnd().setThingName("Converter").createThing();
 
     Dto dtoToUse = dto.withVariableNameEqualToObjectName();
     ValueObject valueObjectToUse = valueObject.withVariableNameEqualToObjectName();
@@ -259,7 +258,7 @@ public class DomainEntityConverterDeducer extends BaseApiImplementationDeducer
       Dto dtoCollectionRecord,
       BaseDomainEntity domainObject) {
 
-    Thing thing = ThingBuilder.endToEnd().setThingName(new ThingName("Converter")).createThing();
+    Thing thing = ThingBuilder.endToEnd().setThingName("Converter").createThing();
 
     Function function =
         new Function(

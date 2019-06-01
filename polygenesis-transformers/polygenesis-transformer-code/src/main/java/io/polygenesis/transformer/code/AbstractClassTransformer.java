@@ -236,6 +236,7 @@ public abstract class AbstractClassTransformer<S> extends AbstractTransformer
    */
   protected ConstructorRepresentation createConstructorWithDirectAssignment(
       String dataType, Set<ParameterRepresentation> parameterRepresentations) {
+
     String description =
         String.format(INSTANTIATES_A_NEW_S, TextConverter.toUpperCamelSpaces(dataType));
 

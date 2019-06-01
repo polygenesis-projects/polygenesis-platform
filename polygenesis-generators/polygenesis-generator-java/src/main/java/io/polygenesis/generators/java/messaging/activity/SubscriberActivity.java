@@ -18,31 +18,24 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.models.api;
+package io.polygenesis.generators.java.messaging.activity;
 
-import io.polygenesis.abstraction.thing.CqsType;
-import io.polygenesis.abstraction.thing.ThingName;
-import io.polygenesis.commons.test.AbstractEqualityTest;
-import io.polygenesis.commons.valueobjects.PackageName;
+import io.polygenesis.commons.freemarker.FreemarkerService;
+import io.polygenesis.models.messaging.subscriber.SubscriberMethod;
 
-/** @author Christos Tsakostas */
-public class ServiceTest extends AbstractEqualityTest<Service> {
+/**
+ * The interface Subscriber activity.
+ *
+ * @author Christos Tsakostas
+ */
+public interface SubscriberActivity {
 
-  @Override
-  public Service createObject1() {
-    return new Service(
-        new PackageName("com.oregor"),
-        new ServiceName("create"),
-        CqsType.COMMAND,
-        new ThingName("aaa"));
-  }
-
-  @Override
-  public Service createObject2() {
-    return new Service(
-        new PackageName("com.oregor"),
-        new ServiceName("create"),
-        CqsType.SUPPORTIVE,
-        new ThingName("aaa"));
-  }
+  /**
+   * Body string.
+   *
+   * @param freemarkerService the freemarker service
+   * @param subscriberMethod the subscriber method
+   * @return the string
+   */
+  String body(FreemarkerService freemarkerService, SubscriberMethod subscriberMethod);
 }

@@ -18,31 +18,25 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.models.api;
+package io.polygenesis.generators.java.messaging.activity;
 
-import io.polygenesis.abstraction.thing.CqsType;
-import io.polygenesis.abstraction.thing.ThingName;
-import io.polygenesis.commons.test.AbstractEqualityTest;
-import io.polygenesis.commons.valueobjects.PackageName;
+import io.polygenesis.commons.freemarker.FreemarkerService;
+import io.polygenesis.models.messaging.subscriber.SubscriberMethod;
+import java.util.HashMap;
+import java.util.Map;
 
-/** @author Christos Tsakostas */
-public class ServiceTest extends AbstractEqualityTest<Service> {
-
-  @Override
-  public Service createObject1() {
-    return new Service(
-        new PackageName("com.oregor"),
-        new ServiceName("create"),
-        CqsType.COMMAND,
-        new ThingName("aaa"));
-  }
+/**
+ * The type Process subscriber activity.
+ *
+ * @author Christos Tsakostas
+ */
+public class ProcessSubscriberActivity implements SubscriberActivity {
 
   @Override
-  public Service createObject2() {
-    return new Service(
-        new PackageName("com.oregor"),
-        new ServiceName("create"),
-        CqsType.SUPPORTIVE,
-        new ThingName("aaa"));
+  public String body(FreemarkerService freemarkerService, SubscriberMethod subscriberMethod) {
+    Map<String, Object> dataModel = new HashMap<>();
+
+    return freemarkerService.exportToString(
+        dataModel, "polygenesis-generator-java-api-client-messaging/subscriber-process.ftl");
   }
 }

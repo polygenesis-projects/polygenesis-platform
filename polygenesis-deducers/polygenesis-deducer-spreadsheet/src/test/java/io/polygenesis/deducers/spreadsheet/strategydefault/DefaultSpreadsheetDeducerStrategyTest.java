@@ -25,10 +25,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import io.polygenesis.abstraction.data.dsl.DataBuilder;
 import io.polygenesis.abstraction.thing.FunctionBuilder;
 import io.polygenesis.abstraction.thing.Thing;
-import io.polygenesis.abstraction.thing.ThingBuilder;
-import io.polygenesis.abstraction.thing.ThingName;
 import io.polygenesis.abstraction.thing.ThingRepository;
 import io.polygenesis.abstraction.thing.ThingRepositoryImpl;
+import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
 import io.polygenesis.core.AbstractionRepository;
 import io.polygenesis.core.MetamodelRepository;
 import io.polygenesis.deducers.spreadsheet.SpreadsheetDeducerStrategy;
@@ -84,7 +83,7 @@ public class DefaultSpreadsheetDeducerStrategyTest {
   private ThingRepository thingRepository() {
     Set<Thing> things = new LinkedHashSet<>();
 
-    Thing thing = ThingBuilder.endToEnd().setThingName(new ThingName("Customer")).createThing();
+    Thing thing = ThingBuilder.endToEnd().setThingName("Customer").createThing();
 
     thing.addFunctions(
         FunctionBuilder.forThing(thing, "com.oregor")
