@@ -25,8 +25,7 @@ import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.abstraction.thing.FunctionName;
 import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.Thing;
-import io.polygenesis.abstraction.thing.ThingBuilder;
-import io.polygenesis.abstraction.thing.ThingName;
+import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
 import java.util.LinkedHashSet;
 
 /**
@@ -42,7 +41,7 @@ public abstract class AbstractRestDeducerTest {
    * @return the function
    */
   protected Function makeFunctionCreate() {
-    Thing thing = ThingBuilder.endToEnd().setThingName(new ThingName("customer")).createThing();
+    Thing thing = ThingBuilder.endToEnd().setThingName("customer").createThing();
     return new Function(thing, Purpose.create(), new FunctionName("create"), new LinkedHashSet<>());
   }
 
@@ -52,7 +51,7 @@ public abstract class AbstractRestDeducerTest {
    * @return the function
    */
   protected Function makeFunctionModify() {
-    Thing thing = ThingBuilder.endToEnd().setThingName(new ThingName("customer")).createThing();
+    Thing thing = ThingBuilder.endToEnd().setThingName("customer").createThing();
     return new Function(thing, Purpose.modify(), new FunctionName("modify"), new LinkedHashSet<>());
   }
 
@@ -62,7 +61,7 @@ public abstract class AbstractRestDeducerTest {
    * @return the function
    */
   protected Function makeFunctionDelete() {
-    Thing thing = ThingBuilder.endToEnd().setThingName(new ThingName("customer")).createThing();
+    Thing thing = ThingBuilder.endToEnd().setThingName("customer").createThing();
     return new Function(thing, Purpose.modify(), new FunctionName("delete"), new LinkedHashSet<>());
   }
 
@@ -72,7 +71,7 @@ public abstract class AbstractRestDeducerTest {
    * @return the function
    */
   protected Function makeFunctionFetchOne() {
-    Thing thing = ThingBuilder.endToEnd().setThingName(new ThingName("customer")).createThing();
+    Thing thing = ThingBuilder.endToEnd().setThingName("customer").createThing();
     return new Function(
         thing, Purpose.fetchOne(), new FunctionName("fetchOne"), new LinkedHashSet<>());
   }
@@ -83,7 +82,7 @@ public abstract class AbstractRestDeducerTest {
    * @return the function
    */
   protected Function makeFunctionFetchCollection() {
-    Thing thing = ThingBuilder.endToEnd().setThingName(new ThingName("customer")).createThing();
+    Thing thing = ThingBuilder.endToEnd().setThingName("customer").createThing();
     return new Function(
         thing,
         Purpose.fetchCollection(),
@@ -97,7 +96,7 @@ public abstract class AbstractRestDeducerTest {
    * @return the function
    */
   protected Function makeFunctionFetchPagedCollection() {
-    Thing thing = ThingBuilder.endToEnd().setThingName(new ThingName("customer")).createThing();
+    Thing thing = ThingBuilder.endToEnd().setThingName("customer").createThing();
     return new Function(
         thing,
         Purpose.fetchPagedCollection(),
@@ -111,7 +110,7 @@ public abstract class AbstractRestDeducerTest {
    * @return the function
    */
   protected Function makeInvalidGetFunction() {
-    Thing thing = ThingBuilder.endToEnd().setThingName(new ThingName("customer")).createThing();
+    Thing thing = ThingBuilder.endToEnd().setThingName("customer").createThing();
     return new Function(
         thing,
         Purpose.custom("validate", CqsType.COMMAND),

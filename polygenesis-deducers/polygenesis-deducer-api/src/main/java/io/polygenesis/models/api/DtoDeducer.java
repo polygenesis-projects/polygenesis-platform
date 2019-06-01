@@ -151,72 +151,9 @@ public class DtoDeducer {
     return dto;
   }
 
-  /**
-   * Deduce set.
-   *
-   * @param serviceMethods the methods
-   * @return the set
-   */
-  public Set<Dto> deduceAllDtosInMethods(Set<ServiceMethod> serviceMethods) {
-    Set<Dto> dtos = new LinkedHashSet<>();
-
-    serviceMethods
-        .stream()
-        .forEach(
-            method -> {
-              addDto(dtos, method.getRequestDto());
-              addDto(dtos, method.getResponseDto());
-            });
-
-    return dtos;
-  }
-
   // ===============================================================================================
   // PRIVATE
   // ===============================================================================================
-
-  /**
-   * Add dto.
-   *
-   * @param dtos the dtos
-   * @param dto the dto
-   */
-  private void addDto(Set<Dto> dtos, Dto dto) {
-    dtos.add(dto);
-
-    if (dto.getArrayElementAsOptional().isPresent()) {
-      Data arrayElement =
-          dto.getArrayElementAsOptional().orElseThrow(IllegalArgumentException::new);
-      if (arrayElement.isDataGroup()) {
-        addDto(dtos, new Dto(DtoType.COLLECTION_RECORD, arrayElement.getAsDataGroup(), false));
-      }
-    }
-
-    // Add model group children of DataGroup recursively
-    dto.getDataGroup()
-        .getModels()
-        .forEach(
-            model -> {
-              // TODO: check if model array element children should be added as well
-              if (model.isDataGroup()) {
-                DataGroup dataGroup = model.getAsDataGroup();
-
-                DtoType dtoType;
-                if (dto.getDtoType().equals(DtoType.API_COLLECTION_REQUEST)
-                    || dto.getDtoType().equals(DtoType.API_PAGED_COLLECTION_REQUEST)) {
-                  dtoType = DtoType.COLLECTION_RECORD;
-                } else {
-                  dtoType = DtoType.INTERNAL;
-                  dataGroup =
-                      dataGroup.withNewObjectName(
-                          new ObjectName(
-                              String.format("%sDto", dataGroup.getObjectName().getText())));
-                }
-
-                addDto(dtos, new Dto(dtoType, dataGroup, false));
-              }
-            });
-  }
 
   /**
    * Make assertions for request dto.

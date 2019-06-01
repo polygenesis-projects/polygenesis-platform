@@ -18,9 +18,8 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.abstraction.thing;
+package io.polygenesis.abstraction.thing.dsl;
 
-import io.polygenesis.commons.valueobjects.ContextName;
 import io.polygenesis.core.AbstractionScope;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
@@ -31,7 +30,11 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class ThingBuilder {
+public class ThingBuilder extends AbstractThingBuilder<ThingBuilder> {
+
+  // ===============================================================================================
+  // STATE
+  // ===============================================================================================
 
   // ===============================================================================================
   // STATIC
@@ -91,120 +94,16 @@ public class ThingBuilder {
         new LinkedHashSet<>(Arrays.asList(AbstractionScope.domainAggregateEntity())));
   }
 
-  /**
-   * Subscriber thing builder.
-   *
-   * @return the thing builder
-   */
-  public static ThingBuilder subscriber() {
-    return new ThingBuilder(
-        new LinkedHashSet<>(
-            Arrays.asList(AbstractionScope.api(), AbstractionScope.apiClientMessaging())));
-  }
-
-  // ===============================================================================================
-  // STATE
-  // ===============================================================================================
-
-  private String contextName;
-  private ThingName thingName;
-  private Set<AbstractionScope> abstractionScopes;
-  private Set<ThingProperty> thingProperties = new LinkedHashSet<>();
-  private Boolean multiTenant = false;
-  private Thing parentThing;
-
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   private ThingBuilder(Set<AbstractionScope> abstractionScopes) {
-    this.abstractionScopes = abstractionScopes;
+    super(ThingBuilder.class, abstractionScopes);
   }
 
   // ===============================================================================================
   // SETTERS
   // ===============================================================================================
 
-  /**
-   * Sets context name.
-   *
-   * @param contextName the context name
-   */
-  public void setContextName(String contextName) {
-    this.contextName = contextName;
-  }
-
-  /**
-   * Sets thing name.
-   *
-   * @param thingName the thing name
-   * @return the thing name
-   */
-  public ThingBuilder setThingName(ThingName thingName) {
-    this.thingName = thingName;
-    return this;
-  }
-
-  /**
-   * Sets abstraction scopes.
-   *
-   * @param abstractionScopes the abstraction scopes
-   * @return the abstraction scopes
-   */
-  public ThingBuilder setAbstractionScopes(Set<AbstractionScope> abstractionScopes) {
-    this.abstractionScopes = abstractionScopes;
-    return this;
-  }
-
-  /**
-   * Sets thing properties.
-   *
-   * @param thingProperties the thing properties
-   * @return the thing properties
-   */
-  public ThingBuilder setThingProperties(Set<ThingProperty> thingProperties) {
-    this.thingProperties = thingProperties;
-    return this;
-  }
-
-  /**
-   * Sets multi tenant.
-   *
-   * @param multiTenant the multi tenant
-   * @return the multi tenant
-   */
-  public ThingBuilder setMultiTenant(Boolean multiTenant) {
-    this.multiTenant = multiTenant;
-    return this;
-  }
-
-  /**
-   * Sets parent thing.
-   *
-   * @param parentThing the parent thing
-   * @return the parent thing
-   */
-  public ThingBuilder setParentThing(Thing parentThing) {
-    this.parentThing = parentThing;
-    return this;
-  }
-
-  // ===============================================================================================
-  // CREATION
-  // ===============================================================================================
-
-  /**
-   * Create thing thing.
-   *
-   * @return the thing
-   */
-  public Thing createThing() {
-    return new Thing(
-        abstractionScopes,
-        contextName != null ? new ContextName(contextName) : ContextName.defaultContext(),
-        thingName,
-        thingProperties,
-        multiTenant,
-        parentThing);
-  }
 }

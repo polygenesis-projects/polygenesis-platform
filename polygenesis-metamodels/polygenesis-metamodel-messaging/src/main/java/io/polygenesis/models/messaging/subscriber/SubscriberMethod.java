@@ -18,45 +18,35 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.models.api;
+package io.polygenesis.models.messaging.subscriber;
 
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.commons.assertion.Assertion;
 import java.util.Objects;
 
 /**
- * The type Service method.
+ * The type Subscriber method.
  *
  * @author Christos Tsakostas
  */
-public class ServiceMethod {
+public class SubscriberMethod {
 
-  // ===============================================================================================
-  // STATE
-  // ===============================================================================================
-
-  private Service service;
+  private Subscriber subscriber;
   private Function function;
-  private Dto requestDto;
-  private Dto responseDto;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
-   * Instantiates a new Service method.
+   * Instantiates a new Subscriber method.
    *
-   * @param service the service
+   * @param subscriber the subscriber
    * @param function the function
-   * @param requestDto the request dto
-   * @param responseDto the response dto
    */
-  public ServiceMethod(Service service, Function function, Dto requestDto, Dto responseDto) {
-    setService(service);
+  public SubscriberMethod(Subscriber subscriber, Function function) {
+    setSubscriber(subscriber);
     setFunction(function);
-    setRequestDto(requestDto);
-    setResponseDto(responseDto);
   }
 
   // ===============================================================================================
@@ -64,12 +54,12 @@ public class ServiceMethod {
   // ===============================================================================================
 
   /**
-   * Gets service.
+   * Gets subscriber.
    *
-   * @return the service
+   * @return the subscriber
    */
-  public Service getService() {
-    return service;
+  public Subscriber getSubscriber() {
+    return subscriber;
   }
 
   /**
@@ -81,36 +71,18 @@ public class ServiceMethod {
     return function;
   }
 
-  /**
-   * Gets request dto.
-   *
-   * @return the request dto
-   */
-  public Dto getRequestDto() {
-    return requestDto;
-  }
-
-  /**
-   * Gets response dto.
-   *
-   * @return the response dto
-   */
-  public Dto getResponseDto() {
-    return responseDto;
-  }
-
   // ===============================================================================================
   // GUARDS
   // ===============================================================================================
 
   /**
-   * Sets service.
+   * Sets subscriber.
    *
-   * @param service the service
+   * @param subscriber the subscriber
    */
-  private void setService(Service service) {
-    Assertion.isNotNull(service, "service is required");
-    this.service = service;
+  private void setSubscriber(Subscriber subscriber) {
+    Assertion.isNotNull(subscriber, "subscriber is required");
+    this.subscriber = subscriber;
   }
 
   /**
@@ -121,26 +93,6 @@ public class ServiceMethod {
   private void setFunction(Function function) {
     Assertion.isNotNull(function, "function is required");
     this.function = function;
-  }
-
-  /**
-   * Sets request dto.
-   *
-   * @param requestDto the request dto
-   */
-  private void setRequestDto(Dto requestDto) {
-    Assertion.isNotNull(requestDto, "requestDto is required");
-    this.requestDto = requestDto;
-  }
-
-  /**
-   * Sets response dto.
-   *
-   * @param responseDto the response dto
-   */
-  private void setResponseDto(Dto responseDto) {
-    Assertion.isNotNull(responseDto, "responseDto is required");
-    this.responseDto = responseDto;
   }
 
   // ===============================================================================================
@@ -155,14 +107,12 @@ public class ServiceMethod {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ServiceMethod that = (ServiceMethod) o;
-    return Objects.equals(function, that.function)
-        && Objects.equals(requestDto, that.requestDto)
-        && Objects.equals(responseDto, that.responseDto);
+    SubscriberMethod that = (SubscriberMethod) o;
+    return Objects.equals(subscriber, that.subscriber) && Objects.equals(function, that.function);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(function, requestDto, responseDto);
+    return Objects.hash(subscriber, function);
   }
 }

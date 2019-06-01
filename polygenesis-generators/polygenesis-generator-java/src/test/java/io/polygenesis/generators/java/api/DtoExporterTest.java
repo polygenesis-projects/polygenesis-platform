@@ -36,8 +36,8 @@ import io.polygenesis.abstraction.thing.FunctionName;
 import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.ReturnValue;
 import io.polygenesis.abstraction.thing.Thing;
-import io.polygenesis.abstraction.thing.ThingBuilder;
 import io.polygenesis.abstraction.thing.ThingName;
+import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
@@ -46,7 +46,6 @@ import io.polygenesis.generators.java.api.transformer.DtoClassTransformer;
 import io.polygenesis.models.api.Dto;
 import io.polygenesis.models.api.DtoType;
 import io.polygenesis.models.api.Service;
-import io.polygenesis.models.api.ServiceMethod;
 import io.polygenesis.models.api.ServiceName;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -77,7 +76,7 @@ public class DtoExporterTest {
   public void shouldExport() {
     dtoExporter.export(generationPath, service);
 
-    verify(dtoClassRepresentable, times(2)).create(any(Dto.class));
+    verify(dtoClassRepresentable, times(3)).create(any(Dto.class));
 
     // TODO
     //    verify(freemarkerService).export(
@@ -93,7 +92,6 @@ public class DtoExporterTest {
 
   private Service makeService() {
     ThingName thingName = new ThingName("someThingName");
-    Set<ServiceMethod> serviceMethods = new LinkedHashSet<>();
 
     DataGroup returnValueDataGroup =
         new DataGroup(
@@ -114,25 +112,19 @@ public class DtoExporterTest {
 
     createArguments.add(argument);
 
-    ServiceMethod createServiceMethod =
-        new ServiceMethod(
-            makeFunctionCreate(),
-            new Dto(DtoType.API_REQUEST, argument.getData().getAsDataGroup(), false),
-            new Dto(DtoType.API_RESPONSE, createReturnValue.getData().getAsDataGroup(), false));
+    Service service =
+        new Service(
+            new PackageName("com.oregor"),
+            new ServiceName("someServiceName"),
+            CqsType.COMMAND,
+            thingName);
 
-    serviceMethods.add(createServiceMethod);
+    service.appendServiceMethod(
+        makeFunctionCreate(),
+        new Dto(DtoType.API_REQUEST, argument.getData().getAsDataGroup(), false),
+        new Dto(DtoType.API_RESPONSE, createReturnValue.getData().getAsDataGroup(), false));
 
-    Set<Dto> dtos = new LinkedHashSet<>();
-    dtos.add(new Dto(DtoType.API_REQUEST, argument.getData().getAsDataGroup(), false));
-    dtos.add(new Dto(DtoType.API_RESPONSE, createReturnValue.getData().getAsDataGroup(), false));
-
-    return new Service(
-        new PackageName("com.oregor"),
-        new ServiceName("someServiceName"),
-        serviceMethods,
-        CqsType.COMMAND,
-        thingName,
-        dtos);
+    return service;
   }
 
   // postalAddress
@@ -154,7 +146,7 @@ public class DtoExporterTest {
   }
 
   private Function makeFunctionCreate() {
-    Thing thing = ThingBuilder.endToEnd().setThingName(new ThingName("customer")).createThing();
+    Thing thing = ThingBuilder.endToEnd().setThingName("customer").createThing();
     ReturnValue returnValue =
         new ReturnValue(DataPrimitive.of(PrimitiveType.STRING, new VariableName("someRet")));
     return new Function(

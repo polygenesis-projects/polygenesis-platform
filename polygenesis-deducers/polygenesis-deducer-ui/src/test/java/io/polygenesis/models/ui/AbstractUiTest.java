@@ -30,15 +30,14 @@ import io.polygenesis.abstraction.thing.FunctionName;
 import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.ReturnValue;
 import io.polygenesis.abstraction.thing.Thing;
-import io.polygenesis.abstraction.thing.ThingBuilder;
-import io.polygenesis.abstraction.thing.ThingName;
+import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
 import java.util.LinkedHashSet;
 
 /** @author Christos Tsakostas */
 public abstract class AbstractUiTest {
 
   protected Thing createThing() {
-    Thing thing = ThingBuilder.endToEnd().setThingName(new ThingName("someThing")).createThing();
+    Thing thing = ThingBuilder.endToEnd().setThingName("someThing").createThing();
 
     // =============================================================================================
     // CREATE

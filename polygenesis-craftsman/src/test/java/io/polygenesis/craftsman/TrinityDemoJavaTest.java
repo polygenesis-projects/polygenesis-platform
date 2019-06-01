@@ -30,9 +30,8 @@ import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.dsl.DataBuilder;
 import io.polygenesis.abstraction.thing.FunctionBuilder;
 import io.polygenesis.abstraction.thing.Thing;
-import io.polygenesis.abstraction.thing.ThingBuilder;
-import io.polygenesis.abstraction.thing.ThingName;
 import io.polygenesis.abstraction.thing.ThingRepositoryImpl;
+import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.AbstractionRepository;
 import io.polygenesis.core.Deducer;
@@ -129,11 +128,7 @@ public class TrinityDemoJavaTest {
   }
 
   private Thing createTodo(PackageName rootPackageName) {
-    Thing task =
-        ThingBuilder.endToEnd()
-            .setThingName(new ThingName("task"))
-            .setMultiTenant(false)
-            .createThing();
+    Thing task = ThingBuilder.endToEnd().setThingName("task").setMultiTenant(false).createThing();
 
     task.addFunctions(
         FunctionBuilder.forThing(task, rootPackageName.getText()).withCrudFunction(data()).build());

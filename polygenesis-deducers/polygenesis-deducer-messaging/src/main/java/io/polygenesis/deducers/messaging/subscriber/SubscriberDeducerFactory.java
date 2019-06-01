@@ -18,71 +18,43 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.generators.java.messaging;
+package io.polygenesis.deducers.messaging.subscriber;
 
-import io.polygenesis.commons.freemarker.FreemarkerConfig;
-import io.polygenesis.commons.freemarker.FreemarkerService;
-import io.polygenesis.generators.java.messaging.activity.SubscriberActivityRegistry;
-import io.polygenesis.generators.java.messaging.exporter.SubscriberExporter;
-import io.polygenesis.generators.java.messaging.transformer.SubscriberClassTransformer;
-import io.polygenesis.transformer.code.FromDataTypeToJavaConverter;
-import io.polygenesis.transformer.code.FunctionToMethodRepresentationTransformer;
-import java.nio.file.Path;
+import io.polygenesis.commons.valueobjects.PackageName;
 
 /**
- * The type Messaging generator factory.
+ * The type Subscriber deducer factory.
  *
  * @author Christos Tsakostas
  */
-public final class MessagingGeneratorFactory {
+public final class SubscriberDeducerFactory {
 
   // ===============================================================================================
   // DEPENDENCIES
   // ===============================================================================================
-  private static SubscriberExporter subscriberExporter;
 
   // ===============================================================================================
   // STATIC INITIALIZATION OF DEPENDENCIES
   // ===============================================================================================
 
-  static {
-    FreemarkerService freemarkerService =
-        new FreemarkerService(FreemarkerConfig.getInstance().getConfiguration());
-
-    FromDataTypeToJavaConverter fromDataTypeToJavaConverter = new FromDataTypeToJavaConverter();
-
-    FunctionToMethodRepresentationTransformer functionToMethodRepresentationTransformer =
-        new FunctionToMethodRepresentationTransformer(fromDataTypeToJavaConverter);
-
-    subscriberExporter =
-        new SubscriberExporter(
-            freemarkerService,
-            new SubscriberClassTransformer(
-                fromDataTypeToJavaConverter,
-                freemarkerService,
-                functionToMethodRepresentationTransformer,
-                new SubscriberActivityRegistry()));
-  }
-
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
-
-  private MessagingGeneratorFactory() {
+  private SubscriberDeducerFactory() {
     throw new IllegalStateException("Utility class");
   }
 
   // ===============================================================================================
-  // NEW INSTANCE
+  // GETTERS
   // ===============================================================================================
 
   /**
-   * New instance messaging generator.
+   * New instance subscriber deducer.
    *
-   * @param generationPath the generation path
-   * @return the messaging generator
+   * @param packageName the package name
+   * @return the subscriber deducer
    */
-  public static MessagingGenerator newInstance(Path generationPath) {
-    return new MessagingGenerator(generationPath, subscriberExporter);
+  public static SubscriberDeducer newInstance(PackageName packageName) {
+    return new SubscriberDeducer(packageName);
   }
 }

@@ -47,7 +47,7 @@ public class ServiceImplementationClassTransformer
   // ===============================================================================================
   // DEPENDENCIES
   // ===============================================================================================
-  private final ServiceMethodImplementationTransformer serviceMethodImplementationRepresentable;
+  private final ServiceMethodImplementationTransformer serviceMethodImplementationTransformer;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -57,13 +57,13 @@ public class ServiceImplementationClassTransformer
    * Instantiates a new Service implementation class representable.
    *
    * @param fromDataTypeToJavaConverter the from data type to java converter
-   * @param serviceMethodImplementationRepresentable the api impl method projection converter
+   * @param serviceMethodImplementationTransformer the api impl method projection converter
    */
   public ServiceImplementationClassTransformer(
       FromDataTypeToJavaConverter fromDataTypeToJavaConverter,
-      ServiceMethodImplementationTransformer serviceMethodImplementationRepresentable) {
+      ServiceMethodImplementationTransformer serviceMethodImplementationTransformer) {
     super(fromDataTypeToJavaConverter);
-    this.serviceMethodImplementationRepresentable = serviceMethodImplementationRepresentable;
+    this.serviceMethodImplementationTransformer = serviceMethodImplementationTransformer;
   }
 
   // ===============================================================================================
@@ -106,7 +106,7 @@ public class ServiceImplementationClassTransformer
         .forEach(
             method ->
                 methodRepresentations.add(
-                    serviceMethodImplementationRepresentable.create(method, source)));
+                    serviceMethodImplementationTransformer.create(method, source)));
 
     return methodRepresentations;
   }
@@ -253,7 +253,7 @@ public class ServiceImplementationClassTransformer
         .getServiceMethodImplementations()
         .forEach(
             method -> {
-              imports.addAll(serviceMethodImplementationRepresentable.imports(method));
+              imports.addAll(serviceMethodImplementationTransformer.imports(method));
 
               if (method.getServiceMethod().getFunction().getPurpose().isFetchOne()
                   || method.getServiceMethod().getFunction().getPurpose().isModify()) {

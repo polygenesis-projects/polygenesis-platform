@@ -57,7 +57,9 @@ public final class TrinityJavaMultiGeneratorFactory {
   private static final String API_DETAIL = "api-detail";
   private static final String API_CLIENTS = "api-clients";
   private static final String API_CLIENT_REST_SPRING = "api-client-rest-spring";
-  private static final String API_CLIENT_MESSAGING = "api-client-messaging";
+  // TODO
+  // private static final String API_CLIENT_MESSAGING = "api-client-messaging";
+  private static final String API_CLIENT_MESSAGING = "api-client-subscriber-activemq";
   private static final String DOMAIN = "domain";
   private static final String DOMAIN_DETAILS = "domain-details";
   private static final String DOMAIN_DETAIL_SERVICES = "domain-detail-services";

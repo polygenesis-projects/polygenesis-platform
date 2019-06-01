@@ -53,9 +53,7 @@ public class ServiceMetamodelRepositoryTest {
             new Service(
                 new PackageName("com.oregor"),
                 new ServiceName("someServiceName"),
-                new LinkedHashSet<>(),
                 CqsType.COMMAND,
-                new ThingName("someThingName"),
-                new LinkedHashSet<>())));
+                new ThingName("someThingName"))));
   }
 }

@@ -38,6 +38,10 @@ ${ annotation }
 ${ representation.modifiers }<#if representation.modifiers != ""> </#if>class ${ representation.fullObjectName } {
 <#if representation.fieldRepresentations?size gt 0>
 
+  // ===============================================================================================
+  // STATE / DEPENDENCIES
+  // ===============================================================================================
+
 </#if>
 <#list representation.fieldRepresentations as fieldRepresentation>
   <#list fieldRepresentation.annotations as annotation>
@@ -133,7 +137,7 @@ ${ representation.modifiers }<#if representation.modifiers != ""> </#if>class ${
 <#if representation.getMethodRepresentationsBy('ANY')?size gt 0>
 
   // ===============================================================================================
-  // ANY
+  // FUNCTIONALITY
   // ===============================================================================================
 
   <#list representation.getMethodRepresentationsBy('ANY') as method>

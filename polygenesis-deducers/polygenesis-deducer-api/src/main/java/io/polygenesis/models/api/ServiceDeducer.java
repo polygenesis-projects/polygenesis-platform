@@ -22,7 +22,6 @@ package io.polygenesis.models.api;
 
 import io.polygenesis.abstraction.thing.CqsType;
 import io.polygenesis.abstraction.thing.Thing;
-import io.polygenesis.abstraction.thing.ThingName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -38,7 +37,6 @@ public class ServiceDeducer {
   // DEPENDENCIES
   // ===============================================================================================
 
-  private final ServiceMethodDeducer serviceMethodDeducer;
   private final DtoDeducer dtoDeducer;
 
   // ===============================================================================================
@@ -48,11 +46,9 @@ public class ServiceDeducer {
   /**
    * Instantiates a new Service deducer.
    *
-   * @param serviceMethodDeducer the service method deducer
    * @param dtoDeducer the dto deducer
    */
-  public ServiceDeducer(ServiceMethodDeducer serviceMethodDeducer, DtoDeducer dtoDeducer) {
-    this.serviceMethodDeducer = serviceMethodDeducer;
+  public ServiceDeducer(DtoDeducer dtoDeducer) {
     this.dtoDeducer = dtoDeducer;
   }
 
@@ -87,46 +83,72 @@ public class ServiceDeducer {
    * @param rootPackageName the root package name
    */
   private void fillServices(Set<Service> services, Thing thing, PackageName rootPackageName) {
-    Set<ServiceMethod> commandServiceMethods = new LinkedHashSet<>();
-    Set<ServiceMethod> queryServiceMethods = new LinkedHashSet<>();
-
-    serviceMethodDeducer.deduceCommandMethods(commandServiceMethods, thing, rootPackageName);
-    serviceMethodDeducer.deduceQueryMethods(queryServiceMethods, thing, rootPackageName);
-
-    Set<ServiceMethod> allServiceMethods = new LinkedHashSet<>();
-    allServiceMethods.addAll(commandServiceMethods);
-    allServiceMethods.addAll(queryServiceMethods);
-
-    Set<Dto> dtos = dtoDeducer.deduceAllDtosInMethods(allServiceMethods);
-
-    if (!commandServiceMethods.isEmpty()) {
-      services.add(
+    if (numberOfCommandFunctions(thing) > 0) {
+      Service service =
           new Service(
               thing.makePackageName(rootPackageName, thing),
-              makeCommandServiceName(thing.getThingName()),
-              commandServiceMethods,
+              new ServiceName(thing.getThingName().getText() + "Service"),
               CqsType.COMMAND,
-              thing.getThingName(),
-              dtos));
+              thing.getThingName());
+
+      appendCommandMethods(service, thing, rootPackageName);
+
+      services.add(service);
     }
 
-    if (!queryServiceMethods.isEmpty()) {
-      services.add(
+    if (numberOfQueryFunctions(thing) > 0) {
+      Service service =
           new Service(
               thing.makePackageName(rootPackageName, thing),
-              makeQueryServiceName(thing.getThingName()),
-              queryServiceMethods,
+              new ServiceName(thing.getThingName().getText() + "QueryService"),
               CqsType.QUERY,
-              thing.getThingName(),
-              dtos));
+              thing.getThingName());
+
+      appendQueryMethods(service, thing, rootPackageName);
+
+      services.add(service);
     }
   }
 
-  private ServiceName makeCommandServiceName(ThingName thingName) {
-    return new ServiceName(thingName.getText() + "Service");
+  private long numberOfCommandFunctions(Thing thing) {
+    return thing
+        .getFunctions()
+        .stream()
+        .filter(function -> function.getPurpose().isCommand())
+        .count();
   }
 
-  private ServiceName makeQueryServiceName(ThingName thingName) {
-    return new ServiceName(thingName.getText() + "QueryService");
+  private long numberOfQueryFunctions(Thing thing) {
+    return thing
+        .getFunctions()
+        .stream()
+        .filter(function -> function.getPurpose().isQuery())
+        .count();
+  }
+
+  private void appendCommandMethods(Service service, Thing thing, PackageName rootPackageName) {
+    thing
+        .getFunctions()
+        .stream()
+        .filter(function -> function.getPurpose().isCommand())
+        .forEach(
+            function ->
+                service.appendServiceMethod(
+                    function,
+                    dtoDeducer.deduceRequestDto(function, rootPackageName),
+                    dtoDeducer.deduceResponseDto(function, rootPackageName)));
+  }
+
+  private void appendQueryMethods(Service service, Thing thing, PackageName rootPackageName) {
+    thing
+        .getFunctions()
+        .stream()
+        .filter(function -> function.getPurpose().isQuery())
+        .forEach(
+            function ->
+                service.appendServiceMethod(
+                    function,
+                    dtoDeducer.deduceRequestDto(function, rootPackageName),
+                    dtoDeducer.deduceResponseDto(function, rootPackageName)));
   }
 }

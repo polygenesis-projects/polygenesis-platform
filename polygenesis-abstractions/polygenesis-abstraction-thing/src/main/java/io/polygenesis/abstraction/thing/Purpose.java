@@ -67,6 +67,11 @@ public class Purpose implements Serializable {
   private static final String RESET = "RESET";
 
   // ===============================================================================================
+  // MESSAGING
+  // ===============================================================================================
+  private static final String PROCESS = "PROCESS";
+
+  // ===============================================================================================
   // STATE
   // ===============================================================================================
 
@@ -205,6 +210,15 @@ public class Purpose implements Serializable {
     return new Purpose(RESET, CqsType.MUTATION);
   }
 
+  /**
+   * Process purpose.
+   *
+   * @return the purpose
+   */
+  public static Purpose process() {
+    return new Purpose(PROCESS, CqsType.COMMAND);
+  }
+
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
@@ -253,6 +267,15 @@ public class Purpose implements Serializable {
    */
   public boolean isCommand() {
     return getCqsType().equals(CqsType.COMMAND);
+  }
+
+  /**
+   * Is query boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isQuery() {
+    return getCqsType().equals(CqsType.QUERY);
   }
 
   /**

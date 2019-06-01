@@ -21,11 +21,22 @@
 package io.polygenesis.models.messaging.subscriber;
 
 import io.polygenesis.abstraction.data.Data;
+import io.polygenesis.abstraction.data.DataPrimitive;
+import io.polygenesis.abstraction.data.PrimitiveType;
+import io.polygenesis.abstraction.data.VariableName;
+import io.polygenesis.abstraction.thing.Argument;
+import io.polygenesis.abstraction.thing.Function;
+import io.polygenesis.abstraction.thing.FunctionName;
+import io.polygenesis.abstraction.thing.Purpose;
+import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.commons.valueobjects.Name;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.Metamodel;
+import io.polygenesis.models.api.ServiceMethod;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -39,6 +50,10 @@ public class Subscriber implements Metamodel {
   private PackageName packageName;
   private Name name;
   private Set<Data> messageData;
+  private Thing relatedThing;
+  private ServiceMethod commandServiceMethod;
+  private ServiceMethod queryServiceMethod;
+  private Set<SubscriberMethod> subscriberMethods;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -50,11 +65,41 @@ public class Subscriber implements Metamodel {
    * @param packageName the package name
    * @param name the name
    * @param messageData the message data
+   * @param relatedThing the related thing
+   * @param queryServiceMethod the query service method
+   * @param commandServiceMethod the command service method
    */
-  public Subscriber(PackageName packageName, Name name, Set<Data> messageData) {
+  public Subscriber(
+      PackageName packageName,
+      Name name,
+      Set<Data> messageData,
+      Thing relatedThing,
+      ServiceMethod queryServiceMethod,
+      ServiceMethod commandServiceMethod) {
     setPackageName(packageName);
     setName(name);
     setMessageData(messageData);
+    setRelatedThing(relatedThing);
+
+    if (queryServiceMethod != null) {
+      setQueryServiceMethod(queryServiceMethod);
+    }
+
+    if (commandServiceMethod != null) {
+      setCommandServiceMethod(commandServiceMethod);
+    }
+
+    setSubscriberMethods(new LinkedHashSet<>());
+
+    appendSubscriberMethod(makeProcessFunction());
+  }
+
+  // ===============================================================================================
+  // STATE MUTATION
+  // ===============================================================================================
+
+  private void appendSubscriberMethod(Function function) {
+    subscriberMethods.add(new SubscriberMethod(this, function));
   }
 
   // ===============================================================================================
@@ -97,6 +142,57 @@ public class Subscriber implements Metamodel {
     return messageData;
   }
 
+  /**
+   * Gets related thing.
+   *
+   * @return the related thing
+   */
+  public Thing getRelatedThing() {
+    return relatedThing;
+  }
+
+  /**
+   * Gets command service method.
+   *
+   * @return the command service method
+   */
+  public ServiceMethod getCommandServiceMethod() {
+    return commandServiceMethod;
+  }
+
+  /**
+   * Gets query service method.
+   *
+   * @return the query service method
+   */
+  public ServiceMethod getQueryServiceMethod() {
+    return queryServiceMethod;
+  }
+
+  /**
+   * Gets subscriber methods.
+   *
+   * @return the subscriber methods
+   */
+  public Set<SubscriberMethod> getSubscriberMethods() {
+    return subscriberMethods;
+  }
+
+  // ===============================================================================================
+  // PRIVATE
+  // ===============================================================================================
+
+  private Function makeProcessFunction() {
+    return new Function(
+        relatedThing,
+        Purpose.process(),
+        new FunctionName("process"),
+        new LinkedHashSet<>(
+            Arrays.asList(
+                new Argument(
+                    DataPrimitive.of(PrimitiveType.STRING, new VariableName("jsonMessage"))))));
+  }
+
   // ===============================================================================================
   // GUARDS
   // ===============================================================================================
@@ -116,7 +212,7 @@ public class Subscriber implements Metamodel {
    *
    * @param name the name
    */
-  public void setName(Name name) {
+  private void setName(Name name) {
     Assertion.isNotNull(name, "name is required");
     this.name = name;
   }
@@ -126,9 +222,49 @@ public class Subscriber implements Metamodel {
    *
    * @param messageData the message data
    */
-  public void setMessageData(Set<Data> messageData) {
+  private void setMessageData(Set<Data> messageData) {
     Assertion.isNotNull(messageData, "messageData is required");
     this.messageData = messageData;
+  }
+
+  /**
+   * Sets related thing.
+   *
+   * @param relatedThing the related thing
+   */
+  private void setRelatedThing(Thing relatedThing) {
+    Assertion.isNotNull(relatedThing, "relatedThing is required");
+    this.relatedThing = relatedThing;
+  }
+
+  /**
+   * Sets query service method.
+   *
+   * @param queryServiceMethod the query service method
+   */
+  private void setQueryServiceMethod(ServiceMethod queryServiceMethod) {
+    Assertion.isNotNull(queryServiceMethod, "queryServiceMethod is required");
+    this.queryServiceMethod = queryServiceMethod;
+  }
+
+  /**
+   * Sets command service method.
+   *
+   * @param commandServiceMethod the command service method
+   */
+  private void setCommandServiceMethod(ServiceMethod commandServiceMethod) {
+    Assertion.isNotNull(commandServiceMethod, "commandServiceMethod is required");
+    this.commandServiceMethod = commandServiceMethod;
+  }
+
+  /**
+   * Sets subscriber methods.
+   *
+   * @param subscriberMethods the subscriber methods
+   */
+  private void setSubscriberMethods(Set<SubscriberMethod> subscriberMethods) {
+    Assertion.isNotNull(subscriberMethods, "subscriberMethods is required");
+    this.subscriberMethods = subscriberMethods;
   }
 
   // ===============================================================================================
@@ -146,11 +282,15 @@ public class Subscriber implements Metamodel {
     Subscriber that = (Subscriber) o;
     return Objects.equals(packageName, that.packageName)
         && Objects.equals(name, that.name)
-        && Objects.equals(messageData, that.messageData);
+        && Objects.equals(messageData, that.messageData)
+        && Objects.equals(relatedThing, that.relatedThing)
+        && Objects.equals(queryServiceMethod, that.queryServiceMethod)
+        && Objects.equals(commandServiceMethod, that.commandServiceMethod);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(packageName, name, messageData);
+    return Objects.hash(
+        packageName, name, messageData, relatedThing, queryServiceMethod, commandServiceMethod);
   }
 }
