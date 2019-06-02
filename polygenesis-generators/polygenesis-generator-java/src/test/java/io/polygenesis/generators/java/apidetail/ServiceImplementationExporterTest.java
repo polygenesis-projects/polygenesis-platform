@@ -27,8 +27,8 @@ import static org.mockito.Mockito.verify;
 
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.valueobjects.PackageName;
-import io.polygenesis.generators.java.exporters.apidetail.ServiceImplementationExporter;
-import io.polygenesis.generators.java.transformers.apidetail.ServiceImplementationClassTransformer;
+import io.polygenesis.generators.java.apidetail.exporter.ServiceImplementationExporter;
+import io.polygenesis.generators.java.apidetail.transformer.ServiceImplementationClassTransformer;
 import io.polygenesis.models.api.Service;
 import io.polygenesis.models.api.ServiceName;
 import io.polygenesis.models.apiimpl.ServiceImplementation;

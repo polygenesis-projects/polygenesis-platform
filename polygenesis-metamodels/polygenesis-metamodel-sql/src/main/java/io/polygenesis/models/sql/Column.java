@@ -35,7 +35,8 @@ public class Column {
 
   private String name;
   private ColumnDataType columnDataType;
-  private Integer length;
+  private Integer length1;
+  private Integer length2;
   private RequiredType requiredType;
   private Boolean primaryKey;
 
@@ -51,7 +52,7 @@ public class Column {
    * @param requiredType the required type
    */
   public Column(String name, ColumnDataType columnDataType, RequiredType requiredType) {
-    this(name, columnDataType, 0, requiredType, false);
+    this(name, columnDataType, 0, 0, requiredType, false);
   }
 
   /**
@@ -59,12 +60,12 @@ public class Column {
    *
    * @param name the name
    * @param columnDataType the column data type
-   * @param length the length
+   * @param length1 the length1
    * @param requiredType the required type
    */
   public Column(
-      String name, ColumnDataType columnDataType, Integer length, RequiredType requiredType) {
-    this(name, columnDataType, length, requiredType, false);
+      String name, ColumnDataType columnDataType, Integer length1, RequiredType requiredType) {
+    this(name, columnDataType, length1, 0, requiredType, false);
   }
 
   /**
@@ -72,19 +73,40 @@ public class Column {
    *
    * @param name the name
    * @param columnDataType the column data type
-   * @param length the length
+   * @param length1 the length 1
+   * @param length2 the length 2
+   * @param requiredType the required type
+   */
+  public Column(
+      String name,
+      ColumnDataType columnDataType,
+      Integer length1,
+      Integer length2,
+      RequiredType requiredType) {
+    this(name, columnDataType, length1, length2, requiredType, false);
+  }
+
+  /**
+   * Instantiates a new Column.
+   *
+   * @param name the name
+   * @param columnDataType the column data type
+   * @param length1 the length1
+   * @param length2 the length 2
    * @param requiredType the required type
    * @param primaryKey the primary key
    */
   public Column(
       String name,
       ColumnDataType columnDataType,
-      Integer length,
+      Integer length1,
+      Integer length2,
       RequiredType requiredType,
       Boolean primaryKey) {
     setName(name);
     setColumnDataType(columnDataType);
-    setLength(length);
+    setLength1(length1);
+    setLength2(length2);
     setRequiredType(requiredType);
     setPrimaryKey(primaryKey);
   }
@@ -112,12 +134,21 @@ public class Column {
   }
 
   /**
-   * Gets length.
+   * Gets length1.
    *
-   * @return the length
+   * @return the length1
    */
-  public Integer getLength() {
-    return length;
+  public Integer getLength1() {
+    return length1;
+  }
+
+  /**
+   * Gets length 2.
+   *
+   * @return the length 2
+   */
+  public Integer getLength2() {
+    return length2;
   }
 
   /**
@@ -161,12 +192,21 @@ public class Column {
   }
 
   /**
-   * Sets length.
+   * Sets length1.
    *
-   * @param length the length
+   * @param length1 the length1
    */
-  private void setLength(Integer length) {
-    this.length = length;
+  private void setLength1(Integer length1) {
+    this.length1 = length1;
+  }
+
+  /**
+   * Sets length2.
+   *
+   * @param length2 the length2
+   */
+  private void setLength2(Integer length2) {
+    this.length2 = length2;
   }
 
   /**
@@ -202,13 +242,14 @@ public class Column {
     Column column = (Column) o;
     return Objects.equals(name, column.name)
         && columnDataType == column.columnDataType
-        && Objects.equals(length, column.length)
+        && Objects.equals(length1, column.length1)
+        && Objects.equals(length2, column.length2)
         && requiredType == column.requiredType
         && Objects.equals(primaryKey, column.primaryKey);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, columnDataType, length, requiredType, primaryKey);
+    return Objects.hash(name, columnDataType, length1, length2, requiredType, primaryKey);
   }
 }

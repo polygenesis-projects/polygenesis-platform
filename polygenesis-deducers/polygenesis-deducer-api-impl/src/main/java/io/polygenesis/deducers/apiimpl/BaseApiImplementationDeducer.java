@@ -28,6 +28,8 @@ import io.polygenesis.models.domain.AggregateRoot;
 import io.polygenesis.models.domain.AggregateRootPersistable;
 import io.polygenesis.models.domain.BaseDomainEntity;
 import io.polygenesis.models.domain.DomainMetamodelRepository;
+import io.polygenesis.models.domain.Projection;
+import io.polygenesis.models.domain.ProjectionMetamodelRepository;
 import io.polygenesis.models.domain.PropertyType;
 import java.util.Optional;
 import java.util.Set;
@@ -47,9 +49,12 @@ public abstract class BaseApiImplementationDeducer {
    * @return the optional domain object
    */
   protected Optional<BaseDomainEntity> getOptionalDomainEntity(
-      Thing thing, DomainMetamodelRepository domainModelRepository) {
+      Thing thing,
+      DomainMetamodelRepository domainModelRepository,
+      ProjectionMetamodelRepository projectionMetamodelRepository) {
     ObjectName objectName = new ObjectName(thing.getThingName().getText());
 
+    // AggregateRoot
     Optional<AggregateRoot> optionalAggregateRoot =
         domainModelRepository
             .getItems()
@@ -81,6 +86,19 @@ public abstract class BaseApiImplementationDeducer {
 
     if (optionalAggregateEntityCollection.isPresent()) {
       return Optional.of(optionalAggregateEntityCollection.get().getAggregateEntity());
+    }
+
+    // PROJECTION
+    Optional<Projection> optionalProjection =
+        projectionMetamodelRepository
+            .getItems()
+            .stream()
+            .filter(projection -> projection.getObjectName().equals(objectName))
+            .findFirst();
+
+    if (optionalProjection.isPresent()) {
+      Projection projection = optionalProjection.get();
+      return Optional.of(projection);
     }
 
     return Optional.empty();

@@ -24,8 +24,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
-import io.polygenesis.generators.java.transformers.apidetail.ServiceImplementationClassTransformer;
-import io.polygenesis.generators.java.transformers.apidetail.ServiceMethodImplementationTransformer;
+import io.polygenesis.generators.java.apidetail.transformer.ServiceImplementationClassTransformer;
+import io.polygenesis.generators.java.apidetail.transformer.ServiceMethodImplementationTransformer;
 import io.polygenesis.models.api.Service;
 import io.polygenesis.models.api.ServiceName;
 import io.polygenesis.models.apiimpl.ServiceImplementation;

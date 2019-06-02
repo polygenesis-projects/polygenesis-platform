@@ -28,6 +28,7 @@ import io.polygenesis.abstraction.thing.ThingProperty;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.models.domain.Constructor;
 import io.polygenesis.models.domain.DomainObjectProperty;
+import io.polygenesis.models.domain.Mapper;
 import io.polygenesis.models.domain.Primitive;
 import io.polygenesis.models.domain.PrimitiveCollection;
 import io.polygenesis.models.domain.Reference;
@@ -147,6 +148,8 @@ public abstract class AbstractPropertyDeducer {
         return new Primitive(thingProperty.getData().getAsDataPrimitive());
       case THING:
         return new Reference(thingProperty.getData());
+      case MAP:
+        return new Mapper(thingProperty.getData().getAsDataMap());
       default:
         throw new UnsupportedOperationException(
             String.format(

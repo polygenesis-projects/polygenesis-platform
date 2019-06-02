@@ -32,8 +32,8 @@ import io.polygenesis.deducers.sql.SqlTableDeducerFactory;
 import io.polygenesis.generators.angular.AngularGeneratorFactory;
 import io.polygenesis.generators.java.api.JavaApiGenerator;
 import io.polygenesis.generators.java.api.JavaApiGeneratorFactory;
-import io.polygenesis.generators.java.exporters.apidetail.JavaApiDetailGenerator;
-import io.polygenesis.generators.java.exporters.apidetail.JavaApiDetailGeneratorFactory;
+import io.polygenesis.generators.java.apidetail.JavaApiDetailGenerator;
+import io.polygenesis.generators.java.apidetail.JavaApiDetailGeneratorFactory;
 import io.polygenesis.generators.java.exporters.domain.JavaDomainGeneratorFactory;
 import io.polygenesis.generators.java.exporters.domainserviceimpl.DomainServiceImplementationGeneratorFactory;
 import io.polygenesis.generators.java.exporters.rdbms.JavaRdbmsGeneratorFactory;
@@ -96,10 +96,10 @@ public class GenesisDefault {
         Arrays.asList(
             ApiDeducerFactory.newInstance(packageName),
             DomainDeducerFactory.newInstance(packageName),
+            ProjectionDeducerFactory.newInstance(packageName),
             DomainServiceDeducerFactory.newInstance(packageName),
             DomainEntityConverterDeducerFactory.newInstance(),
             SupportiveEntityDeducerFactory.newInstance(packageName),
-            ProjectionDeducerFactory.newInstance(packageName),
             ServiceImplementationDeducerFactory.newInstance(),
             RestDeducerFactory.newInstance(packageName),
             SqlTableDeducerFactory.newInstance(),

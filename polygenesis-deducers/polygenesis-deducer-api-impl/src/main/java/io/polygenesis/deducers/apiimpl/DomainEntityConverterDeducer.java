@@ -43,6 +43,7 @@ import io.polygenesis.models.apiimpl.DomainEntityConverterMetamodelRepository;
 import io.polygenesis.models.apiimpl.DomainEntityConverterMethod;
 import io.polygenesis.models.domain.BaseDomainEntity;
 import io.polygenesis.models.domain.DomainMetamodelRepository;
+import io.polygenesis.models.domain.ProjectionMetamodelRepository;
 import io.polygenesis.models.domain.PropertyType;
 import io.polygenesis.models.domain.ValueObject;
 import java.util.LinkedHashSet;
@@ -76,12 +77,17 @@ public class DomainEntityConverterDeducer extends BaseApiImplementationDeducer
         CoreRegistry.getMetamodelRepositoryResolver()
             .resolve(modelRepositories, DomainMetamodelRepository.class);
 
+    ProjectionMetamodelRepository projectionMetamodelRepository =
+        CoreRegistry.getMetamodelRepositoryResolver()
+            .resolve(modelRepositories, ProjectionMetamodelRepository.class);
+
     fillDomainEntityConverters(
         domainEntityConverters,
         CoreRegistry.getAbstractionRepositoryResolver()
             .resolve(abstractionRepositories, ThingRepository.class),
         serviceModelRepository,
-        domainModelRepository);
+        domainModelRepository,
+        projectionMetamodelRepository);
 
     return new DomainEntityConverterMetamodelRepository(domainEntityConverters);
   }
@@ -97,18 +103,21 @@ public class DomainEntityConverterDeducer extends BaseApiImplementationDeducer
    * @param thingRepository the thing repository
    * @param serviceModelRepository the service model repository
    * @param domainModelRepository the domain model repository
+   * @param projectionMetamodelRepository the projection metamodel repository
    */
   protected void fillDomainEntityConverters(
       Set<DomainEntityConverter> domainEntityConverters,
       ThingRepository thingRepository,
       ServiceMetamodelRepository serviceModelRepository,
-      DomainMetamodelRepository domainModelRepository) {
+      DomainMetamodelRepository domainModelRepository,
+      ProjectionMetamodelRepository projectionMetamodelRepository) {
     thingRepository
         .getAbstractionItemsByScope(AbstractionScope.api())
         .forEach(
             thing -> {
               Optional<BaseDomainEntity> optionalDomainObject =
-                  getOptionalDomainEntity(thing, domainModelRepository);
+                  getOptionalDomainEntity(
+                      thing, domainModelRepository, projectionMetamodelRepository);
 
               if (optionalDomainObject.isPresent()) {
                 domainEntityConverters.add(

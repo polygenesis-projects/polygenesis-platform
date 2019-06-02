@@ -74,6 +74,7 @@ public class FromDataTypeToJavaConverter {
     dataTypeMap.put(PrimitiveType.INTEGER, "Integer");
     dataTypeMap.put(PrimitiveType.LONG, "Long");
     dataTypeMap.put(PrimitiveType.BOOLEAN, "Boolean");
+    dataTypeMap.put(PrimitiveType.DATE, "LocalDate");
     dataTypeMap.put(PrimitiveType.DATETIME, "LocalDateTime");
     dataTypeMap.put(PrimitiveType.DECIMAL, "BigDecimal");
     dataTypeMap.put(PrimitiveType.UUID, "UUID");
