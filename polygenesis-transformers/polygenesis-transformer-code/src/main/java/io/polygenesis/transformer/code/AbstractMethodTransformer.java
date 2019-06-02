@@ -137,10 +137,13 @@ public abstract class AbstractMethodTransformer<S extends FunctionProvider>
 
   @Override
   public String implementation(S source, Object... args) {
-    if (source.getFunction().getReturnValue() != null) {
-      return "\t\treturn null;";
+    if (source.getFunction().getReturnValue() == null) {
+      return "\t\t// TODO [PolyGenesis]: write implementation here";
     } else {
-      return "\t\t";
+      StringBuilder stringBuilder = new StringBuilder();
+      stringBuilder.append("\t\t// TODO [PolyGenesis]: write implementation here\n");
+      stringBuilder.append("\t\treturn null;");
+      return stringBuilder.toString();
     }
   }
 

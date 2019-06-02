@@ -25,6 +25,7 @@ import io.polygenesis.core.CoreRegistry;
 import io.polygenesis.core.Deducer;
 import io.polygenesis.core.MetamodelRepository;
 import io.polygenesis.models.domain.DomainMetamodelRepository;
+import io.polygenesis.models.domain.ProjectionMetamodelRepository;
 import io.polygenesis.models.sql.Column;
 import io.polygenesis.models.sql.ColumnDataType;
 import io.polygenesis.models.sql.RequiredType;
@@ -71,7 +72,17 @@ public class SqlTableDeducer implements Deducer<SqlTableMetamodelRepository> {
         .getItems()
         .forEach(aggregateRoot -> tables.addAll(tableDeducer.deduce(aggregateRoot)));
 
-    tables.add(createDomainMessageTable());
+    ProjectionMetamodelRepository projectionMetamodelRepository =
+        CoreRegistry.getMetamodelRepositoryResolver()
+            .resolve(modelRepositories, ProjectionMetamodelRepository.class);
+
+    projectionMetamodelRepository
+        .getItems()
+        .forEach(projection -> tables.addAll(tableDeducer.deduce(projection)));
+
+    if (projectionMetamodelRepository.getItems().isEmpty()) {
+      tables.add(createDomainMessageTable());
+    }
 
     return new SqlTableMetamodelRepository(tables);
   }
@@ -84,34 +95,35 @@ public class SqlTableDeducer implements Deducer<SqlTableMetamodelRepository> {
     Set<Column> columns = new LinkedHashSet<>();
 
     // Add Message Id
-    columns.add(new Column("id", ColumnDataType.BINARY, 16, RequiredType.REQUIRED, true));
+    columns.add(new Column("id", ColumnDataType.BINARY, 16, 0, RequiredType.REQUIRED, true));
 
     // Add root_id
-    columns.add(new Column("root_id", ColumnDataType.BINARY, 16, RequiredType.REQUIRED));
+    columns.add(new Column("root_id", ColumnDataType.BINARY, 16, 0, RequiredType.REQUIRED));
 
     // Add tenant_id
-    columns.add(new Column("tenant_id", ColumnDataType.BINARY, 16, RequiredType.REQUIRED));
+    columns.add(new Column("tenant_id", ColumnDataType.BINARY, 16, 0, RequiredType.REQUIRED));
 
     // Add stream_version
-    columns.add(new Column("stream_version", ColumnDataType.INTEGER, 11, RequiredType.OPTIONAL));
+    columns.add(new Column("stream_version", ColumnDataType.INTEGER, 11, 0, RequiredType.OPTIONAL));
 
     // Add message_name
-    columns.add(new Column("message_name", ColumnDataType.VARCHAR, 512, RequiredType.OPTIONAL));
+    columns.add(new Column("message_name", ColumnDataType.VARCHAR, 512, 0, RequiredType.OPTIONAL));
 
     // Add message_version
-    columns.add(new Column("message_version", ColumnDataType.INTEGER, 11, RequiredType.REQUIRED));
+    columns.add(
+        new Column("message_version", ColumnDataType.INTEGER, 11, 0, RequiredType.REQUIRED));
 
     // Add message
-    columns.add(new Column("message", ColumnDataType.LONGTEXT, RequiredType.REQUIRED));
+    columns.add(new Column("message", ColumnDataType.LONGTEXT, 0, RequiredType.REQUIRED));
 
     // Add principal
-    columns.add(new Column("principal", ColumnDataType.VARCHAR, 100, RequiredType.OPTIONAL));
+    columns.add(new Column("principal", ColumnDataType.VARCHAR, 100, 0, RequiredType.OPTIONAL));
 
     // Add ip_address
-    columns.add(new Column("ip_address", ColumnDataType.VARCHAR, 100, RequiredType.OPTIONAL));
+    columns.add(new Column("ip_address", ColumnDataType.VARCHAR, 100, 0, RequiredType.OPTIONAL));
 
     // Add occurred_on
-    columns.add(new Column("occurred_on", ColumnDataType.DATETIME, RequiredType.OPTIONAL));
+    columns.add(new Column("occurred_on", ColumnDataType.DATETIME, 0, RequiredType.OPTIONAL));
 
     return new Table(new TableName("domain_message"), columns, false);
   }

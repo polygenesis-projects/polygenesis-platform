@@ -33,6 +33,7 @@ import io.polygenesis.models.domain.BaseDomainObject;
 import io.polygenesis.models.domain.DomainObjectProperty;
 import io.polygenesis.models.domain.DomainObjectType;
 import io.polygenesis.models.domain.InstantiationType;
+import io.polygenesis.models.domain.Mapper;
 import io.polygenesis.models.domain.PropertyType;
 import io.polygenesis.representations.code.ConstructorRepresentation;
 import io.polygenesis.representations.code.FieldRepresentation;
@@ -131,6 +132,11 @@ public abstract class DomainObjectClassTransformer<S extends BaseDomainObject>
                           makeAnnotationsForAggregateEntityCollection(source)));
                   break;
                 case REFERENCE:
+                  fieldRepresentations.add(
+                      new FieldRepresentation(
+                          makeVariableDataType(property), makeVariableName(property)));
+                  break;
+                case MAP:
                   fieldRepresentations.add(
                       new FieldRepresentation(
                           makeVariableDataType(property), makeVariableName(property)));
@@ -544,7 +550,7 @@ public abstract class DomainObjectClassTransformer<S extends BaseDomainObject>
    * @param property the property
    * @return the string
    */
-  @SuppressWarnings("rawtypes")
+  @SuppressWarnings({"rawtypes", "unchecked"})
   protected String makeVariableDataType(DomainObjectProperty property) {
     switch (property.getPropertyType()) {
       case ABSTRACT_AGGREGATE_ROOT_ID:
@@ -557,6 +563,12 @@ public abstract class DomainObjectClassTransformer<S extends BaseDomainObject>
         return String.format(
             "List<%s>",
             fromDataTypeToJavaConverter.convert(property.getTypeParameterData().getDataType()));
+      case MAP:
+        Mapper mapper = Mapper.class.cast(property);
+        return String.format(
+            "Map<%s, %s>",
+            fromDataTypeToJavaConverter.convert(mapper.getTypeParameterDataKey().getDataType()),
+            fromDataTypeToJavaConverter.convert(mapper.getTypeParameterDataValue().getDataType()));
       default:
         return fromDataTypeToJavaConverter.convert(property.getData().getDataType());
     }

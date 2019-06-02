@@ -27,9 +27,10 @@ import io.polygenesis.abstraction.data.PrimitiveType;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.commons.valueobjects.VariableName;
 import io.polygenesis.models.domain.AggregateEntityCollection;
-import io.polygenesis.models.domain.AggregateRoot;
+import io.polygenesis.models.domain.BaseDomainEntity;
 import io.polygenesis.models.domain.BaseDomainObject;
 import io.polygenesis.models.domain.DomainObjectProperty;
+import io.polygenesis.models.domain.DomainObjectType;
 import io.polygenesis.models.sql.Column;
 import io.polygenesis.models.sql.ColumnDataType;
 import io.polygenesis.models.sql.RequiredType;
@@ -76,49 +77,59 @@ public class TableDeducer {
   /**
    * Deduce set.
    *
-   * @param aggregateRoot the aggregate root
+   * @param domainEntity the aggregate root
    * @return the set
    */
-  public Set<Table> deduce(AggregateRoot aggregateRoot) {
-    Set<Table> allAggregateRootRelatedTables = new LinkedHashSet<>();
+  public Set<Table> deduce(BaseDomainEntity domainEntity) {
+    Set<Table> allDomainEntityRelatedTables = new LinkedHashSet<>();
 
-    Set<Column> aggregateRootColumns = new LinkedHashSet<>();
+    Set<Column> domainEntityColumns = new LinkedHashSet<>();
 
-    addAggregateRootIdInColumnSetAsPrimaryKey(aggregateRootColumns, aggregateRoot);
+    if (domainEntity.getDomainObjectType().equals(DomainObjectType.AGGREGATE_ROOT)) {
+      addAggregateRootIdInColumnSetAsPrimaryKey(domainEntityColumns, domainEntity);
+    }
 
-    aggregateRoot
+    if (domainEntity.getDomainObjectType().equals(DomainObjectType.PROJECTION)) {
+      addProjectionIdInColumnSet(domainEntityColumns);
+    }
+
+    domainEntity
         .getProperties()
         .forEach(
             property -> {
               switch (property.getPropertyType()) {
                 case AGGREGATE_ROOT_ID:
+                case PROJECTION_ID:
                 case TENANT_ID:
                   break;
                 case PRIMITIVE:
-                  aggregateRootColumns.add(getColumnForPrimitive(property.getData(), ""));
+                  domainEntityColumns.add(getColumnForPrimitive(property.getData(), ""));
                   break;
                 case PRIMITIVE_COLLECTION:
-                  allAggregateRootRelatedTables.add(
-                      getTableForPrimitiveCollection(aggregateRoot, property));
+                  allDomainEntityRelatedTables.add(
+                      getTableForPrimitiveCollection(domainEntity, property));
                   break;
                 case VALUE_OBJECT:
-                  aggregateRootColumns.addAll(
+                  domainEntityColumns.addAll(
                       getColumnsForValueObject(property.getData().getAsDataGroup()));
                   break;
                 case VALUE_OBJECT_COLLECTION:
-                  allAggregateRootRelatedTables.add(
-                      getTableForValueObjectCollection(aggregateRoot, property));
+                  allDomainEntityRelatedTables.add(
+                      getTableForValueObjectCollection(domainEntity, property));
                   break;
                 case AGGREGATE_ENTITY:
-                  aggregateRootColumns.addAll(
+                  domainEntityColumns.addAll(
                       getColumnsForValueObject(property.getData().getAsDataGroup()));
                   break;
                 case AGGREGATE_ENTITY_COLLECTION:
                   AggregateEntityCollection aggregateEntityCollection =
                       (AggregateEntityCollection) property;
-                  allAggregateRootRelatedTables.add(
+                  allDomainEntityRelatedTables.add(
                       getTableForAggregateEntityCollection(
-                          aggregateRoot, aggregateEntityCollection.getAggregateEntity(), property));
+                          domainEntity, aggregateEntityCollection.getAggregateEntity(), property));
+                  break;
+                case MAP:
+                  domainEntityColumns.addAll(getColumnsForMap());
                   break;
                 default:
                   throw new IllegalArgumentException(
@@ -130,18 +141,18 @@ public class TableDeducer {
             });
 
     // Add version
-    aggregateRootColumns.add(
+    domainEntityColumns.add(
         new Column("version", ColumnDataType.INTEGER, 11, RequiredType.REQUIRED));
 
-    Table mainAggregateRootTable =
+    Table domainEntityTable =
         new Table(
-            new TableName(aggregateRoot.getObjectName().getText()),
-            aggregateRootColumns,
-            aggregateRoot.getMultiTenant());
+            new TableName(domainEntity.getObjectName().getText()),
+            domainEntityColumns,
+            domainEntity.getMultiTenant());
 
-    allAggregateRootRelatedTables.add(mainAggregateRootTable);
+    allDomainEntityRelatedTables.add(domainEntityTable);
 
-    return allAggregateRootRelatedTables;
+    return allDomainEntityRelatedTables;
   }
 
   /**
@@ -272,6 +283,15 @@ public class TableDeducer {
 
     if (columnDataType.equals(ColumnDataType.BIT)) {
       length = 1;
+    } else if (columnDataType.equals(ColumnDataType.BINARY)) {
+      length = 16;
+    } else if (columnDataType.equals(ColumnDataType.DECIMAL)) {
+      return new Column(
+          String.format("%s%s", columnPrefix, data.getVariableName().getText()),
+          columnDataType,
+          19,
+          2,
+          RequiredType.OPTIONAL);
     }
 
     return new Column(
@@ -306,6 +326,19 @@ public class TableDeducer {
                 throw new IllegalStateException();
               }
             });
+
+    return columns;
+  }
+
+  /**
+   * Gets columns for map.
+   *
+   * @return the columns for map
+   */
+  private Set<Column> getColumnsForMap() {
+    Set<Column> columns = new LinkedHashSet<>();
+
+    // TODO
 
     return columns;
   }
@@ -423,13 +456,14 @@ public class TableDeducer {
       Set<Column> columns, BaseDomainObject baseDomainObject, boolean addAsPrimaryKey) {
     // Add Object Id
     columns.add(
-        new Column("root_id", ColumnDataType.BINARY, 16, RequiredType.REQUIRED, addAsPrimaryKey));
+        new Column(
+            "root_id", ColumnDataType.BINARY, 16, 0, RequiredType.REQUIRED, addAsPrimaryKey));
 
     if (baseDomainObject.getMultiTenant()) {
       // Add Tenant Id
       columns.add(
           new Column(
-              "tenant_id", ColumnDataType.BINARY, 16, RequiredType.REQUIRED, addAsPrimaryKey));
+              "tenant_id", ColumnDataType.BINARY, 16, 0, RequiredType.REQUIRED, addAsPrimaryKey));
     }
   }
 
@@ -439,7 +473,11 @@ public class TableDeducer {
    * @param columns the columns
    */
   private void addAggregateEntityIdInColumnSet(Set<Column> columns) {
-    // Add Entity Id
-    columns.add(new Column("entity_id", ColumnDataType.BINARY, 16, RequiredType.REQUIRED, true));
+    columns.add(new Column("entity_id", ColumnDataType.BINARY, 16, 0, RequiredType.REQUIRED, true));
+  }
+
+  private void addProjectionIdInColumnSet(Set<Column> columns) {
+    columns.add(
+        new Column("projection_id", ColumnDataType.BINARY, 16, 0, RequiredType.REQUIRED, true));
   }
 }

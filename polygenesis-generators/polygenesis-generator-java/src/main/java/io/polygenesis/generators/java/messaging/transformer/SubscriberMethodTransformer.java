@@ -103,8 +103,8 @@ public class SubscriberMethodTransformer extends AbstractMethodTransformer<Subsc
    */
   @SuppressWarnings("unchecked")
   private String getSupportedMessageTypes(SubscriberMethod source) {
-    Set<String> supportedMessageTypes = (Set<String>)
-        source.getFunction().getActivity().getValue("supportedMessageTypes");
+    Set<String> supportedMessageTypes =
+        (Set<String>) source.getFunction().getActivity().getValue("supportedMessageTypes");
 
     return supportedMessageTypes
         .stream()

@@ -27,6 +27,14 @@
           <#else>
         ${ persistenceVariable }.nextId()<#sep>,</#sep>
           </#if>
+        <#break>
+        <#case 'PROJECTION_ID'>
+          <#if multiTenant>
+          <#--        ${ persistenceVariable }.nextId(UUID.fromString(${ requestDto.dataGroup.objectName.text }.getTenantId()))<#sep>,</#sep>-->
+        ${ persistenceVariable }.nextId()<#sep>,</#sep>
+          <#else>
+        ${ persistenceVariable }.nextId()<#sep>,</#sep>
+          </#if>
           <#break>
         <#case 'TENANT_ID'>
         new TenantId(UUID.fromString(${ requestDto.dataGroup.objectName.text }.getTenantId()))<#sep>,</#sep>

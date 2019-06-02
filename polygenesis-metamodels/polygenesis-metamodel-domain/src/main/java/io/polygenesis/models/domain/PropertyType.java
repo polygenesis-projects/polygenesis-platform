@@ -36,6 +36,8 @@ public enum PropertyType {
   AGGREGATE_ENTITY_ID,
   /** Aggregate entity collection property type. */
   AGGREGATE_ENTITY_COLLECTION,
+  /** Map property type. */
+  MAP,
   /** Primitive property type. */
   PRIMITIVE,
   /** Primitive collection property type. */

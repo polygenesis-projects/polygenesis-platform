@@ -23,6 +23,7 @@ package io.polygenesis.abstraction.data.dsl;
 import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.DataArray;
 import io.polygenesis.abstraction.data.DataGroup;
+import io.polygenesis.abstraction.data.DataMap;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -174,6 +175,17 @@ public class DataBuilder {
    */
   public final DataBuilder withArrayData(DataArray dataArray) {
     this.models.add(dataArray);
+    return this;
+  }
+
+  /**
+   * With map data builder.
+   *
+   * @param dataMap the data map
+   * @return the data builder
+   */
+  public final DataBuilder withMap(DataMap dataMap) {
+    this.models.add(dataMap);
     return this;
   }
 

@@ -55,8 +55,8 @@ public class Activity {
    * @return the activity
    */
   public static Activity empty() {
-    return new Activity(new LinkedHashSet<>(), new LinkedHashSet<>(), new LinkedHashSet<>(),
-        new LinkedHashSet<>());
+    return new Activity(
+        new LinkedHashSet<>(), new LinkedHashSet<>(), new LinkedHashSet<>(), new LinkedHashSet<>());
   }
 
   /**
@@ -66,8 +66,10 @@ public class Activity {
    * @return the activity
    */
   public static Activity keyValue(KeyValue keyValue) {
-    return new Activity(new LinkedHashSet<>(Arrays.asList(keyValue)),
-        new LinkedHashSet<>(), new LinkedHashSet<>(),
+    return new Activity(
+        new LinkedHashSet<>(Arrays.asList(keyValue)),
+        new LinkedHashSet<>(),
+        new LinkedHashSet<>(),
         new LinkedHashSet<>());
   }
 
@@ -78,8 +80,8 @@ public class Activity {
    * @return the activity
    */
   public static Activity keyValues(Set<KeyValue> keyValues) {
-    return new Activity(keyValues, new LinkedHashSet<>(), new LinkedHashSet<>(),
-        new LinkedHashSet<>());
+    return new Activity(
+        keyValues, new LinkedHashSet<>(), new LinkedHashSet<>(), new LinkedHashSet<>());
   }
 
   /**
@@ -100,8 +102,8 @@ public class Activity {
    * @return the activity
    */
   public static Activity messageHandlerSupportedMessages(Set<String> supportedMessages) {
-    return new Activity(new LinkedHashSet<>(), new LinkedHashSet<>(), new LinkedHashSet<>(),
-        supportedMessages);
+    return new Activity(
+        new LinkedHashSet<>(), new LinkedHashSet<>(), new LinkedHashSet<>(), supportedMessages);
   }
 
   // ===============================================================================================
@@ -116,9 +118,11 @@ public class Activity {
    * @param externalFunctions the external functions
    * @param strings the strings
    */
-  public Activity(Set<KeyValue> keyValues,
+  public Activity(
+      Set<KeyValue> keyValues,
       Set<Data> externalData,
-      Set<Function> externalFunctions, Set<String> strings) {
+      Set<Function> externalFunctions,
+      Set<String> strings) {
     setKeyValues(keyValues);
     setExternalData(externalData);
     setExternalFunctions(externalFunctions);
@@ -241,9 +245,9 @@ public class Activity {
       return false;
     }
     Activity activity = (Activity) o;
-    return Objects.equals(externalData, activity.externalData) &&
-        Objects.equals(externalFunctions, activity.externalFunctions) &&
-        Objects.equals(strings, activity.strings);
+    return Objects.equals(externalData, activity.externalData)
+        && Objects.equals(externalFunctions, activity.externalFunctions)
+        && Objects.equals(strings, activity.strings);
   }
 
   @Override

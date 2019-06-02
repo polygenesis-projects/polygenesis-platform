@@ -38,6 +38,23 @@ public class DataMap extends Data {
   private final Data value;
 
   // ===============================================================================================
+  // STATIC
+  // ===============================================================================================
+
+  /**
+   * Of data map.
+   *
+   * @param key the key
+   * @param value the value
+   * @param variableName the variable name
+   * @return the data map
+   */
+  public static DataMap of(Data key, Data value, String variableName) {
+    return new DataMap(
+        new VariableName(variableName), DataPurpose.any(), DataValidator.empty(), key, value);
+  }
+
+  // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
