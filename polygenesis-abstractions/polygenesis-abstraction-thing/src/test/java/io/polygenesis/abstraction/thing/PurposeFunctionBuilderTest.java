@@ -24,18 +24,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.dsl.DataBuilder;
-import io.polygenesis.abstraction.thing.test.ThingForTesting;
+import io.polygenesis.abstraction.thing.dsl.PurposeFunctionBuilder;
 import java.util.Set;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
 /** @author Christos Tsakostas */
-public class FunctionBuilderTest {
+public class PurposeFunctionBuilderTest {
 
   @Test
   public void build() {
     Set<Function> functions =
-        FunctionBuilder.forThing(ThingForTesting.create(), "com.oregor").build();
+        PurposeFunctionBuilder.forThing(ThingForTesting.create(), "com.oregor").build();
 
     Assertions.assertThat(functions).isNotNull();
     assertThat(functions.size()).isEqualTo(0);
@@ -44,7 +44,7 @@ public class FunctionBuilderTest {
   @Test
   public void shouldCreateModify() {
     Set<Function> functions =
-        FunctionBuilder.forThing(ThingForTesting.create(), "com.oregor")
+        PurposeFunctionBuilder.forThing(ThingForTesting.create(), "com.oregor")
             .withFunctionModify(dataModifyDescription())
             .build();
 
@@ -60,7 +60,7 @@ public class FunctionBuilderTest {
   @Test
   public void shouldCreateModifyWithCustomName() {
     Set<Function> functions =
-        FunctionBuilder.forThing(ThingForTesting.create(), "com.oregor")
+        PurposeFunctionBuilder.forThing(ThingForTesting.create(), "com.oregor")
             .withFunctionModify("modifyDescription", dataModifyDescription())
             .build();
 

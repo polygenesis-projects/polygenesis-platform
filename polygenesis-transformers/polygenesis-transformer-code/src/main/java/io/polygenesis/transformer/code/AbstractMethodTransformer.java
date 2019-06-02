@@ -20,8 +20,13 @@
 
 package io.polygenesis.transformer.code;
 
+import io.polygenesis.abstraction.data.PrimitiveType;
+import io.polygenesis.abstraction.thing.FunctionProvider;
+import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.representations.code.MethodRepresentation;
+import io.polygenesis.representations.code.MethodRepresentationType;
 import io.polygenesis.representations.code.ParameterRepresentation;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -31,8 +36,8 @@ import java.util.stream.Collectors;
  * @param <S> the type parameter
  * @author Christos Tsakostas
  */
-public abstract class AbstractMethodTransformer<S> extends AbstractTransformer
-    implements MethodTransformer<S> {
+public abstract class AbstractMethodTransformer<S extends FunctionProvider>
+    extends AbstractTransformer implements MethodTransformer<S> {
 
   /** The constant MODIFIER_PUBLIC. */
   protected static final String MODIFIER_PUBLIC = "public";
@@ -66,6 +71,77 @@ public abstract class AbstractMethodTransformer<S> extends AbstractTransformer
         parameterRepresentations(source, args),
         returnValue(source, args),
         implementation(source, args));
+  }
+
+  @Override
+  public MethodRepresentationType methodType(S source, Object... args) {
+    return MethodRepresentationType.ANY;
+  }
+
+  @Override
+  public Set<String> imports(S source, Object... args) {
+    return new LinkedHashSet<>();
+  }
+
+  @Override
+  public Set<String> annotations(S source, Object... args) {
+    return new LinkedHashSet<>();
+  }
+
+  @Override
+  public String description(S source, Object... args) {
+    StringBuilder stringBuilder = new StringBuilder();
+
+    stringBuilder.append(
+        TextConverter.toUpperCamelSpaces(source.getFunction().getName().getText()));
+    stringBuilder.append(".");
+
+    return stringBuilder.toString();
+  }
+
+  @Override
+  public String modifiers(S source, Object... args) {
+    return MODIFIER_PUBLIC;
+  }
+
+  @Override
+  public String methodName(S source, Object... args) {
+    return source.getFunction().getName().getText();
+  }
+
+  @Override
+  public Set<ParameterRepresentation> parameterRepresentations(S source, Object... args) {
+    Set<ParameterRepresentation> parameterRepresentations = new LinkedHashSet<>();
+
+    source
+        .getFunction()
+        .getArguments()
+        .forEach(
+            argument ->
+                parameterRepresentations.add(
+                    new ParameterRepresentation(
+                        fromDataTypeToJavaConverter.convert(argument.getData().getDataType()),
+                        argument.getData().getVariableName().getText())));
+
+    return parameterRepresentations;
+  }
+
+  @Override
+  public String returnValue(S source, Object... args) {
+    if (source.getFunction().getReturnValue() != null) {
+      return makeVariableDataType(source.getFunction().getReturnValue().getData());
+    } else {
+      return fromDataTypeToJavaConverter.convert(PrimitiveType.VOID.name());
+    }
+  }
+
+  @Override
+  public String implementation(S source, Object... args) {
+    if (source.getFunction().getReturnValue() != null) {
+      return "\t\treturn null;";
+    } else {
+      return "\t\t";
+    }
   }
 
   // ===============================================================================================

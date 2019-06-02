@@ -22,7 +22,7 @@ package io.polygenesis.abstraction.data.dsl;
 
 import io.polygenesis.abstraction.data.DataPrimitive;
 import io.polygenesis.abstraction.data.PrimitiveType;
-import io.polygenesis.abstraction.data.VariableName;
+import io.polygenesis.commons.valueobjects.VariableName;
 
 /**
  * The type Data boolean builder.

@@ -21,7 +21,6 @@
 package io.polygenesis.abstraction.thing;
 
 import io.polygenesis.commons.assertion.Assertion;
-import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -33,81 +32,51 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class Function {
+public class Function implements FunctionProvider {
 
-  /** The {@link Thing} the Function belongs to. */
   private Thing thing;
-
-  /** The {@link Purpose} of the Function. */
   private Purpose purpose;
-
-  /**
-   * The name of the Function.
-   *
-   * <p>It will be used in code generation.
-   */
   private FunctionName name;
-
-  /** Optional return value of the Function. */
   private ReturnValue returnValue;
-
-  /** Optional arguments of the Function. */
   private Set<Argument> arguments;
+  private Activity activity;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
-  private Function(Thing thing, Purpose purpose, FunctionName name) {
-    setThing(thing);
-    setPurpose(purpose);
-    setName(name);
-  }
-
   /**
-   * Instantiates a new Function with ReturnValue.
+   * Instantiates a new Function.
    *
    * @param thing the thing
    * @param purpose the purpose
    * @param name the name
    * @param returnValue the return value
-   */
-  public Function(Thing thing, Purpose purpose, FunctionName name, ReturnValue returnValue) {
-    this(thing, purpose, name);
-    setReturnValue(returnValue);
-    setArguments(new LinkedHashSet<>());
-  }
-
-  /**
-   * Instantiates a new Function with Arguments.
-   *
-   * @param thing the thing
-   * @param purpose the purpose
-   * @param name the name
    * @param arguments the arguments
-   */
-  public Function(Thing thing, Purpose purpose, FunctionName name, Set<Argument> arguments) {
-    this(thing, purpose, name);
-    setArguments(arguments);
-  }
-
-  /**
-   * Instantiates a new Function with ReturnValue and Arguments.
-   *
-   * @param thing the thing
-   * @param purpose the purpose
-   * @param name the name
-   * @param arguments the arguments
-   * @param returnValue the return value
+   * @param activity the activity
    */
   public Function(
       Thing thing,
       Purpose purpose,
       FunctionName name,
+      ReturnValue returnValue,
       Set<Argument> arguments,
-      ReturnValue returnValue) {
-    this(thing, purpose, name, arguments);
-    setReturnValue(returnValue);
+      Activity activity) {
+    setThing(thing);
+    setPurpose(purpose);
+    setName(name);
+
+    if (returnValue != null) {
+      setReturnValue(returnValue);
+    }
+
+    if (arguments != null) {
+      setArguments(arguments);
+    }
+
+    if (activity != null) {
+      setActivity(activity);
+    }
   }
 
   // ===============================================================================================
@@ -157,6 +126,10 @@ public class Function {
    */
   public Set<Argument> getArguments() {
     return arguments;
+  }
+
+  public Activity getActivity() {
+    return activity;
   }
 
   // ===============================================================================================
@@ -213,9 +186,24 @@ public class Function {
     this.arguments = arguments;
   }
 
+  /**
+   * Sets activity.
+   *
+   * @param activity the activity
+   */
+  public void setActivity(Activity activity) {
+    Assertion.isNotNull(activity, "activity is required");
+    this.activity = activity;
+  }
+
   // ===============================================================================================
   // OVERRIDES
   // ===============================================================================================
+
+  @Override
+  public Function getFunction() {
+    return this;
+  }
 
   @Override
   public boolean equals(Object o) {
@@ -229,11 +217,12 @@ public class Function {
     return Objects.equals(purpose, function.purpose)
         && Objects.equals(name, function.name)
         && Objects.equals(returnValue, function.returnValue)
-        && Objects.equals(arguments, function.arguments);
+        && Objects.equals(arguments, function.arguments)
+        && Objects.equals(activity, function.activity);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(purpose, name, returnValue, arguments);
+    return Objects.hash(purpose, name, returnValue, arguments, activity);
   }
 }

@@ -20,6 +20,34 @@
     try {
       JsonNode jsonNode = objectMapper.readTree(jsonMessage);
 
+      ${ textConverter.toUpperCamel(commandServiceMethod.requestDto.dataGroup.objectName.text) } request = new ${ textConverter.toUpperCamel(commandServiceMethod.requestDto.dataGroup.objectName.text) }();
+
+<#list jsonData as data>
+  <#switch data.dataPrimaryType>
+    <#case 'PRIMITIVE'>
+      if (jsonNode.hasNonNull("${ textConverter.toLowerCamel(data.variableName.text) }")) {
+      <#switch data.primitiveType>
+        <#case 'STRING'>
+        request.set${ textConverter.toUpperCamel(data.variableName.text) }(jsonNode.get("${ textConverter.toLowerCamel(data.variableName.text) }").asText());
+        <#break>
+        <#default>
+        // request.set${ textConverter.toUpperCamel(data.variableName.text) }(jsonNode.get("${ textConverter.toLowerCamel(data.variableName.text) }").asText());
+        <#break>
+      </#switch>
+      }
+      <#break>
+    <#case 'OBJECT'>
+      if (jsonNode.hasNonNull("${ textConverter.toLowerCamel(data.variableName.text) }")) {
+        // Data Primary Type Type = ${ data.dataPrimaryType } is not supported
+      }
+      <#break>
+    <#default>
+      // Data Primary Type Type = ${ data.dataPrimaryType } is not supported
+    <#break>
+  </#switch>
+</#list>
+
+      ${ textConverter.toLowerCamel(commandServiceMethod.service.serviceName.text) }.${ textConverter.toLowerCamel(commandServiceMethod.function.name.text) }(request);
     } catch (IOException e) {
       throw new IllegalStateException(e.getMessage(), e);
     }

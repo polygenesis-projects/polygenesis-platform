@@ -23,15 +23,13 @@ package io.polygenesis.models.api;
 import static org.mockito.Mockito.mock;
 
 import io.polygenesis.abstraction.data.DataGroup;
-import io.polygenesis.abstraction.thing.Function;
-import io.polygenesis.abstraction.thing.FunctionName;
 import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.Thing;
+import io.polygenesis.abstraction.thing.dsl.FunctionBuilder;
 import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
 import io.polygenesis.commons.test.AbstractEqualityTest;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
-import java.util.LinkedHashSet;
 
 /** @author Christos Tsakostas */
 public class ServiceMethodTest extends AbstractEqualityTest<ServiceMethod> {
@@ -52,7 +50,7 @@ public class ServiceMethodTest extends AbstractEqualityTest<ServiceMethod> {
     Thing thing = ThingBuilder.endToEnd().setThingName("customer").createThing();
     return new ServiceMethod(
         mock(Service.class),
-        new Function(thing, Purpose.create(), new FunctionName("create"), new LinkedHashSet<>()),
+        FunctionBuilder.of(thing, "create", Purpose.create()).build(),
         requestDto,
         responseDto);
   }
@@ -73,7 +71,7 @@ public class ServiceMethodTest extends AbstractEqualityTest<ServiceMethod> {
     Thing thing = ThingBuilder.endToEnd().setThingName("user").createThing();
     return new ServiceMethod(
         mock(Service.class),
-        new Function(thing, Purpose.create(), new FunctionName("create"), new LinkedHashSet<>()),
+        FunctionBuilder.of(thing, "create", Purpose.create()).build(),
         requestDto,
         responseDto);
   }

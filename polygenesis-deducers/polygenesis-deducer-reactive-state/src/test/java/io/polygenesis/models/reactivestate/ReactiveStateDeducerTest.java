@@ -24,7 +24,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
 import io.polygenesis.abstraction.thing.ThingRepository;
-import io.polygenesis.abstraction.thing.ThingRepositoryImpl;
 import io.polygenesis.core.AbstractionRepository;
 import io.polygenesis.core.MetamodelRepository;
 import io.polygenesis.models.api.Service;
@@ -55,7 +54,7 @@ public class ReactiveStateDeducerTest {
             reducerGroupDeducer);
 
     ReactiveStateDeducer reactiveStateDeducer = new ReactiveStateDeducer(storeDeducer);
-    ThingRepository thingRepository = new ThingRepositoryImpl(new LinkedHashSet<>());
+    ThingRepository thingRepository = new ThingRepository(new LinkedHashSet<>());
     Set<AbstractionRepository> abstractionRepositories =
         new LinkedHashSet<>(Arrays.asList(thingRepository));
 

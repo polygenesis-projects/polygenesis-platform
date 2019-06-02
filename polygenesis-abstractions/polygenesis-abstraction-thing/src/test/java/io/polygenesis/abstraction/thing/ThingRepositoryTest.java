@@ -22,6 +22,7 @@ package io.polygenesis.abstraction.thing;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import io.polygenesis.abstraction.thing.dsl.FunctionBuilder;
 import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.core.AbstractionScope;
@@ -34,7 +35,7 @@ public class ThingRepositoryTest {
 
   @Test
   public void shouldSucceedToMakeDeducer() {
-    ThingRepository repository = new ThingRepositoryImpl(new LinkedHashSet<>());
+    ThingRepository repository = new ThingRepository(new LinkedHashSet<>());
 
     assertThat(repository).isNotNull();
     assertThat(repository.getAbstractionItemsByScope(AbstractionScope.api()).size()).isEqualTo(0);
@@ -42,7 +43,7 @@ public class ThingRepositoryTest {
 
   @Test
   public void shouldSucceedToGetThingByName() {
-    ThingRepository repository = new ThingRepositoryImpl(createThings());
+    ThingRepository repository = new ThingRepository(createThings());
 
     assertThat(repository.getAbstractionItemByObjectName(new ObjectName("someThing"))).isPresent();
   }
@@ -56,9 +57,7 @@ public class ThingRepositoryTest {
 
     Thing someThing = ThingBuilder.endToEnd().setThingName("someThing").createThing();
 
-    Function someFunction =
-        new Function(
-            someThing, Purpose.create(), new FunctionName("someFunction"), new LinkedHashSet<>());
+    Function someFunction = FunctionBuilder.of(someThing, "someFunction", Purpose.create()).build();
 
     someThing.addFunction(someFunction);
 

@@ -18,24 +18,17 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.abstraction.thing.test;
+package io.polygenesis.abstraction.thing;
 
 import io.polygenesis.abstraction.data.DataGroup;
 import io.polygenesis.abstraction.data.DataPrimitive;
 import io.polygenesis.abstraction.data.DataPurpose;
 import io.polygenesis.abstraction.data.PrimitiveType;
-import io.polygenesis.abstraction.data.VariableName;
-import io.polygenesis.abstraction.thing.Argument;
-import io.polygenesis.abstraction.thing.Function;
-import io.polygenesis.abstraction.thing.FunctionName;
-import io.polygenesis.abstraction.thing.Purpose;
-import io.polygenesis.abstraction.thing.ReturnValue;
-import io.polygenesis.abstraction.thing.Thing;
+import io.polygenesis.abstraction.thing.dsl.FunctionBuilder;
 import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
-import java.util.Arrays;
-import java.util.LinkedHashSet;
+import io.polygenesis.commons.valueobjects.VariableName;
 
 /**
  * Convenient class defining a Thing and its Functions for testing in other modules.
@@ -105,12 +98,10 @@ public class ThingForTesting {
 
     // ---------------------------------------------------------------------------------------------
 
-    return new Function(
-        business,
-        Purpose.create(),
-        new FunctionName("create"),
-        new LinkedHashSet<>(Arrays.asList(new Argument(argumentDataGroup))),
-        new ReturnValue(returnValueDataGroup));
+    return FunctionBuilder.of(business, "create", Purpose.create())
+        .setReturnValue(returnValueDataGroup)
+        .addArgument(argumentDataGroup)
+        .build();
   }
 
   // ===============================================================================================
@@ -144,12 +135,10 @@ public class ThingForTesting {
     returnValueDataGroup.addData(DataPrimitive.of(PrimitiveType.STRING, new VariableName(NAME)));
 
     // ---------------------------------------------------------------------------------------------
-    return new Function(
-        business,
-        Purpose.fetchOne(),
-        new FunctionName("fetchOne"),
-        new LinkedHashSet<>(Arrays.asList(new Argument(argumentDataGroup))),
-        new ReturnValue(returnValueDataGroup));
+    return FunctionBuilder.of(business, "fetchOne", Purpose.fetchOne())
+        .setReturnValue(returnValueDataGroup)
+        .addArgument(argumentDataGroup)
+        .build();
   }
 
   // ===============================================================================================
@@ -184,12 +173,10 @@ public class ThingForTesting {
     returnValueDataGroup.addData(DataPrimitive.of(PrimitiveType.STRING, new VariableName(NAME)));
 
     // ---------------------------------------------------------------------------------------------
-    return new Function(
-        business,
-        Purpose.fetchCollection(),
-        new FunctionName("fetchCollection"),
-        new LinkedHashSet<>(Arrays.asList(new Argument(argumentDataGroup))),
-        new ReturnValue(returnValueDataGroup));
+    return FunctionBuilder.of(business, "fetchCollection", Purpose.fetchCollection())
+        .setReturnValue(returnValueDataGroup)
+        .addArgument(argumentDataGroup)
+        .build();
   }
 
   // ===============================================================================================
@@ -221,12 +208,11 @@ public class ThingForTesting {
 
     // ---------------------------------------------------------------------------------------------
 
-    return new Function(
-        business,
-        Purpose.create(),
-        new FunctionName("functionWithNoReturnValueAndManyArguments"),
-        new LinkedHashSet<>(
-            Arrays.asList(new Argument(argumentDataGroup1), new Argument(argumentDataGroup2))));
+    return FunctionBuilder.of(
+            business, "functionWithNoReturnValueAndManyArguments", Purpose.create())
+        .addArgument(argumentDataGroup1)
+        .addArgument(argumentDataGroup2)
+        .build();
   }
 
   // ===============================================================================================
@@ -248,11 +234,9 @@ public class ThingForTesting {
 
     // ---------------------------------------------------------------------------------------------
 
-    return new Function(
-        business,
-        Purpose.create(),
-        new FunctionName("functionWithNoArguments"),
-        new ReturnValue(returnValueDataGroup));
+    return FunctionBuilder.of(business, "functionWithNoArguments", Purpose.create())
+        .setReturnValue(returnValueDataGroup)
+        .build();
   }
 
   // ===============================================================================================
@@ -267,12 +251,10 @@ public class ThingForTesting {
 
     // ---------------------------------------------------------------------------------------------
 
-    return new Function(
-        business,
-        Purpose.create(),
-        new FunctionName("functionWithPrimitives"),
-        new LinkedHashSet<>(Arrays.asList(new Argument(dataPrimitive))),
-        new ReturnValue(dataPrimitive));
+    return FunctionBuilder.of(business, "functionWithPrimitives", Purpose.create())
+        .setReturnValue(dataPrimitive)
+        .addArgument(dataPrimitive)
+        .build();
   }
 
   // ===============================================================================================

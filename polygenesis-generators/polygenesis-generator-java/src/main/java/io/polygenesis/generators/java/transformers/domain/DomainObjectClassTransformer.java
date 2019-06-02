@@ -86,6 +86,7 @@ public abstract class DomainObjectClassTransformer<S extends BaseDomainObject>
                           makeVariableName(property),
                           makeAnnotationsForReferenceToAggregateRoot(source)));
                   break;
+                case AGGREGATE_ENTITY_ID:
                 case AGGREGATE_ROOT_ID:
                 case ABSTRACT_AGGREGATE_ROOT_ID:
                 case PROJECTION_ID:

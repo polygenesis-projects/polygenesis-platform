@@ -18,7 +18,7 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.abstraction.thing;
+package io.polygenesis.abstraction.thing.dsl;
 
 import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.DataArray;
@@ -26,20 +26,22 @@ import io.polygenesis.abstraction.data.DataGroup;
 import io.polygenesis.abstraction.data.DataPrimitive;
 import io.polygenesis.abstraction.data.DataPurpose;
 import io.polygenesis.abstraction.data.PrimitiveType;
-import io.polygenesis.abstraction.data.VariableName;
+import io.polygenesis.abstraction.thing.Function;
+import io.polygenesis.abstraction.thing.Purpose;
+import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
-import java.util.Arrays;
+import io.polygenesis.commons.valueobjects.VariableName;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
- * The type Function builder.
+ * The type Purpose function builder.
  *
  * @author Christos Tsakostas
  */
-public class FunctionBuilder {
+public class PurposeFunctionBuilder {
 
   private final PackageName rootPackageNameVo;
   private final Thing thing;
@@ -49,7 +51,7 @@ public class FunctionBuilder {
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
-  private FunctionBuilder(Thing thing, String rootPackageName) {
+  private PurposeFunctionBuilder(Thing thing, String rootPackageName) {
     this.rootPackageNameVo = new PackageName(rootPackageName);
     this.thing = thing;
     functions = new LinkedHashSet<>();
@@ -66,8 +68,8 @@ public class FunctionBuilder {
    * @param rootPackageName the root package name
    * @return the function builder
    */
-  public static FunctionBuilder forThing(Thing thing, String rootPackageName) {
-    return new FunctionBuilder(thing, rootPackageName);
+  public static PurposeFunctionBuilder forThing(Thing thing, String rootPackageName) {
+    return new PurposeFunctionBuilder(thing, rootPackageName);
   }
 
   // ===============================================================================================
@@ -80,7 +82,7 @@ public class FunctionBuilder {
    * @param models the models
    * @return the function builder
    */
-  public final FunctionBuilder withCrudFunction(Set<Data> models) {
+  public final PurposeFunctionBuilder withCrudFunction(Set<Data> models) {
     withFunctionCreate(models);
     withFunctionModify(models);
     withFunctionFetchOne(models);
@@ -88,18 +90,25 @@ public class FunctionBuilder {
     return this;
   }
 
-  public final FunctionBuilder withFunctionCreate(Set<Data> models) {
+  /**
+   * With function create purpose function builder.
+   *
+   * @param models the models
+   * @return the purpose function builder
+   */
+  public final PurposeFunctionBuilder withFunctionCreate(Set<Data> models) {
     return withFunctionCreate("create", models);
   }
 
   /**
    * With function create thing builder.
    *
+   * @param functionName the function name
    * @param models the models
    * @return the thing builder
    */
   @SuppressWarnings("CPD-START")
-  public final FunctionBuilder withFunctionCreate(String functionName, Set<Data> models) {
+  public final PurposeFunctionBuilder withFunctionCreate(String functionName, Set<Data> models) {
 
     // ---------------------------------------------------------------------------------------------
     // ARGUMENTS
@@ -152,29 +161,34 @@ public class FunctionBuilder {
     // ---------------------------------------------------------------------------------------------
 
     Function function =
-        new Function(
-            thing,
-            Purpose.create(),
-            new FunctionName(functionName),
-            new LinkedHashSet<>(Arrays.asList(new Argument(argumentDataGroup))),
-            new ReturnValue(returnValueDataGroup));
+        FunctionBuilder.of(thing, functionName, Purpose.create())
+            .setReturnValue(returnValueDataGroup)
+            .addArgument(argumentDataGroup)
+            .build();
 
     this.functions.add(function);
     return this;
   }
 
-  public final FunctionBuilder withFunctionModify(Set<Data> models) {
+  /**
+   * With function modify purpose function builder.
+   *
+   * @param models the models
+   * @return the purpose function builder
+   */
+  public final PurposeFunctionBuilder withFunctionModify(Set<Data> models) {
     return withFunctionModify("modify", models);
   }
 
   /**
    * With function modify thing builder.
    *
+   * @param functionName the function name
    * @param models the models
    * @return the thing builder
    */
   @SuppressWarnings("CPD-END")
-  public final FunctionBuilder withFunctionModify(String functionName, Set<Data> models) {
+  public final PurposeFunctionBuilder withFunctionModify(String functionName, Set<Data> models) {
 
     // ---------------------------------------------------------------------------------------------
     // ARGUMENTS
@@ -227,12 +241,10 @@ public class FunctionBuilder {
     // ---------------------------------------------------------------------------------------------
 
     Function function =
-        new Function(
-            thing,
-            Purpose.modify(),
-            new FunctionName(functionName),
-            new LinkedHashSet<>(Arrays.asList(new Argument(argumentDataGroup))),
-            new ReturnValue(returnValueDataGroup));
+        FunctionBuilder.of(thing, functionName, Purpose.modify())
+            .setReturnValue(returnValueDataGroup)
+            .addArgument(argumentDataGroup)
+            .build();
 
     this.functions.add(function);
     return this;
@@ -244,7 +256,7 @@ public class FunctionBuilder {
    * @param models the models
    * @return the thing builder
    */
-  public final FunctionBuilder withFunctionFetchOne(Set<Data> models) {
+  public final PurposeFunctionBuilder withFunctionFetchOne(Set<Data> models) {
 
     // ---------------------------------------------------------------------------------------------
     // ARGUMENTS
@@ -285,12 +297,10 @@ public class FunctionBuilder {
     // ---------------------------------------------------------------------------------------------
 
     Function function =
-        new Function(
-            thing,
-            Purpose.fetchOne(),
-            new FunctionName("fetch"),
-            new LinkedHashSet<>(Arrays.asList(new Argument(argumentDataGroup))),
-            new ReturnValue(returnValueDataGroup));
+        FunctionBuilder.of(thing, "fetch", Purpose.fetchOne())
+            .setReturnValue(returnValueDataGroup)
+            .addArgument(argumentDataGroup)
+            .build();
 
     this.functions.add(function);
     return this;
@@ -302,7 +312,7 @@ public class FunctionBuilder {
    * @param models the models
    * @return the thing builder
    */
-  public final FunctionBuilder withFunctionFetchPagedCollection(Set<Data> models) {
+  public final PurposeFunctionBuilder withFunctionFetchPagedCollection(Set<Data> models) {
 
     // ---------------------------------------------------------------------------------------------
     // ARGUMENTS
@@ -369,12 +379,10 @@ public class FunctionBuilder {
     // ---------------------------------------------------------------------------------------------
 
     Function function =
-        new Function(
-            thing,
-            Purpose.fetchPagedCollection(),
-            new FunctionName("fetchCollection"),
-            new LinkedHashSet<>(Arrays.asList(new Argument(argumentDataGroup))),
-            new ReturnValue(dataGroupReturnValue));
+        FunctionBuilder.of(thing, "fetchCollection", Purpose.fetchPagedCollection())
+            .setReturnValue(dataGroupReturnValue)
+            .addArgument(argumentDataGroup)
+            .build();
 
     this.functions.add(function);
     return this;

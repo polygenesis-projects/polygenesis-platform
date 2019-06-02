@@ -25,8 +25,8 @@ import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.generators.java.messaging.activity.SubscriberActivityRegistry;
 import io.polygenesis.generators.java.messaging.exporter.SubscriberExporter;
 import io.polygenesis.generators.java.messaging.transformer.SubscriberClassTransformer;
+import io.polygenesis.generators.java.messaging.transformer.SubscriberMethodTransformer;
 import io.polygenesis.transformer.code.FromDataTypeToJavaConverter;
-import io.polygenesis.transformer.code.FunctionToMethodRepresentationTransformer;
 import java.nio.file.Path;
 
 /**
@@ -51,17 +51,15 @@ public final class MessagingGeneratorFactory {
 
     FromDataTypeToJavaConverter fromDataTypeToJavaConverter = new FromDataTypeToJavaConverter();
 
-    FunctionToMethodRepresentationTransformer functionToMethodRepresentationTransformer =
-        new FunctionToMethodRepresentationTransformer(fromDataTypeToJavaConverter);
-
     subscriberExporter =
         new SubscriberExporter(
             freemarkerService,
             new SubscriberClassTransformer(
                 fromDataTypeToJavaConverter,
-                freemarkerService,
-                functionToMethodRepresentationTransformer,
-                new SubscriberActivityRegistry()));
+                new SubscriberMethodTransformer(
+                    fromDataTypeToJavaConverter,
+                    freemarkerService,
+                    new SubscriberActivityRegistry())));
   }
 
   // ===============================================================================================

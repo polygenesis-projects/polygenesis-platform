@@ -57,6 +57,11 @@ public class DataPurpose implements Serializable {
   private static final String REFERENCE_TO_THING = "REFERENCE_TO_THING";
 
   // ===============================================================================================
+  // SUBCLASSES / SUPERCLASSES
+  // ===============================================================================================
+  private static final String SUPERCLASS_PARAMETER = "SUPERCLASS_PARAMETER";
+
+  // ===============================================================================================
   // STATE
   // ===============================================================================================
 
@@ -127,6 +132,15 @@ public class DataPurpose implements Serializable {
    */
   public static DataPurpose referenceToThing() {
     return new DataPurpose(REFERENCE_TO_THING);
+  }
+
+  /**
+   * Superclass parameter data purpose.
+   *
+   * @return the data purpose
+   */
+  public static DataPurpose superclassParameter() {
+    return new DataPurpose(SUPERCLASS_PARAMETER);
   }
 
   // ===============================================================================================

@@ -21,10 +21,10 @@
 package io.polygenesis.models.domain.aggregateroot;
 
 import io.polygenesis.abstraction.data.DataGroup;
-import io.polygenesis.abstraction.data.VariableName;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
+import io.polygenesis.commons.valueobjects.VariableName;
 import io.polygenesis.models.domain.AggregateEntityId;
 import io.polygenesis.models.domain.DomainObjectProperty;
 import io.polygenesis.models.domain.ReferenceToAggregateRoot;

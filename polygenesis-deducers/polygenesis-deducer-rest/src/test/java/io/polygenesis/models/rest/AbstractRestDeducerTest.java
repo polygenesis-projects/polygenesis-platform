@@ -22,11 +22,10 @@ package io.polygenesis.models.rest;
 
 import io.polygenesis.abstraction.thing.CqsType;
 import io.polygenesis.abstraction.thing.Function;
-import io.polygenesis.abstraction.thing.FunctionName;
 import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.Thing;
+import io.polygenesis.abstraction.thing.dsl.FunctionBuilder;
 import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
-import java.util.LinkedHashSet;
 
 /**
  * The type Mapping deducer test.
@@ -42,7 +41,8 @@ public abstract class AbstractRestDeducerTest {
    */
   protected Function makeFunctionCreate() {
     Thing thing = ThingBuilder.endToEnd().setThingName("customer").createThing();
-    return new Function(thing, Purpose.create(), new FunctionName("create"), new LinkedHashSet<>());
+
+    return FunctionBuilder.of(thing, "create", Purpose.create()).build();
   }
 
   /**
@@ -52,7 +52,8 @@ public abstract class AbstractRestDeducerTest {
    */
   protected Function makeFunctionModify() {
     Thing thing = ThingBuilder.endToEnd().setThingName("customer").createThing();
-    return new Function(thing, Purpose.modify(), new FunctionName("modify"), new LinkedHashSet<>());
+
+    return FunctionBuilder.of(thing, "modify", Purpose.modify()).build();
   }
 
   /**
@@ -62,7 +63,8 @@ public abstract class AbstractRestDeducerTest {
    */
   protected Function makeFunctionDelete() {
     Thing thing = ThingBuilder.endToEnd().setThingName("customer").createThing();
-    return new Function(thing, Purpose.modify(), new FunctionName("delete"), new LinkedHashSet<>());
+
+    return FunctionBuilder.of(thing, "delete", Purpose.delete()).build();
   }
 
   /**
@@ -72,8 +74,8 @@ public abstract class AbstractRestDeducerTest {
    */
   protected Function makeFunctionFetchOne() {
     Thing thing = ThingBuilder.endToEnd().setThingName("customer").createThing();
-    return new Function(
-        thing, Purpose.fetchOne(), new FunctionName("fetchOne"), new LinkedHashSet<>());
+
+    return FunctionBuilder.of(thing, "fetchOne", Purpose.fetchOne()).build();
   }
 
   /**
@@ -83,11 +85,8 @@ public abstract class AbstractRestDeducerTest {
    */
   protected Function makeFunctionFetchCollection() {
     Thing thing = ThingBuilder.endToEnd().setThingName("customer").createThing();
-    return new Function(
-        thing,
-        Purpose.fetchCollection(),
-        new FunctionName("fetchCollection"),
-        new LinkedHashSet<>());
+
+    return FunctionBuilder.of(thing, "fetchCollection", Purpose.fetchCollection()).build();
   }
 
   /**
@@ -97,11 +96,9 @@ public abstract class AbstractRestDeducerTest {
    */
   protected Function makeFunctionFetchPagedCollection() {
     Thing thing = ThingBuilder.endToEnd().setThingName("customer").createThing();
-    return new Function(
-        thing,
-        Purpose.fetchPagedCollection(),
-        new FunctionName("fetchCollection"),
-        new LinkedHashSet<>());
+
+    return FunctionBuilder.of(thing, "fetchPagedCollection", Purpose.fetchPagedCollection())
+        .build();
   }
 
   /**
@@ -111,10 +108,8 @@ public abstract class AbstractRestDeducerTest {
    */
   protected Function makeInvalidGetFunction() {
     Thing thing = ThingBuilder.endToEnd().setThingName("customer").createThing();
-    return new Function(
-        thing,
-        Purpose.custom("validate", CqsType.COMMAND),
-        new FunctionName("fetchCollection"),
-        new LinkedHashSet<>());
+
+    return FunctionBuilder.of(thing, "validate", Purpose.custom("validate", CqsType.COMMAND))
+        .build();
   }
 }

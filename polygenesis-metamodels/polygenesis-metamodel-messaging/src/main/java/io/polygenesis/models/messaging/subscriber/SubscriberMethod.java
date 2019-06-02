@@ -21,7 +21,9 @@
 package io.polygenesis.models.messaging.subscriber;
 
 import io.polygenesis.abstraction.thing.Function;
+import io.polygenesis.abstraction.thing.FunctionProvider;
 import io.polygenesis.commons.assertion.Assertion;
+import io.polygenesis.models.api.ServiceMethod;
 import java.util.Objects;
 
 /**
@@ -29,10 +31,12 @@ import java.util.Objects;
  *
  * @author Christos Tsakostas
  */
-public class SubscriberMethod {
+public class SubscriberMethod implements FunctionProvider {
 
   private Subscriber subscriber;
   private Function function;
+  private ServiceMethod commandServiceMethod;
+  private ServiceMethod queryServiceMethod;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -43,10 +47,18 @@ public class SubscriberMethod {
    *
    * @param subscriber the subscriber
    * @param function the function
+   * @param commandServiceMethod the command service method
+   * @param queryServiceMethod the query service method
    */
-  public SubscriberMethod(Subscriber subscriber, Function function) {
+  public SubscriberMethod(
+      Subscriber subscriber,
+      Function function,
+      ServiceMethod commandServiceMethod,
+      ServiceMethod queryServiceMethod) {
     setSubscriber(subscriber);
     setFunction(function);
+    setCommandServiceMethod(commandServiceMethod);
+    setQueryServiceMethod(queryServiceMethod);
   }
 
   // ===============================================================================================
@@ -69,6 +81,24 @@ public class SubscriberMethod {
    */
   public Function getFunction() {
     return function;
+  }
+
+  /**
+   * Gets command service method.
+   *
+   * @return the command service method
+   */
+  public ServiceMethod getCommandServiceMethod() {
+    return commandServiceMethod;
+  }
+
+  /**
+   * Gets query service method.
+   *
+   * @return the query service method
+   */
+  public ServiceMethod getQueryServiceMethod() {
+    return queryServiceMethod;
   }
 
   // ===============================================================================================
@@ -95,6 +125,26 @@ public class SubscriberMethod {
     this.function = function;
   }
 
+  /**
+   * Sets command service method.
+   *
+   * @param commandServiceMethod the command service method
+   */
+  private void setCommandServiceMethod(ServiceMethod commandServiceMethod) {
+    Assertion.isNotNull(commandServiceMethod, "commandServiceMethod is required");
+    this.commandServiceMethod = commandServiceMethod;
+  }
+
+  /**
+   * Sets query service method.
+   *
+   * @param queryServiceMethod the query service method
+   */
+  private void setQueryServiceMethod(ServiceMethod queryServiceMethod) {
+    Assertion.isNotNull(queryServiceMethod, "queryServiceMethod is required");
+    this.queryServiceMethod = queryServiceMethod;
+  }
+
   // ===============================================================================================
   // OVERRIDES
   // ===============================================================================================
@@ -108,11 +158,14 @@ public class SubscriberMethod {
       return false;
     }
     SubscriberMethod that = (SubscriberMethod) o;
-    return Objects.equals(subscriber, that.subscriber) && Objects.equals(function, that.function);
+    return Objects.equals(subscriber, that.subscriber)
+        && Objects.equals(function, that.function)
+        && Objects.equals(commandServiceMethod, that.commandServiceMethod)
+        && Objects.equals(queryServiceMethod, that.queryServiceMethod);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(subscriber, function);
+    return Objects.hash(subscriber, function, commandServiceMethod, queryServiceMethod);
   }
 }

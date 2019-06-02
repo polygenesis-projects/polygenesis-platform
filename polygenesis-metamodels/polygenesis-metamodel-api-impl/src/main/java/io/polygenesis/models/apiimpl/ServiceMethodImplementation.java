@@ -20,6 +20,8 @@
 
 package io.polygenesis.models.apiimpl;
 
+import io.polygenesis.abstraction.thing.Function;
+import io.polygenesis.abstraction.thing.FunctionProvider;
 import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.models.api.ServiceMethod;
 import java.util.Objects;
@@ -29,7 +31,7 @@ import java.util.Objects;
  *
  * @author Christos Tsakostas
  */
-public class ServiceMethodImplementation {
+public class ServiceMethodImplementation implements FunctionProvider {
 
   // ===============================================================================================
   // STATE
@@ -80,6 +82,11 @@ public class ServiceMethodImplementation {
   // ===============================================================================================
   // OVERRIDES
   // ===============================================================================================
+
+  @Override
+  public Function getFunction() {
+    return serviceMethod.getFunction();
+  }
 
   @Override
   public boolean equals(Object o) {

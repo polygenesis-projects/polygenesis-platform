@@ -20,6 +20,8 @@
 
 package io.polygenesis.abstraction.data;
 
+import io.polygenesis.commons.valueobjects.VariableName;
+
 /** @author Christos Tsakostas */
 class TestData extends Data {
 

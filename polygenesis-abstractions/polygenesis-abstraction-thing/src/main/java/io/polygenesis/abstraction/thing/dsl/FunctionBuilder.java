@@ -18,29 +18,46 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.abstraction.data;
+package io.polygenesis.abstraction.thing.dsl;
 
-import io.polygenesis.commons.text.AbstractText;
+import io.polygenesis.abstraction.thing.Purpose;
+import io.polygenesis.abstraction.thing.Thing;
 
 /**
- * The type Variable name.
+ * The type Function builder.
  *
  * @author Christos Tsakostas
  */
-public class VariableName extends AbstractText {
+public class FunctionBuilder extends AbstractFunctionBuilder<FunctionBuilder> {
 
-  private static final long serialVersionUID = 1L;
+  // ===============================================================================================
+  // STATIC
+  // ===============================================================================================
+
+  /**
+   * Of new function builder.
+   *
+   * @param thing the thing
+   * @param name the name
+   * @param purpose the purpose
+   * @return the new function builder
+   */
+  public static FunctionBuilder of(Thing thing, String name, Purpose purpose) {
+    return new FunctionBuilder(thing, name, purpose);
+  }
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
-   * Instantiates a new Variable name.
+   * Instantiates a new function builder.
    *
-   * @param text the text
+   * @param thing the thing
+   * @param name the name
+   * @param purpose the purpose
    */
-  public VariableName(String text) {
-    super(text);
+  private FunctionBuilder(Thing thing, String name, Purpose purpose) {
+    super(FunctionBuilder.class, thing, name, purpose);
   }
 }
