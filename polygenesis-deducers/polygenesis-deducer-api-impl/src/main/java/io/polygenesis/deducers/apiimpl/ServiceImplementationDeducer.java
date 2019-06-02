@@ -20,8 +20,8 @@
 
 package io.polygenesis.deducers.apiimpl;
 
-import io.polygenesis.abstraction.data.VariableName;
 import io.polygenesis.commons.valueobjects.ObjectName;
+import io.polygenesis.commons.valueobjects.VariableName;
 import io.polygenesis.core.AbstractionRepository;
 import io.polygenesis.core.CoreRegistry;
 import io.polygenesis.core.Deducer;

@@ -23,10 +23,9 @@ package io.polygenesis.deducers.spreadsheet.strategydefault;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.polygenesis.abstraction.data.dsl.DataBuilder;
-import io.polygenesis.abstraction.thing.FunctionBuilder;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.ThingRepository;
-import io.polygenesis.abstraction.thing.ThingRepositoryImpl;
+import io.polygenesis.abstraction.thing.dsl.PurposeFunctionBuilder;
 import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
 import io.polygenesis.core.AbstractionRepository;
 import io.polygenesis.core.MetamodelRepository;
@@ -86,7 +85,7 @@ public class DefaultSpreadsheetDeducerStrategyTest {
     Thing thing = ThingBuilder.endToEnd().setThingName("Customer").createThing();
 
     thing.addFunctions(
-        FunctionBuilder.forThing(thing, "com.oregor")
+        PurposeFunctionBuilder.forThing(thing, "com.oregor")
             .withFunctionCreate(
                 DataBuilder.create()
                     .withTextProperty("firstName")
@@ -98,6 +97,6 @@ public class DefaultSpreadsheetDeducerStrategyTest {
 
     things.add(thing);
 
-    return new ThingRepositoryImpl(things);
+    return new ThingRepository(things);
   }
 }

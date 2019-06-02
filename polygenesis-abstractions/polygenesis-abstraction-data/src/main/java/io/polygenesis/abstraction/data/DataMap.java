@@ -20,6 +20,7 @@
 
 package io.polygenesis.abstraction.data;
 
+import io.polygenesis.commons.valueobjects.VariableName;
 import java.util.Objects;
 
 /**

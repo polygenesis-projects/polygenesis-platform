@@ -28,9 +28,9 @@ import com.oregor.trinity.scaffolder.java.core.TrinityScaffolderJava;
 import com.oregor.trinity.scaffolder.java.core.TrinityScaffolderJavaFactory;
 import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.dsl.DataBuilder;
-import io.polygenesis.abstraction.thing.FunctionBuilder;
 import io.polygenesis.abstraction.thing.Thing;
-import io.polygenesis.abstraction.thing.ThingRepositoryImpl;
+import io.polygenesis.abstraction.thing.ThingRepository;
+import io.polygenesis.abstraction.thing.dsl.PurposeFunctionBuilder;
 import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.AbstractionRepository;
@@ -122,7 +122,7 @@ public class TrinityDemoJavaTest {
     allThings.add(createTodo(new PackageName(JAVA_ROOT_PACKAGE)));
 
     Set<AbstractionRepository> abstractionRepositories =
-        new LinkedHashSet<>(Arrays.asList(new ThingRepositoryImpl(allThings)));
+        new LinkedHashSet<>(Arrays.asList(new ThingRepository(allThings)));
 
     genesis.generate(abstractionRepositories, deducers, generators);
   }
@@ -131,7 +131,9 @@ public class TrinityDemoJavaTest {
     Thing task = ThingBuilder.endToEnd().setThingName("task").setMultiTenant(false).createThing();
 
     task.addFunctions(
-        FunctionBuilder.forThing(task, rootPackageName.getText()).withCrudFunction(data()).build());
+        PurposeFunctionBuilder.forThing(task, rootPackageName.getText())
+            .withCrudFunction(data())
+            .build());
 
     return task;
   }

@@ -22,8 +22,8 @@ package io.polygenesis.abstraction.thing;
 
 import io.polygenesis.abstraction.data.DataPrimitive;
 import io.polygenesis.abstraction.data.PrimitiveType;
-import io.polygenesis.abstraction.data.VariableName;
 import io.polygenesis.commons.test.AbstractEqualityTest;
+import io.polygenesis.commons.valueobjects.VariableName;
 
 /** @author Christos Tsakostas */
 public class ThingPropertyTest extends AbstractEqualityTest<ThingProperty> {

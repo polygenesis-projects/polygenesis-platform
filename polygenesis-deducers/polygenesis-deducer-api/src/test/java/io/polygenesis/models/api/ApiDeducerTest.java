@@ -28,8 +28,6 @@ import static org.mockito.Mockito.verify;
 
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.ThingRepository;
-import io.polygenesis.abstraction.thing.ThingRepositoryImpl;
-import io.polygenesis.abstraction.thing.test.ThingForTesting;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.AbstractionRepository;
 import io.polygenesis.core.MetamodelRepository;
@@ -60,7 +58,7 @@ public class ApiDeducerTest {
     rootPackageName = new PackageName(ThingForTesting.ROOT_PACKAGE);
     serviceDeducer = mock(ServiceDeducer.class);
     thing = ThingForTesting.create();
-    thingRepository = new ThingRepositoryImpl(new LinkedHashSet<>(Arrays.asList(thing)));
+    thingRepository = new ThingRepository(new LinkedHashSet<>(Arrays.asList(thing)));
     modelRepositories = new LinkedHashSet<>();
     apiDeducer = new ApiDeducer(rootPackageName, serviceDeducer);
     abstractionRepositories = new LinkedHashSet<>(Arrays.asList(thingRepository));

@@ -20,6 +20,8 @@
 
 package io.polygenesis.models.rest;
 
+import io.polygenesis.abstraction.thing.Function;
+import io.polygenesis.abstraction.thing.FunctionProvider;
 import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.models.api.Service;
 import io.polygenesis.models.api.ServiceMethod;
@@ -31,7 +33,7 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class Endpoint {
+public class Endpoint implements FunctionProvider {
 
   private Service service;
   private ServiceMethod serviceMethod;
@@ -171,6 +173,11 @@ public class Endpoint {
   // ===============================================================================================
   // OVERRIDES
   // ===============================================================================================
+
+  @Override
+  public Function getFunction() {
+    return serviceMethod.getFunction();
+  }
 
   @Override
   public boolean equals(Object o) {

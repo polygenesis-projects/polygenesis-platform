@@ -22,11 +22,11 @@ package io.polygenesis.models.reactivestate;
 
 import io.polygenesis.abstraction.data.DataPrimitive;
 import io.polygenesis.abstraction.data.PrimitiveType;
-import io.polygenesis.abstraction.data.VariableName;
 import io.polygenesis.abstraction.thing.FunctionName;
 import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.commons.text.TextConverter;
+import io.polygenesis.commons.valueobjects.VariableName;
 import io.polygenesis.models.api.Service;
 import io.polygenesis.models.api.ServiceMetamodelRepository;
 import java.util.Arrays;

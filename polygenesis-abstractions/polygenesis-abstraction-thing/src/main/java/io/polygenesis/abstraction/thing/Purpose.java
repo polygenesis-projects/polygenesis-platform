@@ -70,6 +70,7 @@ public class Purpose implements Serializable {
   // MESSAGING
   // ===============================================================================================
   private static final String PROCESS = "PROCESS";
+  private static final String SUPPORTED_MESSAGES = "SUPPORTED_MESSAGES";
 
   // ===============================================================================================
   // STATE
@@ -217,6 +218,15 @@ public class Purpose implements Serializable {
    */
   public static Purpose process() {
     return new Purpose(PROCESS, CqsType.COMMAND);
+  }
+
+  /**
+   * Supported messages purpose.
+   *
+   * @return the purpose
+   */
+  public static Purpose supportedMessages() {
+    return new Purpose(SUPPORTED_MESSAGES, CqsType.QUERY);
   }
 
   // ===============================================================================================

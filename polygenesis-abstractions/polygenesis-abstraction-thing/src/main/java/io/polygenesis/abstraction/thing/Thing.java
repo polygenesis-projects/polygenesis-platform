@@ -53,9 +53,7 @@ public class Thing implements Abstraction {
   private Set<Function> functions;
   private Boolean multiTenant;
   private Set<Thing> children;
-  private Set<Thing> virtualChildren;
   private Thing optionalParent;
-  private ThingMetadata thingMetadata;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -70,7 +68,6 @@ public class Thing implements Abstraction {
    * @param thingProperties the thing properties
    * @param multiTenant the multi tenant
    * @param optionalParent the optional parent
-   * @param thingMetadata the thing metadata
    */
   public Thing(
       Set<AbstractionScope> abstractionScopes,
@@ -78,8 +75,7 @@ public class Thing implements Abstraction {
       ThingName thingName,
       Set<ThingProperty> thingProperties,
       Boolean multiTenant,
-      Thing optionalParent,
-      ThingMetadata thingMetadata) {
+      Thing optionalParent) {
     setAbstractionScopes(abstractionScopes);
     setContextName(contextName);
     setThingName(thingName);
@@ -87,13 +83,10 @@ public class Thing implements Abstraction {
     setFunctions(new LinkedHashSet<>());
     setMultiTenant(multiTenant);
     setChildren(new LinkedHashSet<>());
-    setVirtualChildren(new LinkedHashSet<>());
 
     if (optionalParent != null) {
       setOptionalParent(optionalParent);
     }
-
-    setThingMetadata(thingMetadata);
   }
 
   // ===============================================================================================
@@ -149,26 +142,6 @@ public class Thing implements Abstraction {
     }
 
     getChildren().add(thing);
-  }
-
-  /**
-   * Add virtual child.
-   *
-   * @param thing the thing
-   */
-  public void addVirtualChild(Thing thing) {
-    Assertion.isNotNull(
-        thing.getOptionalParent(),
-        String.format("The parent of %s is not set", thing.getThingName().getText()));
-
-    if (!thing.getOptionalParent().equals(this)) {
-      throw new IllegalArgumentException(
-          String.format(
-              "The parent of %s is not set equal to %s",
-              thing.getThingName().getText(), getThingName().getText()));
-    }
-
-    getVirtualChildren().add(thing);
   }
 
   // ===============================================================================================
@@ -265,30 +238,12 @@ public class Thing implements Abstraction {
   }
 
   /**
-   * Gets virtual children.
-   *
-   * @return the virtual children
-   */
-  public Set<Thing> getVirtualChildren() {
-    return virtualChildren;
-  }
-
-  /**
    * Gets optional parent.
    *
    * @return the optional parent
    */
   public Thing getOptionalParent() {
     return optionalParent;
-  }
-
-  /**
-   * Gets thing metadata.
-   *
-   * @return the thing metadata
-   */
-  public ThingMetadata getThingMetadata() {
-    return thingMetadata;
   }
 
   // ===============================================================================================
@@ -383,16 +338,6 @@ public class Thing implements Abstraction {
   }
 
   /**
-   * Sets virtual children.
-   *
-   * @param virtualChildren the virtual children
-   */
-  private void setVirtualChildren(Set<Thing> virtualChildren) {
-    Assertion.isNotNull(virtualChildren, "virtualChildren is required");
-    this.virtualChildren = virtualChildren;
-  }
-
-  /**
    * Sets optional parent.
    *
    * @param optionalParent the optional parent
@@ -400,16 +345,6 @@ public class Thing implements Abstraction {
   private void setOptionalParent(Thing optionalParent) {
     Assertion.isNotNull(optionalParent, "optionalParent is required");
     this.optionalParent = optionalParent;
-  }
-
-  /**
-   * Sets thing metadata.
-   *
-   * @param thingMetadata the thing metadata
-   */
-  private void setThingMetadata(ThingMetadata thingMetadata) {
-    Assertion.isNotNull(thingMetadata, "thingMetadata is required");
-    this.thingMetadata = thingMetadata;
   }
 
   // ===============================================================================================
@@ -477,9 +412,7 @@ public class Thing implements Abstraction {
         && Objects.equals(thingProperties, thing.thingProperties)
         && Objects.equals(functions, thing.functions)
         && Objects.equals(multiTenant, thing.multiTenant)
-        && Objects.equals(children, thing.children)
-        && Objects.equals(virtualChildren, thing.virtualChildren)
-        && Objects.equals(thingMetadata, thing.thingMetadata);
+        && Objects.equals(children, thing.children);
   }
 
   @Override
@@ -491,8 +424,6 @@ public class Thing implements Abstraction {
         thingProperties,
         functions,
         multiTenant,
-        children,
-        virtualChildren,
-        thingMetadata);
+        children);
   }
 }

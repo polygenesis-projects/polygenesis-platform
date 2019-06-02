@@ -18,7 +18,7 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.abstraction.data;
+package io.polygenesis.commons.valueobjects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

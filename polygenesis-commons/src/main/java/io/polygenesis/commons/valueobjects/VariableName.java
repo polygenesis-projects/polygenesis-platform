@@ -18,36 +18,42 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.abstraction.data;
+package io.polygenesis.commons.valueobjects;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import io.polygenesis.commons.text.AbstractText;
 
-import io.polygenesis.commons.test.AbstractEqualityTest;
-import io.polygenesis.commons.valueobjects.VariableName;
-import org.junit.Test;
+/**
+ * The type Variable name.
+ *
+ * @author Christos Tsakostas
+ */
+public class VariableName extends AbstractText {
 
-/** @author Christos Tsakostas */
-public class DataTest extends AbstractEqualityTest<TestData> {
+  private static final long serialVersionUID = 1L;
 
-  @Test
-  public void shouldInitializeTestData() {
-    TestData testData = new TestData(new VariableName("someVariableName"));
+  // ===============================================================================================
+  // STATIC
+  // ===============================================================================================
 
-    assertThat(testData).isNotNull();
-    assertThat(testData.getDataType()).isEqualTo(PrimitiveType.STRING.name());
-    assertThat(testData.getVariableName()).isEqualTo(new VariableName("someVariableName"));
+  /**
+   * Response variable name.
+   *
+   * @return the variable name
+   */
+  public static VariableName response() {
+    return new VariableName("response");
   }
 
   // ===============================================================================================
-  // Equality and Hash
+  // CONSTRUCTOR(S)
   // ===============================================================================================
-  @Override
-  public TestData createObject1() {
-    return new TestData(new VariableName("variableName"));
-  }
 
-  @Override
-  public TestData createObject2() {
-    return new TestData(new VariableName("someOtherVariableName"));
+  /**
+   * Instantiates a new Variable name.
+   *
+   * @param text the text
+   */
+  public VariableName(String text) {
+    super(text);
   }
 }

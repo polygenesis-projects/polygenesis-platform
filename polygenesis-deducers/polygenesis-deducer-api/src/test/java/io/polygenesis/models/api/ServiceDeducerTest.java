@@ -26,7 +26,6 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
 import io.polygenesis.abstraction.thing.Thing;
-import io.polygenesis.abstraction.thing.test.ThingForTesting;
 import io.polygenesis.commons.valueobjects.PackageName;
 import java.util.Set;
 import org.junit.Before;

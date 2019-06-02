@@ -37,6 +37,7 @@ import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * The type Abstract class representable.
@@ -484,7 +485,7 @@ public abstract class AbstractClassTransformer<S> extends AbstractTransformer
    * @param fieldRepresentations the field representations
    * @return the set
    */
-  private Set<ParameterRepresentation> convertFieldRepresentationsToParameterRepresentations(
+  protected Set<ParameterRepresentation> convertFieldRepresentationsToParameterRepresentations(
       Set<FieldRepresentation> fieldRepresentations) {
     return fieldRepresentations
         .stream()
@@ -568,23 +569,49 @@ public abstract class AbstractClassTransformer<S> extends AbstractTransformer
       Set<ParameterRepresentation> parameterRepresentations) {
     StringBuilder stringBuilder = new StringBuilder();
 
-    parameterRepresentations.forEach(
-        parameterRepresentation -> {
-          if (parameterRepresentation.getDataPurpose().equals(DataPurpose.thingIdentity())) {
-            throw new UnsupportedOperationException();
-          } else {
-            stringBuilder.append("\t\t");
-            stringBuilder.append("this.");
-            stringBuilder.append(
-                TextConverter.toLowerCamel(parameterRepresentation.getVariableName()));
-            stringBuilder.append(" = ");
-            stringBuilder.append(
-                TextConverter.toLowerCamel(parameterRepresentation.getVariableName()));
-            stringBuilder.append(";");
-            stringBuilder.append("\n");
-          }
-        });
+    String callSuperWithParameters = callSuperWithParameters(parameterRepresentations);
+    if (!callSuperWithParameters.equals("")) {
+      stringBuilder.append(String.format("\t\tsuper(%s);%n", callSuperWithParameters));
+    }
+
+    parameterRepresentations
+        .stream()
+        .filter(
+            parameterRepresentation ->
+                !parameterRepresentation.getDataPurpose().equals(DataPurpose.superclassParameter()))
+        .forEach(
+            parameterRepresentation -> {
+              if (parameterRepresentation.getDataPurpose().equals(DataPurpose.thingIdentity())) {
+                throw new UnsupportedOperationException();
+              } else {
+                stringBuilder.append("\t\t");
+                stringBuilder.append("this.");
+                stringBuilder.append(
+                    TextConverter.toLowerCamel(parameterRepresentation.getVariableName()));
+                stringBuilder.append(" = ");
+                stringBuilder.append(
+                    TextConverter.toLowerCamel(parameterRepresentation.getVariableName()));
+                stringBuilder.append(";");
+                stringBuilder.append("\n");
+              }
+            });
 
     return stringBuilder.toString();
+  }
+
+  /**
+   * Call super with parameters string.
+   *
+   * @param parameterRepresentations the parameter representations
+   * @return the string
+   */
+  private String callSuperWithParameters(Set<ParameterRepresentation> parameterRepresentations) {
+    return parameterRepresentations
+        .stream()
+        .filter(
+            parameterRepresentation ->
+                parameterRepresentation.getDataPurpose().equals(DataPurpose.superclassParameter()))
+        .map(ParameterRepresentation::getVariableName)
+        .collect(Collectors.joining(", "));
   }
 }

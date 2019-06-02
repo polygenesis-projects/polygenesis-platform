@@ -28,19 +28,19 @@ import static org.mockito.Mockito.verify;
 import io.polygenesis.abstraction.data.DataGroup;
 import io.polygenesis.abstraction.data.DataPrimitive;
 import io.polygenesis.abstraction.data.PrimitiveType;
-import io.polygenesis.abstraction.data.VariableName;
 import io.polygenesis.abstraction.thing.Argument;
 import io.polygenesis.abstraction.thing.CqsType;
 import io.polygenesis.abstraction.thing.Function;
-import io.polygenesis.abstraction.thing.FunctionName;
 import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.ReturnValue;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.ThingName;
+import io.polygenesis.abstraction.thing.dsl.FunctionBuilder;
 import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
+import io.polygenesis.commons.valueobjects.VariableName;
 import io.polygenesis.generators.java.api.exporter.DtoExporter;
 import io.polygenesis.generators.java.api.transformer.DtoClassTransformer;
 import io.polygenesis.models.api.Dto;
@@ -147,9 +147,9 @@ public class DtoExporterTest {
 
   private Function makeFunctionCreate() {
     Thing thing = ThingBuilder.endToEnd().setThingName("customer").createThing();
-    ReturnValue returnValue =
-        new ReturnValue(DataPrimitive.of(PrimitiveType.STRING, new VariableName("someRet")));
-    return new Function(
-        thing, Purpose.create(), new FunctionName("create"), new LinkedHashSet<>(), returnValue);
+
+    return FunctionBuilder.of(thing, "create", Purpose.create())
+        .setReturnValue(DataPrimitive.of(PrimitiveType.STRING, new VariableName("someRet")))
+        .build();
   }
 }

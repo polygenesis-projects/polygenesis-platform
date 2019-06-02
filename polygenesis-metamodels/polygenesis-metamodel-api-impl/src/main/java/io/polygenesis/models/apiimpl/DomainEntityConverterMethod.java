@@ -21,6 +21,7 @@
 package io.polygenesis.models.apiimpl;
 
 import io.polygenesis.abstraction.thing.Function;
+import io.polygenesis.abstraction.thing.FunctionProvider;
 import io.polygenesis.commons.assertion.Assertion;
 import java.util.Objects;
 
@@ -29,7 +30,7 @@ import java.util.Objects;
  *
  * @author Christos Tsakostas
  */
-public class DomainEntityConverterMethod {
+public class DomainEntityConverterMethod implements FunctionProvider {
 
   // ===============================================================================================
   // STATE

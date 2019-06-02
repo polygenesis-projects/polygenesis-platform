@@ -20,19 +20,17 @@
 
 package io.polygenesis.generators.java.messaging.transformer;
 
-import io.polygenesis.commons.freemarker.FreemarkerService;
+import io.polygenesis.abstraction.data.DataPurpose;
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.generators.java.messaging.activity.SubscriberActivityRegistry;
 import io.polygenesis.models.messaging.subscriber.Subscriber;
 import io.polygenesis.representations.code.ConstructorRepresentation;
 import io.polygenesis.representations.code.FieldRepresentation;
 import io.polygenesis.representations.code.MethodRepresentation;
+import io.polygenesis.representations.code.ParameterRepresentation;
 import io.polygenesis.transformer.code.AbstractClassTransformer;
 import io.polygenesis.transformer.code.FromDataTypeToJavaConverter;
-import io.polygenesis.transformer.code.FunctionToMethodRepresentationTransformer;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
-import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -46,32 +44,17 @@ public class SubscriberClassTransformer extends AbstractClassTransformer<Subscri
   // DEPENDENCIES
   // ===============================================================================================
 
-  private final FreemarkerService freemarkerService;
-  private final FunctionToMethodRepresentationTransformer functionToMethodRepresentationTransformer;
-  private final SubscriberActivityRegistry subscriberActivityRegistry;
+  private final SubscriberMethodTransformer subscriberMethodTransformer;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
-  /**
-   * Instantiates a new Subscriber class transformer.
-   *
-   * @param fromDataTypeToJavaConverter the from data type to java converter
-   * @param freemarkerService the freemarker service
-   * @param functionToMethodRepresentationTransformer the function to method representation
-   *     transformer
-   * @param subscriberActivityRegistry the subscriber activity registry
-   */
   public SubscriberClassTransformer(
       FromDataTypeToJavaConverter fromDataTypeToJavaConverter,
-      FreemarkerService freemarkerService,
-      FunctionToMethodRepresentationTransformer functionToMethodRepresentationTransformer,
-      SubscriberActivityRegistry subscriberActivityRegistry) {
+      SubscriberMethodTransformer subscriberMethodTransformer) {
     super(fromDataTypeToJavaConverter);
-    this.freemarkerService = freemarkerService;
-    this.functionToMethodRepresentationTransformer = functionToMethodRepresentationTransformer;
-    this.subscriberActivityRegistry = subscriberActivityRegistry;
+    this.subscriberMethodTransformer = subscriberMethodTransformer;
   }
 
   // ===============================================================================================
@@ -91,6 +74,9 @@ public class SubscriberClassTransformer extends AbstractClassTransformer<Subscri
     imports.add("com.fasterxml.jackson.databind.ObjectMapper");
     imports.add("java.io.IOException");
     imports.add("org.springframework.stereotype.Component");
+    imports.add("com.oregor.trinity4j.api.AbstractMessageSubscriber");
+    imports.add("java.util.List");
+    imports.add("java.util.Arrays");
 
     imports.add(
         String.format(
@@ -106,6 +92,45 @@ public class SubscriberClassTransformer extends AbstractClassTransformer<Subscri
             TextConverter.toUpperCamel(
                 source.getQueryServiceMethod().getService().getServiceName().getText())));
 
+    source
+        .getSubscriberMethods()
+        .forEach(
+            subscriberMethod -> {
+              imports.add(
+                  String.format(
+                      "%s.%s",
+                      subscriberMethod
+                          .getCommandServiceMethod()
+                          .getRequestDto()
+                          .getDataGroup()
+                          .getPackageName()
+                          .getText(),
+                      TextConverter.toUpperCamel(
+                          subscriberMethod
+                              .getCommandServiceMethod()
+                              .getRequestDto()
+                              .getDataGroup()
+                              .getObjectName()
+                              .getText())));
+
+              imports.add(
+                  String.format(
+                      "%s.%s",
+                      subscriberMethod
+                          .getQueryServiceMethod()
+                          .getRequestDto()
+                          .getDataGroup()
+                          .getPackageName()
+                          .getText(),
+                      TextConverter.toUpperCamel(
+                          subscriberMethod
+                              .getCommandServiceMethod()
+                              .getRequestDto()
+                              .getDataGroup()
+                              .getObjectName()
+                              .getText())));
+            });
+
     return imports;
   }
 
@@ -120,7 +145,8 @@ public class SubscriberClassTransformer extends AbstractClassTransformer<Subscri
 
   @Override
   public String description(Subscriber source, Object... args) {
-    return "";
+    return String.format(
+        "Message handler for %s.", TextConverter.toUpperCamelSpaces(source.getName().getText()));
   }
 
   @Override
@@ -135,14 +161,14 @@ public class SubscriberClassTransformer extends AbstractClassTransformer<Subscri
 
   @Override
   public String fullObjectName(Subscriber source, Object... args) {
-    return TextConverter.toUpperCamel(source.getName().getText());
+    return String.format(
+        "%s extends AbstractMessageSubscriber",
+        TextConverter.toUpperCamel(source.getName().getText()));
   }
 
   @Override
   public Set<FieldRepresentation> fieldRepresentations(Subscriber source, Object... args) {
     Set<FieldRepresentation> fieldRepresentations = new LinkedHashSet<>();
-
-    fieldRepresentations.add(new FieldRepresentation("ObjectMapper", "objectMapper"));
 
     fieldRepresentations.add(
         new FieldRepresentation(
@@ -164,10 +190,20 @@ public class SubscriberClassTransformer extends AbstractClassTransformer<Subscri
   @Override
   public Set<ConstructorRepresentation> constructorRepresentations(
       Subscriber source, Object... args) {
-    return new LinkedHashSet<>(
-        Arrays.asList(
-            createConstructorWithDirectAssignmentFromFieldRepresentations(
-                source.getName().getText(), fieldRepresentations(source, args))));
+
+    Set<ParameterRepresentation> parameterRepresentations = new LinkedHashSet<>();
+
+    parameterRepresentations.add(
+        new ParameterRepresentation(
+            "ObjectMapper", "objectMapper", DataPurpose.superclassParameter()));
+
+    parameterRepresentations.addAll(
+        convertFieldRepresentationsToParameterRepresentations(fieldRepresentations(source, args)));
+
+    ConstructorRepresentation constructorRepresentation =
+        createConstructorWithDirectAssignment(source.getName().getText(), parameterRepresentations);
+
+    return new LinkedHashSet<>(Arrays.asList(constructorRepresentation));
   }
 
   @Override
@@ -177,19 +213,8 @@ public class SubscriberClassTransformer extends AbstractClassTransformer<Subscri
     source
         .getSubscriberMethods()
         .forEach(
-            subscriberMethod -> {
-              MethodRepresentation methodRepresentation =
-                  functionToMethodRepresentationTransformer.create(subscriberMethod.getFunction());
-
-              Optional<String> optionalImplementation =
-                  subscriberActivityRegistry.implementation(freemarkerService, subscriberMethod);
-
-              if (optionalImplementation.isPresent()) {
-                methodRepresentation.changeImplementationTo(optionalImplementation.get());
-              }
-
-              methodRepresentations.add(methodRepresentation);
-            });
+            subscriberMethod ->
+                methodRepresentations.add(subscriberMethodTransformer.create(subscriberMethod)));
 
     return methodRepresentations;
   }

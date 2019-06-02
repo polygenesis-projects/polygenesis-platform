@@ -25,9 +25,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import io.polygenesis.abstraction.data.DataPrimitive;
 import io.polygenesis.abstraction.data.DataPurpose;
 import io.polygenesis.abstraction.data.PrimitiveType;
-import io.polygenesis.abstraction.data.VariableName;
+import io.polygenesis.abstraction.thing.dsl.FunctionBuilder;
 import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
 import io.polygenesis.commons.test.AbstractEqualityTest;
+import io.polygenesis.commons.valueobjects.VariableName;
 import java.util.LinkedHashSet;
 import org.junit.Test;
 
@@ -78,22 +79,22 @@ public class FunctionTest extends AbstractEqualityTest<Function> {
 
   @Override
   public Function createObject1() {
-    return new Function(
-        ThingBuilder.endToEnd().setThingName("thingName").createThing(),
-        Purpose.create(),
-        new FunctionName("functionName"),
-        new LinkedHashSet<>(),
-        new ReturnValue(createDataPrimitive()));
+    return FunctionBuilder.of(
+            ThingBuilder.endToEnd().setThingName("thingName").createThing(),
+            "functionName",
+            Purpose.create())
+        .setReturnValue(createDataPrimitive())
+        .build();
   }
 
   @Override
   public Function createObject2() {
-    return new Function(
-        ThingBuilder.endToEnd().setThingName("thingName").createThing(),
-        Purpose.create(),
-        new FunctionName("anotherFunctionName"),
-        new LinkedHashSet<>(),
-        new ReturnValue(createDataPrimitive()));
+    return FunctionBuilder.of(
+            ThingBuilder.endToEnd().setThingName("thingName").createThing(),
+            "anotherFunctionName",
+            Purpose.create())
+        .setReturnValue(createDataPrimitive())
+        .build();
   }
 
   // ===============================================================================================
@@ -101,19 +102,21 @@ public class FunctionTest extends AbstractEqualityTest<Function> {
   // ===============================================================================================
 
   private Function createFunctionWithReturnValueAndNoArguments() {
-    return new Function(
-        ThingBuilder.endToEnd().setThingName("thingName").createThing(),
-        Purpose.create(),
-        new FunctionName("functionName"),
-        new ReturnValue(createDataPrimitive()));
+    return FunctionBuilder.of(
+            ThingBuilder.endToEnd().setThingName("thingName").createThing(),
+            "functionName",
+            Purpose.create())
+        .setReturnValue(createDataPrimitive())
+        .build();
   }
 
   private Function createFunctionWithArgumentsAndNoReturnValue() {
-    return new Function(
-        ThingBuilder.endToEnd().setThingName("thingName").createThing(),
-        Purpose.create(),
-        new FunctionName("functionName"),
-        new LinkedHashSet<>());
+    return FunctionBuilder.of(
+            ThingBuilder.endToEnd().setThingName("thingName").createThing(),
+            "functionName",
+            Purpose.create())
+        .addArgument(DataPrimitive.of(PrimitiveType.STRING, new VariableName("jsonMessage")))
+        .build();
   }
 
   private DataPrimitive createDataPrimitive() {

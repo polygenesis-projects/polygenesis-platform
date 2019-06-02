@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.DataPrimitive;
 import io.polygenesis.abstraction.data.PrimitiveType;
-import io.polygenesis.abstraction.data.VariableName;
+import io.polygenesis.commons.valueobjects.VariableName;
 import java.util.Set;
 import org.junit.Test;
 

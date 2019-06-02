@@ -23,14 +23,13 @@ package io.polygenesis.models.reactivestate;
 import io.polygenesis.abstraction.data.DataPrimitive;
 import io.polygenesis.abstraction.data.DataPurpose;
 import io.polygenesis.abstraction.data.PrimitiveType;
-import io.polygenesis.abstraction.data.VariableName;
 import io.polygenesis.abstraction.thing.CqsType;
 import io.polygenesis.abstraction.thing.Function;
-import io.polygenesis.abstraction.thing.FunctionName;
 import io.polygenesis.abstraction.thing.Purpose;
-import io.polygenesis.abstraction.thing.ReturnValue;
 import io.polygenesis.abstraction.thing.Thing;
+import io.polygenesis.abstraction.thing.dsl.FunctionBuilder;
 import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
+import io.polygenesis.commons.valueobjects.VariableName;
 import java.util.LinkedHashSet;
 
 /** @author Christos Tsakostas */
@@ -43,32 +42,30 @@ public abstract class AbstractReactiveStateTest {
     // CREATE
     // =============================================================================================
     Function createFunction =
-        new Function(
-            thing,
-            Purpose.create(),
-            new FunctionName("createSomeThing"),
-            new ReturnValue(
+        FunctionBuilder.of(thing, "createSomeThing", Purpose.create())
+            .setReturnValue(
                 new DataPrimitive(
                     PrimitiveType.STRING,
                     new VariableName("response"),
                     new LinkedHashSet<>(),
-                    DataPurpose.any())));
+                    DataPurpose.any()))
+            .build();
+
     thing.addFunction(createFunction);
 
     // =============================================================================================
     // Custom Purpose
     // =============================================================================================
     Function customPurposeFunction =
-        new Function(
-            thing,
-            Purpose.custom("validate", CqsType.COMMAND),
-            new FunctionName("createSomeThing"),
-            new ReturnValue(
+        FunctionBuilder.of(thing, "createSomeThing", Purpose.custom("validate", CqsType.COMMAND))
+            .setReturnValue(
                 new DataPrimitive(
                     PrimitiveType.STRING,
                     new VariableName("response"),
                     new LinkedHashSet<>(),
-                    DataPurpose.any())));
+                    DataPurpose.any()))
+            .build();
+
     thing.addFunction(customPurposeFunction);
 
     return thing;

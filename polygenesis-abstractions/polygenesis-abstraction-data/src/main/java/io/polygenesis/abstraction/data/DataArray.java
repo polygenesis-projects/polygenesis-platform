@@ -21,6 +21,7 @@
 package io.polygenesis.abstraction.data;
 
 import io.polygenesis.commons.text.TextConverter;
+import io.polygenesis.commons.valueobjects.VariableName;
 import java.util.Objects;
 
 /**
@@ -31,6 +32,20 @@ import java.util.Objects;
 public class DataArray extends Data {
 
   private final Data arrayElement;
+
+  // ===============================================================================================
+  // STATIC
+  // ===============================================================================================
+
+  /**
+   * Of data array.
+   *
+   * @param arrayElement the array element
+   * @return the data array
+   */
+  public static DataArray of(Data arrayElement) {
+    return new DataArray(VariableName.response(), arrayElement);
+  }
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -51,6 +66,7 @@ public class DataArray extends Data {
    *
    * @param variableName the variable name
    * @param dataPurpose the data business type
+   * @param dataValidator the data validator
    * @param arrayElement the array element
    */
   public DataArray(

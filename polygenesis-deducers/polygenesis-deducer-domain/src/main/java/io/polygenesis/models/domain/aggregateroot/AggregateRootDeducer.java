@@ -36,7 +36,6 @@ import io.polygenesis.models.domain.StateMutationMethod;
 import io.polygenesis.models.domain.StateQueryMethod;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
-import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -93,8 +92,13 @@ public class AggregateRootDeducer {
         .stream()
         .forEach(
             thing -> {
-              if (thing.getOptionalParent() == null || isVirtualChild(thingRepository, thing)) {
+              if (thing.getOptionalParent() == null) {
                 makeAggregateRoot(aggregateRoots, thing, rootPackageName);
+              } else {
+                throw new IllegalArgumentException(
+                    String.format(
+                        "The aggregate root=%s should not have a parent",
+                        thing.getThingName().getText()));
               }
             });
 
@@ -152,13 +156,6 @@ public class AggregateRootDeducer {
             factoryMethods,
             makeSuperclass(thing.getMultiTenant()),
             persistence));
-
-    // TODO: check if the following should be removed
-    thing
-        .getVirtualChildren()
-        .forEach(
-            thingVirtualChild ->
-                makeAggregateRoot(aggregateRoots, thingVirtualChild, rootPackageName));
   }
 
   /**
@@ -210,21 +207,11 @@ public class AggregateRootDeducer {
   }
 
   /**
-   * Is virtual child boolean.
+   * Is abstract boolean.
    *
-   * @param thingRepository the thing repository
-   * @param thingToCheck the thing to check
+   * @param thing the thing
    * @return the boolean
    */
-  private Boolean isVirtualChild(ThingRepository thingRepository, Thing thingToCheck) {
-    return thingRepository
-        .getAllAbstractionItems()
-        .stream()
-        .flatMap(thing -> thing.getVirtualChildren().stream())
-        .filter(thing -> thing.equals(thingToCheck))
-        .anyMatch(Objects::nonNull);
-  }
-
   private Boolean isAbstract(Thing thing) {
     return thing.getAbstractionsScopes().contains(AbstractionScope.domainAbstractAggregateRoot());
   }

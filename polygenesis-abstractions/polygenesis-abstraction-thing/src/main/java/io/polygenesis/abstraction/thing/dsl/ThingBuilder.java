@@ -56,6 +56,21 @@ public class ThingBuilder extends AbstractThingBuilder<ThingBuilder> {
   }
 
   /**
+   * End to end child thing builder.
+   *
+   * @return the thing builder
+   */
+  public static ThingBuilder endToEndChild() {
+    return new ThingBuilder(
+        new LinkedHashSet<>(
+            Arrays.asList(
+                AbstractionScope.api(),
+                AbstractionScope.apiDetail(),
+                AbstractionScope.apiClientRest(),
+                AbstractionScope.domainAggregateEntity())));
+  }
+
+  /**
    * Projection thing builder.
    *
    * @return the thing builder
@@ -92,6 +107,16 @@ public class ThingBuilder extends AbstractThingBuilder<ThingBuilder> {
   public static ThingBuilder domainAggregateEntity() {
     return new ThingBuilder(
         new LinkedHashSet<>(Arrays.asList(AbstractionScope.domainAggregateEntity())));
+  }
+
+  /**
+   * Subscriber thing builder.
+   *
+   * @return the thing builder
+   */
+  public static ThingBuilder subscriber() {
+    return new ThingBuilder(
+        new LinkedHashSet<>(Arrays.asList(AbstractionScope.apiClientMessaging())));
   }
 
   // ===============================================================================================

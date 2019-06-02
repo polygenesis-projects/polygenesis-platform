@@ -35,6 +35,9 @@ public class ProcessSubscriberActivity implements SubscriberActivity {
   @Override
   public String body(FreemarkerService freemarkerService, SubscriberMethod subscriberMethod) {
     Map<String, Object> dataModel = new HashMap<>();
+    dataModel.put("jsonData", subscriberMethod.getFunction().getActivity().getExternalData());
+    dataModel.put("commandServiceMethod", subscriberMethod.getCommandServiceMethod());
+    dataModel.put("queryServiceMethod", subscriberMethod.getQueryServiceMethod());
 
     return freemarkerService.exportToString(
         dataModel, "polygenesis-generator-java-api-client-messaging/subscriber-process.ftl");

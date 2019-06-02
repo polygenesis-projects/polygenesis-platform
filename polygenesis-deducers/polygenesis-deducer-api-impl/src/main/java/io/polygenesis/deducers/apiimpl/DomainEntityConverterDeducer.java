@@ -22,13 +22,11 @@ package io.polygenesis.deducers.apiimpl;
 
 import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.DataGroup;
-import io.polygenesis.abstraction.thing.Argument;
 import io.polygenesis.abstraction.thing.Function;
-import io.polygenesis.abstraction.thing.FunctionName;
 import io.polygenesis.abstraction.thing.Purpose;
-import io.polygenesis.abstraction.thing.ReturnValue;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.ThingRepository;
+import io.polygenesis.abstraction.thing.dsl.FunctionBuilder;
 import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.commons.valueobjects.ObjectName;
@@ -47,7 +45,6 @@ import io.polygenesis.models.domain.BaseDomainEntity;
 import io.polygenesis.models.domain.DomainMetamodelRepository;
 import io.polygenesis.models.domain.PropertyType;
 import io.polygenesis.models.domain.ValueObject;
-import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -191,22 +188,18 @@ public class DomainEntityConverterDeducer extends BaseApiImplementationDeducer
     ValueObject valueObjectToUse = valueObject.withVariableNameEqualToObjectName();
 
     Function functionToVo =
-        new Function(
-            thing,
-            Purpose.convertDtoToVo(),
-            new FunctionName("convertToVo"),
-            new LinkedHashSet<>(Arrays.asList(new Argument(dtoToUse.getDataGroup()))),
-            new ReturnValue(valueObjectToUse.getData()));
+        FunctionBuilder.of(thing, "convertToVo", Purpose.convertDtoToVo())
+            .setReturnValue(valueObjectToUse.getData())
+            .addArgument(dtoToUse.getDataGroup())
+            .build();
 
     methods.add(new DomainEntityConverterMethod(functionToVo, dtoToUse, valueObjectToUse));
 
     Function functionToDto =
-        new Function(
-            thing,
-            Purpose.convertVoToDto(),
-            new FunctionName("convertToDto"),
-            new LinkedHashSet<>(Arrays.asList(new Argument(valueObjectToUse.getData()))),
-            new ReturnValue(dto.getDataGroup()));
+        FunctionBuilder.of(thing, "convertToDto", Purpose.convertVoToDto())
+            .setReturnValue(dto.getDataGroup())
+            .addArgument(valueObjectToUse.getData())
+            .build();
 
     methods.add(new DomainEntityConverterMethod(functionToDto, valueObjectToUse, dto));
   }
@@ -261,16 +254,15 @@ public class DomainEntityConverterDeducer extends BaseApiImplementationDeducer
     Thing thing = ThingBuilder.endToEnd().setThingName("Converter").createThing();
 
     Function function =
-        new Function(
-            thing,
-            Purpose.convertDomainObjectToCollectionRecord(),
-            new FunctionName(
+        FunctionBuilder.of(
+                thing,
                 String.format(
                     "convertTo%s",
-                    TextConverter.toUpperCamel(dtoCollectionRecord.getDataGroup().getDataType()))),
-            new LinkedHashSet<>(
-                Arrays.asList(new Argument(transformDomainObjectToDataGroup(domainObject)))),
-            new ReturnValue(dtoCollectionRecord.getDataGroup()));
+                    TextConverter.toUpperCamel(dtoCollectionRecord.getDataGroup().getDataType())),
+                Purpose.convertDomainObjectToCollectionRecord())
+            .setReturnValue(dtoCollectionRecord.getDataGroup())
+            .addArgument(transformDomainObjectToDataGroup(domainObject))
+            .build();
 
     methods.add(new DomainEntityConverterMethod(function, domainObject, dtoCollectionRecord));
   }

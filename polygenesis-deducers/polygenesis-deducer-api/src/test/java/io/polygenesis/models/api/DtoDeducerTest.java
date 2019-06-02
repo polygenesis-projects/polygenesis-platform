@@ -25,7 +25,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.abstraction.thing.FunctionName;
 import io.polygenesis.abstraction.thing.Thing;
-import io.polygenesis.abstraction.thing.test.ThingForTesting;
 import io.polygenesis.commons.valueobjects.PackageName;
 import org.junit.Before;
 import org.junit.Test;

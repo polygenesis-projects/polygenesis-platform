@@ -25,9 +25,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import io.polygenesis.abstraction.data.DataPrimitive;
 import io.polygenesis.abstraction.data.DataPurpose;
 import io.polygenesis.abstraction.data.PrimitiveType;
-import io.polygenesis.abstraction.data.VariableName;
+import io.polygenesis.abstraction.thing.dsl.FunctionBuilder;
 import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
 import io.polygenesis.commons.test.AbstractEqualityTest;
+import io.polygenesis.commons.valueobjects.VariableName;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import org.junit.Test;
@@ -58,30 +59,30 @@ public class ThingTest extends AbstractEqualityTest<Thing> {
   }
 
   private Function createFunction1() {
-    return new Function(
-        ThingBuilder.endToEnd().setThingName("thingName").createThing(),
-        Purpose.modify(),
-        new FunctionName("functionName"),
-        new LinkedHashSet<>(),
-        new ReturnValue(createDataPrimitive()));
+    return FunctionBuilder.of(
+            ThingBuilder.endToEnd().setThingName("thingName").createThing(),
+            "functionName",
+            Purpose.modify())
+        .setReturnValue(createDataPrimitive())
+        .build();
   }
 
   private Function createFunction2() {
-    return new Function(
-        ThingBuilder.endToEnd().setThingName("thingName").createThing(),
-        Purpose.modify(),
-        new FunctionName("anotherFunctionName"),
-        new LinkedHashSet<>(),
-        new ReturnValue(createDataPrimitive()));
+    return FunctionBuilder.of(
+            ThingBuilder.endToEnd().setThingName("thingName").createThing(),
+            "anotherFunctionName",
+            Purpose.modify())
+        .setReturnValue(createDataPrimitive())
+        .build();
   }
 
   private Function createFunction3() {
-    return new Function(
-        ThingBuilder.endToEnd().setThingName("thingName").createThing(),
-        Purpose.modify(),
-        new FunctionName("someAnotherNewFunctionName"),
-        new LinkedHashSet<>(),
-        new ReturnValue(createDataPrimitive()));
+    return FunctionBuilder.of(
+            ThingBuilder.endToEnd().setThingName("thingName").createThing(),
+            "someAnotherNewFunctionName",
+            Purpose.modify())
+        .setReturnValue(createDataPrimitive())
+        .build();
   }
 
   private DataPrimitive createDataPrimitive() {

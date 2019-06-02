@@ -22,7 +22,7 @@ package io.polygenesis.abstraction.data.dsl;
 
 import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.DataArray;
-import io.polygenesis.abstraction.data.VariableName;
+import io.polygenesis.commons.valueobjects.VariableName;
 
 /**
  * The type Data array builder.

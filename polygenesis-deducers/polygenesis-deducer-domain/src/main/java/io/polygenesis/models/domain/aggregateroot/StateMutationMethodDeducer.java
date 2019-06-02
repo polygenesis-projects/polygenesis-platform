@@ -22,11 +22,9 @@ package io.polygenesis.models.domain.aggregateroot;
 
 import static io.polygenesis.models.domain.PropertyType.AGGREGATE_ENTITY_COLLECTION;
 
-import io.polygenesis.abstraction.thing.Function;
-import io.polygenesis.abstraction.thing.FunctionName;
 import io.polygenesis.abstraction.thing.Purpose;
-import io.polygenesis.abstraction.thing.ReturnValue;
 import io.polygenesis.abstraction.thing.Thing;
+import io.polygenesis.abstraction.thing.dsl.FunctionBuilder;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.models.domain.AggregateEntity;
 import io.polygenesis.models.domain.AggregateEntityCollection;
@@ -106,15 +104,14 @@ public class StateMutationMethodDeducer {
   protected StateMutationMethod aggregateRootCreateEntity(
       Thing thing, AggregateEntity aggregateEntity) {
     return new StateMutationMethod(
-        new Function(
-            thing,
-            Purpose.aggregateRootCreateEntity(),
-            new FunctionName(
+        FunctionBuilder.of(
+                thing,
                 String.format(
                     "define%s",
-                    TextConverter.toUpperCamel(aggregateEntity.getObjectName().getText()))),
-            new LinkedHashSet<>(),
-            new ReturnValue(aggregateEntity.getData())));
+                    TextConverter.toUpperCamel(aggregateEntity.getObjectName().getText())),
+                Purpose.aggregateRootCreateEntity())
+            .setReturnValue(aggregateEntity.getData())
+            .build());
   }
 
   /**
@@ -127,15 +124,14 @@ public class StateMutationMethodDeducer {
   protected StateMutationMethod aggregateRootUpdateEntity(
       Thing thing, AggregateEntity aggregateEntity) {
     return new StateMutationMethod(
-        new Function(
-            thing,
-            Purpose.aggregateRootUpdateEntity(),
-            new FunctionName(
+        FunctionBuilder.of(
+                thing,
                 String.format(
                     "modify%s",
-                    TextConverter.toUpperCamel(aggregateEntity.getObjectName().getText()))),
-            new LinkedHashSet<>(),
-            new ReturnValue(aggregateEntity.getData())));
+                    TextConverter.toUpperCamel(aggregateEntity.getObjectName().getText())),
+                Purpose.aggregateRootUpdateEntity())
+            .setReturnValue(aggregateEntity.getData())
+            .build());
   }
 
   /**
@@ -148,14 +144,13 @@ public class StateMutationMethodDeducer {
   protected StateMutationMethod aggregateRootDeleteEntity(
       Thing thing, AggregateEntity aggregateEntity) {
     return new StateMutationMethod(
-        new Function(
-            thing,
-            Purpose.aggregateRootDeleteEntity(),
-            new FunctionName(
+        FunctionBuilder.of(
+                thing,
                 String.format(
                     "remove%s",
-                    TextConverter.toUpperCamel(aggregateEntity.getObjectName().getText()))),
-            new LinkedHashSet<>(),
-            new ReturnValue(aggregateEntity.getData())));
+                    TextConverter.toUpperCamel(aggregateEntity.getObjectName().getText())),
+                Purpose.aggregateRootDeleteEntity())
+            .setReturnValue(aggregateEntity.getData())
+            .build());
   }
 }

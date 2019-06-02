@@ -20,7 +20,9 @@
 
 package io.polygenesis.deducers.messaging.subscriber;
 
+import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.thing.Function;
+import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.ThingRepository;
 import io.polygenesis.commons.valueobjects.Name;
@@ -35,7 +37,9 @@ import io.polygenesis.models.api.ServiceMethod;
 import io.polygenesis.models.messaging.subscriber.Subscriber;
 import io.polygenesis.models.messaging.subscriber.SubscriberMetamodelRepository;
 import java.util.LinkedHashSet;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * The type Subscriber deducer.
@@ -108,15 +112,96 @@ public class SubscriberDeducer implements Deducer<SubscriberMetamodelRepository>
   @SuppressWarnings("rawtypes")
   private Subscriber deduceSubscriberFromThing(
       Thing thing, Set<MetamodelRepository> modelRepositories) {
-    return new Subscriber(
-        getRootPackageName().withSubPackage("subscribers"),
-        new Name(thing.getThingName().getText()),
-        thing.getThingMetadata().getMessageData(),
-        thing.getThingMetadata().getRelatedThing(),
-        findServiceMethodFromFunction(
-            modelRepositories, thing.getThingMetadata().getQueryFunction()),
-        findServiceMethodFromFunction(
-            modelRepositories, thing.getThingMetadata().getCommandFunction()));
+
+    Subscriber subscriber =
+        new Subscriber(
+            getRootPackageName().withSubPackage("subscribers"),
+            new Name(thing.getThingName().getText()),
+            getMessageData(thing),
+            getRelatedThing(thing),
+            findServiceMethodFromFunction(modelRepositories, getHandlerCommandFunction(thing)),
+            findServiceMethodFromFunction(modelRepositories, getHandlerQueryFunction(thing)));
+
+    thing.getFunctions().forEach(subscriber::appendSubscriberMethod);
+
+    return subscriber;
+  }
+
+  /**
+   * Gets related thing.
+   *
+   * @param thing the thing
+   * @return the related thing
+   */
+  private Thing getRelatedThing(Thing thing) {
+    Set<Thing> relatedThings =
+        thing
+            .getFunctions()
+            .stream()
+            .map(function -> function.getActivity())
+            .filter(Objects::nonNull)
+            .flatMap(activity -> activity.getExternalFunctions().stream())
+            .map(function -> function.getThing())
+            .collect(Collectors.toSet());
+
+    if (relatedThings.size() == 0) {
+      throw new IllegalStateException("No related thing found");
+    } else if (relatedThings.size() > 1) {
+      throw new IllegalStateException("More than one related things found");
+    }
+
+    return relatedThings.stream().findFirst().orElseThrow(IllegalStateException::new);
+  }
+
+  /**
+   * Gets handler command function.
+   *
+   * @param thing the thing
+   * @return the handler command function
+   */
+  private Function getHandlerCommandFunction(Thing thing) {
+    return thing
+        .getFunctions()
+        .stream()
+        .map(function -> function.getActivity())
+        .filter(Objects::nonNull)
+        .flatMap(activity -> activity.getExternalFunctions().stream())
+        .filter(function -> function.getPurpose().isCommand())
+        .findFirst()
+        .orElseThrow(IllegalArgumentException::new);
+  }
+
+  /**
+   * Gets handler query function.
+   *
+   * @param thing the thing
+   * @return the handler query function
+   */
+  private Function getHandlerQueryFunction(Thing thing) {
+    return thing
+        .getFunctions()
+        .stream()
+        .map(function -> function.getActivity())
+        .filter(Objects::nonNull)
+        .flatMap(activity -> activity.getExternalFunctions().stream())
+        .filter(function -> function.getPurpose().isQuery())
+        .findFirst()
+        .orElseThrow(IllegalArgumentException::new);
+  }
+
+  /**
+   * Gets message data.
+   *
+   * @param thing the thing
+   * @return the message data
+   */
+  private Set<Data> getMessageData(Thing thing) {
+    return thing
+        .getFunctions()
+        .stream()
+        .filter(function -> function.getPurpose().equals(Purpose.process()))
+        .flatMap(function -> function.getActivity().getExternalData().stream())
+        .collect(Collectors.toCollection(LinkedHashSet::new));
   }
 
   /**
