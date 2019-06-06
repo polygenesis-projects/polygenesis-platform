@@ -21,7 +21,7 @@
 package io.polygenesis.craftsman;
 
 /**
- * The type Genesis Request.
+ * The type Creator Request.
  *
  * @author Christos Tsakostas
  */

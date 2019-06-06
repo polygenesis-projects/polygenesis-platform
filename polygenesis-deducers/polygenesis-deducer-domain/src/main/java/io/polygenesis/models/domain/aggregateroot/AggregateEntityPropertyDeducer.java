@@ -20,7 +20,7 @@
 
 package io.polygenesis.models.domain.aggregateroot;
 
-import io.polygenesis.abstraction.data.DataGroup;
+import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
@@ -115,12 +115,12 @@ public class AggregateEntityPropertyDeducer extends AbstractPropertyDeducer {
    * @return the aggregate entity id
    */
   protected AggregateEntityId makeAggregateEntityId(Thing thing, PackageName rootPackageName) {
-    DataGroup dataGroup =
-        new DataGroup(
+    DataObject dataObject =
+        new DataObject(
             new ObjectName(thing.getThingName().getText() + "Id"),
             thing.makePackageName(rootPackageName, thing));
 
-    return new AggregateEntityId(dataGroup);
+    return new AggregateEntityId(dataObject);
   }
 
   /**
@@ -132,7 +132,7 @@ public class AggregateEntityPropertyDeducer extends AbstractPropertyDeducer {
   private ReferenceToAggregateRoot makeReferenceToAggregateRoot(
       Thing thingParent, PackageName rootPackageName) {
     return new ReferenceToAggregateRoot(
-        new DataGroup(
+        new DataObject(
             new ObjectName(thingParent.getThingName().getText()),
             thingParent.makePackageName(rootPackageName, thingParent),
             new VariableName(thingParent.getThingName().getText())));

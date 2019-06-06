@@ -20,7 +20,7 @@
 
 package io.polygenesis.models.domain.supportiveentity;
 
-import io.polygenesis.abstraction.data.DataGroup;
+import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
@@ -81,11 +81,11 @@ public class SupportiveEntityPropertyDeducer extends AbstractPropertyDeducer {
    * @return the supportive entity id
    */
   protected SupportiveEntityId makeSupportiveEntityId(Thing thing, PackageName rootPackageName) {
-    DataGroup dataGroup =
-        new DataGroup(
+    DataObject dataObject =
+        new DataObject(
             new ObjectName(thing.getThingName().getText() + "Id"),
             thing.makePackageName(rootPackageName, thing));
 
-    return new SupportiveEntityId(dataGroup);
+    return new SupportiveEntityId(dataObject);
   }
 }

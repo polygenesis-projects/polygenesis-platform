@@ -22,7 +22,7 @@ package io.polygenesis.generators.java.exporters.rdbms;
 
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.generators.java.transformers.rdbms.SpringDataRepositoryInterfaceTransformer;
+import io.polygenesis.generators.java.transformers.rdbms.SpringDataRepositoryLegacyInterfaceTransformer;
 import io.polygenesis.models.domain.Persistence;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -41,7 +41,8 @@ public class SpringDataRepositoryExporter {
   // ===============================================================================================
 
   private final FreemarkerService freemarkerService;
-  private final SpringDataRepositoryInterfaceTransformer springDataRepositoryInterfaceRepresentable;
+  private final SpringDataRepositoryLegacyInterfaceTransformer
+      springDataRepositoryInterfaceRepresentable;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -56,7 +57,7 @@ public class SpringDataRepositoryExporter {
    */
   public SpringDataRepositoryExporter(
       FreemarkerService freemarkerService,
-      SpringDataRepositoryInterfaceTransformer springDataRepositoryInterfaceRepresentable) {
+      SpringDataRepositoryLegacyInterfaceTransformer springDataRepositoryInterfaceRepresentable) {
     this.freemarkerService = freemarkerService;
     this.springDataRepositoryInterfaceRepresentable = springDataRepositoryInterfaceRepresentable;
   }

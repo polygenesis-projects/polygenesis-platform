@@ -20,7 +20,7 @@
 <#include "../polygenesis-implementation-java-shared/macro-assertions-for-parameters.ftl">
 <@assertionsForParameters representation.parameterRepresentations></@assertionsForParameters>
 
-    return new ${ textConverter.toUpperCamel(to.dataGroup.dataType) }(
+    return new ${ textConverter.toUpperCamel(to.dataObject.dataType) }(
 <#list from.data.models as data >
     <#switch data.dataPrimaryType>
         <#case 'PRIMITIVE'>

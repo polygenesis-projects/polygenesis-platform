@@ -20,7 +20,7 @@
 
 package io.polygenesis.models.api;
 
-import io.polygenesis.abstraction.data.DataGroup;
+import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.abstraction.data.DataPrimitive;
 import io.polygenesis.abstraction.data.DataPurpose;
 import io.polygenesis.abstraction.data.PrimitiveType;
@@ -76,34 +76,34 @@ public class ThingForTesting {
     // ---------------------------------------------------------------------------------------------
     // ARGUMENTS
     // ---------------------------------------------------------------------------------------------
-    DataGroup argumentDataGroup =
-        new DataGroup(
+    DataObject argumentDataObject =
+        new DataObject(
             new ObjectName("CreateBusinessRequest"),
             new PackageName(ROOT_PACKAGE + "." + BUSINESS));
 
     // name
-    argumentDataGroup.addData(DataPrimitive.of(PrimitiveType.STRING, new VariableName(NAME)));
+    argumentDataObject.addData(DataPrimitive.of(PrimitiveType.STRING, new VariableName(NAME)));
 
     // postal address
-    argumentDataGroup.addData(postalAddress());
+    argumentDataObject.addData(postalAddress());
 
     // ---------------------------------------------------------------------------------------------
     // RETURN VALUE
     // ---------------------------------------------------------------------------------------------
-    DataGroup returnValueDataGroup =
-        new DataGroup(
+    DataObject returnValueDataObject =
+        new DataObject(
             new ObjectName("CreateBusinessResponse"),
             new PackageName(ROOT_PACKAGE + "." + BUSINESS));
 
-    returnValueDataGroup.addData(
+    returnValueDataObject.addData(
         DataPrimitive.ofDataBusinessType(
             DataPurpose.thingIdentity(), PrimitiveType.STRING, new VariableName(BUSINESS_ID)));
 
     // ---------------------------------------------------------------------------------------------
 
     return FunctionBuilder.of(business, "create", Purpose.create())
-        .setReturnValue(returnValueDataGroup)
-        .addArgument(argumentDataGroup)
+        .setReturnValue(returnValueDataObject)
+        .addArgument(argumentDataObject)
         .build();
   }
 
@@ -115,32 +115,32 @@ public class ThingForTesting {
     // ---------------------------------------------------------------------------------------------
     // ARGUMENTS
     // ---------------------------------------------------------------------------------------------
-    DataGroup argumentDataGroup =
-        new DataGroup(
+    DataObject argumentDataObject =
+        new DataObject(
             new ObjectName("FetchBusinessRequest"), new PackageName(ROOT_PACKAGE + "." + BUSINESS));
 
     // ---------------------------------------------------------------------------------------------
 
-    argumentDataGroup.addData(
+    argumentDataObject.addData(
         DataPrimitive.ofDataBusinessType(
             DataPurpose.thingIdentity(), PrimitiveType.STRING, new VariableName(BUSINESS_ID)));
 
     // ---------------------------------------------------------------------------------------------
     // RETURN VALUE
     // ---------------------------------------------------------------------------------------------
-    DataGroup returnValueDataGroup =
-        new DataGroup(
+    DataObject returnValueDataObject =
+        new DataObject(
             new ObjectName("FetchBusinessResponse"),
             new PackageName(ROOT_PACKAGE + "." + BUSINESS));
 
     // ---------------------------------------------------------------------------------------------
 
-    returnValueDataGroup.addData(DataPrimitive.of(PrimitiveType.STRING, new VariableName(NAME)));
+    returnValueDataObject.addData(DataPrimitive.of(PrimitiveType.STRING, new VariableName(NAME)));
 
     // ---------------------------------------------------------------------------------------------
     return FunctionBuilder.of(business, "fetchOne", Purpose.fetchOne())
-        .setReturnValue(returnValueDataGroup)
-        .addArgument(argumentDataGroup)
+        .setReturnValue(returnValueDataObject)
+        .addArgument(argumentDataObject)
         .build();
   }
 
@@ -152,33 +152,33 @@ public class ThingForTesting {
     // ---------------------------------------------------------------------------------------------
     // ARGUMENTS
     // ---------------------------------------------------------------------------------------------
-    DataGroup argumentDataGroup =
-        new DataGroup(
+    DataObject argumentDataObject =
+        new DataObject(
             new ObjectName("FetchBusinessCollectionRequest"),
             new PackageName(ROOT_PACKAGE + "." + BUSINESS));
 
     // ---------------------------------------------------------------------------------------------
 
-    argumentDataGroup.addData(
+    argumentDataObject.addData(
         DataPrimitive.ofDataBusinessType(
             DataPurpose.thingIdentity(), PrimitiveType.STRING, new VariableName(BUSINESS_ID)));
 
     // ---------------------------------------------------------------------------------------------
     // RETURN VALUE
     // ---------------------------------------------------------------------------------------------
-    DataGroup returnValueDataGroup =
-        new DataGroup(
+    DataObject returnValueDataObject =
+        new DataObject(
             new ObjectName("FetchBusinessCollectionResponse"),
             new PackageName(ROOT_PACKAGE + "." + BUSINESS));
 
     // ---------------------------------------------------------------------------------------------
 
-    returnValueDataGroup.addData(DataPrimitive.of(PrimitiveType.STRING, new VariableName(NAME)));
+    returnValueDataObject.addData(DataPrimitive.of(PrimitiveType.STRING, new VariableName(NAME)));
 
     // ---------------------------------------------------------------------------------------------
     return FunctionBuilder.of(business, "fetchCollection", Purpose.fetchCollection())
-        .setReturnValue(returnValueDataGroup)
-        .addArgument(argumentDataGroup)
+        .setReturnValue(returnValueDataObject)
+        .addArgument(argumentDataObject)
         .build();
   }
 
@@ -190,31 +190,31 @@ public class ThingForTesting {
     // ---------------------------------------------------------------------------------------------
     // ARGUMENTS - 1
     // ---------------------------------------------------------------------------------------------
-    DataGroup argumentDataGroup1 =
-        new DataGroup(
+    DataObject argumentDataObject1 =
+        new DataObject(
             new ObjectName("CreateBusinessRequest1"),
             new PackageName(ROOT_PACKAGE + "." + BUSINESS));
 
     // name
-    argumentDataGroup1.addData(DataPrimitive.of(PrimitiveType.STRING, new VariableName(NAME)));
+    argumentDataObject1.addData(DataPrimitive.of(PrimitiveType.STRING, new VariableName(NAME)));
 
     // ---------------------------------------------------------------------------------------------
     // ARGUMENTS - 2
     // ---------------------------------------------------------------------------------------------
-    DataGroup argumentDataGroup2 =
-        new DataGroup(
+    DataObject argumentDataObject2 =
+        new DataObject(
             new ObjectName("CreateBusinessRequest2"),
             new PackageName(ROOT_PACKAGE + "." + BUSINESS));
 
     // name
-    argumentDataGroup2.addData(DataPrimitive.of(PrimitiveType.STRING, new VariableName(NAME)));
+    argumentDataObject2.addData(DataPrimitive.of(PrimitiveType.STRING, new VariableName(NAME)));
 
     // ---------------------------------------------------------------------------------------------
 
     return FunctionBuilder.of(
             business, "functionWithNoReturnValueAndManyArguments", Purpose.create())
-        .addArgument(argumentDataGroup1)
-        .addArgument(argumentDataGroup2)
+        .addArgument(argumentDataObject1)
+        .addArgument(argumentDataObject2)
         .build();
   }
 
@@ -226,19 +226,19 @@ public class ThingForTesting {
     // ---------------------------------------------------------------------------------------------
     // RETURN VALUE
     // ---------------------------------------------------------------------------------------------
-    DataGroup returnValueDataGroup =
-        new DataGroup(
+    DataObject returnValueDataObject =
+        new DataObject(
             new ObjectName("FetchBusinessCollectionResponse"),
             new PackageName(ROOT_PACKAGE + "." + BUSINESS));
 
     // ---------------------------------------------------------------------------------------------
 
-    returnValueDataGroup.addData(DataPrimitive.of(PrimitiveType.STRING, new VariableName(NAME)));
+    returnValueDataObject.addData(DataPrimitive.of(PrimitiveType.STRING, new VariableName(NAME)));
 
     // ---------------------------------------------------------------------------------------------
 
     return FunctionBuilder.of(business, "functionWithNoArguments", Purpose.create())
-        .setReturnValue(returnValueDataGroup)
+        .setReturnValue(returnValueDataObject)
         .build();
   }
 
@@ -268,9 +268,9 @@ public class ThingForTesting {
   // POSTAL ADDRESS
   // ===============================================================================================
 
-  private static DataGroup postalAddress() {
-    DataGroup postalAddress =
-        new DataGroup(
+  private static DataObject postalAddress() {
+    DataObject postalAddress =
+        new DataObject(
             new ObjectName("PostalAddressDto"),
             new PackageName("com.oregor.trinity4j.example.shared"));
 

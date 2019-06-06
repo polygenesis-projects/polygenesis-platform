@@ -24,7 +24,7 @@ import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
-import io.polygenesis.generators.java.transformers.rdbms.projection.testing.ProjectionRepositoryImplTestClassTransformer;
+import io.polygenesis.generators.java.transformers.rdbms.projection.testing.ProjectionRepositoryImplTestLegacyClassTransformer;
 import io.polygenesis.models.domain.Persistence;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -43,7 +43,7 @@ public class ProjectionRepositoryImplTestExporter {
   // ===============================================================================================
 
   private final FreemarkerService freemarkerService;
-  private final ProjectionRepositoryImplTestClassTransformer
+  private final ProjectionRepositoryImplTestLegacyClassTransformer
       projectionRepositoryImplTestClassRepresentable;
 
   // ===============================================================================================
@@ -58,7 +58,7 @@ public class ProjectionRepositoryImplTestExporter {
    */
   public ProjectionRepositoryImplTestExporter(
       FreemarkerService freemarkerService,
-      ProjectionRepositoryImplTestClassTransformer persistenceImplClassRepresentable) {
+      ProjectionRepositoryImplTestLegacyClassTransformer persistenceImplClassRepresentable) {
     this.freemarkerService = freemarkerService;
     this.projectionRepositoryImplTestClassRepresentable = persistenceImplClassRepresentable;
   }

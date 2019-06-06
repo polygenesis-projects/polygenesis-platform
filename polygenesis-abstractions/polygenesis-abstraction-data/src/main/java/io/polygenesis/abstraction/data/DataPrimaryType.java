@@ -26,17 +26,20 @@ package io.polygenesis.abstraction.data;
  * @author Christos Tsakostas
  */
 public enum DataPrimaryType {
-  /** Primitive data kind. */
-  PRIMITIVE,
+  /** Array data kind. */
+  ARRAY,
+
+  /** Enum data primary type. */
+  ENUM,
+
+  /** Map data primary type. */
+  MAP,
 
   /** Object data kind. */
   OBJECT,
 
-  /** Array data kind. */
-  ARRAY,
-
-  /** Map data primary type. */
-  MAP,
+  /** Primitive data kind. */
+  PRIMITIVE,
 
   /** Thing data primary type. */
   THING

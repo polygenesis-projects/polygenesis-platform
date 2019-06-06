@@ -21,7 +21,7 @@
 package io.polygenesis.models.domain;
 
 import io.polygenesis.abstraction.data.Data;
-import io.polygenesis.abstraction.data.DataGroup;
+import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.abstraction.data.DataPurpose;
 import io.polygenesis.abstraction.data.DataValidator;
 import io.polygenesis.commons.valueobjects.ObjectName;
@@ -37,7 +37,7 @@ import java.util.Set;
  * @author Christos Tsakostas
  */
 public class SupportiveEntity extends BaseDomainEntity
-    implements DomainObjectProperty<DataGroup>, Metamodel {
+    implements DomainObjectProperty<DataObject>, Metamodel {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -88,10 +88,10 @@ public class SupportiveEntity extends BaseDomainEntity
   }
 
   @Override
-  public DataGroup getData() {
+  public DataObject getData() {
     Set<Data> models = new LinkedHashSet<>();
 
-    return new DataGroup(
+    return new DataObject(
         new VariableName(getObjectName().getText()),
         DataPurpose.any(),
         DataValidator.empty(),

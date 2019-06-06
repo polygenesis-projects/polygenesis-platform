@@ -22,8 +22,8 @@ package io.polygenesis.generators.java.exporters.domainserviceimpl;
 
 import io.polygenesis.commons.freemarker.FreemarkerConfig;
 import io.polygenesis.commons.freemarker.FreemarkerService;
-import io.polygenesis.generators.java.transformers.domainserviceimpl.DomainServiceImplementationClassTransformer;
-import io.polygenesis.transformer.code.FromDataTypeToJavaConverter;
+import io.polygenesis.generators.java.shared.transformer.FromDataTypeToJavaConverter;
+import io.polygenesis.generators.java.transformers.domainserviceimpl.DomainServiceImplementationLegacyClassTransformer;
 import java.nio.file.Path;
 
 /**
@@ -48,8 +48,9 @@ public final class DomainServiceImplementationGeneratorFactory {
 
     FromDataTypeToJavaConverter fromDataTypeToJavaConverter = new FromDataTypeToJavaConverter();
 
-    DomainServiceImplementationClassTransformer domainServiceImplementationClassRepresentable =
-        new DomainServiceImplementationClassTransformer(fromDataTypeToJavaConverter);
+    DomainServiceImplementationLegacyClassTransformer
+        domainServiceImplementationClassRepresentable =
+            new DomainServiceImplementationLegacyClassTransformer(fromDataTypeToJavaConverter);
 
     domainServiceImplementationExporter =
         new DomainServiceImplementationExporter(
@@ -74,8 +75,8 @@ public final class DomainServiceImplementationGeneratorFactory {
    * @param generationPath the generation path
    * @return the domain service implementation generator
    */
-  public static DomainServiceImplementationGenerator newInstance(Path generationPath) {
-    return new DomainServiceImplementationGenerator(
+  public static DomainServiceImplementationMetamodelGenerator newInstance(Path generationPath) {
+    return new DomainServiceImplementationMetamodelGenerator(
         generationPath, domainServiceImplementationExporter);
   }
 }

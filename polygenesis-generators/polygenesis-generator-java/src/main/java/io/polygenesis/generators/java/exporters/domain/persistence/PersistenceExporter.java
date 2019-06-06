@@ -22,7 +22,7 @@ package io.polygenesis.generators.java.exporters.domain.persistence;
 
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.generators.java.transformers.domain.persistence.PersistenceInterfaceTransformer;
+import io.polygenesis.generators.java.transformers.domain.persistence.PersistenceLegacyInterfaceTransformer;
 import io.polygenesis.models.domain.Persistence;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -41,7 +41,7 @@ public class PersistenceExporter {
   // ===============================================================================================
 
   private final FreemarkerService freemarkerService;
-  private final PersistenceInterfaceTransformer persistenceInterfaceRepresentable;
+  private final PersistenceLegacyInterfaceTransformer persistenceInterfaceRepresentable;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -55,7 +55,7 @@ public class PersistenceExporter {
    */
   public PersistenceExporter(
       FreemarkerService freemarkerService,
-      PersistenceInterfaceTransformer persistenceInterfaceRepresentable) {
+      PersistenceLegacyInterfaceTransformer persistenceInterfaceRepresentable) {
     this.freemarkerService = freemarkerService;
     this.persistenceInterfaceRepresentable = persistenceInterfaceRepresentable;
   }

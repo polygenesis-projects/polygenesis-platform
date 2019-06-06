@@ -34,10 +34,34 @@
       <artifactId>polygenesis-metamodel-rest</artifactId>
     </dependency>
 
+    <!--TEMPLATE ENGINES-->
+    <dependency>
+      <groupId>io.polygenesis.template-engines</groupId>
+      <artifactId>polygenesis-template-engine-freemarker</artifactId>
+    </dependency>
+
     <!--TRANSFORMERS-->
     <dependency>
       <groupId>io.polygenesis.transformers</groupId>
-      <artifactId>polygenesis-transformer-code</artifactId>
+      <artifactId>polygenesis-transformer-datatype-java</artifactId>
+    </dependency>
+
+    <!--EXPORTERS-->
+    <dependency>
+      <groupId>io.polygenesis.exporters</groupId>
+      <artifactId>polygenesis-exporter-file</artifactId>
+    </dependency>
+
+    <!--REPRESENTATIONS-->
+    <dependency>
+      <groupId>io.polygenesis.representations</groupId>
+      <artifactId>polygenesis-representation-code</artifactId>
+    </dependency>
+
+    <!--GENERATORS-->
+    <dependency>
+      <groupId>io.polygenesis.generators</groupId>
+      <artifactId>polygenesis-generator-sql</artifactId>
     </dependency>
 
     <!--TEST-->

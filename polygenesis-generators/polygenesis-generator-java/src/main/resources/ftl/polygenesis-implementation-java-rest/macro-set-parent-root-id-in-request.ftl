@@ -19,5 +19,5 @@
 -->
 
 <#macro setParentRootIdInRequest requestDto parentThingIdentityVariableName>
-    ${ requestDto.dataGroup.variableName.text }.set${ textConverter.toUpperCamel(parentThingIdentityVariableName) }(${ parentThingIdentityVariableName });
+    ${ requestDto.dataObject.variableName.text }.set${ textConverter.toUpperCamel(parentThingIdentityVariableName) }(${ parentThingIdentityVariableName });
 </#macro>

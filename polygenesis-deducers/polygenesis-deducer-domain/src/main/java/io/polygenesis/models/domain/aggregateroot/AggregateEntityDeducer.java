@@ -21,7 +21,7 @@
 package io.polygenesis.models.domain.aggregateroot;
 
 import io.polygenesis.abstraction.data.DataArray;
-import io.polygenesis.abstraction.data.DataGroup;
+import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
@@ -129,13 +129,13 @@ public class AggregateEntityDeducer {
    * @return the data array
    */
   private DataArray convertAggregateEntityToDataArray(AggregateEntity aggregateEntity) {
-    DataGroup dataGroup = aggregateEntity.getData();
+    DataObject dataObject = aggregateEntity.getData();
 
     return new DataArray(
-        dataGroup.getVariableName(),
-        dataGroup.getDataPurpose(),
-        dataGroup.getDataValidator(),
-        dataGroup);
+        dataObject.getVariableName(),
+        dataObject.getDataPurpose(),
+        dataObject.getDataValidator(),
+        dataObject);
   }
 
   /**

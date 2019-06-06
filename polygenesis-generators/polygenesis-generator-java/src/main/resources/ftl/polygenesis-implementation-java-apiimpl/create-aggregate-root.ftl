@@ -21,12 +21,12 @@
 <#include "macro-restore-aggregate-root.ftl">
 <#include "macro-store-aggregate-root.ftl">
 <#include "macro-fill-arguments.ftl">
-    <@assertionsForParameters representation.parameterRepresentations></@assertionsForParameters>
+    <@assertionsForParameters data.parameterRepresentations></@assertionsForParameters>
 
-    ${ aggregateRootDataType } ${ aggregateRootVariable } = new ${ aggregateRootDataType }(
-<@fillArguments properties persistenceVariable requestDto converterVariable multiTenant></@fillArguments>
+    ${ data.aggregateRootDataType } ${ data.aggregateRootVariable } = new ${ data.aggregateRootDataType }(
+<@fillArguments data.properties data.persistenceVariable data.requestDto data.converterVariable data.multiTenant></@fillArguments>
     );
 
-<@storeAggregateRoot persistenceVariable aggregateRootVariable></@storeAggregateRoot>
+<@storeAggregateRoot data.persistenceVariable data.aggregateRootVariable></@storeAggregateRoot>
 
-    return new ${ representation.returnValue }(${ aggregateRootVariable }.getId().getTypeId().toString());
+    return new ${ data.returnValue }(${ data.aggregateRootVariable }.getId().getTypeId().toString());

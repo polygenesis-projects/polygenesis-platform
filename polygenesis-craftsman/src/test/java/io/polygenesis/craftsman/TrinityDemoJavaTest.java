@@ -34,8 +34,9 @@ import io.polygenesis.abstraction.thing.dsl.PurposeFunctionBuilder;
 import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.AbstractionRepository;
+import io.polygenesis.core.Creator;
 import io.polygenesis.core.Deducer;
-import io.polygenesis.core.Generator;
+import io.polygenesis.core.MetamodelGenerator;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -104,11 +105,11 @@ public class TrinityDemoJavaTest {
 
   @SuppressWarnings("rawtypes")
   private void generate() {
-    Genesis genesis = new Genesis();
+    Creator creator = new Creator();
 
     Set<Deducer> deducers = GenesisDefault.javaDeducers(JAVA_ROOT_PACKAGE);
 
-    Set<Generator> generators =
+    Set<MetamodelGenerator> metamodelGenerators =
         GenesisDefault.javaGenerators(
             JAVA_EXPORT_PATH,
             JAVA_PROJECT_FOLDER,
@@ -124,7 +125,7 @@ public class TrinityDemoJavaTest {
     Set<AbstractionRepository> abstractionRepositories =
         new LinkedHashSet<>(Arrays.asList(new ThingRepository(allThings)));
 
-    genesis.generate(abstractionRepositories, deducers, generators);
+    creator.generate(abstractionRepositories, deducers, metamodelGenerators);
   }
 
   private Thing createTodo(PackageName rootPackageName) {

@@ -20,8 +20,8 @@
 <#include "../polygenesis-implementation-java-shared/macro-assertions-for-parameters.ftl">
 <@assertionsForParameters representation.parameterRepresentations></@assertionsForParameters>
 
-    return new ${ textConverter.toUpperCamel(to.dataGroup.dataType) }(
-    <#list to.dataGroup.models as data>
+    return new ${ textConverter.toUpperCamel(to.dataObject.dataType) }(
+    <#list to.dataObject.models as data>
       <#if data.dataPurpose.text == 'THING_IDENTITY'>
         ${ from.data.variableName.text }.getId().getTypeId().toString()<#sep>,</#sep>
       <#else>

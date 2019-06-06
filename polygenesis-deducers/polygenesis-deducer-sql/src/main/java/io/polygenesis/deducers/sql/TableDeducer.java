@@ -21,7 +21,7 @@
 package io.polygenesis.deducers.sql;
 
 import io.polygenesis.abstraction.data.Data;
-import io.polygenesis.abstraction.data.DataGroup;
+import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.abstraction.data.DataPrimitive;
 import io.polygenesis.abstraction.data.PrimitiveType;
 import io.polygenesis.commons.text.TextConverter;
@@ -304,13 +304,13 @@ public class TableDeducer {
   /**
    * Gets columns for value object.
    *
-   * @param dataGroup the data group
+   * @param dataObject the data group
    * @return the columns for value object
    */
-  private Set<Column> getColumnsForValueObject(DataGroup dataGroup) {
+  private Set<Column> getColumnsForValueObject(DataObject dataObject) {
     Set<Column> columns = new LinkedHashSet<>();
 
-    dataGroup
+    dataObject
         .getModels()
         .forEach(
             model -> {
@@ -321,7 +321,7 @@ public class TableDeducer {
                         String.format(
                             "%s_",
                             TextConverter.toLowerUnderscore(
-                                dataGroup.getVariableName().getText()))));
+                                dataObject.getVariableName().getText()))));
               } else {
                 throw new IllegalStateException();
               }

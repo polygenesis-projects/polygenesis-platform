@@ -20,18 +20,22 @@
 
 package io.polygenesis.generators.java.api;
 
-import io.polygenesis.commons.freemarker.FreemarkerConfig;
-import io.polygenesis.commons.freemarker.FreemarkerService;
-import io.polygenesis.generators.java.api.exporter.DtoExporter;
-import io.polygenesis.generators.java.api.exporter.ServiceExporter;
-import io.polygenesis.generators.java.api.transformer.DtoClassTransformer;
-import io.polygenesis.generators.java.api.transformer.ServiceInterfaceTransformer;
-import io.polygenesis.transformer.code.FromDataTypeToJavaConverter;
-import io.polygenesis.transformer.code.FunctionToMethodRepresentationTransformer;
+import io.polygenesis.core.DataTypeTransformer;
+import io.polygenesis.core.Exporter;
+import io.polygenesis.core.FileExporter;
+import io.polygenesis.core.FreemarkerTemplateEngine;
+import io.polygenesis.core.JavaDataTypeTransformer;
+import io.polygenesis.core.TemplateEngine;
+import io.polygenesis.generators.java.api.dto.DtoGenerator;
+import io.polygenesis.generators.java.api.dto.DtoMethodTransformer;
+import io.polygenesis.generators.java.api.dto.DtoTransformer;
+import io.polygenesis.generators.java.api.service.ServiceGenerator;
+import io.polygenesis.generators.java.api.service.ServiceMethodTransformer;
+import io.polygenesis.generators.java.api.service.ServiceTransformer;
 import java.nio.file.Path;
 
 /**
- * The Java API Generator Factory creates new instances of {@link JavaApiGenerator}.
+ * The type Java api generator factory.
  *
  * @author Christos Tsakostas
  */
@@ -40,32 +44,30 @@ public final class JavaApiGeneratorFactory {
   // ===============================================================================================
   // DEPENDENCIES
   // ===============================================================================================
-  private static final ServiceExporter serviceExporter;
-  private static final DtoExporter dtoExporter;
+  private static ServiceGenerator serviceGenerator;
+  private static DtoGenerator dtoGenerator;
 
   // ===============================================================================================
   // STATIC INITIALIZATION OF DEPENDENCIES
   // ===============================================================================================
 
   static {
-    FreemarkerService freemarkerService =
-        new FreemarkerService(FreemarkerConfig.getInstance().getConfiguration());
+    TemplateEngine templateEngine = new FreemarkerTemplateEngine();
+    Exporter exporter = new FileExporter();
+    DataTypeTransformer dataTypeTransformer = new JavaDataTypeTransformer();
 
-    FromDataTypeToJavaConverter fromDataTypeToJavaConverter = new FromDataTypeToJavaConverter();
+    serviceGenerator =
+        new ServiceGenerator(
+            new ServiceTransformer(
+                dataTypeTransformer, new ServiceMethodTransformer(dataTypeTransformer)),
+            templateEngine,
+            exporter);
 
-    FunctionToMethodRepresentationTransformer functionToMethodRepresentationTransformer =
-        new FunctionToMethodRepresentationTransformer(fromDataTypeToJavaConverter);
-
-    ServiceInterfaceTransformer serviceInterfaceRepresentable =
-        new ServiceInterfaceTransformer(
-            fromDataTypeToJavaConverter, functionToMethodRepresentationTransformer);
-
-    serviceExporter = new ServiceExporter(freemarkerService, serviceInterfaceRepresentable);
-
-    DtoClassTransformer dtoClassRepresentable =
-        new DtoClassTransformer(fromDataTypeToJavaConverter);
-
-    dtoExporter = new DtoExporter(freemarkerService, dtoClassRepresentable);
+    dtoGenerator =
+        new DtoGenerator(
+            new DtoTransformer(dataTypeTransformer, new DtoMethodTransformer(dataTypeTransformer)),
+            templateEngine,
+            exporter);
   }
 
   // ===============================================================================================
@@ -81,12 +83,12 @@ public final class JavaApiGeneratorFactory {
   // ===============================================================================================
 
   /**
-   * New instance java api generator.
+   * New instance java api metamodel generator.
    *
    * @param generationPath the generation path
-   * @return the java api generator
+   * @return the java api metamodel generator
    */
-  public static JavaApiGenerator newInstance(Path generationPath) {
-    return new JavaApiGenerator(generationPath, serviceExporter, dtoExporter);
+  public static JavaApiMetamodelGenerator newInstance(Path generationPath) {
+    return new JavaApiMetamodelGenerator(generationPath, serviceGenerator, dtoGenerator);
   }
 }

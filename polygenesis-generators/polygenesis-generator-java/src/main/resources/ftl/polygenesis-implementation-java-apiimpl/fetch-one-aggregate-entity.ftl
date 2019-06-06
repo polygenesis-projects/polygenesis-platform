@@ -20,11 +20,11 @@
 <#include "../polygenesis-implementation-java-shared/macro-assertions-for-parameters.ftl">
 <#include "macro-restore-aggregate-root.ftl">
 <#include "macro-fill-fetch-one-response-dto-arguments.ftl">
-<@assertionsForParameters representation.parameterRepresentations></@assertionsForParameters>
+<@assertionsForParameters data.parameterRepresentations></@assertionsForParameters>
 
-<@restoreAggregateRoot persistenceVariable aggregateRootIdDataType aggregateRootDataType aggregateRootVariable requestDto parentThingIdentity multiTenant></@restoreAggregateRoot>
+<@restoreAggregateRoot data.persistenceVariable data.aggregateRootIdDataType data.aggregateRootDataType data.aggregateRootVariable data.requestDto data.parentThingIdentity data.multiTenant></@restoreAggregateRoot>
 
-    <#--return new ${ representation.returnValue }(-->
+    <#--return new ${ data.returnValue }(-->
       <#--<@fillFetchOneResponseDtoArguments responseDto aggregateRootVariable converterVariable></@fillFetchOneResponseDtoArguments>-->
     <#--);-->
     // TODO

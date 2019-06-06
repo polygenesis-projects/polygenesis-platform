@@ -23,5 +23,6 @@
     <module>polygenesis-metamodel-spreadsheet</module>
     <module>polygenesis-metamodel-sql</module>
     <module>polygenesis-metamodel-ui</module>
+    <module>polygenesis-metamodel-page-object</module>
   </modules>
 </project>

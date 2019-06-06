@@ -83,14 +83,14 @@ public class ActionGroupDeducer {
                           createAction(
                               method.getFunction().getName(),
                               ActionType.SUBMIT,
-                              new Model(method.getRequestDto().getDataGroup())));
+                              new Model(method.getRequestDto().getDataObject())));
 
                       // Success
                       actions.add(
                           createAction(
                               method.getFunction().getName(),
                               ActionType.ON_SUCCESS,
-                              new Model(method.getResponseDto().getDataGroup())));
+                              new Model(method.getResponseDto().getDataObject())));
 
                       // Failure
                       actions.add(

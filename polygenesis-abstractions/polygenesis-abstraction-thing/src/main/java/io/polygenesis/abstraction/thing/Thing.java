@@ -103,6 +103,15 @@ public class Thing implements Abstraction {
   }
 
   /**
+   * Assign context name.
+   *
+   * @param contextName the context name
+   */
+  public void assignContextName(ContextName contextName) {
+    setContextName(contextName);
+  }
+
+  /**
    * Add function.
    *
    * @param function the function
@@ -130,16 +139,18 @@ public class Thing implements Abstraction {
    * @param thing the thing
    */
   public void addChild(Thing thing) {
-    Assertion.isNotNull(
-        thing.getOptionalParent(),
-        String.format("The parent of %s is not set", thing.getThingName().getText()));
+    //    Assertion.isNotNull(
+    //        thing.getOptionalParent(),
+    //        String.format("The parent of %s is not set", thing.getThingName().getText()));
+    //
+    //    if (!thing.getOptionalParent().equals(this)) {
+    //      throw new IllegalArgumentException(
+    //          String.format(
+    //              "The parent of %s is not set equal to %s",
+    //              thing.getThingName().getText(), getThingName().getText()));
+    //    }
 
-    if (!thing.getOptionalParent().equals(this)) {
-      throw new IllegalArgumentException(
-          String.format(
-              "The parent of %s is not set equal to %s",
-              thing.getThingName().getText(), getThingName().getText()));
-    }
+    thing.setOptionalParent(this);
 
     getChildren().add(thing);
   }

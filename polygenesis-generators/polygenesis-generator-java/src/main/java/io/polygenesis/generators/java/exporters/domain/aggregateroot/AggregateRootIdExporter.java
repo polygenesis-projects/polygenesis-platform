@@ -22,7 +22,7 @@ package io.polygenesis.generators.java.exporters.domain.aggregateroot;
 
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.generators.java.transformers.domain.aggregateroot.AggregateRootIdClassTransformer;
+import io.polygenesis.generators.java.transformers.domain.aggregateroot.AggregateRootIdLegacyClassTransformer;
 import io.polygenesis.models.domain.AggregateRoot;
 import io.polygenesis.models.domain.InstantiationType;
 import java.nio.file.Path;
@@ -42,7 +42,7 @@ public class AggregateRootIdExporter {
   // ===============================================================================================
 
   private final FreemarkerService freemarkerService;
-  private final AggregateRootIdClassTransformer aggregateRootIdClassRepresentable;
+  private final AggregateRootIdLegacyClassTransformer aggregateRootIdClassRepresentable;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -56,7 +56,7 @@ public class AggregateRootIdExporter {
    */
   public AggregateRootIdExporter(
       FreemarkerService freemarkerService,
-      AggregateRootIdClassTransformer aggregateRootIdClassRepresentable) {
+      AggregateRootIdLegacyClassTransformer aggregateRootIdClassRepresentable) {
     this.freemarkerService = freemarkerService;
     this.aggregateRootIdClassRepresentable = aggregateRootIdClassRepresentable;
   }

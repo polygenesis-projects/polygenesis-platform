@@ -22,8 +22,8 @@ package io.polygenesis.abstraction.data.dsl;
 
 import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.DataArray;
-import io.polygenesis.abstraction.data.DataGroup;
 import io.polygenesis.abstraction.data.DataMap;
+import io.polygenesis.abstraction.data.DataObject;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -118,6 +118,20 @@ public class DataBuilder {
   }
 
   /**
+   * With long property data long builder.
+   *
+   * @param propertyName the property name
+   * @return the data long builder
+   */
+  public final DataLongBuilder withLongProperty(String propertyName) {
+    DataLongBuilder dataLongBuilder = DataLongBuilder.create(this, propertyName);
+
+    this.models.add(dataLongBuilder.getModel());
+
+    return dataLongBuilder;
+  }
+
+  /**
    * With uuid property data uuid builder.
    *
    * @param propertyName the property name
@@ -138,11 +152,25 @@ public class DataBuilder {
    * @return the data date time builder
    */
   public final DataDateTimeBuilder withDateTimeProperty(String propertyName) {
-    DataDateTimeBuilder dataUuidBuilder = DataDateTimeBuilder.create(this, propertyName);
+    DataDateTimeBuilder dataDateTimeBuilder = DataDateTimeBuilder.create(this, propertyName);
 
-    this.models.add(dataUuidBuilder.getModel());
+    this.models.add(dataDateTimeBuilder.getModel());
 
-    return dataUuidBuilder;
+    return dataDateTimeBuilder;
+  }
+
+  /**
+   * With date property data date builder.
+   *
+   * @param propertyName the property name
+   * @return the data date builder
+   */
+  public final DataDateBuilder withDateProperty(String propertyName) {
+    DataDateBuilder dataDateBuilder = DataDateBuilder.create(this, propertyName);
+
+    this.models.add(dataDateBuilder.getModel());
+
+    return dataDateBuilder;
   }
 
   /**
@@ -159,11 +187,11 @@ public class DataBuilder {
   /**
    * With group data data builder.
    *
-   * @param dataGroup the data group
+   * @param dataObject the data group
    * @return the data builder
    */
-  public final DataBuilder withGroupData(DataGroup dataGroup) {
-    this.models.add(dataGroup);
+  public final DataBuilder withGroupData(DataObject dataObject) {
+    this.models.add(dataObject);
     return this;
   }
 

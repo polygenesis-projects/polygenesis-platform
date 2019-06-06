@@ -22,7 +22,7 @@
       <#switch property.propertyType>
         <#case 'AGGREGATE_ROOT_ID'>
           <#if multiTenant>
-<#--        ${ persistenceVariable }.nextId(UUID.fromString(${ requestDto.dataGroup.objectName.text }.getTenantId()))<#sep>,</#sep>-->
+<#--        ${ persistenceVariable }.nextId(UUID.fromString(${ requestDto.dataObject.objectName.text }.getTenantId()))<#sep>,</#sep>-->
         ${ persistenceVariable }.nextId()<#sep>,</#sep>
           <#else>
         ${ persistenceVariable }.nextId()<#sep>,</#sep>
@@ -30,20 +30,20 @@
         <#break>
         <#case 'PROJECTION_ID'>
           <#if multiTenant>
-          <#--        ${ persistenceVariable }.nextId(UUID.fromString(${ requestDto.dataGroup.objectName.text }.getTenantId()))<#sep>,</#sep>-->
+          <#--        ${ persistenceVariable }.nextId(UUID.fromString(${ requestDto.dataObject.objectName.text }.getTenantId()))<#sep>,</#sep>-->
         ${ persistenceVariable }.nextId()<#sep>,</#sep>
           <#else>
         ${ persistenceVariable }.nextId()<#sep>,</#sep>
           </#if>
           <#break>
         <#case 'TENANT_ID'>
-        new TenantId(UUID.fromString(${ requestDto.dataGroup.objectName.text }.getTenantId()))<#sep>,</#sep>
+        new TenantId(UUID.fromString(${ requestDto.dataObject.objectName.text }.getTenantId()))<#sep>,</#sep>
           <#break>
         <#case 'PRIMITIVE'>
-        ${ requestDto.dataGroup.objectName.text }.get${ textConverter.toUpperCamel(property.data.variableName.text) }()<#sep>,</#sep>
+        ${ requestDto.dataObject.objectName.text }.get${ textConverter.toUpperCamel(property.data.variableName.text) }()<#sep>,</#sep>
           <#break>
         <#case 'VALUE_OBJECT'>
-        ${ converterVariable }.convertToVo(${ requestDto.dataGroup.objectName.text }.get${ textConverter.toUpperCamel(property.data.variableName.text) }())<#sep>,</#sep>
+        ${ converterVariable }.convertToVo(${ requestDto.dataObject.objectName.text }.get${ textConverter.toUpperCamel(property.data.variableName.text) }())<#sep>,</#sep>
           <#break>
         <#default>
         // Property Type = ${ property.propertyType } is not supported

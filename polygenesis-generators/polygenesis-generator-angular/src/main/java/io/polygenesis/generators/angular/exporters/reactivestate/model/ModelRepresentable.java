@@ -20,7 +20,7 @@
 
 package io.polygenesis.generators.angular.exporters.reactivestate.model;
 
-import io.polygenesis.abstraction.data.DataGroup;
+import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.generators.angular.skeletons.FromDataTypeToTypescriptConverter;
 import io.polygenesis.generators.angular.skeletons.model.ModelRepresentation;
@@ -84,9 +84,9 @@ public class ModelRepresentable {
     Set<FieldRepresentation> fieldRepresentations = new LinkedHashSet<>();
 
     if (payloadModel.getData().isDataGroup()) {
-      DataGroup dataGroup = (DataGroup) payloadModel.getData();
+      DataObject dataObject = (DataObject) payloadModel.getData();
 
-      dataGroup
+      dataObject
           .getModels()
           .forEach(
               model ->

@@ -20,7 +20,7 @@
 
 package io.polygenesis.models.domain.aggregateroot;
 
-import io.polygenesis.abstraction.data.DataGroup;
+import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
@@ -120,12 +120,12 @@ public class AggregateRootPropertyDeducer extends AbstractPropertyDeducer {
    * @return the aggregate root id
    */
   protected AggregateRootId makeAggregateRootId(Thing thing, PackageName rootPackageName) {
-    DataGroup dataGroup =
-        new DataGroup(
+    DataObject dataObject =
+        new DataObject(
             new ObjectName(thing.getThingName().getText() + "Id"),
             thing.makePackageName(rootPackageName, thing));
 
-    return new AggregateRootId(dataGroup);
+    return new AggregateRootId(dataObject);
   }
 
   /**
@@ -134,9 +134,9 @@ public class AggregateRootPropertyDeducer extends AbstractPropertyDeducer {
    * @return the tenant id
    */
   protected TenantId makeTenantId() {
-    DataGroup dataGroup =
-        new DataGroup(new ObjectName("TenantId"), new PackageName("com.oregor.trinity4j.domain"));
+    DataObject dataObject =
+        new DataObject(new ObjectName("TenantId"), new PackageName("com.oregor.trinity4j.domain"));
 
-    return new TenantId(dataGroup);
+    return new TenantId(dataObject);
   }
 }

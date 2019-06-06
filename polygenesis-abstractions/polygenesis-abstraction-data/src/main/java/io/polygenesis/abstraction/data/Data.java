@@ -144,12 +144,12 @@ public abstract class Data {
    *
    * @return the as data group
    */
-  public DataGroup getAsDataGroup() {
+  public DataObject getAsDataGroup() {
     if (isDataGroup()) {
-      return (DataGroup) this;
+      return (DataObject) this;
     } else {
       throw new IllegalStateException(
-          String.format("Data of type=%s is not a DataGroup", getDataPrimaryType().name()));
+          String.format("Data of type=%s is not a DataObject", getDataPrimaryType().name()));
     }
   }
 

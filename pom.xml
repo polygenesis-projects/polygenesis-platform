@@ -13,10 +13,10 @@
     <module>polygenesis-deducers</module>
     <module>polygenesis-generators</module>
     <module>polygenesis-metamodels</module>
-    <module>polygenesis-transformers</module>
     <module>polygenesis-exporters</module>
-    <module>polygenesis-templates</module>
     <module>polygenesis-representations</module>
+    <module>polygenesis-template-engines</module>
+    <module>polygenesis-transformers</module>
   </modules>
   <parent>
     <groupId>org.springframework.boot</groupId>
@@ -252,7 +252,7 @@
         <version>${project.version}</version>
       </dependency>
 
-      <!--MODELS-->
+      <!--METAMODELS-->
       <dependency>
         <groupId>io.polygenesis.metamodels</groupId>
         <artifactId>polygenesis-metamodel-api</artifactId>
@@ -276,6 +276,11 @@
       <dependency>
         <groupId>io.polygenesis.metamodels</groupId>
         <artifactId>polygenesis-metamodel-messaging</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.polygenesis.metamodels</groupId>
+        <artifactId>polygenesis-metamodel-page-object</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
@@ -346,15 +351,39 @@
         <version>${project.version}</version>
       </dependency>
 
+      <!--TEMPLATE ENGINES-->
+      <dependency>
+        <groupId>io.polygenesis.template-engines</groupId>
+        <artifactId>polygenesis-template-engine-freemarker</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+
+      <!--EXPORTERS-->
+      <dependency>
+        <groupId>io.polygenesis.exporters</groupId>
+        <artifactId>polygenesis-exporter-file</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+
       <!--TRANSFORMERS-->
       <dependency>
         <groupId>io.polygenesis.transformers</groupId>
-        <artifactId>polygenesis-transformer-code</artifactId>
+        <artifactId>polygenesis-transformer-datatype-dart</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>io.polygenesis.transformers</groupId>
-        <artifactId>polygenesis-transformer-spreadsheet</artifactId>
+        <artifactId>polygenesis-transformer-datatype-dotnet</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.polygenesis.transformers</groupId>
+        <artifactId>polygenesis-transformer-datatype-java</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.polygenesis.transformers</groupId>
+        <artifactId>polygenesis-transformer-datatype-typescript</artifactId>
         <version>${project.version}</version>
       </dependency>
 

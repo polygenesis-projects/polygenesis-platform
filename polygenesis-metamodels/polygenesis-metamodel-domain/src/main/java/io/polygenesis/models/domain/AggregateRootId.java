@@ -21,14 +21,14 @@
 package io.polygenesis.models.domain;
 
 import io.polygenesis.abstraction.data.Data;
-import io.polygenesis.abstraction.data.DataGroup;
+import io.polygenesis.abstraction.data.DataObject;
 
 /**
  * The type Aggregate root id.
  *
  * @author Christos Tsakostas
  */
-public class AggregateRootId extends BaseProperty<DataGroup> {
+public class AggregateRootId extends BaseProperty<DataObject> {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -39,7 +39,7 @@ public class AggregateRootId extends BaseProperty<DataGroup> {
    *
    * @param data the data
    */
-  public AggregateRootId(DataGroup data) {
+  public AggregateRootId(DataObject data) {
     super(PropertyType.AGGREGATE_ROOT_ID, data);
   }
 

@@ -41,6 +41,14 @@ public class ThingRepository implements AbstractionRepository<Thing> {
   private Set<Thing> things;
 
   // ===============================================================================================
+  // STATIC
+  // ===============================================================================================
+
+  public static ThingRepository empty() {
+    return new ThingRepository(new LinkedHashSet<>());
+  }
+
+  // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
@@ -94,6 +102,11 @@ public class ThingRepository implements AbstractionRepository<Thing> {
         abstractionScope -> things.addAll(getAbstractionItemsByScope(abstractionScope)));
 
     return things;
+  }
+
+  @Override
+  public void addAbstractionItem(Thing abstraction) {
+    things.add(abstraction);
   }
 
   // ===============================================================================================

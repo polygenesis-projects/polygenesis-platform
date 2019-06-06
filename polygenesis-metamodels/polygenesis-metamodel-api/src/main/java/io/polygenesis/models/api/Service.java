@@ -21,7 +21,7 @@
 package io.polygenesis.models.api;
 
 import io.polygenesis.abstraction.data.Data;
-import io.polygenesis.abstraction.data.DataGroup;
+import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.abstraction.thing.CqsType;
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.abstraction.thing.ThingName;
@@ -189,14 +189,14 @@ public class Service implements Metamodel {
       }
     }
 
-    // Add model group children of DataGroup recursively
-    dto.getDataGroup()
+    // Add model group children of DataObject recursively
+    dto.getDataObject()
         .getModels()
         .forEach(
             model -> {
               // TODO: check if model array element children should be added as well
               if (model.isDataGroup()) {
-                DataGroup dataGroup = model.getAsDataGroup();
+                DataObject dataObject = model.getAsDataGroup();
 
                 DtoType dtoType;
                 if (dto.getDtoType().equals(DtoType.API_COLLECTION_REQUEST)
@@ -204,13 +204,13 @@ public class Service implements Metamodel {
                   dtoType = DtoType.COLLECTION_RECORD;
                 } else {
                   dtoType = DtoType.INTERNAL;
-                  dataGroup =
-                      dataGroup.withNewObjectName(
+                  dataObject =
+                      dataObject.withNewObjectName(
                           new ObjectName(
-                              String.format("%sDto", dataGroup.getObjectName().getText())));
+                              String.format("%sDto", dataObject.getObjectName().getText())));
                 }
 
-                addDto(dtos, new Dto(dtoType, dataGroup, false));
+                addDto(dtos, new Dto(dtoType, dataObject, false));
               }
             });
   }

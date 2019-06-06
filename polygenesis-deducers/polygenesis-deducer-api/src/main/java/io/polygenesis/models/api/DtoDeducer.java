@@ -23,7 +23,7 @@ package io.polygenesis.models.api;
 import static java.util.stream.Collectors.toCollection;
 
 import io.polygenesis.abstraction.data.Data;
-import io.polygenesis.abstraction.data.DataGroup;
+import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.abstraction.data.DataPrimitive;
 import io.polygenesis.abstraction.data.DataPurpose;
 import io.polygenesis.abstraction.thing.Argument;
@@ -54,22 +54,22 @@ public class DtoDeducer {
    */
   public Dto deduceRequestDto(Function function, PackageName rootPackageName) {
 
-    DataGroup originatingDataGroup = null;
+    DataObject originatingDataObject = null;
     Boolean virtual = false;
 
     if (function.getArguments() != null && function.getArguments().size() == 1) {
       Argument argument =
           function.getArguments().stream().findFirst().orElseThrow(IllegalArgumentException::new);
       if (argument.getData().isDataGroup()) {
-        originatingDataGroup = argument.getData().getAsDataGroup();
+        originatingDataObject = argument.getData().getAsDataGroup();
       }
     }
 
-    if (originatingDataGroup == null) {
+    if (originatingDataObject == null) {
       virtual = true;
 
-      DataGroup finalDataGroup =
-          new DataGroup(
+      DataObject finalDataObject =
+          new DataObject(
               new ObjectName(
                   String.format(
                       "%s%sVirtualRequest",
@@ -78,10 +78,10 @@ public class DtoDeducer {
               function.getThing().makePackageName(rootPackageName, function.getThing()));
 
       if (function.getArguments() != null) {
-        function.getArguments().forEach(argument -> finalDataGroup.addData(argument.getData()));
+        function.getArguments().forEach(argument -> finalDataObject.addData(argument.getData()));
       }
 
-      originatingDataGroup = finalDataGroup;
+      originatingDataObject = finalDataObject;
     }
 
     DtoType dtoType;
@@ -93,7 +93,7 @@ public class DtoDeducer {
       dtoType = DtoType.API_REQUEST;
     }
 
-    Dto dto = new Dto(dtoType, originatingDataGroup.getAsDataGroup(), virtual);
+    Dto dto = new Dto(dtoType, originatingDataObject.getAsDataGroup(), virtual);
 
     makeAssertionsForRequestDto(dto, function);
 
@@ -109,18 +109,18 @@ public class DtoDeducer {
    */
   public Dto deduceResponseDto(Function function, PackageName rootPackageName) {
 
-    DataGroup originatingDataGroup = null;
+    DataObject originatingDataObject = null;
     Boolean virtual = false;
 
     if (function.getReturnValue() != null && function.getReturnValue().getData().isDataGroup()) {
-      originatingDataGroup = function.getReturnValue().getData().getAsDataGroup();
+      originatingDataObject = function.getReturnValue().getData().getAsDataGroup();
     }
 
-    if (originatingDataGroup == null) {
+    if (originatingDataObject == null) {
       virtual = true;
 
-      DataGroup virtualResponseDataGroup =
-          new DataGroup(
+      DataObject virtualResponseDataObject =
+          new DataObject(
               new ObjectName(
                   String.format(
                       "%s%sVirtualResponse",
@@ -129,10 +129,10 @@ public class DtoDeducer {
               function.getThing().makePackageName(rootPackageName, function.getThing()));
 
       if (function.getReturnValue() != null) {
-        virtualResponseDataGroup.addData(function.getReturnValue().getData());
+        virtualResponseDataObject.addData(function.getReturnValue().getData());
       }
 
-      originatingDataGroup = virtualResponseDataGroup;
+      originatingDataObject = virtualResponseDataObject;
     }
 
     DtoType dtoType;
@@ -144,7 +144,7 @@ public class DtoDeducer {
       dtoType = DtoType.API_RESPONSE;
     }
 
-    Dto dto = new Dto(dtoType, originatingDataGroup, virtual);
+    Dto dto = new Dto(dtoType, originatingDataObject, virtual);
 
     makeAssertionsForResponseDto(dto, function);
 
@@ -195,7 +195,7 @@ public class DtoDeducer {
       Dto dto, Function function, DataPurpose dataPurpose) {
 
     Set<DataPrimitive> modelPrimitives =
-        dto.getDataGroup()
+        dto.getDataObject()
             .getModels()
             .stream()
             .filter(Data::isDataPrimitive)
@@ -208,7 +208,7 @@ public class DtoDeducer {
           String.format(
               "No %s found in Dto=%s. Thing name=%s, function=%s",
               dataPurpose.getText(),
-              dto.getDataGroup().getObjectName().getText(),
+              dto.getDataObject().getObjectName().getText(),
               function.getThing().getThingName().getText(),
               function.getName().getText()));
     }
@@ -218,7 +218,7 @@ public class DtoDeducer {
           String.format(
               "More than one %s found in Dto=%s. Thing name=%s, function=%s",
               dataPurpose.getText(),
-              dto.getDataGroup().getObjectName().getText(),
+              dto.getDataObject().getObjectName().getText(),
               function.getThing().getThingName().getText(),
               function.getName().getText()));
     }

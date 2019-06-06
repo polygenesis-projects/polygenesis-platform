@@ -33,6 +33,13 @@ import java.util.Set;
 public interface AbstractionRepository<T extends Abstraction> {
 
   /**
+   * Add abstraction item.
+   *
+   * @param abstraction the abstraction
+   */
+  void addAbstractionItem(T abstraction);
+
+  /**
    * Gets all abstraction items.
    *
    * @return the all abstraction items

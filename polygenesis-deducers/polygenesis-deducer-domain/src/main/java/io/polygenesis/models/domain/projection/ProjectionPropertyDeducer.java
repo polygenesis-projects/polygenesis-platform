@@ -20,7 +20,7 @@
 
 package io.polygenesis.models.domain.projection;
 
-import io.polygenesis.abstraction.data.DataGroup;
+import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
@@ -76,11 +76,11 @@ public class ProjectionPropertyDeducer extends AbstractPropertyDeducer {
    * @return the projection id
    */
   private ProjectionId makeProjectionId(Thing thing, PackageName rootPackageName) {
-    DataGroup dataGroup =
-        new DataGroup(
+    DataObject dataObject =
+        new DataObject(
             new ObjectName(thing.getThingName().getText() + "Id"),
             thing.makePackageName(rootPackageName, thing));
 
-    return new ProjectionId(dataGroup);
+    return new ProjectionId(dataObject);
   }
 }

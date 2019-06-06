@@ -21,7 +21,7 @@
 package io.polygenesis.models.domain;
 
 import io.polygenesis.abstraction.data.Data;
-import io.polygenesis.abstraction.data.DataGroup;
+import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.abstraction.data.DataPurpose;
 import io.polygenesis.abstraction.data.DataValidator;
 import io.polygenesis.commons.assertion.Assertion;
@@ -37,7 +37,7 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class AggregateEntity extends BaseDomainEntity implements DomainObjectProperty<DataGroup> {
+public class AggregateEntity extends BaseDomainEntity implements DomainObjectProperty<DataObject> {
 
   // ===============================================================================================
   // STATE
@@ -151,10 +151,10 @@ public class AggregateEntity extends BaseDomainEntity implements DomainObjectPro
   }
 
   @Override
-  public DataGroup getData() {
+  public DataObject getData() {
     Set<Data> models = new LinkedHashSet<>();
 
-    return new DataGroup(
+    return new DataObject(
         new VariableName(getObjectName().getText()),
         DataPurpose.any(),
         DataValidator.empty(),

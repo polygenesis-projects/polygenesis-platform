@@ -22,7 +22,7 @@ package io.polygenesis.models.api;
 
 import static org.mockito.Mockito.mock;
 
-import io.polygenesis.abstraction.data.DataGroup;
+import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.dsl.FunctionBuilder;
@@ -39,12 +39,12 @@ public class ServiceMethodTest extends AbstractEqualityTest<ServiceMethod> {
     Dto requestDto =
         new Dto(
             DtoType.API_REQUEST,
-            new DataGroup(new ObjectName("asd"), new PackageName("com.oregor")),
+            new DataObject(new ObjectName("asd"), new PackageName("com.oregor")),
             false);
     Dto responseDto =
         new Dto(
             DtoType.API_REQUEST,
-            new DataGroup(new ObjectName("xyz"), new PackageName("com.oregor")),
+            new DataObject(new ObjectName("xyz"), new PackageName("com.oregor")),
             false);
 
     Thing thing = ThingBuilder.endToEnd().setThingName("customer").createThing();
@@ -60,12 +60,12 @@ public class ServiceMethodTest extends AbstractEqualityTest<ServiceMethod> {
     Dto requestDto =
         new Dto(
             DtoType.API_REQUEST,
-            new DataGroup(new ObjectName("qwe"), new PackageName("com.oregor")),
+            new DataObject(new ObjectName("qwe"), new PackageName("com.oregor")),
             false);
     Dto responseDto =
         new Dto(
             DtoType.API_REQUEST,
-            new DataGroup(new ObjectName("iop"), new PackageName("com.oregor")),
+            new DataObject(new ObjectName("iop"), new PackageName("com.oregor")),
             false);
 
     Thing thing = ThingBuilder.endToEnd().setThingName("user").createThing();
