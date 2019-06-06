@@ -20,101 +20,41 @@
 
 package io.polygenesis.core;
 
-import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.commons.valueobjects.Name;
-import java.util.Objects;
-import java.util.Set;
 
 /**
- * The type Context.
+ * The interface Context.
  *
+ * @param <T> the type parameter
  * @author Christos Tsakostas
  */
-public class Context {
-
-  private Name name;
-  private Set<AbstractionRepository<?>> abstractionRepositories;
-
-  // ===============================================================================================
-  // CONSTRUCTOR(S)
-  // ===============================================================================================
-
-  /**
-   * Instantiates a new Context.
-   *
-   * @param name the name
-   * @param abstractionRepositories the abstraction repositories
-   */
-  public Context(Name name, Set<AbstractionRepository<?>> abstractionRepositories) {
-    setName(name);
-    setAbstractionRepositories(abstractionRepositories);
-  }
-
-  // ===============================================================================================
-  // GETTERS
-  // ===============================================================================================
+public interface Context<T extends Abstraction> {
 
   /**
    * Gets name.
    *
    * @return the name
    */
-  public Name getName() {
-    return name;
-  }
+  Name getName();
 
   /**
-   * Gets abstraction repositories.
+   * Gets abstraction repository.
    *
-   * @return the abstraction repositories
+   * @return the abstraction repository
    */
-  public Set<AbstractionRepository<?>> getAbstractionRepositories() {
-    return abstractionRepositories;
-  }
-
-  // ===============================================================================================
-  // GUARDS
-  // ===============================================================================================
+  AbstractionRepository<T> getAbstractionRepository();
 
   /**
-   * Sets name.
+   * Add abstraction.
    *
-   * @param name the name
+   * @param abstraction the abstraction
    */
-  private void setName(Name name) {
-    Assertion.isNotNull(name, "name is required");
-    this.name = name;
-  }
+  void addAbstraction(T abstraction);
 
   /**
-   * Sets abstraction repositories.
+   * Gets architecture generator.
    *
-   * @param abstractionRepositories the abstraction repositories
+   * @return the architecture generator
    */
-  private void setAbstractionRepositories(Set<AbstractionRepository<?>> abstractionRepositories) {
-    Assertion.isNotNull(abstractionRepositories, "abstractionRepositories is required");
-    this.abstractionRepositories = abstractionRepositories;
-  }
-
-  // ===============================================================================================
-  // OVERRIDES
-  // ===============================================================================================
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    Context context = (Context) o;
-    return Objects.equals(name, context.name)
-        && Objects.equals(abstractionRepositories, context.abstractionRepositories);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(name, abstractionRepositories);
-  }
+  ContextGenerator getContextGenerator();
 }

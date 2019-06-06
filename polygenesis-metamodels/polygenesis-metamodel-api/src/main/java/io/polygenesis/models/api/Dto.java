@@ -22,8 +22,10 @@ package io.polygenesis.models.api;
 
 import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.DataArray;
-import io.polygenesis.abstraction.data.DataGroup;
+import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.commons.assertion.Assertion;
+import io.polygenesis.commons.valueobjects.ObjectName;
+import io.polygenesis.core.Nameable;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -32,14 +34,14 @@ import java.util.Optional;
  *
  * @author Christos Tsakostas
  */
-public class Dto {
+public class Dto implements Nameable {
 
   // ===============================================================================================
   // STATE
   // ===============================================================================================
 
   private DtoType dtoType;
-  private DataGroup dataGroup;
+  private DataObject dataObject;
   private Boolean virtual;
 
   // ===============================================================================================
@@ -50,12 +52,12 @@ public class Dto {
    * Instantiates a new Dto.
    *
    * @param dtoType the dto type
-   * @param dataGroup the data group
+   * @param dataObject the data group
    * @param virtual the virtual
    */
-  public Dto(DtoType dtoType, DataGroup dataGroup, Boolean virtual) {
+  public Dto(DtoType dtoType, DataObject dataObject, Boolean virtual) {
     setDtoType(dtoType);
-    setDataGroup(dataGroup);
+    setDataObject(dataObject);
     setVirtual(virtual);
   }
 
@@ -69,7 +71,7 @@ public class Dto {
    * @return the dto
    */
   public Dto withVariableNameEqualToObjectName() {
-    return new Dto(getDtoType(), getDataGroup().withVariableNameEqualToObjectName(), getVirtual());
+    return new Dto(getDtoType(), getDataObject().withVariableNameEqualToObjectName(), getVirtual());
   }
 
   // ===============================================================================================
@@ -90,8 +92,8 @@ public class Dto {
    *
    * @return the data group
    */
-  public DataGroup getDataGroup() {
-    return dataGroup;
+  public DataObject getDataObject() {
+    return dataObject;
   }
 
   /**
@@ -113,7 +115,7 @@ public class Dto {
    * @return the array element as optional
    */
   public Optional<Data> getArrayElementAsOptional() {
-    return getDataGroup()
+    return getDataObject()
         .getModels()
         .stream()
         .filter(Data::isDataArray)
@@ -129,7 +131,7 @@ public class Dto {
    * @return the optional thing identity
    */
   public Optional<Data> getThingIdentityAsOptional() {
-    return getDataGroup().getModels().stream().filter(Data::isThingIdentity).findFirst();
+    return getDataObject().getModels().stream().filter(Data::isThingIdentity).findFirst();
   }
 
   /**
@@ -138,7 +140,7 @@ public class Dto {
    * @return the parent thing identity as optional
    */
   public Optional<Data> getParentThingIdentityAsOptional() {
-    return getDataGroup().getModels().stream().filter(Data::isParentThingIdentity).findFirst();
+    return getDataObject().getModels().stream().filter(Data::isParentThingIdentity).findFirst();
   }
 
   // ===============================================================================================
@@ -158,11 +160,11 @@ public class Dto {
   /**
    * Sets data group.
    *
-   * @param dataGroup the data group
+   * @param dataObject the data group
    */
-  public void setDataGroup(DataGroup dataGroup) {
-    Assertion.isNotNull(dataGroup, "dataGroup is required");
-    this.dataGroup = dataGroup;
+  public void setDataObject(DataObject dataObject) {
+    Assertion.isNotNull(dataObject, "dataObject is required");
+    this.dataObject = dataObject;
   }
 
   /**
@@ -180,6 +182,11 @@ public class Dto {
   // ===============================================================================================
 
   @Override
+  public ObjectName getObjectName() {
+    return dataObject.getObjectName();
+  }
+
+  @Override
   public boolean equals(Object o) {
     if (this == o) {
       return true;
@@ -189,12 +196,12 @@ public class Dto {
     }
     Dto dto = (Dto) o;
     return dtoType == dto.dtoType
-        && Objects.equals(dataGroup, dto.dataGroup)
+        && Objects.equals(dataObject, dto.dataObject)
         && Objects.equals(virtual, dto.virtual);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(dtoType, dataGroup, virtual);
+    return Objects.hash(dtoType, dataObject, virtual);
   }
 }

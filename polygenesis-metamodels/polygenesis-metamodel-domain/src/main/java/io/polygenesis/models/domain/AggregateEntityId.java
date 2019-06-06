@@ -21,14 +21,14 @@
 package io.polygenesis.models.domain;
 
 import io.polygenesis.abstraction.data.Data;
-import io.polygenesis.abstraction.data.DataGroup;
+import io.polygenesis.abstraction.data.DataObject;
 
 /**
  * The type Aggregate entity id.
  *
  * @author Christos Tsakostas
  */
-public class AggregateEntityId extends BaseProperty<DataGroup> {
+public class AggregateEntityId extends BaseProperty<DataObject> {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -39,7 +39,7 @@ public class AggregateEntityId extends BaseProperty<DataGroup> {
    *
    * @param data the data
    */
-  public AggregateEntityId(DataGroup data) {
+  public AggregateEntityId(DataObject data) {
     super(PropertyType.AGGREGATE_ENTITY_ID, data);
   }
 

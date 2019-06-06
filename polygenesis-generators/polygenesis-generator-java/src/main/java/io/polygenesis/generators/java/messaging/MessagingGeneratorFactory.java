@@ -24,9 +24,9 @@ import io.polygenesis.commons.freemarker.FreemarkerConfig;
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.generators.java.messaging.activity.SubscriberActivityRegistry;
 import io.polygenesis.generators.java.messaging.exporter.SubscriberExporter;
-import io.polygenesis.generators.java.messaging.transformer.SubscriberClassTransformer;
-import io.polygenesis.generators.java.messaging.transformer.SubscriberMethodTransformer;
-import io.polygenesis.transformer.code.FromDataTypeToJavaConverter;
+import io.polygenesis.generators.java.messaging.transformer.SubscriberLegacyClassTransformer;
+import io.polygenesis.generators.java.messaging.transformer.SubscriberLegacyMethodTransformer;
+import io.polygenesis.generators.java.shared.transformer.FromDataTypeToJavaConverter;
 import java.nio.file.Path;
 
 /**
@@ -54,9 +54,9 @@ public final class MessagingGeneratorFactory {
     subscriberExporter =
         new SubscriberExporter(
             freemarkerService,
-            new SubscriberClassTransformer(
+            new SubscriberLegacyClassTransformer(
                 fromDataTypeToJavaConverter,
-                new SubscriberMethodTransformer(
+                new SubscriberLegacyMethodTransformer(
                     fromDataTypeToJavaConverter,
                     freemarkerService,
                     new SubscriberActivityRegistry())));
@@ -80,7 +80,7 @@ public final class MessagingGeneratorFactory {
    * @param generationPath the generation path
    * @return the messaging generator
    */
-  public static MessagingGenerator newInstance(Path generationPath) {
-    return new MessagingGenerator(generationPath, subscriberExporter);
+  public static MessagingMetamodelGenerator newInstance(Path generationPath) {
+    return new MessagingMetamodelGenerator(generationPath, subscriberExporter);
   }
 }

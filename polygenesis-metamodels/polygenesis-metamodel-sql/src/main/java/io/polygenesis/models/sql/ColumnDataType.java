@@ -30,6 +30,8 @@ public enum ColumnDataType {
   BINARY,
   /** Bit column data type. */
   BIT,
+  /** Date column data type. */
+  DATE,
   /** Datetime column data type. */
   DATETIME,
   /** Decimal column data type. */

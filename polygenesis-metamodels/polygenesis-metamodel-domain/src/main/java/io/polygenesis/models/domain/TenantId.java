@@ -21,14 +21,14 @@
 package io.polygenesis.models.domain;
 
 import io.polygenesis.abstraction.data.Data;
-import io.polygenesis.abstraction.data.DataGroup;
+import io.polygenesis.abstraction.data.DataObject;
 
 /**
  * The type Tenant id.
  *
  * @author Christos Tsakostas
  */
-public class TenantId extends BaseProperty<DataGroup> {
+public class TenantId extends BaseProperty<DataObject> {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -39,7 +39,7 @@ public class TenantId extends BaseProperty<DataGroup> {
    *
    * @param data the data
    */
-  public TenantId(DataGroup data) {
+  public TenantId(DataObject data) {
     super(PropertyType.TENANT_ID, data);
   }
 

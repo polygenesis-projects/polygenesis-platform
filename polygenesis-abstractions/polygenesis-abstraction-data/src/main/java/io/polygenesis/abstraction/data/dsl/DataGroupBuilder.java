@@ -21,7 +21,7 @@
 package io.polygenesis.abstraction.data.dsl;
 
 import io.polygenesis.abstraction.data.Data;
-import io.polygenesis.abstraction.data.DataGroup;
+import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import java.util.LinkedHashSet;
@@ -84,11 +84,11 @@ public class DataGroupBuilder {
    *
    * @return the data group
    */
-  public final DataGroup build() {
-    DataGroup dataGroup = new DataGroup(new ObjectName(name), new PackageName("com.oregor"));
+  public final DataObject build() {
+    DataObject dataObject = new DataObject(new ObjectName(name), new PackageName("com.oregor"));
 
-    models.forEach(dataGroup::addData);
+    models.forEach(dataObject::addData);
 
-    return dataGroup;
+    return dataObject;
   }
 }

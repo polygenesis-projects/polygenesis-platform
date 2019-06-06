@@ -30,7 +30,7 @@ import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.generators.java.exporters.rest.ResourceExporter;
-import io.polygenesis.generators.java.transformers.rest.ResourceClassTransformer;
+import io.polygenesis.generators.java.transformers.rest.ResourceLegacyClassTransformer;
 import io.polygenesis.models.rest.Resource;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -48,7 +48,7 @@ public class ResourceExporterTest {
   private PackageName rootPackageName;
   private Resource resource;
   private FreemarkerService freemarkerService;
-  private ResourceClassTransformer resourceClassRepresentable;
+  private ResourceLegacyClassTransformer resourceClassRepresentable;
   private ResourceExporter resourceExporter;
 
   /** Sets up. */
@@ -58,7 +58,7 @@ public class ResourceExporterTest {
     rootPackageName = new PackageName("com.oregor");
     resource = mock(Resource.class);
     freemarkerService = mock(FreemarkerService.class);
-    resourceClassRepresentable = mock(ResourceClassTransformer.class);
+    resourceClassRepresentable = mock(ResourceLegacyClassTransformer.class);
     resourceExporter = new ResourceExporter(freemarkerService, resourceClassRepresentable);
   }
 

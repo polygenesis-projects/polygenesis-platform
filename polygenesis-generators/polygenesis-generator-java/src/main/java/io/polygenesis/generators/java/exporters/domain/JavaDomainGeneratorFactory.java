@@ -26,9 +26,9 @@ import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.generators.java.domain.projection.exporter.ProjectionExporter;
 import io.polygenesis.generators.java.domain.projection.exporter.ProjectionIdExporter;
 import io.polygenesis.generators.java.domain.projection.exporter.ProjectionRepositoryExporter;
-import io.polygenesis.generators.java.domain.projection.transformer.ProjectionClassTransformer;
-import io.polygenesis.generators.java.domain.projection.transformer.ProjectionIdClassTransformer;
-import io.polygenesis.generators.java.domain.projection.transformer.ProjectionRepositoryInterfaceTransformer;
+import io.polygenesis.generators.java.domain.projection.transformer.ProjectionIdLegacyClassTransformer;
+import io.polygenesis.generators.java.domain.projection.transformer.ProjectionLegacyClassTransformer;
+import io.polygenesis.generators.java.domain.projection.transformer.ProjectionRepositoryLegacyInterfaceTransformer;
 import io.polygenesis.generators.java.exporters.domain.aggregateentity.AggregateEntityExporter;
 import io.polygenesis.generators.java.exporters.domain.aggregateentity.AggregateEntityIdExporter;
 import io.polygenesis.generators.java.exporters.domain.aggregateroot.AggregateRootExporter;
@@ -40,22 +40,23 @@ import io.polygenesis.generators.java.exporters.domain.supportiveentity.Supporti
 import io.polygenesis.generators.java.exporters.domain.valueobject.ValueObjectExporter;
 import io.polygenesis.generators.java.implementations.domain.StateMutationMethodImplementorRegistry;
 import io.polygenesis.generators.java.implementations.domain.constructor.ConstructorImplementorRegistry;
-import io.polygenesis.generators.java.transformers.domain.ConstructorTransformer;
-import io.polygenesis.generators.java.transformers.domain.StateMutationMethodTransformer;
-import io.polygenesis.generators.java.transformers.domain.aggregateentity.AggregateEntityClassTransformer;
-import io.polygenesis.generators.java.transformers.domain.aggregateentity.AggregateEntityIdClassTransformer;
-import io.polygenesis.generators.java.transformers.domain.aggregateroot.AggregateRootClassTransformer;
-import io.polygenesis.generators.java.transformers.domain.aggregateroot.AggregateRootIdClassTransformer;
-import io.polygenesis.generators.java.transformers.domain.persistence.PersistenceInterfaceTransformer;
-import io.polygenesis.generators.java.transformers.domain.service.DomainServiceInterfaceTransformer;
-import io.polygenesis.generators.java.transformers.domain.supportiveentity.SupportiveEntityClassTransformer;
-import io.polygenesis.generators.java.transformers.domain.valueobject.ValueObjectClassTransformer;
-import io.polygenesis.transformer.code.FromDataTypeToJavaConverter;
-import io.polygenesis.transformer.code.FunctionToMethodRepresentationTransformer;
+import io.polygenesis.generators.java.shared.transformer.FromDataTypeToJavaConverter;
+import io.polygenesis.generators.java.shared.transformer.FunctionToLegacyMethodRepresentationTransformer;
+import io.polygenesis.generators.java.transformers.domain.ConstructorTransformerLegacy;
+import io.polygenesis.generators.java.transformers.domain.StateMutationLegacyMethodTransformer;
+import io.polygenesis.generators.java.transformers.domain.aggregateentity.AggregateEntityIdLegacyClassTransformer;
+import io.polygenesis.generators.java.transformers.domain.aggregateentity.AggregateEntityLegacyClassTransformer;
+import io.polygenesis.generators.java.transformers.domain.aggregateroot.AggregateRootIdLegacyClassTransformer;
+import io.polygenesis.generators.java.transformers.domain.aggregateroot.AggregateRootLegacyClassTransformer;
+import io.polygenesis.generators.java.transformers.domain.persistence.PersistenceLegacyInterfaceTransformer;
+import io.polygenesis.generators.java.transformers.domain.service.DomainServiceLegacyInterfaceTransformer;
+import io.polygenesis.generators.java.transformers.domain.supportiveentity.SupportiveEntityLegacyClassTransformer;
+import io.polygenesis.generators.java.transformers.domain.valueobject.ValueObjectLegacyClassTransformer;
 import java.nio.file.Path;
 
 /**
- * The Java Domain Generator Factory creates new instances of {@link JavaDomainGenerator}.
+ * The Java Domain MetamodelGenerator Factory creates new instances of {@link
+ * JavaDomainMetamodelGenerator}.
  *
  * @author Christos Tsakostas
  */
@@ -92,52 +93,52 @@ public final class JavaDomainGeneratorFactory {
     StateMutationMethodImplementorRegistry stateMutationMethodImplementorRegistry =
         new StateMutationMethodImplementorRegistry(freemarkerService);
 
-    StateMutationMethodTransformer stateMutationMethodRepresentable =
-        new StateMutationMethodTransformer(
+    StateMutationLegacyMethodTransformer stateMutationMethodRepresentable =
+        new StateMutationLegacyMethodTransformer(
             fromDataTypeToJavaConverter, stateMutationMethodImplementorRegistry);
 
-    AggregateRootClassTransformer aggregateRootClassRepresentable =
-        new AggregateRootClassTransformer(
+    AggregateRootLegacyClassTransformer aggregateRootClassRepresentable =
+        new AggregateRootLegacyClassTransformer(
             fromDataTypeToJavaConverter, stateMutationMethodRepresentable);
 
     aggregateRootExporter =
         new AggregateRootExporter(freemarkerService, aggregateRootClassRepresentable);
 
-    AggregateRootIdClassTransformer aggregateRootIdClassRepresentable =
-        new AggregateRootIdClassTransformer(fromDataTypeToJavaConverter);
+    AggregateRootIdLegacyClassTransformer aggregateRootIdClassRepresentable =
+        new AggregateRootIdLegacyClassTransformer(fromDataTypeToJavaConverter);
 
     aggregateRootIdExporter =
         new AggregateRootIdExporter(freemarkerService, aggregateRootIdClassRepresentable);
 
-    AggregateEntityClassTransformer aggregateEntityClassRepresentable =
-        new AggregateEntityClassTransformer(fromDataTypeToJavaConverter);
+    AggregateEntityLegacyClassTransformer aggregateEntityClassRepresentable =
+        new AggregateEntityLegacyClassTransformer(fromDataTypeToJavaConverter);
     aggregateEntityExporter =
         new AggregateEntityExporter(freemarkerService, aggregateEntityClassRepresentable);
 
-    AggregateEntityIdClassTransformer aggregateEntityIdClassRepresentable =
-        new AggregateEntityIdClassTransformer(fromDataTypeToJavaConverter);
+    AggregateEntityIdLegacyClassTransformer aggregateEntityIdClassRepresentable =
+        new AggregateEntityIdLegacyClassTransformer(fromDataTypeToJavaConverter);
     aggregateEntityIdExporter =
         new AggregateEntityIdExporter(freemarkerService, aggregateEntityIdClassRepresentable);
 
-    ValueObjectClassTransformer valueObjectClassRepresentable =
-        new ValueObjectClassTransformer(fromDataTypeToJavaConverter);
+    ValueObjectLegacyClassTransformer valueObjectClassRepresentable =
+        new ValueObjectLegacyClassTransformer(fromDataTypeToJavaConverter);
 
     valueObjectExporter = new ValueObjectExporter(freemarkerService, valueObjectClassRepresentable);
 
     domainEventExporter = new DomainEventExporter(freemarkerService);
 
-    FunctionToMethodRepresentationTransformer functionToMethodRepresentationTransformer =
-        new FunctionToMethodRepresentationTransformer(fromDataTypeToJavaConverter);
+    FunctionToLegacyMethodRepresentationTransformer functionToMethodRepresentationTransformer =
+        new FunctionToLegacyMethodRepresentationTransformer(fromDataTypeToJavaConverter);
 
-    PersistenceInterfaceTransformer persistenceInterfaceRepresentable =
-        new PersistenceInterfaceTransformer(
+    PersistenceLegacyInterfaceTransformer persistenceInterfaceRepresentable =
+        new PersistenceLegacyInterfaceTransformer(
             fromDataTypeToJavaConverter, functionToMethodRepresentationTransformer);
 
     persistenceExporter =
         new PersistenceExporter(freemarkerService, persistenceInterfaceRepresentable);
 
-    DomainServiceInterfaceTransformer domainServiceInterfaceRepresentable =
-        new DomainServiceInterfaceTransformer(
+    DomainServiceLegacyInterfaceTransformer domainServiceInterfaceRepresentable =
+        new DomainServiceLegacyInterfaceTransformer(
             fromDataTypeToJavaConverter, functionToMethodRepresentationTransformer);
 
     domainServiceExporter =
@@ -145,11 +146,13 @@ public final class JavaDomainGeneratorFactory {
 
     ConstructorImplementorRegistry constructorImplementorRegistry =
         new ConstructorImplementorRegistry(freemarkerService);
-    ConstructorTransformer constructorRepresentable =
-        new ConstructorTransformer(fromDataTypeToJavaConverter, constructorImplementorRegistry);
+    ConstructorTransformerLegacy constructorRepresentable =
+        new ConstructorTransformerLegacy(
+            fromDataTypeToJavaConverter, constructorImplementorRegistry);
 
-    SupportiveEntityClassTransformer supportiveEntityClassRepresentable =
-        new SupportiveEntityClassTransformer(fromDataTypeToJavaConverter, constructorRepresentable);
+    SupportiveEntityLegacyClassTransformer supportiveEntityClassRepresentable =
+        new SupportiveEntityLegacyClassTransformer(
+            fromDataTypeToJavaConverter, constructorRepresentable);
 
     supportiveEntityExporter =
         new SupportiveEntityExporter(freemarkerService, supportiveEntityClassRepresentable);
@@ -158,16 +161,16 @@ public final class JavaDomainGeneratorFactory {
 
     projectionExporter =
         new ProjectionExporter(
-            freemarkerService, new ProjectionClassTransformer(fromDataTypeToJavaConverter));
+            freemarkerService, new ProjectionLegacyClassTransformer(fromDataTypeToJavaConverter));
 
     projectionIdExporter =
         new ProjectionIdExporter(
-            freemarkerService, new ProjectionIdClassTransformer(fromDataTypeToJavaConverter));
+            freemarkerService, new ProjectionIdLegacyClassTransformer(fromDataTypeToJavaConverter));
 
     projectionRepositoryExporter =
         new ProjectionRepositoryExporter(
             freemarkerService,
-            new ProjectionRepositoryInterfaceTransformer(
+            new ProjectionRepositoryLegacyInterfaceTransformer(
                 fromDataTypeToJavaConverter, functionToMethodRepresentationTransformer));
   }
 
@@ -191,9 +194,9 @@ public final class JavaDomainGeneratorFactory {
    * @param tablePrefix the table prefix
    * @return the java api generator
    */
-  public static JavaDomainGenerator newInstance(
+  public static JavaDomainMetamodelGenerator newInstance(
       Path generationPath, PackageName rootPackageName, String tablePrefix) {
-    return new JavaDomainGenerator(
+    return new JavaDomainMetamodelGenerator(
         generationPath,
         tablePrefix,
         rootPackageName,

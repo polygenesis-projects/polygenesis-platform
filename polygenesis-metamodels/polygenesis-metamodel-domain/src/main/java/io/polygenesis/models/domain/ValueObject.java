@@ -21,14 +21,14 @@
 package io.polygenesis.models.domain;
 
 import io.polygenesis.abstraction.data.Data;
-import io.polygenesis.abstraction.data.DataGroup;
+import io.polygenesis.abstraction.data.DataObject;
 
 /**
  * The type Value object.
  *
  * @author Christos Tsakostas
  */
-public class ValueObject extends BaseProperty<DataGroup> {
+public class ValueObject extends BaseProperty<DataObject> {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -39,7 +39,7 @@ public class ValueObject extends BaseProperty<DataGroup> {
    *
    * @param data the data
    */
-  public ValueObject(DataGroup data) {
+  public ValueObject(DataObject data) {
     super(PropertyType.VALUE_OBJECT, data);
   }
 

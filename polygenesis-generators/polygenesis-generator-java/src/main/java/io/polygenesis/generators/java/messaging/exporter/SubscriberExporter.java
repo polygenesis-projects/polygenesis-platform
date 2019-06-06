@@ -22,7 +22,7 @@ package io.polygenesis.generators.java.messaging.exporter;
 
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.generators.java.messaging.transformer.SubscriberClassTransformer;
+import io.polygenesis.generators.java.messaging.transformer.SubscriberLegacyClassTransformer;
 import io.polygenesis.models.messaging.subscriber.Subscriber;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -41,7 +41,7 @@ public class SubscriberExporter {
   // ===============================================================================================
 
   private final FreemarkerService freemarkerService;
-  private final SubscriberClassTransformer subscriberClassTransformer;
+  private final SubscriberLegacyClassTransformer subscriberClassTransformer;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -54,7 +54,8 @@ public class SubscriberExporter {
    * @param subscriberClassTransformer the subscriber class transformer
    */
   public SubscriberExporter(
-      FreemarkerService freemarkerService, SubscriberClassTransformer subscriberClassTransformer) {
+      FreemarkerService freemarkerService,
+      SubscriberLegacyClassTransformer subscriberClassTransformer) {
     this.freemarkerService = freemarkerService;
     this.subscriberClassTransformer = subscriberClassTransformer;
   }

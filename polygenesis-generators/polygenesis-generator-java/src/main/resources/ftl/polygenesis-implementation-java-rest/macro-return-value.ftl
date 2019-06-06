@@ -19,5 +19,5 @@
 -->
 
 <#macro returnValue serviceName serviceMethodName requestDto>
-    return ${ serviceName }.${ serviceMethodName }(${ requestDto.dataGroup.objectName.text });
+    return ${ serviceName }.${ serviceMethodName }(${ requestDto.dataObject.objectName.text });
 </#macro>

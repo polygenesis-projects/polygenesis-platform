@@ -66,7 +66,7 @@ public final class SqlGeneratorFactory {
    * @param tablePrefix the table prefix
    * @return the sql generator
    */
-  public static SqlGenerator newInstance(Path generationPath, String tablePrefix) {
-    return new SqlGenerator(generationPath, scriptExporter, tablePrefix);
+  public static SqlMetamodelGenerator newInstance(Path generationPath, String tablePrefix) {
+    return new SqlMetamodelGenerator(generationPath, scriptExporter, tablePrefix);
   }
 }

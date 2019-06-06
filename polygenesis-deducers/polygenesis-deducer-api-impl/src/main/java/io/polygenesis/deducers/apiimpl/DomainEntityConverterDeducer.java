@@ -21,7 +21,7 @@
 package io.polygenesis.deducers.apiimpl;
 
 import io.polygenesis.abstraction.data.Data;
-import io.polygenesis.abstraction.data.DataGroup;
+import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.Thing;
@@ -174,7 +174,7 @@ public class DomainEntityConverterDeducer extends BaseApiImplementationDeducer
                             .getDtos()
                             .forEach(
                                 dto -> {
-                                  if (dto.getDataGroup().equals(valueObject.getData().asDto())) {
+                                  if (dto.getDataObject().equals(valueObject.getData().asDto())) {
                                     makeValueObjectConversion(methods, dto, valueObject);
                                   }
                                 }));
@@ -199,14 +199,14 @@ public class DomainEntityConverterDeducer extends BaseApiImplementationDeducer
     Function functionToVo =
         FunctionBuilder.of(thing, "convertToVo", Purpose.convertDtoToVo())
             .setReturnValue(valueObjectToUse.getData())
-            .addArgument(dtoToUse.getDataGroup())
+            .addArgument(dtoToUse.getDataObject())
             .build();
 
     methods.add(new DomainEntityConverterMethod(functionToVo, dtoToUse, valueObjectToUse));
 
     Function functionToDto =
         FunctionBuilder.of(thing, "convertToDto", Purpose.convertVoToDto())
-            .setReturnValue(dto.getDataGroup())
+            .setReturnValue(dto.getDataObject())
             .addArgument(valueObjectToUse.getData())
             .build();
 
@@ -267,9 +267,9 @@ public class DomainEntityConverterDeducer extends BaseApiImplementationDeducer
                 thing,
                 String.format(
                     "convertTo%s",
-                    TextConverter.toUpperCamel(dtoCollectionRecord.getDataGroup().getDataType())),
+                    TextConverter.toUpperCamel(dtoCollectionRecord.getDataObject().getDataType())),
                 Purpose.convertDomainObjectToCollectionRecord())
-            .setReturnValue(dtoCollectionRecord.getDataGroup())
+            .setReturnValue(dtoCollectionRecord.getDataObject())
             .addArgument(transformDomainObjectToDataGroup(domainObject))
             .build();
 
@@ -282,15 +282,15 @@ public class DomainEntityConverterDeducer extends BaseApiImplementationDeducer
    * @param domainObject the domain object
    * @return the data group
    */
-  private DataGroup transformDomainObjectToDataGroup(BaseDomainEntity domainObject) {
+  private DataObject transformDomainObjectToDataGroup(BaseDomainEntity domainObject) {
 
-    DataGroup dataGroup =
-        new DataGroup(
+    DataObject dataObject =
+        new DataObject(
             new ObjectName(domainObject.getObjectName().getText()), domainObject.getPackageName());
 
-    domainObject.getProperties().forEach(property -> dataGroup.addData(property.getData()));
+    domainObject.getProperties().forEach(property -> dataObject.addData(property.getData()));
 
-    return dataGroup;
+    return dataObject;
   }
 
   /**
@@ -304,7 +304,7 @@ public class DomainEntityConverterDeducer extends BaseApiImplementationDeducer
     return service
         .getDtos()
         .stream()
-        .filter(dto -> dto.getDataGroup().equals(dataGroup))
+        .filter(dto -> dto.getDataObject().equals(dataGroup))
         .findFirst()
         .orElseThrow(
             () ->

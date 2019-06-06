@@ -28,18 +28,19 @@ import io.polygenesis.generators.java.exporters.rdbms.projection.ProjectionRepos
 import io.polygenesis.generators.java.exporters.rdbms.projection.ProjectionSpringDataRepositoryExporter;
 import io.polygenesis.generators.java.exporters.rdbms.projection.testing.ProjectionRepositoryImplTestExporter;
 import io.polygenesis.generators.java.exporters.rdbms.testing.PersistenceImplTestExporter;
-import io.polygenesis.generators.java.transformers.rdbms.PersistenceImplClassTransformer;
-import io.polygenesis.generators.java.transformers.rdbms.SpringDataRepositoryInterfaceTransformer;
-import io.polygenesis.generators.java.transformers.rdbms.projection.ProjectionRepositoryImplClassTransformer;
-import io.polygenesis.generators.java.transformers.rdbms.projection.ProjectionSpringDataRepositoryInterfaceTransformer;
-import io.polygenesis.generators.java.transformers.rdbms.projection.testing.ProjectionRepositoryImplTestClassTransformer;
-import io.polygenesis.generators.java.transformers.rdbms.testing.PersistenceImplTestClassTransformer;
-import io.polygenesis.transformer.code.FromDataTypeToJavaConverter;
-import io.polygenesis.transformer.code.FunctionToMethodRepresentationTransformer;
+import io.polygenesis.generators.java.shared.transformer.FromDataTypeToJavaConverter;
+import io.polygenesis.generators.java.shared.transformer.FunctionToLegacyMethodRepresentationTransformer;
+import io.polygenesis.generators.java.transformers.rdbms.PersistenceImplLegacyClassTransformer;
+import io.polygenesis.generators.java.transformers.rdbms.SpringDataRepositoryLegacyInterfaceTransformer;
+import io.polygenesis.generators.java.transformers.rdbms.projection.ProjectionRepositoryImplLegacyClassTransformer;
+import io.polygenesis.generators.java.transformers.rdbms.projection.ProjectionSpringDataRepositoryLegacyInterfaceTransformer;
+import io.polygenesis.generators.java.transformers.rdbms.projection.testing.ProjectionRepositoryImplTestLegacyClassTransformer;
+import io.polygenesis.generators.java.transformers.rdbms.testing.PersistenceImplTestLegacyClassTransformer;
 import java.nio.file.Path;
 
 /**
- * The Java Domain Generator Factory creates new instances of {@link JavaRdbmsGenerator}.
+ * The Java Domain MetamodelGenerator Factory creates new instances of {@link
+ * JavaRdbmsMetamodelGenerator}.
  *
  * @author Christos Tsakostas
  */
@@ -76,23 +77,23 @@ public final class JavaRdbmsGeneratorFactory {
 
     FromDataTypeToJavaConverter fromDataTypeToJavaConverter = new FromDataTypeToJavaConverter();
 
-    PersistenceImplClassTransformer persistenceImplClassRepresentable =
-        new PersistenceImplClassTransformer(fromDataTypeToJavaConverter);
+    PersistenceImplLegacyClassTransformer persistenceImplClassRepresentable =
+        new PersistenceImplLegacyClassTransformer(fromDataTypeToJavaConverter);
 
     persistenceImplExporter =
         new PersistenceImplExporter(freemarkerService, persistenceImplClassRepresentable);
 
-    PersistenceImplTestClassTransformer persistenceImplTestClassRepresentable =
-        new PersistenceImplTestClassTransformer(fromDataTypeToJavaConverter);
+    PersistenceImplTestLegacyClassTransformer persistenceImplTestClassRepresentable =
+        new PersistenceImplTestLegacyClassTransformer(fromDataTypeToJavaConverter);
 
     persistenceImplTestExporter =
         new PersistenceImplTestExporter(freemarkerService, persistenceImplTestClassRepresentable);
 
-    FunctionToMethodRepresentationTransformer functionToMethodRepresentationTransformer =
-        new FunctionToMethodRepresentationTransformer(fromDataTypeToJavaConverter);
+    FunctionToLegacyMethodRepresentationTransformer functionToMethodRepresentationTransformer =
+        new FunctionToLegacyMethodRepresentationTransformer(fromDataTypeToJavaConverter);
 
-    SpringDataRepositoryInterfaceTransformer springDataRepositoryInterfaceRepresentable =
-        new SpringDataRepositoryInterfaceTransformer(
+    SpringDataRepositoryLegacyInterfaceTransformer springDataRepositoryInterfaceRepresentable =
+        new SpringDataRepositoryLegacyInterfaceTransformer(
             fromDataTypeToJavaConverter, functionToMethodRepresentationTransformer);
 
     springDataRepositoryExporter =
@@ -107,18 +108,18 @@ public final class JavaRdbmsGeneratorFactory {
     projectionRepositoryImplExporter =
         new ProjectionRepositoryImplExporter(
             freemarkerService,
-            new ProjectionRepositoryImplClassTransformer(fromDataTypeToJavaConverter));
+            new ProjectionRepositoryImplLegacyClassTransformer(fromDataTypeToJavaConverter));
 
     projectionSpringDataRepositoryExporter =
         new ProjectionSpringDataRepositoryExporter(
             freemarkerService,
-            new ProjectionSpringDataRepositoryInterfaceTransformer(
+            new ProjectionSpringDataRepositoryLegacyInterfaceTransformer(
                 fromDataTypeToJavaConverter, functionToMethodRepresentationTransformer));
 
     projectionRepositoryImplTestExporter =
         new ProjectionRepositoryImplTestExporter(
             freemarkerService,
-            new ProjectionRepositoryImplTestClassTransformer(fromDataTypeToJavaConverter));
+            new ProjectionRepositoryImplTestLegacyClassTransformer(fromDataTypeToJavaConverter));
   }
 
   // ===============================================================================================
@@ -141,9 +142,9 @@ public final class JavaRdbmsGeneratorFactory {
    * @param contextName the context name
    * @return the java api generator
    */
-  public static JavaRdbmsGenerator newInstance(
+  public static JavaRdbmsMetamodelGenerator newInstance(
       Path generationPath, PackageName rootPackageName, ObjectName contextName) {
-    return new JavaRdbmsGenerator(
+    return new JavaRdbmsMetamodelGenerator(
         generationPath,
         rootPackageName,
         contextName,

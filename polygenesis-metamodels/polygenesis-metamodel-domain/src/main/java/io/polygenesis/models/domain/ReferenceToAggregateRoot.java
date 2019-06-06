@@ -21,14 +21,14 @@
 package io.polygenesis.models.domain;
 
 import io.polygenesis.abstraction.data.Data;
-import io.polygenesis.abstraction.data.DataGroup;
+import io.polygenesis.abstraction.data.DataObject;
 
 /**
  * The type Reference to aggregate root.
  *
  * @author Christos Tsakostas
  */
-public class ReferenceToAggregateRoot extends BaseProperty<DataGroup> {
+public class ReferenceToAggregateRoot extends BaseProperty<DataObject> {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -39,7 +39,7 @@ public class ReferenceToAggregateRoot extends BaseProperty<DataGroup> {
    *
    * @param data the data
    */
-  public ReferenceToAggregateRoot(DataGroup data) {
+  public ReferenceToAggregateRoot(DataObject data) {
     super(PropertyType.REFERENCE_TO_AGGREGATE_ROOT, data);
   }
 

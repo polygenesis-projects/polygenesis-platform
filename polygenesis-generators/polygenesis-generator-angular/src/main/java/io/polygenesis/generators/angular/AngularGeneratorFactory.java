@@ -155,7 +155,7 @@ public class AngularGeneratorFactory {
    * @param generationPath the generation path
    * @return the poly genesis angular generator
    */
-  public static AngularGenerator newInstance(Path generationPath) {
-    return new AngularGenerator(generationPath, onceExporter, storeExporter, uiExporter);
+  public static AngularMetamodelGenerator newInstance(Path generationPath) {
+    return new AngularMetamodelGenerator(generationPath, onceExporter, storeExporter, uiExporter);
   }
 }

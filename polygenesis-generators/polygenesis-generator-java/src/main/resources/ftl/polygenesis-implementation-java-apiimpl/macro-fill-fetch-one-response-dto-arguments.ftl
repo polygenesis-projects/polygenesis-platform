@@ -18,7 +18,7 @@
  ===========================LICENSE_END==================================
 -->
 <#macro fillFetchOneResponseDtoArguments responseDto aggregateRootVariable converterVariable>
-<#list responseDto.dataGroup.models as data >
+<#list responseDto.dataObject.models as data >
   <#switch data.dataPrimaryType>
     <#case 'PRIMITIVE'>
       ${ aggregateRootVariable }.get${ textConverter.toUpperCamel(data.variableName.text) }()<#sep>,</#sep>

@@ -13,16 +13,22 @@
   <artifactId>polygenesis-generator-spreadsheet</artifactId>
 
   <dependencies>
+    <!--APACHE-->
+    <dependency>
+      <groupId>org.apache.poi</groupId>
+      <artifactId>poi-ooxml</artifactId>
+    </dependency>
+
     <!--MODELS-->
     <dependency>
       <groupId>io.polygenesis.metamodels</groupId>
       <artifactId>polygenesis-metamodel-spreadsheet</artifactId>
     </dependency>
 
-    <!--TRANSFORMERS-->
+    <!--EXPORTERS-->
     <dependency>
-      <groupId>io.polygenesis.transformers</groupId>
-      <artifactId>polygenesis-transformer-spreadsheet</artifactId>
+      <groupId>io.polygenesis.exporters</groupId>
+      <artifactId>polygenesis-exporter-file</artifactId>
     </dependency>
 
     <!--TEST-->

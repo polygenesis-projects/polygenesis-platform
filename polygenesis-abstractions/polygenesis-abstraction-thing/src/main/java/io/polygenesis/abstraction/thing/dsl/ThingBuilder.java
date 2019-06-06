@@ -20,6 +20,7 @@
 
 package io.polygenesis.abstraction.thing.dsl;
 
+import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.core.AbstractionScope;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
@@ -60,14 +61,15 @@ public class ThingBuilder extends AbstractThingBuilder<ThingBuilder> {
    *
    * @return the thing builder
    */
-  public static ThingBuilder endToEndChild() {
+  public static ThingBuilder endToEndChild(Thing parentThing) {
     return new ThingBuilder(
-        new LinkedHashSet<>(
-            Arrays.asList(
-                AbstractionScope.api(),
-                AbstractionScope.apiDetail(),
-                AbstractionScope.apiClientRest(),
-                AbstractionScope.domainAggregateEntity())));
+            new LinkedHashSet<>(
+                Arrays.asList(
+                    AbstractionScope.api(),
+                    AbstractionScope.apiDetail(),
+                    AbstractionScope.apiClientRest(),
+                    AbstractionScope.domainAggregateEntity())))
+        .setParentThing(parentThing);
   }
 
   /**

@@ -21,7 +21,7 @@
 package io.polygenesis.models.domain;
 
 import io.polygenesis.abstraction.data.Data;
-import io.polygenesis.abstraction.data.DataGroup;
+import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.commons.assertion.Assertion;
 import java.util.Objects;
 
@@ -30,7 +30,7 @@ import java.util.Objects;
  *
  * @author Christos Tsakostas
  */
-public class AbstractAggregateRootId extends BaseProperty<DataGroup> {
+public class AbstractAggregateRootId extends BaseProperty<DataObject> {
 
   // ===============================================================================================
   // STATE
@@ -48,7 +48,7 @@ public class AbstractAggregateRootId extends BaseProperty<DataGroup> {
    * @param data the data
    * @param genericTypeParameter the endToEnd type parameter
    */
-  public AbstractAggregateRootId(DataGroup data, GenericTypeParameter genericTypeParameter) {
+  public AbstractAggregateRootId(DataObject data, GenericTypeParameter genericTypeParameter) {
     super(PropertyType.ABSTRACT_AGGREGATE_ROOT_ID, data);
     setGenericTypeParameter(genericTypeParameter);
   }

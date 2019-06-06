@@ -22,7 +22,7 @@ package io.polygenesis.abstraction.thing.dsl;
 
 import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.DataArray;
-import io.polygenesis.abstraction.data.DataGroup;
+import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.abstraction.data.DataPrimitive;
 import io.polygenesis.abstraction.data.DataPurpose;
 import io.polygenesis.abstraction.data.PrimitiveType;
@@ -113,8 +113,8 @@ public class PurposeFunctionBuilder {
     // ---------------------------------------------------------------------------------------------
     // ARGUMENTS
     // ---------------------------------------------------------------------------------------------
-    DataGroup argumentDataGroup =
-        new DataGroup(
+    DataObject argumentDataObject =
+        new DataObject(
             new ObjectName(
                 String.format(
                     "%s%sRequest",
@@ -124,22 +124,22 @@ public class PurposeFunctionBuilder {
     // ---------------------------------------------------------------------------------------------
     // Add Parent Thing Identity if Any
     if (thing.getOptionalParent() != null) {
-      argumentDataGroup.addData(makeParentThingIdentity(thing.getOptionalParent()));
+      argumentDataObject.addData(makeParentThingIdentity(thing.getOptionalParent()));
     }
 
     // ---------------------------------------------------------------------------------------------
     // Add Thing Identity
-    argumentDataGroup.addData(makeThingIdentity(thing));
+    argumentDataObject.addData(makeThingIdentity(thing));
 
     // ---------------------------------------------------------------------------------------------
-    models.forEach(argumentDataGroup::addData);
+    models.forEach(argumentDataObject::addData);
     // ---------------------------------------------------------------------------------------------
 
     // ---------------------------------------------------------------------------------------------
     // RETURN VALUE
     // ---------------------------------------------------------------------------------------------
-    DataGroup returnValueDataGroup =
-        new DataGroup(
+    DataObject returnValueDataObject =
+        new DataObject(
             new ObjectName(
                 String.format(
                     "%s%sResponse",
@@ -148,7 +148,7 @@ public class PurposeFunctionBuilder {
 
     // ---------------------------------------------------------------------------------------------
 
-    returnValueDataGroup.addData(
+    returnValueDataObject.addData(
         DataPrimitive.ofDataBusinessType(
             DataPurpose.thingIdentity(),
             PrimitiveType.STRING,
@@ -162,8 +162,8 @@ public class PurposeFunctionBuilder {
 
     Function function =
         FunctionBuilder.of(thing, functionName, Purpose.create())
-            .setReturnValue(returnValueDataGroup)
-            .addArgument(argumentDataGroup)
+            .setReturnValue(returnValueDataObject)
+            .addArgument(argumentDataObject)
             .build();
 
     this.functions.add(function);
@@ -193,8 +193,8 @@ public class PurposeFunctionBuilder {
     // ---------------------------------------------------------------------------------------------
     // ARGUMENTS
     // ---------------------------------------------------------------------------------------------
-    DataGroup argumentDataGroup =
-        new DataGroup(
+    DataObject argumentDataObject =
+        new DataObject(
             new ObjectName(
                 String.format(
                     "%s%sRequest",
@@ -204,22 +204,22 @@ public class PurposeFunctionBuilder {
     // ---------------------------------------------------------------------------------------------
     // Add Parent Thing Identity if Any
     if (thing.getOptionalParent() != null) {
-      argumentDataGroup.addData(makeParentThingIdentity(thing.getOptionalParent()));
+      argumentDataObject.addData(makeParentThingIdentity(thing.getOptionalParent()));
     }
 
     // ---------------------------------------------------------------------------------------------
     // Add Thing Identity
-    argumentDataGroup.addData(makeThingIdentity(thing));
+    argumentDataObject.addData(makeThingIdentity(thing));
 
     // ---------------------------------------------------------------------------------------------
-    models.forEach(argumentDataGroup::addData);
+    models.forEach(argumentDataObject::addData);
     // ---------------------------------------------------------------------------------------------
 
     // ---------------------------------------------------------------------------------------------
     // RETURN VALUE
     // ---------------------------------------------------------------------------------------------
-    DataGroup returnValueDataGroup =
-        new DataGroup(
+    DataObject returnValueDataObject =
+        new DataObject(
             new ObjectName(
                 String.format(
                     "%s%sResponse",
@@ -228,7 +228,7 @@ public class PurposeFunctionBuilder {
 
     // ---------------------------------------------------------------------------------------------
 
-    returnValueDataGroup.addData(
+    returnValueDataObject.addData(
         DataPrimitive.ofDataBusinessType(
             DataPurpose.thingIdentity(),
             PrimitiveType.STRING,
@@ -242,8 +242,8 @@ public class PurposeFunctionBuilder {
 
     Function function =
         FunctionBuilder.of(thing, functionName, Purpose.modify())
-            .setReturnValue(returnValueDataGroup)
-            .addArgument(argumentDataGroup)
+            .setReturnValue(returnValueDataObject)
+            .addArgument(argumentDataObject)
             .build();
 
     this.functions.add(function);
@@ -261,8 +261,8 @@ public class PurposeFunctionBuilder {
     // ---------------------------------------------------------------------------------------------
     // ARGUMENTS
     // ---------------------------------------------------------------------------------------------
-    DataGroup argumentDataGroup =
-        new DataGroup(
+    DataObject argumentDataObject =
+        new DataObject(
             new ObjectName(
                 String.format(
                     "Fetch%sRequest", TextConverter.toUpperCamel(thing.getThingName().getText()))),
@@ -271,25 +271,25 @@ public class PurposeFunctionBuilder {
     // ---------------------------------------------------------------------------------------------
     // Add Parent Thing Identity if Any
     if (thing.getOptionalParent() != null) {
-      argumentDataGroup.addData(makeParentThingIdentity(thing.getOptionalParent()));
+      argumentDataObject.addData(makeParentThingIdentity(thing.getOptionalParent()));
     }
 
     // ---------------------------------------------------------------------------------------------
     // Add Thing Identity
-    argumentDataGroup.addData(makeThingIdentity(thing));
+    argumentDataObject.addData(makeThingIdentity(thing));
 
     // ---------------------------------------------------------------------------------------------
     // RETURN VALUE
     // ---------------------------------------------------------------------------------------------
-    DataGroup returnValueDataGroup =
-        new DataGroup(
+    DataObject returnValueDataObject =
+        new DataObject(
             new ObjectName(
                 String.format(
                     "Fetch%sResponse", TextConverter.toUpperCamel(thing.getThingName().getText()))),
             thing.makePackageName(rootPackageNameVo, thing));
 
     // ---------------------------------------------------------------------------------------------
-    models.forEach(returnValueDataGroup::addData);
+    models.forEach(returnValueDataObject::addData);
     // ---------------------------------------------------------------------------------------------
 
     // ---------------------------------------------------------------------------------------------
@@ -298,8 +298,8 @@ public class PurposeFunctionBuilder {
 
     Function function =
         FunctionBuilder.of(thing, "fetch", Purpose.fetchOne())
-            .setReturnValue(returnValueDataGroup)
-            .addArgument(argumentDataGroup)
+            .setReturnValue(returnValueDataObject)
+            .addArgument(argumentDataObject)
             .build();
 
     this.functions.add(function);
@@ -317,8 +317,8 @@ public class PurposeFunctionBuilder {
     // ---------------------------------------------------------------------------------------------
     // ARGUMENTS
     // ---------------------------------------------------------------------------------------------
-    DataGroup argumentDataGroup =
-        new DataGroup(
+    DataObject argumentDataObject =
+        new DataObject(
             new ObjectName(
                 String.format(
                     "Fetch%sCollectionRequest",
@@ -328,15 +328,15 @@ public class PurposeFunctionBuilder {
     // ---------------------------------------------------------------------------------------------
     // Add Parent Thing Identity if Any
     if (thing.getOptionalParent() != null) {
-      argumentDataGroup.addData(makeParentThingIdentity(thing.getOptionalParent()));
+      argumentDataObject.addData(makeParentThingIdentity(thing.getOptionalParent()));
     }
 
     // ---------------------------------------------------------------------------------------------
-    argumentDataGroup.addData(
+    argumentDataObject.addData(
         DataPrimitive.ofDataBusinessType(
             DataPurpose.pageNumber(), PrimitiveType.INTEGER, new VariableName("pageNumber")));
 
-    argumentDataGroup.addData(
+    argumentDataObject.addData(
         DataPrimitive.ofDataBusinessType(
             DataPurpose.pageSize(), PrimitiveType.INTEGER, new VariableName("pageSize")));
 
@@ -347,8 +347,8 @@ public class PurposeFunctionBuilder {
         String.format(
             "%sCollectionRecord", TextConverter.toUpperCamel(thing.getThingName().getText()));
 
-    DataGroup arrayElement =
-        new DataGroup(
+    DataObject arrayElement =
+        new DataObject(
             new ObjectName(arrayElementDataTypeAndVariableName),
             thing.makePackageName(rootPackageNameVo, thing));
 
@@ -367,12 +367,12 @@ public class PurposeFunctionBuilder {
 
     DataArray dataArray = new DataArray(new VariableName("someArray"), arrayElement);
 
-    DataGroup dataGroupReturnValue =
-        new DataGroup(
+    DataObject dataObjectReturnValue =
+        new DataObject(
             new ObjectName(arrayDataTypeAndVariableName),
             thing.makePackageName(rootPackageNameVo, thing));
 
-    dataGroupReturnValue.addData(dataArray);
+    dataObjectReturnValue.addData(dataArray);
 
     // ---------------------------------------------------------------------------------------------
     // FUNCTION
@@ -380,8 +380,8 @@ public class PurposeFunctionBuilder {
 
     Function function =
         FunctionBuilder.of(thing, "fetchCollection", Purpose.fetchPagedCollection())
-            .setReturnValue(dataGroupReturnValue)
-            .addArgument(argumentDataGroup)
+            .setReturnValue(dataObjectReturnValue)
+            .addArgument(argumentDataObject)
             .build();
 
     this.functions.add(function);

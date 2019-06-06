@@ -19,6 +19,6 @@
 -->
 
 <#macro setTenantIdAndIpAddress requestDto>
-    ${ requestDto.dataGroup.variableName.text }.setTenantId(getTenantId(httpServletRequest));
-    ${ requestDto.dataGroup.variableName.text }.setIpAddress(getRemoteIpAddress(httpServletRequest));
+    ${ requestDto.dataObject.variableName.text }.setTenantId(getTenantId(httpServletRequest));
+    ${ requestDto.dataObject.variableName.text }.setIpAddress(getRemoteIpAddress(httpServletRequest));
 </#macro>

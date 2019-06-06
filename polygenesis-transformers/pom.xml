@@ -14,8 +14,9 @@
   <packaging>pom</packaging>
 
   <modules>
-    <module>polygenesis-transformer-code</module>
-    <module>polygenesis-transformer-spreadsheet</module>
+    <module>polygenesis-transformer-datatype-dart</module>
+    <module>polygenesis-transformer-datatype-dotnet</module>
+    <module>polygenesis-transformer-datatype-java</module>
+    <module>polygenesis-transformer-datatype-typescript</module>
   </modules>
-
 </project>

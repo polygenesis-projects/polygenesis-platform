@@ -19,6 +19,6 @@
 -->
 
 <#macro setPageNumberAndSize requestDto>
-    ${ requestDto.dataGroup.variableName.text }.setPageNumber(pageNumber);
-    ${ requestDto.dataGroup.variableName.text }.setPageSize(pageSize);
+    ${ requestDto.dataObject.variableName.text }.setPageNumber(pageNumber);
+    ${ requestDto.dataObject.variableName.text }.setPageSize(pageSize);
 </#macro>

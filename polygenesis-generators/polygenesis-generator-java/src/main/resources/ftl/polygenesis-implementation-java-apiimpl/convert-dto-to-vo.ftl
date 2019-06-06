@@ -21,10 +21,10 @@
 <@assertionsForParameters representation.parameterRepresentations></@assertionsForParameters>
 
     return new ${ textConverter.toUpperCamel(to.data.dataType) }(
-<#list from.dataGroup.models as data >
+<#list from.dataObject.models as data >
     <#switch data.dataPrimaryType>
         <#case 'PRIMITIVE'>
-      ${ from.dataGroup.variableName.text }.get${ textConverter.toUpperCamel(data.variableName.text) }()<#sep>,</#sep>
+      ${ from.dataObject.variableName.text }.get${ textConverter.toUpperCamel(data.variableName.text) }()<#sep>,</#sep>
             <#break>
             <#break>
         <#default>

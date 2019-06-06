@@ -24,15 +24,16 @@ import io.polygenesis.commons.freemarker.FreemarkerConfig;
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
-import io.polygenesis.generators.java.transformers.rest.EndpointMethodTransformer;
-import io.polygenesis.generators.java.transformers.rest.ResourceClassTransformer;
-import io.polygenesis.generators.java.transformers.rest.ResourceTestClassTransformer;
+import io.polygenesis.generators.java.shared.transformer.FromDataTypeToJavaConverter;
+import io.polygenesis.generators.java.transformers.rest.EndpointLegacyMethodTransformer;
+import io.polygenesis.generators.java.transformers.rest.ResourceLegacyClassTransformer;
+import io.polygenesis.generators.java.transformers.rest.ResourceTestLegacyClassTransformer;
 import io.polygenesis.generators.java.transformers.rest.activities.EndpointImplementationRegistry;
-import io.polygenesis.transformer.code.FromDataTypeToJavaConverter;
 import java.nio.file.Path;
 
 /**
- * The Java Domain Generator Factory creates new instances of {@link JavaApiRestGenerator}.
+ * The Java Domain MetamodelGenerator Factory creates new instances of {@link
+ * JavaApiRestMetamodelGenerator}.
  *
  * @author Christos Tsakostas
  */
@@ -58,17 +59,19 @@ public final class JavaApiRestGeneratorFactory {
     EndpointImplementationRegistry endpointImplementationRegistry =
         new EndpointImplementationRegistry();
 
-    EndpointMethodTransformer endpointMethodRepresentable =
-        new EndpointMethodTransformer(
+    EndpointLegacyMethodTransformer endpointMethodRepresentable =
+        new EndpointLegacyMethodTransformer(
             fromDataTypeToJavaConverter, freemarkerService, endpointImplementationRegistry);
 
-    ResourceClassTransformer resourceClassRepresentable =
-        new ResourceClassTransformer(fromDataTypeToJavaConverter, endpointMethodRepresentable);
+    ResourceLegacyClassTransformer resourceClassRepresentable =
+        new ResourceLegacyClassTransformer(
+            fromDataTypeToJavaConverter, endpointMethodRepresentable);
 
     resourceExporter = new ResourceExporter(freemarkerService, resourceClassRepresentable);
 
-    ResourceTestClassTransformer resourceTestClassRepresentable =
-        new ResourceTestClassTransformer(fromDataTypeToJavaConverter, endpointMethodRepresentable);
+    ResourceTestLegacyClassTransformer resourceTestClassRepresentable =
+        new ResourceTestLegacyClassTransformer(
+            fromDataTypeToJavaConverter, endpointMethodRepresentable);
 
     resourceTestExporter =
         new ResourceTestExporter(freemarkerService, resourceTestClassRepresentable);
@@ -96,9 +99,9 @@ public final class JavaApiRestGeneratorFactory {
    * @param contextName the context name
    * @return the java api generator
    */
-  public static JavaApiRestGenerator newInstance(
+  public static JavaApiRestMetamodelGenerator newInstance(
       Path generationPath, PackageName rootPackageName, ObjectName contextName) {
-    return new JavaApiRestGenerator(
+    return new JavaApiRestMetamodelGenerator(
         generationPath,
         rootPackageName,
         contextName,

@@ -50,7 +50,7 @@ public class ModelDeducer {
     Set<Service> services = serviceModelRepository.getServicesBy(thing.getThingName());
 
     services.forEach(
-        service -> service.getDtos().forEach(dto -> models.add(new Model(dto.getDataGroup()))));
+        service -> service.getDtos().forEach(dto -> models.add(new Model(dto.getDataObject()))));
 
     return models;
   }

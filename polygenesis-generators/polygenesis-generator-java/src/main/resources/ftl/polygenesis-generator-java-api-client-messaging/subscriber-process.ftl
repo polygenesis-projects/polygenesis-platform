@@ -20,7 +20,7 @@
     try {
       JsonNode jsonNode = objectMapper.readTree(jsonMessage);
 
-      ${ textConverter.toUpperCamel(commandServiceMethod.requestDto.dataGroup.objectName.text) } request = new ${ textConverter.toUpperCamel(commandServiceMethod.requestDto.dataGroup.objectName.text) }();
+      ${ textConverter.toUpperCamel(commandServiceMethod.requestDto.dataObject.objectName.text) } request = new ${ textConverter.toUpperCamel(commandServiceMethod.requestDto.dataObject.objectName.text) }();
 
 <#list jsonData as data>
   <#switch data.dataPrimaryType>

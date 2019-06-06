@@ -22,7 +22,7 @@ package io.polygenesis.models.api;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.polygenesis.abstraction.data.DataGroup;
+import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.commons.test.AbstractEqualityTest;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
@@ -36,20 +36,20 @@ public class DtoTest extends AbstractEqualityTest<Dto> {
     Dto dto =
         new Dto(
             DtoType.API_REQUEST,
-            new DataGroup(new ObjectName("asd"), new PackageName("com.oregor")),
+            new DataObject(new ObjectName("asd"), new PackageName("com.oregor")),
             false);
 
     assertThat(dto).isNotNull();
-    assertThat(dto.getDataGroup()).isNotNull();
-    assertThat(dto.getDataGroup())
-        .isEqualTo(new DataGroup(new ObjectName("asd"), new PackageName("com.oregor")));
+    assertThat(dto.getDataObject()).isNotNull();
+    assertThat(dto.getDataObject())
+        .isEqualTo(new DataObject(new ObjectName("asd"), new PackageName("com.oregor")));
   }
 
   @Override
   public Dto createObject1() {
     return new Dto(
         DtoType.API_REQUEST,
-        new DataGroup(new ObjectName("asd"), new PackageName("com.oregor")),
+        new DataObject(new ObjectName("asd"), new PackageName("com.oregor")),
         false);
   }
 
@@ -57,7 +57,7 @@ public class DtoTest extends AbstractEqualityTest<Dto> {
   public Dto createObject2() {
     return new Dto(
         DtoType.API_REQUEST,
-        new DataGroup(new ObjectName("xyz"), new PackageName("com.oregor")),
+        new DataObject(new ObjectName("xyz"), new PackageName("com.oregor")),
         false);
   }
 }

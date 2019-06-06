@@ -21,6 +21,7 @@
 package io.polygenesis.models.api;
 
 import io.polygenesis.abstraction.thing.Function;
+import io.polygenesis.abstraction.thing.FunctionProvider;
 import io.polygenesis.commons.assertion.Assertion;
 import java.util.Objects;
 
@@ -29,7 +30,7 @@ import java.util.Objects;
  *
  * @author Christos Tsakostas
  */
-public class ServiceMethod {
+public class ServiceMethod implements FunctionProvider {
 
   // ===============================================================================================
   // STATE
@@ -77,6 +78,7 @@ public class ServiceMethod {
    *
    * @return the function
    */
+  @Override
   public Function getFunction() {
     return function;
   }

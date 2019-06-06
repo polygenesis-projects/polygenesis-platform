@@ -19,21 +19,21 @@
 -->
 <#include "../polygenesis-implementation-java-shared/macro-assertions-for-parameters.ftl">
 <#include "macro-restore-aggregate-root.ftl">
-<@assertionsForParameters representation.parameterRepresentations></@assertionsForParameters>
+<@assertionsForParameters data.parameterRepresentations></@assertionsForParameters>
 
-<@restoreAggregateRoot persistenceVariable aggregateRootIdDataType aggregateRootDataType aggregateRootVariable requestDto parentThingIdentity multiTenant></@restoreAggregateRoot>
+<@restoreAggregateRoot data.persistenceVariable data.aggregateRootIdDataType data.aggregateRootDataType data.aggregateRootVariable data.requestDto data.parentThingIdentity data.multiTenant></@restoreAggregateRoot>
 
-    <#--Paginated<${ aggregateRootDataType }> paginated = ${ persistenceVariable }.findPaginated(<#if multiTenant>UUID.fromString(${ requestDto.dataGroup.variableName.text }.getTenantId()), </#if>${ requestDto.dataGroup.objectName.text }.getPageNumber(), ${ requestDto.dataGroup.objectName.text }.getPageSize());-->
+    <#--Paginated<${ aggregateRootDataType }> paginated = ${ persistenceVariable }.findPaginated(<#if multiTenant>UUID.fromString(${ requestDto.dataObject.variableName.text }.getTenantId()), </#if>${ requestDto.dataObject.objectName.text }.getPageNumber(), ${ requestDto.dataObject.objectName.text }.getPageSize());-->
 
-    <#--return new ${ representation.returnValue }(-->
+    <#--return new ${ data.returnValue }(-->
         <#--StreamSupport-->
             <#--.stream(paginated.getItems().spliterator(), false)-->
             <#--.map(${ converterVariable }::convertTo${ aggregateRootDataType }CollectionRecord)-->
             <#--.collect(Collectors.toList()),-->
         <#--paginated.getTotalPages(),-->
         <#--paginated.getTotalElements(),-->
-        <#--${ requestDto.dataGroup.objectName.text }.getPageNumber(),-->
-        <#--${ requestDto.dataGroup.objectName.text }.getPageSize()-->
+        <#--${ requestDto.dataObject.objectName.text }.getPageNumber(),-->
+        <#--${ requestDto.dataObject.objectName.text }.getPageSize()-->
     <#--);-->
     // TODO
     return null;

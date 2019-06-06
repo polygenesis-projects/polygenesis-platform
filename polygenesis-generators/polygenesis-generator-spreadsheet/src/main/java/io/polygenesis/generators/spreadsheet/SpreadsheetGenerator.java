@@ -20,27 +20,16 @@
 
 package io.polygenesis.generators.spreadsheet;
 
-import io.polygenesis.commons.path.PathService;
-import io.polygenesis.core.AbstractGenerator;
-import io.polygenesis.core.CoreRegistry;
-import io.polygenesis.core.MetamodelRepository;
-import io.polygenesis.metamodels.spreadsheet.SpreadsheetMetamodelRepository;
-import io.polygenesis.transformers.spreadsheet.SpreadsheetTransformer;
-import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Set;
+import io.polygenesis.core.AbstractUnitGenerator;
+import io.polygenesis.core.Exporter;
+import io.polygenesis.metamodels.spreadsheet.Spreadsheet;
 
 /**
  * The type Spreadsheet generator.
  *
  * @author Christos Tsakostas
  */
-public class SpreadsheetGenerator extends AbstractGenerator {
-
-  private static final String FORMAT = "xls";
+public class SpreadsheetGenerator extends AbstractUnitGenerator<Spreadsheet> {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -49,49 +38,10 @@ public class SpreadsheetGenerator extends AbstractGenerator {
   /**
    * Instantiates a new Spreadsheet generator.
    *
-   * @param generationPath the generation path
+   * @param spreadsheetTransformer the spreadsheet transformer
+   * @param exporter the exporter
    */
-  public SpreadsheetGenerator(Path generationPath) {
-    super(generationPath);
-  }
-
-  // ===============================================================================================
-  // OVERRIDES
-  // ===============================================================================================
-
-  @SuppressWarnings("rawtypes")
-  @Override
-  public void generate(Set<MetamodelRepository> modelRepositories) {
-    SpreadsheetTransformer spreadsheetTransformer = new SpreadsheetTransformer();
-
-    CoreRegistry.getMetamodelRepositoryResolver()
-        .resolve(modelRepositories, SpreadsheetMetamodelRepository.class)
-        .getItems()
-        .forEach(
-            spreadsheet -> {
-              ByteArrayOutputStream byteArrayOutputStream =
-                  spreadsheetTransformer.transform(spreadsheet);
-
-              export(
-                  byteArrayOutputStream,
-                  Paths.get(
-                      getGenerationPath().toString(),
-                      String.format("%s.%s", spreadsheet.getObjectName().getText(), FORMAT)));
-            });
-  }
-
-  private void export(ByteArrayOutputStream byteArrayOutputStream, Path filePath) {
-    PathService.ensurePath(filePath.getParent());
-
-    FileOutputStream fileOutputStream;
-    try {
-      fileOutputStream = new FileOutputStream(filePath.toFile());
-
-      byteArrayOutputStream.writeTo(fileOutputStream);
-
-      fileOutputStream.close();
-    } catch (IOException e) {
-      throw new IllegalStateException(e.getMessage(), e);
-    }
+  public SpreadsheetGenerator(SpreadsheetTransformer spreadsheetTransformer, Exporter exporter) {
+    super(spreadsheetTransformer, exporter);
   }
 }

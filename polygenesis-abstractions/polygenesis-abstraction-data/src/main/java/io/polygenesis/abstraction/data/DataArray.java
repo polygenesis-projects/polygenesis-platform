@@ -47,6 +47,17 @@ public class DataArray extends Data {
     return new DataArray(VariableName.response(), arrayElement);
   }
 
+  /**
+   * Of data array.
+   *
+   * @param arrayElement the array element
+   * @param variableName the variable name
+   * @return the data array
+   */
+  public static DataArray of(Data arrayElement, String variableName) {
+    return new DataArray(new VariableName(variableName), arrayElement);
+  }
+
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================

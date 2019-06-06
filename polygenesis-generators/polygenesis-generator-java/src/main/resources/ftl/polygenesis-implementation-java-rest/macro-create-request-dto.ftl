@@ -19,5 +19,5 @@
 -->
 
 <#macro createRequestDto requestDto>
-    ${ textConverter.toUpperCamel(requestDto.dataGroup.objectName.text) } ${ requestDto.dataGroup.objectName.text } = new ${ textConverter.toUpperCamel(requestDto.dataGroup.objectName.text) }();
+    ${ textConverter.toUpperCamel(requestDto.dataObject.objectName.text) } ${ requestDto.dataObject.objectName.text } = new ${ textConverter.toUpperCamel(requestDto.dataObject.objectName.text) }();
 </#macro>

@@ -23,17 +23,17 @@ package io.polygenesis.craftsman;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.Deducer;
-import io.polygenesis.core.Generator;
+import io.polygenesis.core.MetamodelGenerator;
 import io.polygenesis.deducers.apiimpl.DomainEntityConverterDeducerFactory;
 import io.polygenesis.deducers.apiimpl.ServiceImplementationDeducerFactory;
 import io.polygenesis.deducers.messaging.subscriber.SubscriberDeducerFactory;
 import io.polygenesis.deducers.sql.SqlIndexDeducerFactory;
 import io.polygenesis.deducers.sql.SqlTableDeducerFactory;
 import io.polygenesis.generators.angular.AngularGeneratorFactory;
-import io.polygenesis.generators.java.api.JavaApiGenerator;
 import io.polygenesis.generators.java.api.JavaApiGeneratorFactory;
-import io.polygenesis.generators.java.apidetail.JavaApiDetailGenerator;
-import io.polygenesis.generators.java.apidetail.JavaApiDetailGeneratorFactory;
+import io.polygenesis.generators.java.api.JavaApiMetamodelGenerator;
+import io.polygenesis.generators.java.apidetail.JavaApiDetailMetamodelGenerator;
+import io.polygenesis.generators.java.apidetail.JavaApiDetailMetamodelGeneratorFactory;
 import io.polygenesis.generators.java.exporters.domain.JavaDomainGeneratorFactory;
 import io.polygenesis.generators.java.exporters.domainserviceimpl.DomainServiceImplementationGeneratorFactory;
 import io.polygenesis.generators.java.exporters.rdbms.JavaRdbmsGeneratorFactory;
@@ -54,7 +54,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
- * The type Genesis default.
+ * The type Creator default.
  *
  * @author Christos Tsakostas
  */
@@ -118,7 +118,7 @@ public class GenesisDefault {
    * @param rootPackageName the root package name
    * @return the set
    */
-  public static Set<Generator> javaGenerators(
+  public static Set<MetamodelGenerator> javaGenerators(
       String exportPath,
       String projectFolder,
       String modulePrefix,
@@ -175,7 +175,7 @@ public class GenesisDefault {
    * @param modulePrefix the module prefix
    * @return the java api generator
    */
-  public static JavaApiGenerator javaApiGenerator(
+  public static JavaApiMetamodelGenerator javaApiGenerator(
       String exportPath, String projectFolder, String modulePrefix) {
     return JavaApiGeneratorFactory.newInstance(
         Paths.get(exportPath, projectFolder, modulePrefix + "-" + API));
@@ -190,9 +190,9 @@ public class GenesisDefault {
    * @param rootPackageName the root package name
    * @return the java api detail generator
    */
-  public static JavaApiDetailGenerator javaApiDetailGenerator(
+  public static JavaApiDetailMetamodelGenerator javaApiDetailGenerator(
       String exportPath, String projectFolder, String modulePrefix, String rootPackageName) {
-    return JavaApiDetailGeneratorFactory.newInstance(
+    return JavaApiDetailMetamodelGeneratorFactory.newInstance(
         Paths.get(exportPath, projectFolder, modulePrefix + "-" + API_DETAIL),
         new PackageName(rootPackageName));
   }
@@ -220,7 +220,7 @@ public class GenesisDefault {
    * @param angularExportPath the angular export path
    * @return the set
    */
-  public static Set<Generator> angularGenerators(String angularExportPath) {
+  public static Set<MetamodelGenerator> angularGenerators(String angularExportPath) {
     return new LinkedHashSet<>(
         Arrays.asList(AngularGeneratorFactory.newInstance(Paths.get(angularExportPath))));
   }

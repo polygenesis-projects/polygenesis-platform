@@ -22,7 +22,7 @@ package io.polygenesis.generators.java.exporters.domain.aggregateentity;
 
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.generators.java.transformers.domain.aggregateentity.AggregateEntityIdClassTransformer;
+import io.polygenesis.generators.java.transformers.domain.aggregateentity.AggregateEntityIdLegacyClassTransformer;
 import io.polygenesis.models.domain.AggregateEntity;
 import io.polygenesis.models.domain.InstantiationType;
 import java.nio.file.Path;
@@ -42,7 +42,7 @@ public class AggregateEntityIdExporter {
   // ===============================================================================================
 
   private final FreemarkerService freemarkerService;
-  private final AggregateEntityIdClassTransformer aggregateEntityIdClassRepresentable;
+  private final AggregateEntityIdLegacyClassTransformer aggregateEntityIdClassRepresentable;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -56,7 +56,7 @@ public class AggregateEntityIdExporter {
    */
   public AggregateEntityIdExporter(
       FreemarkerService freemarkerService,
-      AggregateEntityIdClassTransformer aggregateEntityIdClassRepresentable) {
+      AggregateEntityIdLegacyClassTransformer aggregateEntityIdClassRepresentable) {
     this.freemarkerService = freemarkerService;
     this.aggregateEntityIdClassRepresentable = aggregateEntityIdClassRepresentable;
   }

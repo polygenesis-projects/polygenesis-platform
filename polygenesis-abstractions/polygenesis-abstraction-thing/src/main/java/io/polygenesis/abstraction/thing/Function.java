@@ -34,6 +34,10 @@ import java.util.Set;
  */
 public class Function implements FunctionProvider {
 
+  // ===============================================================================================
+  // STATE
+  // ===============================================================================================
+
   private Thing thing;
   private Purpose purpose;
   private FunctionName name;
