@@ -292,6 +292,9 @@ public class TableDeducer {
           19,
           2,
           RequiredType.OPTIONAL);
+    } else if (columnDataType.equals(ColumnDataType.DATE)
+        || columnDataType.equals(ColumnDataType.DATETIME)) {
+      length = 0;
     }
 
     return new Column(

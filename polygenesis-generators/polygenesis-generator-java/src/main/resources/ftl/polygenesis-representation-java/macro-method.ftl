@@ -19,6 +19,7 @@
 -->
 <#include "macro-parameters.ftl">
 <#macro printMethod method>
+<#if method.description != ''>
   /**
    * ${ method.description }
   <#if method.parameterRepresentations?size gt 0 || method.returnValue != "void">
@@ -31,6 +32,7 @@
    * @return ${ textConverter.toLowerCamelSpaces(method.returnValue) }
   </#if>
    */
+</#if>
 <#list method.annotations as annotation>
   ${ annotation }
 </#list>

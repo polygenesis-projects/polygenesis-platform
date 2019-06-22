@@ -46,7 +46,7 @@ import java.util.stream.Collectors;
  * @param <S> the type parameter
  * @author Christos Tsakostas
  */
-public abstract class AbstractLegacyClassTransformer<S> extends AbstractTransformer
+public abstract class AbstractLegacyClassTransformer<S> extends AbstractLegacyTransformer
     implements ClassTransformer<S> {
 
   /** The constant MODIFIER_ABSTRACT. */

@@ -21,9 +21,9 @@
 package io.polygenesis.generators.java.domain.projection.transformer;
 
 import io.polygenesis.commons.text.TextConverter;
+import io.polygenesis.generators.java.domain.AbstractRepositoryLegacyInterfaceTransformer;
 import io.polygenesis.generators.java.shared.transformer.FromDataTypeToJavaConverter;
 import io.polygenesis.generators.java.shared.transformer.FunctionToLegacyMethodRepresentationTransformer;
-import io.polygenesis.generators.java.transformers.domain.shared.AbstractRepositoryLegacyInterfaceTransformer;
 import io.polygenesis.models.domain.Persistence;
 import java.util.Set;
 import java.util.TreeSet;

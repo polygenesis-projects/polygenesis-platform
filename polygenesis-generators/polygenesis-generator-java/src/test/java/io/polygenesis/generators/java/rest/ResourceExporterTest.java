@@ -29,8 +29,6 @@ import static org.mockito.Mockito.verify;
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
-import io.polygenesis.generators.java.exporters.rest.ResourceExporter;
-import io.polygenesis.generators.java.transformers.rest.ResourceLegacyClassTransformer;
 import io.polygenesis.models.rest.Resource;
 import java.nio.file.Path;
 import java.nio.file.Paths;

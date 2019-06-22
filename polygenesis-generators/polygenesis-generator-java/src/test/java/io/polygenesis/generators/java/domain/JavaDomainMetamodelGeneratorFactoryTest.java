@@ -23,8 +23,6 @@ package io.polygenesis.generators.java.domain;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import io.polygenesis.commons.valueobjects.PackageName;
-import io.polygenesis.generators.java.exporters.domain.JavaDomainGeneratorFactory;
-import io.polygenesis.generators.java.exporters.domain.JavaDomainMetamodelGenerator;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Paths;

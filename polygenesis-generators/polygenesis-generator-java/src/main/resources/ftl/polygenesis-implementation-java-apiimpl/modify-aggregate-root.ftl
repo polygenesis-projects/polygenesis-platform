@@ -25,5 +25,7 @@
 <@restoreAggregateRoot data.persistenceVariable data.aggregateRootIdDataType data.aggregateRootDataType data.aggregateRootVariable data.requestDto data.thingIdentity data.multiTenant></@restoreAggregateRoot>
 
 <@storeAggregateRoot data.persistenceVariable data.aggregateRootVariable></@storeAggregateRoot>
+<#if !data.responseDto.getVirtual()>
 
     return new ${ data.returnValue }(${ data.aggregateRootVariable }.getId().getTypeId().toString());
+</#if>

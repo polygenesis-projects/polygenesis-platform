@@ -23,9 +23,9 @@ package io.polygenesis.generators.java.apidetail;
 import io.polygenesis.commons.freemarker.FreemarkerConfig;
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.valueobjects.PackageName;
+import io.polygenesis.core.ActiveFileExporter;
 import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.core.Exporter;
-import io.polygenesis.core.FileExporter;
 import io.polygenesis.core.FreemarkerTemplateEngine;
 import io.polygenesis.core.JavaDataTypeTransformer;
 import io.polygenesis.core.TemplateEngine;
@@ -59,7 +59,7 @@ public final class JavaApiDetailMetamodelGeneratorFactory {
 
   static {
     TemplateEngine templateEngine = new FreemarkerTemplateEngine();
-    Exporter exporter = new FileExporter();
+    Exporter exporter = new ActiveFileExporter();
     DataTypeTransformer dataTypeTransformer = new JavaDataTypeTransformer();
 
     FreemarkerService freemarkerService =

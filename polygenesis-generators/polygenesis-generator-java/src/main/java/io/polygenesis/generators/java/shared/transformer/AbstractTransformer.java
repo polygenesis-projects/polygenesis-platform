@@ -21,9 +21,10 @@
 package io.polygenesis.generators.java.shared.transformer;
 
 import io.polygenesis.abstraction.data.Data;
+import io.polygenesis.core.DataTypeTransformer;
 
 /**
- * The type Abstract representable.
+ * The type Abstract transformer.
  *
  * @author Christos Tsakostas
  */
@@ -33,20 +34,20 @@ public class AbstractTransformer {
   // DEPENDENCIES
   // ===============================================================================================
 
-  /** The From data type to java converter. */
-  protected final FromDataTypeToJavaConverter fromDataTypeToJavaConverter;
+  /** The Data type transformer. */
+  protected final DataTypeTransformer dataTypeTransformer;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
-   * Instantiates a new Abstract representable.
+   * Instantiates a new Abstract transformer.
    *
-   * @param fromDataTypeToJavaConverter the from data type to java converter
+   * @param dataTypeTransformer the data type transformer
    */
-  public AbstractTransformer(FromDataTypeToJavaConverter fromDataTypeToJavaConverter) {
-    this.fromDataTypeToJavaConverter = fromDataTypeToJavaConverter;
+  public AbstractTransformer(DataTypeTransformer dataTypeTransformer) {
+    this.dataTypeTransformer = dataTypeTransformer;
   }
 
   // ===============================================================================================
@@ -63,15 +64,14 @@ public class AbstractTransformer {
     if (model.isDataArray()) {
       return String.format(
           "List<%s>",
-          fromDataTypeToJavaConverter.convert(
-              model.getAsDataArray().getArrayElement().getDataType()));
+          dataTypeTransformer.convert(model.getAsDataArray().getArrayElement().getDataType()));
     } else if (model.isDataMap()) {
       return String.format(
           "Map<%s, %s>",
-          fromDataTypeToJavaConverter.convert(model.getAsDataMap().getKey().getDataType()),
-          fromDataTypeToJavaConverter.convert(model.getAsDataMap().getValue().getDataType()));
+          dataTypeTransformer.convert(model.getAsDataMap().getKey().getDataType()),
+          dataTypeTransformer.convert(model.getAsDataMap().getValue().getDataType()));
     } else {
-      return fromDataTypeToJavaConverter.convert(model.getDataType());
+      return dataTypeTransformer.convert(model.getDataType());
     }
   }
 

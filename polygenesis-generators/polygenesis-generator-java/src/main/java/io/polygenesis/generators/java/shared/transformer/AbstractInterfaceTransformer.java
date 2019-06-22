@@ -27,6 +27,9 @@ import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.core.Nameable;
 import io.polygenesis.core.TemplateData;
 import io.polygenesis.representations.code.InterfaceRepresentation;
+import io.polygenesis.representations.code.MethodRepresentation;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * The type Abstract interface representable.
@@ -35,7 +38,7 @@ import io.polygenesis.representations.code.InterfaceRepresentation;
  * @author Christos Tsakostas
  */
 public abstract class AbstractInterfaceTransformer<S extends Nameable, F extends FunctionProvider>
-    extends AbstractNewTransformer implements InterfaceTransformer<S> {
+    extends AbstractTransformer implements InterfaceTransformer<S> {
 
   /** The constant MODIFIER_PUBLIC. */
   protected static final String MODIFIER_PUBLIC = "public";
@@ -77,6 +80,51 @@ public abstract class AbstractInterfaceTransformer<S extends Nameable, F extends
         simpleObjectName(source, args),
         fullObjectName(source, args),
         methodRepresentations(source, args));
+  }
+
+  @Override
+  public Set<MethodRepresentation> methodRepresentations(S source, Object... args) {
+    return new LinkedHashSet<>();
+  }
+
+  @Override
+  public String packageName(S source, Object... args) {
+    return "";
+  }
+
+  @Override
+  public Set<String> imports(S source, Object... args) {
+    return new LinkedHashSet<>();
+  }
+
+  @Override
+  public Set<String> annotations(S source, Object... args) {
+    return new LinkedHashSet<>();
+  }
+
+  @Override
+  public String description(S source, Object... args) {
+    return String.format(
+        "The %s type.", TextConverter.toUpperCamelSpaces(source.getObjectName().getText()));
+  }
+
+  @Override
+  public String modifiers(S source, Object... args) {
+    return dataTypeTransformer.getModifierPublic();
+  }
+
+  @Override
+  public String simpleObjectName(S source, Object... args) {
+    StringBuilder stringBuilder = new StringBuilder();
+
+    stringBuilder.append(TextConverter.toUpperCamel(source.getObjectName().getText()));
+
+    return stringBuilder.toString();
+  }
+
+  @Override
+  public String fullObjectName(S source, Object... args) {
+    return simpleObjectName(source);
   }
 
   // ===============================================================================================

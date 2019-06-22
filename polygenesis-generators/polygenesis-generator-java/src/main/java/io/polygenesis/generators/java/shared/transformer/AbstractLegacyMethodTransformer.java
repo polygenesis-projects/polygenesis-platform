@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
  * @author Christos Tsakostas
  */
 public abstract class AbstractLegacyMethodTransformer<S extends FunctionProvider>
-    extends AbstractTransformer implements MethodTransformer<S> {
+    extends AbstractLegacyTransformer implements MethodTransformer<S> {
 
   /** The constant MODIFIER_PUBLIC. */
   protected static final String MODIFIER_PUBLIC = "public";

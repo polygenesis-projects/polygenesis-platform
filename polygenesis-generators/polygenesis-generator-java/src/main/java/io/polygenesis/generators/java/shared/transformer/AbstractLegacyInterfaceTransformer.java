@@ -31,7 +31,7 @@ import io.polygenesis.representations.code.InterfaceRepresentation;
  * @param <S> the type parameter
  * @author Christos Tsakostas
  */
-public abstract class AbstractLegacyInterfaceTransformer<S> extends AbstractTransformer
+public abstract class AbstractLegacyInterfaceTransformer<S> extends AbstractLegacyTransformer
     implements InterfaceTransformer<S> {
 
   /** The constant MODIFIER_PUBLIC. */

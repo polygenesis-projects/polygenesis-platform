@@ -30,6 +30,7 @@ import io.polygenesis.core.AbstractionScope;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * {@link Thing} is defined as a concept or an entity on or for which a {@link Purpose} is defined.
@@ -100,6 +101,18 @@ public class Thing implements Abstraction {
    */
   public void assignThingProperties(Set<ThingProperty> thingProperties) {
     setThingProperties(thingProperties);
+  }
+
+  /**
+   * Add data.
+   *
+   * @param data the data
+   */
+  public void addData(Set<Data> data) {
+    Assertion.isNotNull(data, "data is required");
+
+    thingProperties.addAll(
+        data.stream().map(ThingProperty::new).collect(Collectors.toCollection(LinkedHashSet::new)));
   }
 
   /**

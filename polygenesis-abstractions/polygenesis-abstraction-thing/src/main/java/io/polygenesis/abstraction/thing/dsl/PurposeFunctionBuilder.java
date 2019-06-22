@@ -171,13 +171,36 @@ public class PurposeFunctionBuilder {
   }
 
   /**
+   * With function modify no return value purpose function builder.
+   *
+   * @param functionName the function name
+   * @param models the models
+   * @return the purpose function builder
+   */
+  public final PurposeFunctionBuilder withFunctionModifyNoReturnValue(
+      String functionName, Set<Data> models) {
+    return withFunctionModify(functionName, models, false);
+  }
+
+  /**
    * With function modify purpose function builder.
    *
    * @param models the models
    * @return the purpose function builder
    */
   public final PurposeFunctionBuilder withFunctionModify(Set<Data> models) {
-    return withFunctionModify("modify", models);
+    return withFunctionModify("modify", models, true);
+  }
+
+  /**
+   * With function modify purpose function builder.
+   *
+   * @param functionName the function name
+   * @param models the models
+   * @return the purpose function builder
+   */
+  public final PurposeFunctionBuilder withFunctionModify(String functionName, Set<Data> models) {
+    return withFunctionModify(functionName, models, true);
   }
 
   /**
@@ -188,7 +211,8 @@ public class PurposeFunctionBuilder {
    * @return the thing builder
    */
   @SuppressWarnings("CPD-END")
-  public final PurposeFunctionBuilder withFunctionModify(String functionName, Set<Data> models) {
+  private PurposeFunctionBuilder withFunctionModify(
+      String functionName, Set<Data> models, Boolean returnValue) {
 
     // ---------------------------------------------------------------------------------------------
     // ARGUMENTS
@@ -218,35 +242,49 @@ public class PurposeFunctionBuilder {
     // ---------------------------------------------------------------------------------------------
     // RETURN VALUE
     // ---------------------------------------------------------------------------------------------
-    DataObject returnValueDataObject =
-        new DataObject(
-            new ObjectName(
-                String.format(
-                    "%s%sResponse",
-                    functionName, TextConverter.toUpperCamel(thing.getThingName().getText()))),
-            thing.makePackageName(rootPackageNameVo, thing));
+    if (returnValue) {
+      DataObject returnValueDataObject =
+          new DataObject(
+              new ObjectName(
+                  String.format(
+                      "%s%sResponse",
+                      functionName, TextConverter.toUpperCamel(thing.getThingName().getText()))),
+              thing.makePackageName(rootPackageNameVo, thing));
 
-    // ---------------------------------------------------------------------------------------------
+      // -------------------------------------------------------------------------------------------
 
-    returnValueDataObject.addData(
-        DataPrimitive.ofDataBusinessType(
-            DataPurpose.thingIdentity(),
-            PrimitiveType.STRING,
-            new VariableName(
-                String.format(
-                    "%sId", TextConverter.toLowerCamel(thing.getThingName().getText())))));
+      returnValueDataObject.addData(
+          DataPrimitive.ofDataBusinessType(
+              DataPurpose.thingIdentity(),
+              PrimitiveType.STRING,
+              new VariableName(
+                  String.format(
+                      "%sId", TextConverter.toLowerCamel(thing.getThingName().getText())))));
 
-    // ---------------------------------------------------------------------------------------------
-    // FUNCTION
-    // ---------------------------------------------------------------------------------------------
+      // -------------------------------------------------------------------------------------------
+      // FUNCTION
+      // -------------------------------------------------------------------------------------------
 
-    Function function =
-        FunctionBuilder.of(thing, functionName, Purpose.modify())
-            .setReturnValue(returnValueDataObject)
-            .addArgument(argumentDataObject)
-            .build();
+      Function function =
+          FunctionBuilder.of(thing, functionName, Purpose.modify())
+              .setReturnValue(returnValueDataObject)
+              .addArgument(argumentDataObject)
+              .build();
 
-    this.functions.add(function);
+      this.functions.add(function);
+    } else {
+      // -------------------------------------------------------------------------------------------
+      // FUNCTION
+      // -------------------------------------------------------------------------------------------
+
+      Function function =
+          FunctionBuilder.of(thing, functionName, Purpose.modify())
+              .addArgument(argumentDataObject)
+              .build();
+
+      this.functions.add(function);
+    }
+
     return this;
   }
 

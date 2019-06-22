@@ -20,8 +20,8 @@
 
 package io.polygenesis.generators.spreadsheet;
 
+import io.polygenesis.core.ActiveFileExporter;
 import io.polygenesis.core.Exporter;
-import io.polygenesis.core.FileExporter;
 import java.nio.file.Path;
 
 /**
@@ -41,7 +41,7 @@ public class SpreadsheetMetamodelGeneratorFactory {
   // ===============================================================================================
 
   static {
-    Exporter exporter = new FileExporter();
+    Exporter exporter = new ActiveFileExporter();
 
     spreadsheetGenerator = new SpreadsheetGenerator(new SpreadsheetTransformer(), exporter);
   }

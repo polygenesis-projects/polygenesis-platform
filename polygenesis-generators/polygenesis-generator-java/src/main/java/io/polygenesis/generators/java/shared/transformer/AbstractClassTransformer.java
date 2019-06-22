@@ -48,7 +48,7 @@ import java.util.stream.Collectors;
  * @author Christos Tsakostas
  */
 public abstract class AbstractClassTransformer<S extends Nameable, F extends FunctionProvider>
-    extends AbstractNewTransformer implements ClassTransformer<S> {
+    extends AbstractTransformer implements ClassTransformer<S> {
 
   private static final String INSTANTIATES_A_NEW_S = "Instantiates a new %s.";
 
@@ -126,7 +126,8 @@ public abstract class AbstractClassTransformer<S extends Nameable, F extends Fun
 
   @Override
   public String description(S source, Object... args) {
-    return "";
+    return String.format(
+        "The %s type.", TextConverter.toUpperCamelSpaces(source.getObjectName().getText()));
   }
 
   @Override

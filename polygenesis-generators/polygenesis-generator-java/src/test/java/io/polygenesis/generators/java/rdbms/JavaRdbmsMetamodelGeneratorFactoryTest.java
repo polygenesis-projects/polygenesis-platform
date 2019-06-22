@@ -25,8 +25,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
-import io.polygenesis.generators.java.exporters.rdbms.JavaRdbmsGeneratorFactory;
-import io.polygenesis.generators.java.exporters.rdbms.JavaRdbmsMetamodelGenerator;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Paths;

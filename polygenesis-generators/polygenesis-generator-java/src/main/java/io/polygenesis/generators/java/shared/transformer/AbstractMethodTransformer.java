@@ -20,15 +20,19 @@
 
 package io.polygenesis.generators.java.shared.transformer;
 
+import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.abstraction.data.PrimitiveType;
+import io.polygenesis.abstraction.thing.Argument;
 import io.polygenesis.abstraction.thing.FunctionProvider;
 import io.polygenesis.commons.text.TextConverter;
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.representations.code.MethodRepresentation;
 import io.polygenesis.representations.code.MethodRepresentationType;
 import io.polygenesis.representations.code.ParameterRepresentation;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 /**
@@ -38,7 +42,7 @@ import java.util.stream.Collectors;
  * @author Christos Tsakostas
  */
 public abstract class AbstractMethodTransformer<S extends FunctionProvider>
-    extends AbstractNewTransformer implements MethodTransformer<S> {
+    extends AbstractTransformer implements MethodTransformer<S> {
 
   /** The constant MODIFIER_PUBLIC. */
   protected static final String MODIFIER_PUBLIC = "public";
@@ -82,7 +86,35 @@ public abstract class AbstractMethodTransformer<S extends FunctionProvider>
 
   @Override
   public Set<String> imports(S source, Object... args) {
-    return new LinkedHashSet<>();
+    Set<String> imports = new TreeSet<>();
+
+    if (source.getFunction().getReturnValue() != null
+        && source.getFunction().getReturnValue().getData().isDataGroup()) {
+      DataObject dataObject = source.getFunction().getReturnValue().getData().getAsDataGroup();
+
+      // TODO
+      //      if (!dataObject.getPackageName().equals(source.getPackageName())) {
+      imports.add(makeCanonicalObjectName(dataObject.getPackageName(), dataObject.getDataType()));
+      //      }
+    }
+
+    source
+        .getFunction()
+        .getArguments()
+        .stream()
+        .filter(argument -> argument.getData().isDataGroup())
+        .map(Argument::getData)
+        .map(DataObject.class::cast)
+        .forEach(
+            dataGroup -> {
+              // TODO
+              //              if (!dataGroup.getPackageName().equals(source.getPackageName())) {
+              imports.add(
+                  makeCanonicalObjectName(dataGroup.getPackageName(), dataGroup.getDataType()));
+              //              }
+            });
+
+    return imports;
   }
 
   @Override
@@ -152,6 +184,17 @@ public abstract class AbstractMethodTransformer<S extends FunctionProvider>
   // ===============================================================================================
   // PROTECTED
   // ===============================================================================================
+
+  /**
+   * Make canonical object name string.
+   *
+   * @param packageName the package name
+   * @param dataType the data type
+   * @return the string
+   */
+  protected String makeCanonicalObjectName(PackageName packageName, String dataType) {
+    return packageName.getText() + "." + TextConverter.toUpperCamel(dataType);
+  }
 
   /**
    * Gets parameters comma separated.

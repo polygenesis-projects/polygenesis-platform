@@ -27,16 +27,16 @@ import io.polygenesis.generators.java.api.JavaApiGeneratorFactory;
 import io.polygenesis.generators.java.api.JavaApiMetamodelGenerator;
 import io.polygenesis.generators.java.apidetail.JavaApiDetailMetamodelGenerator;
 import io.polygenesis.generators.java.apidetail.JavaApiDetailMetamodelGeneratorFactory;
-import io.polygenesis.generators.java.exporters.domain.JavaDomainGeneratorFactory;
-import io.polygenesis.generators.java.exporters.domain.JavaDomainMetamodelGenerator;
-import io.polygenesis.generators.java.exporters.domainserviceimpl.DomainServiceImplementationGeneratorFactory;
-import io.polygenesis.generators.java.exporters.domainserviceimpl.DomainServiceImplementationMetamodelGenerator;
-import io.polygenesis.generators.java.exporters.rdbms.JavaRdbmsGeneratorFactory;
-import io.polygenesis.generators.java.exporters.rdbms.JavaRdbmsMetamodelGenerator;
-import io.polygenesis.generators.java.exporters.rest.JavaApiRestGeneratorFactory;
-import io.polygenesis.generators.java.exporters.rest.JavaApiRestMetamodelGenerator;
+import io.polygenesis.generators.java.domain.JavaDomainGeneratorFactory;
+import io.polygenesis.generators.java.domain.JavaDomainMetamodelGenerator;
+import io.polygenesis.generators.java.domainservicedetail.DomainServiceDetailMetamodelGenerator;
+import io.polygenesis.generators.java.domainservicedetail.DomainServiceDetailMetamodelGeneratorFactory;
 import io.polygenesis.generators.java.messaging.MessagingGeneratorFactory;
 import io.polygenesis.generators.java.messaging.MessagingMetamodelGenerator;
+import io.polygenesis.generators.java.rdbms.JavaRdbmsGeneratorFactory;
+import io.polygenesis.generators.java.rdbms.JavaRdbmsMetamodelGenerator;
+import io.polygenesis.generators.java.rest.JavaApiRestGeneratorFactory;
+import io.polygenesis.generators.java.rest.JavaApiRestMetamodelGenerator;
 import io.polygenesis.generators.sql.SqlGeneratorFactory;
 import io.polygenesis.generators.sql.SqlMetamodelGenerator;
 import java.nio.file.Path;
@@ -52,7 +52,7 @@ import java.util.Set;
 public final class TrinityJavaContextGeneratorFactory {
 
   // ===============================================================================================
-  // STATIC FINAL
+  // STATIC
   // ===============================================================================================
 
   private static final String API = "api";
@@ -270,9 +270,9 @@ public final class TrinityJavaContextGeneratorFactory {
    * @param modulePrefix the module prefix
    * @return the domain service implementation generator
    */
-  private static DomainServiceImplementationMetamodelGenerator domainServiceImplementationGenerator(
+  private static DomainServiceDetailMetamodelGenerator domainServiceImplementationGenerator(
       String exportPath, String projectFolder, String modulePrefix) {
-    return DomainServiceImplementationGeneratorFactory.newInstance(
+    return DomainServiceDetailMetamodelGeneratorFactory.newInstance(
         Paths.get(
             exportPath,
             projectFolder,

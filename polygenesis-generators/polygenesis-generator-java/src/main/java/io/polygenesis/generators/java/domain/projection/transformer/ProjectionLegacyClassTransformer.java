@@ -21,8 +21,8 @@
 package io.polygenesis.generators.java.domain.projection.transformer;
 
 import io.polygenesis.commons.text.TextConverter;
+import io.polygenesis.generators.java.domain.DomainObjectLegacyClassTransformer;
 import io.polygenesis.generators.java.shared.transformer.FromDataTypeToJavaConverter;
-import io.polygenesis.generators.java.transformers.domain.DomainObjectLegacyClassTransformer;
 import io.polygenesis.models.domain.InstantiationType;
 import io.polygenesis.models.domain.Projection;
 import io.polygenesis.representations.code.MethodRepresentation;
