@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <parent>
+    <artifactId>polygenesis-generators</artifactId>
+    <groupId>io.polygenesis.generators</groupId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>io.polygenesis.generators</groupId>
+  <artifactId>polygenesis-generator-flutter</artifactId>
+
+  <dependencies>
+    <!--METAMODELS-->
+    <dependency>
+      <groupId>io.polygenesis.metamodels</groupId>
+      <artifactId>polygenesis-metamodel-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.polygenesis.metamodels</groupId>
+      <artifactId>polygenesis-metamodel-api-impl</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.polygenesis.metamodels</groupId>
+      <artifactId>polygenesis-metamodel-domain</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.polygenesis.metamodels</groupId>
+      <artifactId>polygenesis-metamodel-messaging</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.polygenesis.metamodels</groupId>
+      <artifactId>polygenesis-metamodel-rest</artifactId>
+    </dependency>
+
+    <!--TEMPLATE ENGINES-->
+    <dependency>
+      <groupId>io.polygenesis.template-engines</groupId>
+      <artifactId>polygenesis-template-engine-freemarker</artifactId>
+    </dependency>
+
+    <!--TRANSFORMERS-->
+    <dependency>
+      <groupId>io.polygenesis.transformers</groupId>
+      <artifactId>polygenesis-transformer-datatype-java</artifactId>
+    </dependency>
+
+    <!--EXPORTERS-->
+    <dependency>
+      <groupId>io.polygenesis.exporters</groupId>
+      <artifactId>polygenesis-exporter-file</artifactId>
+    </dependency>
+
+    <!--REPRESENTATIONS-->
+    <dependency>
+      <groupId>io.polygenesis.representations</groupId>
+      <artifactId>polygenesis-representation-code</artifactId>
+    </dependency>
+
+    <!--GENERATORS-->
+    <dependency>
+      <groupId>io.polygenesis.generators</groupId>
+      <artifactId>polygenesis-generator-sql</artifactId>
+    </dependency>
+
+    <!--TEST-->
+    <dependency>
+      <groupId>io.polygenesis</groupId>
+      <artifactId>polygenesis-commons-test</artifactId>
+      <scope>test</scope>
+      <type>test-jar</type>
+    </dependency>
+  </dependencies>
+
+</project>

@@ -34,10 +34,10 @@ import io.polygenesis.generators.java.api.JavaApiGeneratorFactory;
 import io.polygenesis.generators.java.api.JavaApiMetamodelGenerator;
 import io.polygenesis.generators.java.apidetail.JavaApiDetailMetamodelGenerator;
 import io.polygenesis.generators.java.apidetail.JavaApiDetailMetamodelGeneratorFactory;
-import io.polygenesis.generators.java.exporters.domain.JavaDomainGeneratorFactory;
-import io.polygenesis.generators.java.exporters.domainserviceimpl.DomainServiceImplementationGeneratorFactory;
-import io.polygenesis.generators.java.exporters.rdbms.JavaRdbmsGeneratorFactory;
-import io.polygenesis.generators.java.exporters.rest.JavaApiRestGeneratorFactory;
+import io.polygenesis.generators.java.domain.JavaDomainGeneratorFactory;
+import io.polygenesis.generators.java.domainservicedetail.DomainServiceDetailMetamodelGeneratorFactory;
+import io.polygenesis.generators.java.rdbms.JavaRdbmsGeneratorFactory;
+import io.polygenesis.generators.java.rest.JavaApiRestGeneratorFactory;
 import io.polygenesis.generators.sql.SqlGeneratorFactory;
 import io.polygenesis.models.api.ApiDeducerFactory;
 import io.polygenesis.models.domain.DomainDeducerFactory;
@@ -152,7 +152,7 @@ public class GenesisDefault {
                 Paths.get(exportPath, projectFolder, modulePrefix + "-" + DOMAIN),
                 packageName,
                 tablePrefix),
-            DomainServiceImplementationGeneratorFactory.newInstance(
+            DomainServiceDetailMetamodelGeneratorFactory.newInstance(
                 Paths.get(
                     exportPath,
                     projectFolder,

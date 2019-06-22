@@ -27,7 +27,7 @@ import io.polygenesis.core.ExportInfo;
 import io.polygenesis.core.MetamodelRepository;
 import io.polygenesis.generators.java.api.dto.DtoGenerator;
 import io.polygenesis.generators.java.api.service.ServiceGenerator;
-import io.polygenesis.generators.java.shared.Constants;
+import io.polygenesis.generators.java.shared.FolderFileConstants;
 import io.polygenesis.models.api.Dto;
 import io.polygenesis.models.api.Service;
 import io.polygenesis.models.api.ServiceMetamodelRepository;
@@ -96,22 +96,23 @@ public class JavaApiMetamodelGenerator extends AbstractMetamodelGenerator {
     return ExportInfo.file(
         Paths.get(
             generationPath.toString(),
-            Constants.SRC,
-            Constants.MAIN,
-            Constants.JAVA,
+            FolderFileConstants.SRC,
+            FolderFileConstants.MAIN,
+            FolderFileConstants.JAVA,
             service.getPackageName().toPath().toString()),
-        TextConverter.toUpperCamel(service.getServiceName().getText()) + Constants.JAVA_POSTFIX);
+        TextConverter.toUpperCamel(service.getServiceName().getText())
+            + FolderFileConstants.JAVA_POSTFIX);
   }
 
   private ExportInfo dtoExportInfo(Path generationPath, Dto dto) {
     return ExportInfo.file(
         Paths.get(
             generationPath.toString(),
-            Constants.SRC,
-            Constants.MAIN,
-            Constants.JAVA,
+            FolderFileConstants.SRC,
+            FolderFileConstants.MAIN,
+            FolderFileConstants.JAVA,
             dto.getDataObject().getPackageName().toPath().toString()),
         TextConverter.toUpperCamel(dto.getDataObject().getObjectName().getText())
-            + Constants.JAVA_POSTFIX);
+            + FolderFileConstants.JAVA_POSTFIX);
   }
 }

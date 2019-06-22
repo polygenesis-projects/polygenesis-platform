@@ -73,6 +73,11 @@ public class Purpose implements Serializable {
   private static final String SUPPORTED_MESSAGES = "SUPPORTED_MESSAGES";
 
   // ===============================================================================================
+  // GENERIC
+  // ===============================================================================================
+  private static final String DECIDE = "DECIDE";
+
+  // ===============================================================================================
   // STATE
   // ===============================================================================================
 
@@ -227,6 +232,19 @@ public class Purpose implements Serializable {
    */
   public static Purpose supportedMessages() {
     return new Purpose(SUPPORTED_MESSAGES, CqsType.QUERY);
+  }
+
+  // ===============================================================================================
+  // GENERIC
+  // ===============================================================================================
+
+  /**
+   * Decide purpose.
+   *
+   * @return the purpose
+   */
+  public static Purpose decide() {
+    return new Purpose(DECIDE, CqsType.COMMAND);
   }
 
   // ===============================================================================================

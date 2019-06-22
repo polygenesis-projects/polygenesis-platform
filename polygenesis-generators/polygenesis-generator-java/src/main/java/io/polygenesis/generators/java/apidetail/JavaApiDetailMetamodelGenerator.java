@@ -28,7 +28,7 @@ import io.polygenesis.core.ExportInfo;
 import io.polygenesis.core.MetamodelRepository;
 import io.polygenesis.generators.java.apidetail.converter.DomainObjectConverterExporter;
 import io.polygenesis.generators.java.apidetail.service.ServiceDetailGenerator;
-import io.polygenesis.generators.java.shared.Constants;
+import io.polygenesis.generators.java.shared.FolderFileConstants;
 import io.polygenesis.models.apiimpl.DomainEntityConverterMetamodelRepository;
 import io.polygenesis.models.apiimpl.ServiceImplementation;
 import io.polygenesis.models.apiimpl.ServiceImplementationMetamodelRepository;
@@ -124,12 +124,12 @@ public class JavaApiDetailMetamodelGenerator extends AbstractMetamodelGenerator 
     return ExportInfo.file(
         Paths.get(
             generationPath.toString(),
-            Constants.SRC,
-            Constants.MAIN,
-            Constants.JAVA,
+            FolderFileConstants.SRC,
+            FolderFileConstants.MAIN,
+            FolderFileConstants.JAVA,
             serviceImplementation.getService().getPackageName().toPath().toString()),
         TextConverter.toUpperCamel(serviceImplementation.getService().getServiceName().getText())
             + "Impl"
-            + Constants.JAVA_POSTFIX);
+            + FolderFileConstants.JAVA_POSTFIX);
   }
 }

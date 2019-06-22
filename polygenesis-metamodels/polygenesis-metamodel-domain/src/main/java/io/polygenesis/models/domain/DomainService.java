@@ -20,7 +20,6 @@
 
 package io.polygenesis.models.domain;
 
-import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
@@ -41,7 +40,7 @@ public class DomainService implements Metamodel {
   // ===============================================================================================
   private ObjectName objectName;
   private PackageName packageName;
-  private Set<Function> functions;
+  private Set<DomainServiceMethod> domainServiceMethods;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -56,7 +55,7 @@ public class DomainService implements Metamodel {
   public DomainService(ObjectName objectName, PackageName packageName) {
     setObjectName(objectName);
     setPackageName(packageName);
-    setFunctions(new LinkedHashSet<>());
+    setDomainServiceMethods(new LinkedHashSet<>());
   }
 
   // ===============================================================================================
@@ -68,12 +67,12 @@ public class DomainService implements Metamodel {
   // ===============================================================================================
 
   /**
-   * Append function.
+   * Append domain service method.
    *
-   * @param function the function
+   * @param domainServiceMethod the domain service method
    */
-  public void appendFunction(Function function) {
-    getFunctions().add(function);
+  public void appendDomainServiceMethod(DomainServiceMethod domainServiceMethod) {
+    getDomainServiceMethods().add(domainServiceMethod);
   }
 
   // ===============================================================================================
@@ -103,12 +102,12 @@ public class DomainService implements Metamodel {
   }
 
   /**
-   * Gets functions.
+   * Gets domain service methods.
    *
-   * @return the functions
+   * @return the domain service methods
    */
-  public Set<Function> getFunctions() {
-    return functions;
+  public Set<DomainServiceMethod> getDomainServiceMethods() {
+    return domainServiceMethods;
   }
 
   // ===============================================================================================
@@ -136,13 +135,13 @@ public class DomainService implements Metamodel {
   }
 
   /**
-   * Sets functions.
+   * Sets domain service methods.
    *
-   * @param functions the functions
+   * @param domainServiceMethods the domain service methods
    */
-  public void setFunctions(Set<Function> functions) {
-    Assertion.isNotNull(functions, "functions is required");
-    this.functions = functions;
+  private void setDomainServiceMethods(Set<DomainServiceMethod> domainServiceMethods) {
+    Assertion.isNotNull(domainServiceMethods, "domainServiceMethods is required");
+    this.domainServiceMethods = domainServiceMethods;
   }
 
   // ===============================================================================================
@@ -160,11 +159,11 @@ public class DomainService implements Metamodel {
     DomainService that = (DomainService) o;
     return Objects.equals(objectName, that.objectName)
         && Objects.equals(packageName, that.packageName)
-        && Objects.equals(functions, that.functions);
+        && Objects.equals(domainServiceMethods, that.domainServiceMethods);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(objectName, packageName, functions);
+    return Objects.hash(objectName, packageName, domainServiceMethods);
   }
 }
