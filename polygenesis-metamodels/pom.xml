@@ -20,6 +20,7 @@
     <module>polygenesis-metamodel-messaging</module>
     <module>polygenesis-metamodel-reactive-state</module>
     <module>polygenesis-metamodel-rest</module>
+    <module>polygenesis-metamodel-scheduler</module>
     <module>polygenesis-metamodel-spreadsheet</module>
     <module>polygenesis-metamodel-sql</module>
     <module>polygenesis-metamodel-ui</module>

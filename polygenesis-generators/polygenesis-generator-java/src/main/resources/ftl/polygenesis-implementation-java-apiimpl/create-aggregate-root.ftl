@@ -28,5 +28,7 @@
     );
 
 <@storeAggregateRoot data.persistenceVariable data.aggregateRootVariable></@storeAggregateRoot>
+<#if !data.responseDto.getVirtual()>
 
     return new ${ data.returnValue }(${ data.aggregateRootVariable }.getId().getTypeId().toString());
+</#if>

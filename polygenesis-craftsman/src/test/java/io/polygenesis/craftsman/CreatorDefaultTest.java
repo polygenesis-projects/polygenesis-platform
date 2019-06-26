@@ -45,7 +45,7 @@ public class CreatorDefaultTest {
 
   @Test
   public void javaDeducers() {
-    assertThat(GenesisDefault.javaDeducers("rootPackageName").size()).isEqualTo(11);
+    assertThat(GenesisDefault.javaDeducers("rootPackageName").size()).isGreaterThan(10);
   }
 
   @Test

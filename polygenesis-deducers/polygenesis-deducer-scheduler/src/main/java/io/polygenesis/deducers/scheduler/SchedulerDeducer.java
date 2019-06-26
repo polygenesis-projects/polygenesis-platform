@@ -18,42 +18,58 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.models.rest;
+package io.polygenesis.deducers.scheduler;
 
 import io.polygenesis.abstraction.thing.ThingRepository;
+import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.AbstractionRepository;
+import io.polygenesis.core.AbstractionScope;
 import io.polygenesis.core.CoreRegistry;
+import io.polygenesis.core.Deducer;
 import io.polygenesis.core.MetamodelRepository;
-import io.polygenesis.models.api.ServiceMetamodelRepository;
+import io.polygenesis.models.scheduler.Scheduler;
+import io.polygenesis.models.scheduler.SchedulerRepository;
+import io.polygenesis.models.scheduler.Trigger;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
- * The type Domain deducer.
+ * The type Scheduler deducer.
  *
  * @author Christos Tsakostas
  */
-public class RestDeducerImpl implements RestDeducer {
+public class SchedulerDeducer implements Deducer<SchedulerRepository> {
 
   // ===============================================================================================
   // DEPENDENCIES
   // ===============================================================================================
   private final PackageName rootPackageName;
-  private final ResourceDeducer resourceDeducer;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
-   * Instantiates a new Rest deducer.
+   * Instantiates a new Scheduler deducer.
    *
    * @param rootPackageName the root package name
-   * @param resourceDeducer the resource deducer
    */
-  public RestDeducerImpl(PackageName rootPackageName, ResourceDeducer resourceDeducer) {
+  public SchedulerDeducer(PackageName rootPackageName) {
     this.rootPackageName = rootPackageName;
-    this.resourceDeducer = resourceDeducer;
+  }
+
+  // ===============================================================================================
+  // GETTERS
+  // ===============================================================================================
+
+  /**
+   * Gets root package name.
+   *
+   * @return the root package name
+   */
+  public PackageName getRootPackageName() {
+    return rootPackageName;
   }
 
   // ===============================================================================================
@@ -62,16 +78,23 @@ public class RestDeducerImpl implements RestDeducer {
 
   @SuppressWarnings("rawtypes")
   @Override
-  public RestMetamodelRepository deduce(
+  public SchedulerRepository deduce(
       Set<AbstractionRepository> abstractionRepositories,
-      Set<MetamodelRepository> modelRepositories) {
+      Set<MetamodelRepository> metamodelRepositories) {
+    Set<Scheduler> schedulers = new LinkedHashSet<>();
 
-    return new RestMetamodelRepository(
-        resourceDeducer.deduceFrom(
-            CoreRegistry.getAbstractionRepositoryResolver()
-                .resolve(abstractionRepositories, ThingRepository.class),
-            CoreRegistry.getMetamodelRepositoryResolver()
-                .resolve(modelRepositories, ServiceMetamodelRepository.class),
-            rootPackageName));
+    CoreRegistry.getAbstractionRepositoryResolver()
+        .resolve(abstractionRepositories, ThingRepository.class)
+        .getAbstractionItemsByScope(AbstractionScope.apiClientScheduler())
+        .forEach(
+            thing ->
+                schedulers.add(
+                    new Scheduler(
+                        new ObjectName(thing.getThingName().getText()),
+                        getRootPackageName(),
+                        new Trigger("someTrigger"),
+                        new LinkedHashSet<>())));
+
+    return new SchedulerRepository(schedulers);
   }
 }

@@ -35,6 +35,7 @@ public class TrinityJavaContextGeneratorEnablement {
   private boolean javaRdbmsGenerator = true;
   private boolean apiClientMessaging = true;
   private boolean javaDomainSqlGenerator = true;
+  private boolean apiClientScheduler = true;
 
   /** Instantiates a new Trinity java context generator enablement. */
   public TrinityJavaContextGeneratorEnablement() {
@@ -46,6 +47,7 @@ public class TrinityJavaContextGeneratorEnablement {
     setJavaRdbmsGenerator(true);
     setApiClientMessaging(true);
     setJavaDomainSqlGenerator(true);
+    setApiClientScheduler(true);
   }
 
   // ===============================================================================================
@@ -124,6 +126,15 @@ public class TrinityJavaContextGeneratorEnablement {
     return javaDomainSqlGenerator;
   }
 
+  /**
+   * Is api client scheduler boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isApiClientScheduler() {
+    return apiClientScheduler;
+  }
+
   // ===============================================================================================
   // SETTERS
   // ===============================================================================================
@@ -199,5 +210,14 @@ public class TrinityJavaContextGeneratorEnablement {
    */
   public void setJavaDomainSqlGenerator(boolean javaDomainSqlGenerator) {
     this.javaDomainSqlGenerator = javaDomainSqlGenerator;
+  }
+
+  /**
+   * Sets api client scheduler.
+   *
+   * @param apiClientScheduler the api client scheduler
+   */
+  public void setApiClientScheduler(boolean apiClientScheduler) {
+    this.apiClientScheduler = apiClientScheduler;
   }
 }

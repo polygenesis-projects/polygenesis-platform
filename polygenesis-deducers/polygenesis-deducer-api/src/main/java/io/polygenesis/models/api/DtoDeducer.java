@@ -203,15 +203,16 @@ public class DtoDeducer {
             .filter(model -> model.getDataPurpose().equals(dataPurpose))
             .collect(toCollection(LinkedHashSet::new));
 
-    if (modelPrimitives.isEmpty()) {
-      throw new IllegalStateException(
-          String.format(
-              "No %s found in Dto=%s. Thing name=%s, function=%s",
-              dataPurpose.getText(),
-              dto.getDataObject().getObjectName().getText(),
-              function.getThing().getThingName().getText(),
-              function.getName().getText()));
-    }
+    // TODO: is this check necessary?
+    //    if (modelPrimitives.isEmpty()) {
+    //      throw new IllegalStateException(
+    //          String.format(
+    //              "No %s found in Dto=%s. Thing name=%s, function=%s",
+    //              dataPurpose.getText(),
+    //              dto.getDataObject().getObjectName().getText(),
+    //              function.getThing().getThingName().getText(),
+    //              function.getName().getText()));
+    //    }
 
     if (modelPrimitives.size() > 1) {
       throw new IllegalStateException(

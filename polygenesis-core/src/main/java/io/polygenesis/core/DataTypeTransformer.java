@@ -41,4 +41,11 @@ public interface DataTypeTransformer {
    * @return the modifier public
    */
   String getModifierPublic();
+
+  /**
+   * Gets void.
+   *
+   * @return the void
+   */
+  String getVoid();
 }

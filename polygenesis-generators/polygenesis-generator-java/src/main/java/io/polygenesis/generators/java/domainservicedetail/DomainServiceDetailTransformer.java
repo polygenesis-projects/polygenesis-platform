@@ -100,6 +100,13 @@ public class DomainServiceDetailTransformer
   }
 
   @Override
+  public String description(DomainService source, Object... args) {
+    return String.format(
+        "The %s Implementation.",
+        TextConverter.toUpperCamelSpaces(source.getObjectName().getText()));
+  }
+
+  @Override
   public Set<String> annotations(DomainService source, Object... args) {
     Set<String> annotations = new LinkedHashSet<>();
 
