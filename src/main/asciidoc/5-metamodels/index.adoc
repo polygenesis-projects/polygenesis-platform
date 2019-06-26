@@ -1,0 +1,9 @@
+== Metamodels
+
+The PolyGenesis platform offers several metamodels out of the box:
+
+image::https://raw.githubusercontent.com/tsakostas/automatic-programming-assets/master/images/current-metamodels/current-metamodels.png[Current metamodels]
+
+
+* API
+* API Detail

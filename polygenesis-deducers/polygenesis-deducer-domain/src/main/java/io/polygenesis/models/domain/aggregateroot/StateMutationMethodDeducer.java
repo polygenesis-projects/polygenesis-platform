@@ -22,6 +22,10 @@ package io.polygenesis.models.domain.aggregateroot;
 
 import static io.polygenesis.models.domain.PropertyType.AGGREGATE_ENTITY_COLLECTION;
 
+import io.polygenesis.abstraction.data.Data;
+import io.polygenesis.abstraction.data.DataPurpose;
+import io.polygenesis.abstraction.thing.Argument;
+import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.dsl.FunctionBuilder;
@@ -55,6 +59,72 @@ public class StateMutationMethodDeducer {
   public Set<StateMutationMethod> deduce(Thing thing, Set<DomainObjectProperty> properties) {
     Set<StateMutationMethod> stateMutationMethods = new LinkedHashSet<>();
 
+    stateMutationMethods.addAll(deduceForAggregateEntities(thing, properties));
+    stateMutationMethods.addAll(deduceForStateMutation(thing));
+
+    return stateMutationMethods;
+  }
+
+  // ===============================================================================================
+  // PRIVATE - STATE MUTATION
+  // ===============================================================================================
+
+  /**
+   * Deduce for state mutation set.
+   *
+   * @param thing the thing
+   * @return the set
+   */
+  private Set<StateMutationMethod> deduceForStateMutation(Thing thing) {
+    Set<StateMutationMethod> stateMutationMethods = new LinkedHashSet<>();
+
+    thing
+        .getFunctions()
+        .stream()
+        .filter(function -> function.getPurpose().isModify())
+        .forEach(
+            function ->
+                stateMutationMethods.add(
+                    new StateMutationMethod(convertToDomainFunction(function))));
+
+    return stateMutationMethods;
+  }
+
+  protected Function convertToDomainFunction(Function function) {
+    Argument argumentDto =
+        function.getArguments().stream().findFirst().orElseThrow(IllegalArgumentException::new);
+
+    Set<Data> newArguments = new LinkedHashSet<>();
+    argumentDto
+        .getData()
+        .getAsDataGroup()
+        .getModels()
+        .stream()
+        .filter(data -> !data.getDataPurpose().equals(DataPurpose.thingIdentity()))
+        .forEach(data -> newArguments.add(data));
+
+    return FunctionBuilder.of(
+            function.getThing(), function.getName().getText(), function.getPurpose())
+        .addArguments(newArguments)
+        .build();
+  }
+
+  // ===============================================================================================
+  // PRIVATE - AGGREGATE ENTITIES
+  // ===============================================================================================
+
+  /**
+   * Deduce for aggregate entities set.
+   *
+   * @param thing the thing
+   * @param properties the properties
+   * @return the set
+   */
+  @SuppressWarnings("rawtypes")
+  private Set<StateMutationMethod> deduceForAggregateEntities(
+      Thing thing, Set<DomainObjectProperty> properties) {
+    Set<StateMutationMethod> stateMutationMethods = new LinkedHashSet<>();
+
     properties.forEach(
         property -> {
           if (property.getPropertyType().equals(AGGREGATE_ENTITY_COLLECTION)) {
@@ -67,10 +137,6 @@ public class StateMutationMethodDeducer {
     return stateMutationMethods;
   }
 
-  // ===============================================================================================
-  // PRIVATE
-  // ===============================================================================================
-
   /**
    * For aggregate entity collection set.
    *
@@ -78,7 +144,7 @@ public class StateMutationMethodDeducer {
    * @param aggregateEntityCollection the aggregate entity collection
    * @return the set
    */
-  protected Set<StateMutationMethod> forAggregateEntityCollection(
+  private Set<StateMutationMethod> forAggregateEntityCollection(
       Thing thing, AggregateEntityCollection aggregateEntityCollection) {
     Set<StateMutationMethod> stateMutationMethods = new LinkedHashSet<>();
 
@@ -101,7 +167,7 @@ public class StateMutationMethodDeducer {
    * @param aggregateEntity the aggregate entity
    * @return the state mutation method
    */
-  protected StateMutationMethod aggregateRootCreateEntity(
+  private StateMutationMethod aggregateRootCreateEntity(
       Thing thing, AggregateEntity aggregateEntity) {
     return new StateMutationMethod(
         FunctionBuilder.of(
@@ -121,7 +187,7 @@ public class StateMutationMethodDeducer {
    * @param aggregateEntity the aggregate entity
    * @return the state mutation method
    */
-  protected StateMutationMethod aggregateRootUpdateEntity(
+  private StateMutationMethod aggregateRootUpdateEntity(
       Thing thing, AggregateEntity aggregateEntity) {
     return new StateMutationMethod(
         FunctionBuilder.of(
@@ -141,7 +207,7 @@ public class StateMutationMethodDeducer {
    * @param aggregateEntity the aggregate entity
    * @return the state mutation method
    */
-  protected StateMutationMethod aggregateRootDeleteEntity(
+  private StateMutationMethod aggregateRootDeleteEntity(
       Thing thing, AggregateEntity aggregateEntity) {
     return new StateMutationMethod(
         FunctionBuilder.of(

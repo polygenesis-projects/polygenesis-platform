@@ -21,7 +21,6 @@
 package io.polygenesis.metamodels.spreadsheet;
 
 import io.polygenesis.core.AbstractMetamodelRepository;
-import io.polygenesis.core.MetamodelRepository;
 import java.util.Set;
 
 /**
@@ -29,8 +28,7 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class SpreadsheetMetamodelRepository extends AbstractMetamodelRepository<Spreadsheet>
-    implements MetamodelRepository<Spreadsheet> {
+public class SpreadsheetMetamodelRepository extends AbstractMetamodelRepository<Spreadsheet> {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)

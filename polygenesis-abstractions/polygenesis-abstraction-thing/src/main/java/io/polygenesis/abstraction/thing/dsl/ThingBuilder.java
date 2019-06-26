@@ -59,6 +59,7 @@ public class ThingBuilder extends AbstractThingBuilder<ThingBuilder> {
   /**
    * End to end child thing builder.
    *
+   * @param parentThing the parent thing
    * @return the thing builder
    */
   public static ThingBuilder endToEndChild(Thing parentThing) {
@@ -70,6 +71,17 @@ public class ThingBuilder extends AbstractThingBuilder<ThingBuilder> {
                     AbstractionScope.apiClientRest(),
                     AbstractionScope.domainAggregateEntity())))
         .setParentThing(parentThing);
+  }
+
+  /**
+   * Api client scheduler thing builder.
+   *
+   * @return the thing builder
+   */
+  public static ThingBuilder apiClientScheduler() {
+    return new ThingBuilder(
+        new LinkedHashSet<>(
+            Arrays.asList(AbstractionScope.api(), AbstractionScope.apiClientScheduler())));
   }
 
   /**

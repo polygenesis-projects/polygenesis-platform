@@ -79,7 +79,7 @@ public class PersistenceImplTestLegacyClassTransformer
   @Override
   public Set<MethodRepresentation> methodRepresentations(Persistence source, Object... args) {
     StringBuilder stringBuilder = new StringBuilder();
-    stringBuilder.append("\t\t// TODO [PolyGenesis]: write test case\n");
+    stringBuilder.append("\t\t// TODO: write test case\n");
     stringBuilder.append(
         String.format(
             "\t\tassertThat(%s).isNotNull();",

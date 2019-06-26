@@ -20,11 +20,59 @@
 
 package io.polygenesis.models.rest;
 
+import io.polygenesis.abstraction.thing.ThingRepository;
+import io.polygenesis.commons.valueobjects.PackageName;
+import io.polygenesis.core.AbstractionRepository;
+import io.polygenesis.core.CoreRegistry;
 import io.polygenesis.core.Deducer;
+import io.polygenesis.core.MetamodelRepository;
+import io.polygenesis.models.api.ServiceMetamodelRepository;
+import java.util.Set;
 
 /**
- * The interface Api deducer.
+ * The type Domain deducer.
  *
  * @author Christos Tsakostas
  */
-public interface RestDeducer extends Deducer<RestMetamodelRepository> {}
+public class RestDeducer implements Deducer<RestMetamodelRepository> {
+
+  // ===============================================================================================
+  // DEPENDENCIES
+  // ===============================================================================================
+  private final PackageName rootPackageName;
+  private final ResourceDeducer resourceDeducer;
+
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
+  /**
+   * Instantiates a new Rest deducer.
+   *
+   * @param rootPackageName the root package name
+   * @param resourceDeducer the resource deducer
+   */
+  public RestDeducer(PackageName rootPackageName, ResourceDeducer resourceDeducer) {
+    this.rootPackageName = rootPackageName;
+    this.resourceDeducer = resourceDeducer;
+  }
+
+  // ===============================================================================================
+  // OVERRIDES
+  // ===============================================================================================
+
+  @SuppressWarnings("rawtypes")
+  @Override
+  public RestMetamodelRepository deduce(
+      Set<AbstractionRepository> abstractionRepositories,
+      Set<MetamodelRepository> modelRepositories) {
+
+    return new RestMetamodelRepository(
+        resourceDeducer.deduceFrom(
+            CoreRegistry.getAbstractionRepositoryResolver()
+                .resolve(abstractionRepositories, ThingRepository.class),
+            CoreRegistry.getMetamodelRepositoryResolver()
+                .resolve(modelRepositories, ServiceMetamodelRepository.class),
+            rootPackageName));
+  }
+}

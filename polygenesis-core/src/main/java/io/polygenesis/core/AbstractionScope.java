@@ -40,6 +40,8 @@ public class AbstractionScope implements Serializable {
   public static final String API_CLIENT_REST = "API_CLIENT_REST";
   /** The constant API_CLIENT_MESSAGING. */
   public static final String API_CLIENT_MESSAGING = "API_CLIENT_MESSAGING";
+  /** The constant API_CLIENT_SCHEDULER. */
+  public static final String API_CLIENT_SCHEDULER = "API_CLIENT_SCHEDULER";
 
   // ===============================================================================================
   // DOMAIN
@@ -120,6 +122,15 @@ public class AbstractionScope implements Serializable {
    */
   public static AbstractionScope apiClientMessaging() {
     return new AbstractionScope(API_CLIENT_MESSAGING);
+  }
+
+  /**
+   * Api client scheduler abstraction scope.
+   *
+   * @return the abstraction scope
+   */
+  public static AbstractionScope apiClientScheduler() {
+    return new AbstractionScope(API_CLIENT_SCHEDULER);
   }
 
   /**

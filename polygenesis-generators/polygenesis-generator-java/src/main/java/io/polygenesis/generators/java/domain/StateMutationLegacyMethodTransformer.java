@@ -144,10 +144,10 @@ public class StateMutationLegacyMethodTransformer
   @Override
   public String implementation(StateMutationMethod source, Object... args) {
     if (source.getFunction().getReturnValue() == null) {
-      return "\t\t// TODO [PolyGenesis]: write implementation here";
+      return "\t\t// TODO: write implementation here";
     } else {
       StringBuilder stringBuilder = new StringBuilder();
-      stringBuilder.append("\t\t// TODO [PolyGenesis]: write implementation here\n");
+      stringBuilder.append("\t\t// TODO: write implementation here\n");
       stringBuilder.append("\t\treturn null;");
       return stringBuilder.toString();
     }

@@ -1,0 +1,8 @@
+== Custom Metamodel
+
+If the existing PolyGenesis metamodels do dot cover your needs you can always create your custom
+metamodels, by following the steps below:
+
+
+* Optionally, create a new module for your metamodel
+* API Detail

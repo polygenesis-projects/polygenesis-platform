@@ -63,7 +63,7 @@ public final class RestDeducerFactory {
    * @param packageName the package name
    * @return the api deducer
    */
-  public static RestDeducerImpl newInstance(PackageName packageName) {
-    return new RestDeducerImpl(packageName, resourceDeducer);
+  public static RestDeducer newInstance(PackageName packageName) {
+    return new RestDeducer(packageName, resourceDeducer);
   }
 }

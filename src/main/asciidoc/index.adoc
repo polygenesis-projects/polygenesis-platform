@@ -9,3 +9,8 @@ PolyGenesis is an open source platform for Cross-Language Automated Code Generat
 include::1-introduction/index.adoc[]
 
 include::2-getting-started/index.adoc[]
+
+include::5-metamodels/index.adoc[]
+
+include::10-custom-metamodel/index.adoc[]
+

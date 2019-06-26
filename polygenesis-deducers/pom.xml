@@ -20,6 +20,7 @@
     <module>polygenesis-deducer-messaging</module>
     <module>polygenesis-deducer-reactive-state</module>
     <module>polygenesis-deducer-rest</module>
+    <module>polygenesis-deducer-scheduler</module>
     <module>polygenesis-deducer-spreadsheet</module>
     <module>polygenesis-deducer-sql</module>
     <module>polygenesis-deducer-ui</module>

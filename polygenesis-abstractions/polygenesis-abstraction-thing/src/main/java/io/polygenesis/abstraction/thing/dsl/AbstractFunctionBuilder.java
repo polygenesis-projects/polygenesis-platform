@@ -95,6 +95,17 @@ public abstract class AbstractFunctionBuilder<T extends AbstractFunctionBuilder<
     return builderClass.cast(this);
   }
 
+  /**
+   * Add arguments t.
+   *
+   * @param dataSet the data set
+   * @return the t
+   */
+  public T addArguments(Set<Data> dataSet) {
+    dataSet.forEach(data -> this.arguments.add(new Argument(data)));
+    return builderClass.cast(this);
+  }
+
   // ===============================================================================================
   // SETTERS
   // ===============================================================================================

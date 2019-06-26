@@ -37,6 +37,8 @@ import io.polygenesis.generators.java.rdbms.JavaRdbmsGeneratorFactory;
 import io.polygenesis.generators.java.rdbms.JavaRdbmsMetamodelGenerator;
 import io.polygenesis.generators.java.rest.JavaApiRestGeneratorFactory;
 import io.polygenesis.generators.java.rest.JavaApiRestMetamodelGenerator;
+import io.polygenesis.generators.java.scheduler.SchedulerMetamodelGenerator;
+import io.polygenesis.generators.java.scheduler.SchedulerMetamodelGeneratorFactory;
 import io.polygenesis.generators.sql.SqlGeneratorFactory;
 import io.polygenesis.generators.sql.SqlMetamodelGenerator;
 import java.nio.file.Path;
@@ -62,6 +64,8 @@ public final class TrinityJavaContextGeneratorFactory {
   // TODO
   // private static final String API_CLIENT_MESSAGING = "api-client-messaging";
   private static final String API_CLIENT_MESSAGING = "api-client-subscriber-activemq";
+  private static final String API_CLIENT_SCHEDULER = "api-client-scheduler-camel";
+
   private static final String DOMAIN = "domain";
   private static final String DOMAIN_DETAILS = "domain-details";
   private static final String DOMAIN_DETAIL_SERVICES = "domain-detail-services";
@@ -149,6 +153,10 @@ public final class TrinityJavaContextGeneratorFactory {
     if (trinityJavaContextGeneratorEnablement.isJavaDomainSqlGenerator()) {
       metamodelGenerators.add(
           sqlMetamodelGenerator(exportPath, projectFolder, modulePrefix, tablePrefix));
+    }
+
+    if (trinityJavaContextGeneratorEnablement.isApiClientScheduler()) {
+      metamodelGenerators.add(apiClientScheduler(exportPath, projectFolder, modulePrefix));
     }
 
     return new TrinityJavaContextGenerator(generationPath, metamodelGenerators);
@@ -296,6 +304,24 @@ public final class TrinityJavaContextGeneratorFactory {
             projectFolder,
             modulePrefix + "-" + API_CLIENTS,
             modulePrefix + "-" + API_CLIENT_MESSAGING));
+  }
+
+  /**
+   * Api client scheduler scheduler metamodel generator.
+   *
+   * @param exportPath the export path
+   * @param projectFolder the project folder
+   * @param modulePrefix the module prefix
+   * @return the scheduler metamodel generator
+   */
+  private static SchedulerMetamodelGenerator apiClientScheduler(
+      String exportPath, String projectFolder, String modulePrefix) {
+    return SchedulerMetamodelGeneratorFactory.newInstance(
+        Paths.get(
+            exportPath,
+            projectFolder,
+            modulePrefix + "-" + API_CLIENTS,
+            modulePrefix + "-" + API_CLIENT_SCHEDULER));
   }
 
   /**

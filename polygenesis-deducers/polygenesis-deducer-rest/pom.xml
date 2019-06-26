@@ -12,7 +12,7 @@
   <artifactId>polygenesis-deducer-rest</artifactId>
 
   <dependencies>
-    <!--MODEL-->
+    <!--METAMODELS-->
     <dependency>
       <groupId>io.polygenesis.metamodels</groupId>
       <artifactId>polygenesis-metamodel-rest</artifactId>
