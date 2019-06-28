@@ -74,14 +74,14 @@ public class ThingBuilder extends AbstractThingBuilder<ThingBuilder> {
   }
 
   /**
-   * Api client scheduler thing builder.
+   * Api client batch process thing builder.
    *
    * @return the thing builder
    */
-  public static ThingBuilder apiClientScheduler() {
+  public static ThingBuilder apiClientBatchProcess() {
     return new ThingBuilder(
         new LinkedHashSet<>(
-            Arrays.asList(AbstractionScope.api(), AbstractionScope.apiClientScheduler())));
+            Arrays.asList(AbstractionScope.api(), AbstractionScope.apiClientBatchProcess())));
   }
 
   /**

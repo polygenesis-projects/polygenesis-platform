@@ -185,7 +185,7 @@ public class Service implements Metamodel {
       Data arrayElement =
           dto.getArrayElementAsOptional().orElseThrow(IllegalArgumentException::new);
       if (arrayElement.isDataGroup()) {
-        addDto(dtos, new Dto(DtoType.COLLECTION_RECORD, arrayElement.getAsDataGroup(), false));
+        addDto(dtos, new Dto(DtoType.COLLECTION_RECORD, arrayElement.getAsDataGroup(), false, dto));
       }
     }
 
@@ -210,7 +210,7 @@ public class Service implements Metamodel {
                               String.format("%sDto", dataObject.getObjectName().getText())));
                 }
 
-                addDto(dtos, new Dto(dtoType, dataObject, false));
+                addDto(dtos, new Dto(dtoType, dataObject, false, dto));
               }
             });
   }

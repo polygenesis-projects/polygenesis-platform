@@ -38,6 +38,7 @@ import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 /**
@@ -114,7 +115,7 @@ public abstract class AbstractLegacyClassTransformer<S> extends AbstractLegacyTr
    * @return the set
    */
   protected Set<String> imports(DataObject modelGroup) {
-    Set<String> imports = new LinkedHashSet<>();
+    Set<String> imports = new TreeSet<>();
 
     modelGroup
         .getModels()

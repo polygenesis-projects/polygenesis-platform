@@ -30,7 +30,7 @@
         ${ from.data.variableName.text }.get${ textConverter.toUpperCamel(data.variableName.text) }()<#sep>,</#sep>
         <#break>
         <#case 'OBJECT'>
-        convertToDto(${ from.data.variableName.text }.get${ textConverter.toUpperCamel(data.variableName.text) }())<#sep>,</#sep>
+        convertTo${ textConverter.toUpperCamel(data.objectName.text) }Dto(${ from.data.variableName.text }.get${ textConverter.toUpperCamel(data.variableName.text) }())<#sep>,</#sep>
           <#break>
         <#default>
         // Data Primary Type = ${ data.dataPrimaryType } is not supported

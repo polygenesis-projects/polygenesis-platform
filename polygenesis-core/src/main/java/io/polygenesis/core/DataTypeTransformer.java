@@ -43,6 +43,13 @@ public interface DataTypeTransformer {
   String getModifierPublic();
 
   /**
+   * Gets modifier abstract.
+   *
+   * @return the modifier abstract
+   */
+  String getModifierAbstract();
+
+  /**
    * Gets void.
    *
    * @return the void

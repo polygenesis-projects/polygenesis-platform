@@ -285,6 +285,11 @@
       </dependency>
       <dependency>
         <groupId>io.polygenesis.metamodels</groupId>
+        <artifactId>polygenesis-metamodel-periodic-process</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.polygenesis.metamodels</groupId>
         <artifactId>polygenesis-metamodel-reactive-state</artifactId>
         <version>${project.version}</version>
       </dependency>
@@ -333,6 +338,16 @@
       <dependency>
         <groupId>io.polygenesis.deducers</groupId>
         <artifactId>polygenesis-deducer-messaging</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.polygenesis.deducers</groupId>
+        <artifactId>polygenesis-deducer-page-object</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.polygenesis.deducers</groupId>
+        <artifactId>polygenesis-deducer-periodic-process</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>

@@ -47,6 +47,12 @@ public class SchedulerTransformer extends AbstractClassTransformer<Scheduler, Se
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
+  /**
+   * Instantiates a new Scheduler transformer.
+   *
+   * @param dataTypeTransformer the data type transformer
+   * @param methodTransformer the method transformer
+   */
   public SchedulerTransformer(
       DataTypeTransformer dataTypeTransformer, MethodTransformer<ServiceMethod> methodTransformer) {
     super(dataTypeTransformer, methodTransformer);

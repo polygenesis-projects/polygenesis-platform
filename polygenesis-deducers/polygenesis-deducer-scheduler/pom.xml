@@ -13,7 +13,7 @@
   <artifactId>polygenesis-deducer-scheduler</artifactId>
 
   <dependencies>
-    <!--MODEL-->
+    <!--METAMODELS-->
     <dependency>
       <groupId>io.polygenesis.metamodels</groupId>
       <artifactId>polygenesis-metamodel-scheduler</artifactId>

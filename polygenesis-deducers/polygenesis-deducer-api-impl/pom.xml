@@ -12,7 +12,7 @@
   <artifactId>polygenesis-deducer-api-impl</artifactId>
 
   <dependencies>
-    <!--MODEL-->
+    <!--METAMODELS-->
     <dependency>
       <groupId>io.polygenesis.metamodels</groupId>
       <artifactId>polygenesis-metamodel-api-impl</artifactId>

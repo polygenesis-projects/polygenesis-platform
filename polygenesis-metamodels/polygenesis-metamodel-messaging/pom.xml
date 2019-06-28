@@ -19,7 +19,7 @@
       <artifactId>polygenesis-abstraction-thing</artifactId>
     </dependency>
 
-    <!--MODELS-->
+    <!--METAMODELS-->
     <dependency>
       <groupId>io.polygenesis.metamodels</groupId>
       <artifactId>polygenesis-metamodel-api</artifactId>

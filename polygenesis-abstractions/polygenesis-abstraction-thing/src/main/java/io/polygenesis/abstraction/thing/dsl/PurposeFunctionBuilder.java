@@ -450,7 +450,7 @@ public class PurposeFunctionBuilder {
     // ---------------------------------------------------------------------------------------------
 
     Function function =
-        FunctionBuilder.of(thing, "fetchCollection", Purpose.fetchPagedCollection())
+        FunctionBuilder.of(thing, "fetchPagedCollection", Purpose.fetchPagedCollection())
             .setReturnValue(dataObjectReturnValue)
             .addArgument(argumentDataObject)
             .build();

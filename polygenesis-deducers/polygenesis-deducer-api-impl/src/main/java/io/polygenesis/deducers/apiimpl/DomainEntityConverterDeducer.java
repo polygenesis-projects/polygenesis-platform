@@ -196,6 +196,7 @@ public class DomainEntityConverterDeducer extends BaseApiImplementationDeducer
     Dto dtoToUse = dto.withVariableNameEqualToObjectName();
     ValueObject valueObjectToUse = valueObject.withVariableNameEqualToObjectName();
 
+    // TO VALUE OBJECT
     Function functionToVo =
         FunctionBuilder.of(thing, "convertToVo", Purpose.convertDtoToVo())
             .setReturnValue(valueObjectToUse.getData())
@@ -204,13 +205,35 @@ public class DomainEntityConverterDeducer extends BaseApiImplementationDeducer
 
     methods.add(new DomainEntityConverterMethod(functionToVo, dtoToUse, valueObjectToUse));
 
-    Function functionToDto =
-        FunctionBuilder.of(thing, "convertToDto", Purpose.convertVoToDto())
-            .setReturnValue(dto.getDataObject())
-            .addArgument(valueObjectToUse.getData())
-            .build();
+    // TO DTO
+    Optional<DomainEntityConverterMethod> optionalDomainEntityConverterMethod =
+        methods
+            .stream()
+            .filter(
+                domainEntityConverterMethod ->
+                    domainEntityConverterMethod
+                        .getFunction()
+                        .getName()
+                        .getText()
+                        .equals(
+                            String.format(
+                                "convertTo%s",
+                                TextConverter.toUpperCamel(dto.getObjectName().getText()))))
+            .findFirst();
 
-    methods.add(new DomainEntityConverterMethod(functionToDto, valueObjectToUse, dto));
+    if (!optionalDomainEntityConverterMethod.isPresent()) {
+      Function functionToDto =
+          FunctionBuilder.of(
+                  thing,
+                  String.format(
+                      "convertTo%s", TextConverter.toUpperCamel(dto.getObjectName().getText())),
+                  Purpose.convertVoToDto())
+              .setReturnValue(dto.getDataObject())
+              .addArgument(valueObjectToUse.getData())
+              .build();
+
+      methods.add(new DomainEntityConverterMethod(functionToDto, valueObjectToUse, dto));
+    }
   }
 
   /**

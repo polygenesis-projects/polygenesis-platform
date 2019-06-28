@@ -22,6 +22,7 @@ package io.polygenesis.models.api;
 
 import static java.util.stream.Collectors.toCollection;
 
+import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.abstraction.thing.ThingName;
 import io.polygenesis.core.AbstractMetamodelRepository;
 import io.polygenesis.core.MetamodelRepository;
@@ -64,5 +65,20 @@ public class ServiceMetamodelRepository extends AbstractMetamodelRepository<Serv
         .stream()
         .filter(service -> service.getThingName().equals(thingName))
         .collect(toCollection(LinkedHashSet::new));
+  }
+
+  /**
+   * Gets service method by function.
+   *
+   * @param function the function
+   * @return the service method by function
+   */
+  public ServiceMethod getServiceMethodByFunction(Function function) {
+    return getItems()
+        .stream()
+        .flatMap(service -> service.getServiceMethods().stream())
+        .filter(serviceMethod -> serviceMethod.getFunction().equals(function))
+        .findFirst()
+        .orElseThrow(IllegalArgumentException::new);
   }
 }

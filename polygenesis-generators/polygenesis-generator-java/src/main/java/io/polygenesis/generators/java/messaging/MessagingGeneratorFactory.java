@@ -22,10 +22,10 @@ package io.polygenesis.generators.java.messaging;
 
 import io.polygenesis.commons.freemarker.FreemarkerConfig;
 import io.polygenesis.commons.freemarker.FreemarkerService;
-import io.polygenesis.generators.java.messaging.activity.SubscriberActivityRegistry;
-import io.polygenesis.generators.java.messaging.exporter.SubscriberExporter;
-import io.polygenesis.generators.java.messaging.transformer.SubscriberLegacyClassTransformer;
-import io.polygenesis.generators.java.messaging.transformer.SubscriberLegacyMethodTransformer;
+import io.polygenesis.generators.java.messaging.subscriber.SubscriberExporter;
+import io.polygenesis.generators.java.messaging.subscriber.SubscriberLegacyClassTransformer;
+import io.polygenesis.generators.java.messaging.subscriber.SubscriberLegacyMethodTransformer;
+import io.polygenesis.generators.java.messaging.subscriber.activity.SubscriberActivityRegistry;
 import io.polygenesis.generators.java.shared.transformer.FromDataTypeToJavaConverter;
 import java.nio.file.Path;
 

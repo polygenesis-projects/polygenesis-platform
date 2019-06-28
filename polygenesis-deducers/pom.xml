@@ -24,6 +24,8 @@
     <module>polygenesis-deducer-spreadsheet</module>
     <module>polygenesis-deducer-sql</module>
     <module>polygenesis-deducer-ui</module>
+    <module>polygenesis-deducer-periodic-process</module>
+    <module>polygenesis-deducer-page-object</module>
   </modules>
 
 </project>
