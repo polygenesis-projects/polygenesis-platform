@@ -42,6 +42,8 @@ public class AbstractionScope implements Serializable {
   public static final String API_CLIENT_MESSAGING = "API_CLIENT_MESSAGING";
   /** The constant API_CLIENT_SCHEDULER. */
   public static final String API_CLIENT_SCHEDULER = "API_CLIENT_SCHEDULER";
+  /** The constant API_CLIENT_BATCH_PROCESS. */
+  public static final String API_CLIENT_BATCH_PROCESS = "API_CLIENT_BATCH_PROCESS";
 
   // ===============================================================================================
   // DOMAIN
@@ -131,6 +133,15 @@ public class AbstractionScope implements Serializable {
    */
   public static AbstractionScope apiClientScheduler() {
     return new AbstractionScope(API_CLIENT_SCHEDULER);
+  }
+
+  /**
+   * Api client batch process abstraction scope.
+   *
+   * @return the abstraction scope
+   */
+  public static AbstractionScope apiClientBatchProcess() {
+    return new AbstractionScope(API_CLIENT_BATCH_PROCESS);
   }
 
   /**

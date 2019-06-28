@@ -78,6 +78,14 @@ public class Purpose implements Serializable {
   private static final String DECIDE = "DECIDE";
 
   // ===============================================================================================
+  // PERIODIC_PROCESS
+  // ===============================================================================================
+  private static final String PERIODIC_PROCESS_NEXT_PAGE = "PERIODIC_PROCESS_NEXT_PAGE";
+  private static final String PERIODIC_PROCESS_PROCESS_ONE = "PERIODIC_PROCESS_PROCESS_ONE";
+  private static final String PERIODIC_PROCESS_COMMAND = "PERIODIC_PROCESS_COMMAND";
+  private static final String PERIODIC_PROCESS_QUERY = "PERIODIC_PROCESS_QUERY";
+
+  // ===============================================================================================
   // STATE
   // ===============================================================================================
 
@@ -245,6 +253,46 @@ public class Purpose implements Serializable {
    */
   public static Purpose decide() {
     return new Purpose(DECIDE, CqsType.COMMAND);
+  }
+
+  // ===============================================================================================
+  // PERIODIC_PROCESS
+  // ===============================================================================================
+
+  /**
+   * Periodic process next page purpose.
+   *
+   * @return the purpose
+   */
+  public static Purpose periodicProcessNextPage() {
+    return new Purpose(PERIODIC_PROCESS_NEXT_PAGE, CqsType.QUERY);
+  }
+
+  /**
+   * Periodic process process one purpose.
+   *
+   * @return the purpose
+   */
+  public static Purpose periodicProcessProcessOne() {
+    return new Purpose(PERIODIC_PROCESS_PROCESS_ONE, CqsType.COMMAND);
+  }
+
+  /**
+   * Periodic process command purpose.
+   *
+   * @return the purpose
+   */
+  public static Purpose periodicProcessCommand() {
+    return new Purpose(PERIODIC_PROCESS_COMMAND, CqsType.COMMAND);
+  }
+
+  /**
+   * Periodic process query purpose.
+   *
+   * @return the purpose
+   */
+  public static Purpose periodicProcessQuery() {
+    return new Purpose(PERIODIC_PROCESS_QUERY, CqsType.QUERY);
   }
 
   // ===============================================================================================

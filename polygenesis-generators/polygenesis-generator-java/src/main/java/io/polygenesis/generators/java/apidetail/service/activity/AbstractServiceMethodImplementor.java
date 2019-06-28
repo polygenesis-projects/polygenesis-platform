@@ -38,6 +38,7 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
+@Deprecated
 public abstract class AbstractServiceMethodImplementor {
 
   // ===============================================================================================

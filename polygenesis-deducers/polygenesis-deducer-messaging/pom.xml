@@ -13,7 +13,7 @@
   <artifactId>polygenesis-deducer-messaging</artifactId>
 
   <dependencies>
-    <!--MODELS-->
+    <!--METAMODELS-->
     <dependency>
       <groupId>io.polygenesis.metamodels</groupId>
       <artifactId>polygenesis-metamodel-messaging</artifactId>

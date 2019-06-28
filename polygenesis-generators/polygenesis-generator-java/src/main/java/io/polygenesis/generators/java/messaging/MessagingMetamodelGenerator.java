@@ -23,7 +23,7 @@ package io.polygenesis.generators.java.messaging;
 import io.polygenesis.core.AbstractMetamodelGenerator;
 import io.polygenesis.core.CoreRegistry;
 import io.polygenesis.core.MetamodelRepository;
-import io.polygenesis.generators.java.messaging.exporter.SubscriberExporter;
+import io.polygenesis.generators.java.messaging.subscriber.SubscriberExporter;
 import io.polygenesis.models.messaging.subscriber.SubscriberMetamodelRepository;
 import java.nio.file.Path;
 import java.util.Set;

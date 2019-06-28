@@ -43,6 +43,7 @@ public class Dto implements Nameable {
   private DtoType dtoType;
   private DataObject dataObject;
   private Boolean virtual;
+  private Dto parent;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -59,6 +60,21 @@ public class Dto implements Nameable {
     setDtoType(dtoType);
     setDataObject(dataObject);
     setVirtual(virtual);
+  }
+
+  /**
+   * Instantiates a new Dto.
+   *
+   * @param dtoType the dto type
+   * @param dataObject the data object
+   * @param virtual the virtual
+   * @param parent the parent
+   */
+  public Dto(DtoType dtoType, DataObject dataObject, Boolean virtual, Dto parent) {
+    setDtoType(dtoType);
+    setDataObject(dataObject);
+    setVirtual(virtual);
+    setParent(parent);
   }
 
   // ===============================================================================================
@@ -143,6 +159,15 @@ public class Dto implements Nameable {
     return getDataObject().getModels().stream().filter(Data::isParentThingIdentity).findFirst();
   }
 
+  /**
+   * Gets parent.
+   *
+   * @return the parent
+   */
+  public Dto getParent() {
+    return parent;
+  }
+
   // ===============================================================================================
   // GUARDS
   // ===============================================================================================
@@ -177,6 +202,16 @@ public class Dto implements Nameable {
     this.virtual = virtual;
   }
 
+  /**
+   * Sets parent.
+   *
+   * @param parent the parent
+   */
+  private void setParent(Dto parent) {
+    Assertion.isNotNull(parent, "parent is required");
+    this.parent = parent;
+  }
+
   // ===============================================================================================
   // OVERRIDES
   // ===============================================================================================
@@ -197,11 +232,12 @@ public class Dto implements Nameable {
     Dto dto = (Dto) o;
     return dtoType == dto.dtoType
         && Objects.equals(dataObject, dto.dataObject)
-        && Objects.equals(virtual, dto.virtual);
+        && Objects.equals(virtual, dto.virtual)
+        && Objects.equals(parent, dto.parent);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(dtoType, dataObject, virtual);
+    return Objects.hash(dtoType, dataObject, virtual, parent);
   }
 }

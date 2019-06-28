@@ -22,6 +22,7 @@ package io.polygenesis.abstraction.thing;
 
 import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.commons.assertion.Assertion;
+import io.polygenesis.commons.keyvalue.KeyValue;
 import io.polygenesis.commons.valueobjects.ContextName;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
@@ -55,6 +56,7 @@ public class Thing implements Abstraction {
   private Boolean multiTenant;
   private Set<Thing> children;
   private Thing optionalParent;
+  private Set<KeyValue> metadata;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -88,6 +90,8 @@ public class Thing implements Abstraction {
     if (optionalParent != null) {
       setOptionalParent(optionalParent);
     }
+
+    setMetadata(new LinkedHashSet<>());
   }
 
   // ===============================================================================================
@@ -166,6 +170,17 @@ public class Thing implements Abstraction {
     thing.setOptionalParent(this);
 
     getChildren().add(thing);
+  }
+
+  /**
+   * Add metadata.
+   *
+   * @param metadata the metadata
+   */
+  public void addMetadata(KeyValue metadata) {
+    Assertion.isNotNull(metadata, "metadata is required");
+
+    getMetadata().add(metadata);
   }
 
   // ===============================================================================================
@@ -288,6 +303,30 @@ public class Thing implements Abstraction {
         .orElseThrow(IllegalArgumentException::new);
   }
 
+  /**
+   * Gets metadata.
+   *
+   * @return the metadata
+   */
+  public Set<KeyValue> getMetadata() {
+    return metadata;
+  }
+
+  /**
+   * Gets metadata value.
+   *
+   * @param key the key
+   * @return the metadata value
+   */
+  public Object getMetadataValue(Object key) {
+    return metadata
+        .stream()
+        .filter(keyValue -> keyValue.getKey().equals(key))
+        .map(keyValue -> keyValue.getValue())
+        .findFirst()
+        .orElseThrow(IllegalArgumentException::new);
+  }
+
   // ===============================================================================================
   // GUARDS
   // ===============================================================================================
@@ -371,6 +410,16 @@ public class Thing implements Abstraction {
     this.optionalParent = optionalParent;
   }
 
+  /**
+   * Sets metadata.
+   *
+   * @param metadata the metadata
+   */
+  private void setMetadata(Set<KeyValue> metadata) {
+    Assertion.isNotNull(metadata, "metadata is required");
+    this.metadata = metadata;
+  }
+
   // ===============================================================================================
   // PRIVATE
   // ===============================================================================================
@@ -436,7 +485,8 @@ public class Thing implements Abstraction {
         && Objects.equals(thingProperties, thing.thingProperties)
         && Objects.equals(functions, thing.functions)
         && Objects.equals(multiTenant, thing.multiTenant)
-        && Objects.equals(children, thing.children);
+        && Objects.equals(children, thing.children)
+        && Objects.equals(metadata, thing.metadata);
   }
 
   @Override
@@ -448,6 +498,7 @@ public class Thing implements Abstraction {
         thingProperties,
         functions,
         multiTenant,
-        children);
+        children,
+        metadata);
   }
 }

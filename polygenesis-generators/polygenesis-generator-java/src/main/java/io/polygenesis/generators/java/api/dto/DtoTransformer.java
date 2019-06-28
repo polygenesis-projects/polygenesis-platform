@@ -32,13 +32,16 @@ import io.polygenesis.models.api.DtoType;
 import io.polygenesis.representations.code.ConstructorRepresentation;
 import io.polygenesis.representations.code.FieldRepresentation;
 import io.polygenesis.representations.code.MethodRepresentation;
+import io.polygenesis.representations.code.MethodRepresentationType;
 import io.polygenesis.representations.code.ParameterRepresentation;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * The type Dto template data creator.
@@ -140,9 +143,11 @@ public class DtoTransformer extends AbstractClassTransformer<Dto, DtoMethod> {
     // ---------------------------------------------------------------------------------------------
     Set<FieldRepresentation> fieldRepresentations = fieldRepresentations(source);
 
-    constructorRepresentations.add(
-        createConstructorWithSettersFromFieldRepresentations(
-            source.getDataObject().getObjectName().getText(), fieldRepresentations));
+    if (!fieldRepresentations.isEmpty()) {
+      constructorRepresentations.add(
+          createConstructorWithSettersFromFieldRepresentations(
+              source.getDataObject().getObjectName().getText(), fieldRepresentations));
+    }
 
     // ---------------------------------------------------------------------------------------------
     // Create constructor for collection response
@@ -159,8 +164,26 @@ public class DtoTransformer extends AbstractClassTransformer<Dto, DtoMethod> {
 
   @Override
   public Set<MethodRepresentation> methodRepresentations(Dto source, Object... args) {
+    Set<MethodRepresentation> methodRepresentations = new LinkedHashSet<>();
+
     Set<FieldRepresentation> fieldRepresentations = fieldRepresentations(source);
-    return methodRepresentationsForGettersAndSetters(fieldRepresentations);
+    methodRepresentations.addAll(methodRepresentationsForGettersAndSetters(fieldRepresentations));
+
+    if (source.getDtoType().equals(DtoType.COLLECTION_RECORD)) {
+      methodRepresentations.add(
+          new MethodRepresentation(
+              MethodRepresentationType.GETTER,
+              new LinkedHashSet<>(),
+              new LinkedHashSet<>(Arrays.asList("@Override")),
+              "",
+              dataTypeTransformer.getModifierPublic(),
+              "getId",
+              new LinkedHashSet<>(),
+              "String",
+              "\t\treturn null;"));
+    }
+
+    return methodRepresentations;
   }
 
   @Override
@@ -170,7 +193,7 @@ public class DtoTransformer extends AbstractClassTransformer<Dto, DtoMethod> {
 
   @Override
   public Set<String> imports(Dto source, Object... args) {
-    Set<String> imports = new LinkedHashSet<>();
+    Set<String> imports = new TreeSet<>();
 
     if (mapDtoTypeToInclude.containsKey(source.getDtoType())) {
       imports.add(mapDtoTypeToInclude.get(source.getDtoType()));
@@ -179,6 +202,10 @@ public class DtoTransformer extends AbstractClassTransformer<Dto, DtoMethod> {
     if (source.getDtoType().equals(DtoType.API_COLLECTION_RESPONSE)
         || source.getDtoType().equals(DtoType.API_PAGED_COLLECTION_RESPONSE)) {
       imports.add("java.util.List");
+    }
+
+    if (source.getDtoType().equals(DtoType.COLLECTION_RECORD)) {
+      imports.add("com.oregor.trinity4j.api.CollectionItemIdentifiable");
     }
 
     source
@@ -286,6 +313,15 @@ public class DtoTransformer extends AbstractClassTransformer<Dto, DtoMethod> {
             || source.getDtoType().equals(DtoType.API_PAGED_COLLECTION_RESPONSE))
         && !source.getArrayElementAsOptional().isPresent()) {
       return simpleObjectName(source, args);
+    }
+
+    if (source.getDtoType().equals(DtoType.COLLECTION_RECORD)) {
+      StringBuilder stringBuilder = new StringBuilder();
+
+      stringBuilder.append(simpleObjectName(source));
+      stringBuilder.append(" implements CollectionItemIdentifiable");
+
+      return stringBuilder.toString();
     }
 
     if (mapDtoTypeToClass.containsKey(source.getDtoType())) {

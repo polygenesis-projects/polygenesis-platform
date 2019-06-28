@@ -39,6 +39,7 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * The type Service detail transformer.
@@ -120,7 +121,7 @@ public class ServiceDetailTransformer
   @Override
   public Set<String> imports(ServiceImplementation source, Object... args) {
     // TODO: inherit imports from Service Interface ?
-    Set<String> imports = new LinkedHashSet<>();
+    Set<String> imports = new TreeSet<>();
 
     source
         .getOptionalDomainEntity()
@@ -219,7 +220,7 @@ public class ServiceDetailTransformer
    * @return the set
    */
   protected Set<String> detectImportsForDomainEntity(BaseDomainEntity domainObject) {
-    Set<String> imports = new LinkedHashSet<>();
+    Set<String> imports = new TreeSet<>();
 
     // TODO: refactor the following implementation
     domainObject
@@ -248,7 +249,7 @@ public class ServiceDetailTransformer
    * @return the set
    */
   protected Set<String> detectImportsForMethods(ServiceImplementation serviceImplementation) {
-    Set<String> imports = new LinkedHashSet<>();
+    Set<String> imports = new TreeSet<>();
 
     serviceImplementation
         .getServiceMethodImplementations()

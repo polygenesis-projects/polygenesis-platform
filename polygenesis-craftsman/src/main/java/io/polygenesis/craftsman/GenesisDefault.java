@@ -26,6 +26,7 @@ import io.polygenesis.core.Deducer;
 import io.polygenesis.core.MetamodelGenerator;
 import io.polygenesis.deducers.apiimpl.DomainEntityConverterDeducerFactory;
 import io.polygenesis.deducers.apiimpl.ServiceImplementationDeducerFactory;
+import io.polygenesis.deducers.batchprocess.BatchProcessDeducerFactory;
 import io.polygenesis.deducers.messaging.subscriber.SubscriberDeducerFactory;
 import io.polygenesis.deducers.scheduler.SchedulerDeducerFactory;
 import io.polygenesis.deducers.sql.SqlIndexDeducerFactory;
@@ -106,7 +107,8 @@ public class GenesisDefault {
             SqlTableDeducerFactory.newInstance(),
             SqlIndexDeducerFactory.newInstance(),
             SubscriberDeducerFactory.newInstance(packageName),
-            SchedulerDeducerFactory.newInstance(packageName)));
+            SchedulerDeducerFactory.newInstance(packageName),
+            BatchProcessDeducerFactory.newInstance(packageName)));
   }
 
   /**

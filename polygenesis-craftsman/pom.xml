@@ -42,6 +42,14 @@
     </dependency>
     <dependency>
       <groupId>io.polygenesis.deducers</groupId>
+      <artifactId>polygenesis-deducer-page-object</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.polygenesis.deducers</groupId>
+      <artifactId>polygenesis-deducer-periodic-process</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.polygenesis.deducers</groupId>
       <artifactId>polygenesis-deducer-reactive-state</artifactId>
     </dependency>
     <dependency>

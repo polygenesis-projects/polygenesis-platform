@@ -33,6 +33,7 @@ import java.util.stream.Stream;
 public class JavaDataTypeTransformer implements DataTypeTransformer {
 
   private static final String MODIFIER_PUBLIC = "public";
+  private static final String MODIFIER_ABSTRACT = "abstract";
   private static final String VOID = "void";
 
   // ===============================================================================================
@@ -63,6 +64,11 @@ public class JavaDataTypeTransformer implements DataTypeTransformer {
   @Override
   public String getModifierPublic() {
     return MODIFIER_PUBLIC;
+  }
+
+  @Override
+  public String getModifierAbstract() {
+    return MODIFIER_ABSTRACT;
   }
 
   @Override

@@ -36,6 +36,10 @@ public class TrinityJavaContextGeneratorEnablement {
   private boolean apiClientMessaging = true;
   private boolean javaDomainSqlGenerator = true;
   private boolean apiClientScheduler = true;
+  private boolean apiClientBatchProcess = true;
+  private boolean apiClientBatchProcessMessageSubscriber = true;
+  private boolean apiClientBatchProcessMessagingActivemq = true;
+  private boolean apiClientBatchProcessSchedulerCamel = true;
 
   /** Instantiates a new Trinity java context generator enablement. */
   public TrinityJavaContextGeneratorEnablement() {
@@ -48,6 +52,10 @@ public class TrinityJavaContextGeneratorEnablement {
     setApiClientMessaging(true);
     setJavaDomainSqlGenerator(true);
     setApiClientScheduler(true);
+    setApiClientBatchProcess(true);
+    setApiClientBatchProcessMessageSubscriber(true);
+    setApiClientBatchProcessMessagingActivemq(true);
+    setApiClientBatchProcessSchedulerCamel(true);
   }
 
   // ===============================================================================================
@@ -135,6 +143,42 @@ public class TrinityJavaContextGeneratorEnablement {
     return apiClientScheduler;
   }
 
+  /**
+   * Is api client periodic process boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isApiClientBatchProcess() {
+    return apiClientBatchProcess;
+  }
+
+  /**
+   * Is api client batch process message subscriber boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isApiClientBatchProcessMessageSubscriber() {
+    return apiClientBatchProcessMessageSubscriber;
+  }
+
+  /**
+   * Is api client batch process messaging activemq boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isApiClientBatchProcessMessagingActivemq() {
+    return apiClientBatchProcessMessagingActivemq;
+  }
+
+  /**
+   * Is api client batch process scheduler camel boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isApiClientBatchProcessSchedulerCamel() {
+    return apiClientBatchProcessSchedulerCamel;
+  }
+
   // ===============================================================================================
   // SETTERS
   // ===============================================================================================
@@ -219,5 +263,43 @@ public class TrinityJavaContextGeneratorEnablement {
    */
   public void setApiClientScheduler(boolean apiClientScheduler) {
     this.apiClientScheduler = apiClientScheduler;
+  }
+
+  /**
+   * Sets api client periodic process.
+   *
+   * @param apiClientBatchProcess the api client periodic process
+   */
+  public void setApiClientBatchProcess(boolean apiClientBatchProcess) {
+    this.apiClientBatchProcess = apiClientBatchProcess;
+  }
+
+  /**
+   * Sets api client batch process message subscriber.
+   *
+   * @param apiClientBatchProcessMessageSubscriber the api client batch process message subscriber
+   */
+  public void setApiClientBatchProcessMessageSubscriber(
+      boolean apiClientBatchProcessMessageSubscriber) {
+    this.apiClientBatchProcessMessageSubscriber = apiClientBatchProcessMessageSubscriber;
+  }
+
+  /**
+   * Sets api client batch process messaging activemq.
+   *
+   * @param apiClientBatchProcessMessagingActivemq the api client batch process messaging activemq
+   */
+  public void setApiClientBatchProcessMessagingActivemq(
+      boolean apiClientBatchProcessMessagingActivemq) {
+    this.apiClientBatchProcessMessagingActivemq = apiClientBatchProcessMessagingActivemq;
+  }
+
+  /**
+   * Sets api client batch process scheduler camel.
+   *
+   * @param apiClientBatchProcessSchedulerCamel the api client batch process scheduler camel
+   */
+  public void setApiClientBatchProcessSchedulerCamel(boolean apiClientBatchProcessSchedulerCamel) {
+    this.apiClientBatchProcessSchedulerCamel = apiClientBatchProcessSchedulerCamel;
   }
 }

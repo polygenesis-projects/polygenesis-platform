@@ -24,7 +24,7 @@
       ${ aggregateRootVariable }.get${ textConverter.toUpperCamel(data.variableName.text) }()<#sep>,</#sep>
     <#break>
     <#case 'OBJECT'>
-      ${converterVariable}.convertToDto(${ aggregateRootVariable }.get${ textConverter.toUpperCamel(data.variableName.text) }())<#sep>,</#sep>
+      ${converterVariable}.convertTo${ textConverter.toUpperCamel(data.objectName.text) }Dto(${ aggregateRootVariable }.get${ textConverter.toUpperCamel(data.variableName.text) }())<#sep>,</#sep>
       <#break>
     <#default>
       // Data Primary Type Type = ${ data.dataPrimaryType } is not supported

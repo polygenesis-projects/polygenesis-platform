@@ -32,6 +32,7 @@ import io.polygenesis.representations.code.MethodRepresentation;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * The type Value object class representable.
@@ -100,7 +101,7 @@ public class ValueObjectLegacyClassTransformer extends AbstractLegacyClassTransf
 
   @Override
   public Set<String> imports(ValueObject source, Object... args) {
-    Set<String> imports = new LinkedHashSet<>();
+    Set<String> imports = new TreeSet<>();
 
     imports.addAll(imports(source.getData()));
     imports.add("com.oregor.trinity4j.commons.assertion.Assertion");
