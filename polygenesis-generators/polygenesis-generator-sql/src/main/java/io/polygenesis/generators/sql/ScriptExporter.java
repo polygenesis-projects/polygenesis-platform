@@ -79,7 +79,6 @@ public class ScriptExporter {
   }
 
   private Path makeFileName(Path generationPath) {
-
     String name = "V2019.01.01.00.00.01__Initialize";
 
     return Paths.get(generationPath.toString(), "src/main/resources/db/migration", name + ".sql");

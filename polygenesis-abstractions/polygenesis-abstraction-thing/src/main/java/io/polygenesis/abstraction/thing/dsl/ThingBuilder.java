@@ -85,6 +85,16 @@ public class ThingBuilder extends AbstractThingBuilder<ThingBuilder> {
   }
 
   /**
+   * Api client domain message thing builder.
+   *
+   * @return the thing builder
+   */
+  public static ThingBuilder apiClientDomainMessage() {
+    return new ThingBuilder(
+        new LinkedHashSet<>(Arrays.asList(AbstractionScope.apiClientMessaging())));
+  }
+
+  /**
    * Projection thing builder.
    *
    * @return the thing builder
@@ -114,6 +124,16 @@ public class ThingBuilder extends AbstractThingBuilder<ThingBuilder> {
   }
 
   /**
+   * Domain aggregate root thing builder.
+   *
+   * @return the thing builder
+   */
+  public static ThingBuilder domainAggregateRoot() {
+    return new ThingBuilder(
+        new LinkedHashSet<>(Arrays.asList(AbstractionScope.domainAggregateRoot())));
+  }
+
+  /**
    * Domain aggregate entity thing builder.
    *
    * @return the thing builder
@@ -124,11 +144,11 @@ public class ThingBuilder extends AbstractThingBuilder<ThingBuilder> {
   }
 
   /**
-   * Subscriber thing builder.
+   * Domain message subscriber thing builder.
    *
    * @return the thing builder
    */
-  public static ThingBuilder subscriber() {
+  public static ThingBuilder domainMessageSubscriber() {
     return new ThingBuilder(
         new LinkedHashSet<>(Arrays.asList(AbstractionScope.apiClientMessaging())));
   }

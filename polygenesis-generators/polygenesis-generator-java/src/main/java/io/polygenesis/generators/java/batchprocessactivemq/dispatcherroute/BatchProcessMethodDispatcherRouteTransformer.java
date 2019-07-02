@@ -70,6 +70,6 @@ public class BatchProcessMethodDispatcherRouteTransformer
 
   @Override
   public String implementation(Function source, Object... args) {
-    return configureActivityGenerator.generate(source.getFunction());
+    return configureActivityGenerator.generate(source.getFunction(), args);
   }
 }

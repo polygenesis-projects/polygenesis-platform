@@ -154,6 +154,9 @@ public class ServiceDetailTransformer
     // TODO: check for multi tenant
     imports.add("com.oregor.trinity4j.domain.TenantId");
 
+    // TODO: if has method ensure existence
+    imports.add("java.util.Optional");
+
     return imports;
   }
 

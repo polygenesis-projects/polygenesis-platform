@@ -28,12 +28,12 @@ import io.polygenesis.core.AbstractMetamodelGenerator;
 import io.polygenesis.core.CoreRegistry;
 import io.polygenesis.core.ExportInfo;
 import io.polygenesis.core.MetamodelRepository;
-import io.polygenesis.generators.java.batchprocesssubscriber.abstractsubscriber.AbstractSubscriber;
+import io.polygenesis.generators.java.batchprocesssubscriber.abstractsubscriber.BatchProcessAbstractSubscriber;
 import io.polygenesis.generators.java.batchprocesssubscriber.abstractsubscriber.BatchProcessAbstractSubscriberGenerator;
 import io.polygenesis.generators.java.batchprocesssubscriber.dispatcher.BatchProcessDispatcher;
 import io.polygenesis.generators.java.batchprocesssubscriber.dispatcher.BatchProcessDispatcherGenerator;
+import io.polygenesis.generators.java.batchprocesssubscriber.registry.BatchProcessSubscriberRegistry;
 import io.polygenesis.generators.java.batchprocesssubscriber.registry.BatchProcessSubscriberRegistryGenerator;
-import io.polygenesis.generators.java.batchprocesssubscriber.registry.Registry;
 import io.polygenesis.generators.java.batchprocesssubscriber.subscriber.BatchProcessSubscriber;
 import io.polygenesis.generators.java.batchprocesssubscriber.subscriber.BatchProcessSubscriberGenerator;
 import io.polygenesis.generators.java.shared.FolderFileConstants;
@@ -99,17 +99,19 @@ public class BatchProcessSubscriberMetamodelGenerator extends AbstractMetamodelG
   @SuppressWarnings("rawtypes")
   @Override
   public void generate(Set<MetamodelRepository> modelRepositories) {
-    AbstractSubscriber abstractSubscriber = makeAbstractSubscriber();
+    BatchProcessAbstractSubscriber batchProcessAbstractSubscriber = makeAbstractSubscriber();
     batchProcessAbstractSubscriberGenerator.generate(
-        abstractSubscriber, abstractSubscriberExportInfo(getGenerationPath(), abstractSubscriber));
+        batchProcessAbstractSubscriber,
+        abstractSubscriberExportInfo(getGenerationPath(), batchProcessAbstractSubscriber));
 
     BatchProcessDispatcher dispatcher = makeBatchProcessDispatcher();
     batchProcessDispatcherGenerator.generate(
         dispatcher, dispatcherExportInfo(getGenerationPath(), dispatcher));
 
-    Registry registry = makeRegistry();
+    BatchProcessSubscriberRegistry batchProcessSubscriberRegistry = makeRegistry();
     batchProcessSubscriberRegistryGenerator.generate(
-        registry, registryExportInfo(getGenerationPath(), registry));
+        batchProcessSubscriberRegistry,
+        registryExportInfo(getGenerationPath(), batchProcessSubscriberRegistry));
 
     CoreRegistry.getMetamodelRepositoryResolver()
         .resolve(modelRepositories, BatchProcessMetamodelRepository.class)
@@ -119,7 +121,7 @@ public class BatchProcessSubscriberMetamodelGenerator extends AbstractMetamodelG
                 batchProcessSubscriberGenerator.generate(
                     makeBatchProcessSubscriber(batchProcessMetamodel),
                     subscriberExportInfo(getGenerationPath(), batchProcessMetamodel),
-                    abstractSubscriber));
+                    batchProcessAbstractSubscriber));
   }
 
   // ===============================================================================================
@@ -131,8 +133,8 @@ public class BatchProcessSubscriberMetamodelGenerator extends AbstractMetamodelG
    *
    * @return the abstract subscriber
    */
-  private AbstractSubscriber makeAbstractSubscriber() {
-    return new AbstractSubscriber(
+  private BatchProcessAbstractSubscriber makeAbstractSubscriber() {
+    return new BatchProcessAbstractSubscriber(
         new ObjectName(
             String.format(
                 "%sBatchProcessMessageSubscriber",
@@ -159,8 +161,8 @@ public class BatchProcessSubscriberMetamodelGenerator extends AbstractMetamodelG
    *
    * @return the registry
    */
-  private Registry makeRegistry() {
-    return new Registry(
+  private BatchProcessSubscriberRegistry makeRegistry() {
+    return new BatchProcessSubscriberRegistry(
         new ObjectName(
             String.format(
                 "%sBatchProcessMessageSubscriberRegistry",
@@ -189,17 +191,17 @@ public class BatchProcessSubscriberMetamodelGenerator extends AbstractMetamodelG
   // ===============================================================================================
 
   private ExportInfo abstractSubscriberExportInfo(
-      Path generationPath, AbstractSubscriber abstractSubscriber) {
+      Path generationPath, BatchProcessAbstractSubscriber batchProcessAbstractSubscriber) {
     return ExportInfo.file(
         Paths.get(
             generationPath.toString(),
             FolderFileConstants.SRC,
             FolderFileConstants.MAIN,
             FolderFileConstants.JAVA,
-            abstractSubscriber.getPackageName().toPath().toString()),
+            batchProcessAbstractSubscriber.getPackageName().toPath().toString()),
         String.format(
             "%s%s",
-            TextConverter.toUpperCamel(abstractSubscriber.getObjectName().getText()),
+            TextConverter.toUpperCamel(batchProcessAbstractSubscriber.getObjectName().getText()),
             FolderFileConstants.JAVA_POSTFIX));
   }
 
@@ -217,17 +219,18 @@ public class BatchProcessSubscriberMetamodelGenerator extends AbstractMetamodelG
             FolderFileConstants.JAVA_POSTFIX));
   }
 
-  private ExportInfo registryExportInfo(Path generationPath, Registry registry) {
+  private ExportInfo registryExportInfo(
+      Path generationPath, BatchProcessSubscriberRegistry batchProcessSubscriberRegistry) {
     return ExportInfo.file(
         Paths.get(
             generationPath.toString(),
             FolderFileConstants.SRC,
             FolderFileConstants.MAIN,
             FolderFileConstants.JAVA,
-            registry.getPackageName().toPath().toString()),
+            batchProcessSubscriberRegistry.getPackageName().toPath().toString()),
         String.format(
             "%s%s",
-            TextConverter.toUpperCamel(registry.getObjectName().getText()),
+            TextConverter.toUpperCamel(batchProcessSubscriberRegistry.getObjectName().getText()),
             FolderFileConstants.JAVA_POSTFIX));
   }
 

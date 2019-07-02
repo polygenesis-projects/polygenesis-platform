@@ -136,7 +136,6 @@ public class PurposeFunctionBuilder {
 
     // ---------------------------------------------------------------------------------------------
     // ARGUMENTS
-    // ---------------------------------------------------------------------------------------------
     DataObject argumentDataObject =
         new DataObject(
             new ObjectName(
@@ -161,7 +160,6 @@ public class PurposeFunctionBuilder {
 
     // ---------------------------------------------------------------------------------------------
     // RETURN VALUE
-    // ---------------------------------------------------------------------------------------------
     if (returnValue) {
       DataObject returnValueDataObject =
           new DataObject(
@@ -170,8 +168,6 @@ public class PurposeFunctionBuilder {
                       "%s%sResponse",
                       functionName, TextConverter.toUpperCamel(thing.getThingName().getText()))),
               thing.makePackageName(rootPackageNameVo, thing));
-
-      // -------------------------------------------------------------------------------------------
 
       returnValueDataObject.addData(
           DataPrimitive.ofDataBusinessType(
@@ -183,8 +179,6 @@ public class PurposeFunctionBuilder {
 
       // -------------------------------------------------------------------------------------------
       // FUNCTION
-      // -------------------------------------------------------------------------------------------
-
       Function function =
           FunctionBuilder.of(thing, functionName, Purpose.create())
               .setReturnValue(returnValueDataObject)
@@ -200,6 +194,47 @@ public class PurposeFunctionBuilder {
 
       this.functions.add(function);
     }
+    return this;
+  }
+
+  /**
+   * With function ensure existence purpose function builder.
+   *
+   * @return the purpose function builder
+   */
+  public PurposeFunctionBuilder withFunctionEnsureExistence() {
+
+    String functionName = "ensureExistence";
+
+    // ---------------------------------------------------------------------------------------------
+    // ARGUMENTS
+    DataObject argumentDataObject =
+        new DataObject(
+            new ObjectName(
+                String.format(
+                    "%s%sRequest",
+                    functionName, TextConverter.toUpperCamel(thing.getThingName().getText()))),
+            thing.makePackageName(rootPackageNameVo, thing));
+
+    // ---------------------------------------------------------------------------------------------
+    // Add Parent Thing Identity if Any
+    if (thing.getOptionalParent() != null) {
+      argumentDataObject.addData(makeParentThingIdentity(thing.getOptionalParent()));
+    }
+
+    // ---------------------------------------------------------------------------------------------
+    // Add Thing Identity
+    argumentDataObject.addData(makeThingIdentity(thing));
+
+    // ---------------------------------------------------------------------------------------------
+    // RETURN VALUE
+    Function function =
+        FunctionBuilder.of(thing, functionName, Purpose.ensureExistence())
+            .addArgument(argumentDataObject)
+            .build();
+
+    this.functions.add(function);
+
     return this;
   }
 
@@ -243,7 +278,6 @@ public class PurposeFunctionBuilder {
    * @param models the models
    * @return the thing builder
    */
-  @SuppressWarnings("CPD-END")
   private PurposeFunctionBuilder withFunctionModify(
       String functionName, Set<Data> models, Boolean returnValue) {
 
@@ -322,11 +356,21 @@ public class PurposeFunctionBuilder {
   }
 
   /**
+   * With function batch process purpose function builder.
+   *
+   * @return the purpose function builder
+   */
+  public PurposeFunctionBuilder withFunctionBatchProcess() {
+    return withFunctionModifyNoReturnValue("batchProcess", new LinkedHashSet<>());
+  }
+
+  /**
    * With function fetch one thing builder.
    *
    * @param models the models
    * @return the thing builder
    */
+  @SuppressWarnings("CPD-END")
   public final PurposeFunctionBuilder withFunctionFetchOne(Set<Data> models) {
 
     // ---------------------------------------------------------------------------------------------

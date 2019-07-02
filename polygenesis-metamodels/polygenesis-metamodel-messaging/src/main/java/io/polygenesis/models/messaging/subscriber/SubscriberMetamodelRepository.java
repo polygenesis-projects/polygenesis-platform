@@ -29,8 +29,8 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class SubscriberMetamodelRepository extends AbstractMetamodelRepository<Subscriber>
-    implements MetamodelRepository<Subscriber> {
+public class SubscriberMetamodelRepository extends AbstractMetamodelRepository<SubscriberMetamodel>
+    implements MetamodelRepository<SubscriberMetamodel> {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -41,7 +41,7 @@ public class SubscriberMetamodelRepository extends AbstractMetamodelRepository<S
    *
    * @param items the items
    */
-  public SubscriberMetamodelRepository(Set<Subscriber> items) {
+  public SubscriberMetamodelRepository(Set<SubscriberMetamodel> items) {
     super(items);
   }
 }

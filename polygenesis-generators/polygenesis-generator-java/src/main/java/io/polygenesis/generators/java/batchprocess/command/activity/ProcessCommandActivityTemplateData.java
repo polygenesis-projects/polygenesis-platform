@@ -20,17 +20,99 @@
 
 package io.polygenesis.generators.java.batchprocess.command.activity;
 
-import io.polygenesis.generators.java.apidetail.service.activity.entity.AbstractAggregateEntityTemplateData;
+import io.polygenesis.commons.assertion.Assertion;
 
 /**
  * The type Process command activity template data.
  *
  * @author Christos Tsakostas
  */
-public class ProcessCommandActivityTemplateData extends AbstractAggregateEntityTemplateData {
+public class ProcessCommandActivityTemplateData {
+
+  private String commandService;
+  private String commandMethod;
+  private String requestDto;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
+  /**
+   * Instantiates a new Process command activity template data.
+   *
+   * @param commandService the command service
+   * @param commandMethod the command method
+   * @param requestDto the request dto
+   */
+  public ProcessCommandActivityTemplateData(
+      String commandService, String commandMethod, String requestDto) {
+    setCommandService(commandService);
+    setCommandMethod(commandMethod);
+    setRequestDto(requestDto);
+  }
+
+  // ===============================================================================================
+  // GETTERS
+  // ===============================================================================================
+
+  /**
+   * Gets command service.
+   *
+   * @return the command service
+   */
+  public String getCommandService() {
+    return commandService;
+  }
+
+  /**
+   * Gets command method.
+   *
+   * @return the command method
+   */
+  public String getCommandMethod() {
+    return commandMethod;
+  }
+
+  /**
+   * Gets request dto.
+   *
+   * @return the request dto
+   */
+  public String getRequestDto() {
+    return requestDto;
+  }
+
+  // ===============================================================================================
+  // GUARDS
+  // ===============================================================================================
+
+  /**
+   * Sets command service.
+   *
+   * @param commandService the command service
+   */
+  private void setCommandService(String commandService) {
+    Assertion.isNotNull(commandService, "commandService is required");
+    this.commandService = commandService;
+  }
+
+  /**
+   * Sets command method.
+   *
+   * @param commandMethod the command method
+   */
+  private void setCommandMethod(String commandMethod) {
+    Assertion.isNotNull(commandMethod, "commandMethod is required");
+    this.commandMethod = commandMethod;
+  }
+
+  /**
+   * Sets request dto.
+   *
+   * @param requestDto the request dto
+   */
+  private void setRequestDto(String requestDto) {
+    Assertion.isNotNull(requestDto, "requestDto is required");
+    this.requestDto = requestDto;
+  }
 }

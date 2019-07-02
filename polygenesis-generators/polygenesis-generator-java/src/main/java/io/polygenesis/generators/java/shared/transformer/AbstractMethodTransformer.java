@@ -93,9 +93,9 @@ public abstract class AbstractMethodTransformer<S extends FunctionProvider>
       DataObject dataObject = source.getFunction().getReturnValue().getData().getAsDataGroup();
 
       // TODO
-      //      if (!dataObject.getPackageName().equals(source.getPackageName())) {
+      //            if (!dataObject.getPackageName().equals(source.getPackageName())) {
       imports.add(makeCanonicalObjectName(dataObject.getPackageName(), dataObject.getDataType()));
-      //      }
+      //            }
     }
 
     source
@@ -172,10 +172,10 @@ public abstract class AbstractMethodTransformer<S extends FunctionProvider>
   @Override
   public String implementation(S source, Object... args) {
     if (source.getFunction().getReturnValue() == null) {
-      return "\t\t// TODO: write implementation here";
+      return "\t\t// TODO: implementation";
     } else {
       StringBuilder stringBuilder = new StringBuilder();
-      stringBuilder.append("\t\t// TODO: write implementation here\n");
+      stringBuilder.append("\t\t// TODO: implementation\n");
       stringBuilder.append("\t\treturn null;");
       return stringBuilder.toString();
     }

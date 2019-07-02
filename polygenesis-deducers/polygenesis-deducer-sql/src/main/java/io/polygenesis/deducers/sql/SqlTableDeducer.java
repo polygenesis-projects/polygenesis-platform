@@ -95,35 +95,31 @@ public class SqlTableDeducer implements Deducer<SqlTableMetamodelRepository> {
     Set<Column> columns = new LinkedHashSet<>();
 
     // Add Message Id
-    columns.add(new Column("id", ColumnDataType.BINARY, 16, 0, RequiredType.REQUIRED, true));
+    columns.add(new Column("message_id", ColumnDataType.BINARY, 16, 0, RequiredType.REQUIRED, true));
+
+    // Add occurred_on
+    columns.add(new Column("occurred_on", ColumnDataType.DATETIME, 0, RequiredType.REQUIRED));
 
     // Add root_id
     columns.add(new Column("root_id", ColumnDataType.BINARY, 16, 0, RequiredType.REQUIRED));
 
-    // Add tenant_id
-    columns.add(new Column("tenant_id", ColumnDataType.BINARY, 16, 0, RequiredType.REQUIRED));
+    // Add root_version
+    columns.add(new Column("root_version", ColumnDataType.INTEGER, 11, 0, RequiredType.REQUIRED));
 
-    // Add stream_version
-    columns.add(new Column("stream_version", ColumnDataType.INTEGER, 11, 0, RequiredType.OPTIONAL));
+    // Add message_type
+    columns.add(new Column("message_type", ColumnDataType.VARCHAR, 10, 0, RequiredType.REQUIRED));
 
     // Add message_name
-    columns.add(new Column("message_name", ColumnDataType.VARCHAR, 512, 0, RequiredType.OPTIONAL));
-
-    // Add message_version
-    columns.add(
-        new Column("message_version", ColumnDataType.INTEGER, 11, 0, RequiredType.REQUIRED));
+    columns.add(new Column("message_name", ColumnDataType.VARCHAR, 512, 0, RequiredType.REQUIRED));
 
     // Add message
-    columns.add(new Column("message", ColumnDataType.LONGTEXT, 0, RequiredType.REQUIRED));
+    columns.add(new Column("message_body", ColumnDataType.LONGTEXT, 0, RequiredType.REQUIRED));
 
-    // Add principal
-    columns.add(new Column("principal", ColumnDataType.VARCHAR, 100, 0, RequiredType.OPTIONAL));
+    // Add user Id
+    columns.add(new Column("user_id", ColumnDataType.BINARY, 16, 0, RequiredType.REQUIRED));
 
     // Add ip_address
     columns.add(new Column("ip_address", ColumnDataType.VARCHAR, 100, 0, RequiredType.OPTIONAL));
-
-    // Add occurred_on
-    columns.add(new Column("occurred_on", ColumnDataType.DATETIME, 0, RequiredType.OPTIONAL));
 
     return new Table(new TableName("domain_message"), columns, false);
   }

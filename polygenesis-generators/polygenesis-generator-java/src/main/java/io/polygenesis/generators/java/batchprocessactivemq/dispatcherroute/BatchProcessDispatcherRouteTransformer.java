@@ -22,12 +22,14 @@ package io.polygenesis.generators.java.batchprocessactivemq.dispatcherroute;
 
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.commons.text.TextConverter;
+import io.polygenesis.commons.valueobjects.ContextName;
 import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.core.TemplateData;
 import io.polygenesis.generators.java.shared.transformer.AbstractClassTransformer;
 import io.polygenesis.representations.code.ConstructorRepresentation;
 import io.polygenesis.representations.code.FieldRepresentation;
 import io.polygenesis.representations.code.MethodRepresentation;
+import io.polygenesis.representations.code.ParameterRepresentation;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -66,7 +68,7 @@ public class BatchProcessDispatcherRouteTransformer
   @Override
   public TemplateData transform(BatchProcessDispatcherRoute source, Object... args) {
     Map<String, Object> dataModel = new HashMap<>();
-    dataModel.put("representation", create(source));
+    dataModel.put("representation", create(source, args));
 
     return new TemplateData(dataModel, "polygenesis-representation-java/Class.java.ftl");
   }
@@ -90,11 +92,32 @@ public class BatchProcessDispatcherRouteTransformer
   @Override
   public Set<ConstructorRepresentation> constructorRepresentations(
       BatchProcessDispatcherRoute source, Object... args) {
-    Set<ConstructorRepresentation> constructorRepresentations = new LinkedHashSet<>();
+    ContextName contextName = (ContextName) args[0];
+    Set<ParameterRepresentation> parameterRepresentations = new LinkedHashSet<>();
 
-    constructorRepresentations.add(
-        createConstructorWithDirectAssignmentFromFieldRepresentations(
-            simpleObjectName(source, args), fieldRepresentations(source, args)));
+    parameterRepresentations.add(
+        new ParameterRepresentation(
+            TextConverter.toUpperCamel(
+                source.getBatchProcessDispatcher().getObjectName().getText()),
+            "dispatcher"));
+
+    String endpoint =
+        String.format(
+            "context.%s.api-client.batch-process.subscriber", contextName.getText().toLowerCase());
+    parameterRepresentations.add(
+        new ParameterRepresentation(
+            String.format("@Value(\"${%s}\") String", endpoint), "endpoint"));
+
+    Set<ConstructorRepresentation> constructorRepresentations = new LinkedHashSet<>();
+    ConstructorRepresentation constructorRepresentation =
+        new ConstructorRepresentation(
+            new LinkedHashSet<>(),
+            description(source, args),
+            dataTypeTransformer.getModifierPublic(),
+            parameterRepresentations,
+            "\t\tthis.dispatcher = dispatcher;\n\t\tthis.endpoint = endpoint;");
+
+    constructorRepresentations.add(constructorRepresentation);
 
     return constructorRepresentations;
   }
@@ -120,6 +143,7 @@ public class BatchProcessDispatcherRouteTransformer
 
     imports.add("org.apache.camel.spring.SpringRouteBuilder");
     imports.add("org.springframework.stereotype.Component");
+    imports.add("org.springframework.beans.factory.annotation.Value");
 
     return imports;
   }

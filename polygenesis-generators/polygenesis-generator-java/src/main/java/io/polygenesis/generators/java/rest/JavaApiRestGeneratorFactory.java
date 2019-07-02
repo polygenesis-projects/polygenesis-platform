@@ -24,7 +24,13 @@ import io.polygenesis.commons.freemarker.FreemarkerConfig;
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
-import io.polygenesis.generators.java.rest.activity.EndpointImplementationRegistry;
+import io.polygenesis.generators.java.rest.constants.RestConstantsProjectionExporter;
+import io.polygenesis.generators.java.rest.resource.EndpointLegacyMethodTransformer;
+import io.polygenesis.generators.java.rest.resource.ResourceExporter;
+import io.polygenesis.generators.java.rest.resource.ResourceLegacyClassTransformer;
+import io.polygenesis.generators.java.rest.resource.activity.EndpointImplementationRegistry;
+import io.polygenesis.generators.java.rest.resource.testing.ResourceTestExporter;
+import io.polygenesis.generators.java.rest.resource.testing.ResourceTestLegacyClassTransformer;
 import io.polygenesis.generators.java.shared.transformer.FromDataTypeToJavaConverter;
 import java.nio.file.Path;
 

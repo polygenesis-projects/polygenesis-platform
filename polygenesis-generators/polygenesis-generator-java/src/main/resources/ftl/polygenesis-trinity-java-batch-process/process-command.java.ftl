@@ -17,4 +17,4 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-  // process command
+    ${ data.commandService}.${ data.commandMethod}(new ${ data.requestDto}(uniqueId));

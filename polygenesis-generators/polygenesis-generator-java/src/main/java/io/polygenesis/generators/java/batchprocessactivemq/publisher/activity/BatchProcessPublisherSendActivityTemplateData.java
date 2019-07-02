@@ -20,18 +20,11 @@
 
 package io.polygenesis.generators.java.batchprocessactivemq.publisher.activity;
 
-import io.polygenesis.generators.java.apidetail.service.activity.entity.AbstractAggregateEntityTemplateData;
-
 /**
  * The type Batch process publisher send activity template data.
  *
  * @author Christos Tsakostas
  */
-public class BatchProcessPublisherSendActivityTemplateData
-    extends AbstractAggregateEntityTemplateData {
-
-  // ===============================================================================================
-  // CONSTRUCTOR(S)
-  // ===============================================================================================
-
+public class BatchProcessPublisherSendActivityTemplateData {
+  // No template data needed for this case
 }

@@ -25,4 +25,6 @@ package io.polygenesis.models.reactivestate;
  *
  * @author Christos Tsakostas
  */
-public class ReducerState {}
+public class ReducerState {
+  // Not implemented yet
+}

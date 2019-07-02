@@ -20,17 +20,99 @@
 
 package io.polygenesis.generators.java.batchprocess.query.activity;
 
-import io.polygenesis.generators.java.apidetail.service.activity.entity.AbstractAggregateEntityTemplateData;
+import io.polygenesis.commons.assertion.Assertion;
 
 /**
  * The type Process query activity template data.
  *
  * @author Christos Tsakostas
  */
-public class ProcessQueryActivityTemplateData extends AbstractAggregateEntityTemplateData {
+public class ProcessQueryActivityTemplateData {
+
+  private String queryService;
+  private String queryMethod;
+  private String requestDto;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
+  /**
+   * Instantiates a new Process query activity template data.
+   *
+   * @param queryService the query service
+   * @param queryMethod the query method
+   * @param requestDto the request dto
+   */
+  public ProcessQueryActivityTemplateData(
+      String queryService, String queryMethod, String requestDto) {
+    setQueryService(queryService);
+    setQueryMethod(queryMethod);
+    setRequestDto(requestDto);
+  }
+
+  // ===============================================================================================
+  // GETTERS
+  // ===============================================================================================
+
+  /**
+   * Gets query service.
+   *
+   * @return the query service
+   */
+  public String getQueryService() {
+    return queryService;
+  }
+
+  /**
+   * Gets query method.
+   *
+   * @return the query method
+   */
+  public String getQueryMethod() {
+    return queryMethod;
+  }
+
+  /**
+   * Gets request dto.
+   *
+   * @return the request dto
+   */
+  public String getRequestDto() {
+    return requestDto;
+  }
+
+  // ===============================================================================================
+  // GUARDS
+  // ===============================================================================================
+
+  /**
+   * Sets query service.
+   *
+   * @param queryService the query service
+   */
+  private void setQueryService(String queryService) {
+    Assertion.isNotNull(queryService, "queryService is required");
+    this.queryService = queryService;
+  }
+
+  /**
+   * Sets query method.
+   *
+   * @param queryMethod the query method
+   */
+  private void setQueryMethod(String queryMethod) {
+    Assertion.isNotNull(queryMethod, "queryMethod is required");
+    this.queryMethod = queryMethod;
+  }
+
+  /**
+   * Sets request dto.
+   *
+   * @param requestDto the request dto
+   */
+  private void setRequestDto(String requestDto) {
+    Assertion.isNotNull(requestDto, "requestDto is required");
+    this.requestDto = requestDto;
+  }
 }

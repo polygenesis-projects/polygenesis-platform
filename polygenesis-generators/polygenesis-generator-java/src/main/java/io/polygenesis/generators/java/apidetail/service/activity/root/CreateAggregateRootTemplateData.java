@@ -20,6 +20,7 @@
 
 package io.polygenesis.generators.java.apidetail.service.activity.root;
 
+import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.models.api.Dto;
 import io.polygenesis.models.domain.DomainObjectProperty;
 import io.polygenesis.representations.code.ParameterRepresentation;
@@ -49,6 +50,8 @@ public class CreateAggregateRootTemplateData extends AbstractAggregateRootTempla
    * @param converterVariable the converter variable
    * @param multiTenant the multi tenant
    * @param returnValue the return value
+   * @param aggregateRootIdDataType the aggregate root id data type
+   * @param thingIdentity the thing identity
    */
   @SuppressWarnings("rawtypes")
   public CreateAggregateRootTemplateData(
@@ -61,7 +64,9 @@ public class CreateAggregateRootTemplateData extends AbstractAggregateRootTempla
       Dto responseDto,
       String converterVariable,
       Boolean multiTenant,
-      String returnValue) {
+      String returnValue,
+      String aggregateRootIdDataType,
+      Data thingIdentity) {
     super(
         parameterRepresentations,
         aggregateRootDataType,
@@ -72,6 +77,8 @@ public class CreateAggregateRootTemplateData extends AbstractAggregateRootTempla
         responseDto,
         converterVariable,
         multiTenant,
-        returnValue);
+        returnValue,
+        aggregateRootIdDataType,
+        thingIdentity);
   }
 }

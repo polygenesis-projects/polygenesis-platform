@@ -36,8 +36,8 @@ import io.polygenesis.generators.java.batchprocesssubscriber.abstractsubscriber.
 import io.polygenesis.generators.java.batchprocesssubscriber.dispatcher.BatchProcessDispatcherGenerator;
 import io.polygenesis.generators.java.batchprocesssubscriber.dispatcher.BatchProcessDispatcherTransformer;
 import io.polygenesis.generators.java.batchprocesssubscriber.dispatcher.BatchProcessMethodDispatcherTransformer;
-import io.polygenesis.generators.java.batchprocesssubscriber.dispatcher.activity.ExtractMessageTypeActivityGenerator;
-import io.polygenesis.generators.java.batchprocesssubscriber.dispatcher.activity.ExtractMessageTypeActivityTransformer;
+import io.polygenesis.generators.java.batchprocesssubscriber.dispatcher.activity.BatchProcessExtractMessageTypeActivityGenerator;
+import io.polygenesis.generators.java.batchprocesssubscriber.dispatcher.activity.BatchProcessExtractMessageTypeActivityTransformer;
 import io.polygenesis.generators.java.batchprocesssubscriber.registry.BatchProcessMethodSubscriberRegistryTransformer;
 import io.polygenesis.generators.java.batchprocesssubscriber.registry.BatchProcessSubscriberRegistryGenerator;
 import io.polygenesis.generators.java.batchprocesssubscriber.registry.BatchProcessSubscriberRegistryTransformer;
@@ -89,8 +89,8 @@ public final class BatchProcessSubscriberMetamodelGeneratorFactory {
                 dataTypeTransformer,
                 new BatchProcessMethodDispatcherTransformer(
                     dataTypeTransformer,
-                    new ExtractMessageTypeActivityGenerator(
-                        new ExtractMessageTypeActivityTransformer(), templateEngine))),
+                    new BatchProcessExtractMessageTypeActivityGenerator(
+                        new BatchProcessExtractMessageTypeActivityTransformer(), templateEngine))),
             templateEngine,
             exporter);
 
@@ -127,12 +127,12 @@ public final class BatchProcessSubscriberMetamodelGeneratorFactory {
   // ===============================================================================================
 
   /**
-   * New instance periodic process metamodel generator.
+   * New instance batch process subscriber metamodel generator.
    *
    * @param generationPath the generation path
    * @param rootPackageName the root package name
    * @param contextName the context name
-   * @return the periodic process metamodel generator
+   * @return the batch process subscriber metamodel generator
    */
   public static BatchProcessSubscriberMetamodelGenerator newInstance(
       Path generationPath, PackageName rootPackageName, ContextName contextName) {

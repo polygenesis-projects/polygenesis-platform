@@ -104,7 +104,7 @@ public class BatchProcessCommandTransformer
       BatchProcessMetamodel source, Object... args) {
     Set<MethodRepresentation> methodRepresentations = new LinkedHashSet<>();
 
-    methodRepresentations.add(methodTransformer.create(source.getQueryServiceMethod(), source));
+    methodRepresentations.add(methodTransformer.create(source.getCommandServiceMethod(), args));
 
     return methodRepresentations;
   }

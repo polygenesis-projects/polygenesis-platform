@@ -20,6 +20,7 @@
 
 package io.polygenesis.generators.java.apidetail.service.activity.root;
 
+import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
@@ -50,6 +51,9 @@ public abstract class AbstractAggregateRootTemplateData {
   private String converterVariable;
   private Boolean multiTenant;
   private String returnValue;
+
+  private String aggregateRootIdDataType;
+  private Data thingIdentity;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -86,6 +90,8 @@ public abstract class AbstractAggregateRootTemplateData {
    * @param converterVariable the converter variable
    * @param multiTenant the multi tenant
    * @param returnValue the return value
+   * @param aggregateRootIdDataType the aggregate root id data type
+   * @param thingIdentity the thing identity
    */
   @SuppressWarnings("rawtypes")
   public AbstractAggregateRootTemplateData(
@@ -98,7 +104,9 @@ public abstract class AbstractAggregateRootTemplateData {
       Dto responseDto,
       String converterVariable,
       Boolean multiTenant,
-      String returnValue) {
+      String returnValue,
+      String aggregateRootIdDataType,
+      Data thingIdentity) {
     this.parameterRepresentations = parameterRepresentations;
     this.aggregateRootDataType = aggregateRootDataType;
     this.aggregateRootVariable = aggregateRootVariable;
@@ -109,6 +117,8 @@ public abstract class AbstractAggregateRootTemplateData {
     this.converterVariable = converterVariable;
     this.multiTenant = multiTenant;
     this.returnValue = returnValue;
+    this.aggregateRootIdDataType = aggregateRootIdDataType;
+    this.thingIdentity = thingIdentity;
   }
 
   // ===============================================================================================
@@ -206,6 +216,24 @@ public abstract class AbstractAggregateRootTemplateData {
     return responseDto;
   }
 
+  /**
+   * Gets aggregate root id data type.
+   *
+   * @return the aggregate root id data type
+   */
+  public String getAggregateRootIdDataType() {
+    return aggregateRootIdDataType;
+  }
+
+  /**
+   * Gets thing identity.
+   *
+   * @return the thing identity
+   */
+  public Data getThingIdentity() {
+    return thingIdentity;
+  }
+
   // ===============================================================================================
   // SETTERS
   // ===============================================================================================
@@ -297,8 +325,26 @@ public abstract class AbstractAggregateRootTemplateData {
    *
    * @param responseDto the response dto
    */
-  @SuppressWarnings("CPD-END")
   public void setResponseDto(Dto responseDto) {
     this.responseDto = responseDto;
+  }
+
+  /**
+   * Sets aggregate root id data type.
+   *
+   * @param aggregateRootIdDataType the aggregate root id data type
+   */
+  public void setAggregateRootIdDataType(String aggregateRootIdDataType) {
+    this.aggregateRootIdDataType = aggregateRootIdDataType;
+  }
+
+  /**
+   * Sets thing identity.
+   *
+   * @param thingIdentity the thing identity
+   */
+  @SuppressWarnings("CPD-END")
+  public void setThingIdentity(Data thingIdentity) {
+    this.thingIdentity = thingIdentity;
   }
 }

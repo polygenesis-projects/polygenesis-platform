@@ -26,6 +26,7 @@ import io.polygenesis.core.TemplateData;
 import io.polygenesis.generators.java.apidetail.service.activity.AbstractServiceMethodImplementationTransformer;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * The type Get supported message types activity transformer.
@@ -43,8 +44,11 @@ public class GetSupportedMessageTypesActivityTransformer
   @SuppressWarnings({"unchecked", "rawtypes"})
   @Override
   public TemplateData transform(Function source, Object... args) {
+    Set<String> supportedMessageTypes =
+        (Set<String>) source.getActivity().getValue("supportedMessageTypes");
+
     GetSupportedMessageTypesActivityTemplateData data =
-        new GetSupportedMessageTypesActivityTemplateData();
+        new GetSupportedMessageTypesActivityTemplateData(supportedMessageTypes);
 
     Map<String, Object> dataModel = new HashMap<>();
     dataModel.put("data", data);

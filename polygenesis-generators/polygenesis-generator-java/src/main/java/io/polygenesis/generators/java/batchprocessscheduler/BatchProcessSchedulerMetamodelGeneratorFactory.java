@@ -31,6 +31,8 @@ import io.polygenesis.core.TemplateEngine;
 import io.polygenesis.generators.java.batchprocessscheduler.scheduler.BatchProcessMethodSchedulerTransformer;
 import io.polygenesis.generators.java.batchprocessscheduler.scheduler.BatchProcessSchedulerGenerator;
 import io.polygenesis.generators.java.batchprocessscheduler.scheduler.BatchProcessSchedulerTransformer;
+import io.polygenesis.generators.java.batchprocessscheduler.scheduler.activity.ConfigureSchedulerRouteActivityGenerator;
+import io.polygenesis.generators.java.batchprocessscheduler.scheduler.activity.ConfigureSchedulerRouteActivityTransformer;
 import java.nio.file.Path;
 
 /**
@@ -58,7 +60,10 @@ public final class BatchProcessSchedulerMetamodelGeneratorFactory {
         new BatchProcessSchedulerGenerator(
             new BatchProcessSchedulerTransformer(
                 dataTypeTransformer,
-                new BatchProcessMethodSchedulerTransformer(dataTypeTransformer)),
+                new BatchProcessMethodSchedulerTransformer(
+                    dataTypeTransformer,
+                    new ConfigureSchedulerRouteActivityGenerator(
+                        new ConfigureSchedulerRouteActivityTransformer(), templateEngine))),
             templateEngine,
             exporter);
   }

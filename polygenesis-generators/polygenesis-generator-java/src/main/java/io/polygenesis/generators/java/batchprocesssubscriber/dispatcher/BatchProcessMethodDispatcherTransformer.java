@@ -22,7 +22,7 @@ package io.polygenesis.generators.java.batchprocesssubscriber.dispatcher;
 
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.core.DataTypeTransformer;
-import io.polygenesis.generators.java.batchprocesssubscriber.dispatcher.activity.ExtractMessageTypeActivityGenerator;
+import io.polygenesis.generators.java.batchprocesssubscriber.dispatcher.activity.BatchProcessExtractMessageTypeActivityGenerator;
 import io.polygenesis.generators.java.shared.transformer.AbstractMethodTransformer;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
@@ -39,7 +39,8 @@ public class BatchProcessMethodDispatcherTransformer extends AbstractMethodTrans
   // STATE / DEPENDENCIES
   // ===============================================================================================
 
-  private final ExtractMessageTypeActivityGenerator extractMessageTypeActivityGenerator;
+  private final BatchProcessExtractMessageTypeActivityGenerator
+      batchProcessExtractMessageTypeActivityGenerator;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -49,13 +50,16 @@ public class BatchProcessMethodDispatcherTransformer extends AbstractMethodTrans
    * Instantiates a new Batch process method dispatcher transformer.
    *
    * @param dataTypeTransformer the data type transformer
-   * @param extractMessageTypeActivityGenerator the extract message type activity generator
+   * @param batchProcessExtractMessageTypeActivityGenerator the extract message type activity
+   *     generator
    */
   public BatchProcessMethodDispatcherTransformer(
       DataTypeTransformer dataTypeTransformer,
-      ExtractMessageTypeActivityGenerator extractMessageTypeActivityGenerator) {
+      BatchProcessExtractMessageTypeActivityGenerator
+          batchProcessExtractMessageTypeActivityGenerator) {
     super(dataTypeTransformer);
-    this.extractMessageTypeActivityGenerator = extractMessageTypeActivityGenerator;
+    this.batchProcessExtractMessageTypeActivityGenerator =
+        batchProcessExtractMessageTypeActivityGenerator;
   }
 
   // ===============================================================================================
@@ -69,6 +73,6 @@ public class BatchProcessMethodDispatcherTransformer extends AbstractMethodTrans
 
   @Override
   public String implementation(Function source, Object... args) {
-    return extractMessageTypeActivityGenerator.generate(source.getFunction());
+    return batchProcessExtractMessageTypeActivityGenerator.generate(source.getFunction());
   }
 }

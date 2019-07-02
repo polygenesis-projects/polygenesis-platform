@@ -33,7 +33,7 @@ import java.util.Objects;
  */
 public class SubscriberMethod implements FunctionProvider {
 
-  private Subscriber subscriber;
+  private SubscriberMetamodel subscriberMetamodel;
   private Function function;
   private ServiceMethod commandServiceMethod;
   private ServiceMethod queryServiceMethod;
@@ -45,17 +45,17 @@ public class SubscriberMethod implements FunctionProvider {
   /**
    * Instantiates a new Subscriber method.
    *
-   * @param subscriber the subscriber
+   * @param subscriberMetamodel the subscriber
    * @param function the function
    * @param commandServiceMethod the command service method
    * @param queryServiceMethod the query service method
    */
   public SubscriberMethod(
-      Subscriber subscriber,
+      SubscriberMetamodel subscriberMetamodel,
       Function function,
       ServiceMethod commandServiceMethod,
       ServiceMethod queryServiceMethod) {
-    setSubscriber(subscriber);
+    setSubscriberMetamodel(subscriberMetamodel);
     setFunction(function);
     setCommandServiceMethod(commandServiceMethod);
     setQueryServiceMethod(queryServiceMethod);
@@ -70,8 +70,8 @@ public class SubscriberMethod implements FunctionProvider {
    *
    * @return the subscriber
    */
-  public Subscriber getSubscriber() {
-    return subscriber;
+  public SubscriberMetamodel getSubscriberMetamodel() {
+    return subscriberMetamodel;
   }
 
   /**
@@ -108,11 +108,11 @@ public class SubscriberMethod implements FunctionProvider {
   /**
    * Sets subscriber.
    *
-   * @param subscriber the subscriber
+   * @param subscriberMetamodel the subscriber
    */
-  private void setSubscriber(Subscriber subscriber) {
-    Assertion.isNotNull(subscriber, "subscriber is required");
-    this.subscriber = subscriber;
+  private void setSubscriberMetamodel(SubscriberMetamodel subscriberMetamodel) {
+    Assertion.isNotNull(subscriberMetamodel, "subscriber is required");
+    this.subscriberMetamodel = subscriberMetamodel;
   }
 
   /**
@@ -158,7 +158,7 @@ public class SubscriberMethod implements FunctionProvider {
       return false;
     }
     SubscriberMethod that = (SubscriberMethod) o;
-    return Objects.equals(subscriber, that.subscriber)
+    return Objects.equals(subscriberMetamodel, that.subscriberMetamodel)
         && Objects.equals(function, that.function)
         && Objects.equals(commandServiceMethod, that.commandServiceMethod)
         && Objects.equals(queryServiceMethod, that.queryServiceMethod);
@@ -166,6 +166,6 @@ public class SubscriberMethod implements FunctionProvider {
 
   @Override
   public int hashCode() {
-    return Objects.hash(subscriber, function, commandServiceMethod, queryServiceMethod);
+    return Objects.hash(subscriberMetamodel, function, commandServiceMethod, queryServiceMethod);
   }
 }
