@@ -48,6 +48,7 @@ public class BatchProcessDispatcher extends AbstractNameablePackageable {
   // STATE
   // ===============================================================================================
 
+  @SuppressWarnings("CPD-START")
   private Function function;
 
   // ===============================================================================================
@@ -87,6 +88,7 @@ public class BatchProcessDispatcher extends AbstractNameablePackageable {
    *
    * @return the function
    */
+  @SuppressWarnings("CPD-END")
   private Function makeExtractMessageTypeFunction() {
     Thing thing =
         ThingBuilder.apiClientBatchProcess().setThingName("batchProcessDispatcher").createThing();

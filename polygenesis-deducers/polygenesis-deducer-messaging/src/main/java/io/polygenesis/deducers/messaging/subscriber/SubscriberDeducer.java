@@ -22,7 +22,7 @@ package io.polygenesis.deducers.messaging.subscriber;
 
 import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.thing.Function;
-import io.polygenesis.abstraction.thing.Purpose;
+import io.polygenesis.abstraction.thing.FunctionName;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.ThingRepository;
 import io.polygenesis.commons.valueobjects.Name;
@@ -34,12 +34,10 @@ import io.polygenesis.core.Deducer;
 import io.polygenesis.core.MetamodelRepository;
 import io.polygenesis.models.api.ServiceMetamodelRepository;
 import io.polygenesis.models.api.ServiceMethod;
-import io.polygenesis.models.messaging.subscriber.Subscriber;
+import io.polygenesis.models.messaging.subscriber.SubscriberMetamodel;
 import io.polygenesis.models.messaging.subscriber.SubscriberMetamodelRepository;
 import java.util.LinkedHashSet;
-import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * The type Subscriber deducer.
@@ -89,14 +87,15 @@ public class SubscriberDeducer implements Deducer<SubscriberMetamodelRepository>
       Set<AbstractionRepository> abstractionRepositories,
       Set<MetamodelRepository> modelRepositories) {
 
-    Set<Subscriber> subscribers = new LinkedHashSet<>();
+    Set<SubscriberMetamodel> subscriberMetamodels = new LinkedHashSet<>();
 
     CoreRegistry.getAbstractionRepositoryResolver()
         .resolve(abstractionRepositories, ThingRepository.class)
         .getAbstractionItemsByScope(AbstractionScope.apiClientMessaging())
-        .forEach(thing -> subscribers.add(deduceSubscriberFromThing(thing, modelRepositories)));
+        .forEach(
+            thing -> subscriberMetamodels.add(deduceSubscriberFromThing(thing, modelRepositories)));
 
-    return new SubscriberMetamodelRepository(subscribers);
+    return new SubscriberMetamodelRepository(subscriberMetamodels);
   }
 
   // ===============================================================================================
@@ -110,21 +109,23 @@ public class SubscriberDeducer implements Deducer<SubscriberMetamodelRepository>
    * @return the subscriber
    */
   @SuppressWarnings("rawtypes")
-  private Subscriber deduceSubscriberFromThing(
+  private SubscriberMetamodel deduceSubscriberFromThing(
       Thing thing, Set<MetamodelRepository> modelRepositories) {
 
-    Subscriber subscriber =
-        new Subscriber(
+    Thing relatedThing = getRelatedThing(thing);
+
+    SubscriberMetamodel subscriberMetamodel =
+        new SubscriberMetamodel(
             getRootPackageName().withSubPackage("subscribers"),
             new Name(thing.getThingName().getText()),
             getMessageData(thing),
+            getSupportedMessageTypes(thing),
             getRelatedThing(thing),
-            findServiceMethodFromFunction(modelRepositories, getHandlerCommandFunction(thing)),
-            findServiceMethodFromFunction(modelRepositories, getHandlerQueryFunction(thing)));
+            findServiceMethodFromFunction(
+                modelRepositories, getHandlerEnsureExistenceFunction(relatedThing)),
+            findServiceMethodFromFunction(modelRepositories, getHandlerCommandFunction(thing)));
 
-    thing.getFunctions().forEach(subscriber::appendSubscriberMethod);
-
-    return subscriber;
+    return subscriberMetamodel;
   }
 
   /**
@@ -134,23 +135,22 @@ public class SubscriberDeducer implements Deducer<SubscriberMetamodelRepository>
    * @return the related thing
    */
   private Thing getRelatedThing(Thing thing) {
-    Set<Thing> relatedThings =
-        thing
-            .getFunctions()
-            .stream()
-            .map(function -> function.getActivity())
-            .filter(Objects::nonNull)
-            .flatMap(activity -> activity.getExternalFunctions().stream())
-            .map(function -> function.getThing())
-            .collect(Collectors.toSet());
+    return (Thing) thing.getMetadataValue("relatedThing");
+  }
 
-    if (relatedThings.size() == 0) {
-      throw new IllegalStateException("No related thing found");
-    } else if (relatedThings.size() > 1) {
-      throw new IllegalStateException("More than one related things found");
-    }
-
-    return relatedThings.stream().findFirst().orElseThrow(IllegalStateException::new);
+  /**
+   * Gets handler ensure existence function.
+   *
+   * @param relatedThing the related thing
+   * @return the handler ensure existence function
+   */
+  private Function getHandlerEnsureExistenceFunction(Thing relatedThing) {
+    return relatedThing
+        .getFunctions()
+        .stream()
+        .filter(function -> function.getName().equals(new FunctionName("ensureExistence")))
+        .findFirst()
+        .orElseThrow(IllegalArgumentException::new);
   }
 
   /**
@@ -160,33 +160,7 @@ public class SubscriberDeducer implements Deducer<SubscriberMetamodelRepository>
    * @return the handler command function
    */
   private Function getHandlerCommandFunction(Thing thing) {
-    return thing
-        .getFunctions()
-        .stream()
-        .map(function -> function.getActivity())
-        .filter(Objects::nonNull)
-        .flatMap(activity -> activity.getExternalFunctions().stream())
-        .filter(function -> function.getPurpose().isCommand())
-        .findFirst()
-        .orElseThrow(IllegalArgumentException::new);
-  }
-
-  /**
-   * Gets handler query function.
-   *
-   * @param thing the thing
-   * @return the handler query function
-   */
-  private Function getHandlerQueryFunction(Thing thing) {
-    return thing
-        .getFunctions()
-        .stream()
-        .map(function -> function.getActivity())
-        .filter(Objects::nonNull)
-        .flatMap(activity -> activity.getExternalFunctions().stream())
-        .filter(function -> function.getPurpose().isQuery())
-        .findFirst()
-        .orElseThrow(IllegalArgumentException::new);
+    return (Function) thing.getMetadataValue("process");
   }
 
   /**
@@ -195,13 +169,20 @@ public class SubscriberDeducer implements Deducer<SubscriberMetamodelRepository>
    * @param thing the thing
    * @return the message data
    */
+  @SuppressWarnings("unchecked")
   private Set<Data> getMessageData(Thing thing) {
-    return thing
-        .getFunctions()
-        .stream()
-        .filter(function -> function.getPurpose().equals(Purpose.process()))
-        .flatMap(function -> function.getActivity().getExternalData().stream())
-        .collect(Collectors.toCollection(LinkedHashSet::new));
+    return (Set<Data>) thing.getMetadataValue("messageData");
+  }
+
+  /**
+   * Gets supported message types.
+   *
+   * @param thing the thing
+   * @return the supported message types
+   */
+  @SuppressWarnings("unchecked")
+  private Set<String> getSupportedMessageTypes(Thing thing) {
+    return (Set<String>) thing.getMetadataValue("supportedMessageTypes");
   }
 
   /**

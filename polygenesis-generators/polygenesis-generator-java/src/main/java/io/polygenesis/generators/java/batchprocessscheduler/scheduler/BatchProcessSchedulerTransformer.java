@@ -21,16 +21,19 @@
 package io.polygenesis.generators.java.batchprocessscheduler.scheduler;
 
 import io.polygenesis.abstraction.thing.Function;
+import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.core.TemplateData;
 import io.polygenesis.generators.java.shared.transformer.AbstractClassTransformer;
-import io.polygenesis.models.periodicprocess.BatchProcessMetamodel;
 import io.polygenesis.representations.code.ConstructorRepresentation;
 import io.polygenesis.representations.code.FieldRepresentation;
 import io.polygenesis.representations.code.MethodRepresentation;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * The type Batch process scheduler transformer.
@@ -38,7 +41,7 @@ import java.util.Set;
  * @author Christos Tsakostas
  */
 public class BatchProcessSchedulerTransformer
-    extends AbstractClassTransformer<BatchProcessMetamodel, Function> {
+    extends AbstractClassTransformer<BatchProcessSchedulerRoute, Function> {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -61,7 +64,7 @@ public class BatchProcessSchedulerTransformer
   // ===============================================================================================
 
   @Override
-  public TemplateData transform(BatchProcessMetamodel source, Object... args) {
+  public TemplateData transform(BatchProcessSchedulerRoute source, Object... args) {
     Map<String, Object> dataModel = new HashMap<>();
     dataModel.put("representation", create(source));
 
@@ -70,54 +73,65 @@ public class BatchProcessSchedulerTransformer
 
   @Override
   public Set<FieldRepresentation> fieldRepresentations(
-      BatchProcessMetamodel source, Object... args) {
+      BatchProcessSchedulerRoute source, Object... args) {
     return super.fieldRepresentations(source, args);
   }
 
   @Override
   public Set<ConstructorRepresentation> constructorRepresentations(
-      BatchProcessMetamodel source, Object... args) {
+      BatchProcessSchedulerRoute source, Object... args) {
     return super.constructorRepresentations(source, args);
   }
 
   @Override
   public Set<MethodRepresentation> methodRepresentations(
-      BatchProcessMetamodel source, Object... args) {
-    return super.methodRepresentations(source, args);
+      BatchProcessSchedulerRoute source, Object... args) {
+    Set<MethodRepresentation> methodRepresentations = new LinkedHashSet<>();
+
+    methodRepresentations.add(methodTransformer.create(source.getConfigure(), args));
+
+    return methodRepresentations;
   }
 
   @Override
-  public String packageName(BatchProcessMetamodel source, Object... args) {
+  public String packageName(BatchProcessSchedulerRoute source, Object... args) {
     return source.getPackageName().getText();
   }
 
   @Override
-  public Set<String> imports(BatchProcessMetamodel source, Object... args) {
-    return super.imports(source, args);
+  public Set<String> imports(BatchProcessSchedulerRoute source, Object... args) {
+    Set<String> imports = new TreeSet<>();
+
+    imports.add("org.apache.camel.spring.SpringRouteBuilder");
+    imports.add("org.springframework.stereotype.Component");
+    imports.add("org.springframework.beans.factory.annotation.Value");
+
+    return imports;
   }
 
   @Override
-  public Set<String> annotations(BatchProcessMetamodel source, Object... args) {
-    return super.annotations(source, args);
+  public Set<String> annotations(BatchProcessSchedulerRoute source, Object... args) {
+    return new LinkedHashSet<>(Arrays.asList("@Component"));
   }
 
   @Override
-  public String description(BatchProcessMetamodel source, Object... args) {
-    return super.description(source, args);
+  public String description(BatchProcessSchedulerRoute source, Object... args) {
+    return String.format(
+        "The %s.", TextConverter.toUpperCamelSpaces(simpleObjectName(source, args)));
   }
 
   @Override
-  public String modifiers(BatchProcessMetamodel source, Object... args) {
+  public String modifiers(BatchProcessSchedulerRoute source, Object... args) {
     return super.modifiers(source, args);
   }
 
   @Override
-  public String simpleObjectName(BatchProcessMetamodel source, Object... args) {
-    return String.format("%sScheduler", super.simpleObjectName(source, args));
+  public String simpleObjectName(BatchProcessSchedulerRoute source, Object... args) {
+    return String.format("%sSchedulerRoute", super.simpleObjectName(source, args));
   }
 
   @Override
-  public String fullObjectName(BatchProcessMetamodel source, Object... args) {
-    return super.fullObjectName(source, args);
+  public String fullObjectName(BatchProcessSchedulerRoute source, Object... args) {
+    return String.format("%s extends SpringRouteBuilder", simpleObjectName(source, args));
   }
 }

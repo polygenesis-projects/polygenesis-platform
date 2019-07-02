@@ -40,7 +40,7 @@ import java.util.TreeSet;
  * @author Christos Tsakostas
  */
 public class BatchProcessAbstractSubscriberTransformer
-    extends AbstractClassTransformer<AbstractSubscriber, Function> {
+    extends AbstractClassTransformer<BatchProcessAbstractSubscriber, Function> {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -63,7 +63,7 @@ public class BatchProcessAbstractSubscriberTransformer
   // ===============================================================================================
 
   @Override
-  public TemplateData transform(AbstractSubscriber source, Object... args) {
+  public TemplateData transform(BatchProcessAbstractSubscriber source, Object... args) {
     Map<String, Object> dataModel = new HashMap<>();
     dataModel.put("representation", create(source));
 
@@ -71,7 +71,8 @@ public class BatchProcessAbstractSubscriberTransformer
   }
 
   @Override
-  public Set<FieldRepresentation> fieldRepresentations(AbstractSubscriber source, Object... args) {
+  public Set<FieldRepresentation> fieldRepresentations(
+      BatchProcessAbstractSubscriber source, Object... args) {
     Set<FieldRepresentation> fieldRepresentations = new LinkedHashSet<>();
 
     fieldRepresentations.add(new FieldRepresentation("BatchProcessService", "batchProcessService"));
@@ -81,7 +82,7 @@ public class BatchProcessAbstractSubscriberTransformer
 
   @Override
   public Set<ConstructorRepresentation> constructorRepresentations(
-      AbstractSubscriber source, Object... args) {
+      BatchProcessAbstractSubscriber source, Object... args) {
     Set<ConstructorRepresentation> constructorRepresentations = new LinkedHashSet<>();
     Set<ParameterRepresentation> parameterRepresentations = new LinkedHashSet<>();
 
@@ -103,7 +104,7 @@ public class BatchProcessAbstractSubscriberTransformer
 
   @Override
   public Set<MethodRepresentation> methodRepresentations(
-      AbstractSubscriber source, Object... args) {
+      BatchProcessAbstractSubscriber source, Object... args) {
     Set<MethodRepresentation> methodRepresentations = new LinkedHashSet<>();
 
     methodRepresentations.add(methodTransformer.create(source.getFunction(), source));
@@ -112,45 +113,47 @@ public class BatchProcessAbstractSubscriberTransformer
   }
 
   @Override
-  public String packageName(AbstractSubscriber source, Object... args) {
+  public String packageName(BatchProcessAbstractSubscriber source, Object... args) {
     return source.getPackageName().getText();
   }
 
   @Override
-  public Set<String> imports(AbstractSubscriber source, Object... args) {
+  public Set<String> imports(BatchProcessAbstractSubscriber source, Object... args) {
     Set<String> imports = new TreeSet<>();
 
     imports.add("com.fasterxml.jackson.databind.ObjectMapper");
+    imports.add("com.fasterxml.jackson.databind.JsonNode");
     imports.add("com.oregor.trinity4j.api.clients.batchprocess.BatchProcessService");
-    imports.add("com.oregor.trinity4j.commons.messaging.subscriber.AbstractMessageSubscriber");
+    imports.add("com.oregor.trinity4j.api.clients.subscriber.AbstractMessageSubscriber");
+    imports.add("java.io.IOException");
 
     return imports;
   }
 
   @Override
-  public Set<String> annotations(AbstractSubscriber source, Object... args) {
+  public Set<String> annotations(BatchProcessAbstractSubscriber source, Object... args) {
     return super.annotations(source, args);
   }
 
   @Override
-  public String description(AbstractSubscriber source, Object... args) {
+  public String description(BatchProcessAbstractSubscriber source, Object... args) {
     return super.description(source, args);
   }
 
   @Override
-  public String modifiers(AbstractSubscriber source, Object... args) {
+  public String modifiers(BatchProcessAbstractSubscriber source, Object... args) {
     return String.format(
         "%s %s",
         dataTypeTransformer.getModifierPublic(), dataTypeTransformer.getModifierAbstract());
   }
 
   @Override
-  public String simpleObjectName(AbstractSubscriber source, Object... args) {
+  public String simpleObjectName(BatchProcessAbstractSubscriber source, Object... args) {
     return super.simpleObjectName(source, args);
   }
 
   @Override
-  public String fullObjectName(AbstractSubscriber source, Object... args) {
+  public String fullObjectName(BatchProcessAbstractSubscriber source, Object... args) {
     return String.format(
         "%s extends AbstractMessageSubscriber", super.simpleObjectName(source, args));
   }

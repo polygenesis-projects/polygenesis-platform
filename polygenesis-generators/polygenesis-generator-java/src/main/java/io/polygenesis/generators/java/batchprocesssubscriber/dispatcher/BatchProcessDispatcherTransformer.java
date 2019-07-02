@@ -29,6 +29,7 @@ import io.polygenesis.representations.code.ConstructorRepresentation;
 import io.polygenesis.representations.code.FieldRepresentation;
 import io.polygenesis.representations.code.MethodRepresentation;
 import io.polygenesis.representations.code.ParameterRepresentation;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -71,10 +72,19 @@ public class BatchProcessDispatcherTransformer
     return new TemplateData(dataModel, "polygenesis-representation-java/Class.java.ftl");
   }
 
+  @SuppressWarnings("CPD-START")
   @Override
   public Set<FieldRepresentation> fieldRepresentations(
       BatchProcessDispatcher source, Object... args) {
-    return super.fieldRepresentations(source, args);
+    Set<FieldRepresentation> fieldRepresentations = new LinkedHashSet<>();
+
+    // TODO
+    // private static final Logger LOG =
+    // LoggerFactory.getLogger(GdprBatchProcessMessageDispatcher.class);
+
+    fieldRepresentations.add(new FieldRepresentation("ObjectMapper", "objectMapper"));
+
+    return fieldRepresentations;
   }
 
   @Override
@@ -89,13 +99,15 @@ public class BatchProcessDispatcherTransformer
                 .replace("Dispatcher", "SubscriberRegistry"),
             "messageSubscriberRegistry"));
 
+    parameterRepresentations.add(new ParameterRepresentation("ObjectMapper", "objectMapper"));
+
     constructorRepresentations.add(
         new ConstructorRepresentation(
             new LinkedHashSet<>(),
             description(source),
             dataTypeTransformer.getModifierPublic(),
             parameterRepresentations,
-            "\t\tsuper(messageSubscriberRegistry);"));
+            "\t\tsuper(messageSubscriberRegistry);\n\t\tthis.objectMapper = objectMapper;"));
 
     return constructorRepresentations;
   }
@@ -119,31 +131,23 @@ public class BatchProcessDispatcherTransformer
   public Set<String> imports(BatchProcessDispatcher source, Object... args) {
     Set<String> imports = new TreeSet<>();
 
-    imports.add("com.oregor.trinity4j.commons.messaging.subscriber.AbstractMessageDispatcher");
+    imports.add("com.oregor.trinity4j.api.clients.subscriber.AbstractMessageDispatcher");
+    imports.add("com.fasterxml.jackson.databind.ObjectMapper");
+    imports.add("com.fasterxml.jackson.databind.JsonNode");
+    imports.add("org.springframework.stereotype.Service");
+    imports.add("java.io.IOException");
+    imports.add("org.slf4j.Logger");
+    imports.add("org.slf4j.LoggerFactory");
 
     return imports;
   }
 
   @Override
   public Set<String> annotations(BatchProcessDispatcher source, Object... args) {
-    return super.annotations(source, args);
+    return new LinkedHashSet<>(Arrays.asList("@Service"));
   }
 
-  @Override
-  public String description(BatchProcessDispatcher source, Object... args) {
-    return super.description(source, args);
-  }
-
-  @Override
-  public String modifiers(BatchProcessDispatcher source, Object... args) {
-    return super.modifiers(source, args);
-  }
-
-  @Override
-  public String simpleObjectName(BatchProcessDispatcher source, Object... args) {
-    return super.simpleObjectName(source, args);
-  }
-
+  @SuppressWarnings("CPD-END")
   @Override
   public String fullObjectName(BatchProcessDispatcher source, Object... args) {
     return String.format(

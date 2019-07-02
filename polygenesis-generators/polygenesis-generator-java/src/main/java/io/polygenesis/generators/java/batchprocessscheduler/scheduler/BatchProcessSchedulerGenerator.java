@@ -23,22 +23,21 @@ package io.polygenesis.generators.java.batchprocessscheduler.scheduler;
 import io.polygenesis.core.AbstractUnitTemplateGenerator;
 import io.polygenesis.core.Exporter;
 import io.polygenesis.core.TemplateEngine;
-import io.polygenesis.models.periodicprocess.BatchProcessMetamodel;
 
 /**
- * The type Batch process publisher generator.
+ * The type Batch process scheduler generator.
  *
  * @author Christos Tsakostas
  */
 public class BatchProcessSchedulerGenerator
-    extends AbstractUnitTemplateGenerator<BatchProcessMetamodel> {
+    extends AbstractUnitTemplateGenerator<BatchProcessSchedulerRoute> {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
-   * Instantiates a new Batch process publisher generator.
+   * Instantiates a new Batch process scheduler generator.
    *
    * @param templateTransformer the template transformer
    * @param templateEngine the template engine

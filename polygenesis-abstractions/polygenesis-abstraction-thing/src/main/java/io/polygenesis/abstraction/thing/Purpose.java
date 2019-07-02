@@ -36,6 +36,7 @@ public class Purpose implements Serializable {
   // DEFAULT COMMAND PURPOSES
   // ===============================================================================================
   private static final String CREATE = "CREATE";
+  private static final String ENSURE_EXISTENCE = "ENSURE_EXISTENCE";
   private static final String MODIFY = "MODIFY";
   private static final String DELETE = "DELETE";
 
@@ -86,6 +87,24 @@ public class Purpose implements Serializable {
   private static final String PERIODIC_PROCESS_QUERY = "PERIODIC_PROCESS_QUERY";
 
   // ===============================================================================================
+  // DOMAIN MESSAGE SUBSCRIBER
+  // ===============================================================================================
+  private static final String DOMAIN_MESSAGE_SUBSCRIBER_PROCESS =
+      "DOMAIN_MESSAGE_SUBSCRIBER_PROCESS";
+  private static final String DOMAIN_MESSAGE_SUBSCRIBER_SUPPORTED_TYPES =
+      "DOMAIN_MESSAGE_SUBSCRIBER_SUPPORTED_TYPES";
+
+  // ===============================================================================================
+  // INCOMING DOMAIN MESSAGE
+  // ===============================================================================================
+  private static final String INCOMING_DOMAIN_MESSAGE_GET_MESSAGE_ID =
+      "INCOMING_DOMAIN_MESSAGE_GET_MESSAGE_ID";
+  private static final String INCOMING_DOMAIN_MESSAGE_GET_ROOT_ID =
+      "INCOMING_DOMAIN_MESSAGE_GET_ROOT_ID";
+  private static final String INCOMING_DOMAIN_MESSAGE_GET_MESSAGE_BODY =
+      "INCOMING_DOMAIN_MESSAGE_GET_MESSAGE_BODY";
+
+  // ===============================================================================================
   // STATE
   // ===============================================================================================
 
@@ -114,6 +133,15 @@ public class Purpose implements Serializable {
    */
   public static Purpose create() {
     return new Purpose(CREATE, CqsType.COMMAND);
+  }
+
+  /**
+   * Ensure existence purpose.
+   *
+   * @return the purpose
+   */
+  public static Purpose ensureExistence() {
+    return new Purpose(ENSURE_EXISTENCE, CqsType.COMMAND);
   }
 
   /**
@@ -296,6 +324,59 @@ public class Purpose implements Serializable {
   }
 
   // ===============================================================================================
+  // DOMAIN MESSAGE SUBSCRIBER
+  // ===============================================================================================
+
+  /**
+   * Domain message subscriber process purpose.
+   *
+   * @return the purpose
+   */
+  public static Purpose domainMessageSubscriberProcess() {
+    return new Purpose(DOMAIN_MESSAGE_SUBSCRIBER_PROCESS, CqsType.COMMAND);
+  }
+
+  /**
+   * Domain message subscriber supported types purpose.
+   *
+   * @return the purpose
+   */
+  public static Purpose domainMessageSubscriberSupportedTypes() {
+    return new Purpose(DOMAIN_MESSAGE_SUBSCRIBER_SUPPORTED_TYPES, CqsType.QUERY);
+  }
+
+  // ===============================================================================================
+  // INCOMING DOMAIN MESSAGE
+  // ===============================================================================================
+
+  /**
+   * Incoming domain message get message id purpose.
+   *
+   * @return the purpose
+   */
+  public static Purpose incomingDomainMessageGetMessageId() {
+    return new Purpose(INCOMING_DOMAIN_MESSAGE_GET_MESSAGE_ID, CqsType.QUERY);
+  }
+
+  /**
+   * Incoming domain message get root id purpose.
+   *
+   * @return the purpose
+   */
+  public static Purpose incomingDomainMessageGetRootId() {
+    return new Purpose(INCOMING_DOMAIN_MESSAGE_GET_ROOT_ID, CqsType.QUERY);
+  }
+
+  /**
+   * Incoming domain message get message body purpose.
+   *
+   * @return the purpose
+   */
+  public static Purpose incomingDomainMessageGetMessageBody() {
+    return new Purpose(INCOMING_DOMAIN_MESSAGE_GET_MESSAGE_BODY, CqsType.QUERY);
+  }
+
+  // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
@@ -361,6 +442,15 @@ public class Purpose implements Serializable {
    */
   public boolean isCreate() {
     return getText().equals(CREATE);
+  }
+
+  /**
+   * Is ensure existence boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isEnsureExistence() {
+    return getText().equals(ENSURE_EXISTENCE);
   }
 
   /**

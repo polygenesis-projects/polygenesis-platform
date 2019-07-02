@@ -24,6 +24,8 @@
 
 <@restoreAggregateRoot data.persistenceVariable data.aggregateRootIdDataType data.aggregateRootDataType data.aggregateRootVariable data.requestDto data.thingIdentity data.multiTenant></@restoreAggregateRoot>
 
+    // TODO: implementation
+
 <@storeAggregateRoot data.persistenceVariable data.aggregateRootVariable></@storeAggregateRoot>
 <#if !data.responseDto.getVirtual()>
 

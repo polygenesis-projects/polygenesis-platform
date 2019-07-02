@@ -20,17 +20,11 @@
 
 package io.polygenesis.generators.java.batchprocesssubscriber.abstractsubscriber.activity;
 
-import io.polygenesis.generators.java.apidetail.service.activity.entity.AbstractAggregateEntityTemplateData;
-
 /**
  * The type Process activity template data.
  *
  * @author Christos Tsakostas
  */
-public class ProcessActivityTemplateData extends AbstractAggregateEntityTemplateData {
-
-  // ===============================================================================================
-  // CONSTRUCTOR(S)
-  // ===============================================================================================
-
+public class ProcessActivityTemplateData {
+  // No template data needed for this case
 }

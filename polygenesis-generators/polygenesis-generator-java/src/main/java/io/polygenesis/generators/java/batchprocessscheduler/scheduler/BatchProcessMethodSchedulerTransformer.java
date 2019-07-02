@@ -22,7 +22,11 @@ package io.polygenesis.generators.java.batchprocessscheduler.scheduler;
 
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.core.DataTypeTransformer;
+import io.polygenesis.generators.java.batchprocessscheduler.scheduler.activity.ConfigureSchedulerRouteActivityGenerator;
 import io.polygenesis.generators.java.shared.transformer.AbstractMethodTransformer;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * The type Batch process method publisher transformer.
@@ -32,20 +36,40 @@ import io.polygenesis.generators.java.shared.transformer.AbstractMethodTransform
 public class BatchProcessMethodSchedulerTransformer extends AbstractMethodTransformer<Function> {
 
   // ===============================================================================================
+  // STATE / DEPENDENCIES
+  // ===============================================================================================
+
+  private final ConfigureSchedulerRouteActivityGenerator configureSchedulerRouteActivityGenerator;
+
+  // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
-   * Instantiates a new Batch process method publisher transformer.
+   * Instantiates a new Batch process method scheduler transformer.
    *
    * @param dataTypeTransformer the data type transformer
+   * @param configureSchedulerRouteActivityGenerator the configure scheduler route activity
+   *     generator
    */
-  public BatchProcessMethodSchedulerTransformer(DataTypeTransformer dataTypeTransformer) {
+  public BatchProcessMethodSchedulerTransformer(
+      DataTypeTransformer dataTypeTransformer,
+      ConfigureSchedulerRouteActivityGenerator configureSchedulerRouteActivityGenerator) {
     super(dataTypeTransformer);
+    this.configureSchedulerRouteActivityGenerator = configureSchedulerRouteActivityGenerator;
   }
 
   // ===============================================================================================
   // OVERRIDES
   // ===============================================================================================
 
+  @Override
+  public Set<String> annotations(Function source, Object... args) {
+    return new LinkedHashSet<>(Arrays.asList("@Override"));
+  }
+
+  @Override
+  public String implementation(Function source, Object... args) {
+    return configureSchedulerRouteActivityGenerator.generate(source.getFunction());
+  }
 }

@@ -17,4 +17,4 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-    // TODO: configure-dispatcher-route
+    from(endpoint).bean(dispatcher, "dispatch");

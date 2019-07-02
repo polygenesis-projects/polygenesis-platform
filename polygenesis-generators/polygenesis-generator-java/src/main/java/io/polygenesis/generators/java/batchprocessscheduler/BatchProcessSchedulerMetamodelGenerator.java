@@ -28,6 +28,7 @@ import io.polygenesis.core.CoreRegistry;
 import io.polygenesis.core.ExportInfo;
 import io.polygenesis.core.MetamodelRepository;
 import io.polygenesis.generators.java.batchprocessscheduler.scheduler.BatchProcessSchedulerGenerator;
+import io.polygenesis.generators.java.batchprocessscheduler.scheduler.BatchProcessSchedulerRoute;
 import io.polygenesis.generators.java.shared.FolderFileConstants;
 import io.polygenesis.models.periodicprocess.BatchProcessMetamodel;
 import io.polygenesis.models.periodicprocess.BatchProcessMetamodelRepository;
@@ -105,12 +106,31 @@ public class BatchProcessSchedulerMetamodelGenerator extends AbstractMetamodelGe
         .resolve(modelRepositories, BatchProcessMetamodelRepository.class)
         .getItems()
         .forEach(
-            periodicProcessMetamodel -> {
+            batchProcessMetamodel -> {
               batchProcessSchedulerGenerator.generate(
-                  periodicProcessMetamodel,
+                  makeBatchProcessSchedulerRoute(batchProcessMetamodel),
                   batchProcessSchedulerGeneratorExportInfo(
-                      getGenerationPath(), periodicProcessMetamodel));
+                      getGenerationPath(), batchProcessMetamodel));
             });
+  }
+
+  // ===============================================================================================
+  // PRIVATE - Objects
+  // ===============================================================================================
+
+  /**
+   * Make batch process scheduler route batch process scheduler route.
+   *
+   * @return the batch process scheduler route
+   */
+  private BatchProcessSchedulerRoute makeBatchProcessSchedulerRoute(
+      BatchProcessMetamodel batchProcessMetamodel) {
+    return new BatchProcessSchedulerRoute(
+        batchProcessMetamodel.getObjectName(),
+        batchProcessMetamodel.getPackageName(),
+        batchProcessMetamodel.getCommandServiceMethod(),
+        batchProcessMetamodel.getQueryServiceMethod(),
+        batchProcessMetamodel.getQueryCollectionItem());
   }
 
   // ===============================================================================================
@@ -127,7 +147,7 @@ public class BatchProcessSchedulerMetamodelGenerator extends AbstractMetamodelGe
             FolderFileConstants.JAVA,
             batchProcessMetamodel.getPackageName().toPath().toString()),
         String.format(
-            "%sScheduler%s",
+            "%sSchedulerRoute%s",
             TextConverter.toUpperCamel(batchProcessMetamodel.getObjectName().getText()),
             FolderFileConstants.JAVA_POSTFIX));
   }

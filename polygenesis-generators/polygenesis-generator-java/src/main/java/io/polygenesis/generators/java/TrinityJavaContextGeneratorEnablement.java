@@ -33,9 +33,9 @@ public class TrinityJavaContextGeneratorEnablement {
   private boolean javaDomainGenerator = true;
   private boolean domainServiceImplementationGenerator = true;
   private boolean javaRdbmsGenerator = true;
-  private boolean apiClientMessaging = true;
+  private boolean apiClientDomainMessageSubscriber = true;
+  private boolean apiClientDomainMessageSubscriberActiveMq = true;
   private boolean javaDomainSqlGenerator = true;
-  private boolean apiClientScheduler = true;
   private boolean apiClientBatchProcess = true;
   private boolean apiClientBatchProcessMessageSubscriber = true;
   private boolean apiClientBatchProcessMessagingActivemq = true;
@@ -49,9 +49,11 @@ public class TrinityJavaContextGeneratorEnablement {
     setJavaDomainGenerator(true);
     setDomainServiceImplementationGenerator(true);
     setJavaRdbmsGenerator(true);
-    setApiClientMessaging(true);
+
+    setApiClientDomainMessageSubscriber(true);
+    setApiClientDomainMessageSubscriberActiveMq(true);
+
     setJavaDomainSqlGenerator(true);
-    setApiClientScheduler(true);
     setApiClientBatchProcess(true);
     setApiClientBatchProcessMessageSubscriber(true);
     setApiClientBatchProcessMessagingActivemq(true);
@@ -121,8 +123,17 @@ public class TrinityJavaContextGeneratorEnablement {
    *
    * @return the boolean
    */
-  public boolean isApiClientMessaging() {
-    return apiClientMessaging;
+  public boolean isApiClientDomainMessageSubscriber() {
+    return apiClientDomainMessageSubscriber;
+  }
+
+  /**
+   * Is api client domain message subscriber active mq boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isApiClientDomainMessageSubscriberActiveMq() {
+    return apiClientDomainMessageSubscriberActiveMq;
   }
 
   /**
@@ -132,15 +143,6 @@ public class TrinityJavaContextGeneratorEnablement {
    */
   public boolean isJavaDomainSqlGenerator() {
     return javaDomainSqlGenerator;
-  }
-
-  /**
-   * Is api client scheduler boolean.
-   *
-   * @return the boolean
-   */
-  public boolean isApiClientScheduler() {
-    return apiClientScheduler;
   }
 
   /**
@@ -241,10 +243,21 @@ public class TrinityJavaContextGeneratorEnablement {
   /**
    * Sets api client messaging.
    *
-   * @param apiClientMessaging the api client messaging
+   * @param apiClientDomainMessageSubscriber the api client messaging
    */
-  public void setApiClientMessaging(boolean apiClientMessaging) {
-    this.apiClientMessaging = apiClientMessaging;
+  public void setApiClientDomainMessageSubscriber(boolean apiClientDomainMessageSubscriber) {
+    this.apiClientDomainMessageSubscriber = apiClientDomainMessageSubscriber;
+  }
+
+  /**
+   * Sets api client domain message subscriber active mq.
+   *
+   * @param apiClientDomainMessageSubscriberActiveMq the api client domain message subscriber active
+   *     mq
+   */
+  public void setApiClientDomainMessageSubscriberActiveMq(
+      boolean apiClientDomainMessageSubscriberActiveMq) {
+    this.apiClientDomainMessageSubscriberActiveMq = apiClientDomainMessageSubscriberActiveMq;
   }
 
   /**
@@ -254,15 +267,6 @@ public class TrinityJavaContextGeneratorEnablement {
    */
   public void setJavaDomainSqlGenerator(boolean javaDomainSqlGenerator) {
     this.javaDomainSqlGenerator = javaDomainSqlGenerator;
-  }
-
-  /**
-   * Sets api client scheduler.
-   *
-   * @param apiClientScheduler the api client scheduler
-   */
-  public void setApiClientScheduler(boolean apiClientScheduler) {
-    this.apiClientScheduler = apiClientScheduler;
   }
 
   /**

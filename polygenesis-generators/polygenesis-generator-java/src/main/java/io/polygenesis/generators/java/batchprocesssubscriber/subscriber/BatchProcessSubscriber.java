@@ -30,6 +30,7 @@ import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.ReturnValue;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
+import io.polygenesis.commons.keyvalue.KeyValue;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.commons.valueobjects.VariableName;
@@ -108,6 +109,11 @@ public class BatchProcessSubscriber extends BatchProcessMetamodel {
         new ReturnValue(
             DataArray.of(DataPrimitive.of(PrimitiveType.STRING, VariableName.response()))),
         new LinkedHashSet<>(Arrays.asList()),
-        Activity.empty());
+        Activity.keyValues(
+            new LinkedHashSet<>(
+                Arrays.asList(
+                    new KeyValue(
+                        "supportedMessageTypes",
+                        new LinkedHashSet<>(Arrays.asList(getObjectName().getText())))))));
   }
 }

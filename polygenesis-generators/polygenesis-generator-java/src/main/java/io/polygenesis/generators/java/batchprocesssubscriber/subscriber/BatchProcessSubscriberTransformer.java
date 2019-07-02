@@ -24,7 +24,7 @@ import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.core.TemplateData;
-import io.polygenesis.generators.java.batchprocesssubscriber.abstractsubscriber.AbstractSubscriber;
+import io.polygenesis.generators.java.batchprocesssubscriber.abstractsubscriber.BatchProcessAbstractSubscriber;
 import io.polygenesis.generators.java.shared.transformer.AbstractClassTransformer;
 import io.polygenesis.representations.code.ConstructorRepresentation;
 import io.polygenesis.representations.code.MethodRepresentation;
@@ -113,16 +113,18 @@ public class BatchProcessSubscriberTransformer
 
   @Override
   public Set<String> imports(BatchProcessSubscriber source, Object... args) {
-    AbstractSubscriber abstractSubscriber = (AbstractSubscriber) args[0];
+    BatchProcessAbstractSubscriber batchProcessAbstractSubscriber =
+        (BatchProcessAbstractSubscriber) args[0];
     Set<String> imports = new TreeSet<>();
 
     imports.add(
         String.format(
             "%s.%s",
-            abstractSubscriber.getPackageName().getText(),
-            TextConverter.toUpperCamel(abstractSubscriber.getObjectName().getText())));
+            batchProcessAbstractSubscriber.getPackageName().getText(),
+            TextConverter.toUpperCamel(batchProcessAbstractSubscriber.getObjectName().getText())));
 
     imports.add("com.fasterxml.jackson.databind.ObjectMapper");
+    imports.add("java.util.Arrays");
     imports.add("java.util.List");
     imports.add("org.springframework.stereotype.Service");
 
@@ -141,11 +143,12 @@ public class BatchProcessSubscriberTransformer
 
   @Override
   public String fullObjectName(BatchProcessSubscriber source, Object... args) {
-    AbstractSubscriber abstractSubscriber = (AbstractSubscriber) args[0];
+    BatchProcessAbstractSubscriber batchProcessAbstractSubscriber =
+        (BatchProcessAbstractSubscriber) args[0];
 
     return String.format(
         "%s extends %s",
         simpleObjectName(source),
-        TextConverter.toUpperCamel(abstractSubscriber.getObjectName().getText()));
+        TextConverter.toUpperCamel(batchProcessAbstractSubscriber.getObjectName().getText()));
   }
 }

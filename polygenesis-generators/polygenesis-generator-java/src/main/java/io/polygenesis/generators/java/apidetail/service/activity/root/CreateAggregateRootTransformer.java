@@ -42,7 +42,7 @@ public class CreateAggregateRootTransformer extends AbstractServiceMethodImpleme
   // OVERRIDES
   // ===============================================================================================
 
-  @SuppressWarnings({"unchecked", "rawtypes"})
+  @SuppressWarnings({"unchecked", "rawtypes", "CPD-START"})
   @Override
   public TemplateData transform(ServiceMethodImplementation source, Object... args) {
     Set<MetamodelRepository> metamodelRepositories = (Set<MetamodelRepository>) args[0];
@@ -58,12 +58,15 @@ public class CreateAggregateRootTransformer extends AbstractServiceMethodImpleme
             source.getServiceMethod().getResponseDto(),
             getConverterVariable(source, metamodelRepositories),
             source.getFunction().getThing().getMultiTenant(),
-            getReturnValue(source));
+            getReturnValue(source),
+            getAggregateRootIdDataType(source),
+            getThingIdentity(source));
 
     Map<String, Object> dataModel = new HashMap<>();
     dataModel.put("data", data);
 
     return new TemplateData(
-        dataModel, "polygenesis-implementation-java-apiimpl/create-aggregate-root.ftl");
+        dataModel,
+        "polygenesis-trinity-java/api-detail/" + "aggregate-root/create-aggregate-root.java.ftl");
   }
 }

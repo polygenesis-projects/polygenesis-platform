@@ -94,7 +94,9 @@ public abstract class AbstractPropertyDeducer {
     thing
         .getFunctions()
         .stream()
-        .filter(function -> function.getPurpose().isCreate())
+        .filter(
+            function ->
+                function.getPurpose().isCreate() || function.getPurpose().isEnsureExistence())
         .forEach(
             function -> {
               Set<ThingProperty> thingProperties = getThingPropertiesFromFunction(function);

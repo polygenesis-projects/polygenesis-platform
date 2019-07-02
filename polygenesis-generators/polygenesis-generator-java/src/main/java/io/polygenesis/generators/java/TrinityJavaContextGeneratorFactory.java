@@ -38,16 +38,16 @@ import io.polygenesis.generators.java.batchprocesssubscriber.BatchProcessSubscri
 import io.polygenesis.generators.java.batchprocesssubscriber.BatchProcessSubscriberMetamodelGeneratorFactory;
 import io.polygenesis.generators.java.domain.JavaDomainGeneratorFactory;
 import io.polygenesis.generators.java.domain.JavaDomainMetamodelGenerator;
+import io.polygenesis.generators.java.domainmessageactivemq.DomainMessageActiveMqMetamodelGenerator;
+import io.polygenesis.generators.java.domainmessageactivemq.DomainMessageActiveMqMetamodelGeneratorFactory;
+import io.polygenesis.generators.java.domainmessagesubscriber.DomainMessageSubscriberMetamodelGenerator;
+import io.polygenesis.generators.java.domainmessagesubscriber.DomainMessageSubscriberMetamodelGeneratorFactory;
 import io.polygenesis.generators.java.domainservicedetail.DomainServiceDetailMetamodelGenerator;
 import io.polygenesis.generators.java.domainservicedetail.DomainServiceDetailMetamodelGeneratorFactory;
-import io.polygenesis.generators.java.messaging.MessagingGeneratorFactory;
-import io.polygenesis.generators.java.messaging.MessagingMetamodelGenerator;
 import io.polygenesis.generators.java.rdbms.JavaRdbmsGeneratorFactory;
 import io.polygenesis.generators.java.rdbms.JavaRdbmsMetamodelGenerator;
 import io.polygenesis.generators.java.rest.JavaApiRestGeneratorFactory;
 import io.polygenesis.generators.java.rest.JavaApiRestMetamodelGenerator;
-import io.polygenesis.generators.java.scheduler.SchedulerMetamodelGenerator;
-import io.polygenesis.generators.java.scheduler.SchedulerMetamodelGeneratorFactory;
 import io.polygenesis.generators.sql.SqlGeneratorFactory;
 import io.polygenesis.generators.sql.SqlMetamodelGenerator;
 import java.nio.file.Path;
@@ -70,20 +70,20 @@ public final class TrinityJavaContextGeneratorFactory {
   private static final String API_DETAIL = "api-detail";
   private static final String API_CLIENTS = "api-clients";
   private static final String API_CLIENT_REST_SPRING = "api-client-rest-spring";
-  // TODO
-  // private static final String API_CLIENT_MESSAGING = "api-client-messaging";
-  // private static final String API_CLIENT_MESSAGING = "api-client-subscriber-activemq";
-  // BATCH PROCESS
-  private static final String API_CLIENT_BATCH_PROCESS = "api-client-batch-process";
-  private static final String API_CLIENT_BATCH_PROCESS_MESSAGE_SUBSCRIBER =
-      "api-client-batch-process-message-subscriber";
-  private static final String API_CLIENT_BATCH_PROCESS_MESSAGING_ACTIVEMQ =
-      "api-client-batch-process-messaging-activemq";
-  private static final String API_CLIENT_BATCH_PROCESS_SCHEDULER_CAMEL =
-      "api-client-batch-process-scheduler-camel";
 
-  private static final String API_CLIENT_MESSAGING = "api-client-subscriber";
-  private static final String API_CLIENT_SCHEDULER = "api-client-scheduler-camel";
+  // BATCH PROCESS
+  private static final String API_CLIENT_BATCH_PROCESS_SUBSCRIBER =
+      "api-client-batch-process-subscriber";
+  private static final String API_CLIENT_BATCH_PROCESS_MESSAGING_ACTIVEMQ =
+      "api-client-batch-process-subscriber-activemq";
+  private static final String API_CLIENT_BATCH_PROCESS_SCHEDULER_CAMEL =
+      "api-client-batch-process-subscriber-activemq";
+
+  // DOMAIN MESSAGE
+  private static final String API_CLIENT_DOMAIN_MESSAGE_SUBSCRIBER =
+      "api-client-domain-message-subscriber";
+  private static final String API_CLIENT_DOMAIN_MESSAGE_SUBSCRIBER_ACTIVEMQ =
+      "api-client-domain-message-subscriber-activemq";
 
   private static final String DOMAIN = "domain";
   private static final String DOMAIN_DETAILS = "domain-details";
@@ -165,17 +165,21 @@ public final class TrinityJavaContextGeneratorFactory {
           javaRdbmsGenerator(exportPath, projectFolder, modulePrefix, context, rootPackageName));
     }
 
-    if (trinityJavaContextGeneratorEnablement.isApiClientMessaging()) {
-      metamodelGenerators.add(apiClientMessaging(exportPath, projectFolder, modulePrefix));
+    if (trinityJavaContextGeneratorEnablement.isApiClientDomainMessageSubscriber()) {
+      metamodelGenerators.add(
+          apiClientDomainMessageSubscriber(
+              exportPath, projectFolder, modulePrefix, rootPackageName, context));
+    }
+
+    if (trinityJavaContextGeneratorEnablement.isApiClientDomainMessageSubscriberActiveMq()) {
+      metamodelGenerators.add(
+          apiClientDomainMessageSubscriberActiveMq(
+              exportPath, projectFolder, modulePrefix, rootPackageName, context));
     }
 
     if (trinityJavaContextGeneratorEnablement.isJavaDomainSqlGenerator()) {
       metamodelGenerators.add(
           sqlMetamodelGenerator(exportPath, projectFolder, modulePrefix, tablePrefix));
-    }
-
-    if (trinityJavaContextGeneratorEnablement.isApiClientScheduler()) {
-      metamodelGenerators.add(apiClientScheduler(exportPath, projectFolder, modulePrefix));
     }
 
     if (trinityJavaContextGeneratorEnablement.isApiClientBatchProcess()) {
@@ -330,39 +334,53 @@ public final class TrinityJavaContextGeneratorFactory {
   }
 
   /**
-   * Api client messaging messaging generator.
+   * Api client domain message subscriber generator.
    *
    * @param exportPath the export path
    * @param projectFolder the project folder
    * @param modulePrefix the module prefix
    * @return the messaging generator
    */
-  private static MessagingMetamodelGenerator apiClientMessaging(
-      String exportPath, String projectFolder, String modulePrefix) {
-    return MessagingGeneratorFactory.newInstance(
+  private static DomainMessageSubscriberMetamodelGenerator apiClientDomainMessageSubscriber(
+      String exportPath,
+      String projectFolder,
+      String modulePrefix,
+      String rootPackageName,
+      String context) {
+    return DomainMessageSubscriberMetamodelGeneratorFactory.newInstance(
         Paths.get(
             exportPath,
             projectFolder,
             modulePrefix + "-" + API_CLIENTS,
-            modulePrefix + "-" + API_CLIENT_MESSAGING));
+            modulePrefix + "-" + API_CLIENT_DOMAIN_MESSAGE_SUBSCRIBER),
+        new PackageName(rootPackageName),
+        new ContextName(context));
   }
 
   /**
-   * Api client scheduler scheduler metamodel generator.
+   * Api client domain message subscriber active mq domain message active mq metamodel generator.
    *
    * @param exportPath the export path
    * @param projectFolder the project folder
    * @param modulePrefix the module prefix
-   * @return the scheduler metamodel generator
+   * @param rootPackageName the root package name
+   * @param context the context
+   * @return the domain message active mq metamodel generator
    */
-  private static SchedulerMetamodelGenerator apiClientScheduler(
-      String exportPath, String projectFolder, String modulePrefix) {
-    return SchedulerMetamodelGeneratorFactory.newInstance(
+  private static DomainMessageActiveMqMetamodelGenerator apiClientDomainMessageSubscriberActiveMq(
+      String exportPath,
+      String projectFolder,
+      String modulePrefix,
+      String rootPackageName,
+      String context) {
+    return DomainMessageActiveMqMetamodelGeneratorFactory.newInstance(
         Paths.get(
             exportPath,
             projectFolder,
             modulePrefix + "-" + API_CLIENTS,
-            modulePrefix + "-" + API_CLIENT_SCHEDULER));
+            modulePrefix + "-" + API_CLIENT_DOMAIN_MESSAGE_SUBSCRIBER_ACTIVEMQ),
+        new PackageName(rootPackageName),
+        new ContextName(context));
   }
 
   /**
@@ -380,7 +398,7 @@ public final class TrinityJavaContextGeneratorFactory {
             exportPath,
             projectFolder,
             modulePrefix + "-" + API_CLIENTS,
-            modulePrefix + "-" + API_CLIENT_BATCH_PROCESS));
+            modulePrefix + "-" + API_CLIENT_BATCH_PROCESS_SUBSCRIBER));
   }
 
   /**
@@ -402,7 +420,7 @@ public final class TrinityJavaContextGeneratorFactory {
             exportPath,
             projectFolder,
             modulePrefix + "-" + API_CLIENTS,
-            modulePrefix + "-" + API_CLIENT_BATCH_PROCESS_MESSAGE_SUBSCRIBER),
+            modulePrefix + "-" + API_CLIENT_BATCH_PROCESS_SUBSCRIBER),
         new PackageName(rootPackageName),
         new ContextName(context));
   }
@@ -434,7 +452,7 @@ public final class TrinityJavaContextGeneratorFactory {
   }
 
   /**
-   * Api client batch process scheduler camelq batch process scheduler metamodel generator.
+   * Api client batch process scheduler.
    *
    * @param exportPath the export path
    * @param projectFolder the project folder

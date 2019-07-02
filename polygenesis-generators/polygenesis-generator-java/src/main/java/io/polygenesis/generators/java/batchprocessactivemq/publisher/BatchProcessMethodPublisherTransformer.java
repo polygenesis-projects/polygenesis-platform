@@ -71,6 +71,6 @@ public class BatchProcessMethodPublisherTransformer extends AbstractMethodTransf
 
   @Override
   public String implementation(Function source, Object... args) {
-    return batchProcessPublisherSendActivityGenerator.generate(source.getFunction());
+    return batchProcessPublisherSendActivityGenerator.generate(source.getFunction(), args);
   }
 }

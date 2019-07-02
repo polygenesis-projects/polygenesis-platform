@@ -20,17 +20,11 @@
 
 package io.polygenesis.generators.java.batchprocessactivemq.dispatcherroute.activity;
 
-import io.polygenesis.generators.java.apidetail.service.activity.entity.AbstractAggregateEntityTemplateData;
-
 /**
  * The type Configure activity template data.
  *
  * @author Christos Tsakostas
  */
-public class ConfigureActivityTemplateData extends AbstractAggregateEntityTemplateData {
-
-  // ===============================================================================================
-  // CONSTRUCTOR(S)
-  // ===============================================================================================
-
+public class ConfigureActivityTemplateData {
+  // No template data needed for this case
 }

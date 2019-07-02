@@ -17,5 +17,4 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-    // process QUERY!!!
-    return null;
+    return ${ data.queryService}.${ data.queryMethod}(new ${ data.requestDto}(pageNumber, pageSize));

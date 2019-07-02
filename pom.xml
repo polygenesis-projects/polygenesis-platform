@@ -92,8 +92,8 @@
     <sonar-maven-plugin.version>3.5.0.1254</sonar-maven-plugin.version>
     <license-maven-plugin.version>1.14</license-maven-plugin.version>
     <fmt-maven-plugin.version>2.6.0</fmt-maven-plugin.version>
-    <maven-checkstyle-plugin.version>3.0.0</maven-checkstyle-plugin.version>
-    <checkstyle.version>8.15</checkstyle.version>
+    <maven-checkstyle-plugin.version>3.1.0</maven-checkstyle-plugin.version>
+    <checkstyle.version>8.22</checkstyle.version>
     <findbugs-maven-plugin.version>3.0.0</findbugs-maven-plugin.version>
     <maven-pmd-plugin.version>3.11.0</maven-pmd-plugin.version>
     <maven-jxr-plugin.version>2.4</maven-jxr-plugin.version>
@@ -285,7 +285,7 @@
       </dependency>
       <dependency>
         <groupId>io.polygenesis.metamodels</groupId>
-        <artifactId>polygenesis-metamodel-periodic-process</artifactId>
+        <artifactId>polygenesis-metamodel-batch-process</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
@@ -347,7 +347,7 @@
       </dependency>
       <dependency>
         <groupId>io.polygenesis.deducers</groupId>
-        <artifactId>polygenesis-deducer-periodic-process</artifactId>
+        <artifactId>polygenesis-deducer-batch-process</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>

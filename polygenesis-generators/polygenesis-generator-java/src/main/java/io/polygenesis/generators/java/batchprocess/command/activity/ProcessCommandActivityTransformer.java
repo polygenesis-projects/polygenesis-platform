@@ -21,6 +21,7 @@
 package io.polygenesis.generators.java.batchprocess.command.activity;
 
 import io.polygenesis.abstraction.thing.ActivityTemplateTransformer;
+import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.TemplateData;
 import io.polygenesis.generators.java.apidetail.service.activity.AbstractServiceMethodImplementationTransformer;
 import io.polygenesis.models.api.ServiceMethod;
@@ -43,7 +44,12 @@ public class ProcessCommandActivityTransformer
   @SuppressWarnings({"unchecked", "rawtypes"})
   @Override
   public TemplateData transform(ServiceMethod source, Object... args) {
-    ProcessCommandActivityTemplateData data = new ProcessCommandActivityTemplateData();
+    ProcessCommandActivityTemplateData data =
+        new ProcessCommandActivityTemplateData(
+            TextConverter.toLowerCamel(source.getService().getServiceName().getText()),
+            TextConverter.toLowerCamel(source.getFunction().getName().getText()),
+            TextConverter.toUpperCamel(
+                source.getRequestDto().getDataObject().getObjectName().getText()));
 
     Map<String, Object> dataModel = new HashMap<>();
     dataModel.put("data", data);

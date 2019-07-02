@@ -27,8 +27,8 @@ import io.polygenesis.core.TemplateData;
 import io.polygenesis.generators.java.shared.transformer.AbstractClassTransformer;
 import io.polygenesis.representations.code.ConstructorRepresentation;
 import io.polygenesis.representations.code.FieldRepresentation;
-import io.polygenesis.representations.code.MethodRepresentation;
 import io.polygenesis.representations.code.ParameterRepresentation;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -41,7 +41,7 @@ import java.util.TreeSet;
  * @author Christos Tsakostas
  */
 public class BatchProcessSubscriberRegistryTransformer
-    extends AbstractClassTransformer<Registry, Function> {
+    extends AbstractClassTransformer<BatchProcessSubscriberRegistry, Function> {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -64,7 +64,7 @@ public class BatchProcessSubscriberRegistryTransformer
   // ===============================================================================================
 
   @Override
-  public TemplateData transform(Registry source, Object... args) {
+  public TemplateData transform(BatchProcessSubscriberRegistry source, Object... args) {
     Map<String, Object> dataModel = new HashMap<>();
     dataModel.put("representation", create(source));
 
@@ -72,13 +72,15 @@ public class BatchProcessSubscriberRegistryTransformer
   }
 
   @Override
-  public Set<FieldRepresentation> fieldRepresentations(Registry source, Object... args) {
+  public Set<FieldRepresentation> fieldRepresentations(
+      BatchProcessSubscriberRegistry source, Object... args) {
     return super.fieldRepresentations(source, args);
   }
 
+  @SuppressWarnings("CPD-START")
   @Override
   public Set<ConstructorRepresentation> constructorRepresentations(
-      Registry source, Object... args) {
+      BatchProcessSubscriberRegistry source, Object... args) {
     Set<ConstructorRepresentation> constructorRepresentations = new LinkedHashSet<>();
     Set<ParameterRepresentation> parameterRepresentations = new LinkedHashSet<>();
 
@@ -102,21 +104,16 @@ public class BatchProcessSubscriberRegistryTransformer
   }
 
   @Override
-  public Set<MethodRepresentation> methodRepresentations(Registry source, Object... args) {
-    return super.methodRepresentations(source, args);
-  }
-
-  @Override
-  public String packageName(Registry source, Object... args) {
+  public String packageName(BatchProcessSubscriberRegistry source, Object... args) {
     return source.getPackageName().getText();
   }
 
   @Override
-  public Set<String> imports(Registry source, Object... args) {
+  public Set<String> imports(BatchProcessSubscriberRegistry source, Object... args) {
     Set<String> imports = new TreeSet<>();
 
-    imports.add(
-        "com.oregor.trinity4j.commons.messaging.subscriber.AbstractMessageSubscriberRegistry");
+    imports.add("com.oregor.trinity4j.api.clients.subscriber.AbstractMessageSubscriberRegistry");
+    imports.add("org.springframework.stereotype.Service");
     imports.add("java.util.List");
     imports.add("java.util.Optional");
 
@@ -124,27 +121,13 @@ public class BatchProcessSubscriberRegistryTransformer
   }
 
   @Override
-  public Set<String> annotations(Registry source, Object... args) {
-    return super.annotations(source, args);
+  public Set<String> annotations(BatchProcessSubscriberRegistry source, Object... args) {
+    return new LinkedHashSet<>(Arrays.asList("@Service"));
   }
 
+  @SuppressWarnings("CPD-END")
   @Override
-  public String description(Registry source, Object... args) {
-    return super.description(source, args);
-  }
-
-  @Override
-  public String modifiers(Registry source, Object... args) {
-    return super.modifiers(source, args);
-  }
-
-  @Override
-  public String simpleObjectName(Registry source, Object... args) {
-    return super.simpleObjectName(source, args);
-  }
-
-  @Override
-  public String fullObjectName(Registry source, Object... args) {
+  public String fullObjectName(BatchProcessSubscriberRegistry source, Object... args) {
     return String.format(
         "%s extends AbstractMessageSubscriberRegistry<%s>",
         super.simpleObjectName(source, args),

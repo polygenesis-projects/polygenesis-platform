@@ -36,6 +36,8 @@ import io.polygenesis.generators.java.apidetail.service.activity.entity.UpdateAg
 import io.polygenesis.generators.java.apidetail.service.activity.entity.UpdateAggregateEntityTransformer;
 import io.polygenesis.generators.java.apidetail.service.activity.root.CreateAggregateRootGenerator;
 import io.polygenesis.generators.java.apidetail.service.activity.root.CreateAggregateRootTransformer;
+import io.polygenesis.generators.java.apidetail.service.activity.root.EnsureExistenceOfAggregateRootGenerator;
+import io.polygenesis.generators.java.apidetail.service.activity.root.EnsureExistenceOfAggregateRootTransformer;
 import io.polygenesis.generators.java.apidetail.service.activity.root.FetchOneAggregateRootGenerator;
 import io.polygenesis.generators.java.apidetail.service.activity.root.FetchOneAggregateRootTransformer;
 import io.polygenesis.generators.java.apidetail.service.activity.root.FetchPagedCollectionAggregateRootGenerator;
@@ -67,6 +69,11 @@ public class ServiceMethodActivityRegistry
     TemplateEngine templateEngine = new FreemarkerTemplateEngine();
 
     // AGGREGATE ROOT
+    scopeAndPurposeMap.put(
+        new ScopePurposeTuple(AbstractionScope.domainAggregateRoot(), Purpose.ensureExistence()),
+        new EnsureExistenceOfAggregateRootGenerator(
+            new EnsureExistenceOfAggregateRootTransformer(), templateEngine));
+
     scopeAndPurposeMap.put(
         new ScopePurposeTuple(AbstractionScope.domainAggregateRoot(), Purpose.create()),
         new CreateAggregateRootGenerator(new CreateAggregateRootTransformer(), templateEngine));

@@ -30,7 +30,7 @@ import io.polygenesis.core.TemplateEngine;
  * @author Christos Tsakostas
  */
 public class BatchProcessAbstractSubscriberGenerator
-    extends AbstractUnitTemplateGenerator<AbstractSubscriber> {
+    extends AbstractUnitTemplateGenerator<BatchProcessAbstractSubscriber> {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)

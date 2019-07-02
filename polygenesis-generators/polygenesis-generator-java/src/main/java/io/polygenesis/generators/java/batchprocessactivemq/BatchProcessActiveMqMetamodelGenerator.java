@@ -88,12 +88,14 @@ public class BatchProcessActiveMqMetamodelGenerator extends AbstractMetamodelGen
     BatchProcessDispatcherRoute batchProcessDispatcherRoute = makeBatchProcessDispatcherRoute();
     batchProcessDispatcherRouteGenerator.generate(
         batchProcessDispatcherRoute,
-        batchProcessDispatcherRouteExportInfo(getGenerationPath(), batchProcessDispatcherRoute));
+        batchProcessDispatcherRouteExportInfo(getGenerationPath(), batchProcessDispatcherRoute),
+        contextName);
 
     BatchProcessMessagePublisher batchProcessMessagePublisher = makeBatchProcessMessagePublisher();
     batchProcessPublisherGenerator.generate(
         batchProcessMessagePublisher,
-        batchProcessMessagePublisherExportInfo(getGenerationPath(), batchProcessMessagePublisher));
+        batchProcessMessagePublisherExportInfo(getGenerationPath(), batchProcessMessagePublisher),
+        contextName);
   }
 
   // ===============================================================================================
@@ -124,7 +126,7 @@ public class BatchProcessActiveMqMetamodelGenerator extends AbstractMetamodelGen
     return new BatchProcessMessagePublisher(
         new ObjectName(
             String.format(
-                "%sBatchProcessMessagePublisherImpl",
+                "%sBatchProcessMessagePublisher",
                 TextConverter.toUpperCamel(contextName.getText()))),
         new PackageName(String.format("%s", rootPackageName.getText())));
   }

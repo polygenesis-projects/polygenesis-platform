@@ -20,18 +20,55 @@
 
 package io.polygenesis.generators.java.batchprocesssubscriber.subscriber.activity;
 
-import io.polygenesis.generators.java.apidetail.service.activity.entity.AbstractAggregateEntityTemplateData;
+import io.polygenesis.commons.assertion.Assertion;
+import java.util.Set;
 
 /**
  * The type Get supported message types activity template data.
  *
  * @author Christos Tsakostas
  */
-public class GetSupportedMessageTypesActivityTemplateData
-    extends AbstractAggregateEntityTemplateData {
+public class GetSupportedMessageTypesActivityTemplateData {
+
+  private Set<String> supportedMessageTypes;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
+  /**
+   * Instantiates a new Get supported message types activity template data.
+   *
+   * @param supportedMessageTypes the supported message types
+   */
+  public GetSupportedMessageTypesActivityTemplateData(Set<String> supportedMessageTypes) {
+    setSupportedMessageTypes(supportedMessageTypes);
+  }
+
+  // ===============================================================================================
+  // GETTERS
+  // ===============================================================================================
+
+  /**
+   * Gets supported message types.
+   *
+   * @return the supported message types
+   */
+  public Set<String> getSupportedMessageTypes() {
+    return supportedMessageTypes;
+  }
+
+  // ===============================================================================================
+  // GUARDS
+  // ===============================================================================================
+
+  /**
+   * Sets supported message types.
+   *
+   * @param supportedMessageTypes the supported message types
+   */
+  private void setSupportedMessageTypes(Set<String> supportedMessageTypes) {
+    Assertion.isNotNull(supportedMessageTypes, "supportedMessageTypes is required");
+    this.supportedMessageTypes = supportedMessageTypes;
+  }
 }

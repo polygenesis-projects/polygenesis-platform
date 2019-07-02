@@ -25,4 +25,6 @@ package io.polygenesis.models.rest;
  *
  * @author Christos Tsakostas
  */
-public class RequestParameter {}
+public class RequestParameter {
+  // Not implemented yet
+}

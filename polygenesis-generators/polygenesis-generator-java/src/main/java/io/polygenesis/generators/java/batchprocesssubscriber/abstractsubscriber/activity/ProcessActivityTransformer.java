@@ -47,6 +47,9 @@ public class ProcessActivityTransformer extends AbstractServiceMethodImplementat
     Map<String, Object> dataModel = new HashMap<>();
     dataModel.put("data", data);
 
-    return new TemplateData(dataModel, "polygenesis-trinity-java-batch-process/process.java.ftl");
+    return new TemplateData(
+        dataModel,
+        "polygenesis-trinity-java/api-clients/"
+            + "api-client-batch-process-subscriber/process.java.ftl");
   }
 }

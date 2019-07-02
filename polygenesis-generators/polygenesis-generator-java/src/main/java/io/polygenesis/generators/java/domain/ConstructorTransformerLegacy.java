@@ -136,10 +136,10 @@ public class ConstructorTransformerLegacy extends AbstractLegacyMethodTransforme
   @Override
   public String implementation(Constructor source, Object... args) {
     if (source.getFunction().getReturnValue() == null) {
-      return "\t\t// TODO: write implementation here";
+      return "\t\t// TODO: implementation";
     } else {
       StringBuilder stringBuilder = new StringBuilder();
-      stringBuilder.append("\t\t// TODO: write implementation here\n");
+      stringBuilder.append("\t\t// TODO: implementation\n");
       stringBuilder.append("\t\treturn null;");
       return stringBuilder.toString();
     }

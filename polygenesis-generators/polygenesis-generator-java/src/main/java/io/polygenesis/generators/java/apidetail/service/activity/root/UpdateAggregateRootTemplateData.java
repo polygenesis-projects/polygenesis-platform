@@ -33,9 +33,6 @@ import java.util.Set;
  */
 public class UpdateAggregateRootTemplateData extends AbstractAggregateRootTemplateData {
 
-  private String aggregateRootIdDataType;
-  private Data thingIdentity;
-
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
@@ -80,30 +77,8 @@ public class UpdateAggregateRootTemplateData extends AbstractAggregateRootTempla
         responseDto,
         converterVariable,
         multiTenant,
-        returnValue);
-    this.aggregateRootIdDataType = aggregateRootIdDataType;
-    this.thingIdentity = thingIdentity;
-  }
-
-  // ===============================================================================================
-  // GETTERS
-  // ===============================================================================================
-
-  /**
-   * Gets aggregate root id data type.
-   *
-   * @return the aggregate root id data type
-   */
-  public String getAggregateRootIdDataType() {
-    return aggregateRootIdDataType;
-  }
-
-  /**
-   * Gets thing identity.
-   *
-   * @return the thing identity
-   */
-  public Data getThingIdentity() {
-    return thingIdentity;
+        returnValue,
+        aggregateRootIdDataType,
+        thingIdentity);
   }
 }
