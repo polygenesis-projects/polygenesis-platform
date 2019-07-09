@@ -102,6 +102,7 @@ public class BatchProcessDispatcherRoute extends AbstractNameablePackageable {
         new FunctionName("configure"),
         null,
         new LinkedHashSet<>(),
-        Activity.empty());
+        Activity.empty(),
+        thing.getAbstractionsScopes());
   }
 }

@@ -33,6 +33,7 @@ import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.commons.valueobjects.VariableName;
+import io.polygenesis.core.AbstractionScope;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -84,7 +85,7 @@ public class PurposeFunctionBuilder {
    */
   public final PurposeFunctionBuilder withCrudFunction(Set<Data> models) {
     withFunctionCreate(models);
-    withFunctionModify(models);
+    withFunctionModify("modify", models);
     withFunctionFetchOne(models);
     withFunctionFetchPagedCollection(models);
     return this;
@@ -247,17 +248,20 @@ public class PurposeFunctionBuilder {
    */
   public final PurposeFunctionBuilder withFunctionModifyNoReturnValue(
       String functionName, Set<Data> models) {
-    return withFunctionModify(functionName, models, false);
+    return withFunctionModify(functionName, models, false, thing.getAbstractionsScopes());
   }
 
   /**
-   * With function modify purpose function builder.
+   * With function modify no return value purpose function builder.
    *
+   * @param functionName the function name
    * @param models the models
+   * @param abstractionScopes the abstraction scopes
    * @return the purpose function builder
    */
-  public final PurposeFunctionBuilder withFunctionModify(Set<Data> models) {
-    return withFunctionModify("modify", models, true);
+  public final PurposeFunctionBuilder withFunctionModifyNoReturnValue(
+      String functionName, Set<Data> models, Set<AbstractionScope> abstractionScopes) {
+    return withFunctionModify(functionName, models, false, abstractionScopes);
   }
 
   /**
@@ -268,7 +272,7 @@ public class PurposeFunctionBuilder {
    * @return the purpose function builder
    */
   public final PurposeFunctionBuilder withFunctionModify(String functionName, Set<Data> models) {
-    return withFunctionModify(functionName, models, true);
+    return withFunctionModify(functionName, models, true, thing.getAbstractionsScopes());
   }
 
   /**
@@ -279,7 +283,10 @@ public class PurposeFunctionBuilder {
    * @return the thing builder
    */
   private PurposeFunctionBuilder withFunctionModify(
-      String functionName, Set<Data> models, Boolean returnValue) {
+      String functionName,
+      Set<Data> models,
+      Boolean returnValue,
+      Set<AbstractionScope> abstractionScopes) {
 
     // ---------------------------------------------------------------------------------------------
     // ARGUMENTS
@@ -336,6 +343,7 @@ public class PurposeFunctionBuilder {
           FunctionBuilder.of(thing, functionName, Purpose.modify())
               .setReturnValue(returnValueDataObject)
               .addArgument(argumentDataObject)
+              .setAbstractionScopes(abstractionScopes)
               .build();
 
       this.functions.add(function);
@@ -347,6 +355,7 @@ public class PurposeFunctionBuilder {
       Function function =
           FunctionBuilder.of(thing, functionName, Purpose.modify())
               .addArgument(argumentDataObject)
+              .setAbstractionScopes(abstractionScopes)
               .build();
 
       this.functions.add(function);

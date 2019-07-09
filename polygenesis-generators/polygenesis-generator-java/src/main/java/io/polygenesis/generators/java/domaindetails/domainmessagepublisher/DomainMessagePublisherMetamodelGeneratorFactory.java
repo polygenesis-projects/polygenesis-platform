@@ -28,19 +28,34 @@ import io.polygenesis.core.Exporter;
 import io.polygenesis.core.FreemarkerTemplateEngine;
 import io.polygenesis.core.JavaDataTypeTransformer;
 import io.polygenesis.core.TemplateEngine;
-import io.polygenesis.generators.java.domaindetails.domainmessagepublisher.publisherroute.ScheduledDomainMessagePublisherRouteGenerator;
-import io.polygenesis.generators.java.domaindetails.domainmessagepublisher.publisherroute.ScheduledDomainMessagePublisherRouteTransformer;
-import io.polygenesis.generators.java.domaindetails.domainmessagepublisher.publisherroute.ScheduledDomainMessagePublisherRouteMethodTransformer;
-import io.polygenesis.generators.java.domaindetails.domainmessagepublisher.publisherroute.activity.ConfigureActivityGenerator;
-import io.polygenesis.generators.java.domaindetails.domainmessagepublisher.publisherroute.activity.ConfigureActivityTransformer;
-import io.polygenesis.generators.java.domaindetails.domainmessagepublisher.publisher.ScheduledDomainMessagePublisherMethodTransformer;
-import io.polygenesis.generators.java.domaindetails.domainmessagepublisher.publisher.ScheduledDomainMessagePublisherGenerator;
-import io.polygenesis.generators.java.domaindetails.domainmessagepublisher.publisher.ScheduledDomainMessagePublisherTransformer;
-import io.polygenesis.generators.java.domaindetails.domainmessagepublisher.publisher.activity.BatchProcessPublisherSendActivityGenerator;
-import io.polygenesis.generators.java.domaindetails.domainmessagepublisher.publisher.activity.BatchProcessPublisherSendActivityTransformer;
+import io.polygenesis.generators.java.domaindetails.domainmessagepublisher.dataconverter.DomainMessagePublishedDataConverterGenerator;
+import io.polygenesis.generators.java.domaindetails.domainmessagepublisher.dataconverter.DomainMessagePublishedDataConverterMethodTransformer;
+import io.polygenesis.generators.java.domaindetails.domainmessagepublisher.dataconverter.DomainMessagePublishedDataConverterTransformer;
+import io.polygenesis.generators.java.domaindetails.domainmessagepublisher.publishdto.DomainMessagePublishDtoGenerator;
+import io.polygenesis.generators.java.domaindetails.domainmessagepublisher.publishdto.DomainMessagePublishDtoMethodTransformer;
+import io.polygenesis.generators.java.domaindetails.domainmessagepublisher.publishdto.DomainMessagePublishDtoTransformer;
+import io.polygenesis.generators.java.domaindetails.domainmessagepublisher.publishdtoconverter.DomainMessagePublishDtoConverterGenerator;
+import io.polygenesis.generators.java.domaindetails.domainmessagepublisher.publishdtoconverter.DomainMessagePublishDtoConverterMethodTransformer;
+import io.polygenesis.generators.java.domaindetails.domainmessagepublisher.publishdtoconverter.DomainMessagePublishDtoConverterTransformer;
+import io.polygenesis.generators.java.domaindetails.domainmessagepublisher.publishdtoconverter.activity.DomainMessagePublishDtoConverterActivityRegistry;
+import io.polygenesis.generators.java.domaindetails.domainmessagepublisher.publisher.DomainMessagePublisherGenerator;
+import io.polygenesis.generators.java.domaindetails.domainmessagepublisher.publisher.DomainMessagePublisherMethodTransformer;
+import io.polygenesis.generators.java.domaindetails.domainmessagepublisher.publisher.DomainMessagePublisherTransformer;
+import io.polygenesis.generators.java.domaindetails.domainmessagepublisher.publisher.activity.DomainMessagePublisherSendActivityGenerator;
+import io.polygenesis.generators.java.domaindetails.domainmessagepublisher.publisher.activity.DomainMessagePublisherSendActivityTransformer;
+import io.polygenesis.generators.java.domaindetails.domainmessagepublisher.scheduledpublisher.ScheduledDomainMessagePublisherGenerator;
+import io.polygenesis.generators.java.domaindetails.domainmessagepublisher.scheduledpublisher.ScheduledDomainMessagePublisherMethodTransformer;
+import io.polygenesis.generators.java.domaindetails.domainmessagepublisher.scheduledpublisher.ScheduledDomainMessagePublisherTransformer;
+import io.polygenesis.generators.java.domaindetails.domainmessagepublisher.scheduledpublisherroute.ScheduledDomainMessagePublisherRouteGenerator;
+import io.polygenesis.generators.java.domaindetails.domainmessagepublisher.scheduledpublisherroute.ScheduledDomainMessagePublisherRouteMethodTransformer;
+import io.polygenesis.generators.java.domaindetails.domainmessagepublisher.scheduledpublisherroute.ScheduledDomainMessagePublisherRouteTransformer;
+import io.polygenesis.generators.java.domaindetails.domainmessagepublisher.scheduledpublisherroute.activity.ConfigureActivityGenerator;
+import io.polygenesis.generators.java.domaindetails.domainmessagepublisher.scheduledpublisherroute.activity.ConfigureActivityTransformer;
 import java.nio.file.Path;
 
 /**
+ * The type Domain message publisher metamodel generator factory.
+ *
  * @author Christos Tsakostas
  */
 public final class DomainMessagePublisherMetamodelGeneratorFactory {
@@ -48,8 +63,17 @@ public final class DomainMessagePublisherMetamodelGeneratorFactory {
   // ===============================================================================================
   // DEPENDENCIES
   // ===============================================================================================
-  private static ScheduledDomainMessagePublisherRouteGenerator scheduledDomainMessagePublisherRouteGenerator;
+  private static DomainMessagePublisherGenerator domainMessagePublisherGenerator;
+  private static ScheduledDomainMessagePublisherRouteGenerator
+      scheduledDomainMessagePublisherRouteGenerator;
   private static ScheduledDomainMessagePublisherGenerator scheduledDomainMessagePublisherGenerator;
+
+  private static DomainMessagePublishedDataConverterGenerator
+      domainMessagePublishedDataConverterGenerator;
+
+  private static DomainMessagePublishDtoGenerator domainMessagePublishDtoGenerator;
+  private static DomainMessagePublishDtoConverterGenerator
+      domainMessagePublishDtoConverterGenerator;
 
   // ===============================================================================================
   // STATIC INITIALIZATION OF DEPENDENCIES
@@ -59,6 +83,17 @@ public final class DomainMessagePublisherMetamodelGeneratorFactory {
     TemplateEngine templateEngine = new FreemarkerTemplateEngine();
     Exporter exporter = new ActiveFileExporter();
     DataTypeTransformer dataTypeTransformer = new JavaDataTypeTransformer();
+
+    domainMessagePublisherGenerator =
+        new DomainMessagePublisherGenerator(
+            new DomainMessagePublisherTransformer(
+                dataTypeTransformer,
+                new DomainMessagePublisherMethodTransformer(
+                    dataTypeTransformer,
+                    new DomainMessagePublisherSendActivityGenerator(
+                        new DomainMessagePublisherSendActivityTransformer(), templateEngine))),
+            templateEngine,
+            exporter);
 
     scheduledDomainMessagePublisherRouteGenerator =
         new ScheduledDomainMessagePublisherRouteGenerator(
@@ -75,10 +110,32 @@ public final class DomainMessagePublisherMetamodelGeneratorFactory {
         new ScheduledDomainMessagePublisherGenerator(
             new ScheduledDomainMessagePublisherTransformer(
                 dataTypeTransformer,
-                new ScheduledDomainMessagePublisherMethodTransformer(
-                    dataTypeTransformer,
-                    new BatchProcessPublisherSendActivityGenerator(
-                        new BatchProcessPublisherSendActivityTransformer(), templateEngine))),
+                new ScheduledDomainMessagePublisherMethodTransformer(dataTypeTransformer)),
+            templateEngine,
+            exporter);
+
+    domainMessagePublishedDataConverterGenerator =
+        new DomainMessagePublishedDataConverterGenerator(
+            new DomainMessagePublishedDataConverterTransformer(
+                dataTypeTransformer,
+                new DomainMessagePublishedDataConverterMethodTransformer(dataTypeTransformer)),
+            templateEngine,
+            exporter);
+
+    domainMessagePublishDtoGenerator =
+        new DomainMessagePublishDtoGenerator(
+            new DomainMessagePublishDtoTransformer(
+                dataTypeTransformer,
+                new DomainMessagePublishDtoMethodTransformer(dataTypeTransformer)),
+            templateEngine,
+            exporter);
+
+    domainMessagePublishDtoConverterGenerator =
+        new DomainMessagePublishDtoConverterGenerator(
+            new DomainMessagePublishDtoConverterTransformer(
+                dataTypeTransformer,
+                new DomainMessagePublishDtoConverterMethodTransformer(
+                    dataTypeTransformer, new DomainMessagePublishDtoConverterActivityRegistry())),
             templateEngine,
             exporter);
   }
@@ -95,13 +152,25 @@ public final class DomainMessagePublisherMetamodelGeneratorFactory {
   // NEW INSTANCE
   // ===============================================================================================
 
+  /**
+   * New instance domain message publisher metamodel generator.
+   *
+   * @param generationPath the generation path
+   * @param rootPackageName the root package name
+   * @param contextName the context name
+   * @return the domain message publisher metamodel generator
+   */
   public static DomainMessagePublisherMetamodelGenerator newInstance(
       Path generationPath, PackageName rootPackageName, ContextName contextName) {
     return new DomainMessagePublisherMetamodelGenerator(
         generationPath,
         rootPackageName,
         contextName,
+        domainMessagePublisherGenerator,
         scheduledDomainMessagePublisherRouteGenerator,
-        scheduledDomainMessagePublisherGenerator);
+        scheduledDomainMessagePublisherGenerator,
+        domainMessagePublishedDataConverterGenerator,
+        domainMessagePublishDtoGenerator,
+        domainMessagePublishDtoConverterGenerator);
   }
 }

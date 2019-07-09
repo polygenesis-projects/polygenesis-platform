@@ -82,6 +82,7 @@ public class SqlTableDeducer implements Deducer<SqlTableMetamodelRepository> {
 
     if (projectionMetamodelRepository.getItems().isEmpty()) {
       tables.add(createDomainMessageTable());
+      tables.add(createPublishedDomainMessageTable());
     }
 
     return new SqlTableMetamodelRepository(tables);
@@ -92,10 +93,26 @@ public class SqlTableDeducer implements Deducer<SqlTableMetamodelRepository> {
   // ===============================================================================================
 
   private Table createDomainMessageTable() {
+    Set<Column> columns = columnsForDomainMessageData();
+
+    return new Table(new TableName("domain_message_data"), columns, false);
+  }
+
+  private Table createPublishedDomainMessageTable() {
+    Set<Column> columns = columnsForDomainMessageData();
+
+    // Add sent_on
+    columns.add(new Column("sent_on", ColumnDataType.DATETIME, 0, RequiredType.OPTIONAL));
+
+    return new Table(new TableName("domain_message_published_data"), columns, false);
+  }
+
+  private Set<Column> columnsForDomainMessageData() {
     Set<Column> columns = new LinkedHashSet<>();
 
     // Add Message Id
-    columns.add(new Column("message_id", ColumnDataType.BINARY, 16, 0, RequiredType.REQUIRED, true));
+    columns.add(
+        new Column("message_id", ColumnDataType.BINARY, 16, 0, RequiredType.REQUIRED, true));
 
     // Add occurred_on
     columns.add(new Column("occurred_on", ColumnDataType.DATETIME, 0, RequiredType.REQUIRED));
@@ -112,6 +129,10 @@ public class SqlTableDeducer implements Deducer<SqlTableMetamodelRepository> {
     // Add message_name
     columns.add(new Column("message_name", ColumnDataType.VARCHAR, 512, 0, RequiredType.REQUIRED));
 
+    // Add message_version
+    columns.add(
+        new Column("message_version", ColumnDataType.INTEGER, 11, 0, RequiredType.REQUIRED));
+
     // Add message
     columns.add(new Column("message_body", ColumnDataType.LONGTEXT, 0, RequiredType.REQUIRED));
 
@@ -121,6 +142,6 @@ public class SqlTableDeducer implements Deducer<SqlTableMetamodelRepository> {
     // Add ip_address
     columns.add(new Column("ip_address", ColumnDataType.VARCHAR, 100, 0, RequiredType.OPTIONAL));
 
-    return new Table(new TableName("domain_message"), columns, false);
+    return columns;
   }
 }

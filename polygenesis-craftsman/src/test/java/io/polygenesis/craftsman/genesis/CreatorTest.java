@@ -85,6 +85,7 @@ public class CreatorTest {
         trinityJavaContextGeneratorEnablement,
         JAVA_EXPORT_PATH,
         projectFolder,
+        "",
         JAVA_MODULE_PREFIX,
         JAVA_CONTEXT,
         TABLE_PREFIX,

@@ -22,6 +22,7 @@ package io.polygenesis.generators.sql;
 
 import io.polygenesis.commons.freemarker.FreemarkerConfig;
 import io.polygenesis.commons.freemarker.FreemarkerService;
+import io.polygenesis.commons.valueobjects.ContextName;
 import java.nio.file.Path;
 
 /**
@@ -66,7 +67,8 @@ public final class SqlGeneratorFactory {
    * @param tablePrefix the table prefix
    * @return the sql generator
    */
-  public static SqlMetamodelGenerator newInstance(Path generationPath, String tablePrefix) {
-    return new SqlMetamodelGenerator(generationPath, scriptExporter, tablePrefix);
+  public static SqlMetamodelGenerator newInstance(
+      Path generationPath, ContextName contextName, String tablePrefix) {
+    return new SqlMetamodelGenerator(generationPath, contextName, scriptExporter, tablePrefix);
   }
 }

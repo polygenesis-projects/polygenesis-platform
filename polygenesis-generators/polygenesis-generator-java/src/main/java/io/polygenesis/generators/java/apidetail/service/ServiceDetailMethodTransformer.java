@@ -24,6 +24,8 @@ import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.generators.java.apidetail.service.activity.ServiceMethodActivityRegistry;
 import io.polygenesis.generators.java.shared.transformer.AbstractMethodTransformer;
 import io.polygenesis.models.apiimpl.ServiceMethodImplementation;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * The type Service detail method transformer.
@@ -68,5 +70,19 @@ public class ServiceDetailMethodTransformer
     } else {
       return super.implementation(source, args);
     }
+  }
+
+  @Override
+  public Set<String> annotations(ServiceMethodImplementation source, Object... args) {
+    Set<String> annotations = new LinkedHashSet<>();
+
+    annotations.add("@Override");
+
+    return annotations;
+  }
+
+  @Override
+  public String description(ServiceMethodImplementation source, Object... args) {
+    return "";
   }
 }

@@ -105,6 +105,12 @@ public class Purpose implements Serializable {
       "INCOMING_DOMAIN_MESSAGE_GET_MESSAGE_BODY";
 
   // ===============================================================================================
+  // DOMAIN MESSAGE PUBLISHER
+  // ===============================================================================================
+  private static final String DOMAIN_MESSAGE_PUBLISHER_GET_CONTEXT =
+      "DOMAIN_MESSAGE_PUBLISHER_GET_CONTEXT";
+
+  // ===============================================================================================
   // STATE
   // ===============================================================================================
 
@@ -374,6 +380,19 @@ public class Purpose implements Serializable {
    */
   public static Purpose incomingDomainMessageGetMessageBody() {
     return new Purpose(INCOMING_DOMAIN_MESSAGE_GET_MESSAGE_BODY, CqsType.QUERY);
+  }
+
+  // ===============================================================================================
+  // DOMAIN MESSAGE PUBLISHER
+  // ===============================================================================================
+
+  /**
+   * Domain message publisher get context purpose.
+   *
+   * @return the purpose
+   */
+  public static Purpose domainMessagePublisherGetContext() {
+    return new Purpose(DOMAIN_MESSAGE_PUBLISHER_GET_CONTEXT, CqsType.QUERY);
   }
 
   // ===============================================================================================

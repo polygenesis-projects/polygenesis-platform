@@ -156,6 +156,10 @@ public class BatchProcessTransformer
         String.format("%sQuery", TextConverter.toLowerCamel(source.getObjectName().getText())));
     implementation.append(", ");
     implementation.append("defaultPageSize");
+    implementation.append(", ");
+    implementation.append("\"");
+    implementation.append(simpleObjectName(source, args));
+    implementation.append("\"");
     implementation.append(");");
 
     Set<ConstructorRepresentation> constructorRepresentations = new LinkedHashSet<>();

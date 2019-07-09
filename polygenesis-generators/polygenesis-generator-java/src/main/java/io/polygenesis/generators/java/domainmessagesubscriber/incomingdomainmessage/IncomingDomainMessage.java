@@ -112,7 +112,8 @@ public class IncomingDomainMessage extends AbstractNameablePackageable {
         new FunctionName("getMessageId"),
         new ReturnValue(DataPrimitive.of(PrimitiveType.STRING, VariableName.response())),
         new LinkedHashSet<>(),
-        Activity.empty());
+        Activity.empty(),
+        thing.getAbstractionsScopes());
   }
 
   private Function makeGetRootId() {
@@ -125,7 +126,8 @@ public class IncomingDomainMessage extends AbstractNameablePackageable {
         new FunctionName("getRootId"),
         new ReturnValue(DataPrimitive.of(PrimitiveType.STRING, VariableName.response())),
         new LinkedHashSet<>(),
-        Activity.empty());
+        Activity.empty(),
+        thing.getAbstractionsScopes());
   }
 
   private Function makeGetMessageBody() {
@@ -138,6 +140,7 @@ public class IncomingDomainMessage extends AbstractNameablePackageable {
         new FunctionName("getMessageBody"),
         new ReturnValue(DataPrimitive.of(PrimitiveType.STRING, VariableName.response())),
         new LinkedHashSet<>(),
-        Activity.empty());
+        Activity.empty(),
+        thing.getAbstractionsScopes());
   }
 }

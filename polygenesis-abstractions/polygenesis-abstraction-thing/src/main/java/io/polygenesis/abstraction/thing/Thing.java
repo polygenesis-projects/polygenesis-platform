@@ -78,7 +78,8 @@ public class Thing implements Abstraction {
       ThingName thingName,
       Set<ThingProperty> thingProperties,
       Boolean multiTenant,
-      Thing optionalParent) {
+      Thing optionalParent,
+      Set<KeyValue> metadata) {
     setAbstractionScopes(abstractionScopes);
     setContextName(contextName);
     setThingName(thingName);
@@ -91,21 +92,12 @@ public class Thing implements Abstraction {
       setOptionalParent(optionalParent);
     }
 
-    setMetadata(new LinkedHashSet<>());
+    setMetadata(metadata);
   }
 
   // ===============================================================================================
   // STATE MUTATION
   // ===============================================================================================
-
-  /**
-   * Assign thing properties.
-   *
-   * @param thingProperties the thing properties
-   */
-  public void assignThingProperties(Set<ThingProperty> thingProperties) {
-    setThingProperties(thingProperties);
-  }
 
   /**
    * Add data.
@@ -153,23 +145,24 @@ public class Thing implements Abstraction {
   /**
    * Add child.
    *
-   * @param thing the thing
+   * @param childThing the child thing
    */
-  public void addChild(Thing thing) {
+  public void addChild(Thing childThing) {
+    Assertion.isNotNull(childThing, "childThing is required");
     //    Assertion.isNotNull(
-    //        thing.getOptionalParent(),
-    //        String.format("The parent of %s is not set", thing.getThingName().getText()));
+    //        childThing.getOptionalParent(),
+    //        String.format("The parent of %s is not set", childThing.getThingName().getText()));
     //
-    //    if (!thing.getOptionalParent().equals(this)) {
+    //    if (!childThing.getOptionalParent().equals(this)) {
     //      throw new IllegalArgumentException(
     //          String.format(
     //              "The parent of %s is not set equal to %s",
-    //              thing.getThingName().getText(), getThingName().getText()));
+    //              childThing.getThingName().getText(), getThingName().getText()));
     //    }
 
-    thing.setOptionalParent(this);
+    childThing.setOptionalParent(this);
 
-    getChildren().add(thing);
+    getChildren().add(childThing);
   }
 
   /**

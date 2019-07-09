@@ -21,6 +21,7 @@
 package io.polygenesis.abstraction.thing;
 
 import io.polygenesis.commons.assertion.Assertion;
+import io.polygenesis.core.AbstractionScope;
 import java.util.Objects;
 import java.util.Set;
 
@@ -44,6 +45,7 @@ public class Function implements FunctionProvider {
   private ReturnValue returnValue;
   private Set<Argument> arguments;
   private Activity activity;
+  private Set<AbstractionScope> abstractionScopes;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -58,6 +60,7 @@ public class Function implements FunctionProvider {
    * @param returnValue the return value
    * @param arguments the arguments
    * @param activity the activity
+   * @param abstractionScopes the abstraction scopes
    */
   public Function(
       Thing thing,
@@ -65,7 +68,8 @@ public class Function implements FunctionProvider {
       FunctionName name,
       ReturnValue returnValue,
       Set<Argument> arguments,
-      Activity activity) {
+      Activity activity,
+      Set<AbstractionScope> abstractionScopes) {
     setThing(thing);
     setPurpose(purpose);
     setName(name);
@@ -81,6 +85,24 @@ public class Function implements FunctionProvider {
     if (activity != null) {
       setActivity(activity);
     }
+
+    setAbstractionScopes(abstractionScopes);
+  }
+
+  // ===============================================================================================
+  // QUERIES
+  // ===============================================================================================
+
+  /**
+   * Supports abstraction scope boolean.
+   *
+   * @param abstractionScope the abstraction scope
+   * @return the boolean
+   */
+  public Boolean supportsAbstractionScope(AbstractionScope abstractionScope) {
+    return getAbstractionScopes()
+        .stream()
+        .anyMatch(abstractionScope1 -> abstractionScope1.equals(abstractionScope));
   }
 
   // ===============================================================================================
@@ -132,8 +154,22 @@ public class Function implements FunctionProvider {
     return arguments;
   }
 
+  /**
+   * Gets activity.
+   *
+   * @return the activity
+   */
   public Activity getActivity() {
     return activity;
+  }
+
+  /**
+   * Gets abstraction scopes.
+   *
+   * @return the abstraction scopes
+   */
+  public Set<AbstractionScope> getAbstractionScopes() {
+    return abstractionScopes;
   }
 
   // ===============================================================================================
@@ -200,6 +236,16 @@ public class Function implements FunctionProvider {
     this.activity = activity;
   }
 
+  /**
+   * Sets abstraction scopes.
+   *
+   * @param abstractionScopes the abstraction scopes
+   */
+  private void setAbstractionScopes(Set<AbstractionScope> abstractionScopes) {
+    Assertion.isNotNull(abstractionScopes, "abstractionScopes is required");
+    this.abstractionScopes = abstractionScopes;
+  }
+
   // ===============================================================================================
   // OVERRIDES
   // ===============================================================================================
@@ -222,11 +268,12 @@ public class Function implements FunctionProvider {
         && Objects.equals(name, function.name)
         && Objects.equals(returnValue, function.returnValue)
         && Objects.equals(arguments, function.arguments)
-        && Objects.equals(activity, function.activity);
+        && Objects.equals(activity, function.activity)
+        && Objects.equals(abstractionScopes, function.abstractionScopes);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(purpose, name, returnValue, arguments, activity);
+    return Objects.hash(purpose, name, returnValue, arguments, activity, abstractionScopes);
   }
 }

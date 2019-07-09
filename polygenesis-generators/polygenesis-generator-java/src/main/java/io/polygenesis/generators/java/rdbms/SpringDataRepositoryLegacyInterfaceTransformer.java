@@ -77,7 +77,7 @@ public class SpringDataRepositoryLegacyInterfaceTransformer
     if (source.getMultiTenant()) {
       imports.add("com.oregor.trinity4j.domain.SpringDataTenantRepository");
     } else {
-      imports.add("com.oregor.trinity4j.domain.SpringDataRepository");
+      imports.add("com.oregor.trinity4j.domain.SpringDataRootRepository");
     }
 
     return imports;
@@ -131,7 +131,7 @@ public class SpringDataRepositoryLegacyInterfaceTransformer
     if (source.getMultiTenant()) {
       stringBuilder.append("SpringDataTenantRepository<");
     } else {
-      stringBuilder.append("SpringDataRepository<");
+      stringBuilder.append("SpringDataRootRepository<");
     }
 
     stringBuilder.append(TextConverter.toUpperCamel(source.getAggregateRootObjectName().getText()));

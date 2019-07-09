@@ -42,6 +42,15 @@ public class ThingBuilder extends AbstractThingBuilder<ThingBuilder> {
   // ===============================================================================================
 
   /**
+   * Api thing builder.
+   *
+   * @return the thing builder
+   */
+  public static ThingBuilder api() {
+    return new ThingBuilder(new LinkedHashSet<>(Arrays.asList(AbstractionScope.api())));
+  }
+
+  /**
    * End to end thing builder.
    *
    * @return the thing builder
@@ -151,6 +160,16 @@ public class ThingBuilder extends AbstractThingBuilder<ThingBuilder> {
   public static ThingBuilder domainMessageSubscriber() {
     return new ThingBuilder(
         new LinkedHashSet<>(Arrays.asList(AbstractionScope.apiClientMessaging())));
+  }
+
+  /**
+   * Domain detail domain message publisher thing builder.
+   *
+   * @return the thing builder
+   */
+  public static ThingBuilder domainDetailDomainMessagePublisher() {
+    return new ThingBuilder(
+        new LinkedHashSet<>(Arrays.asList(AbstractionScope.domainDetailPublisher())));
   }
 
   // ===============================================================================================

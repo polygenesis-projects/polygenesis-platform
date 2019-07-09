@@ -94,6 +94,7 @@ public class BatchProcessMessagePublisher extends AbstractNameablePackageable {
         new LinkedHashSet<>(
             Arrays.asList(
                 new Argument(DataPrimitive.of(PrimitiveType.STRING, new VariableName("message"))))),
-        Activity.empty());
+        Activity.empty(),
+        thing.getAbstractionsScopes());
   }
 }
