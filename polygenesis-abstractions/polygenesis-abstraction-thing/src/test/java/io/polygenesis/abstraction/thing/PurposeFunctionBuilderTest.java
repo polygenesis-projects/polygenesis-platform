@@ -45,7 +45,7 @@ public class PurposeFunctionBuilderTest {
   public void shouldCreateModify() {
     Set<Function> functions =
         PurposeFunctionBuilder.forThing(ThingForTesting.create(), "com.oregor")
-            .withFunctionModify(dataModifyDescription())
+            .withFunctionModify("modify", dataModifyDescription())
             .build();
 
     Assertions.assertThat(functions).isNotNull();

@@ -30,6 +30,7 @@ import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.dsl.FunctionBuilder;
 import io.polygenesis.commons.text.TextConverter;
+import io.polygenesis.core.AbstractionScope;
 import io.polygenesis.models.domain.AggregateEntity;
 import io.polygenesis.models.domain.AggregateEntityCollection;
 import io.polygenesis.models.domain.DomainObjectProperty;
@@ -81,6 +82,10 @@ public class StateMutationMethodDeducer {
     thing
         .getFunctions()
         .stream()
+        .filter(
+            function ->
+                function.supportsAbstractionScope(AbstractionScope.domainAggregateRoot())
+                    || function.supportsAbstractionScope(AbstractionScope.domainAggregateEntity()))
         .filter(function -> function.getPurpose().isModify())
         .forEach(
             function ->
@@ -90,7 +95,13 @@ public class StateMutationMethodDeducer {
     return stateMutationMethods;
   }
 
-  protected Function convertToDomainFunction(Function function) {
+  /**
+   * Convert to domain function.
+   *
+   * @param function the function
+   * @return the function
+   */
+  private Function convertToDomainFunction(Function function) {
     Argument argumentDto =
         function.getArguments().stream().findFirst().orElseThrow(IllegalArgumentException::new);
 

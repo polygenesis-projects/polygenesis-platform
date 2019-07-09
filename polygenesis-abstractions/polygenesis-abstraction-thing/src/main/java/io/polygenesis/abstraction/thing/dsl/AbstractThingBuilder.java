@@ -23,6 +23,7 @@ package io.polygenesis.abstraction.thing.dsl;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.ThingName;
 import io.polygenesis.abstraction.thing.ThingProperty;
+import io.polygenesis.commons.keyvalue.KeyValue;
 import io.polygenesis.commons.valueobjects.ContextName;
 import io.polygenesis.core.AbstractionScope;
 import java.util.LinkedHashSet;
@@ -48,6 +49,7 @@ public abstract class AbstractThingBuilder<T extends AbstractThingBuilder<?>> {
   private Set<ThingProperty> thingProperties = new LinkedHashSet<>();
   private Boolean multiTenant = false;
   private Thing parentThing;
+  private Set<KeyValue> metadata = new LinkedHashSet<>();
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -132,6 +134,17 @@ public abstract class AbstractThingBuilder<T extends AbstractThingBuilder<?>> {
     return builderClass.cast(this);
   }
 
+  /**
+   * Add metadata t.
+   *
+   * @param metadata the metadata
+   * @return the t
+   */
+  public T addMetadata(KeyValue metadata) {
+    this.metadata.add(metadata);
+    return builderClass.cast(this);
+  }
+
   // ===============================================================================================
   // CREATION
   // ===============================================================================================
@@ -148,6 +161,7 @@ public abstract class AbstractThingBuilder<T extends AbstractThingBuilder<?>> {
         thingName,
         thingProperties,
         multiTenant,
-        parentThing);
+        parentThing,
+        metadata);
   }
 }

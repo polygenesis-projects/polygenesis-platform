@@ -35,8 +35,8 @@ public class JavaRdbmsMetamodelGeneratorFactoryTest {
 
   @Test
   public void shouldFailToInstantiate() throws NoSuchMethodException {
-    Constructor<JavaRdbmsGeneratorFactory> constructor =
-        JavaRdbmsGeneratorFactory.class.getDeclaredConstructor();
+    Constructor<JavaRdbmsMetamodelGeneratorFactory> constructor =
+        JavaRdbmsMetamodelGeneratorFactory.class.getDeclaredConstructor();
     constructor.setAccessible(true);
     assertThatThrownBy(constructor::newInstance).isInstanceOf(InvocationTargetException.class);
   }
@@ -44,7 +44,7 @@ public class JavaRdbmsMetamodelGeneratorFactoryTest {
   @Test
   public void shouldCreateNewInstance() {
     JavaRdbmsMetamodelGenerator javaApiGenerator =
-        JavaRdbmsGeneratorFactory.newInstance(
+        JavaRdbmsMetamodelGeneratorFactory.newInstance(
             Paths.get("tmp"), new PackageName("com.oregor"), new ObjectName("account"));
     assertThat(javaApiGenerator).isNotNull();
   }

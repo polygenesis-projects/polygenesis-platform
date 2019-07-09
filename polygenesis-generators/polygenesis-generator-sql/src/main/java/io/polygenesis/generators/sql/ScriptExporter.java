@@ -35,6 +35,12 @@ import java.util.Map;
 public class ScriptExporter {
 
   // ===============================================================================================
+  // STATIC
+  // ===============================================================================================
+
+  private static Integer counter = 0;
+
+  // ===============================================================================================
   // DEPENDENCIES
   // ===============================================================================================
 
@@ -63,11 +69,13 @@ public class ScriptExporter {
    * @param generationPath the generation path
    * @param sqlTableModelRepository the sql model repository
    * @param tablePrefix the table prefix
+   * @param context the context
    */
   public void export(
       Path generationPath,
       SqlTableMetamodelRepository sqlTableModelRepository,
-      String tablePrefix) {
+      String tablePrefix,
+      String context) {
     Map<String, Object> dataModel = new HashMap<>();
     dataModel.put("representation", sqlTableModelRepository);
     dataModel.put("tablePrefix", tablePrefix);
@@ -75,11 +83,12 @@ public class ScriptExporter {
     freemarkerService.export(
         dataModel,
         "polygenesis-generator-java-sql-flyway/script.sql.ftl",
-        makeFileName(generationPath));
+        makeFileName(generationPath, context));
   }
 
-  private Path makeFileName(Path generationPath) {
-    String name = "V2019.01.01.00.00.01__Initialize";
+  private Path makeFileName(Path generationPath, String context) {
+    counter = counter + 1;
+    String name = String.format("V2019.01.01.00.00.%s__%s__Initialize", counter, context);
 
     return Paths.get(generationPath.toString(), "src/main/resources/db/migration", name + ".sql");
   }

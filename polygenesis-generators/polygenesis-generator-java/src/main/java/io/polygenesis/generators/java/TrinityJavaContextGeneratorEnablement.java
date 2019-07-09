@@ -41,6 +41,8 @@ public class TrinityJavaContextGeneratorEnablement {
   private boolean apiClientBatchProcessMessagingActivemq = true;
   private boolean apiClientBatchProcessSchedulerCamel = true;
 
+  private boolean domainDetailDomainMessagePublisher = true;
+
   /** Instantiates a new Trinity java context generator enablement. */
   public TrinityJavaContextGeneratorEnablement() {
     setJavaApiGenerator(true);
@@ -58,6 +60,8 @@ public class TrinityJavaContextGeneratorEnablement {
     setApiClientBatchProcessMessageSubscriber(true);
     setApiClientBatchProcessMessagingActivemq(true);
     setApiClientBatchProcessSchedulerCamel(true);
+
+    setDomainDetailDomainMessagePublisher(true);
   }
 
   // ===============================================================================================
@@ -179,6 +183,10 @@ public class TrinityJavaContextGeneratorEnablement {
    */
   public boolean isApiClientBatchProcessSchedulerCamel() {
     return apiClientBatchProcessSchedulerCamel;
+  }
+
+  public boolean isDomainDetailDomainMessagePublisher() {
+    return domainDetailDomainMessagePublisher;
   }
 
   // ===============================================================================================
@@ -305,5 +313,9 @@ public class TrinityJavaContextGeneratorEnablement {
    */
   public void setApiClientBatchProcessSchedulerCamel(boolean apiClientBatchProcessSchedulerCamel) {
     this.apiClientBatchProcessSchedulerCamel = apiClientBatchProcessSchedulerCamel;
+  }
+
+  public void setDomainDetailDomainMessagePublisher(boolean domainDetailDomainMessagePublisher) {
+    this.domainDetailDomainMessagePublisher = domainDetailDomainMessagePublisher;
   }
 }

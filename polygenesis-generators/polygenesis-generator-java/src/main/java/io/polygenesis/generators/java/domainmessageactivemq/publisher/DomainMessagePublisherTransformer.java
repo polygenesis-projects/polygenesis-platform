@@ -134,7 +134,7 @@ public class DomainMessagePublisherTransformer
   public Set<String> imports(DomainMessagePublisher source, Object... args) {
     Set<String> imports = new TreeSet<>();
 
-    imports.add("com.oregor.trinity4j.api.clients.domainmessage.DomainMessagePublisher");
+    imports.add("com.oregor.trinity4j.api.clients.domainmessage.DomainMessageForwarder");
     imports.add("org.springframework.stereotype.Service");
     imports.add("org.apache.camel.ProducerTemplate");
     imports.add("org.springframework.beans.factory.annotation.Value");
@@ -150,6 +150,6 @@ public class DomainMessagePublisherTransformer
   @SuppressWarnings("CPD-END")
   @Override
   public String fullObjectName(DomainMessagePublisher source, Object... args) {
-    return String.format("%s implements DomainMessagePublisher", simpleObjectName(source, args));
+    return String.format("%s implements DomainMessageForwarder", simpleObjectName(source, args));
   }
 }

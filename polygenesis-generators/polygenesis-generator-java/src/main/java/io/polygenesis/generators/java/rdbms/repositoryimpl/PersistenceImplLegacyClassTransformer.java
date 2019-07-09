@@ -114,7 +114,7 @@ public class PersistenceImplLegacyClassTransformer
     if (source.getMultiTenant()) {
       imports.add("com.oregor.trinity4j.domain.AbstractJpaTenantRepository");
     } else {
-      imports.add("com.oregor.trinity4j.domain.AbstractJpaRepository");
+      imports.add("com.oregor.trinity4j.domain.AbstractJpaRootRepository");
     }
 
     imports.add(rootPackageName.getText() + "." + context + "DomainMessageData");
@@ -137,7 +137,7 @@ public class PersistenceImplLegacyClassTransformer
     if (source.getMultiTenant()) {
       stringBuilder.append("extends AbstractJpaTenantRepository<");
     } else {
-      stringBuilder.append("extends AbstractJpaRepository<");
+      stringBuilder.append("extends AbstractJpaRootRepository<");
     }
 
     ObjectName contextName = (ObjectName) args[1];

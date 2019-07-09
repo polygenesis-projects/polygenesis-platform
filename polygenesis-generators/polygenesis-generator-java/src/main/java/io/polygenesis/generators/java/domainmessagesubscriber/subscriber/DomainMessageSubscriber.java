@@ -175,7 +175,8 @@ public class DomainMessageSubscriber extends SubscriberMetamodel {
                         new ObjectName("JsonNode"),
                         new PackageName("com.fasterxml.jackson.databind"),
                         new VariableName("jsonNodeBody"))))),
-        Activity.keyValues(keyValues));
+        Activity.keyValues(keyValues),
+        thing.getAbstractionsScopes());
   }
 
   private Function makeGetSupportedMessageTypes() {
@@ -193,6 +194,7 @@ public class DomainMessageSubscriber extends SubscriberMetamodel {
         new ReturnValue(
             DataArray.of(DataPrimitive.of(PrimitiveType.STRING, VariableName.response()))),
         new LinkedHashSet<>(),
-        Activity.keyValues(keyValues));
+        Activity.keyValues(keyValues),
+        thing.getAbstractionsScopes());
   }
 }

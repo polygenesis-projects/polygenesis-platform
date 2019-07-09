@@ -29,6 +29,7 @@ import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.ReturnValue;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.commons.assertion.Assertion;
+import io.polygenesis.core.AbstractionScope;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -52,6 +53,7 @@ public abstract class AbstractFunctionBuilder<T extends AbstractFunctionBuilder<
   private ReturnValue returnValue;
   private Set<Argument> arguments;
   private Activity activity;
+  private Set<AbstractionScope> abstractionScopes;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -78,6 +80,7 @@ public abstract class AbstractFunctionBuilder<T extends AbstractFunctionBuilder<
     this.purpose = purpose;
 
     arguments = new LinkedHashSet<>();
+    abstractionScopes = thing.getAbstractionsScopes();
   }
 
   // ===============================================================================================
@@ -132,6 +135,17 @@ public abstract class AbstractFunctionBuilder<T extends AbstractFunctionBuilder<
     return builderClass.cast(this);
   }
 
+  /**
+   * Sets abstraction scopes.
+   *
+   * @param abstractionScopes the abstraction scopes
+   * @return the abstraction scopes
+   */
+  public T setAbstractionScopes(Set<AbstractionScope> abstractionScopes) {
+    this.abstractionScopes = abstractionScopes;
+    return builderClass.cast(this);
+  }
+
   // ===============================================================================================
   // BUILD
   // ===============================================================================================
@@ -142,6 +156,6 @@ public abstract class AbstractFunctionBuilder<T extends AbstractFunctionBuilder<
    * @return the function
    */
   public Function build() {
-    return new Function(thing, purpose, name, returnValue, arguments, activity);
+    return new Function(thing, purpose, name, returnValue, arguments, activity, abstractionScopes);
   }
 }

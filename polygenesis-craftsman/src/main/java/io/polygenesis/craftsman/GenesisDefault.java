@@ -20,6 +20,7 @@
 
 package io.polygenesis.craftsman;
 
+import io.polygenesis.commons.valueobjects.ContextName;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.Deducer;
@@ -36,9 +37,9 @@ import io.polygenesis.generators.java.api.JavaApiGeneratorFactory;
 import io.polygenesis.generators.java.api.JavaApiMetamodelGenerator;
 import io.polygenesis.generators.java.apidetail.JavaApiDetailMetamodelGenerator;
 import io.polygenesis.generators.java.apidetail.JavaApiDetailMetamodelGeneratorFactory;
-import io.polygenesis.generators.java.domain.JavaDomainGeneratorFactory;
+import io.polygenesis.generators.java.domain.JavaDomainMetamodelGeneratorFactory;
 import io.polygenesis.generators.java.domainservicedetail.DomainServiceDetailMetamodelGeneratorFactory;
-import io.polygenesis.generators.java.rdbms.JavaRdbmsGeneratorFactory;
+import io.polygenesis.generators.java.rdbms.JavaRdbmsMetamodelGeneratorFactory;
 import io.polygenesis.generators.java.rest.JavaApiRestGeneratorFactory;
 import io.polygenesis.generators.sql.SqlGeneratorFactory;
 import io.polygenesis.models.api.ApiDeducerFactory;
@@ -144,7 +145,7 @@ public class GenesisDefault {
                     modulePrefix + "-" + API_CLIENT_REST_SPRING),
                 packageName,
                 new ObjectName(context)),
-            JavaRdbmsGeneratorFactory.newInstance(
+            JavaRdbmsMetamodelGeneratorFactory.newInstance(
                 Paths.get(
                     exportPath,
                     projectFolder,
@@ -152,8 +153,9 @@ public class GenesisDefault {
                     modulePrefix + "-" + DOMAIN_DETAIL_REPOSITORY_SPRING_DATA_JPA),
                 packageName,
                 new ObjectName(context)),
-            JavaDomainGeneratorFactory.newInstance(
+            JavaDomainMetamodelGeneratorFactory.newInstance(
                 Paths.get(exportPath, projectFolder, modulePrefix + "-" + DOMAIN),
+                new ContextName(context),
                 packageName,
                 tablePrefix),
             DomainServiceDetailMetamodelGeneratorFactory.newInstance(
@@ -168,6 +170,7 @@ public class GenesisDefault {
                     projectFolder,
                     modulePrefix + "-" + DOMAIN_DETAILS,
                     modulePrefix + "-" + DOMAIN_DETAIL_REPOSITORY_SPRING_DATA_JPA),
+                new ContextName(context),
                 tablePrefix)));
   }
 

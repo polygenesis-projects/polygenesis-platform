@@ -22,6 +22,7 @@ package io.polygenesis.generators.java.domain;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import io.polygenesis.commons.valueobjects.ContextName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -34,8 +35,8 @@ public class JavaDomainMetamodelGeneratorFactoryTest {
 
   @Test
   public void shouldFailToInstantiate() throws NoSuchMethodException {
-    Constructor<JavaDomainGeneratorFactory> constructor =
-        JavaDomainGeneratorFactory.class.getDeclaredConstructor();
+    Constructor<JavaDomainMetamodelGeneratorFactory> constructor =
+        JavaDomainMetamodelGeneratorFactory.class.getDeclaredConstructor();
     constructor.setAccessible(true);
     assertThatThrownBy(constructor::newInstance).isInstanceOf(InvocationTargetException.class);
   }
@@ -43,8 +44,8 @@ public class JavaDomainMetamodelGeneratorFactoryTest {
   @Test
   public void shouldCreateNewInstance() {
     JavaDomainMetamodelGenerator javaApiGenerator =
-        JavaDomainGeneratorFactory.newInstance(
-            Paths.get("tmp"), new PackageName("com.oregor"), "prf_");
+        JavaDomainMetamodelGeneratorFactory.newInstance(
+            Paths.get("tmp"), new ContextName("context"), new PackageName("com.oregor"), "prf_");
     Assertions.assertThat(javaApiGenerator).isNotNull();
   }
 }

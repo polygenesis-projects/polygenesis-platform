@@ -98,6 +98,7 @@ public class BatchProcessSchedulerRoute extends BatchProcessMetamodel {
         new FunctionName("configure"),
         null,
         new LinkedHashSet<>(),
-        Activity.empty());
+        Activity.empty(),
+        thing.getAbstractionsScopes());
   }
 }

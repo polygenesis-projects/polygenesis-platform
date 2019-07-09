@@ -21,6 +21,8 @@
 package io.polygenesis.generators.java.domain;
 
 import io.polygenesis.commons.text.TextConverter;
+import io.polygenesis.commons.valueobjects.ContextName;
+import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.AbstractMetamodelGenerator;
 import io.polygenesis.core.CoreRegistry;
@@ -31,6 +33,14 @@ import io.polygenesis.generators.java.domain.aggregateentity.AggregateEntityIdEx
 import io.polygenesis.generators.java.domain.aggregateroot.AggregateRootExporter;
 import io.polygenesis.generators.java.domain.aggregateroot.AggregateRootIdExporter;
 import io.polygenesis.generators.java.domain.domainevent.DomainEventExporter;
+import io.polygenesis.generators.java.domain.domainmessage.data.DomainMessageData;
+import io.polygenesis.generators.java.domain.domainmessage.data.DomainMessageDataGenerator;
+import io.polygenesis.generators.java.domain.domainmessage.datarepository.DomainMessageDataRepository;
+import io.polygenesis.generators.java.domain.domainmessage.datarepository.DomainMessageDataRepositoryGenerator;
+import io.polygenesis.generators.java.domain.domainmessage.publisheddata.DomainMessagePublishedData;
+import io.polygenesis.generators.java.domain.domainmessage.publisheddata.DomainMessagePublishedDataGenerator;
+import io.polygenesis.generators.java.domain.domainmessage.publisheddatarepository.DomainMessagePublishedDataRepository;
+import io.polygenesis.generators.java.domain.domainmessage.publisheddatarepository.DomainMessagePublishedDataRepositoryGenerator;
 import io.polygenesis.generators.java.domain.persistence.PersistenceExporter;
 import io.polygenesis.generators.java.domain.projection.exporter.ProjectionExporter;
 import io.polygenesis.generators.java.domain.projection.exporter.ProjectionIdExporter;
@@ -64,6 +74,8 @@ public class JavaDomainMetamodelGenerator extends AbstractMetamodelGenerator {
   private final String tablePrefix;
 
   private final PackageName rootPackageName;
+  private final ContextName contextName;
+
   private final AggregateRootExporter aggregateRootExporter;
   private final AggregateRootIdExporter aggregateRootIdExporter;
   private final AggregateEntityExporter aggregateEntityExporter;
@@ -78,34 +90,21 @@ public class JavaDomainMetamodelGenerator extends AbstractMetamodelGenerator {
   private final ProjectionIdExporter projectionIdExporter;
   private final ProjectionRepositoryExporter projectionRepositoryExporter;
 
+  private final DomainMessageDataGenerator domainMessageDataGenerator;
+  private final DomainMessageDataRepositoryGenerator domainMessageDataRepositoryGenerator;
+  private final DomainMessagePublishedDataGenerator domainMessagePublishedDataGenerator;
+  private final DomainMessagePublishedDataRepositoryGenerator
+      domainMessagePublishedDataRepositoryGenerator;
+
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
-  /**
-   * Instantiates a new Java domain metamodel generator.
-   *
-   * @param generationPath the generation path
-   * @param tablePrefix the table prefix
-   * @param rootPackageName the root package name
-   * @param aggregateRootExporter the aggregate root exporter
-   * @param aggregateRootIdExporter the aggregate root id exporter
-   * @param aggregateEntityExporter the aggregate entity exporter
-   * @param aggregateEntityIdExporter the aggregate entity id exporter
-   * @param valueObjectExporter the value object exporter
-   * @param domainEventExporter the domain event exporter
-   * @param persistenceExporter the persistence exporter
-   * @param domainServiceGenerator the domain service generator
-   * @param supportiveEntityExporter the supportive entity exporter
-   * @param constantsExporter the constants exporter
-   * @param projectionExporter the projection exporter
-   * @param projectionIdExporter the projection id exporter
-   * @param projectionRepositoryExporter the projection repository exporter
-   */
   public JavaDomainMetamodelGenerator(
       Path generationPath,
       String tablePrefix,
       PackageName rootPackageName,
+      ContextName contextName,
       AggregateRootExporter aggregateRootExporter,
       AggregateRootIdExporter aggregateRootIdExporter,
       AggregateEntityExporter aggregateEntityExporter,
@@ -118,10 +117,15 @@ public class JavaDomainMetamodelGenerator extends AbstractMetamodelGenerator {
       ConstantsExporter constantsExporter,
       ProjectionExporter projectionExporter,
       ProjectionIdExporter projectionIdExporter,
-      ProjectionRepositoryExporter projectionRepositoryExporter) {
+      ProjectionRepositoryExporter projectionRepositoryExporter,
+      DomainMessageDataGenerator domainMessageDataGenerator,
+      DomainMessageDataRepositoryGenerator domainMessageDataRepositoryGenerator,
+      DomainMessagePublishedDataGenerator domainMessagePublishedDataGenerator,
+      DomainMessagePublishedDataRepositoryGenerator domainMessagePublishedDataRepositoryGenerator) {
     super(generationPath);
     this.tablePrefix = tablePrefix;
     this.rootPackageName = rootPackageName;
+    this.contextName = contextName;
     this.aggregateRootExporter = aggregateRootExporter;
     this.aggregateRootIdExporter = aggregateRootIdExporter;
     this.aggregateEntityExporter = aggregateEntityExporter;
@@ -135,6 +139,11 @@ public class JavaDomainMetamodelGenerator extends AbstractMetamodelGenerator {
     this.projectionExporter = projectionExporter;
     this.projectionIdExporter = projectionIdExporter;
     this.projectionRepositoryExporter = projectionRepositoryExporter;
+    this.domainMessageDataGenerator = domainMessageDataGenerator;
+    this.domainMessageDataRepositoryGenerator = domainMessageDataRepositoryGenerator;
+    this.domainMessagePublishedDataGenerator = domainMessagePublishedDataGenerator;
+    this.domainMessagePublishedDataRepositoryGenerator =
+        domainMessagePublishedDataRepositoryGenerator;
   }
 
   // ===============================================================================================
@@ -256,6 +265,35 @@ public class JavaDomainMetamodelGenerator extends AbstractMetamodelGenerator {
     constantsExporter.export(getGenerationPath(), getRootPackageName(), getTablePrefix());
 
     generateProjections(modelRepositories);
+
+    // =============================================================================================
+    // DOMAIN MESSAGE
+
+    DomainMessageData domainMessageData = makeDomainMessageData();
+    domainMessageDataGenerator.generate(
+        domainMessageData,
+        domainMessageDataExportInfo(getGenerationPath(), domainMessageData),
+        contextName);
+
+    DomainMessageDataRepository domainMessageDataRepository = makeDomainMessageDataRepository();
+    domainMessageDataRepositoryGenerator.generate(
+        domainMessageDataRepository,
+        domainMessageDataRepositoryExportInfo(getGenerationPath(), domainMessageDataRepository),
+        contextName);
+
+    DomainMessagePublishedData domainMessagePublishedData = makeDomainMessagePublishedData();
+    domainMessagePublishedDataGenerator.generate(
+        domainMessagePublishedData,
+        domainMessagePublishedDataExportInfo(getGenerationPath(), domainMessagePublishedData),
+        contextName);
+
+    DomainMessagePublishedDataRepository domainMessagePublishedDataRepository =
+        makeDomainMessagePublishedDataRepository();
+    domainMessagePublishedDataRepositoryGenerator.generate(
+        domainMessagePublishedDataRepository,
+        domainMessagePublishedDataRepositoryExportInfo(
+            getGenerationPath(), domainMessagePublishedDataRepository),
+        contextName);
   }
 
   // ===============================================================================================
@@ -300,5 +338,105 @@ public class JavaDomainMetamodelGenerator extends AbstractMetamodelGenerator {
             domainService.getPackageName().toPath().toString()),
         TextConverter.toUpperCamel(domainService.getObjectName().getText())
             + FolderFileConstants.JAVA_POSTFIX);
+  }
+
+  // ===============================================================================================
+  // PRIVATE MESSAGE DATA
+  // ===============================================================================================
+
+  private DomainMessageData makeDomainMessageData() {
+    return new DomainMessageData(
+        new ObjectName(
+            String.format(
+                "%sDomainMessageData", TextConverter.toUpperCamel(contextName.getText()))),
+        new PackageName(String.format("%s", rootPackageName.getText())));
+  }
+
+  private DomainMessageDataRepository makeDomainMessageDataRepository() {
+    return new DomainMessageDataRepository(
+        new ObjectName(
+            String.format(
+                "%sDomainMessageDataRepository",
+                TextConverter.toUpperCamel(contextName.getText()))),
+        new PackageName(String.format("%s", rootPackageName.getText())));
+  }
+
+  private DomainMessagePublishedData makeDomainMessagePublishedData() {
+    return new DomainMessagePublishedData(
+        new ObjectName(
+            String.format(
+                "%sDomainMessagePublishedData", TextConverter.toUpperCamel(contextName.getText()))),
+        new PackageName(String.format("%s", rootPackageName.getText())));
+  }
+
+  private DomainMessagePublishedDataRepository makeDomainMessagePublishedDataRepository() {
+    return new DomainMessagePublishedDataRepository(
+        new ObjectName(
+            String.format(
+                "%sDomainMessagePublishedDataRepository",
+                TextConverter.toUpperCamel(contextName.getText()))),
+        new PackageName(String.format("%s", rootPackageName.getText())));
+  }
+
+  private ExportInfo domainMessageDataExportInfo(
+      Path generationPath, DomainMessageData domainMessageData) {
+    return ExportInfo.file(
+        Paths.get(
+            generationPath.toString(),
+            FolderFileConstants.SRC,
+            FolderFileConstants.MAIN,
+            FolderFileConstants.JAVA,
+            domainMessageData.getPackageName().toPath().toString()),
+        String.format(
+            "%s%s",
+            TextConverter.toUpperCamel(domainMessageData.getObjectName().getText()),
+            FolderFileConstants.JAVA_POSTFIX));
+  }
+
+  private ExportInfo domainMessageDataRepositoryExportInfo(
+      Path generationPath, DomainMessageDataRepository domainMessageDataRepository) {
+    return ExportInfo.file(
+        Paths.get(
+            generationPath.toString(),
+            FolderFileConstants.SRC,
+            FolderFileConstants.MAIN,
+            FolderFileConstants.JAVA,
+            domainMessageDataRepository.getPackageName().toPath().toString()),
+        String.format(
+            "%s%s",
+            TextConverter.toUpperCamel(domainMessageDataRepository.getObjectName().getText()),
+            FolderFileConstants.JAVA_POSTFIX));
+  }
+
+  private ExportInfo domainMessagePublishedDataExportInfo(
+      Path generationPath, DomainMessagePublishedData domainMessagePublishedData) {
+    return ExportInfo.file(
+        Paths.get(
+            generationPath.toString(),
+            FolderFileConstants.SRC,
+            FolderFileConstants.MAIN,
+            FolderFileConstants.JAVA,
+            domainMessagePublishedData.getPackageName().toPath().toString()),
+        String.format(
+            "%s%s",
+            TextConverter.toUpperCamel(domainMessagePublishedData.getObjectName().getText()),
+            FolderFileConstants.JAVA_POSTFIX));
+  }
+
+  private ExportInfo domainMessagePublishedDataRepositoryExportInfo(
+      Path generationPath,
+      DomainMessagePublishedDataRepository domainMessagePublishedDataRepository) {
+    return ExportInfo.file(
+        Paths.get(
+            generationPath.toString(),
+            FolderFileConstants.SRC,
+            FolderFileConstants.MAIN,
+            FolderFileConstants.JAVA,
+            domainMessagePublishedDataRepository.getPackageName().toPath().toString()),
+        String.format(
+            "%s%s",
+            TextConverter.toUpperCamel(
+                domainMessagePublishedDataRepository.getObjectName().getText()),
+            FolderFileConstants.JAVA_POSTFIX));
   }
 }

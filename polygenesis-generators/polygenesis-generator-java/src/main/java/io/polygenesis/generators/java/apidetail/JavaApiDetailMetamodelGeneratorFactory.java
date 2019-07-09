@@ -59,7 +59,7 @@ public final class JavaApiDetailMetamodelGeneratorFactory {
 
   static {
     TemplateEngine templateEngine = new FreemarkerTemplateEngine();
-    Exporter exporter = new ActiveFileExporter();
+    Exporter activeFileExporter = new ActiveFileExporter();
     DataTypeTransformer dataTypeTransformer = new JavaDataTypeTransformer();
 
     FreemarkerService freemarkerService =
@@ -93,7 +93,7 @@ public final class JavaApiDetailMetamodelGeneratorFactory {
                 new ServiceDetailMethodTransformer(
                     dataTypeTransformer, serviceMethodActivityRegistry)),
             templateEngine,
-            exporter);
+            activeFileExporter);
   }
 
   // ===============================================================================================

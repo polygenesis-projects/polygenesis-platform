@@ -23,6 +23,7 @@ package io.polygenesis.generators.sql;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
+import io.polygenesis.commons.valueobjects.ContextName;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import org.junit.Before;
@@ -42,7 +43,9 @@ public class SqlMetamodelGeneratorTest {
     scriptExporter = mock(ScriptExporter.class);
     tablePrefix = "pre_";
 
-    sqlGenerator = new SqlMetamodelGenerator(generationPath, scriptExporter, tablePrefix);
+    sqlGenerator =
+        new SqlMetamodelGenerator(
+            generationPath, new ContextName("context"), scriptExporter, tablePrefix);
   }
 
   @Test

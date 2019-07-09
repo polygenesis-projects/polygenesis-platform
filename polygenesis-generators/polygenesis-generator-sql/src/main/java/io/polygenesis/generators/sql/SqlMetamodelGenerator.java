@@ -20,6 +20,7 @@
 
 package io.polygenesis.generators.sql;
 
+import io.polygenesis.commons.valueobjects.ContextName;
 import io.polygenesis.core.AbstractMetamodelGenerator;
 import io.polygenesis.core.CoreRegistry;
 import io.polygenesis.core.MetamodelRepository;
@@ -38,6 +39,7 @@ public class SqlMetamodelGenerator extends AbstractMetamodelGenerator {
   // DEPENDENCIES
   // ===============================================================================================
 
+  private final ContextName contextName;
   private final ScriptExporter scriptExporter;
   private final String tablePrefix;
 
@@ -45,16 +47,13 @@ public class SqlMetamodelGenerator extends AbstractMetamodelGenerator {
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
-  /**
-   * Instantiates a new Sql generator.
-   *
-   * @param generationPath the generation path
-   * @param scriptExporter the script exporter
-   * @param tablePrefix the table prefix
-   */
   public SqlMetamodelGenerator(
-      Path generationPath, ScriptExporter scriptExporter, String tablePrefix) {
+      Path generationPath,
+      ContextName contextName,
+      ScriptExporter scriptExporter,
+      String tablePrefix) {
     super(generationPath);
+    this.contextName = contextName;
     this.scriptExporter = scriptExporter;
     this.tablePrefix = tablePrefix;
   }
@@ -72,6 +71,10 @@ public class SqlMetamodelGenerator extends AbstractMetamodelGenerator {
     return tablePrefix;
   }
 
+  public ContextName getContextName() {
+    return contextName;
+  }
+
   // ===============================================================================================
   // OVERRIDES
   // ===============================================================================================
@@ -83,6 +86,7 @@ public class SqlMetamodelGenerator extends AbstractMetamodelGenerator {
         CoreRegistry.getMetamodelRepositoryResolver()
             .resolve(modelRepositories, SqlTableMetamodelRepository.class);
 
-    scriptExporter.export(getGenerationPath(), sqlTableModelRepository, getTablePrefix());
+    scriptExporter.export(
+        getGenerationPath(), sqlTableModelRepository, getTablePrefix(), getContextName().getText());
   }
 }

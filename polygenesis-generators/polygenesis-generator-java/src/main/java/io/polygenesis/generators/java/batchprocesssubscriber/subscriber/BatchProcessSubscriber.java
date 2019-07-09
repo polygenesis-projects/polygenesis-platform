@@ -114,6 +114,7 @@ public class BatchProcessSubscriber extends BatchProcessMetamodel {
                 Arrays.asList(
                     new KeyValue(
                         "supportedMessageTypes",
-                        new LinkedHashSet<>(Arrays.asList(getObjectName().getText())))))));
+                        new LinkedHashSet<>(Arrays.asList(getObjectName().getText())))))),
+        thing.getAbstractionsScopes());
   }
 }

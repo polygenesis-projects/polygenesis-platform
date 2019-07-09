@@ -23,6 +23,7 @@ package io.polygenesis.models.api;
 import io.polygenesis.abstraction.thing.CqsType;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.commons.valueobjects.PackageName;
+import io.polygenesis.core.AbstractionScope;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -114,6 +115,7 @@ public class ServiceDeducer {
     return thing
         .getFunctions()
         .stream()
+        .filter(function -> function.supportsAbstractionScope(AbstractionScope.api()))
         .filter(function -> function.getPurpose().isCommand())
         .count();
   }
@@ -122,6 +124,7 @@ public class ServiceDeducer {
     return thing
         .getFunctions()
         .stream()
+        .filter(function -> function.supportsAbstractionScope(AbstractionScope.api()))
         .filter(function -> function.getPurpose().isQuery())
         .count();
   }
@@ -130,6 +133,7 @@ public class ServiceDeducer {
     thing
         .getFunctions()
         .stream()
+        .filter(function -> function.supportsAbstractionScope(AbstractionScope.api()))
         .filter(function -> function.getPurpose().isCommand())
         .forEach(
             function ->
@@ -143,6 +147,7 @@ public class ServiceDeducer {
     thing
         .getFunctions()
         .stream()
+        .filter(function -> function.supportsAbstractionScope(AbstractionScope.api()))
         .filter(function -> function.getPurpose().isQuery())
         .forEach(
             function ->
