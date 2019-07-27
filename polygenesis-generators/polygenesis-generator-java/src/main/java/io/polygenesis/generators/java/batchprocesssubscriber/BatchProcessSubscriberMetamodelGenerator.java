@@ -96,9 +96,8 @@ public class BatchProcessSubscriberMetamodelGenerator extends AbstractMetamodelG
   // OVERRIDES
   // ===============================================================================================
 
-  @SuppressWarnings("rawtypes")
   @Override
-  public void generate(Set<MetamodelRepository> modelRepositories) {
+  public void generate(Set<MetamodelRepository<?>> modelRepositories) {
     BatchProcessAbstractSubscriber batchProcessAbstractSubscriber = makeAbstractSubscriber();
     batchProcessAbstractSubscriberGenerator.generate(
         batchProcessAbstractSubscriber,

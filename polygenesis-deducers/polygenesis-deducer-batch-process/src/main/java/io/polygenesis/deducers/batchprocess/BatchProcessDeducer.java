@@ -81,11 +81,10 @@ public class BatchProcessDeducer implements Deducer<BatchProcessMetamodelReposit
   // OVERRIDES
   // ===============================================================================================
 
-  @SuppressWarnings("rawtypes")
   @Override
   public BatchProcessMetamodelRepository deduce(
-      Set<AbstractionRepository> abstractionRepositories,
-      Set<MetamodelRepository> metamodelRepositories) {
+      Set<AbstractionRepository<?>> abstractionRepositories,
+      Set<MetamodelRepository<?>> metamodelRepositories) {
     Set<BatchProcessMetamodel> batchProcessMetamodels = new LinkedHashSet<>();
 
     CoreRegistry.getAbstractionRepositoryResolver()
@@ -113,16 +112,8 @@ public class BatchProcessDeducer implements Deducer<BatchProcessMetamodelReposit
   // PRIVATE
   // ===============================================================================================
 
-  /**
-   * Command service method service method.
-   *
-   * @param metamodelRepositories the metamodel repositories
-   * @param thing the thing
-   * @return the service method
-   */
-  @SuppressWarnings("rawtypes")
   private ServiceMethod commandServiceMethod(
-      Set<MetamodelRepository> metamodelRepositories, Thing thing) {
+      Set<MetamodelRepository<?>> metamodelRepositories, Thing thing) {
     Function commandFunction = Function.class.cast(thing.getMetadataValue("commandFunction"));
 
     return CoreRegistry.getMetamodelRepositoryResolver()
@@ -130,16 +121,8 @@ public class BatchProcessDeducer implements Deducer<BatchProcessMetamodelReposit
         .getServiceMethodByFunction(commandFunction);
   }
 
-  /**
-   * Query service method service method.
-   *
-   * @param metamodelRepositories the metamodel repositories
-   * @param thing the thing
-   * @return the service method
-   */
-  @SuppressWarnings("rawtypes")
   private ServiceMethod queryServiceMethod(
-      Set<MetamodelRepository> metamodelRepositories, Thing thing) {
+      Set<MetamodelRepository<?>> metamodelRepositories, Thing thing) {
     Function queryFunction = Function.class.cast(thing.getMetadataValue("queryFunction"));
 
     return CoreRegistry.getMetamodelRepositoryResolver()
@@ -153,7 +136,6 @@ public class BatchProcessDeducer implements Deducer<BatchProcessMetamodelReposit
    * @param queryServiceMethod the query service method
    * @return the query collection item
    */
-  @SuppressWarnings("rawtypes")
   private Dto getQueryCollectionItem(ServiceMethod queryServiceMethod) {
     return queryServiceMethod
         .getService()

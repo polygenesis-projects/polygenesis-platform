@@ -22,6 +22,8 @@ package io.polygenesis.core;
 
 import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.commons.valueobjects.Name;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -93,7 +95,15 @@ public class ProjectBuilder {
    *
    * @return the project
    */
-  public Project build() {
-    return new Project(this.name, this.contexts);
+  public <T extends Project> T build(Class<T> projectClass) {
+    try {
+      Constructor<?>[] allConstructors = projectClass.getConstructors();
+
+      Object[] objects = {this.name, this.contexts};
+
+      return projectClass.cast(allConstructors[0].newInstance(objects));
+    } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+      throw new IllegalStateException(e.getMessage(), e);
+    }
   }
 }

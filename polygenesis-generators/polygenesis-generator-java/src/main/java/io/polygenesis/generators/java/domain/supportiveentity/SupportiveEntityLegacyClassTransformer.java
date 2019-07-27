@@ -21,9 +21,9 @@
 package io.polygenesis.generators.java.domain.supportiveentity;
 
 import io.polygenesis.commons.text.TextConverter;
+import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.generators.java.domain.ConstructorTransformerLegacy;
 import io.polygenesis.generators.java.domain.DomainObjectLegacyClassTransformer;
-import io.polygenesis.generators.java.shared.transformer.FromDataTypeToJavaConverter;
 import io.polygenesis.models.domain.InstantiationType;
 import io.polygenesis.models.domain.SupportiveEntity;
 import io.polygenesis.representations.code.MethodRepresentation;
@@ -51,13 +51,13 @@ public class SupportiveEntityLegacyClassTransformer
   /**
    * Instantiates a new Supportive entity class representable.
    *
-   * @param fromDataTypeToJavaConverter the from data type to java converter
+   * @param dataTypeTransformer the from data type to java converter
    * @param constructorRepresentable the constructor representable
    */
   public SupportiveEntityLegacyClassTransformer(
-      FromDataTypeToJavaConverter fromDataTypeToJavaConverter,
+      DataTypeTransformer dataTypeTransformer,
       ConstructorTransformerLegacy constructorRepresentable) {
-    super(fromDataTypeToJavaConverter);
+    super(dataTypeTransformer);
     this.constructorRepresentable = constructorRepresentable;
   }
 

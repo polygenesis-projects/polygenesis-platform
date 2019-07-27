@@ -43,8 +43,7 @@ public abstract class BaseDomainObject implements SubClassable {
   private ObjectName objectName;
   private PackageName packageName;
 
-  @SuppressWarnings("rawtypes")
-  private Set<DomainObjectProperty> properties;
+  private Set<DomainObjectProperty<?>> properties;
 
   private Set<Constructor> constructors;
   private Boolean multiTenant;
@@ -64,13 +63,12 @@ public abstract class BaseDomainObject implements SubClassable {
    * @param constructors the constructors
    * @param multiTenant the multi tenant
    */
-  @SuppressWarnings("rawtypes")
   public BaseDomainObject(
       DomainObjectType domainObjectType,
       InstantiationType instantiationType,
       ObjectName objectName,
       PackageName packageName,
-      Set<DomainObjectProperty> properties,
+      Set<DomainObjectProperty<?>> properties,
       Set<Constructor> constructors,
       Boolean multiTenant) {
     setDomainObjectType(domainObjectType);
@@ -140,8 +138,7 @@ public abstract class BaseDomainObject implements SubClassable {
    *
    * @return the properties
    */
-  @SuppressWarnings("rawtypes")
-  public Set<DomainObjectProperty> getProperties() {
+  public Set<DomainObjectProperty<?>> getProperties() {
     return properties;
   }
 
@@ -212,8 +209,7 @@ public abstract class BaseDomainObject implements SubClassable {
    *
    * @param properties the properties
    */
-  @SuppressWarnings("rawtypes")
-  private void setProperties(Set<DomainObjectProperty> properties) {
+  private void setProperties(Set<DomainObjectProperty<?>> properties) {
     Assertion.isNotNull(properties, "properties is required");
     this.properties = properties;
   }

@@ -63,12 +63,11 @@ public class Projection extends BaseDomainEntity
    * @param persistence the persistence
    * @param superClass the super class
    */
-  @SuppressWarnings("rawtypes")
   public Projection(
       InstantiationType instantiationType,
       ObjectName objectName,
       PackageName packageName,
-      Set<DomainObjectProperty> properties,
+      Set<DomainObjectProperty<?>> properties,
       Set<Constructor> constructors,
       Boolean multiTenant,
       Persistence persistence,

@@ -29,17 +29,16 @@ import com.oregor.trinity.scaffolder.java.core.TrinityScaffolderJavaFactory;
 import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.dsl.DataBuilder;
 import io.polygenesis.abstraction.thing.Thing;
-import io.polygenesis.abstraction.thing.ThingRepository;
+import io.polygenesis.abstraction.thing.ThingContext;
+import io.polygenesis.abstraction.thing.ThingContextBuilder;
 import io.polygenesis.abstraction.thing.dsl.PurposeFunctionBuilder;
 import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
 import io.polygenesis.commons.valueobjects.PackageName;
-import io.polygenesis.core.AbstractionRepository;
-import io.polygenesis.core.Creator;
-import io.polygenesis.core.Deducer;
 import io.polygenesis.core.MetamodelGenerator;
+import io.polygenesis.generators.java.TrinityJavaContextGeneratorEnablement;
+import io.polygenesis.generators.java.TrinityJavaContextGeneratorFactory;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import org.junit.Test;
@@ -103,12 +102,7 @@ public class TrinityDemoJavaTest {
         .createProjectDescription();
   }
 
-  @SuppressWarnings("rawtypes")
   private void generate() {
-    Creator creator = new Creator();
-
-    Set<Deducer> deducers = GenesisDefault.javaDeducers(JAVA_ROOT_PACKAGE);
-
     Set<MetamodelGenerator> metamodelGenerators =
         GenesisDefault.javaGenerators(
             JAVA_EXPORT_PATH,
@@ -122,10 +116,25 @@ public class TrinityDemoJavaTest {
 
     allThings.add(createTodo(new PackageName(JAVA_ROOT_PACKAGE)));
 
-    Set<AbstractionRepository> abstractionRepositories =
-        new LinkedHashSet<>(Arrays.asList(new ThingRepository(allThings)));
+    ThingContext thingContext =
+        ThingContextBuilder.of(
+                "trinity-demo",
+                TrinityJavaContextGeneratorFactory.newInstance(
+                    Paths.get(JAVA_EXPORT_PATH),
+                    new TrinityJavaContextGeneratorEnablement(),
+                    JAVA_EXPORT_PATH,
+                    JAVA_PROJECT_FOLDER,
+                    "",
+                    JAVA_MODULE_PREFIX,
+                    JAVA_CONTEXT,
+                    TABLE_PREFIX,
+                    JAVA_ROOT_PACKAGE))
+            .addThing(createTodo(new PackageName(JAVA_ROOT_PACKAGE)))
+            .withDeducers(GenesisDefault.javaDeducers(JAVA_ROOT_PACKAGE))
+            .build();
 
-    creator.generate(abstractionRepositories, deducers, metamodelGenerators);
+    metamodelGenerators.forEach(
+        generator -> generator.generate(thingContext.getMetamodelRepositories()));
   }
 
   private Thing createTodo(PackageName rootPackageName) {

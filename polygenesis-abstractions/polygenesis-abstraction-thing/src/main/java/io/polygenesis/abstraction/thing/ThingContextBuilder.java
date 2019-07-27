@@ -20,9 +20,12 @@
 
 package io.polygenesis.abstraction.thing;
 
+import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.commons.valueobjects.Name;
 import io.polygenesis.core.ContextGenerator;
+import io.polygenesis.core.Deducer;
 import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * The type Thing context builder.
@@ -36,6 +39,7 @@ public class ThingContextBuilder {
   // ===============================================================================================
 
   private ThingContext thingContext;
+  private Set<Deducer<?>> deducers;
 
   // ===============================================================================================
   // STATIC
@@ -45,6 +49,7 @@ public class ThingContextBuilder {
    * Of thing context builder.
    *
    * @param name the name
+   * @param contextGenerator the context generator
    * @return the thing context builder
    */
   public static ThingContextBuilder of(String name, ContextGenerator contextGenerator) {
@@ -76,6 +81,17 @@ public class ThingContextBuilder {
     return this;
   }
 
+  /**
+   * With deducers thing context builder.
+   *
+   * @param deducers the deducers
+   * @return the thing context builder
+   */
+  public ThingContextBuilder withDeducers(Set<Deducer<?>> deducers) {
+    this.deducers = deducers;
+    return this;
+  }
+
   // ===============================================================================================
   // BUILD
   // ===============================================================================================
@@ -86,6 +102,8 @@ public class ThingContextBuilder {
    * @return the thing context
    */
   public ThingContext build() {
+    Assertion.isNotNull(deducers, "deducers is required");
+    thingContext.populateMetamodelRepositories(deducers);
     return thingContext;
   }
 }

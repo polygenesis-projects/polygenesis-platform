@@ -35,6 +35,5 @@ public interface MetamodelGenerator {
    * @param modelRepositories the model repositories
    * @see MetamodelRepository
    */
-  @SuppressWarnings("rawtypes")
-  void generate(Set<MetamodelRepository> modelRepositories);
+  void generate(Set<MetamodelRepository<?>> modelRepositories);
 }

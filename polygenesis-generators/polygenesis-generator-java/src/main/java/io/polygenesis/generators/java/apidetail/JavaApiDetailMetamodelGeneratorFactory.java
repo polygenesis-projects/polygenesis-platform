@@ -27,7 +27,6 @@ import io.polygenesis.core.ActiveFileExporter;
 import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.core.Exporter;
 import io.polygenesis.core.FreemarkerTemplateEngine;
-import io.polygenesis.core.JavaDataTypeTransformer;
 import io.polygenesis.core.TemplateEngine;
 import io.polygenesis.generators.java.apidetail.converter.DomainObjectConverterExporter;
 import io.polygenesis.generators.java.apidetail.converter.DomainObjectConverterLegacyClassTransformer;
@@ -37,7 +36,7 @@ import io.polygenesis.generators.java.apidetail.service.ServiceDetailGenerator;
 import io.polygenesis.generators.java.apidetail.service.ServiceDetailMethodTransformer;
 import io.polygenesis.generators.java.apidetail.service.ServiceDetailTransformer;
 import io.polygenesis.generators.java.apidetail.service.activity.ServiceMethodActivityRegistry;
-import io.polygenesis.generators.java.shared.transformer.FromDataTypeToJavaConverter;
+import io.polygenesis.transformers.java.JavaDataTypeTransformer;
 import java.nio.file.Path;
 
 /**
@@ -65,18 +64,16 @@ public final class JavaApiDetailMetamodelGeneratorFactory {
     FreemarkerService freemarkerService =
         new FreemarkerService(FreemarkerConfig.getInstance().getConfiguration());
 
-    FromDataTypeToJavaConverter fromDataTypeToJavaConverter = new FromDataTypeToJavaConverter();
-
     ConverterMethodImplementationRegistry converterMethodImplementationRegistry =
         new ConverterMethodImplementationRegistry();
 
     DomainObjectConverterLegacyMethodTransformer domainObjectConverterMethodRepresentable =
         new DomainObjectConverterLegacyMethodTransformer(
-            fromDataTypeToJavaConverter, freemarkerService, converterMethodImplementationRegistry);
+            dataTypeTransformer, freemarkerService, converterMethodImplementationRegistry);
 
     DomainObjectConverterLegacyClassTransformer domainObjectConverterClassRepresentable =
         new DomainObjectConverterLegacyClassTransformer(
-            fromDataTypeToJavaConverter, domainObjectConverterMethodRepresentable);
+            dataTypeTransformer, domainObjectConverterMethodRepresentable);
 
     domainObjectConverterExporter =
         new DomainObjectConverterExporter(

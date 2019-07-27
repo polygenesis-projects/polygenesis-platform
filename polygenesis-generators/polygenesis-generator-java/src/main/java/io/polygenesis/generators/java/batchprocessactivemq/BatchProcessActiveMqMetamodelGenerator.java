@@ -82,9 +82,8 @@ public class BatchProcessActiveMqMetamodelGenerator extends AbstractMetamodelGen
   // OVERRIDES
   // ===============================================================================================
 
-  @SuppressWarnings("rawtypes")
   @Override
-  public void generate(Set<MetamodelRepository> modelRepositories) {
+  public void generate(Set<MetamodelRepository<?>> modelRepositories) {
     BatchProcessDispatcherRoute batchProcessDispatcherRoute = makeBatchProcessDispatcherRoute();
     batchProcessDispatcherRouteGenerator.generate(
         batchProcessDispatcherRoute,

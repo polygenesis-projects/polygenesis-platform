@@ -23,13 +23,13 @@ package io.polygenesis.generators.java.apidetail.converter;
 import io.polygenesis.abstraction.data.PrimitiveType;
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.text.TextConverter;
+import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.generators.java.apidetail.converter.activity.ConverterMethodImplementationRegistry;
-import io.polygenesis.generators.java.shared.transformer.AbstractLegacyMethodTransformer;
-import io.polygenesis.generators.java.shared.transformer.FromDataTypeToJavaConverter;
 import io.polygenesis.models.apiimpl.DomainEntityConverterMethod;
 import io.polygenesis.representations.code.MethodRepresentation;
 import io.polygenesis.representations.code.MethodRepresentationType;
 import io.polygenesis.representations.code.ParameterRepresentation;
+import io.polygenesis.transformers.java.legacy.AbstractLegacyMethodTransformer;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -54,15 +54,15 @@ public class DomainObjectConverterLegacyMethodTransformer
   /**
    * Instantiates a new Domain object converter method representable.
    *
-   * @param fromDataTypeToJavaConverter the from data type to java converter
+   * @param dataTypeTransformer the from data type to java converter
    * @param freemarkerService the freemarker service
    * @param converterMethodImplementationRegistry the converter method implementation registry
    */
   public DomainObjectConverterLegacyMethodTransformer(
-      FromDataTypeToJavaConverter fromDataTypeToJavaConverter,
+      DataTypeTransformer dataTypeTransformer,
       FreemarkerService freemarkerService,
       ConverterMethodImplementationRegistry converterMethodImplementationRegistry) {
-    super(fromDataTypeToJavaConverter);
+    super(dataTypeTransformer);
     this.freemarkerService = freemarkerService;
     this.converterMethodImplementationRegistry = converterMethodImplementationRegistry;
   }
@@ -133,7 +133,7 @@ public class DomainObjectConverterLegacyMethodTransformer
             argument ->
                 parameterRepresentations.add(
                     new ParameterRepresentation(
-                        fromDataTypeToJavaConverter.convert(argument.getData().getDataType()),
+                        dataTypeTransformer.convert(argument.getData().getDataType()),
                         argument.getData().getVariableName().getText())));
 
     return parameterRepresentations;
@@ -144,7 +144,7 @@ public class DomainObjectConverterLegacyMethodTransformer
     if (source.getFunction().getReturnValue() != null) {
       return makeVariableDataType(source.getFunction().getReturnValue().getData());
     } else {
-      return fromDataTypeToJavaConverter.convert(PrimitiveType.VOID.name());
+      return dataTypeTransformer.convert(PrimitiveType.VOID.name());
     }
   }
 

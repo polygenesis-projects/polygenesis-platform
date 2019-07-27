@@ -25,7 +25,7 @@ import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.commons.valueobjects.ContextName;
 import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.core.TemplateData;
-import io.polygenesis.generators.java.shared.transformer.AbstractInterfaceTransformer;
+import io.polygenesis.transformers.java.AbstractInterfaceTransformer;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;

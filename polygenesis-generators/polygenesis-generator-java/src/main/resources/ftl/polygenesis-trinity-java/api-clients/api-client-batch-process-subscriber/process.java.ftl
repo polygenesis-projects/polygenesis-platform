@@ -18,16 +18,19 @@
  ===========================LICENSE_END==================================
 -->
     try {
-      JsonNode jsonNode = objectMapper.readTree(message);
+      Assertion.isNotNull(message, "message is required");
 
-      if (jsonNode.hasNonNull("pageNumber")
-          && jsonNode.hasNonNull("pageSize")) {
-        batchProcessService
-            .fetchPage(jsonNode.get("pageNumber").asInt(), jsonNode.get("pageSize").asInt());
-      } else if (jsonNode.hasNonNull("uniqueId")) {
-        batchProcessService.processForId(jsonNode.get("uniqueId").asText());
+      BatchProcessMessage batchProcessMessage =
+        objectMapper.readValue(message, BatchProcessMessage.class);
+
+      Assertion.isNotNull(batchProcessMessage.getDryRun(), "dryRun flag MUST be specified");
+
+      if (batchProcessMessage.isForFetchingPage()) {
+        batchProcessService.fetchPage(batchProcessMessage);
+      } else if (batchProcessMessage.isForProcessing()) {
+        batchProcessService.processForId(batchProcessMessage);
       } else {
-        batchProcessService.fetchPage(0, null);
+        // TODO: LOG.warn("Cannot decode message={}}", message);
       }
     } catch (IOException e) {
       throw new IllegalArgumentException(e.getMessage(), e);

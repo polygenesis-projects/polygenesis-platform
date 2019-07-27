@@ -52,8 +52,7 @@ public abstract class AbstractPropertyDeducer {
    * @param rootPackageName the root package name
    * @return the set
    */
-  @SuppressWarnings("rawtypes")
-  protected abstract Set<DomainObjectProperty> makeIdentityDomainObjectProperties(
+  protected abstract Set<DomainObjectProperty<?>> makeIdentityDomainObjectProperties(
       Thing thing, PackageName rootPackageName);
 
   /**
@@ -63,9 +62,8 @@ public abstract class AbstractPropertyDeducer {
    * @param rootPackageName the root package name
    * @return the set
    */
-  @SuppressWarnings("rawtypes")
-  public Set<DomainObjectProperty> deduceFromThing(Thing thing, PackageName rootPackageName) {
-    Set<DomainObjectProperty> properties = new LinkedHashSet<>();
+  public Set<DomainObjectProperty<?>> deduceFromThing(Thing thing, PackageName rootPackageName) {
+    Set<DomainObjectProperty<?>> properties = new LinkedHashSet<>();
 
     assertThatThingHasIdentity(thing);
 
@@ -87,7 +85,6 @@ public abstract class AbstractPropertyDeducer {
    * @param rootPackageName the root package name
    * @return the set
    */
-  @SuppressWarnings("rawtypes")
   public Set<Constructor> deduceConstructors(Thing thing, PackageName rootPackageName) {
     Set<Constructor> constructors = new LinkedHashSet<>();
 
@@ -101,7 +98,7 @@ public abstract class AbstractPropertyDeducer {
             function -> {
               Set<ThingProperty> thingProperties = getThingPropertiesFromFunction(function);
 
-              Set<DomainObjectProperty> properties = new LinkedHashSet<>();
+              Set<DomainObjectProperty<?>> properties = new LinkedHashSet<>();
 
               properties.addAll(makeIdentityDomainObjectProperties(thing, rootPackageName));
               properties.addAll(this.toDomainObjectProperties(thingProperties));
@@ -118,8 +115,8 @@ public abstract class AbstractPropertyDeducer {
    * @param thingProperties the thing properties
    * @return the set
    */
-  @SuppressWarnings("rawtypes")
-  protected Set<DomainObjectProperty> toDomainObjectProperties(Set<ThingProperty> thingProperties) {
+  protected Set<DomainObjectProperty<?>> toDomainObjectProperties(
+      Set<ThingProperty> thingProperties) {
     return thingProperties
         .stream()
         .map(this::toDomainObjectProperty)
@@ -132,8 +129,7 @@ public abstract class AbstractPropertyDeducer {
    * @param thingProperty the thing property
    * @return the domain object property
    */
-  @SuppressWarnings("rawtypes")
-  protected DomainObjectProperty toDomainObjectProperty(ThingProperty thingProperty) {
+  protected DomainObjectProperty<?> toDomainObjectProperty(ThingProperty thingProperty) {
     switch (thingProperty.getData().getDataPrimaryType()) {
       case ARRAY:
         switch (thingProperty.getData().getAsDataArray().getArrayElement().getDataPrimaryType()) {
@@ -145,7 +141,7 @@ public abstract class AbstractPropertyDeducer {
             throw new UnsupportedOperationException();
         }
       case OBJECT:
-        return new ValueObject(thingProperty.getData().getAsDataGroup());
+        return new ValueObject(thingProperty.getData().getAsDataObject());
       case PRIMITIVE:
         return new Primitive(thingProperty.getData().getAsDataPrimitive());
       case THING:
@@ -220,7 +216,7 @@ public abstract class AbstractPropertyDeducer {
                 if (argument.getData().isDataGroup()) {
                   argument
                       .getData()
-                      .getAsDataGroup()
+                      .getAsDataObject()
                       .getModels()
                       .forEach(
                           model -> {

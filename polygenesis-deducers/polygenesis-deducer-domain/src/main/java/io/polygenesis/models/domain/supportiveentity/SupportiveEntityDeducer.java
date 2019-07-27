@@ -68,11 +68,10 @@ public class SupportiveEntityDeducer implements Deducer<SupportiveEntityMetamode
   // FUNCTIONALITY
   // ===============================================================================================
 
-  @SuppressWarnings("rawtypes")
   @Override
   public SupportiveEntityMetamodelRepository deduce(
-      Set<AbstractionRepository> abstractionRepositories,
-      Set<MetamodelRepository> modelRepositories) {
+      Set<AbstractionRepository<?>> abstractionRepositories,
+      Set<MetamodelRepository<?>> metamodelRepositories) {
     Set<SupportiveEntity> supportiveEntities = new LinkedHashSet<>();
 
     CoreRegistry.getAbstractionRepositoryResolver()
@@ -99,7 +98,10 @@ public class SupportiveEntityDeducer implements Deducer<SupportiveEntityMetamode
     supportiveEntities.add(
         new SupportiveEntity(
             new ObjectName(thing.getThingName().getText()),
-            new PackageName(String.format("%s.%s", rootPackageName.getText(), "supportive")),
+            new PackageName(
+                String.format(
+                    "%s.%s.%s",
+                    rootPackageName.getText(), "supportive", thing.getThingName().getText())),
             supportiveEntityPropertyDeducer.deduceFromThing(thing, rootPackageName),
             supportiveEntityPropertyDeducer.deduceConstructors(thing, rootPackageName)));
   }

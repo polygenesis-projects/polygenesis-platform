@@ -75,8 +75,7 @@ public class JavaApiMetamodelGeneratorTest {
   // PRIVATE
   // ===============================================================================================
 
-  @SuppressWarnings("rawtypes")
-  private Set<MetamodelRepository> createModelRepositories() {
+  private Set<MetamodelRepository<?>> createModelRepositories() {
     Set<Service> services = new LinkedHashSet<>();
 
     Service service = mock(Service.class);

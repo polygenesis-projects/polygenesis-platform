@@ -20,66 +20,26 @@
 
 package io.polygenesis.core;
 
-import io.polygenesis.commons.assertion.Assertion;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 
 /**
- * The type Abstract generator.
+ * The type Abstract metamodel generator.
  *
  * @author Christos Tsakostas
  */
-public abstract class AbstractMetamodelGenerator implements MetamodelGenerator {
-
-  // ===============================================================================================
-  // STATE
-  // ===============================================================================================
-
-  private Path generationPath;
+public abstract class AbstractMetamodelGenerator extends AbstractPathGenerator
+    implements MetamodelGenerator {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
-   * Instantiates a new Abstract generator.
+   * Instantiates a new Abstract metamodel generator.
    *
    * @param generationPath the generation path
    */
-  protected AbstractMetamodelGenerator(Path generationPath) {
-    setGenerationPath(generationPath);
-  }
-
-  // ===============================================================================================
-  // GETTERS
-  // ===============================================================================================
-
-  /**
-   * Gets generation path.
-   *
-   * @return the generation path
-   */
-  protected Path getGenerationPath() {
-    return generationPath;
-  }
-
-  // ===============================================================================================
-  // GUARDS
-  // ===============================================================================================
-  private void setGenerationPath(Path generationPath) {
-    Assertion.isNotNull(generationPath, "Generation Path is required");
-    try {
-      if (!generationPath.toFile().exists()) {
-        Files.createDirectories(generationPath);
-      }
-    } catch (IOException e) {
-      throw new IllegalArgumentException(
-          String.format(
-              "Cannot create directories for '%s'. Error message=%s",
-              generationPath.toString(), e.getMessage()),
-          e);
-    }
-    this.generationPath = generationPath;
+  public AbstractMetamodelGenerator(Path generationPath) {
+    super(generationPath);
   }
 }

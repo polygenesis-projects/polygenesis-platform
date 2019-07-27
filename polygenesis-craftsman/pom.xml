@@ -50,10 +50,6 @@
     </dependency>
     <dependency>
       <groupId>io.polygenesis.deducers</groupId>
-      <artifactId>polygenesis-deducer-reactive-state</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.polygenesis.deducers</groupId>
       <artifactId>polygenesis-deducer-scheduler</artifactId>
     </dependency>
     <dependency>
@@ -63,6 +59,14 @@
     <dependency>
       <groupId>io.polygenesis.deducers</groupId>
       <artifactId>polygenesis-deducer-sql</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.polygenesis.deducers</groupId>
+      <artifactId>polygenesis-deducer-state-provider</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.polygenesis.deducers</groupId>
+      <artifactId>polygenesis-deducer-state-redux</artifactId>
     </dependency>
     <dependency>
       <groupId>io.polygenesis.deducers</groupId>

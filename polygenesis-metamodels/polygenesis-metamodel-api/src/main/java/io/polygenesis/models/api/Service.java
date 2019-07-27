@@ -185,7 +185,8 @@ public class Service implements Metamodel {
       Data arrayElement =
           dto.getArrayElementAsOptional().orElseThrow(IllegalArgumentException::new);
       if (arrayElement.isDataGroup()) {
-        addDto(dtos, new Dto(DtoType.COLLECTION_RECORD, arrayElement.getAsDataGroup(), false, dto));
+        addDto(
+            dtos, new Dto(DtoType.COLLECTION_RECORD, arrayElement.getAsDataObject(), false, dto));
       }
     }
 
@@ -196,7 +197,7 @@ public class Service implements Metamodel {
             model -> {
               // TODO: check if model array element children should be added as well
               if (model.isDataGroup()) {
-                DataObject dataObject = model.getAsDataGroup();
+                DataObject dataObject = model.getAsDataObject();
 
                 DtoType dtoType;
                 if (dto.getDtoType().equals(DtoType.API_COLLECTION_REQUEST)

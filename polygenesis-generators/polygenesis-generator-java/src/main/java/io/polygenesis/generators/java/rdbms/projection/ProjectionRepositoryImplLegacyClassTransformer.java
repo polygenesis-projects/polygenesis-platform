@@ -21,8 +21,8 @@
 package io.polygenesis.generators.java.rdbms.projection;
 
 import io.polygenesis.commons.text.TextConverter;
+import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.generators.java.rdbms.AbstractRepositoryImplLegacyClassTransformer;
-import io.polygenesis.generators.java.shared.transformer.FromDataTypeToJavaConverter;
 import io.polygenesis.models.domain.Persistence;
 import io.polygenesis.representations.code.ConstructorRepresentation;
 import io.polygenesis.representations.code.ParameterRepresentation;
@@ -46,11 +46,10 @@ public class ProjectionRepositoryImplLegacyClassTransformer
   /**
    * Instantiates a new Projection repository impl class representable.
    *
-   * @param fromDataTypeToJavaConverter the from data type to java converter
+   * @param dataTypeTransformer the from data type to java converter
    */
-  public ProjectionRepositoryImplLegacyClassTransformer(
-      FromDataTypeToJavaConverter fromDataTypeToJavaConverter) {
-    super(fromDataTypeToJavaConverter);
+  public ProjectionRepositoryImplLegacyClassTransformer(DataTypeTransformer dataTypeTransformer) {
+    super(dataTypeTransformer);
   }
 
   // ===============================================================================================

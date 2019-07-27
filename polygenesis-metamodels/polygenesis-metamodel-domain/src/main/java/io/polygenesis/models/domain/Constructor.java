@@ -31,8 +31,7 @@ import java.util.Set;
  */
 public class Constructor extends BaseMethod {
 
-  @SuppressWarnings("rawtypes")
-  private Set<DomainObjectProperty> properties;
+  private Set<DomainObjectProperty<?>> properties;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -44,8 +43,7 @@ public class Constructor extends BaseMethod {
    * @param function the function
    * @param properties the properties
    */
-  @SuppressWarnings("rawtypes")
-  public Constructor(Function function, Set<DomainObjectProperty> properties) {
+  public Constructor(Function function, Set<DomainObjectProperty<?>> properties) {
     super(function);
     setProperties(properties);
   }
@@ -59,8 +57,7 @@ public class Constructor extends BaseMethod {
    *
    * @return the properties
    */
-  @SuppressWarnings("rawtypes")
-  public Set<DomainObjectProperty> getProperties() {
+  public Set<DomainObjectProperty<?>> getProperties() {
     return properties;
   }
 
@@ -73,8 +70,7 @@ public class Constructor extends BaseMethod {
    *
    * @param properties the properties
    */
-  @SuppressWarnings("rawtypes")
-  private void setProperties(Set<DomainObjectProperty> properties) {
+  private void setProperties(Set<DomainObjectProperty<?>> properties) {
     this.properties = properties;
   }
 

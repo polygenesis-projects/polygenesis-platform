@@ -46,13 +46,12 @@ public abstract class BaseDomainEntity extends BaseDomainObject {
    * @param constructors the constructors
    * @param multiTenant the multi tenant
    */
-  @SuppressWarnings("rawtypes")
   public BaseDomainEntity(
       DomainObjectType domainObjectType,
       InstantiationType instantiationType,
       ObjectName objectName,
       PackageName packageName,
-      Set<DomainObjectProperty> properties,
+      Set<DomainObjectProperty<?>> properties,
       Set<Constructor> constructors,
       Boolean multiTenant) {
     super(

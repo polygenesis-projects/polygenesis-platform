@@ -51,11 +51,10 @@ public class SupportiveEntity extends BaseDomainEntity
    * @param properties the properties
    * @param constructors the constructors
    */
-  @SuppressWarnings("rawtypes")
   public SupportiveEntity(
       ObjectName objectName,
       PackageName packageName,
-      Set<DomainObjectProperty> properties,
+      Set<DomainObjectProperty<?>> properties,
       Set<Constructor> constructors) {
     super(
         DomainObjectType.HELPER_ENTITY,

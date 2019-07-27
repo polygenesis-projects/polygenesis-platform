@@ -21,6 +21,9 @@
 package io.polygenesis.abstraction.thing.dsl;
 
 import io.polygenesis.abstraction.thing.Thing;
+import io.polygenesis.abstraction.thing.ThingMetadataKey;
+import io.polygenesis.commons.keyvalue.KeyValue;
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.AbstractionScope;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
@@ -40,6 +43,15 @@ public class ThingBuilder extends AbstractThingBuilder<ThingBuilder> {
   // ===============================================================================================
   // STATIC
   // ===============================================================================================
+
+  /**
+   * App thing builder.
+   *
+   * @return the thing builder
+   */
+  public static ThingBuilder app() {
+    return new ThingBuilder(new LinkedHashSet<>(Arrays.asList(AbstractionScope.app())));
+  }
 
   /**
    * Api thing builder.
@@ -124,6 +136,16 @@ public class ThingBuilder extends AbstractThingBuilder<ThingBuilder> {
   }
 
   /**
+   * Domain abstract aggregate root thing builder.
+   *
+   * @return the thing builder
+   */
+  public static ThingBuilder domainAbstractAggregateRoot() {
+    return new ThingBuilder(
+        new LinkedHashSet<>(Arrays.asList(AbstractionScope.domainAbstractAggregateRoot())));
+  }
+
+  /**
    * Domain service thing builder.
    *
    * @return the thing builder
@@ -170,6 +192,22 @@ public class ThingBuilder extends AbstractThingBuilder<ThingBuilder> {
   public static ThingBuilder domainDetailDomainMessagePublisher() {
     return new ThingBuilder(
         new LinkedHashSet<>(Arrays.asList(AbstractionScope.domainDetailPublisher())));
+  }
+
+  // ===============================================================================================
+  // METADATA RELATED FUNCTIONS
+  // ===============================================================================================
+
+  /**
+   * Sets preferred package.
+   *
+   * @param preferredPackage the preferred package
+   * @return the preferred package
+   */
+  public ThingBuilder setPreferredPackage(String preferredPackage) {
+    addMetadata(
+        new KeyValue(ThingMetadataKey.PREFERRED_PACKAGE, new PackageName(preferredPackage)));
+    return this;
   }
 
   // ===============================================================================================

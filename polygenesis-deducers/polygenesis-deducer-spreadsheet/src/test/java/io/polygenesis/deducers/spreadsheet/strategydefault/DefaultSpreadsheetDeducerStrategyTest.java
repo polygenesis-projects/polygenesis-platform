@@ -42,11 +42,9 @@ import org.junit.Test;
 /** @author Christos Tsakostas */
 public class DefaultSpreadsheetDeducerStrategyTest {
 
-  @SuppressWarnings("rawtypes")
-  private Set<AbstractionRepository> abstractionRepositories;
+  private Set<AbstractionRepository<?>> abstractionRepositories;
 
-  @SuppressWarnings("rawtypes")
-  private Set<MetamodelRepository> metamodelRepositories;
+  private Set<MetamodelRepository<?>> metamodelRepositories;
 
   private SpreadsheetDeducerStrategy spreadsheetDeducerStrategy;
 

@@ -21,8 +21,8 @@
 package io.polygenesis.generators.java.domain.projection.transformer;
 
 import io.polygenesis.commons.text.TextConverter;
+import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.generators.java.domain.DomainObjectLegacyClassTransformer;
-import io.polygenesis.generators.java.shared.transformer.FromDataTypeToJavaConverter;
 import io.polygenesis.models.domain.InstantiationType;
 import io.polygenesis.models.domain.Projection;
 import io.polygenesis.representations.code.MethodRepresentation;
@@ -48,10 +48,10 @@ public class ProjectionLegacyClassTransformer
   /**
    * Instantiates a new Projection class representable.
    *
-   * @param fromDataTypeToJavaConverter the from data type to java converter
+   * @param dataTypeTransformer the from data type to java converter
    */
-  public ProjectionLegacyClassTransformer(FromDataTypeToJavaConverter fromDataTypeToJavaConverter) {
-    super(fromDataTypeToJavaConverter);
+  public ProjectionLegacyClassTransformer(DataTypeTransformer dataTypeTransformer) {
+    super(dataTypeTransformer);
   }
 
   // ===============================================================================================

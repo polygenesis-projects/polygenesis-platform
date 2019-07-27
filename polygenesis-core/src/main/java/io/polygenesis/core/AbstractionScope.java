@@ -32,6 +32,17 @@ public class AbstractionScope implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
+  // ===============================================================================================
+  // APP
+  // ===============================================================================================
+
+  /** The constant APP. */
+  public static final String APP = "APP";
+
+  // ===============================================================================================
+  // API & CLIENTS
+  // ===============================================================================================
+
   /** The constant API. */
   public static final String API = "API";
   /** The constant API_DETAIL. */
@@ -88,6 +99,15 @@ public class AbstractionScope implements Serializable {
    */
   public static AbstractionScope custom(String text) {
     return new AbstractionScope(text);
+  }
+
+  /**
+   * App abstraction scope.
+   *
+   * @return the abstraction scope
+   */
+  public static AbstractionScope app() {
+    return new AbstractionScope(APP);
   }
 
   /**

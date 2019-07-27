@@ -24,7 +24,6 @@ import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.core.TemplateData;
-import io.polygenesis.generators.java.shared.transformer.AbstractClassTransformer;
 import io.polygenesis.models.api.ServiceMethod;
 import io.polygenesis.models.apiimpl.ServiceImplementation;
 import io.polygenesis.models.apiimpl.ServiceMethodImplementation;
@@ -33,6 +32,7 @@ import io.polygenesis.models.domain.PropertyType;
 import io.polygenesis.representations.code.ConstructorRepresentation;
 import io.polygenesis.representations.code.FieldRepresentation;
 import io.polygenesis.representations.code.MethodRepresentation;
+import io.polygenesis.transformers.java.AbstractClassTransformer;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -231,7 +231,7 @@ public class ServiceDetailTransformer
         .forEach(
             property -> {
               if (property.getPropertyType().equals(PropertyType.VALUE_OBJECT)) {
-                DataObject modelGroup = property.getData().getAsDataGroup();
+                DataObject modelGroup = property.getData().getAsDataObject();
 
                 if (modelGroup.getPackageName().equals(domainObject.getPackageName())) {
                   imports.add(

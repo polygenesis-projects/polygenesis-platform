@@ -87,9 +87,8 @@ public class JavaApiDetailMetamodelGenerator extends AbstractMetamodelGenerator 
   // OVERRIDES
   // ===============================================================================================
 
-  @SuppressWarnings("rawtypes")
   @Override
-  public void generate(Set<MetamodelRepository> metamodelRepositories) {
+  public void generate(Set<MetamodelRepository<?>> metamodelRepositories) {
     ServiceImplementationMetamodelRepository serviceImplementationModelRepository =
         CoreRegistry.getMetamodelRepositoryResolver()
             .resolve(metamodelRepositories, ServiceImplementationMetamodelRepository.class);

@@ -21,11 +21,11 @@
 package io.polygenesis.generators.java.rdbms;
 
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.generators.java.shared.transformer.AbstractLegacyClassTransformer;
-import io.polygenesis.generators.java.shared.transformer.FromDataTypeToJavaConverter;
+import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.models.domain.Persistence;
 import io.polygenesis.representations.code.FieldRepresentation;
 import io.polygenesis.representations.code.MethodRepresentation;
+import io.polygenesis.transformers.java.legacy.AbstractLegacyClassTransformer;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -45,11 +45,10 @@ public abstract class AbstractRepositoryImplLegacyClassTransformer
   /**
    * Instantiates a new Abstract repository impl class representable.
    *
-   * @param fromDataTypeToJavaConverter the from data type to java converter
+   * @param dataTypeTransformer the from data type to java converter
    */
-  public AbstractRepositoryImplLegacyClassTransformer(
-      FromDataTypeToJavaConverter fromDataTypeToJavaConverter) {
-    super(fromDataTypeToJavaConverter);
+  public AbstractRepositoryImplLegacyClassTransformer(DataTypeTransformer dataTypeTransformer) {
+    super(dataTypeTransformer);
   }
 
   // ===============================================================================================

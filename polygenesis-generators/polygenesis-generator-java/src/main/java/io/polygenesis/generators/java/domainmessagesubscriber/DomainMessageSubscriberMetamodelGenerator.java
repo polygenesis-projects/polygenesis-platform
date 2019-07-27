@@ -104,9 +104,8 @@ public class DomainMessageSubscriberMetamodelGenerator extends AbstractMetamodel
   // OVERRIDES
   // ===============================================================================================
 
-  @SuppressWarnings("rawtypes")
   @Override
-  public void generate(Set<MetamodelRepository> modelRepositories) {
+  public void generate(Set<MetamodelRepository<?>> modelRepositories) {
     DomainMessageAbstractSubscriber domainMessageAbstractSubscriber = makeAbstractSubscriber();
     domainMessageAbstractSubscriberGenerator.generate(
         domainMessageAbstractSubscriber,

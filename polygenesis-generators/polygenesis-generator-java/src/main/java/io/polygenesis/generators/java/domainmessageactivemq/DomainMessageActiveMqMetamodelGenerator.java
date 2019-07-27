@@ -82,9 +82,8 @@ public class DomainMessageActiveMqMetamodelGenerator extends AbstractMetamodelGe
   // OVERRIDES
   // ===============================================================================================
 
-  @SuppressWarnings("rawtypes")
   @Override
-  public void generate(Set<MetamodelRepository> modelRepositories) {
+  public void generate(Set<MetamodelRepository<?>> modelRepositories) {
     DomainMessageDispatcherRoute domainMessageDispatcherRoute = makeDomainMessageDispatcherRoute();
     domainMessageDispatcherRouteGenerator.generate(
         domainMessageDispatcherRoute,

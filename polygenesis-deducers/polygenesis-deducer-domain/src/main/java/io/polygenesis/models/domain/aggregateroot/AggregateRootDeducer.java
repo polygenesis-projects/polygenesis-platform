@@ -117,14 +117,13 @@ public class AggregateRootDeducer {
    * @param rootPackageName the root package name
    * @return the aggregate root
    */
-  @SuppressWarnings("rawtypes")
   private void makeAggregateRoot(
       Set<AggregateRoot> aggregateRoots, Thing thing, PackageName rootPackageName) {
     PackageName packageName = thing.makePackageName(rootPackageName, thing);
 
     ObjectName aggregateRootObjectName = makeAggregateRootName(thing);
 
-    Set<DomainObjectProperty> properties =
+    Set<DomainObjectProperty<?>> properties =
         aggregateRootPropertyDeducer.deduceFromThing(thing, rootPackageName);
 
     Set<Constructor> constructors =

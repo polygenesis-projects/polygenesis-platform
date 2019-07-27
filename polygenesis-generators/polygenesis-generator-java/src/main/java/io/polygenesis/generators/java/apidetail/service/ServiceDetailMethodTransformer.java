@@ -22,8 +22,8 @@ package io.polygenesis.generators.java.apidetail.service;
 
 import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.generators.java.apidetail.service.activity.ServiceMethodActivityRegistry;
-import io.polygenesis.generators.java.shared.transformer.AbstractMethodTransformer;
 import io.polygenesis.models.apiimpl.ServiceMethodImplementation;
+import io.polygenesis.transformers.java.AbstractMethodTransformer;
 import java.util.LinkedHashSet;
 import java.util.Set;
 

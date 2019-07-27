@@ -21,6 +21,7 @@
 package io.polygenesis.generators.java.implementations;
 
 import io.polygenesis.abstraction.thing.FunctionProvider;
+import io.polygenesis.abstraction.thing.ScopePurposeTuple;
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.core.AbstractionScope;
 import io.polygenesis.representations.code.MethodRepresentation;

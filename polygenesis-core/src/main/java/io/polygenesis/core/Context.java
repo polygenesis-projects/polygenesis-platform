@@ -21,6 +21,7 @@
 package io.polygenesis.core;
 
 import io.polygenesis.commons.valueobjects.Name;
+import java.util.Set;
 
 /**
  * The interface Context.
@@ -57,4 +58,18 @@ public interface Context<T extends Abstraction> {
    * @return the architecture generator
    */
   ContextGenerator getContextGenerator();
+
+  /**
+   * Gets metamodel repositories.
+   *
+   * @return the metamodel repositories
+   */
+  Set<MetamodelRepository<?>> getMetamodelRepositories();
+
+  /**
+   * Populate metamodel repositories.
+   *
+   * @param deducers the deducers
+   */
+  void populateMetamodelRepositories(Set<Deducer<?>> deducers);
 }

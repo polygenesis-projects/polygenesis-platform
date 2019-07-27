@@ -75,12 +75,10 @@ public class ApiDeducer implements Deducer<ServiceMetamodelRepository> {
   // OVERRIDES
   // ===============================================================================================
 
-  @SuppressWarnings("rawtypes")
   @Override
   public ServiceMetamodelRepository deduce(
-      Set<AbstractionRepository> abstractionRepositories,
-      Set<MetamodelRepository> modelRepositories) {
-
+      Set<AbstractionRepository<?>> abstractionRepositories,
+      Set<MetamodelRepository<?>> metamodelRepositories) {
     Set<Service> services = new LinkedHashSet<>();
 
     CoreRegistry.getAbstractionRepositoryResolver()

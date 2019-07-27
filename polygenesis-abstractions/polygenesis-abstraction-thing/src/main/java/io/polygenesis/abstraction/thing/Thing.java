@@ -71,6 +71,7 @@ public class Thing implements Abstraction {
    * @param thingProperties the thing properties
    * @param multiTenant the multi tenant
    * @param optionalParent the optional parent
+   * @param metadata the metadata
    */
   public Thing(
       Set<AbstractionScope> abstractionScopes,
@@ -188,6 +189,10 @@ public class Thing implements Abstraction {
    * @return the package name
    */
   public PackageName makePackageName(PackageName rootPackageName, Thing thing) {
+    if (thing.getMetadataValueIfExists(ThingMetadataKey.PREFERRED_PACKAGE) != null) {
+      return PackageName.class.cast(thing.getMetadataValue(ThingMetadataKey.PREFERRED_PACKAGE));
+    }
+
     if (thing.getOptionalParent() != null) {
       return makePackageName(rootPackageName, thing.getOptionalParent());
     }
@@ -320,6 +325,21 @@ public class Thing implements Abstraction {
         .orElseThrow(IllegalArgumentException::new);
   }
 
+  /**
+   * Gets metadata value if exists.
+   *
+   * @param key the key
+   * @return the metadata value if exists
+   */
+  public Object getMetadataValueIfExists(Object key) {
+    return metadata
+        .stream()
+        .filter(keyValue -> keyValue.getKey().equals(key))
+        .map(keyValue -> keyValue.getValue())
+        .findFirst()
+        .orElse(null);
+  }
+
   // ===============================================================================================
   // GUARDS
   // ===============================================================================================
@@ -429,7 +449,7 @@ public class Thing implements Abstraction {
         .stream()
         .map(Argument::getData)
         .filter(Data::isDataGroup)
-        .map(Data::getAsDataGroup)
+        .map(Data::getAsDataObject)
         .flatMap(dataGroup -> dataGroup.getModels().stream())
         .forEach(data -> newThingProperties.add(new ThingProperty(data)));
 
@@ -446,7 +466,7 @@ public class Thing implements Abstraction {
   //          .map(Function::getArguments)
   //          .flatMap(arguments -> arguments.stream().map(Argument::getData))
   //          .filter(Data::isDataGroup)
-  //          .map(Data::getAsDataGroup)
+  //          .map(Data::getAsDataObject)
   //          .flatMap(dataGroup -> dataGroup.getModels().stream())
   //          // TODO
   //          .filter(

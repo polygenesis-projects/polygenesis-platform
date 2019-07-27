@@ -20,8 +20,8 @@
 
 package io.polygenesis.generators.java.rdbms.projection.testing;
 
+import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.generators.java.rdbms.testing.PersistenceImplTestLegacyClassTransformer;
-import io.polygenesis.generators.java.shared.transformer.FromDataTypeToJavaConverter;
 
 /**
  * The type Projection repository impl test class representable.
@@ -38,11 +38,11 @@ public class ProjectionRepositoryImplTestLegacyClassTransformer
   /**
    * Instantiates a new Projection repository impl test class representable.
    *
-   * @param fromDataTypeToJavaConverter the from data type to java converter
+   * @param dataTypeTransformer the from data type to java converter
    */
   public ProjectionRepositoryImplTestLegacyClassTransformer(
-      FromDataTypeToJavaConverter fromDataTypeToJavaConverter) {
-    super(fromDataTypeToJavaConverter);
+      DataTypeTransformer dataTypeTransformer) {
+    super(dataTypeTransformer);
   }
 
   // ===============================================================================================

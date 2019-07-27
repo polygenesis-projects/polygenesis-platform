@@ -21,8 +21,8 @@
 package io.polygenesis.generators.java.scheduler;
 
 import io.polygenesis.core.DataTypeTransformer;
-import io.polygenesis.generators.java.shared.transformer.AbstractMethodTransformer;
 import io.polygenesis.models.api.ServiceMethod;
+import io.polygenesis.transformers.java.AbstractMethodTransformer;
 
 /**
  * The type Service method transformer.

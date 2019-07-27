@@ -28,7 +28,6 @@ import io.polygenesis.core.ActiveFileExporter;
 import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.core.Exporter;
 import io.polygenesis.core.FreemarkerTemplateEngine;
-import io.polygenesis.core.JavaDataTypeTransformer;
 import io.polygenesis.core.TemplateEngine;
 import io.polygenesis.generators.java.rdbms.domainmessage.datarepositoryimpl.DomainMessageDataRepositoryImplGenerator;
 import io.polygenesis.generators.java.rdbms.domainmessage.datarepositoryimpl.DomainMessageDataRepositoryImplMethodTransformer;
@@ -53,8 +52,8 @@ import io.polygenesis.generators.java.rdbms.repositoryimpl.PersistenceImplExport
 import io.polygenesis.generators.java.rdbms.repositoryimpl.PersistenceImplLegacyClassTransformer;
 import io.polygenesis.generators.java.rdbms.testing.PersistenceImplTestExporter;
 import io.polygenesis.generators.java.rdbms.testing.PersistenceImplTestLegacyClassTransformer;
-import io.polygenesis.generators.java.shared.transformer.FromDataTypeToJavaConverter;
-import io.polygenesis.generators.java.shared.transformer.FunctionToLegacyMethodRepresentationTransformer;
+import io.polygenesis.transformers.java.JavaDataTypeTransformer;
+import io.polygenesis.transformers.java.legacy.FunctionToLegacyMethodRepresentationTransformer;
 import java.nio.file.Path;
 
 /**
@@ -102,26 +101,24 @@ public final class JavaRdbmsMetamodelGeneratorFactory {
 
     domainMessageDataConverterExporter = new DomainMessageDataConverterExporter(freemarkerService);
 
-    FromDataTypeToJavaConverter fromDataTypeToJavaConverter = new FromDataTypeToJavaConverter();
-
     PersistenceImplLegacyClassTransformer persistenceImplClassRepresentable =
-        new PersistenceImplLegacyClassTransformer(fromDataTypeToJavaConverter);
+        new PersistenceImplLegacyClassTransformer(dataTypeTransformer);
 
     persistenceImplExporter =
         new PersistenceImplExporter(freemarkerService, persistenceImplClassRepresentable);
 
     PersistenceImplTestLegacyClassTransformer persistenceImplTestClassRepresentable =
-        new PersistenceImplTestLegacyClassTransformer(fromDataTypeToJavaConverter);
+        new PersistenceImplTestLegacyClassTransformer(dataTypeTransformer);
 
     persistenceImplTestExporter =
         new PersistenceImplTestExporter(freemarkerService, persistenceImplTestClassRepresentable);
 
     FunctionToLegacyMethodRepresentationTransformer functionToMethodRepresentationTransformer =
-        new FunctionToLegacyMethodRepresentationTransformer(fromDataTypeToJavaConverter);
+        new FunctionToLegacyMethodRepresentationTransformer(dataTypeTransformer);
 
     SpringDataRepositoryLegacyInterfaceTransformer springDataRepositoryInterfaceRepresentable =
         new SpringDataRepositoryLegacyInterfaceTransformer(
-            fromDataTypeToJavaConverter, functionToMethodRepresentationTransformer);
+            dataTypeTransformer, functionToMethodRepresentationTransformer);
 
     springDataRepositoryExporter =
         new SpringDataRepositoryExporter(
@@ -135,18 +132,18 @@ public final class JavaRdbmsMetamodelGeneratorFactory {
     projectionRepositoryImplExporter =
         new ProjectionRepositoryImplExporter(
             freemarkerService,
-            new ProjectionRepositoryImplLegacyClassTransformer(fromDataTypeToJavaConverter));
+            new ProjectionRepositoryImplLegacyClassTransformer(dataTypeTransformer));
 
     projectionSpringDataRepositoryExporter =
         new ProjectionSpringDataRepositoryExporter(
             freemarkerService,
             new ProjectionSpringDataRepositoryLegacyInterfaceTransformer(
-                fromDataTypeToJavaConverter, functionToMethodRepresentationTransformer));
+                dataTypeTransformer, functionToMethodRepresentationTransformer));
 
     projectionRepositoryImplTestExporter =
         new ProjectionRepositoryImplTestExporter(
             freemarkerService,
-            new ProjectionRepositoryImplTestLegacyClassTransformer(fromDataTypeToJavaConverter));
+            new ProjectionRepositoryImplTestLegacyClassTransformer(dataTypeTransformer));
 
     domainMessageDataRepositoryImplGenerator =
         new DomainMessageDataRepositoryImplGenerator(

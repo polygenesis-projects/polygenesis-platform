@@ -24,6 +24,7 @@ import io.polygenesis.commons.freemarker.FreemarkerConfig;
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
+import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.generators.java.rest.constants.RestConstantsProjectionExporter;
 import io.polygenesis.generators.java.rest.resource.EndpointLegacyMethodTransformer;
 import io.polygenesis.generators.java.rest.resource.ResourceExporter;
@@ -31,7 +32,7 @@ import io.polygenesis.generators.java.rest.resource.ResourceLegacyClassTransform
 import io.polygenesis.generators.java.rest.resource.activity.EndpointImplementationRegistry;
 import io.polygenesis.generators.java.rest.resource.testing.ResourceTestExporter;
 import io.polygenesis.generators.java.rest.resource.testing.ResourceTestLegacyClassTransformer;
-import io.polygenesis.generators.java.shared.transformer.FromDataTypeToJavaConverter;
+import io.polygenesis.transformers.java.JavaDataTypeTransformer;
 import java.nio.file.Path;
 
 /**
@@ -57,24 +58,22 @@ public final class JavaApiRestGeneratorFactory {
     FreemarkerService freemarkerService =
         new FreemarkerService(FreemarkerConfig.getInstance().getConfiguration());
 
-    FromDataTypeToJavaConverter fromDataTypeToJavaConverter = new FromDataTypeToJavaConverter();
+    DataTypeTransformer dataTypeTransformer = new JavaDataTypeTransformer();
 
     EndpointImplementationRegistry endpointImplementationRegistry =
         new EndpointImplementationRegistry();
 
     EndpointLegacyMethodTransformer endpointMethodRepresentable =
         new EndpointLegacyMethodTransformer(
-            fromDataTypeToJavaConverter, freemarkerService, endpointImplementationRegistry);
+            dataTypeTransformer, freemarkerService, endpointImplementationRegistry);
 
     ResourceLegacyClassTransformer resourceClassRepresentable =
-        new ResourceLegacyClassTransformer(
-            fromDataTypeToJavaConverter, endpointMethodRepresentable);
+        new ResourceLegacyClassTransformer(dataTypeTransformer, endpointMethodRepresentable);
 
     resourceExporter = new ResourceExporter(freemarkerService, resourceClassRepresentable);
 
     ResourceTestLegacyClassTransformer resourceTestClassRepresentable =
-        new ResourceTestLegacyClassTransformer(
-            fromDataTypeToJavaConverter, endpointMethodRepresentable);
+        new ResourceTestLegacyClassTransformer(dataTypeTransformer, endpointMethodRepresentable);
 
     resourceTestExporter =
         new ResourceTestExporter(freemarkerService, resourceTestClassRepresentable);

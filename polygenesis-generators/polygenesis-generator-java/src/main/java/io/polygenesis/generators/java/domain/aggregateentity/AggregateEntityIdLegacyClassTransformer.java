@@ -21,13 +21,13 @@
 package io.polygenesis.generators.java.domain.aggregateentity;
 
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.generators.java.shared.transformer.AbstractLegacyClassTransformer;
-import io.polygenesis.generators.java.shared.transformer.FromDataTypeToJavaConverter;
+import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.models.domain.AggregateEntity;
 import io.polygenesis.representations.code.ConstructorRepresentation;
 import io.polygenesis.representations.code.FieldRepresentation;
 import io.polygenesis.representations.code.MethodRepresentation;
 import io.polygenesis.representations.code.ParameterRepresentation;
+import io.polygenesis.transformers.java.legacy.AbstractLegacyClassTransformer;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -48,11 +48,10 @@ public class AggregateEntityIdLegacyClassTransformer
   /**
    * Instantiates a new Aggregate entity id class representable.
    *
-   * @param fromDataTypeToJavaConverter the from data type to java converter
+   * @param dataTypeTransformer the from data type to java converter
    */
-  public AggregateEntityIdLegacyClassTransformer(
-      FromDataTypeToJavaConverter fromDataTypeToJavaConverter) {
-    super(fromDataTypeToJavaConverter);
+  public AggregateEntityIdLegacyClassTransformer(DataTypeTransformer dataTypeTransformer) {
+    super(dataTypeTransformer);
   }
 
   // ===============================================================================================

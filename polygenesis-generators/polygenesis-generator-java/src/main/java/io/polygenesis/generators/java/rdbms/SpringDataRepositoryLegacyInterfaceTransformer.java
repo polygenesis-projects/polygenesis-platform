@@ -21,11 +21,11 @@
 package io.polygenesis.generators.java.rdbms;
 
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.generators.java.shared.transformer.AbstractLegacyInterfaceTransformer;
-import io.polygenesis.generators.java.shared.transformer.FromDataTypeToJavaConverter;
-import io.polygenesis.generators.java.shared.transformer.FunctionToLegacyMethodRepresentationTransformer;
+import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.models.domain.Persistence;
 import io.polygenesis.representations.code.MethodRepresentation;
+import io.polygenesis.transformers.java.legacy.AbstractLegacyInterfaceTransformer;
+import io.polygenesis.transformers.java.legacy.FunctionToLegacyMethodRepresentationTransformer;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.TreeSet;
@@ -45,15 +45,15 @@ public class SpringDataRepositoryLegacyInterfaceTransformer
   /**
    * Instantiates a new Spring data repository interface representable.
    *
-   * @param fromDataTypeToJavaConverter the from data type to java converter
+   * @param dataTypeTransformer the from data type to java converter
    * @param functionToMethodRepresentationTransformer the function to method representation
    *     converter
    */
   @SuppressWarnings("CPD-START")
   public SpringDataRepositoryLegacyInterfaceTransformer(
-      FromDataTypeToJavaConverter fromDataTypeToJavaConverter,
+      DataTypeTransformer dataTypeTransformer,
       FunctionToLegacyMethodRepresentationTransformer functionToMethodRepresentationTransformer) {
-    super(fromDataTypeToJavaConverter, functionToMethodRepresentationTransformer);
+    super(dataTypeTransformer, functionToMethodRepresentationTransformer);
   }
 
   // ===============================================================================================

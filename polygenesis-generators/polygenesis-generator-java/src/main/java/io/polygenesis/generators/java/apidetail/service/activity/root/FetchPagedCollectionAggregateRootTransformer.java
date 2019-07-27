@@ -45,7 +45,7 @@ public class FetchPagedCollectionAggregateRootTransformer
   @SuppressWarnings({"unchecked", "rawtypes"})
   @Override
   public TemplateData transform(ServiceMethodImplementation source, Object... args) {
-    Set<MetamodelRepository> metamodelRepositories = (Set<MetamodelRepository>) args[0];
+    Set<MetamodelRepository<?>> metamodelRepositories = (Set<MetamodelRepository<?>>) args[0];
 
     FetchPagedCollectionAggregateRootTemplateData data =
         new FetchPagedCollectionAggregateRootTemplateData();

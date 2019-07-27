@@ -56,8 +56,7 @@ public class StateMutationMethodDeducer {
    * @param properties the properties
    * @return the set
    */
-  @SuppressWarnings("rawtypes")
-  public Set<StateMutationMethod> deduce(Thing thing, Set<DomainObjectProperty> properties) {
+  public Set<StateMutationMethod> deduce(Thing thing, Set<DomainObjectProperty<?>> properties) {
     Set<StateMutationMethod> stateMutationMethods = new LinkedHashSet<>();
 
     stateMutationMethods.addAll(deduceForAggregateEntities(thing, properties));
@@ -108,7 +107,7 @@ public class StateMutationMethodDeducer {
     Set<Data> newArguments = new LinkedHashSet<>();
     argumentDto
         .getData()
-        .getAsDataGroup()
+        .getAsDataObject()
         .getModels()
         .stream()
         .filter(data -> !data.getDataPurpose().equals(DataPurpose.thingIdentity()))
@@ -131,9 +130,8 @@ public class StateMutationMethodDeducer {
    * @param properties the properties
    * @return the set
    */
-  @SuppressWarnings("rawtypes")
   private Set<StateMutationMethod> deduceForAggregateEntities(
-      Thing thing, Set<DomainObjectProperty> properties) {
+      Thing thing, Set<DomainObjectProperty<?>> properties) {
     Set<StateMutationMethod> stateMutationMethods = new LinkedHashSet<>();
 
     properties.forEach(

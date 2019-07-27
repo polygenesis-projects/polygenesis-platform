@@ -53,12 +53,11 @@ public class CreateAggregateRootTemplateData extends AbstractAggregateRootTempla
    * @param aggregateRootIdDataType the aggregate root id data type
    * @param thingIdentity the thing identity
    */
-  @SuppressWarnings("rawtypes")
   public CreateAggregateRootTemplateData(
       Set<ParameterRepresentation> parameterRepresentations,
       String aggregateRootDataType,
       String aggregateRootVariable,
-      Set<DomainObjectProperty> properties,
+      Set<DomainObjectProperty<?>> properties,
       String persistenceVariable,
       Dto requestDto,
       Dto responseDto,

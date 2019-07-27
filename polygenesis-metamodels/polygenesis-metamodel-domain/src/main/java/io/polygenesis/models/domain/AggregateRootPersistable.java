@@ -59,12 +59,11 @@ public class AggregateRootPersistable extends AggregateRoot {
    * @param superClass the super class
    * @param persistence the persistence
    */
-  @SuppressWarnings("rawtypes")
   public AggregateRootPersistable(
       InstantiationType instantiationType,
       ObjectName objectName,
       PackageName packageName,
-      Set<DomainObjectProperty> properties,
+      Set<DomainObjectProperty<?>> properties,
       Set<Constructor> constructors,
       Boolean multiTenant,
       Set<StateMutationMethod> stateMutationMethods,

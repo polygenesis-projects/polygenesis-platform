@@ -44,12 +44,11 @@ public class DomainEvent extends BaseDomainObject {
    * @param properties the properties
    * @param constructors the constructors
    */
-  @SuppressWarnings("rawtypes")
   public DomainEvent(
       InstantiationType instantiationType,
       ObjectName objectName,
       PackageName packageName,
-      Set<DomainObjectProperty> properties,
+      Set<DomainObjectProperty<?>> properties,
       Set<Constructor> constructors,
       Boolean multiTenant) {
     super(

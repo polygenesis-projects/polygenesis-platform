@@ -34,8 +34,7 @@ public class MetamodelRepositoryResolverTest {
 
   private MetamodelRepositoryResolver metamodelRepositoryResolver;
 
-  @SuppressWarnings("rawtypes")
-  private Set<MetamodelRepository> modelRepositories;
+  private Set<MetamodelRepository<?>> modelRepositories;
 
   @Before
   public void setUp() throws Exception {

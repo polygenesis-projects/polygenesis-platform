@@ -28,8 +28,7 @@ import io.polygenesis.abstraction.data.DataPrimitive;
 import io.polygenesis.abstraction.data.DataPurpose;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.commons.valueobjects.PackageName;
-import io.polygenesis.generators.java.shared.transformer.AbstractLegacyClassTransformer;
-import io.polygenesis.generators.java.shared.transformer.FromDataTypeToJavaConverter;
+import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.models.domain.AbstractAggregateRootId;
 import io.polygenesis.models.domain.BaseDomainObject;
 import io.polygenesis.models.domain.DomainObjectProperty;
@@ -41,6 +40,7 @@ import io.polygenesis.representations.code.ConstructorRepresentation;
 import io.polygenesis.representations.code.FieldRepresentation;
 import io.polygenesis.representations.code.MethodRepresentation;
 import io.polygenesis.representations.code.ParameterRepresentation;
+import io.polygenesis.transformers.java.legacy.AbstractLegacyClassTransformer;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.TreeSet;
@@ -61,11 +61,10 @@ public abstract class DomainObjectLegacyClassTransformer<S extends BaseDomainObj
   /**
    * Instantiates a new Domain object class representable.
    *
-   * @param fromDataTypeToJavaConverter the from data type to java converter
+   * @param dataTypeTransformer the from data type to java converter
    */
-  public DomainObjectLegacyClassTransformer(
-      FromDataTypeToJavaConverter fromDataTypeToJavaConverter) {
-    super(fromDataTypeToJavaConverter);
+  public DomainObjectLegacyClassTransformer(DataTypeTransformer dataTypeTransformer) {
+    super(dataTypeTransformer);
   }
 
   // ===============================================================================================
@@ -113,7 +112,7 @@ public abstract class DomainObjectLegacyClassTransformer<S extends BaseDomainObj
                       new FieldRepresentation(
                           makeVariableDataType(property),
                           makeVariableName(property),
-                          makeAnnotationsForValueObject(property.getData().getAsDataGroup())));
+                          makeAnnotationsForValueObject(property.getData().getAsDataObject())));
                   break;
                 case VALUE_OBJECT_COLLECTION:
                   // TODO
@@ -123,7 +122,7 @@ public abstract class DomainObjectLegacyClassTransformer<S extends BaseDomainObj
                       new FieldRepresentation(
                           makeVariableDataType(property),
                           makeVariableName(property),
-                          makeAnnotationsForValueObject(property.getData().getAsDataGroup())));
+                          makeAnnotationsForValueObject(property.getData().getAsDataObject())));
                   break;
                 case AGGREGATE_ENTITY_COLLECTION:
                   fieldRepresentations.add(
@@ -253,8 +252,7 @@ public abstract class DomainObjectLegacyClassTransformer<S extends BaseDomainObj
     return imports;
   }
 
-  @SuppressWarnings("rawtypes")
-  private Set<String> importsPrimitiveOrValueObjectCollection(DomainObjectProperty property) {
+  private Set<String> importsPrimitiveOrValueObjectCollection(DomainObjectProperty<?> property) {
     Set<String> imports = new TreeSet<>();
 
     if (property.getPropertyType().equals(PropertyType.PRIMITIVE_COLLECTION)
@@ -270,8 +268,7 @@ public abstract class DomainObjectLegacyClassTransformer<S extends BaseDomainObj
     return imports;
   }
 
-  @SuppressWarnings("rawtypes")
-  private Set<String> importsAggregateEntityCollection(DomainObjectProperty property) {
+  private Set<String> importsAggregateEntityCollection(DomainObjectProperty<?> property) {
     Set<String> imports = new TreeSet<>();
 
     if (property.getPropertyType().equals(PropertyType.AGGREGATE_ENTITY_COLLECTION)) {
@@ -284,8 +281,7 @@ public abstract class DomainObjectLegacyClassTransformer<S extends BaseDomainObj
     return imports;
   }
 
-  @SuppressWarnings("rawtypes")
-  private Set<String> importsReferenceToAggregateRoot(DomainObjectProperty property) {
+  private Set<String> importsReferenceToAggregateRoot(DomainObjectProperty<?> property) {
     Set<String> imports = new TreeSet<>();
 
     if (property.getPropertyType().equals(PropertyType.REFERENCE_TO_AGGREGATE_ROOT)) {
@@ -298,8 +294,7 @@ public abstract class DomainObjectLegacyClassTransformer<S extends BaseDomainObj
     return imports;
   }
 
-  @SuppressWarnings("rawtypes")
-  private Set<String> importsPrimitive(DomainObjectProperty property) {
+  private Set<String> importsPrimitive(DomainObjectProperty<?> property) {
     Set<String> imports = new TreeSet<>();
 
     if (property.getData().isDataPrimitive()) {
@@ -323,8 +318,7 @@ public abstract class DomainObjectLegacyClassTransformer<S extends BaseDomainObj
     return imports;
   }
 
-  @SuppressWarnings("rawtypes")
-  private Set<String> importsValueObject(S source, DomainObjectProperty property) {
+  private Set<String> importsValueObject(S source, DomainObjectProperty<?> property) {
     Set<String> imports = new TreeSet<>();
 
     if (property.getData().isDataGroup()) {
@@ -332,7 +326,7 @@ public abstract class DomainObjectLegacyClassTransformer<S extends BaseDomainObj
       imports.add("javax.persistence.AttributeOverride");
       imports.add("javax.persistence.Column");
 
-      DataObject dataObject = property.getData().getAsDataGroup();
+      DataObject dataObject = property.getData().getAsDataObject();
       if (!dataObject.getPackageName().equals(source.getPackageName())) {
         imports.add(
             dataObject.getPackageName().getText()
@@ -551,27 +545,24 @@ public abstract class DomainObjectLegacyClassTransformer<S extends BaseDomainObj
    * @param property the property
    * @return the string
    */
-  @SuppressWarnings({"rawtypes", "unchecked"})
-  protected String makeVariableDataType(DomainObjectProperty property) {
+  protected String makeVariableDataType(DomainObjectProperty<?> property) {
     switch (property.getPropertyType()) {
       case ABSTRACT_AGGREGATE_ROOT_ID:
         return ((AbstractAggregateRootId) property).getGenericTypeParameter().getText();
       case PRIMITIVE_COLLECTION:
         return String.format(
-            "List<%s>",
-            fromDataTypeToJavaConverter.convert(property.getTypeParameterData().getDataType()));
+            "List<%s>", dataTypeTransformer.convert(property.getTypeParameterData().getDataType()));
       case AGGREGATE_ENTITY_COLLECTION:
         return String.format(
-            "List<%s>",
-            fromDataTypeToJavaConverter.convert(property.getTypeParameterData().getDataType()));
+            "List<%s>", dataTypeTransformer.convert(property.getTypeParameterData().getDataType()));
       case MAP:
         Mapper mapper = Mapper.class.cast(property);
         return String.format(
             "Map<%s, %s>",
-            fromDataTypeToJavaConverter.convert(mapper.getTypeParameterDataKey().getDataType()),
-            fromDataTypeToJavaConverter.convert(mapper.getTypeParameterDataValue().getDataType()));
+            dataTypeTransformer.convert(mapper.getTypeParameterDataKey().getDataType()),
+            dataTypeTransformer.convert(mapper.getTypeParameterDataValue().getDataType()));
       default:
-        return fromDataTypeToJavaConverter.convert(property.getData().getDataType());
+        return dataTypeTransformer.convert(property.getData().getDataType());
     }
   }
 
@@ -581,8 +572,7 @@ public abstract class DomainObjectLegacyClassTransformer<S extends BaseDomainObj
    * @param property the property
    * @return the string
    */
-  @SuppressWarnings("rawtypes")
-  protected String makeVariableName(DomainObjectProperty property) {
+  protected String makeVariableName(DomainObjectProperty<?> property) {
     return property.getData().getVariableName().getText();
   }
 
@@ -592,9 +582,8 @@ public abstract class DomainObjectLegacyClassTransformer<S extends BaseDomainObj
    * @param properties the properties
    * @return the set
    */
-  @SuppressWarnings("rawtypes")
   protected Set<ParameterRepresentation> makeConstructorParameterRepresentation(
-      Set<DomainObjectProperty> properties) {
+      Set<DomainObjectProperty<?>> properties) {
     Set<ParameterRepresentation> parameterRepresentations = new LinkedHashSet<>();
 
     properties

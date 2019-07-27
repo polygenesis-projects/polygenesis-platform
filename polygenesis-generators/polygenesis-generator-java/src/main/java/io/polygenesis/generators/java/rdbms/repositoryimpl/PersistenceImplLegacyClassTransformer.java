@@ -23,8 +23,8 @@ package io.polygenesis.generators.java.rdbms.repositoryimpl;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
+import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.generators.java.rdbms.AbstractRepositoryImplLegacyClassTransformer;
-import io.polygenesis.generators.java.shared.transformer.FromDataTypeToJavaConverter;
 import io.polygenesis.models.domain.Persistence;
 import io.polygenesis.representations.code.ConstructorRepresentation;
 import io.polygenesis.representations.code.ParameterRepresentation;
@@ -48,11 +48,10 @@ public class PersistenceImplLegacyClassTransformer
   /**
    * Instantiates a new Persistence impl class representable.
    *
-   * @param fromDataTypeToJavaConverter the from data type to java converter
+   * @param dataTypeTransformer the from data type to java converter
    */
-  public PersistenceImplLegacyClassTransformer(
-      FromDataTypeToJavaConverter fromDataTypeToJavaConverter) {
-    super(fromDataTypeToJavaConverter);
+  public PersistenceImplLegacyClassTransformer(DataTypeTransformer dataTypeTransformer) {
+    super(dataTypeTransformer);
   }
 
   // ===============================================================================================

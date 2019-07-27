@@ -29,7 +29,6 @@ import java.util.Set;
  * @param <R> the type parameter
  * @author Christos Tsakostas
  */
-@SuppressWarnings("rawtypes")
 public abstract class AbstractDeducer<R extends MetamodelRepository<? extends Metamodel>>
     implements Deducer<R> {
 
@@ -72,8 +71,8 @@ public abstract class AbstractDeducer<R extends MetamodelRepository<? extends Me
 
   @Override
   public R deduce(
-      Set<AbstractionRepository> abstractionRepositories,
-      Set<MetamodelRepository> metamodelRepositories) {
+      Set<AbstractionRepository<?>> abstractionRepositories,
+      Set<MetamodelRepository<?>> metamodelRepositories) {
     return deducerStrategy.deduce(abstractionRepositories, metamodelRepositories);
   }
 }

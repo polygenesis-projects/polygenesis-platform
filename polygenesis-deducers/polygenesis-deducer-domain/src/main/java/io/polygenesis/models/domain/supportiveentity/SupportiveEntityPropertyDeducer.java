@@ -58,11 +58,10 @@ public class SupportiveEntityPropertyDeducer extends AbstractPropertyDeducer {
   // IMPLEMENTATIONS
   // ===============================================================================================
 
-  @SuppressWarnings("rawtypes")
   @Override
-  protected Set<DomainObjectProperty> makeIdentityDomainObjectProperties(
+  protected Set<DomainObjectProperty<?>> makeIdentityDomainObjectProperties(
       Thing thing, PackageName rootPackageName) {
-    Set<DomainObjectProperty> properties = new LinkedHashSet<>();
+    Set<DomainObjectProperty<?>> properties = new LinkedHashSet<>();
 
     properties.add(makeSupportiveEntityId(thing, rootPackageName));
 
@@ -84,7 +83,7 @@ public class SupportiveEntityPropertyDeducer extends AbstractPropertyDeducer {
     DataObject dataObject =
         new DataObject(
             new ObjectName(thing.getThingName().getText() + "Id"),
-            thing.makePackageName(rootPackageName, thing));
+            thing.makePackageName(rootPackageName.withSubPackage("supportive"), thing));
 
     return new SupportiveEntityId(dataObject);
   }

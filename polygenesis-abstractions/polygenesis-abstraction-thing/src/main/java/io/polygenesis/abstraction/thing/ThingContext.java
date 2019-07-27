@@ -26,6 +26,10 @@ import io.polygenesis.commons.valueobjects.Name;
 import io.polygenesis.core.AbstractionRepository;
 import io.polygenesis.core.Context;
 import io.polygenesis.core.ContextGenerator;
+import io.polygenesis.core.Deducer;
+import io.polygenesis.core.MetamodelRepository;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * The type Thing context.
@@ -37,6 +41,7 @@ public class ThingContext implements Context<Thing> {
   private Name name;
   private ThingRepository thingRepository;
   private ContextGenerator contextGenerator;
+  private Set<MetamodelRepository<?>> metamodelRepositories;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -90,6 +95,16 @@ public class ThingContext implements Context<Thing> {
     this.contextGenerator = contextGenerator;
   }
 
+  /**
+   * Sets metamodel repositories.
+   *
+   * @param metamodelRepositories the metamodel repositories
+   */
+  private void setMetamodelRepositories(Set<MetamodelRepository<?>> metamodelRepositories) {
+    Assertion.isNotNull(metamodelRepositories, "metamodelRepositories is required");
+    this.metamodelRepositories = metamodelRepositories;
+  }
+
   // ===============================================================================================
   // OVERRIDES
   // ===============================================================================================
@@ -113,5 +128,31 @@ public class ThingContext implements Context<Thing> {
   @Override
   public ContextGenerator getContextGenerator() {
     return contextGenerator;
+  }
+
+  @Override
+  public Set<MetamodelRepository<?>> getMetamodelRepositories() {
+    return metamodelRepositories;
+  }
+
+  @Override
+  public void populateMetamodelRepositories(Set<Deducer<?>> deducers) {
+    setMetamodelRepositories(new LinkedHashSet<>());
+
+    Set<AbstractionRepository<?>> abstractionRepositories = new LinkedHashSet<>();
+    abstractionRepositories.add(thingRepository);
+
+    deducers.forEach(
+        deducer -> {
+          MetamodelRepository<?> metamodelRepository =
+              deducer.deduce(abstractionRepositories, metamodelRepositories);
+          if (metamodelRepository == null) {
+            throw new IllegalArgumentException(
+                String.format(
+                    "Metamodel repository is null for deducer=%s",
+                    deducer.getClass().getCanonicalName()));
+          }
+          getMetamodelRepositories().add(metamodelRepository);
+        });
   }
 }

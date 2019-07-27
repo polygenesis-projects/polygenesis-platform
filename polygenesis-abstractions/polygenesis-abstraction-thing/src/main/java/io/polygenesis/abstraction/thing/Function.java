@@ -105,6 +105,22 @@ public class Function implements FunctionProvider {
         .anyMatch(abstractionScope1 -> abstractionScope1.equals(abstractionScope));
   }
 
+  /**
+   * Supports ui boolean.
+   *
+   * @return the boolean
+   */
+  public Boolean supportsUi() {
+    if (purpose.isFetchOne()
+        || purpose.isFetchPagedCollection()
+        || purpose.isCreate()
+        || purpose.isModify()) {
+      return true;
+    }
+
+    return false;
+  }
+
   // ===============================================================================================
   // GETTERS
   // ===============================================================================================

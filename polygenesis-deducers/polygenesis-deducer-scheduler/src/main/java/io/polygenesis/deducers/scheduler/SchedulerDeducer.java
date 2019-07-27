@@ -76,11 +76,10 @@ public class SchedulerDeducer implements Deducer<SchedulerRepository> {
   // OVERRIDES
   // ===============================================================================================
 
-  @SuppressWarnings("rawtypes")
   @Override
   public SchedulerRepository deduce(
-      Set<AbstractionRepository> abstractionRepositories,
-      Set<MetamodelRepository> metamodelRepositories) {
+      Set<AbstractionRepository<?>> abstractionRepositories,
+      Set<MetamodelRepository<?>> metamodelRepositories) {
     Set<Scheduler> schedulers = new LinkedHashSet<>();
 
     CoreRegistry.getAbstractionRepositoryResolver()

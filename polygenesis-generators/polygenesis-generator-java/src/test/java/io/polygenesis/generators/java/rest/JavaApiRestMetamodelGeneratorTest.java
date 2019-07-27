@@ -99,8 +99,7 @@ public class JavaApiRestMetamodelGeneratorTest {
   // PRIVATE
   // ===============================================================================================
 
-  @SuppressWarnings("rawtypes")
-  private Set<MetamodelRepository> createModelRepositories() {
+  private Set<MetamodelRepository<?>> createModelRepositories() {
     Set<Resource> resources = new LinkedHashSet<>();
 
     Resource resource = mock(Resource.class);

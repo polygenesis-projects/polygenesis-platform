@@ -21,9 +21,9 @@
 package io.polygenesis.generators.java.domain.aggregateroot;
 
 import io.polygenesis.commons.text.TextConverter;
+import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.generators.java.domain.DomainObjectLegacyClassTransformer;
 import io.polygenesis.generators.java.domain.StateMutationLegacyMethodTransformer;
-import io.polygenesis.generators.java.shared.transformer.FromDataTypeToJavaConverter;
 import io.polygenesis.models.domain.AggregateRoot;
 import io.polygenesis.models.domain.InstantiationType;
 import io.polygenesis.representations.code.MethodRepresentation;
@@ -51,13 +51,13 @@ public class AggregateRootLegacyClassTransformer
   /**
    * Instantiates a new Aggregate root class representable.
    *
-   * @param fromDataTypeToJavaConverter the from data type to java converter
+   * @param dataTypeTransformer the from data type to java converter
    * @param stateMutationMethodRepresentable the state mutation method representable
    */
   public AggregateRootLegacyClassTransformer(
-      FromDataTypeToJavaConverter fromDataTypeToJavaConverter,
+      DataTypeTransformer dataTypeTransformer,
       StateMutationLegacyMethodTransformer stateMutationMethodRepresentable) {
-    super(fromDataTypeToJavaConverter);
+    super(dataTypeTransformer);
     this.stateMutationMethodRepresentable = stateMutationMethodRepresentable;
   }
 

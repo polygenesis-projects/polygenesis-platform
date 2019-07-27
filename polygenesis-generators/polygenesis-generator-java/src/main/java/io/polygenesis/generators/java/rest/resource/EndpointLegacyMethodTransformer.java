@@ -24,15 +24,15 @@ import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.PrimitiveType;
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.text.TextConverter;
+import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.generators.java.rest.resource.activity.EndpointImplementationRegistry;
-import io.polygenesis.generators.java.shared.transformer.AbstractLegacyMethodTransformer;
-import io.polygenesis.generators.java.shared.transformer.FromDataTypeToJavaConverter;
 import io.polygenesis.models.rest.Endpoint;
 import io.polygenesis.models.rest.HttpMethod;
 import io.polygenesis.models.rest.PathContentType;
 import io.polygenesis.representations.code.MethodRepresentation;
 import io.polygenesis.representations.code.MethodRepresentationType;
 import io.polygenesis.representations.code.ParameterRepresentation;
+import io.polygenesis.transformers.java.legacy.AbstractLegacyMethodTransformer;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -74,15 +74,15 @@ public class EndpointLegacyMethodTransformer extends AbstractLegacyMethodTransfo
   /**
    * Instantiates a new Endpoint method representable.
    *
-   * @param fromDataTypeToJavaConverter the from data type to java converter
+   * @param dataTypeTransformer the from data type to java converter
    * @param freemarkerService the freemarker service
    * @param endpointImplementationRegistry the endpoint implementation registry
    */
   public EndpointLegacyMethodTransformer(
-      FromDataTypeToJavaConverter fromDataTypeToJavaConverter,
+      DataTypeTransformer dataTypeTransformer,
       FreemarkerService freemarkerService,
       EndpointImplementationRegistry endpointImplementationRegistry) {
-    super(fromDataTypeToJavaConverter);
+    super(dataTypeTransformer);
     this.freemarkerService = freemarkerService;
     this.endpointImplementationRegistry = endpointImplementationRegistry;
   }
@@ -198,7 +198,7 @@ public class EndpointLegacyMethodTransformer extends AbstractLegacyMethodTransfo
                       || source.getServiceMethod().getFunction().getPurpose().isModify())) {
                 parameterRepresentations.add(
                     new ParameterRepresentation(
-                        fromDataTypeToJavaConverter.convert(argument.getData().getDataType()),
+                        dataTypeTransformer.convert(argument.getData().getDataType()),
                         argument.getData().getVariableName().getText(),
                         new LinkedHashSet<>(Arrays.asList("@RequestBody"))));
               }
@@ -216,7 +216,7 @@ public class EndpointLegacyMethodTransformer extends AbstractLegacyMethodTransfo
       return makeVariableDataType(
           source.getServiceMethod().getFunction().getReturnValue().getData());
     } else {
-      return fromDataTypeToJavaConverter.convert(PrimitiveType.VOID.name());
+      return dataTypeTransformer.convert(PrimitiveType.VOID.name());
     }
   }
 

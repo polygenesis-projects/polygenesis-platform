@@ -69,9 +69,8 @@ public class AggregateRootPropertyDeducer extends AbstractPropertyDeducer {
    * @param rootPackageName the root package name
    * @return the set
    */
-  @SuppressWarnings("rawtypes")
-  public Set<DomainObjectProperty> deduceFromThing(Thing thing, PackageName rootPackageName) {
-    Set<DomainObjectProperty> properties = new LinkedHashSet<>();
+  public Set<DomainObjectProperty<?>> deduceFromThing(Thing thing, PackageName rootPackageName) {
+    Set<DomainObjectProperty<?>> properties = new LinkedHashSet<>();
 
     assertThatThingHasIdentity(thing);
 
@@ -93,11 +92,10 @@ public class AggregateRootPropertyDeducer extends AbstractPropertyDeducer {
   // IMPLEMENTATIONS
   // ===============================================================================================
 
-  @SuppressWarnings("rawtypes")
   @Override
-  protected Set<DomainObjectProperty> makeIdentityDomainObjectProperties(
+  protected Set<DomainObjectProperty<?>> makeIdentityDomainObjectProperties(
       Thing thing, PackageName rootPackageName) {
-    Set<DomainObjectProperty> properties = new LinkedHashSet<>();
+    Set<DomainObjectProperty<?>> properties = new LinkedHashSet<>();
 
     properties.add(makeAggregateRootId(thing, rootPackageName));
 

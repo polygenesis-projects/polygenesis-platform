@@ -59,9 +59,8 @@ public class DomainServiceDetailMetamodelGenerator extends AbstractMetamodelGene
   // OVERRIDES
   // ===============================================================================================
 
-  @SuppressWarnings("rawtypes")
   @Override
-  public void generate(Set<MetamodelRepository> modelRepositories) {
+  public void generate(Set<MetamodelRepository<?>> modelRepositories) {
     CoreRegistry.getMetamodelRepositoryResolver()
         .resolve(modelRepositories, DomainServiceRepository.class)
         .getItems()

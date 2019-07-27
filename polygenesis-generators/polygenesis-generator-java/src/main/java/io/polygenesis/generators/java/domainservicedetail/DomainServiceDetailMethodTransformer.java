@@ -21,8 +21,8 @@
 package io.polygenesis.generators.java.domainservicedetail;
 
 import io.polygenesis.core.DataTypeTransformer;
-import io.polygenesis.generators.java.shared.transformer.AbstractMethodTransformer;
 import io.polygenesis.models.domain.DomainServiceMethod;
+import io.polygenesis.transformers.java.AbstractMethodTransformer;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;

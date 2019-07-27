@@ -112,8 +112,8 @@ public class DtoExporterTest {
 
     service.appendServiceMethod(
         makeFunctionCreate(),
-        new Dto(DtoType.API_REQUEST, argument.getData().getAsDataGroup(), false),
-        new Dto(DtoType.API_RESPONSE, createReturnValue.getData().getAsDataGroup(), false));
+        new Dto(DtoType.API_REQUEST, argument.getData().getAsDataObject(), false),
+        new Dto(DtoType.API_RESPONSE, createReturnValue.getData().getAsDataObject(), false));
 
     return service;
   }

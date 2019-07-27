@@ -70,11 +70,10 @@ public class ProjectionDeducer implements Deducer<ProjectionMetamodelRepository>
   // FUNCTIONALITY
   // ===============================================================================================
 
-  @SuppressWarnings("rawtypes")
   @Override
   public ProjectionMetamodelRepository deduce(
-      Set<AbstractionRepository> abstractionRepositories,
-      Set<MetamodelRepository> modelRepositories) {
+      Set<AbstractionRepository<?>> abstractionRepositories,
+      Set<MetamodelRepository<?>> metamodelRepositories) {
     Set<Projection> projections = new LinkedHashSet<>();
 
     CoreRegistry.getAbstractionRepositoryResolver()

@@ -26,13 +26,13 @@ import io.polygenesis.core.ActiveFileExporter;
 import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.core.Exporter;
 import io.polygenesis.core.FreemarkerTemplateEngine;
-import io.polygenesis.core.JavaDataTypeTransformer;
 import io.polygenesis.core.TemplateEngine;
 import io.polygenesis.generators.java.batchprocessscheduler.scheduler.BatchProcessMethodSchedulerTransformer;
 import io.polygenesis.generators.java.batchprocessscheduler.scheduler.BatchProcessSchedulerGenerator;
 import io.polygenesis.generators.java.batchprocessscheduler.scheduler.BatchProcessSchedulerTransformer;
 import io.polygenesis.generators.java.batchprocessscheduler.scheduler.activity.ConfigureSchedulerRouteActivityGenerator;
 import io.polygenesis.generators.java.batchprocessscheduler.scheduler.activity.ConfigureSchedulerRouteActivityTransformer;
+import io.polygenesis.transformers.java.JavaDataTypeTransformer;
 import java.nio.file.Path;
 
 /**

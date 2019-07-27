@@ -49,11 +49,10 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class DefaultSpreadsheetDeducerStrategy implements SpreadsheetDeducerStrategy {
 
-  @SuppressWarnings("rawtypes")
   @Override
   public SpreadsheetMetamodelRepository deduce(
-      Set<AbstractionRepository> abstractionRepositories,
-      Set<MetamodelRepository> metamodelRepositories) {
+      Set<AbstractionRepository<?>> abstractionRepositories,
+      Set<MetamodelRepository<?>> metamodelRepositories) {
     Set<Spreadsheet> items = new LinkedHashSet<>();
 
     items.add(

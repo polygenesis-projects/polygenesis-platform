@@ -32,7 +32,9 @@ import io.polygenesis.deducers.messaging.subscriber.SubscriberDeducerFactory;
 import io.polygenesis.deducers.scheduler.SchedulerDeducerFactory;
 import io.polygenesis.deducers.sql.SqlIndexDeducerFactory;
 import io.polygenesis.deducers.sql.SqlTableDeducerFactory;
-import io.polygenesis.generators.angular.AngularGeneratorFactory;
+import io.polygenesis.deducers.stateprovider.ProviderDeducerFactory;
+import io.polygenesis.deducers.stateredux.StateReduxDeducerFactory;
+import io.polygenesis.deducers.ui.UiContextDeducerFactory;
 import io.polygenesis.generators.java.api.JavaApiGeneratorFactory;
 import io.polygenesis.generators.java.api.JavaApiMetamodelGenerator;
 import io.polygenesis.generators.java.apidetail.JavaApiDetailMetamodelGenerator;
@@ -47,7 +49,6 @@ import io.polygenesis.models.domain.DomainDeducerFactory;
 import io.polygenesis.models.domain.DomainServiceDeducerFactory;
 import io.polygenesis.models.domain.projection.ProjectionDeducerFactory;
 import io.polygenesis.models.domain.supportiveentity.SupportiveEntityDeducerFactory;
-import io.polygenesis.models.reactivestate.ReactiveStateFactory;
 import io.polygenesis.models.rest.RestDeducerFactory;
 import io.polygenesis.models.ui.UiFeatureDeducerFactory;
 import io.polygenesis.models.ui.UiLayoutContainerDeducerFactory;
@@ -86,13 +87,12 @@ public class GenesisDefault {
   // ===============================================================================================
 
   /**
-   * Java deducers set.
+   * Java deducers proper generics set.
    *
    * @param rootPackageName the root package name
    * @return the set
    */
-  @SuppressWarnings("rawtypes")
-  public static Set<Deducer> javaDeducers(String rootPackageName) {
+  public static Set<Deducer<?>> javaDeducers(String rootPackageName) {
     PackageName packageName = new PackageName(rootPackageName);
 
     return new LinkedHashSet<>(
@@ -110,6 +110,41 @@ public class GenesisDefault {
             SubscriberDeducerFactory.newInstance(packageName),
             SchedulerDeducerFactory.newInstance(packageName),
             BatchProcessDeducerFactory.newInstance(packageName)));
+  }
+
+  /**
+   * Angular deducers set.
+   *
+   * @return the set
+   */
+  public static Set<Deducer<?>> angularDeducers() {
+    PackageName packageName = new PackageName("com.oregor.dummy");
+
+    return new LinkedHashSet<>(
+        Arrays.asList(
+            ApiDeducerFactory.newInstance(packageName),
+            StateReduxDeducerFactory.newInstance(),
+            UiContextDeducerFactory.newInstance(),
+            UiFeatureDeducerFactory.newInstance(),
+            UiLayoutContainerDeducerFactory.newInstance()));
+  }
+
+  /**
+   * Flutter deducers proper generics set.
+   *
+   * @param rootPackageName the root package name
+   * @return the set
+   */
+  public static Set<Deducer<?>> flutterDeducers(String rootPackageName) {
+    PackageName packageName = new PackageName(rootPackageName);
+
+    return new LinkedHashSet<>(
+        Arrays.asList(
+            ApiDeducerFactory.newInstance(packageName),
+            ProviderDeducerFactory.newInstance(),
+            UiContextDeducerFactory.newInstance(),
+            UiFeatureDeducerFactory.newInstance(),
+            UiLayoutContainerDeducerFactory.newInstance()));
   }
 
   /**
@@ -204,31 +239,9 @@ public class GenesisDefault {
         new PackageName(rootPackageName));
   }
 
-  /**
-   * Angular deducers set.
-   *
-   * @return the set
-   */
-  @SuppressWarnings("rawtypes")
-  public static Set<Deducer> angularDeducers() {
-    PackageName packageName = new PackageName("com.oregor.dummy");
-
-    return new LinkedHashSet<>(
-        Arrays.asList(
-            ApiDeducerFactory.newInstance(packageName),
-            ReactiveStateFactory.newInstance(),
-            UiFeatureDeducerFactory.newInstance(),
-            UiLayoutContainerDeducerFactory.newInstance()));
-  }
-
-  /**
-   * Angular generators set.
-   *
-   * @param angularExportPath the angular export path
-   * @return the set
-   */
-  public static Set<MetamodelGenerator> angularGenerators(String angularExportPath) {
-    return new LinkedHashSet<>(
-        Arrays.asList(AngularGeneratorFactory.newInstance(Paths.get(angularExportPath))));
-  }
+  //  public static Set<MetamodelGenerator> angularGenerators(String angularExportPath) {
+  //    return new LinkedHashSet<>(
+  //
+  // Arrays.asList(LegacyAngularContextGeneratorFactory.newInstance(Paths.get(angularExportPath))));
+  //  }
 }

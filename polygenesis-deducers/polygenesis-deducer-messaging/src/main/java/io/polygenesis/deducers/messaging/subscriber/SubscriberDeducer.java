@@ -81,19 +81,18 @@ public class SubscriberDeducer implements Deducer<SubscriberMetamodelRepository>
   // OVERRIDES
   // ===============================================================================================
 
-  @SuppressWarnings("rawtypes")
   @Override
   public SubscriberMetamodelRepository deduce(
-      Set<AbstractionRepository> abstractionRepositories,
-      Set<MetamodelRepository> modelRepositories) {
-
+      Set<AbstractionRepository<?>> abstractionRepositories,
+      Set<MetamodelRepository<?>> metamodelRepositories) {
     Set<SubscriberMetamodel> subscriberMetamodels = new LinkedHashSet<>();
 
     CoreRegistry.getAbstractionRepositoryResolver()
         .resolve(abstractionRepositories, ThingRepository.class)
         .getAbstractionItemsByScope(AbstractionScope.apiClientMessaging())
         .forEach(
-            thing -> subscriberMetamodels.add(deduceSubscriberFromThing(thing, modelRepositories)));
+            thing ->
+                subscriberMetamodels.add(deduceSubscriberFromThing(thing, metamodelRepositories)));
 
     return new SubscriberMetamodelRepository(subscriberMetamodels);
   }
@@ -102,15 +101,8 @@ public class SubscriberDeducer implements Deducer<SubscriberMetamodelRepository>
   // PRIVATE
   // ===============================================================================================
 
-  /**
-   * Deduce subscriber from thing subscriber.
-   *
-   * @param thing the thing
-   * @return the subscriber
-   */
-  @SuppressWarnings("rawtypes")
   private SubscriberMetamodel deduceSubscriberFromThing(
-      Thing thing, Set<MetamodelRepository> modelRepositories) {
+      Thing thing, Set<MetamodelRepository<?>> modelRepositories) {
 
     Thing relatedThing = getRelatedThing(thing);
 
@@ -192,9 +184,8 @@ public class SubscriberDeducer implements Deducer<SubscriberMetamodelRepository>
    * @param function the function
    * @return the service method
    */
-  @SuppressWarnings("rawtypes")
   private ServiceMethod findServiceMethodFromFunction(
-      Set<MetamodelRepository> modelRepositories, Function function) {
+      Set<MetamodelRepository<?>> modelRepositories, Function function) {
     return CoreRegistry.getMetamodelRepositoryResolver()
         .resolve(modelRepositories, ServiceMetamodelRepository.class)
         .getServicesBy(function.getThing().getThingName())

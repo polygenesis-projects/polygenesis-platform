@@ -20,19 +20,17 @@
 
 package io.polygenesis.core;
 
-import java.util.Set;
-
 /**
- * The interface Architecture generator.
+ * The interface Context generator.
  *
  * @author Christos Tsakostas
  */
 public interface ContextGenerator {
 
   /**
-   * Gets generators.
+   * Generate.
    *
-   * @return the generators
+   * @param context the context
    */
-  Set<MetamodelGenerator> getMetamodelGenerators();
+  void generate(Context<? extends Abstraction> context);
 }

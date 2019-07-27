@@ -37,16 +37,16 @@ public class MetamodelRepositoryResolver {
   // ===============================================================================================
 
   /**
-   * Resolve t.
+   * Resolve proper generics t.
    *
    * @param <T> the type parameter
    * @param modelRepositories the model repositories
    * @param clazz the clazz
    * @return the t
    */
-  @SuppressWarnings({"unchecked", "rawtypes"})
-  public <T extends MetamodelRepository> T resolve(
-      Set<MetamodelRepository> modelRepositories, Class<T> clazz) {
+  @SuppressWarnings({"unchecked"})
+  public <T extends MetamodelRepository<?>> T resolve(
+      Set<MetamodelRepository<?>> modelRepositories, Class<T> clazz) {
     Assertion.isNotNull(modelRepositories, "modelRepositories is required");
     Assertion.isNotNull(clazz, "clazz is required");
 

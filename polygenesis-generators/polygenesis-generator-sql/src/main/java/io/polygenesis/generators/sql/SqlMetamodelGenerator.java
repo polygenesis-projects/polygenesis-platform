@@ -79,9 +79,8 @@ public class SqlMetamodelGenerator extends AbstractMetamodelGenerator {
   // OVERRIDES
   // ===============================================================================================
 
-  @SuppressWarnings("rawtypes")
   @Override
-  public void generate(Set<MetamodelRepository> modelRepositories) {
+  public void generate(Set<MetamodelRepository<?>> modelRepositories) {
     SqlTableMetamodelRepository sqlTableModelRepository =
         CoreRegistry.getMetamodelRepositoryResolver()
             .resolve(modelRepositories, SqlTableMetamodelRepository.class);

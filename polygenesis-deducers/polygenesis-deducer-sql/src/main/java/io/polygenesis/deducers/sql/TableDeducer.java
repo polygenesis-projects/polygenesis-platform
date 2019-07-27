@@ -111,7 +111,7 @@ public class TableDeducer {
                   break;
                 case VALUE_OBJECT:
                   domainEntityColumns.addAll(
-                      getColumnsForValueObject(property.getData().getAsDataGroup()));
+                      getColumnsForValueObject(property.getData().getAsDataObject()));
                   break;
                 case VALUE_OBJECT_COLLECTION:
                   allDomainEntityRelatedTables.add(
@@ -119,7 +119,7 @@ public class TableDeducer {
                   break;
                 case AGGREGATE_ENTITY:
                   domainEntityColumns.addAll(
-                      getColumnsForValueObject(property.getData().getAsDataGroup()));
+                      getColumnsForValueObject(property.getData().getAsDataObject()));
                   break;
                 case AGGREGATE_ENTITY_COLLECTION:
                   AggregateEntityCollection aggregateEntityCollection =
@@ -164,8 +164,7 @@ public class TableDeducer {
   // ===============================================================================================
   // PRIVATE
   // ===============================================================================================
-  @SuppressWarnings("rawtypes")
-  protected Set<Column> getColumnsByProperties(Set<DomainObjectProperty> properties) {
+  protected Set<Column> getColumnsByProperties(Set<DomainObjectProperty<?>> properties) {
     Set<Column> columns = new LinkedHashSet<>();
 
     properties.forEach(
@@ -184,12 +183,12 @@ public class TableDeducer {
             case PRIMITIVE_COLLECTION:
               break;
             case VALUE_OBJECT:
-              columns.addAll(getColumnsForValueObject(property.getData().getAsDataGroup()));
+              columns.addAll(getColumnsForValueObject(property.getData().getAsDataObject()));
               break;
             case VALUE_OBJECT_COLLECTION:
               break;
             case AGGREGATE_ENTITY:
-              columns.addAll(getColumnsForValueObject(property.getData().getAsDataGroup()));
+              columns.addAll(getColumnsForValueObject(property.getData().getAsDataObject()));
               break;
             case AGGREGATE_ENTITY_COLLECTION:
               break;
@@ -353,9 +352,8 @@ public class TableDeducer {
    * @param property the property
    * @return the table for primitive collection
    */
-  @SuppressWarnings("rawtypes")
   private Table getTableForPrimitiveCollection(
-      BaseDomainObject baseDomainObject, DomainObjectProperty property) {
+      BaseDomainObject baseDomainObject, DomainObjectProperty<?> property) {
     Set<Column> columns = new LinkedHashSet<>();
 
     addAggregateRootIdInColumnSetWithoutPrimaryKey(columns, baseDomainObject);
@@ -379,9 +377,8 @@ public class TableDeducer {
    * @param property the property
    * @return the table for value object collection
    */
-  @SuppressWarnings("rawtypes")
   private Table getTableForValueObjectCollection(
-      BaseDomainObject baseDomainObject, DomainObjectProperty property) {
+      BaseDomainObject baseDomainObject, DomainObjectProperty<?> property) {
     Set<Column> columns = new LinkedHashSet<>();
 
     return new Table(
@@ -401,11 +398,10 @@ public class TableDeducer {
    * @param property the property
    * @return the table for aggregate entity collection
    */
-  @SuppressWarnings("rawtypes")
   private Table getTableForAggregateEntityCollection(
       BaseDomainObject baseDomainObjectParent,
       BaseDomainObject baseDomainObjectChild,
-      DomainObjectProperty property) {
+      DomainObjectProperty<?> property) {
     Set<Column> columns = new LinkedHashSet<>();
 
     addAggregateRootIdInColumnSetAsPrimaryKey(columns, baseDomainObjectParent);
