@@ -21,7 +21,7 @@
 package io.polygenesis.generators.angular;
 
 import io.polygenesis.core.MetamodelRepository;
-import io.polygenesis.models.reactivestate.ReactiveStateMetamodelRepository;
+import io.polygenesis.metamodels.stateredux.StoreMetamodelRepository;
 import io.polygenesis.models.ui.UiFeatureMetamodelRepository;
 import io.polygenesis.models.ui.UiLayoutContainerMetamodelRepository;
 import java.util.Arrays;
@@ -31,12 +31,11 @@ import java.util.Set;
 /** @author Christos Tsakostas */
 public abstract class AbstractAngularGeneratorTest {
 
-  @SuppressWarnings("rawtypes")
-  protected Set<MetamodelRepository> getModelRepositories() {
-    Set<MetamodelRepository> modelRepositories =
+  protected Set<MetamodelRepository<?>> getModelRepositories() {
+    Set<MetamodelRepository<?>> modelRepositories =
         new LinkedHashSet<>(
             Arrays.asList(
-                new ReactiveStateMetamodelRepository(new LinkedHashSet<>()),
+                new StoreMetamodelRepository(new LinkedHashSet<>()),
                 new UiFeatureMetamodelRepository(new LinkedHashSet<>()),
                 new UiLayoutContainerMetamodelRepository(new LinkedHashSet<>())));
 

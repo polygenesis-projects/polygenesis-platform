@@ -26,7 +26,7 @@ package io.polygenesis.abstraction.thing;
  * @param <S> the type parameter
  * @author Christos Tsakostas
  */
-public interface ActivityRegistry<S> {
+public interface ActivityRegistry<S extends FunctionProvider> {
 
   /**
    * Activity for source.

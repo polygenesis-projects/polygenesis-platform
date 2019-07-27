@@ -41,7 +41,7 @@ public class GetSupportedMessageTypesActivityTransformer
   // OVERRIDES
   // ===============================================================================================
 
-  @SuppressWarnings({"unchecked", "rawtypes"})
+  @SuppressWarnings({"unchecked"})
   @Override
   public TemplateData transform(Function source, Object... args) {
     Set<String> supportedMessageTypes =

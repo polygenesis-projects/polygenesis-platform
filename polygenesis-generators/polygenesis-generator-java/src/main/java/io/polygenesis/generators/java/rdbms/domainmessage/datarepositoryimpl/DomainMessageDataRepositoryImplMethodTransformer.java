@@ -22,7 +22,7 @@ package io.polygenesis.generators.java.rdbms.domainmessage.datarepositoryimpl;
 
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.core.DataTypeTransformer;
-import io.polygenesis.generators.java.shared.transformer.AbstractMethodTransformer;
+import io.polygenesis.transformers.java.AbstractMethodTransformer;
 
 /**
  * The type Domain message data repository impl method transformer.

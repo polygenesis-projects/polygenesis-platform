@@ -95,8 +95,7 @@ public class JavaApiDetailMetamodelGeneratorTest {
   // PRIVATE
   // ===============================================================================================
 
-  @SuppressWarnings("rawtypes")
-  private Set<MetamodelRepository> createModelRepositories() {
+  private Set<MetamodelRepository<?>> createModelRepositories() {
     return new LinkedHashSet<>(
         Arrays.asList(
             createServiceModelRepository(),

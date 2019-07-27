@@ -26,7 +26,6 @@ import com.oregor.trinity.scaffolder.java.core.TrinityScaffolderJava;
 import com.oregor.trinity.scaffolder.java.core.TrinityScaffolderJavaFactory;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.ContextGenerator;
-import io.polygenesis.core.Creator;
 import io.polygenesis.core.Deducer;
 import io.polygenesis.craftsman.GenesisDefault;
 import io.polygenesis.generators.java.TrinityJavaContextGeneratorEnablement;
@@ -62,16 +61,9 @@ public class CreatorTest {
     return projectDescription.getArtifactId();
   }
 
-  @SuppressWarnings("rawtypes")
-  private void generateJava(String projectFolder) {
-    Creator creator = new Creator();
+  private void generateJava(String projectFolder) {}
 
-    creator.generateByContext(
-        GenesisContext.get(JAVA_ROOT_PACKAGE, architectureGenerator(projectFolder)), deducers());
-  }
-
-  @SuppressWarnings("rawtypes")
-  private Set<Deducer> deducers() {
+  private Set<Deducer<?>> deducers() {
     return GenesisDefault.javaDeducers(JAVA_ROOT_PACKAGE);
   }
 

@@ -28,7 +28,7 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public abstract class AbstractContextGenerator extends AbstractMetamodelGenerator
+public abstract class AbstractContextGenerator extends AbstractPathGenerator
     implements ContextGenerator {
 
   // ===============================================================================================
@@ -57,18 +57,23 @@ public abstract class AbstractContextGenerator extends AbstractMetamodelGenerato
   // GETTERS
   // ===============================================================================================
 
-  @Override
+  /**
+   * Gets metamodel generators.
+   *
+   * @return the metamodel generators
+   */
   public Set<MetamodelGenerator> getMetamodelGenerators() {
     return metamodelGenerators;
   }
 
   // ===============================================================================================
-  // IMPLEMENTATIONS
+  // OVERRIDES
   // ===============================================================================================
 
-  @SuppressWarnings("rawtypes")
   @Override
-  public void generate(Set<MetamodelRepository> modelRepositories) {
-    getMetamodelGenerators().forEach(generator -> generator.generate(modelRepositories));
+  public void generate(Context<? extends Abstraction> context) {
+    getMetamodelGenerators()
+        .forEach(
+            metamodelGenerator -> metamodelGenerator.generate(context.getMetamodelRepositories()));
   }
 }

@@ -40,7 +40,7 @@ public class ExtractMessageTypeActivityTransformer
   // OVERRIDES
   // ===============================================================================================
 
-  @SuppressWarnings({"unchecked", "rawtypes"})
+  @SuppressWarnings({"unchecked"})
   @Override
   public TemplateData transform(Function source, Object... args) {
     ExtractMessageTypeActivityTemplateData data = new ExtractMessageTypeActivityTemplateData();

@@ -24,13 +24,13 @@ import static java.util.stream.Collectors.toCollection;
 
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.commons.valueobjects.PackageName;
-import io.polygenesis.generators.java.shared.transformer.AbstractLegacyClassTransformer;
-import io.polygenesis.generators.java.shared.transformer.FromDataTypeToJavaConverter;
+import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.models.rest.HttpMethod;
 import io.polygenesis.models.rest.Resource;
 import io.polygenesis.representations.code.ConstructorRepresentation;
 import io.polygenesis.representations.code.FieldRepresentation;
 import io.polygenesis.representations.code.MethodRepresentation;
+import io.polygenesis.transformers.java.legacy.AbstractLegacyClassTransformer;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -54,9 +54,9 @@ public class ResourceLegacyClassTransformer extends AbstractLegacyClassTransform
   // ===============================================================================================
 
   public ResourceLegacyClassTransformer(
-      FromDataTypeToJavaConverter fromDataTypeToJavaConverter,
+      DataTypeTransformer dataTypeTransformer,
       EndpointLegacyMethodTransformer endpointMethodRepresentable) {
-    super(fromDataTypeToJavaConverter);
+    super(dataTypeTransformer);
     this.endpointMethodRepresentable = endpointMethodRepresentable;
   }
 

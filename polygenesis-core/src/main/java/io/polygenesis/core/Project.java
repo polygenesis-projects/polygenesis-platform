@@ -20,9 +20,7 @@
 
 package io.polygenesis.core;
 
-import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.commons.valueobjects.Name;
-import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -30,94 +28,11 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class Project {
+public interface Project {
 
-  // ===============================================================================================
-  // STATE
-  // ===============================================================================================
+  Set<MetamodelRepository<?>> getAllContextsMetamodelRepositories();
 
-  private Name name;
-  private Set<Context<? extends Abstraction>> contexts;
+  Name getName();
 
-  // ===============================================================================================
-  // CONSTRUCTOR(S)
-  // ===============================================================================================
-
-  /**
-   * Instantiates a new Project.
-   *
-   * @param name the name
-   * @param contexts the contexts
-   */
-  public Project(Name name, Set<Context<? extends Abstraction>> contexts) {
-    setName(name);
-    setContexts(contexts);
-  }
-
-  // ===============================================================================================
-  // GETTERS
-  // ===============================================================================================
-
-  /**
-   * Gets name.
-   *
-   * @return the name
-   */
-  public Name getName() {
-    return name;
-  }
-
-  /**
-   * Gets contexts.
-   *
-   * @return the contexts
-   */
-  public Set<Context<? extends Abstraction>> getContexts() {
-    return contexts;
-  }
-
-  // ===============================================================================================
-  // GUARDS
-  // ===============================================================================================
-
-  /**
-   * Sets name.
-   *
-   * @param name the name
-   */
-  private void setName(Name name) {
-    Assertion.isNotNull(name, "name is required");
-    this.name = name;
-  }
-
-  /**
-   * Sets contexts.
-   *
-   * @param contexts the contexts
-   */
-  private void setContexts(Set<Context<? extends Abstraction>> contexts) {
-    Assertion.isNotNull(contexts, "contexts is required");
-    this.contexts = contexts;
-  }
-
-  // ===============================================================================================
-  // OVERRIDES
-  // ===============================================================================================
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    Project project = (Project) o;
-    return Objects.equals(name, project.name) && Objects.equals(contexts, project.contexts);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(name, contexts);
-  }
+  Set<Context<? extends Abstraction>> getContexts();
 }

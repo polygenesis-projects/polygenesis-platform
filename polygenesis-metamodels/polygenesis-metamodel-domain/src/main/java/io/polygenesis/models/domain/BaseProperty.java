@@ -118,7 +118,6 @@ public abstract class BaseProperty<D extends Data> implements DomainObjectProper
   // OVERRIDES
   // ===============================================================================================
 
-  @SuppressWarnings("rawtypes")
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -127,7 +126,7 @@ public abstract class BaseProperty<D extends Data> implements DomainObjectProper
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    BaseProperty that = (BaseProperty) o;
+    BaseProperty<?> that = (BaseProperty<?>) o;
     return propertyType == that.propertyType && Objects.equals(data, that.data);
   }
 

@@ -23,6 +23,7 @@ package io.polygenesis.generators.java.apidetail.service.activity;
 import io.polygenesis.abstraction.thing.AbstractActivityTemplateGenerator;
 import io.polygenesis.abstraction.thing.ActivityRegistry;
 import io.polygenesis.abstraction.thing.Purpose;
+import io.polygenesis.abstraction.thing.ScopePurposeTuple;
 import io.polygenesis.core.AbstractionScope;
 import io.polygenesis.core.FreemarkerTemplateEngine;
 import io.polygenesis.core.TemplateEngine;
@@ -44,7 +45,6 @@ import io.polygenesis.generators.java.apidetail.service.activity.root.FetchPaged
 import io.polygenesis.generators.java.apidetail.service.activity.root.FetchPagedCollectionAggregateRootTransformer;
 import io.polygenesis.generators.java.apidetail.service.activity.root.UpdateAggregateRootGenerator;
 import io.polygenesis.generators.java.apidetail.service.activity.root.UpdateAggregateRootTransformer;
-import io.polygenesis.generators.java.implementations.ScopePurposeTuple;
 import io.polygenesis.models.apiimpl.ServiceMethodImplementation;
 import java.util.HashMap;
 import java.util.Map;

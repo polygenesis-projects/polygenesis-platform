@@ -48,8 +48,7 @@ public abstract class AbstractAggregateEntityTemplateData {
   private String aggregateRootDataType;
   private String aggregateRootVariable;
 
-  @SuppressWarnings("rawtypes")
-  private Set<DomainObjectProperty> properties;
+  private Set<DomainObjectProperty<?>> properties;
 
   private String persistenceVariable;
   private Dto requestDto;
@@ -99,14 +98,13 @@ public abstract class AbstractAggregateEntityTemplateData {
    * @param multiTenant the multi tenant
    * @param returnValue the return value
    */
-  @SuppressWarnings("rawtypes")
   public AbstractAggregateEntityTemplateData(
       String aggregateRootIdDataType,
       Data parentThingIdentity,
       Set<ParameterRepresentation> parameterRepresentations,
       String aggregateRootDataType,
       String aggregateRootVariable,
-      Set<DomainObjectProperty> properties,
+      Set<DomainObjectProperty<?>> properties,
       String persistenceVariable,
       Dto requestDto,
       Dto responseDto,
@@ -181,8 +179,7 @@ public abstract class AbstractAggregateEntityTemplateData {
    *
    * @return the properties
    */
-  @SuppressWarnings("rawtypes")
-  public Set<DomainObjectProperty> getProperties() {
+  public Set<DomainObjectProperty<?>> getProperties() {
     return properties;
   }
 
@@ -294,8 +291,7 @@ public abstract class AbstractAggregateEntityTemplateData {
    *
    * @param properties the properties
    */
-  @SuppressWarnings("rawtypes")
-  public void setProperties(Set<DomainObjectProperty> properties) {
+  public void setProperties(Set<DomainObjectProperty<?>> properties) {
     this.properties = properties;
   }
 

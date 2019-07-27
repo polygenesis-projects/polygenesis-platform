@@ -67,12 +67,11 @@ public class AggregateRoot extends BaseDomainEntity
    * @param stateQueryMethods the state query methods
    * @param factoryMethods the factory methods
    */
-  @SuppressWarnings("rawtypes")
   public AggregateRoot(
       InstantiationType instantiationType,
       ObjectName objectName,
       PackageName packageName,
-      Set<DomainObjectProperty> properties,
+      Set<DomainObjectProperty<?>> properties,
       Set<Constructor> constructors,
       Boolean multiTenant,
       Set<StateMutationMethod> stateMutationMethods,
@@ -105,12 +104,11 @@ public class AggregateRoot extends BaseDomainEntity
    * @param factoryMethods the factory methods
    * @param superClass the super class
    */
-  @SuppressWarnings("rawtypes")
   public AggregateRoot(
       InstantiationType instantiationType,
       ObjectName objectName,
       PackageName packageName,
-      Set<DomainObjectProperty> properties,
+      Set<DomainObjectProperty<?>> properties,
       Set<Constructor> constructors,
       Boolean multiTenant,
       Set<StateMutationMethod> stateMutationMethods,

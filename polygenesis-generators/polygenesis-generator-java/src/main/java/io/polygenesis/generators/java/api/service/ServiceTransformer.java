@@ -27,10 +27,10 @@ import io.polygenesis.abstraction.thing.Argument;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.core.TemplateData;
-import io.polygenesis.generators.java.shared.transformer.AbstractInterfaceTransformer;
 import io.polygenesis.models.api.Service;
 import io.polygenesis.models.api.ServiceMethod;
 import io.polygenesis.representations.code.MethodRepresentation;
+import io.polygenesis.transformers.java.AbstractInterfaceTransformer;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -98,7 +98,7 @@ public class ServiceTransformer extends AbstractInterfaceTransformer<Service, Se
               if (method.getFunction().getReturnValue() != null
                   && method.getFunction().getReturnValue().getData().isDataGroup()) {
                 DataObject dataObject =
-                    method.getFunction().getReturnValue().getData().getAsDataGroup();
+                    method.getFunction().getReturnValue().getData().getAsDataObject();
 
                 if (!dataObject.getPackageName().equals(source.getPackageName())) {
                   imports.add(

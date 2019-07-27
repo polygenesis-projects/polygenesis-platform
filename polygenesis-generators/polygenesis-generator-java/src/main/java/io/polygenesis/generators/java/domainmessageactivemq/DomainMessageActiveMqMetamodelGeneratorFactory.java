@@ -26,7 +26,6 @@ import io.polygenesis.core.ActiveFileExporter;
 import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.core.Exporter;
 import io.polygenesis.core.FreemarkerTemplateEngine;
-import io.polygenesis.core.JavaDataTypeTransformer;
 import io.polygenesis.core.TemplateEngine;
 import io.polygenesis.generators.java.domainmessageactivemq.dispatcherroute.DomainMessageDispatcherRouteGenerator;
 import io.polygenesis.generators.java.domainmessageactivemq.dispatcherroute.DomainMessageDispatcherRouteTransformer;
@@ -38,6 +37,7 @@ import io.polygenesis.generators.java.domainmessageactivemq.publisher.DomainMess
 import io.polygenesis.generators.java.domainmessageactivemq.publisher.DomainMessagePublisherTransformer;
 import io.polygenesis.generators.java.domainmessageactivemq.publisher.activity.DomainMessagePublisherSendActivityGenerator;
 import io.polygenesis.generators.java.domainmessageactivemq.publisher.activity.DomainMessagePublisherSendActivityTransformer;
+import io.polygenesis.transformers.java.JavaDataTypeTransformer;
 import java.nio.file.Path;
 
 /**

@@ -53,11 +53,10 @@ public class ProjectionPropertyDeducer extends AbstractPropertyDeducer {
   // IMPLEMENTATIONS
   // ===============================================================================================
 
-  @SuppressWarnings("rawtypes")
   @Override
-  protected Set<DomainObjectProperty> makeIdentityDomainObjectProperties(
+  protected Set<DomainObjectProperty<?>> makeIdentityDomainObjectProperties(
       Thing thing, PackageName rootPackageName) {
-    Set<DomainObjectProperty> properties = new LinkedHashSet<>();
+    Set<DomainObjectProperty<?>> properties = new LinkedHashSet<>();
 
     properties.add(makeProjectionId(thing, rootPackageName));
 

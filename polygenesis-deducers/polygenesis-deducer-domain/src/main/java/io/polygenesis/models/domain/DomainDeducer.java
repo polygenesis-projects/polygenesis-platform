@@ -61,11 +61,10 @@ public class DomainDeducer implements Deducer<DomainMetamodelRepository> {
   // OVERRIDES
   // ===============================================================================================
 
-  @SuppressWarnings("rawtypes")
   @Override
   public DomainMetamodelRepository deduce(
-      Set<AbstractionRepository> abstractionRepositories,
-      Set<MetamodelRepository> modelRepositories) {
+      Set<AbstractionRepository<?>> abstractionRepositories,
+      Set<MetamodelRepository<?>> metamodelRepositories) {
     return new DomainMetamodelRepository(
         aggregateRootDeducer.deduceFrom(
             CoreRegistry.getAbstractionRepositoryResolver()

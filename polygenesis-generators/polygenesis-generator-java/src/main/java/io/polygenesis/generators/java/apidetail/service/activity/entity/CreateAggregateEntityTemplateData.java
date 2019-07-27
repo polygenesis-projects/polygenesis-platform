@@ -53,14 +53,13 @@ public class CreateAggregateEntityTemplateData extends AbstractAggregateEntityTe
    * @param multiTenant the multi tenant
    * @param returnValue the return value
    */
-  @SuppressWarnings("rawtypes")
   public CreateAggregateEntityTemplateData(
       String aggregateRootIdDataType,
       Data parentThingIdentity,
       Set<ParameterRepresentation> parameterRepresentations,
       String aggregateRootDataType,
       String aggregateRootVariable,
-      Set<DomainObjectProperty> properties,
+      Set<DomainObjectProperty<?>> properties,
       String persistenceVariable,
       Dto requestDto,
       Dto responseDto,

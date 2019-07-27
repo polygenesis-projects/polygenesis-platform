@@ -127,9 +127,8 @@ public abstract class AbstractServiceMethodImplementationTransformer {
    * @param metamodelRepositories the metamodel repositories
    * @return the converter variable
    */
-  @SuppressWarnings("rawtypes")
   protected String getConverterVariable(
-      ServiceMethodImplementation source, Set<MetamodelRepository> metamodelRepositories) {
+      ServiceMethodImplementation source, Set<MetamodelRepository<?>> metamodelRepositories) {
     return getServiceImplementation(source, metamodelRepositories)
         .domainObjectConverter()
         .getVariableName()
@@ -143,9 +142,8 @@ public abstract class AbstractServiceMethodImplementationTransformer {
    * @param metamodelRepositories the metamodel repositories
    * @return the properties from constructor
    */
-  @SuppressWarnings("rawtypes")
-  protected Set<DomainObjectProperty> getPropertiesFromConstructor(
-      ServiceMethodImplementation source, Set<MetamodelRepository> metamodelRepositories) {
+  protected Set<DomainObjectProperty<?>> getPropertiesFromConstructor(
+      ServiceMethodImplementation source, Set<MetamodelRepository<?>> metamodelRepositories) {
 
     DomainMetamodelRepository domainMetamodelRepository =
         CoreRegistry.getMetamodelRepositoryResolver()
@@ -191,7 +189,7 @@ public abstract class AbstractServiceMethodImplementationTransformer {
    */
   @SuppressWarnings({"unchecked", "rawtypes"})
   protected ServiceImplementation getServiceImplementation(
-      ServiceMethodImplementation source, Set<MetamodelRepository> metamodelRepositories) {
+      ServiceMethodImplementation source, Set<MetamodelRepository<?>> metamodelRepositories) {
 
     ServiceImplementationMetamodelRepository serviceImplementationMetamodelRepository =
         CoreRegistry.getMetamodelRepositoryResolver()

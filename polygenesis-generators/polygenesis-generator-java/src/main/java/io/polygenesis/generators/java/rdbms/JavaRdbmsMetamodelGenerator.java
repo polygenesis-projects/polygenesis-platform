@@ -173,9 +173,8 @@ public class JavaRdbmsMetamodelGenerator extends AbstractMetamodelGenerator {
   // OVERRIDES
   // ===============================================================================================
 
-  @SuppressWarnings("rawtypes")
   @Override
-  public void generate(Set<MetamodelRepository> modelRepositories) {
+  public void generate(Set<MetamodelRepository<?>> modelRepositories) {
     domainMessageDataConverterExporter.export(
         getGenerationPath(), getRootPackageName(), getContextName());
 
@@ -225,8 +224,7 @@ public class JavaRdbmsMetamodelGenerator extends AbstractMetamodelGenerator {
         contextName);
   }
 
-  @SuppressWarnings("rawtypes")
-  private void aggregateRoots(Set<MetamodelRepository> modelRepositories) {
+  private void aggregateRoots(Set<MetamodelRepository<?>> modelRepositories) {
     CoreRegistry.getMetamodelRepositoryResolver()
         .resolve(modelRepositories, DomainMetamodelRepository.class)
         .getItems()
@@ -252,8 +250,7 @@ public class JavaRdbmsMetamodelGenerator extends AbstractMetamodelGenerator {
             });
   }
 
-  @SuppressWarnings("rawtypes")
-  private void projections(Set<MetamodelRepository> modelRepositories) {
+  private void projections(Set<MetamodelRepository<?>> modelRepositories) {
     CoreRegistry.getMetamodelRepositoryResolver()
         .resolve(modelRepositories, ProjectionMetamodelRepository.class)
         .getItems()

@@ -24,13 +24,13 @@ import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.abstraction.thing.Argument;
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.generators.java.shared.transformer.AbstractLegacyClassTransformer;
-import io.polygenesis.generators.java.shared.transformer.FromDataTypeToJavaConverter;
+import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.models.apiimpl.DomainEntityConverter;
 import io.polygenesis.models.apiimpl.DomainEntityConverterMethod;
 import io.polygenesis.representations.code.ConstructorRepresentation;
 import io.polygenesis.representations.code.FieldRepresentation;
 import io.polygenesis.representations.code.MethodRepresentation;
+import io.polygenesis.transformers.java.legacy.AbstractLegacyClassTransformer;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.TreeSet;
@@ -57,13 +57,13 @@ public class DomainObjectConverterLegacyClassTransformer
   /**
    * Instantiates a new Aggregate root converter class representable.
    *
-   * @param fromDataTypeToJavaConverter the from data type to java converter
+   * @param dataTypeTransformer the from data type to java converter
    * @param domainObjectConverterMethodTransformer the aggregate root converter method representable
    */
   public DomainObjectConverterLegacyClassTransformer(
-      FromDataTypeToJavaConverter fromDataTypeToJavaConverter,
+      DataTypeTransformer dataTypeTransformer,
       DomainObjectConverterLegacyMethodTransformer domainObjectConverterMethodTransformer) {
-    super(fromDataTypeToJavaConverter);
+    super(dataTypeTransformer);
     this.domainObjectConverterMethodTransformer = domainObjectConverterMethodTransformer;
   }
 

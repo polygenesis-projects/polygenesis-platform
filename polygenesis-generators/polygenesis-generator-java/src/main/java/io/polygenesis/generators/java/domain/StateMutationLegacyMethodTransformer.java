@@ -22,13 +22,13 @@ package io.polygenesis.generators.java.domain;
 
 import io.polygenesis.abstraction.data.PrimitiveType;
 import io.polygenesis.commons.text.TextConverter;
+import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.generators.java.implementations.domain.StateMutationMethodImplementorRegistry;
-import io.polygenesis.generators.java.shared.transformer.AbstractLegacyMethodTransformer;
-import io.polygenesis.generators.java.shared.transformer.FromDataTypeToJavaConverter;
 import io.polygenesis.models.domain.StateMutationMethod;
 import io.polygenesis.representations.code.MethodRepresentation;
 import io.polygenesis.representations.code.MethodRepresentationType;
 import io.polygenesis.representations.code.ParameterRepresentation;
+import io.polygenesis.transformers.java.legacy.AbstractLegacyMethodTransformer;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -52,13 +52,13 @@ public class StateMutationLegacyMethodTransformer
   /**
    * Instantiates a new State mutation method representable.
    *
-   * @param fromDataTypeToJavaConverter the from data type to java converter
+   * @param dataTypeTransformer the from data type to java converter
    * @param stateMutationMethodImplementorRegistry the state mutation method implementor registry
    */
   public StateMutationLegacyMethodTransformer(
-      FromDataTypeToJavaConverter fromDataTypeToJavaConverter,
+      DataTypeTransformer dataTypeTransformer,
       StateMutationMethodImplementorRegistry stateMutationMethodImplementorRegistry) {
-    super(fromDataTypeToJavaConverter);
+    super(dataTypeTransformer);
     this.stateMutationMethodImplementorRegistry = stateMutationMethodImplementorRegistry;
   }
 
@@ -126,7 +126,7 @@ public class StateMutationLegacyMethodTransformer
             argument ->
                 parameterRepresentations.add(
                     new ParameterRepresentation(
-                        fromDataTypeToJavaConverter.convert(argument.getData().getDataType()),
+                        dataTypeTransformer.convert(argument.getData().getDataType()),
                         argument.getData().getVariableName().getText())));
 
     return parameterRepresentations;
@@ -137,7 +137,7 @@ public class StateMutationLegacyMethodTransformer
     if (source.getFunction().getReturnValue() != null) {
       return makeVariableDataType(source.getFunction().getReturnValue().getData());
     } else {
-      return fromDataTypeToJavaConverter.convert(PrimitiveType.VOID.name());
+      return dataTypeTransformer.convert(PrimitiveType.VOID.name());
     }
   }
 

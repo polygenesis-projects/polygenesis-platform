@@ -29,6 +29,7 @@ import io.polygenesis.abstraction.data.PrimitiveType;
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.Thing;
+import io.polygenesis.abstraction.thing.ThingProperty;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
@@ -36,6 +37,7 @@ import io.polygenesis.commons.valueobjects.VariableName;
 import io.polygenesis.core.AbstractionScope;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * The type Purpose function builder.
@@ -153,7 +155,9 @@ public class PurposeFunctionBuilder {
 
     // ---------------------------------------------------------------------------------------------
     // Add Thing Identity
-    argumentDataObject.addData(makeThingIdentity(thing));
+    if (!thingHasIdentity(thing)) {
+      argumentDataObject.addData(makeThingIdentity(thing));
+    }
 
     // ---------------------------------------------------------------------------------------------
     models.forEach(argumentDataObject::addData);
@@ -225,7 +229,9 @@ public class PurposeFunctionBuilder {
 
     // ---------------------------------------------------------------------------------------------
     // Add Thing Identity
-    argumentDataObject.addData(makeThingIdentity(thing));
+    if (!thingHasIdentity(thing)) {
+      argumentDataObject.addData(makeThingIdentity(thing));
+    }
 
     // ---------------------------------------------------------------------------------------------
     // RETURN VALUE
@@ -307,7 +313,9 @@ public class PurposeFunctionBuilder {
 
     // ---------------------------------------------------------------------------------------------
     // Add Thing Identity
-    argumentDataObject.addData(makeThingIdentity(thing));
+    if (!thingHasIdentity(thing)) {
+      argumentDataObject.addData(makeThingIdentity(thing));
+    }
 
     // ---------------------------------------------------------------------------------------------
     models.forEach(argumentDataObject::addData);
@@ -400,7 +408,9 @@ public class PurposeFunctionBuilder {
 
     // ---------------------------------------------------------------------------------------------
     // Add Thing Identity
-    argumentDataObject.addData(makeThingIdentity(thing));
+    if (!thingHasIdentity(thing)) {
+      argumentDataObject.addData(makeThingIdentity(thing));
+    }
 
     // ---------------------------------------------------------------------------------------------
     // RETURN VALUE
@@ -528,6 +538,22 @@ public class PurposeFunctionBuilder {
   // ===============================================================================================
   // PRIVATE
   // ===============================================================================================
+
+  protected boolean thingHasIdentity(Thing thing) {
+    Set<Data> data =
+        thing
+            .getThingProperties()
+            .stream()
+            .map(ThingProperty::getData)
+            .filter(this::isDataThingIdentity)
+            .collect(Collectors.toSet());
+
+    return data.size() == 1 ? true : false;
+  }
+
+  private boolean isDataThingIdentity(Data data) {
+    return data.getDataPurpose().equals(DataPurpose.thingIdentity());
+  }
 
   /**
    * Make thing identity data primitive.

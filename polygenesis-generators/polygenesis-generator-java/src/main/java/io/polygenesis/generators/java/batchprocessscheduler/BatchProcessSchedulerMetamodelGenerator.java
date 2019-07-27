@@ -99,9 +99,8 @@ public class BatchProcessSchedulerMetamodelGenerator extends AbstractMetamodelGe
   // OVERRIDES
   // ===============================================================================================
 
-  @SuppressWarnings("rawtypes")
   @Override
-  public void generate(Set<MetamodelRepository> modelRepositories) {
+  public void generate(Set<MetamodelRepository<?>> modelRepositories) {
     CoreRegistry.getMetamodelRepositoryResolver()
         .resolve(modelRepositories, BatchProcessMetamodelRepository.class)
         .getItems()

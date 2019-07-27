@@ -21,10 +21,10 @@
 package io.polygenesis.generators.java.implementations.domain;
 
 import io.polygenesis.abstraction.thing.Purpose;
+import io.polygenesis.abstraction.thing.ScopePurposeTuple;
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.core.AbstractionScope;
 import io.polygenesis.generators.java.implementations.AbstractMethodImplementorRegistry;
-import io.polygenesis.generators.java.implementations.ScopePurposeTuple;
 import io.polygenesis.models.domain.StateMutationMethod;
 
 /**

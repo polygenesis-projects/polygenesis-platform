@@ -26,7 +26,6 @@ import io.polygenesis.abstraction.data.PrimitiveType;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.core.TemplateData;
-import io.polygenesis.generators.java.shared.transformer.AbstractClassTransformer;
 import io.polygenesis.models.api.Dto;
 import io.polygenesis.models.api.DtoType;
 import io.polygenesis.representations.code.ConstructorRepresentation;
@@ -34,6 +33,7 @@ import io.polygenesis.representations.code.FieldRepresentation;
 import io.polygenesis.representations.code.MethodRepresentation;
 import io.polygenesis.representations.code.MethodRepresentationType;
 import io.polygenesis.representations.code.ParameterRepresentation;
+import io.polygenesis.transformers.java.AbstractClassTransformer;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumMap;
@@ -115,12 +115,16 @@ public class DtoTransformer extends AbstractClassTransformer<Dto, DtoMethod> {
         .getDataObject()
         .getModels()
         .forEach(
-            model ->
+            model -> {
+              String variableName = makeVariableName(model);
+              if (!variableName.equalsIgnoreCase("someArrays")) {
                 fieldRepresentations.add(
                     new FieldRepresentation(
                         makeVariableDataType(
-                            model.isDataGroup() ? model.getAsDataGroup().asDto() : model),
-                        makeVariableName(model))));
+                            model.isDataGroup() ? model.getAsDataObject().asDto() : model),
+                        variableName));
+              }
+            });
 
     return fieldRepresentations;
   }

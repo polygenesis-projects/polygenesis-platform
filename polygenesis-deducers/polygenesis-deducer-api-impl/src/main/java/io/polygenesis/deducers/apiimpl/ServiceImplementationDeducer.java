@@ -74,22 +74,21 @@ public class ServiceImplementationDeducer extends BaseApiImplementationDeducer
   // IMPLEMENTATIONS
   // ===============================================================================================
 
-  @SuppressWarnings("rawtypes")
   @Override
   public ServiceImplementationMetamodelRepository deduce(
-      Set<AbstractionRepository> abstractionRepositories,
-      Set<MetamodelRepository> modelRepositories) {
+      Set<AbstractionRepository<?>> abstractionRepositories,
+      Set<MetamodelRepository<?>> metamodelRepositories) {
     ServiceMetamodelRepository serviceModelRepository =
         CoreRegistry.getMetamodelRepositoryResolver()
-            .resolve(modelRepositories, ServiceMetamodelRepository.class);
+            .resolve(metamodelRepositories, ServiceMetamodelRepository.class);
 
     DomainMetamodelRepository domainModelRepository =
         CoreRegistry.getMetamodelRepositoryResolver()
-            .resolve(modelRepositories, DomainMetamodelRepository.class);
+            .resolve(metamodelRepositories, DomainMetamodelRepository.class);
 
     DomainEntityConverterMetamodelRepository domainEntityConverterModelRepository =
         CoreRegistry.getMetamodelRepositoryResolver()
-            .resolve(modelRepositories, DomainEntityConverterMetamodelRepository.class);
+            .resolve(metamodelRepositories, DomainEntityConverterMetamodelRepository.class);
 
     Set<ServiceImplementation> serviceImplementations = new LinkedHashSet<>();
 

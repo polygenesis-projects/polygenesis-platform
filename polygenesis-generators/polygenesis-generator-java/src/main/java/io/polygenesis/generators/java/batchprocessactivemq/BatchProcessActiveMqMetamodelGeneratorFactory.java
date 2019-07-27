@@ -26,7 +26,6 @@ import io.polygenesis.core.ActiveFileExporter;
 import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.core.Exporter;
 import io.polygenesis.core.FreemarkerTemplateEngine;
-import io.polygenesis.core.JavaDataTypeTransformer;
 import io.polygenesis.core.TemplateEngine;
 import io.polygenesis.generators.java.batchprocessactivemq.dispatcherroute.BatchProcessDispatcherRouteGenerator;
 import io.polygenesis.generators.java.batchprocessactivemq.dispatcherroute.BatchProcessDispatcherRouteTransformer;
@@ -38,6 +37,7 @@ import io.polygenesis.generators.java.batchprocessactivemq.publisher.BatchProces
 import io.polygenesis.generators.java.batchprocessactivemq.publisher.BatchProcessPublisherTransformer;
 import io.polygenesis.generators.java.batchprocessactivemq.publisher.activity.BatchProcessPublisherSendActivityGenerator;
 import io.polygenesis.generators.java.batchprocessactivemq.publisher.activity.BatchProcessPublisherSendActivityTransformer;
+import io.polygenesis.transformers.java.JavaDataTypeTransformer;
 import java.nio.file.Path;
 
 /**

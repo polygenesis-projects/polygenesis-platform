@@ -59,12 +59,11 @@ public class AggregateEntity extends BaseDomainEntity implements DomainObjectPro
    * @param constructors the constructors
    * @param multiTenant the multi tenant
    */
-  @SuppressWarnings("rawtypes")
   public AggregateEntity(
       InstantiationType instantiationType,
       ObjectName objectName,
       PackageName packageName,
-      Set<DomainObjectProperty> properties,
+      Set<DomainObjectProperty<?>> properties,
       Set<Constructor> constructors,
       Boolean multiTenant) {
     super(
@@ -88,12 +87,11 @@ public class AggregateEntity extends BaseDomainEntity implements DomainObjectPro
    * @param multiTenant the multi tenant
    * @param superClass the super class
    */
-  @SuppressWarnings("rawtypes")
   public AggregateEntity(
       InstantiationType instantiationType,
       ObjectName objectName,
       PackageName packageName,
-      Set<DomainObjectProperty> properties,
+      Set<DomainObjectProperty<?>> properties,
       Set<Constructor> constructors,
       Boolean multiTenant,
       AggregateEntity superClass) {

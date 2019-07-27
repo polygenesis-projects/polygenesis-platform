@@ -16,15 +16,19 @@
   <modules>
     <module>polygenesis-metamodel-api</module>
     <module>polygenesis-metamodel-api-impl</module>
+    <module>polygenesis-metamodel-app-angular</module>
+    <module>polygenesis-metamodel-app-flutter</module>
+    <module>polygenesis-metamodel-app-trinity</module>
     <module>polygenesis-metamodel-batch-process</module>
     <module>polygenesis-metamodel-domain</module>
     <module>polygenesis-metamodel-messaging</module>
-    <module>polygenesis-metamodel-reactive-state</module>
+    <module>polygenesis-metamodel-page-object</module>
     <module>polygenesis-metamodel-rest</module>
     <module>polygenesis-metamodel-scheduler</module>
     <module>polygenesis-metamodel-spreadsheet</module>
     <module>polygenesis-metamodel-sql</module>
+    <module>polygenesis-metamodel-state-provider</module>
+    <module>polygenesis-metamodel-state-redux</module>
     <module>polygenesis-metamodel-ui</module>
-    <module>polygenesis-metamodel-page-object</module>
   </modules>
 </project>

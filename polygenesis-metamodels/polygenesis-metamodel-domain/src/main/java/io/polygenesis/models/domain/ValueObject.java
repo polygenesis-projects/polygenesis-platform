@@ -22,13 +22,17 @@ package io.polygenesis.models.domain;
 
 import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.DataObject;
+import io.polygenesis.commons.valueobjects.ObjectName;
+import io.polygenesis.commons.valueobjects.PackageName;
+import io.polygenesis.core.Nameable;
+import io.polygenesis.core.Packageable;
 
 /**
  * The type Value object.
  *
  * @author Christos Tsakostas
  */
-public class ValueObject extends BaseProperty<DataObject> {
+public class ValueObject extends BaseProperty<DataObject> implements Nameable, Packageable {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -63,5 +67,15 @@ public class ValueObject extends BaseProperty<DataObject> {
   @Override
   public Data getTypeParameterData() {
     throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public ObjectName getObjectName() {
+    return getData().getObjectName();
+  }
+
+  @Override
+  public PackageName getPackageName() {
+    return getData().getPackageName();
   }
 }

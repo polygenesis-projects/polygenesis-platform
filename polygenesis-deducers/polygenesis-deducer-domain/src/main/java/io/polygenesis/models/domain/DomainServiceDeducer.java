@@ -73,11 +73,10 @@ public class DomainServiceDeducer implements Deducer<DomainServiceRepository> {
   // OVERRIDES
   // ===============================================================================================
 
-  @SuppressWarnings("rawtypes")
   @Override
   public DomainServiceRepository deduce(
-      Set<AbstractionRepository> abstractionRepositories,
-      Set<MetamodelRepository> modelRepositories) {
+      Set<AbstractionRepository<?>> abstractionRepositories,
+      Set<MetamodelRepository<?>> metamodelRepositories) {
     Set<DomainService> domainServices = new LinkedHashSet<>();
 
     CoreRegistry.getAbstractionRepositoryResolver()

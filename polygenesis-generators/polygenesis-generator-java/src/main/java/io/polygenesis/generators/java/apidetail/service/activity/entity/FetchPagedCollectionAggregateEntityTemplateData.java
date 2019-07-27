@@ -54,14 +54,13 @@ public class FetchPagedCollectionAggregateEntityTemplateData
    * @param multiTenant the multi tenant
    * @param returnValue the return value
    */
-  @SuppressWarnings("rawtypes")
   public FetchPagedCollectionAggregateEntityTemplateData(
       String aggregateRootIdDataType,
       Data parentThingIdentity,
       Set<ParameterRepresentation> parameterRepresentations,
       String aggregateRootDataType,
       String aggregateRootVariable,
-      Set<DomainObjectProperty> properties,
+      Set<DomainObjectProperty<?>> properties,
       String persistenceVariable,
       Dto requestDto,
       Dto responseDto,

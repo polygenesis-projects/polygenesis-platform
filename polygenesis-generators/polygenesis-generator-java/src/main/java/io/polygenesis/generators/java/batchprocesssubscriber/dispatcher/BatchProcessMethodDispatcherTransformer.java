@@ -23,7 +23,7 @@ package io.polygenesis.generators.java.batchprocesssubscriber.dispatcher;
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.generators.java.batchprocesssubscriber.dispatcher.activity.BatchProcessExtractMessageTypeActivityGenerator;
-import io.polygenesis.generators.java.shared.transformer.AbstractMethodTransformer;
+import io.polygenesis.transformers.java.AbstractMethodTransformer;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;

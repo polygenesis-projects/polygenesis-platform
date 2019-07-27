@@ -29,7 +29,7 @@ import io.polygenesis.core.TemplateEngine;
  * @param <S> the type parameter
  * @author Christos Tsakostas
  */
-public class AbstractActivityTemplateGenerator<S extends FunctionProvider>
+public abstract class AbstractActivityTemplateGenerator<S extends FunctionProvider>
     implements ActivityGenerator<S> {
 
   // ===============================================================================================

@@ -26,7 +26,6 @@ import io.polygenesis.core.ActiveFileExporter;
 import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.core.Exporter;
 import io.polygenesis.core.FreemarkerTemplateEngine;
-import io.polygenesis.core.JavaDataTypeTransformer;
 import io.polygenesis.core.PassiveFileExporter;
 import io.polygenesis.core.TemplateEngine;
 import io.polygenesis.generators.java.domainmessagesubscriber.abstractsubscriber.DomainMessageAbstractSubscriberGenerator;
@@ -48,6 +47,7 @@ import io.polygenesis.generators.java.domainmessagesubscriber.subscriber.DomainM
 import io.polygenesis.generators.java.domainmessagesubscriber.subscriber.DomainMessageSubscriberGenerator;
 import io.polygenesis.generators.java.domainmessagesubscriber.subscriber.DomainMessageSubscriberTransformer;
 import io.polygenesis.generators.java.domainmessagesubscriber.subscriber.activity.DomainMessageSubscriberActivityRegistry;
+import io.polygenesis.transformers.java.JavaDataTypeTransformer;
 import java.nio.file.Path;
 
 /**

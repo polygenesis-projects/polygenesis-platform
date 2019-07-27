@@ -115,9 +115,8 @@ public class DomainMessagePublisherMetamodelGenerator extends AbstractMetamodelG
   // OVERRIDES
   // ===============================================================================================
 
-  @SuppressWarnings("rawtypes")
   @Override
-  public void generate(Set<MetamodelRepository> modelRepositories) {
+  public void generate(Set<MetamodelRepository<?>> modelRepositories) {
     DomainMessagePublisher domainMessagePublisher = makeDomainMessagePublisher();
     domainMessagePublisherGenerator.generate(
         domainMessagePublisher,

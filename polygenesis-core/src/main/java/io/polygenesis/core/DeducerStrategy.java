@@ -37,8 +37,7 @@ public interface DeducerStrategy<R extends MetamodelRepository<? extends Metamod
    * @param metamodelRepositories the metamodel repositories
    * @return the r
    */
-  @SuppressWarnings("rawtypes")
   R deduce(
-      Set<AbstractionRepository> abstractionRepositories,
-      Set<MetamodelRepository> metamodelRepositories);
+      Set<AbstractionRepository<?>> abstractionRepositories,
+      Set<MetamodelRepository<?>> metamodelRepositories);
 }

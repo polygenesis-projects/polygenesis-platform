@@ -76,6 +76,7 @@ public class Purpose implements Serializable {
   // ===============================================================================================
   // GENERIC
   // ===============================================================================================
+  private static final String BUILD = "BUILD";
   private static final String DECIDE = "DECIDE";
 
   // ===============================================================================================
@@ -279,6 +280,15 @@ public class Purpose implements Serializable {
   // ===============================================================================================
   // GENERIC
   // ===============================================================================================
+
+  /**
+   * Build purpose.
+   *
+   * @return the purpose
+   */
+  public static Purpose build() {
+    return new Purpose(BUILD, CqsType.COMMAND);
+  }
 
   /**
    * Decide purpose.

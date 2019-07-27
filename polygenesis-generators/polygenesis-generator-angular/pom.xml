@@ -12,20 +12,61 @@
   <artifactId>polygenesis-generator-angular</artifactId>
 
   <dependencies>
-    <!--MODELS-->
+    <!--METAMODELS-->
     <dependency>
       <groupId>io.polygenesis.metamodels</groupId>
-      <artifactId>polygenesis-metamodel-reactive-state</artifactId>
+      <artifactId>polygenesis-metamodel-app-angular</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>io.polygenesis.metamodels</groupId>
+      <artifactId>polygenesis-metamodel-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.polygenesis.metamodels</groupId>
+      <artifactId>polygenesis-metamodel-api-impl</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.polygenesis.metamodels</groupId>
+      <artifactId>polygenesis-metamodel-domain</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.polygenesis.metamodels</groupId>
+      <artifactId>polygenesis-metamodel-messaging</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.polygenesis.metamodels</groupId>
+      <artifactId>polygenesis-metamodel-state-redux</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.polygenesis.metamodels</groupId>
+      <artifactId>polygenesis-metamodel-rest</artifactId>
     </dependency>
     <dependency>
       <groupId>io.polygenesis.metamodels</groupId>
       <artifactId>polygenesis-metamodel-ui</artifactId>
     </dependency>
 
-    <!--REPRESENTATIONS-->
+    <!--TEMPLATE ENGINES-->
     <dependency>
-      <groupId>io.polygenesis.representations</groupId>
-      <artifactId>polygenesis-representation-code</artifactId>
+      <groupId>io.polygenesis.template-engines</groupId>
+      <artifactId>polygenesis-template-engine-freemarker</artifactId>
+    </dependency>
+
+    <!--TRANSFORMERS-->
+    <dependency>
+      <groupId>io.polygenesis.transformers</groupId>
+      <artifactId>polygenesis-transformer-typescript</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.polygenesis.transformers</groupId>
+      <artifactId>polygenesis-transformer-web</artifactId>
+    </dependency>
+
+    <!--EXPORTERS-->
+    <dependency>
+      <groupId>io.polygenesis.exporters</groupId>
+      <artifactId>polygenesis-exporter-file</artifactId>
     </dependency>
 
     <!--TEST-->

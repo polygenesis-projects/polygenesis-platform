@@ -45,11 +45,9 @@ public class ApiDeducerTest {
   private Thing thing;
   private ThingRepository thingRepository;
 
-  @SuppressWarnings("rawtypes")
-  private Set<AbstractionRepository> abstractionRepositories;
+  private Set<AbstractionRepository<?>> abstractionRepositories;
 
-  @SuppressWarnings("rawtypes")
-  private Set<MetamodelRepository> modelRepositories;
+  private Set<MetamodelRepository<?>> modelRepositories;
 
   private ApiDeducer apiDeducer;
 

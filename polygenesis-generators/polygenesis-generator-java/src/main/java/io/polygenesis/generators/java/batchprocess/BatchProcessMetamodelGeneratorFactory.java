@@ -24,7 +24,6 @@ import io.polygenesis.core.ActiveFileExporter;
 import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.core.Exporter;
 import io.polygenesis.core.FreemarkerTemplateEngine;
-import io.polygenesis.core.JavaDataTypeTransformer;
 import io.polygenesis.core.TemplateEngine;
 import io.polygenesis.generators.java.batchprocess.command.BatchProcessCommandGenerator;
 import io.polygenesis.generators.java.batchprocess.command.BatchProcessCommandMethodTransformer;
@@ -39,6 +38,7 @@ import io.polygenesis.generators.java.batchprocess.query.BatchProcessQueryMethod
 import io.polygenesis.generators.java.batchprocess.query.BatchProcessQueryTransformer;
 import io.polygenesis.generators.java.batchprocess.query.activity.ProcessQueryActivityGenerator;
 import io.polygenesis.generators.java.batchprocess.query.activity.ProcessQueryActivityTransformer;
+import io.polygenesis.transformers.java.JavaDataTypeTransformer;
 import java.nio.file.Path;
 
 /**

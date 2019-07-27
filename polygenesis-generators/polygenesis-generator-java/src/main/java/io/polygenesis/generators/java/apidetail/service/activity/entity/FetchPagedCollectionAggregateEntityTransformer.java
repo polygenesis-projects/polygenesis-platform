@@ -46,7 +46,7 @@ public class FetchPagedCollectionAggregateEntityTransformer
   @SuppressWarnings({"unchecked", "rawtypes"})
   @Override
   public TemplateData transform(ServiceMethodImplementation source, Object... args) {
-    Set<MetamodelRepository> metamodelRepositories = (Set<MetamodelRepository>) args[0];
+    Set<MetamodelRepository<?>> metamodelRepositories = (Set<MetamodelRepository<?>>) args[0];
 
     @SuppressWarnings("CPD-START")
     FetchPagedCollectionAggregateEntityTemplateData data =

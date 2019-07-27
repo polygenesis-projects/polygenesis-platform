@@ -281,8 +281,7 @@ public abstract class AbstractServiceMethodImplementor {
    * @param domainObject the domain object
    * @return the set
    */
-  @SuppressWarnings("rawtypes")
-  private Set<DomainObjectProperty> propertiesOfConstructorFor(BaseDomainObject domainObject) {
+  private Set<DomainObjectProperty<?>> propertiesOfConstructorFor(BaseDomainObject domainObject) {
     return domainObject
         .getConstructors()
         .stream()

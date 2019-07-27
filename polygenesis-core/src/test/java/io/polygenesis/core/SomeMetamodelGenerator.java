@@ -30,7 +30,6 @@ public class SomeMetamodelGenerator extends AbstractMetamodelGenerator {
     super(generationPath);
   }
 
-  @SuppressWarnings("rawtypes")
   @Override
-  public void generate(Set<MetamodelRepository> modelRepositories) {}
+  public void generate(Set<MetamodelRepository<?>> modelRepositories) {}
 }

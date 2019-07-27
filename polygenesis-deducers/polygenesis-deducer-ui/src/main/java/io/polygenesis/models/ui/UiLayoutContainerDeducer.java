@@ -52,12 +52,10 @@ public class UiLayoutContainerDeducer implements Deducer<UiLayoutContainerMetamo
   // OVERRIDES
   // ===============================================================================================
 
-  @SuppressWarnings("rawtypes")
   @Override
   public UiLayoutContainerMetamodelRepository deduce(
-      Set<AbstractionRepository> abstractionRepositories,
-      Set<MetamodelRepository> modelRepositories) {
-
+      Set<AbstractionRepository<?>> abstractionRepositories,
+      Set<MetamodelRepository<?>> metamodelRepositories) {
     Set<LayoutContainer> layoutContainers = layoutDeducer.deduceLayoutsFromFeatures();
 
     return new UiLayoutContainerMetamodelRepository(layoutContainers);

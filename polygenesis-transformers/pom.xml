@@ -14,9 +14,10 @@
   <packaging>pom</packaging>
 
   <modules>
-    <module>polygenesis-transformer-datatype-dart</module>
-    <module>polygenesis-transformer-datatype-dotnet</module>
-    <module>polygenesis-transformer-datatype-java</module>
-    <module>polygenesis-transformer-datatype-typescript</module>
+    <module>polygenesis-transformer-dart</module>
+    <module>polygenesis-transformer-dotnet</module>
+    <module>polygenesis-transformer-java</module>
+    <module>polygenesis-transformer-typescript</module>
+    <module>polygenesis-transformer-web</module>
   </modules>
 </project>

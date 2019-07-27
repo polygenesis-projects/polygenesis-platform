@@ -55,11 +55,10 @@ public class UiFeatureDeducer implements Deducer<UiFeatureMetamodelRepository> {
   // OVERRIDES
   // ===============================================================================================
 
-  @SuppressWarnings("rawtypes")
   @Override
   public UiFeatureMetamodelRepository deduce(
-      Set<AbstractionRepository> abstractionRepositories,
-      Set<MetamodelRepository> modelRepositories) {
+      Set<AbstractionRepository<?>> abstractionRepositories,
+      Set<MetamodelRepository<?>> metamodelRepositories) {
     Set<Feature> features = new LinkedHashSet<>();
 
     CoreRegistry.getAbstractionRepositoryResolver()

@@ -64,9 +64,8 @@ public class SpreadsheetMetamodelGenerator extends AbstractMetamodelGenerator {
   // OVERRIDES
   // ===============================================================================================
 
-  @SuppressWarnings("rawtypes")
   @Override
-  public void generate(Set<MetamodelRepository> modelRepositories) {
+  public void generate(Set<MetamodelRepository<?>> modelRepositories) {
     CoreRegistry.getMetamodelRepositoryResolver()
         .resolve(modelRepositories, SpreadsheetMetamodelRepository.class)
         .getItems()

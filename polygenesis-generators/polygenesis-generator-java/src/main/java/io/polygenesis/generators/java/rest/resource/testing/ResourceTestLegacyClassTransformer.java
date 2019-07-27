@@ -21,9 +21,9 @@
 package io.polygenesis.generators.java.rest.resource.testing;
 
 import io.polygenesis.commons.text.TextConverter;
+import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.generators.java.rest.resource.EndpointLegacyMethodTransformer;
 import io.polygenesis.generators.java.rest.resource.ResourceLegacyClassTransformer;
-import io.polygenesis.generators.java.shared.transformer.FromDataTypeToJavaConverter;
 import io.polygenesis.models.rest.Resource;
 import java.util.Set;
 import java.util.TreeSet;
@@ -42,13 +42,13 @@ public class ResourceTestLegacyClassTransformer extends ResourceLegacyClassTrans
   /**
    * Instantiates a new Resource test class representable.
    *
-   * @param fromDataTypeToJavaConverter the from data type to java converter
+   * @param dataTypeTransformer the from data type to java converter
    * @param endpointMethodRepresentable the endpoint method representable
    */
   public ResourceTestLegacyClassTransformer(
-      FromDataTypeToJavaConverter fromDataTypeToJavaConverter,
+      DataTypeTransformer dataTypeTransformer,
       EndpointLegacyMethodTransformer endpointMethodRepresentable) {
-    super(fromDataTypeToJavaConverter, endpointMethodRepresentable);
+    super(dataTypeTransformer, endpointMethodRepresentable);
   }
 
   // ===============================================================================================

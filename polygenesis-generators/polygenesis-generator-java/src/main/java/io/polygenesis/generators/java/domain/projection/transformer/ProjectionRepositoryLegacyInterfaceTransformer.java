@@ -21,10 +21,10 @@
 package io.polygenesis.generators.java.domain.projection.transformer;
 
 import io.polygenesis.commons.text.TextConverter;
+import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.generators.java.domain.AbstractRepositoryLegacyInterfaceTransformer;
-import io.polygenesis.generators.java.shared.transformer.FromDataTypeToJavaConverter;
-import io.polygenesis.generators.java.shared.transformer.FunctionToLegacyMethodRepresentationTransformer;
 import io.polygenesis.models.domain.Persistence;
+import io.polygenesis.transformers.java.legacy.FunctionToLegacyMethodRepresentationTransformer;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -43,15 +43,15 @@ public class ProjectionRepositoryLegacyInterfaceTransformer
   /**
    * Instantiates a new Projection repository interface representable.
    *
-   * @param fromDataTypeToJavaConverter the from data type to java converter
+   * @param dataTypeTransformer the from data type to java converter
    * @param functionToMethodRepresentationTransformer the function to method representation
    *     converter
    */
   @SuppressWarnings("CPD-START")
   public ProjectionRepositoryLegacyInterfaceTransformer(
-      FromDataTypeToJavaConverter fromDataTypeToJavaConverter,
+      DataTypeTransformer dataTypeTransformer,
       FunctionToLegacyMethodRepresentationTransformer functionToMethodRepresentationTransformer) {
-    super(fromDataTypeToJavaConverter, functionToMethodRepresentationTransformer);
+    super(dataTypeTransformer, functionToMethodRepresentationTransformer);
   }
 
   // ===============================================================================================

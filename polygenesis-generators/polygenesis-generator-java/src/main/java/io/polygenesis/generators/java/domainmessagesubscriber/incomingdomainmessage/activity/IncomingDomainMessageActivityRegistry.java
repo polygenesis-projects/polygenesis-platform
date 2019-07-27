@@ -24,10 +24,10 @@ import io.polygenesis.abstraction.thing.AbstractActivityTemplateGenerator;
 import io.polygenesis.abstraction.thing.ActivityRegistry;
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.abstraction.thing.Purpose;
+import io.polygenesis.abstraction.thing.ScopePurposeTuple;
 import io.polygenesis.core.AbstractionScope;
 import io.polygenesis.core.FreemarkerTemplateEngine;
 import io.polygenesis.core.TemplateEngine;
-import io.polygenesis.generators.java.implementations.ScopePurposeTuple;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -70,7 +70,7 @@ public class IncomingDomainMessageActivityRegistry implements ActivityRegistry<F
   // OVERRIDES
   // ===============================================================================================
 
-  @SuppressWarnings({"rawtypes", "unchecked"})
+  @SuppressWarnings({"unchecked"})
   @Override
   public String activityFor(Function source, Object... args) {
     return activityGenerator(

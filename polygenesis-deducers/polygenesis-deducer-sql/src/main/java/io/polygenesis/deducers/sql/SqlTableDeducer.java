@@ -59,22 +59,20 @@ public class SqlTableDeducer implements Deducer<SqlTableMetamodelRepository> {
   // OVERRIDES
   // ===============================================================================================
 
-  @SuppressWarnings("rawtypes")
   @Override
   public SqlTableMetamodelRepository deduce(
-      Set<AbstractionRepository> abstractionRepositories,
-      Set<MetamodelRepository> modelRepositories) {
-
+      Set<AbstractionRepository<?>> abstractionRepositories,
+      Set<MetamodelRepository<?>> metamodelRepositories) {
     Set<Table> tables = new LinkedHashSet<>();
 
     CoreRegistry.getMetamodelRepositoryResolver()
-        .resolve(modelRepositories, DomainMetamodelRepository.class)
+        .resolve(metamodelRepositories, DomainMetamodelRepository.class)
         .getItems()
         .forEach(aggregateRoot -> tables.addAll(tableDeducer.deduce(aggregateRoot)));
 
     ProjectionMetamodelRepository projectionMetamodelRepository =
         CoreRegistry.getMetamodelRepositoryResolver()
-            .resolve(modelRepositories, ProjectionMetamodelRepository.class);
+            .resolve(metamodelRepositories, ProjectionMetamodelRepository.class);
 
     projectionMetamodelRepository
         .getItems()

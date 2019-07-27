@@ -23,8 +23,8 @@ package io.polygenesis.generators.java.domainmessagesubscriber.incomingdomainmes
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.core.TemplateData;
-import io.polygenesis.generators.java.shared.transformer.AbstractClassTransformer;
 import io.polygenesis.representations.code.MethodRepresentation;
+import io.polygenesis.transformers.java.AbstractClassTransformer;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;

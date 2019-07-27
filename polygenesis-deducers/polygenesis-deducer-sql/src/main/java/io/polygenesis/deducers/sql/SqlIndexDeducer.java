@@ -59,16 +59,14 @@ public class SqlIndexDeducer implements Deducer<SqlIndexMetamodelRepository> {
   // OVERRIDES
   // ===============================================================================================
 
-  @SuppressWarnings("rawtypes")
   @Override
   public SqlIndexMetamodelRepository deduce(
-      Set<AbstractionRepository> abstractionRepositories,
-      Set<MetamodelRepository> modelRepositories) {
-
+      Set<AbstractionRepository<?>> abstractionRepositories,
+      Set<MetamodelRepository<?>> metamodelRepositories) {
     Set<Index> indices = new LinkedHashSet<>();
 
     CoreRegistry.getMetamodelRepositoryResolver()
-        .resolve(modelRepositories, DomainMetamodelRepository.class)
+        .resolve(metamodelRepositories, DomainMetamodelRepository.class)
         .getItems()
         .forEach(aggregateRoot -> indices.add(indexDeducer.deduce()));
 

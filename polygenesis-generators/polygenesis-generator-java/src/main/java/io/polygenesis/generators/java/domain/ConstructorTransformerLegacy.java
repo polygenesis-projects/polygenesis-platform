@@ -21,13 +21,13 @@
 package io.polygenesis.generators.java.domain;
 
 import io.polygenesis.commons.text.TextConverter;
+import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.generators.java.implementations.domain.constructor.ConstructorImplementorRegistry;
-import io.polygenesis.generators.java.shared.transformer.AbstractLegacyMethodTransformer;
-import io.polygenesis.generators.java.shared.transformer.FromDataTypeToJavaConverter;
 import io.polygenesis.models.domain.Constructor;
 import io.polygenesis.representations.code.MethodRepresentation;
 import io.polygenesis.representations.code.MethodRepresentationType;
 import io.polygenesis.representations.code.ParameterRepresentation;
+import io.polygenesis.transformers.java.legacy.AbstractLegacyMethodTransformer;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -50,13 +50,13 @@ public class ConstructorTransformerLegacy extends AbstractLegacyMethodTransforme
   /**
    * Instantiates a new Constructor representable.
    *
-   * @param fromDataTypeToJavaConverter the from data type to java converter
+   * @param dataTypeTransformer the from data type to java converter
    * @param constructorImplementorRegistry the constructor implementor registry
    */
   public ConstructorTransformerLegacy(
-      FromDataTypeToJavaConverter fromDataTypeToJavaConverter,
+      DataTypeTransformer dataTypeTransformer,
       ConstructorImplementorRegistry constructorImplementorRegistry) {
-    super(fromDataTypeToJavaConverter);
+    super(dataTypeTransformer);
     this.constructorImplementorRegistry = constructorImplementorRegistry;
   }
 
@@ -122,7 +122,7 @@ public class ConstructorTransformerLegacy extends AbstractLegacyMethodTransforme
             property ->
                 parameterRepresentations.add(
                     new ParameterRepresentation(
-                        fromDataTypeToJavaConverter.convert(property.getData().getDataType()),
+                        dataTypeTransformer.convert(property.getData().getDataType()),
                         property.getData().getVariableName().getText())));
 
     return parameterRepresentations;

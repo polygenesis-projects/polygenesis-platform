@@ -36,16 +36,16 @@ public class AbstractionRepositoryResolver {
   // ===============================================================================================
 
   /**
-   * Resolve t.
+   * Resolve proper generics t.
    *
    * @param <T> the type parameter
-   * @param abstractionRepositories the model repositories
+   * @param abstractionRepositories the abstraction repositories
    * @param clazz the clazz
    * @return the t
    */
-  @SuppressWarnings({"unchecked", "rawtypes"})
-  public <T extends AbstractionRepository> T resolve(
-      Set<AbstractionRepository> abstractionRepositories, Class<T> clazz) {
+  @SuppressWarnings({"unchecked"})
+  public <T extends AbstractionRepository<?>> T resolve(
+      Set<AbstractionRepository<?>> abstractionRepositories, Class<T> clazz) {
     Assertion.isNotNull(abstractionRepositories, "abstractionRepositories is required");
     Assertion.isNotNull(clazz, "clazz is required");
 

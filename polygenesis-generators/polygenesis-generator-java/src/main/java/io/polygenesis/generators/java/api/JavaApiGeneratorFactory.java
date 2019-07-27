@@ -24,7 +24,6 @@ import io.polygenesis.core.ActiveFileExporter;
 import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.core.Exporter;
 import io.polygenesis.core.FreemarkerTemplateEngine;
-import io.polygenesis.core.JavaDataTypeTransformer;
 import io.polygenesis.core.TemplateEngine;
 import io.polygenesis.generators.java.api.dto.DtoGenerator;
 import io.polygenesis.generators.java.api.dto.DtoMethodTransformer;
@@ -32,6 +31,7 @@ import io.polygenesis.generators.java.api.dto.DtoTransformer;
 import io.polygenesis.generators.java.api.service.ServiceGenerator;
 import io.polygenesis.generators.java.api.service.ServiceMethodTransformer;
 import io.polygenesis.generators.java.api.service.ServiceTransformer;
+import io.polygenesis.transformers.java.JavaDataTypeTransformer;
 import java.nio.file.Path;
 
 /**
@@ -53,7 +53,7 @@ public final class JavaApiGeneratorFactory {
 
   static {
     TemplateEngine templateEngine = new FreemarkerTemplateEngine();
-    Exporter exporter = new ActiveFileExporter();
+    Exporter activeFileExporter = new ActiveFileExporter();
     DataTypeTransformer dataTypeTransformer = new JavaDataTypeTransformer();
 
     serviceGenerator =
@@ -61,13 +61,13 @@ public final class JavaApiGeneratorFactory {
             new ServiceTransformer(
                 dataTypeTransformer, new ServiceMethodTransformer(dataTypeTransformer)),
             templateEngine,
-            exporter);
+            activeFileExporter);
 
     dtoGenerator =
         new DtoGenerator(
             new DtoTransformer(dataTypeTransformer, new DtoMethodTransformer(dataTypeTransformer)),
             templateEngine,
-            exporter);
+            activeFileExporter);
   }
 
   // ===============================================================================================

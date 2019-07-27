@@ -44,15 +44,11 @@ public class SpreadsheetTransformer implements Transformer<Spreadsheet> {
 
   @Override
   public ByteArrayOutputStream transform(Spreadsheet source) {
-    XSSFWorkbook workbook = new XSSFWorkbook();
-
-    source.getSheets().forEach(sheet -> createXssfSheet(workbook, sheet));
-
     ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
-    try {
+    try (XSSFWorkbook workbook = new XSSFWorkbook()) {
+      source.getSheets().forEach(sheet -> createXssfSheet(workbook, sheet));
       workbook.write(byteArrayOutputStream);
-      workbook.close();
     } catch (IOException e) {
       throw new IllegalStateException(e.getMessage(), e);
     }

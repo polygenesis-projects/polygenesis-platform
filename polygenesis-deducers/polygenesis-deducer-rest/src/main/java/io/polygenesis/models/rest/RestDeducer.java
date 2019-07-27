@@ -61,18 +61,16 @@ public class RestDeducer implements Deducer<RestMetamodelRepository> {
   // OVERRIDES
   // ===============================================================================================
 
-  @SuppressWarnings("rawtypes")
   @Override
   public RestMetamodelRepository deduce(
-      Set<AbstractionRepository> abstractionRepositories,
-      Set<MetamodelRepository> modelRepositories) {
-
+      Set<AbstractionRepository<?>> abstractionRepositories,
+      Set<MetamodelRepository<?>> metamodelRepositories) {
     return new RestMetamodelRepository(
         resourceDeducer.deduceFrom(
             CoreRegistry.getAbstractionRepositoryResolver()
                 .resolve(abstractionRepositories, ThingRepository.class),
             CoreRegistry.getMetamodelRepositoryResolver()
-                .resolve(modelRepositories, ServiceMetamodelRepository.class),
+                .resolve(metamodelRepositories, ServiceMetamodelRepository.class),
             rootPackageName));
   }
 }

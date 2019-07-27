@@ -53,7 +53,6 @@ public class DtoDeducer {
    * @return the dto
    */
   public Dto deduceRequestDto(Function function, PackageName rootPackageName) {
-
     DataObject originatingDataObject = null;
     Boolean virtual = false;
 
@@ -61,7 +60,7 @@ public class DtoDeducer {
       Argument argument =
           function.getArguments().stream().findFirst().orElseThrow(IllegalArgumentException::new);
       if (argument.getData().isDataGroup()) {
-        originatingDataObject = argument.getData().getAsDataGroup();
+        originatingDataObject = argument.getData().getAsDataObject();
       }
     }
 
@@ -93,7 +92,7 @@ public class DtoDeducer {
       dtoType = DtoType.API_REQUEST;
     }
 
-    Dto dto = new Dto(dtoType, originatingDataObject.getAsDataGroup(), virtual);
+    Dto dto = new Dto(dtoType, originatingDataObject.getAsDataObject(), virtual);
 
     makeAssertionsForRequestDto(dto, function);
 
@@ -113,7 +112,7 @@ public class DtoDeducer {
     Boolean virtual = false;
 
     if (function.getReturnValue() != null && function.getReturnValue().getData().isDataGroup()) {
-      originatingDataObject = function.getReturnValue().getData().getAsDataGroup();
+      originatingDataObject = function.getReturnValue().getData().getAsDataObject();
     }
 
     if (originatingDataObject == null) {

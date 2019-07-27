@@ -22,7 +22,7 @@ package io.polygenesis.generators.java.domaindetails.domainmessagepublisher.sche
 
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.core.DataTypeTransformer;
-import io.polygenesis.generators.java.shared.transformer.AbstractMethodTransformer;
+import io.polygenesis.transformers.java.AbstractMethodTransformer;
 
 /**
  * The type Scheduled domain message publisher method transformer.

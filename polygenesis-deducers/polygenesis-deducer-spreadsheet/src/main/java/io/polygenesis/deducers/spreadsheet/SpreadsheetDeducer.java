@@ -47,11 +47,10 @@ public class SpreadsheetDeducer implements Deducer<SpreadsheetMetamodelRepositor
   // IMPLEMENTATIONS
   // ===============================================================================================
 
-  @SuppressWarnings("rawtypes")
   @Override
   public SpreadsheetMetamodelRepository deduce(
-      Set<AbstractionRepository> abstractionRepositories,
-      Set<MetamodelRepository> metamodelRepositories) {
+      Set<AbstractionRepository<?>> abstractionRepositories,
+      Set<MetamodelRepository<?>> metamodelRepositories) {
     SpreadsheetDeducerStrategy spreadsheetDeducerStrategy = new DefaultSpreadsheetDeducerStrategy();
     return spreadsheetDeducerStrategy.deduce(abstractionRepositories, metamodelRepositories);
   }

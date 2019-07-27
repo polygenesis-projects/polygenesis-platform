@@ -62,24 +62,23 @@ public class DomainEntityConverterDeducer extends BaseApiImplementationDeducer
   // OVERRIDES
   // ===============================================================================================
 
-  @SuppressWarnings("rawtypes")
   @Override
   public DomainEntityConverterMetamodelRepository deduce(
-      Set<AbstractionRepository> abstractionRepositories,
-      Set<MetamodelRepository> modelRepositories) {
+      Set<AbstractionRepository<?>> abstractionRepositories,
+      Set<MetamodelRepository<?>> metamodelRepositories) {
     Set<DomainEntityConverter> domainEntityConverters = new LinkedHashSet<>();
 
     ServiceMetamodelRepository serviceModelRepository =
         CoreRegistry.getMetamodelRepositoryResolver()
-            .resolve(modelRepositories, ServiceMetamodelRepository.class);
+            .resolve(metamodelRepositories, ServiceMetamodelRepository.class);
 
     DomainMetamodelRepository domainModelRepository =
         CoreRegistry.getMetamodelRepositoryResolver()
-            .resolve(modelRepositories, DomainMetamodelRepository.class);
+            .resolve(metamodelRepositories, DomainMetamodelRepository.class);
 
     ProjectionMetamodelRepository projectionMetamodelRepository =
         CoreRegistry.getMetamodelRepositoryResolver()
-            .resolve(modelRepositories, ProjectionMetamodelRepository.class);
+            .resolve(metamodelRepositories, ProjectionMetamodelRepository.class);
 
     fillDomainEntityConverters(
         domainEntityConverters,
