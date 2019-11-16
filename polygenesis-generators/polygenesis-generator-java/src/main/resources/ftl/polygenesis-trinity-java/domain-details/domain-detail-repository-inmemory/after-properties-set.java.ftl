@@ -17,21 +17,4 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-    try {
-      Assertion.isNotNull(message, "message is required");
-
-      BatchProcessMessage batchProcessMessage =
-        objectMapper.readValue(message, BatchProcessMessage.class);
-
-      Assertion.isNotNull(batchProcessMessage.getDryRun(), "dryRun flag MUST be specified");
-
-      if (batchProcessMessage.isForFetchingPage()) {
-        batchProcessService.fetchPage(batchProcessMessage);
-      } else if (batchProcessMessage.isForProcessing()) {
-        batchProcessService.processForId(batchProcessMessage);
-      } else {
-        throw new IllegalArgumentException(String.format("Cannot decode BatchProcessMessage: %s", batchProcessMessage));
-      }
-    } catch (IOException e) {
-      throw new IllegalArgumentException(e.getMessage(), e);
-    }
+    // TODO: Initialize the supportive entity here

@@ -38,7 +38,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-/** @author Christos Tsakostas */
+/**
+ * The type Value object transformer.
+ *
+ * @author Christos Tsakostas
+ */
 public class ValueObjectTransformer extends AbstractClassTransformer<ValueObject, Function> {
 
   // ===============================================================================================
@@ -46,7 +50,7 @@ public class ValueObjectTransformer extends AbstractClassTransformer<ValueObject
   // ===============================================================================================
 
   /**
-   * Instantiates a new Batch process transformer.
+   * Instantiates a new Value object transformer.
    *
    * @param dataTypeTransformer the data type transformer
    * @param methodTransformer the method transformer
@@ -66,6 +70,12 @@ public class ValueObjectTransformer extends AbstractClassTransformer<ValueObject
     dataModel.put("representation", create(source));
 
     return new TemplateData(dataModel, "polygenesis-representation-java/Class.java.ftl");
+  }
+
+  @Override
+  public Set<FieldRepresentation> staticFieldRepresentations(ValueObject source, Object... args) {
+    return new LinkedHashSet<>(
+        Arrays.asList(new FieldRepresentation("static final long", "serialVersionUID = 1L")));
   }
 
   @Override

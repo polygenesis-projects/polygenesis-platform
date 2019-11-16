@@ -24,11 +24,15 @@ import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
+import io.polygenesis.core.AbstractionScope;
+import io.polygenesis.models.domain.AbstractAggregateRootId;
 import io.polygenesis.models.domain.AggregateRootId;
 import io.polygenesis.models.domain.DomainObjectProperty;
+import io.polygenesis.models.domain.GenericTypeParameter;
 import io.polygenesis.models.domain.TenantId;
 import io.polygenesis.models.domain.shared.AbstractPropertyDeducer;
 import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -97,7 +101,16 @@ public class AggregateRootPropertyDeducer extends AbstractPropertyDeducer {
       Thing thing, PackageName rootPackageName) {
     Set<DomainObjectProperty<?>> properties = new LinkedHashSet<>();
 
-    properties.add(makeAggregateRootId(thing, rootPackageName));
+    Optional<AbstractionScope> optionalAbstractionScope =
+        thing.getAbstractionsScopes().stream()
+            .filter(p -> p.getText().equals(AbstractionScope.DOMAIN_ABSTRACT_AGGREGATE_ROOT))
+            .findFirst();
+
+    if (optionalAbstractionScope.isPresent()) {
+      properties.add(makeAbstractAggregateRootId(thing, rootPackageName));
+    } else {
+      properties.add(makeAggregateRootId(thing, rootPackageName));
+    }
 
     if (thing.getMultiTenant()) {
       properties.add(makeTenantId());
@@ -124,6 +137,23 @@ public class AggregateRootPropertyDeducer extends AbstractPropertyDeducer {
             thing.makePackageName(rootPackageName, thing));
 
     return new AggregateRootId(dataObject);
+  }
+
+  /**
+   * Make abstract aggregate root id abstract aggregate root id.
+   *
+   * @param thing the thing
+   * @param rootPackageName the root package name
+   * @return the abstract aggregate root id
+   */
+  protected AbstractAggregateRootId makeAbstractAggregateRootId(Thing thing,
+      PackageName rootPackageName) {
+    DataObject dataObject =
+        new DataObject(
+            new ObjectName(thing.getThingName().getText() + "Id"),
+            thing.makePackageName(rootPackageName, thing));
+
+    return new AbstractAggregateRootId(dataObject, new GenericTypeParameter("I"));
   }
 
   /**

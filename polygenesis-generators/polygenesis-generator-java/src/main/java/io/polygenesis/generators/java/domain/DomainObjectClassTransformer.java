@@ -21,14 +21,17 @@
 package io.polygenesis.generators.java.domain;
 
 import static io.polygenesis.models.domain.PropertyType.PROJECTION_ID;
+import static io.polygenesis.models.domain.PropertyType.SUPPORTIVE_ENTITY_ID;
 
 import io.polygenesis.abstraction.data.DataArray;
 import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.abstraction.data.DataPrimitive;
 import io.polygenesis.abstraction.data.DataPurpose;
+import io.polygenesis.abstraction.thing.FunctionProvider;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.DataTypeTransformer;
+import io.polygenesis.generators.java.shared.transformer.MethodTransformer;
 import io.polygenesis.models.domain.AbstractAggregateRootId;
 import io.polygenesis.models.domain.BaseDomainObject;
 import io.polygenesis.models.domain.DomainObjectProperty;
@@ -40,31 +43,35 @@ import io.polygenesis.representations.code.ConstructorRepresentation;
 import io.polygenesis.representations.code.FieldRepresentation;
 import io.polygenesis.representations.code.MethodRepresentation;
 import io.polygenesis.representations.code.ParameterRepresentation;
-import io.polygenesis.transformers.java.legacy.AbstractLegacyClassTransformer;
+import io.polygenesis.transformers.java.AbstractClassTransformer;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
 /**
- * The type Domain object class representable.
+ * The type Domain object class transformer.
  *
  * @param <S> the type parameter
+ * @param <F> the type parameter
  * @author Christos Tsakostas
  */
-public abstract class DomainObjectLegacyClassTransformer<S extends BaseDomainObject>
-    extends AbstractLegacyClassTransformer<S> {
+public abstract class DomainObjectClassTransformer<
+        S extends BaseDomainObject, F extends FunctionProvider>
+    extends AbstractClassTransformer<S, F> {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
-   * Instantiates a new Domain object class representable.
+   * Instantiates a new Domain object class transformer.
    *
-   * @param dataTypeTransformer the from data type to java converter
+   * @param dataTypeTransformer the data type transformer
+   * @param methodTransformer the method transformer
    */
-  public DomainObjectLegacyClassTransformer(DataTypeTransformer dataTypeTransformer) {
-    super(dataTypeTransformer);
+  public DomainObjectClassTransformer(
+      DataTypeTransformer dataTypeTransformer, MethodTransformer<F> methodTransformer) {
+    super(dataTypeTransformer, methodTransformer);
   }
 
   // ===============================================================================================
@@ -210,7 +217,10 @@ public abstract class DomainObjectLegacyClassTransformer<S extends BaseDomainObj
               }
             });
 
-    imports.add("com.oregor.trinity4j.commons.assertion.Assertion");
+    if (source.getProperties().size() > 1) {
+      imports.add("com.oregor.trinity4j.commons.assertion.Assertion");
+    }
+
     imports.addAll(importsSuperClass(source));
     imports.addAll(importsSupportiveEntity(source, args));
 
@@ -351,12 +361,12 @@ public abstract class DomainObjectLegacyClassTransformer<S extends BaseDomainObj
 
   @Override
   public String modifiers(S source, Object... args) {
-    return MODIFIER_PUBLIC;
+    return super.modifiers(source, args);
   }
 
   @Override
   public String simpleObjectName(S source, Object... args) {
-    return "empty simpleObjectName";
+    return TextConverter.toUpperCamel(source.getObjectName().getText());
   }
 
   @Override
@@ -594,13 +604,9 @@ public abstract class DomainObjectLegacyClassTransformer<S extends BaseDomainObj
         .forEach(
             property -> {
               if (property.getPropertyType().equals(PropertyType.AGGREGATE_ROOT_ID)
-                  || property.getPropertyType().equals(PROJECTION_ID)) {
-                parameterRepresentations.add(
-                    new ParameterRepresentation(
-                        makeVariableDataType(property),
-                        makeVariableName(property),
-                        DataPurpose.thingIdentity()));
-              } else if (property.getPropertyType().equals(PropertyType.ABSTRACT_AGGREGATE_ROOT_ID)) {
+                  || property.getPropertyType().equals(PropertyType.ABSTRACT_AGGREGATE_ROOT_ID)
+                  || property.getPropertyType().equals(PROJECTION_ID)
+                  || property.getPropertyType().equals(SUPPORTIVE_ENTITY_ID)) {
                 parameterRepresentations.add(
                     new ParameterRepresentation(
                         makeVariableDataType(property),

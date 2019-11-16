@@ -23,6 +23,7 @@ package io.polygenesis.models.domain;
 import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
+import io.polygenesis.core.Nameable;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -32,7 +33,7 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public abstract class BaseDomainObject implements SubClassable {
+public abstract class BaseDomainObject implements Nameable, SubClassable {
 
   // ===============================================================================================
   // STATE

@@ -74,6 +74,10 @@ public class AbstractionScope implements Serializable {
   /** The constant DOMAIN_DETAIL_PUBLISHER. */
   public static final String DOMAIN_DETAIL_PUBLISHER = "DOMAIN_DETAIL_PUBLISHER";
 
+  /** The constant DOMAIN_DETAIL_REPOSITORY_IN_MEMORY. */
+  public static final String DOMAIN_DETAIL_REPOSITORY_IN_MEMORY =
+      "DOMAIN_DETAIL_REPOSITORY_IN_MEMORY";
+
   // ===============================================================================================
   // PROJECTION
   // ===============================================================================================
@@ -216,6 +220,15 @@ public class AbstractionScope implements Serializable {
    */
   public static AbstractionScope domainDetailPublisher() {
     return new AbstractionScope(DOMAIN_DETAIL_PUBLISHER);
+  }
+
+  /**
+   * Domain detail repository in memory abstraction scope.
+   *
+   * @return the abstraction scope
+   */
+  public static AbstractionScope domainDetailRepositoryInMemory() {
+    return new AbstractionScope(DOMAIN_DETAIL_REPOSITORY_IN_MEMORY);
   }
 
   /**

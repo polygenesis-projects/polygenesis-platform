@@ -18,7 +18,7 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.generators.java.domainmessagesubscriber.incomingdomainmessage.activity;
+package io.polygenesis.generators.java.repository.inmemory.initialization.activity;
 
 import io.polygenesis.abstraction.thing.AbstractActivityRegistry;
 import io.polygenesis.abstraction.thing.Function;
@@ -29,11 +29,12 @@ import io.polygenesis.core.FreemarkerTemplateEngine;
 import io.polygenesis.core.TemplateEngine;
 
 /**
- * The type Incoming domain message activity registry.
+ * The type Supportive entity initialization activity registry.
  *
  * @author Christos Tsakostas
  */
-public class IncomingDomainMessageActivityRegistry extends AbstractActivityRegistry<Function> {
+public class SupportiveEntityInitializationActivityRegistry
+    extends AbstractActivityRegistry<Function> {
 
   // ===============================================================================================
   // STATIC
@@ -44,18 +45,8 @@ public class IncomingDomainMessageActivityRegistry extends AbstractActivityRegis
 
     scopeAndPurposeMap.put(
         new ScopePurposeTuple(
-            AbstractionScope.apiClientMessaging(), Purpose.incomingDomainMessageGetRootId()),
-        new GetRootIdActivityGenerator(new GetRootIdActivityTransformer(), templateEngine));
-
-    scopeAndPurposeMap.put(
-        new ScopePurposeTuple(
-            AbstractionScope.apiClientMessaging(), Purpose.incomingDomainMessageGetMessageId()),
-        new GetMessageIdActivityGenerator(new GetMessageIdActivityTransformer(), templateEngine));
-
-    scopeAndPurposeMap.put(
-        new ScopePurposeTuple(
-            AbstractionScope.apiClientMessaging(), Purpose.incomingDomainMessageGetMessageBody()),
-        new GetMessageBodyActivityGenerator(
-            new GetMessageBodyActivityTransformer(), templateEngine));
+            AbstractionScope.domainDetailRepositoryInMemory(), Purpose.afterPropertiesSet()),
+        new AfterPropertiesSetActivityGenerator(
+            new AfterPropertiesSetActivityTransformer(), templateEngine));
   }
 }

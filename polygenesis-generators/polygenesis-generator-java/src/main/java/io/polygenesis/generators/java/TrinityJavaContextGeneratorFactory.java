@@ -48,6 +48,8 @@ import io.polygenesis.generators.java.domainservicedetail.DomainServiceDetailMet
 import io.polygenesis.generators.java.domainservicedetail.DomainServiceDetailMetamodelGeneratorFactory;
 import io.polygenesis.generators.java.rdbms.JavaRdbmsMetamodelGenerator;
 import io.polygenesis.generators.java.rdbms.JavaRdbmsMetamodelGeneratorFactory;
+import io.polygenesis.generators.java.repository.inmemory.InMemoryMetamodelGenerator;
+import io.polygenesis.generators.java.repository.inmemory.InMemoryMetamodelGeneratorFactory;
 import io.polygenesis.generators.java.rest.JavaApiRestGeneratorFactory;
 import io.polygenesis.generators.java.rest.JavaApiRestMetamodelGenerator;
 import io.polygenesis.generators.sql.SqlGeneratorFactory;
@@ -92,6 +94,9 @@ public final class TrinityJavaContextGeneratorFactory {
   private static final String DOMAIN_DETAIL_SERVICES = "domain-detail-services";
   private static final String DOMAIN_DETAIL_REPOSITORY_SPRING_DATA_JPA =
       "domain-detail-repository-springdatajpa";
+
+  private static final String DOMAIN_DETAIL_REPOSITORY_IN_MEMORY =
+      "domain-detail-repository-inmemory";
 
   private static final String DOMAIN_DETAIL_DOMAIN_MESSAGE_PUBLISHER_ACTIVEMQ =
       "domain-detail-domain-message-publisher-activemq";
@@ -172,6 +177,12 @@ public final class TrinityJavaContextGeneratorFactory {
     if (trinityJavaContextGeneratorEnablement.isJavaRdbmsGenerator()) {
       metamodelGenerators.add(
           javaRdbmsGenerator(exportPath, projectFolder, modulePrefix, context, rootPackageName));
+    }
+
+    if (trinityJavaContextGeneratorEnablement.isDomainDetailRepositoryInMemory()) {
+      metamodelGenerators.add(
+          inMemoryMetamodelGenerator(
+              exportPath, projectFolder, modulePrefix, context, rootPackageName));
     }
 
     if (trinityJavaContextGeneratorEnablement.isApiClientDomainMessageSubscriber()) {
@@ -306,6 +317,32 @@ public final class TrinityJavaContextGeneratorFactory {
             projectFolder,
             modulePrefix + "-" + DOMAIN_DETAILS,
             modulePrefix + "-" + DOMAIN_DETAIL_REPOSITORY_SPRING_DATA_JPA),
+        new PackageName(rootPackageName),
+        new ObjectName(context));
+  }
+
+  /**
+   * In memory metamodel generator in memory metamodel generator.
+   *
+   * @param exportPath the export path
+   * @param projectFolder the project folder
+   * @param modulePrefix the module prefix
+   * @param context the context
+   * @param rootPackageName the root package name
+   * @return the in memory metamodel generator
+   */
+  private static InMemoryMetamodelGenerator inMemoryMetamodelGenerator(
+      String exportPath,
+      String projectFolder,
+      String modulePrefix,
+      String context,
+      String rootPackageName) {
+    return InMemoryMetamodelGeneratorFactory.newInstance(
+        Paths.get(
+            exportPath,
+            projectFolder,
+            modulePrefix + "-" + DOMAIN_DETAILS,
+            modulePrefix + "-" + DOMAIN_DETAIL_REPOSITORY_IN_MEMORY),
         new PackageName(rootPackageName),
         new ObjectName(context));
   }

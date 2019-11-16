@@ -134,27 +134,43 @@ public class AggregateRootDeducer {
     Set<StateQueryMethod> stateQueryMethods = new LinkedHashSet<>();
     Set<FactoryMethod> factoryMethods = new LinkedHashSet<>();
 
-    Persistence persistence =
-        new Persistence(
-            packageName,
-            makePersistenceName(thing),
-            aggregateRootObjectName,
-            makeAggregateRootIdName(thing),
-            thing.getMultiTenant());
+    if (isAbstract(thing)) {
+      aggregateRoots.add(
+          new AggregateRoot(
+              isAbstract(thing) ? InstantiationType.ABSTRACT : InstantiationType.CONCRETE,
+              aggregateRootObjectName,
+              packageName,
+              properties,
+              constructors,
+              thing.getMultiTenant(),
+              stateMutationMethods,
+              stateQueryMethods,
+              factoryMethods,
+              makeSuperclass(thing.getMultiTenant())));
+    } else {
+      Persistence persistence =
+          new Persistence(
+              packageName,
+              makePersistenceName(thing),
+              aggregateRootObjectName,
+              makeAggregateRootIdName(thing),
+              thing.getMultiTenant());
 
-    aggregateRoots.add(
-        new AggregateRootPersistable(
-            isAbstract(thing) ? InstantiationType.ABSTRACT : InstantiationType.CONCRETE,
-            aggregateRootObjectName,
-            packageName,
-            properties,
-            constructors,
-            thing.getMultiTenant(),
-            stateMutationMethods,
-            stateQueryMethods,
-            factoryMethods,
-            makeSuperclass(thing.getMultiTenant()),
-            persistence));
+      aggregateRoots.add(
+          new AggregateRootPersistable(
+              isAbstract(thing) ? InstantiationType.ABSTRACT : InstantiationType.CONCRETE,
+              aggregateRootObjectName,
+              packageName,
+              properties,
+              constructors,
+              thing.getMultiTenant(),
+              stateMutationMethods,
+              stateQueryMethods,
+              factoryMethods,
+              makeSuperclass(thing.getMultiTenant()),
+              persistence));
+    }
+
   }
 
   /**

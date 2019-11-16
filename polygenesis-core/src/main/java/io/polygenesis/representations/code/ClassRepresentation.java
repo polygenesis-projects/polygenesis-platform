@@ -87,6 +87,16 @@ public class ClassRepresentation extends AbstractObjectRepresentation {
   // GETTERS
   // ===============================================================================================
 
+
+  /**
+   * Gets static field representations.
+   *
+   * @return the static field representations
+   */
+  public Set<FieldRepresentation> getStaticFieldRepresentations() {
+    return staticFieldRepresentations;
+  }
+
   /**
    * Gets field representations.
    *

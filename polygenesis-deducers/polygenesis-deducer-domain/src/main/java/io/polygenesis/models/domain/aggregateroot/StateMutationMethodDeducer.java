@@ -84,6 +84,7 @@ public class StateMutationMethodDeducer {
         .filter(
             function ->
                 function.supportsAbstractionScope(AbstractionScope.domainAggregateRoot())
+                    || function.supportsAbstractionScope(AbstractionScope.domainAbstractAggregateRoot())
                     || function.supportsAbstractionScope(AbstractionScope.domainAggregateEntity()))
         .filter(function -> function.getPurpose().isModify())
         .forEach(
