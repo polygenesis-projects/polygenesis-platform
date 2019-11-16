@@ -43,6 +43,8 @@ public class TrinityJavaContextGeneratorEnablement {
 
   private boolean domainDetailDomainMessagePublisher = true;
 
+  private boolean domainDetailRepositoryInMemory = true;
+
   /** Instantiates a new Trinity java context generator enablement. */
   public TrinityJavaContextGeneratorEnablement() {
     setJavaApiGenerator(true);
@@ -62,6 +64,7 @@ public class TrinityJavaContextGeneratorEnablement {
     setApiClientBatchProcessSchedulerCamel(true);
 
     setDomainDetailDomainMessagePublisher(true);
+    setDomainDetailRepositoryInMemory(true);
   }
 
   // ===============================================================================================
@@ -185,8 +188,22 @@ public class TrinityJavaContextGeneratorEnablement {
     return apiClientBatchProcessSchedulerCamel;
   }
 
+  /**
+   * Is domain detail domain message publisher boolean.
+   *
+   * @return the boolean
+   */
   public boolean isDomainDetailDomainMessagePublisher() {
     return domainDetailDomainMessagePublisher;
+  }
+
+  /**
+   * Is domain detail repository in memory boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isDomainDetailRepositoryInMemory() {
+    return domainDetailRepositoryInMemory;
   }
 
   // ===============================================================================================
@@ -315,7 +332,21 @@ public class TrinityJavaContextGeneratorEnablement {
     this.apiClientBatchProcessSchedulerCamel = apiClientBatchProcessSchedulerCamel;
   }
 
+  /**
+   * Sets domain detail domain message publisher.
+   *
+   * @param domainDetailDomainMessagePublisher the domain detail domain message publisher
+   */
   public void setDomainDetailDomainMessagePublisher(boolean domainDetailDomainMessagePublisher) {
     this.domainDetailDomainMessagePublisher = domainDetailDomainMessagePublisher;
+  }
+
+  /**
+   * Sets domain detail repository in memory.
+   *
+   * @param domainDetailRepositoryInMemory the domain detail repository in memory
+   */
+  public void setDomainDetailRepositoryInMemory(boolean domainDetailRepositoryInMemory) {
+    this.domainDetailRepositoryInMemory = domainDetailRepositoryInMemory;
   }
 }

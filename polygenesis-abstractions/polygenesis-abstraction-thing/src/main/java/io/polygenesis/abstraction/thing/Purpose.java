@@ -112,6 +112,11 @@ public class Purpose implements Serializable {
       "DOMAIN_MESSAGE_PUBLISHER_GET_CONTEXT";
 
   // ===============================================================================================
+  // INITIALIZER
+  // ===============================================================================================
+  private static final String AFTER_PROPERTIES_SET = "AFTER_PROPERTIES_SET";
+
+  // ===============================================================================================
   // STATE
   // ===============================================================================================
 
@@ -403,6 +408,19 @@ public class Purpose implements Serializable {
    */
   public static Purpose domainMessagePublisherGetContext() {
     return new Purpose(DOMAIN_MESSAGE_PUBLISHER_GET_CONTEXT, CqsType.QUERY);
+  }
+
+  // ===============================================================================================
+  // INITIALIZER
+  // ===============================================================================================
+
+  /**
+   * After properties set purpose.
+   *
+   * @return the purpose
+   */
+  public static Purpose afterPropertiesSet() {
+    return new Purpose(AFTER_PROPERTIES_SET, CqsType.COMMAND);
   }
 
   // ===============================================================================================

@@ -31,6 +31,7 @@ import io.polygenesis.models.domain.BaseDomainEntity;
 import io.polygenesis.models.domain.BaseDomainObject;
 import io.polygenesis.models.domain.DomainObjectProperty;
 import io.polygenesis.models.domain.DomainObjectType;
+import io.polygenesis.models.domain.InstantiationType;
 import io.polygenesis.models.sql.Column;
 import io.polygenesis.models.sql.ColumnDataType;
 import io.polygenesis.models.sql.RequiredType;
@@ -83,6 +84,11 @@ public class TableDeducer {
   public Set<Table> deduce(BaseDomainEntity domainEntity) {
     Set<Table> allDomainEntityRelatedTables = new LinkedHashSet<>();
 
+    if (domainEntity.getDomainObjectType().equals(DomainObjectType.ABSTRACT_AGGREGATE_ROOT)
+        || domainEntity.getInstantiationType().equals(InstantiationType.ABSTRACT)) {
+      return allDomainEntityRelatedTables;
+    }
+
     Set<Column> domainEntityColumns = new LinkedHashSet<>();
 
     if (domainEntity.getDomainObjectType().equals(DomainObjectType.AGGREGATE_ROOT)) {
@@ -99,6 +105,7 @@ public class TableDeducer {
             property -> {
               switch (property.getPropertyType()) {
                 case AGGREGATE_ROOT_ID:
+                case ABSTRACT_AGGREGATE_ROOT_ID:
                 case PROJECTION_ID:
                 case TENANT_ID:
                   break;

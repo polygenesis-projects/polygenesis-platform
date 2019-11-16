@@ -256,7 +256,7 @@ public abstract class AbstractClassTransformer<S extends Nameable, F extends Fun
     String description = "No-args constructor for persistence frameworks.";
 
     return new ConstructorRepresentation(
-        new LinkedHashSet<>(), description, "protected", new LinkedHashSet<>(), "\t\tsuper();");
+        new LinkedHashSet<>(), description, "private", new LinkedHashSet<>(), "\t\tsuper();");
   }
 
   /**

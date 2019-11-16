@@ -61,15 +61,19 @@ import io.polygenesis.generators.java.domain.projection.transformer.ProjectionRe
 import io.polygenesis.generators.java.domain.service.DomainServiceGenerator;
 import io.polygenesis.generators.java.domain.service.DomainServiceMethodTransformer;
 import io.polygenesis.generators.java.domain.service.DomainServiceTransformer;
-import io.polygenesis.generators.java.domain.supportiveentity.SupportiveEntityExporter;
-import io.polygenesis.generators.java.domain.supportiveentity.SupportiveEntityIdExporter;
-import io.polygenesis.generators.java.domain.supportiveentity.SupportiveEntityIdLegacyClassTransformer;
-import io.polygenesis.generators.java.domain.supportiveentity.SupportiveEntityLegacyClassTransformer;
+import io.polygenesis.generators.java.domain.supportiveentity.entity.SupportiveEntityGenerator;
+import io.polygenesis.generators.java.domain.supportiveentity.entity.SupportiveEntityMethodTransformer;
+import io.polygenesis.generators.java.domain.supportiveentity.entity.SupportiveEntityTransformer;
+import io.polygenesis.generators.java.domain.supportiveentity.id.SupportiveEntityIdGenerator;
+import io.polygenesis.generators.java.domain.supportiveentity.id.SupportiveEntityIdMethodTransformer;
+import io.polygenesis.generators.java.domain.supportiveentity.id.SupportiveEntityIdTransformer;
+import io.polygenesis.generators.java.domain.supportiveentity.repository.SupportiveEntityRepositoryGenerator;
+import io.polygenesis.generators.java.domain.supportiveentity.repository.SupportiveEntityRepositoryMethodTransformer;
+import io.polygenesis.generators.java.domain.supportiveentity.repository.SupportiveEntityRepositoryTransformer;
 import io.polygenesis.generators.java.domain.valueobject.ValueObjectGenerator;
 import io.polygenesis.generators.java.domain.valueobject.ValueObjectMethodTransformer;
 import io.polygenesis.generators.java.domain.valueobject.ValueObjectTransformer;
 import io.polygenesis.generators.java.implementations.domain.StateMutationMethodImplementorRegistry;
-import io.polygenesis.generators.java.implementations.domain.constructor.ConstructorImplementorRegistry;
 import io.polygenesis.transformers.java.JavaDataTypeTransformer;
 import io.polygenesis.transformers.java.legacy.FunctionToLegacyMethodRepresentationTransformer;
 import java.nio.file.Path;
@@ -94,8 +98,9 @@ public final class JavaDomainMetamodelGeneratorFactory {
   private static DomainEventExporter domainEventExporter;
   private static PersistenceExporter persistenceExporter;
   private static DomainServiceGenerator domainServiceGenerator;
-  private static SupportiveEntityExporter supportiveEntityExporter;
-  private static SupportiveEntityIdExporter supportiveEntityIdExporter;
+  private static SupportiveEntityGenerator supportiveEntityGenerator;
+  private static SupportiveEntityIdGenerator supportiveEntityIdGenerator;
+  private static SupportiveEntityRepositoryGenerator supportiveEntityRepositoryGenerator;
   private static ConstantsExporter constantsExporter;
   private static ProjectionExporter projectionExporter;
   private static ProjectionIdExporter projectionIdExporter;
@@ -176,20 +181,27 @@ public final class JavaDomainMetamodelGeneratorFactory {
             templateEngine,
             activeFileExporter);
 
-    ConstructorImplementorRegistry constructorImplementorRegistry =
-        new ConstructorImplementorRegistry(freemarkerService);
-    ConstructorTransformerLegacy constructorRepresentable =
-        new ConstructorTransformerLegacy(dataTypeTransformer, constructorImplementorRegistry);
+    supportiveEntityGenerator =
+        new SupportiveEntityGenerator(
+            new SupportiveEntityTransformer(
+                dataTypeTransformer, new SupportiveEntityMethodTransformer(dataTypeTransformer)),
+            templateEngine,
+            activeFileExporter);
 
-    SupportiveEntityLegacyClassTransformer supportiveEntityLegacyClassTransformer =
-        new SupportiveEntityLegacyClassTransformer(dataTypeTransformer, constructorRepresentable);
+    supportiveEntityIdGenerator =
+        new SupportiveEntityIdGenerator(
+            new SupportiveEntityIdTransformer(
+                dataTypeTransformer, new SupportiveEntityIdMethodTransformer(dataTypeTransformer)),
+            templateEngine,
+            activeFileExporter);
 
-    supportiveEntityExporter =
-        new SupportiveEntityExporter(freemarkerService, supportiveEntityLegacyClassTransformer);
-
-    supportiveEntityIdExporter =
-        new SupportiveEntityIdExporter(
-            freemarkerService, new SupportiveEntityIdLegacyClassTransformer(dataTypeTransformer));
+    supportiveEntityRepositoryGenerator =
+        new SupportiveEntityRepositoryGenerator(
+            new SupportiveEntityRepositoryTransformer(
+                dataTypeTransformer,
+                new SupportiveEntityRepositoryMethodTransformer(dataTypeTransformer)),
+            templateEngine,
+            activeFileExporter);
 
     constantsExporter = new ConstantsExporter(freemarkerService);
 
@@ -278,8 +290,9 @@ public final class JavaDomainMetamodelGeneratorFactory {
         domainEventExporter,
         persistenceExporter,
         domainServiceGenerator,
-        supportiveEntityExporter,
-        supportiveEntityIdExporter,
+        supportiveEntityGenerator,
+        supportiveEntityIdGenerator,
+        supportiveEntityRepositoryGenerator,
         constantsExporter,
         projectionExporter,
         projectionIdExporter,

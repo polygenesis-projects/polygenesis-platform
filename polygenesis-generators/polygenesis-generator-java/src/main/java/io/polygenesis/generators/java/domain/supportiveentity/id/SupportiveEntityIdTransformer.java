@@ -18,31 +18,47 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.generators.java.domain.supportiveentity;
+package io.polygenesis.generators.java.domain.supportiveentity.id;
 
+import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.DataTypeTransformer;
-import io.polygenesis.models.domain.SupportiveEntity;
+import io.polygenesis.core.TemplateData;
 import io.polygenesis.representations.code.ConstructorRepresentation;
 import io.polygenesis.representations.code.FieldRepresentation;
 import io.polygenesis.representations.code.MethodRepresentation;
 import io.polygenesis.representations.code.ParameterRepresentation;
-import io.polygenesis.transformers.java.legacy.AbstractLegacyClassTransformer;
+import io.polygenesis.transformers.java.AbstractClassTransformer;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-/** @author Christos Tsakostas */
-public class SupportiveEntityIdLegacyClassTransformer
-    extends AbstractLegacyClassTransformer<SupportiveEntity> {
+/**
+ * The type Supportive entity id transformer.
+ *
+ * @author Christos Tsakostas
+ */
+public class SupportiveEntityIdTransformer
+    extends AbstractClassTransformer<SupportiveEntityId, Function> {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
-  public SupportiveEntityIdLegacyClassTransformer(DataTypeTransformer dataTypeTransformer) {
-    super(dataTypeTransformer);
+  /**
+   * Instantiates a new Supportive entity id transformer.
+   *
+   * @param dataTypeTransformer the data type transformer
+   * @param methodTransformer the method transformer
+   */
+  public SupportiveEntityIdTransformer(
+      DataTypeTransformer dataTypeTransformer,
+      SupportiveEntityIdMethodTransformer methodTransformer) {
+    super(dataTypeTransformer, methodTransformer);
   }
 
   // ===============================================================================================
@@ -50,14 +66,29 @@ public class SupportiveEntityIdLegacyClassTransformer
   // ===============================================================================================
 
   @Override
-  public Set<FieldRepresentation> fieldRepresentations(SupportiveEntity source, Object... args) {
+  public TemplateData transform(SupportiveEntityId source, Object... args) {
+    Map<String, Object> dataModel = new HashMap<>();
+    dataModel.put("representation", create(source));
+
+    return new TemplateData(dataModel, "polygenesis-representation-java/Class.java.ftl");
+  }
+
+  @Override
+  public Set<FieldRepresentation> staticFieldRepresentations(
+      SupportiveEntityId source, Object... args) {
+    return new LinkedHashSet<>(
+        Arrays.asList(new FieldRepresentation("static final long", "serialVersionUID = 1L")));
+  }
+
+  @Override
+  public Set<FieldRepresentation> fieldRepresentations(SupportiveEntityId source, Object... args) {
     return new LinkedHashSet<>(
         Arrays.asList(new FieldRepresentation("static final long", "serialVersionUID = 1L")));
   }
 
   @Override
   public Set<ConstructorRepresentation> constructorRepresentations(
-      SupportiveEntity source, Object... args) {
+      SupportiveEntityId source, Object... args) {
     Set<ConstructorRepresentation> constructorRepresentations = new LinkedHashSet<>();
 
     // ---------------------------------------------------------------------------------------------
@@ -71,75 +102,65 @@ public class SupportiveEntityIdLegacyClassTransformer
     constructorRepresentations.add(
         createConstructorWithImplementation(
             source.getObjectName().getText(),
-            new LinkedHashSet<>(Arrays.asList(new ParameterRepresentation("UUID", "rootId"))),
-            "\t\tsuper(rootId);"));
+            new LinkedHashSet<>(
+                Arrays.asList(new ParameterRepresentation("String", "supportiveEntityId"))),
+            "\t\tsuper(supportiveEntityId);"));
 
     return constructorRepresentations;
   }
 
   @Override
-  public Set<MethodRepresentation> methodRepresentations(SupportiveEntity source, Object... args) {
-    return new LinkedHashSet<>();
+  public Set<MethodRepresentation> methodRepresentations(
+      SupportiveEntityId source, Object... args) {
+    return super.methodRepresentations(source, args);
   }
 
   @Override
-  public String packageName(SupportiveEntity source, Object... args) {
+  public String packageName(SupportiveEntityId source, Object... args) {
     return source.getPackageName().getText();
   }
 
   @Override
-  public Set<String> imports(SupportiveEntity source, Object... args) {
+  public Set<String> imports(SupportiveEntityId source, Object... args) {
     Set<String> imports = new TreeSet<>();
 
     imports.add("com.oregor.trinity4j.domain.SupportiveEntityId");
     imports.add("javax.persistence.Embeddable");
-    imports.add("java.util.UUID");
 
     return imports;
   }
 
   @Override
-  public Set<String> annotations(SupportiveEntity source, Object... args) {
-    return new LinkedHashSet<>(Arrays.asList("@Embeddable"));
+  public Set<String> annotations(SupportiveEntityId source, Object... args) {
+    return new LinkedHashSet<>(Collections.singletonList("@Embeddable"));
   }
 
   @Override
-  public String description(SupportiveEntity source, Object... args) {
+  public String description(SupportiveEntityId source, Object... args) {
     StringBuilder stringBuilder = new StringBuilder();
 
     stringBuilder.append("The ");
 
     stringBuilder.append(TextConverter.toUpperCamelSpaces(source.getObjectName().getText()));
 
-    stringBuilder.append(" Aggregate Root Id.");
+    stringBuilder.append(" Supportive Entity Id.");
 
     return stringBuilder.toString();
   }
 
   @Override
-  public String modifiers(SupportiveEntity source, Object... args) {
-    return MODIFIER_PUBLIC;
+  public String simpleObjectName(SupportiveEntityId source, Object... args) {
+    return super.simpleObjectName(source, args);
   }
 
   @Override
-  public String simpleObjectName(SupportiveEntity source, Object... args) {
-    StringBuilder stringBuilder = new StringBuilder();
-
-    stringBuilder.append(TextConverter.toLowerCamel(source.getObjectName().getText()));
-    stringBuilder.append("Id");
-
-    return stringBuilder.toString();
-  }
-
-  @Override
-  public String fullObjectName(SupportiveEntity source, Object... args) {
+  public String fullObjectName(SupportiveEntityId source, Object... args) {
     StringBuilder stringBuilder = new StringBuilder();
 
     stringBuilder.append(TextConverter.toUpperCamel(source.getObjectName().getText()));
-    stringBuilder.append("Id");
     stringBuilder.append(" extends ");
 
-    stringBuilder.append("SupportiveEntityId");
+    stringBuilder.append("SupportiveEntityId<String>");
 
     return stringBuilder.toString();
   }

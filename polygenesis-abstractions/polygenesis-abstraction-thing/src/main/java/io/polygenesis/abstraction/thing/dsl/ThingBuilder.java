@@ -194,6 +194,16 @@ public class ThingBuilder extends AbstractThingBuilder<ThingBuilder> {
         new LinkedHashSet<>(Arrays.asList(AbstractionScope.domainDetailPublisher())));
   }
 
+  /**
+   * Domain detail repository in memory thing builder.
+   *
+   * @return the thing builder
+   */
+  public static ThingBuilder domainDetailRepositoryInMemory() {
+    return new ThingBuilder(
+        new LinkedHashSet<>(Arrays.asList(AbstractionScope.domainDetailRepositoryInMemory())));
+  }
+
   // ===============================================================================================
   // METADATA RELATED FUNCTIONS
   // ===============================================================================================

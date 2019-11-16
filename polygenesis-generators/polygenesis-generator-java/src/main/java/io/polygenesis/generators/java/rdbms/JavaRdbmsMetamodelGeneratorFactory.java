@@ -57,8 +57,7 @@ import io.polygenesis.transformers.java.legacy.FunctionToLegacyMethodRepresentat
 import java.nio.file.Path;
 
 /**
- * The Java Domain MetamodelGenerator Factory creates new instances of {@link
- * JavaRdbmsMetamodelGenerator}*.
+ * The type Java rdbms metamodel generator factory.
  *
  * @author Christos Tsakostas
  */

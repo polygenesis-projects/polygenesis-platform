@@ -40,6 +40,19 @@ ${ representation.modifiers }<#if representation.modifiers != ""> </#if>class ${
 
   private static final long serialVersionUID = 1L;
 </#if>
+<#if representation.staticFieldRepresentations?size gt 0>
+
+  // ===============================================================================================
+  // STATIC
+  // ===============================================================================================
+
+</#if>
+<#list representation.staticFieldRepresentations as staticFieldRepresentation>
+    <#list staticFieldRepresentation.annotations as annotation>
+        ${ annotation }
+    </#list>
+  private ${ staticFieldRepresentation.dataType } ${ staticFieldRepresentation.variableName };
+</#list>
 <#if representation.fieldRepresentations?size gt 0>
 
   // ===============================================================================================
