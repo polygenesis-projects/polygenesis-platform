@@ -30,13 +30,14 @@ import io.polygenesis.core.Exporter;
 import io.polygenesis.core.FreemarkerTemplateEngine;
 import io.polygenesis.core.TemplateEngine;
 import io.polygenesis.generators.java.domain.aggregateentity.AggregateEntityExporter;
-import io.polygenesis.generators.java.domain.aggregateentity.AggregateEntityIdExporter;
-import io.polygenesis.generators.java.domain.aggregateentity.AggregateEntityIdLegacyClassTransformer;
 import io.polygenesis.generators.java.domain.aggregateentity.AggregateEntityLegacyClassTransformer;
-import io.polygenesis.generators.java.domain.aggregateroot.AggregateRootExporter;
-import io.polygenesis.generators.java.domain.aggregateroot.AggregateRootIdExporter;
-import io.polygenesis.generators.java.domain.aggregateroot.AggregateRootIdLegacyClassTransformer;
-import io.polygenesis.generators.java.domain.aggregateroot.AggregateRootLegacyClassTransformer;
+import io.polygenesis.generators.java.domain.aggregateentity.id.AggregateEntityIdExporter;
+import io.polygenesis.generators.java.domain.aggregateentity.id.AggregateEntityIdLegacyClassTransformer;
+import io.polygenesis.generators.java.domain.aggregateroot.AggregateRootGenerator;
+import io.polygenesis.generators.java.domain.aggregateroot.AggregateRootMethodTransformer;
+import io.polygenesis.generators.java.domain.aggregateroot.AggregateRootTransformer;
+import io.polygenesis.generators.java.domain.aggregateroot.id.AggregateRootIdExporter;
+import io.polygenesis.generators.java.domain.aggregateroot.id.AggregateRootIdLegacyClassTransformer;
 import io.polygenesis.generators.java.domain.domainevent.DomainEventExporter;
 import io.polygenesis.generators.java.domain.domainmessage.data.DomainMessageDataGenerator;
 import io.polygenesis.generators.java.domain.domainmessage.data.DomainMessageDataMethodTransformer;
@@ -90,7 +91,7 @@ public final class JavaDomainMetamodelGeneratorFactory {
   // DEPENDENCIES
   // ===============================================================================================
 
-  private static AggregateRootExporter aggregateRootExporter;
+  private static AggregateRootGenerator aggregateRootGenerator;
   private static AggregateRootIdExporter aggregateRootIdExporter;
   private static AggregateEntityExporter aggregateEntityExporter;
   private static AggregateEntityIdExporter aggregateEntityIdExporter;
@@ -132,12 +133,12 @@ public final class JavaDomainMetamodelGeneratorFactory {
         new StateMutationLegacyMethodTransformer(
             dataTypeTransformer, stateMutationMethodImplementorRegistry);
 
-    AggregateRootLegacyClassTransformer aggregateRootClassRepresentable =
-        new AggregateRootLegacyClassTransformer(
-            dataTypeTransformer, stateMutationMethodRepresentable);
-
-    aggregateRootExporter =
-        new AggregateRootExporter(freemarkerService, aggregateRootClassRepresentable);
+    aggregateRootGenerator = new AggregateRootGenerator(
+        new AggregateRootTransformer(
+            dataTypeTransformer, new AggregateRootMethodTransformer(dataTypeTransformer),
+            stateMutationMethodRepresentable),
+        templateEngine,
+        activeFileExporter);
 
     AggregateRootIdLegacyClassTransformer aggregateRootIdClassRepresentable =
         new AggregateRootIdLegacyClassTransformer(dataTypeTransformer);
@@ -282,7 +283,7 @@ public final class JavaDomainMetamodelGeneratorFactory {
         tablePrefix,
         rootPackageName,
         contextName,
-        aggregateRootExporter,
+        aggregateRootGenerator,
         aggregateRootIdExporter,
         aggregateEntityExporter,
         aggregateEntityIdExporter,

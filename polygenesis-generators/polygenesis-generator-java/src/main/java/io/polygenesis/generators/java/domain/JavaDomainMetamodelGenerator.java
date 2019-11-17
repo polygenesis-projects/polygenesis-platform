@@ -29,9 +29,9 @@ import io.polygenesis.core.CoreRegistry;
 import io.polygenesis.core.ExportInfo;
 import io.polygenesis.core.MetamodelRepository;
 import io.polygenesis.generators.java.domain.aggregateentity.AggregateEntityExporter;
-import io.polygenesis.generators.java.domain.aggregateentity.AggregateEntityIdExporter;
-import io.polygenesis.generators.java.domain.aggregateroot.AggregateRootExporter;
-import io.polygenesis.generators.java.domain.aggregateroot.AggregateRootIdExporter;
+import io.polygenesis.generators.java.domain.aggregateentity.id.AggregateEntityIdExporter;
+import io.polygenesis.generators.java.domain.aggregateroot.AggregateRootGenerator;
+import io.polygenesis.generators.java.domain.aggregateroot.id.AggregateRootIdExporter;
 import io.polygenesis.generators.java.domain.domainevent.DomainEventExporter;
 import io.polygenesis.generators.java.domain.domainmessage.data.DomainMessageData;
 import io.polygenesis.generators.java.domain.domainmessage.data.DomainMessageDataGenerator;
@@ -55,6 +55,7 @@ import io.polygenesis.generators.java.domain.valueobject.ValueObjectGenerator;
 import io.polygenesis.generators.java.shared.FolderFileConstants;
 import io.polygenesis.models.domain.AggregateEntity;
 import io.polygenesis.models.domain.AggregateEntityCollection;
+import io.polygenesis.models.domain.AggregateRoot;
 import io.polygenesis.models.domain.AggregateRootPersistable;
 import io.polygenesis.models.domain.BaseDomainEntity;
 import io.polygenesis.models.domain.DomainMetamodelRepository;
@@ -81,7 +82,7 @@ public class JavaDomainMetamodelGenerator extends AbstractMetamodelGenerator {
   private final PackageName rootPackageName;
   private final ContextName contextName;
 
-  private final AggregateRootExporter aggregateRootExporter;
+  private final AggregateRootGenerator aggregateRootGenerator;
   private final AggregateRootIdExporter aggregateRootIdExporter;
   private final AggregateEntityExporter aggregateEntityExporter;
   private final AggregateEntityIdExporter aggregateEntityIdExporter;
@@ -114,7 +115,7 @@ public class JavaDomainMetamodelGenerator extends AbstractMetamodelGenerator {
    * @param tablePrefix the table prefix
    * @param rootPackageName the root package name
    * @param contextName the context name
-   * @param aggregateRootExporter the aggregate root exporter
+   * @param aggregateRootGenerator the aggregate root exporter
    * @param aggregateRootIdExporter the aggregate root id exporter
    * @param aggregateEntityExporter the aggregate entity exporter
    * @param aggregateEntityIdExporter the aggregate entity id exporter
@@ -133,14 +134,14 @@ public class JavaDomainMetamodelGenerator extends AbstractMetamodelGenerator {
    * @param domainMessageDataRepositoryGenerator the domain message data repository generator
    * @param domainMessagePublishedDataGenerator the domain message published data generator
    * @param domainMessagePublishedDataRepositoryGenerator the domain message published data
-   *     repository generator
+   * repository generator
    */
   public JavaDomainMetamodelGenerator(
       Path generationPath,
       String tablePrefix,
       PackageName rootPackageName,
       ContextName contextName,
-      AggregateRootExporter aggregateRootExporter,
+      AggregateRootGenerator aggregateRootGenerator,
       AggregateRootIdExporter aggregateRootIdExporter,
       AggregateEntityExporter aggregateEntityExporter,
       AggregateEntityIdExporter aggregateEntityIdExporter,
@@ -163,7 +164,7 @@ public class JavaDomainMetamodelGenerator extends AbstractMetamodelGenerator {
     this.tablePrefix = tablePrefix;
     this.rootPackageName = rootPackageName;
     this.contextName = contextName;
-    this.aggregateRootExporter = aggregateRootExporter;
+    this.aggregateRootGenerator = aggregateRootGenerator;
     this.aggregateRootIdExporter = aggregateRootIdExporter;
     this.aggregateEntityExporter = aggregateEntityExporter;
     this.aggregateEntityIdExporter = aggregateEntityIdExporter;
@@ -218,8 +219,10 @@ public class JavaDomainMetamodelGenerator extends AbstractMetamodelGenerator {
         .getItems()
         .forEach(
             aggregateRoot -> {
-              aggregateRootExporter.export(
-                  getGenerationPath(), aggregateRoot, getRootPackageName());
+              aggregateRootGenerator.generate(
+                  aggregateRoot, aggregateRootExportInfo(getGenerationPath(), aggregateRoot),
+                  getRootPackageName()
+              );
 
               aggregateRootIdExporter.export(getGenerationPath(), aggregateRoot);
 
@@ -578,6 +581,21 @@ public class JavaDomainMetamodelGenerator extends AbstractMetamodelGenerator {
         String.format(
             "%s%s",
             TextConverter.toUpperCamel(supportiveEntity.getObjectName().getText()),
+            FolderFileConstants.JAVA_POSTFIX));
+  }
+
+  private ExportInfo aggregateRootExportInfo(
+      Path generationPath, AggregateRoot aggregateRoot) {
+    return ExportInfo.file(
+        Paths.get(
+            generationPath.toString(),
+            FolderFileConstants.SRC,
+            FolderFileConstants.MAIN,
+            FolderFileConstants.JAVA,
+            aggregateRoot.getPackageName().toPath().toString()),
+        String.format(
+            "%s%s",
+            TextConverter.toUpperCamel(aggregateRoot.getObjectName().getText()),
             FolderFileConstants.JAVA_POSTFIX));
   }
 

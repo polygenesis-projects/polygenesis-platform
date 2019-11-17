@@ -18,12 +18,12 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.generators.java.domain.aggregateroot;
+package io.polygenesis.generators.java.domain.aggregateroot.id;
 
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.models.domain.AggregateRoot;
+import io.polygenesis.models.domain.InstantiationType;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -34,30 +34,30 @@ import java.util.Map;
  *
  * @author Christos Tsakostas
  */
-public class AggregateRootExporter {
+public class AggregateRootIdExporter {
 
   // ===============================================================================================
   // DEPENDENCIES
   // ===============================================================================================
 
   private final FreemarkerService freemarkerService;
-  private final AggregateRootLegacyClassTransformer aggregateRootClassRepresentable;
+  private final AggregateRootIdLegacyClassTransformer aggregateRootIdClassRepresentable;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
-   * Instantiates a new Aggregate root exporter.
+   * Instantiates a new Aggregate root projection exporter.
    *
    * @param freemarkerService the freemarker service
-   * @param aggregateRootClassRepresentable the abstract aggregate root class representable
+   * @param aggregateRootIdClassRepresentable the aggregate root ID projection converter
    */
-  public AggregateRootExporter(
+  public AggregateRootIdExporter(
       FreemarkerService freemarkerService,
-      AggregateRootLegacyClassTransformer aggregateRootClassRepresentable) {
+      AggregateRootIdLegacyClassTransformer aggregateRootIdClassRepresentable) {
     this.freemarkerService = freemarkerService;
-    this.aggregateRootClassRepresentable = aggregateRootClassRepresentable;
+    this.aggregateRootIdClassRepresentable = aggregateRootIdClassRepresentable;
   }
 
   // ===============================================================================================
@@ -69,14 +69,14 @@ public class AggregateRootExporter {
    *
    * @param generationPath the generation path
    * @param aggregateRoot the aggregateRoot
-   * @param rootPackageName the root package name
    */
-  public void export(
-      Path generationPath, AggregateRoot aggregateRoot, PackageName rootPackageName) {
+  public void export(Path generationPath, AggregateRoot aggregateRoot) {
     Map<String, Object> dataModel = new HashMap<>();
+    if (aggregateRoot.getInstantiationType().equals(InstantiationType.ABSTRACT)) {
+      return;
+    }
 
-    dataModel.put(
-        "representation", aggregateRootClassRepresentable.create(aggregateRoot, rootPackageName));
+    dataModel.put("representation", aggregateRootIdClassRepresentable.create(aggregateRoot));
 
     freemarkerService.export(
         dataModel,
@@ -90,6 +90,6 @@ public class AggregateRootExporter {
         generationPath.toString(),
         "src/main/java",
         aggregateRoot.getPackageName().toPath().toString(),
-        TextConverter.toUpperCamel(aggregateRoot.getObjectName().getText()) + ".java");
+        TextConverter.toUpperCamel(aggregateRoot.getObjectName().getText()) + "Id.java");
   }
 }
