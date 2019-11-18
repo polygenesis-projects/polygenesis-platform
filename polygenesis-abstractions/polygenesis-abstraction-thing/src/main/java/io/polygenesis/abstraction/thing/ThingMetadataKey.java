@@ -27,8 +27,8 @@ package io.polygenesis.abstraction.thing;
  */
 public class ThingMetadataKey {
 
-  /** The Preferred package. */
   public static final String PREFERRED_PACKAGE = "preferredPackage";
+  public static final String SUPER_CLASS = "superClass";
 
   private ThingMetadataKey() {
     super();

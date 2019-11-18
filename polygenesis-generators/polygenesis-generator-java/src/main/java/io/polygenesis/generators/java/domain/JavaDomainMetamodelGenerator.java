@@ -20,6 +20,7 @@
 
 package io.polygenesis.generators.java.domain;
 
+import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.commons.valueobjects.ContextName;
 import io.polygenesis.commons.valueobjects.ObjectName;
@@ -69,6 +70,7 @@ import io.polygenesis.models.domain.ValueObject;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * The type Java domain generator.
@@ -323,10 +325,32 @@ public class JavaDomainMetamodelGenerator extends AbstractMetamodelGenerator {
     CoreRegistry.getMetamodelRepositoryResolver()
         .resolve(modelRepositories, DomainServiceRepository.class)
         .getItems()
-        .forEach(
-            domainService ->
-                domainServiceGenerator.generate(
-                    domainService, domainServiceExportInfo(getGenerationPath(), domainService)));
+        .forEach(domainService -> {
+          domainServiceGenerator.generate(
+              domainService, domainServiceExportInfo(getGenerationPath(), domainService));
+
+          // Argument Value Objects
+          Set<Data> allArguments =
+              domainService
+                  .getDomainServiceMethods()
+                  .stream()
+                  .flatMap(domainServiceMethod -> domainServiceMethod.getFunction().getArguments()
+                      .stream())
+                  .map(argument -> argument.getData())
+                  .collect(Collectors.toSet());
+
+          allArguments
+              .forEach(
+                  data -> {
+                    if (data.isDataGroup()) {
+                      ValueObject valueObject = new ValueObject(data.getAsDataObject());
+                      valueObjectGenerator.generate(
+                          valueObject,
+                          valueObjectExportInfo(getGenerationPath(), valueObject));
+                    }
+                  });
+
+        });
 
     // SUPPORTIVE ENTITIES
     CoreRegistry.getMetamodelRepositoryResolver()

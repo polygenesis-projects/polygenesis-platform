@@ -45,6 +45,12 @@ public class DomainServiceDetailMetamodelGenerator extends AbstractMetamodelGene
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
+  /**
+   * Instantiates a new Domain service detail metamodel generator.
+   *
+   * @param generationPath the generation path
+   * @param domainServiceDetailGenerator the domain service detail generator
+   */
   public DomainServiceDetailMetamodelGenerator(
       Path generationPath, DomainServiceDetailGenerator domainServiceDetailGenerator) {
     super(generationPath);

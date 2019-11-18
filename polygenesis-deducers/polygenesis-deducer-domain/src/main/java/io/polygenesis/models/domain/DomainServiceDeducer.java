@@ -20,6 +20,7 @@
 
 package io.polygenesis.models.domain;
 
+import io.polygenesis.abstraction.thing.ThingMetadataKey;
 import io.polygenesis.abstraction.thing.ThingRepository;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
@@ -84,11 +85,18 @@ public class DomainServiceDeducer implements Deducer<DomainServiceRepository> {
         .getAbstractionItemsByScope(AbstractionScope.domainService())
         .forEach(
             thing -> {
+              PackageName packageName = new PackageName(
+                  String.format("%s.%s", getRootPackageName().getText(), "service"));
+
+              if (thing.getMetadataValueIfExists(ThingMetadataKey.PREFERRED_PACKAGE) != null) {
+                packageName = PackageName.class
+                    .cast(thing.getMetadataValue(ThingMetadataKey.PREFERRED_PACKAGE));
+              }
+
               DomainService domainService =
                   new DomainService(
                       new ObjectName(thing.getThingName().getText()),
-                      new PackageName(
-                          String.format("%s.%s", getRootPackageName().getText(), "service")));
+                      packageName);
 
               thing
                   .getFunctions()
