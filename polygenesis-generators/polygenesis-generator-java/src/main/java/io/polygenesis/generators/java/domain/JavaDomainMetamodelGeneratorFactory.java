@@ -28,6 +28,7 @@ import io.polygenesis.core.ActiveFileExporter;
 import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.core.Exporter;
 import io.polygenesis.core.FreemarkerTemplateEngine;
+import io.polygenesis.core.PassiveFileExporter;
 import io.polygenesis.core.TemplateEngine;
 import io.polygenesis.generators.java.domain.aggregateentity.AggregateEntityExporter;
 import io.polygenesis.generators.java.domain.aggregateentity.AggregateEntityLegacyClassTransformer;
@@ -120,7 +121,7 @@ public final class JavaDomainMetamodelGeneratorFactory {
   static {
     final TemplateEngine templateEngine = new FreemarkerTemplateEngine();
     final Exporter activeFileExporter = new ActiveFileExporter();
-    // TODO: final Exporter passiveFileExporter = new PassiveFileExporter();
+    final Exporter passiveFileExporter = new PassiveFileExporter();
     final DataTypeTransformer dataTypeTransformer = new JavaDataTypeTransformer();
 
     FreemarkerService freemarkerService =

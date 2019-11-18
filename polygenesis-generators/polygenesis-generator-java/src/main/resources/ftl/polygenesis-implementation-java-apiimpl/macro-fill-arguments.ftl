@@ -43,6 +43,9 @@
         ${ requestDto.dataObject.objectName.text }.get${ textConverter.toUpperCamel(property.data.variableName.text) }()<#sep>,</#sep>
           <#break>
         <#case 'VALUE_OBJECT'>
+        new ${ textConverter.toUpperCamel(property.data.objectName.text) }(${ requestDto.dataObject.objectName.text }.get${ textConverter.toUpperCamel(property.data.variableName.text) }())<#sep>,</#sep>
+          <#break>
+        <#case 'SINGLE_VALUE_OBJECT'>
         ${ converterVariable }.convertToVo(${ requestDto.dataObject.objectName.text }.get${ textConverter.toUpperCamel(property.data.variableName.text) }())<#sep>,</#sep>
           <#break>
         <#default>
