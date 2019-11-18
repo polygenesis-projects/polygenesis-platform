@@ -21,6 +21,7 @@
 package io.polygenesis.models.domain.aggregateroot;
 
 import io.polygenesis.abstraction.thing.Thing;
+import io.polygenesis.abstraction.thing.ThingMetadataKey;
 import io.polygenesis.abstraction.thing.ThingRepository;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
@@ -146,7 +147,7 @@ public class AggregateRootDeducer {
               stateMutationMethods,
               stateQueryMethods,
               factoryMethods,
-              makeSuperclass(thing.getMultiTenant())));
+              makeSuperclass(rootPackageName, thing)));
     } else {
       Persistence persistence =
           new Persistence(
@@ -167,7 +168,7 @@ public class AggregateRootDeducer {
               stateMutationMethods,
               stateQueryMethods,
               factoryMethods,
-              makeSuperclass(thing.getMultiTenant()),
+              makeSuperclass(rootPackageName, thing),
               persistence));
     }
 
@@ -208,14 +209,26 @@ public class AggregateRootDeducer {
    *
    * @return the aggregate root
    */
-  private AggregateRoot makeSuperclass(Boolean multiTenant) {
+  private AggregateRoot makeSuperclass(PackageName rootPackageName, Thing thing) {
+    ObjectName objectNameSuperclass = thing.getMultiTenant()
+        ? new ObjectName("TenantAggregateRoot")
+        : new ObjectName("AggregateRoot");
+    PackageName packageName = new PackageName("com.oregor.trinity4j.domain");
+
+    if (thing.getMetadataValueIfExists(ThingMetadataKey.SUPER_CLASS) != null) {
+      Thing thingSuperclass = Thing.class
+          .cast(thing.getMetadataValue(ThingMetadataKey.SUPER_CLASS));
+      objectNameSuperclass = new ObjectName(thingSuperclass.getThingName().getText());
+      packageName = thingSuperclass.makePackageName(rootPackageName, thingSuperclass);
+    }
+
     return new AggregateRoot(
         InstantiationType.ABSTRACT,
-        multiTenant ? new ObjectName("TenantAggregateRoot") : new ObjectName("AggregateRoot"),
-        new PackageName("com.oregor.trinity4j.domain"),
+        objectNameSuperclass,
+        packageName,
         new LinkedHashSet<>(),
         new LinkedHashSet<>(),
-        multiTenant,
+        thing.getMultiTenant(),
         new LinkedHashSet<>(),
         new LinkedHashSet<>(),
         new LinkedHashSet<>());

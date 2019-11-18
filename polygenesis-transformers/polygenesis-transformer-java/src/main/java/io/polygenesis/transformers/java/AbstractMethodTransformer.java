@@ -94,9 +94,9 @@ public abstract class AbstractMethodTransformer<S extends FunctionProvider>
       DataObject dataObject = source.getFunction().getReturnValue().getData().getAsDataObject();
 
       // TODO
-      //            if (!dataObject.getPackageName().equals(source.getPackageName())) {
-      imports.add(makeCanonicalObjectName(dataObject.getPackageName(), dataObject.getDataType()));
-      //            }
+//      if (!dataObject.getPackageName().equals(source.getPackageName())) {
+//        imports.add(makeCanonicalObjectName(dataObject.getPackageName(), dataObject.getDataType()));
+//      }
     }
 
     source
