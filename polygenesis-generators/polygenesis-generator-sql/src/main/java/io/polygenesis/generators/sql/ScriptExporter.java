@@ -88,8 +88,8 @@ public class ScriptExporter {
 
   private Path makeFileName(Path generationPath, String context) {
     counter = counter + 1;
-    String name = String.format("V2019.01.01.00.00.%s__%s__Initialize", counter, context);
+    String name = String.format("%s__%s__Initialize", counter, context);
 
-    return Paths.get(generationPath.toString(), "src/main/resources/db/migration", name + ".sql");
+    return Paths.get(generationPath.toString(), "src/main/resources/db/migration", name + ".sql.txt");
   }
 }
