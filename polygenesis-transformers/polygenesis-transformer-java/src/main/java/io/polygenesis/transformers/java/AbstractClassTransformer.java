@@ -161,6 +161,14 @@ public abstract class AbstractClassTransformer<S extends Nameable, F extends Fun
   // PROTECTED
   // ===============================================================================================
 
+  /**
+   * Create empty constructor with implementation constructor representation.
+   *
+   * @param dataType the data type
+   * @param annotations the annotations
+   * @param implementation the implementation
+   * @return the constructor representation
+   */
   @SuppressWarnings("CPD-START")
   /**
    * Create empty constructor with implementation constructor representation.
@@ -250,10 +258,11 @@ public abstract class AbstractClassTransformer<S extends Nameable, F extends Fun
   /**
    * Create no args constructor for persistence constructor representation.
    *
+   * @param modifier the modifier
    * @return the constructor representation
    */
   protected ConstructorRepresentation createNoArgsConstructorForPersistence(String modifier) {
-    String description = "No-args constructor for persistence frameworks.";
+    String description = "No-args constructor for reflections-based frameworks.";
 
     return new ConstructorRepresentation(
         new LinkedHashSet<>(), description, modifier, new LinkedHashSet<>(), "\t\tsuper();");
@@ -342,6 +351,24 @@ public abstract class AbstractClassTransformer<S extends Nameable, F extends Fun
         fieldRepresentation -> {
           methodRepresentations.add(createGetterMethod(fieldRepresentation, new LinkedHashSet<>()));
           methodRepresentations.add(createGuardMethod(fieldRepresentation, new LinkedHashSet<>()));
+        });
+
+    return methodRepresentations;
+  }
+
+  /**
+   * Method representations for getters set.
+   *
+   * @param fieldRepresentations the field representations
+   * @return the set
+   */
+  protected Set<MethodRepresentation> methodRepresentationsForGetters(
+      Set<FieldRepresentation> fieldRepresentations) {
+    Set<MethodRepresentation> methodRepresentations = new LinkedHashSet<>();
+
+    fieldRepresentations.forEach(
+        fieldRepresentation -> {
+          methodRepresentations.add(createGetterMethod(fieldRepresentation, new LinkedHashSet<>()));
         });
 
     return methodRepresentations;
@@ -553,7 +580,10 @@ public abstract class AbstractClassTransformer<S extends Nameable, F extends Fun
           }
         });
 
-    return stringBuilder.toString();
+    String impl = stringBuilder.toString();
+
+    // Get rid of the last \n character
+    return impl.substring(0, impl.length() - 1);
   }
 
   /**

@@ -39,7 +39,9 @@ import io.polygenesis.generators.java.domain.aggregateroot.AggregateRootMethodTr
 import io.polygenesis.generators.java.domain.aggregateroot.AggregateRootTransformer;
 import io.polygenesis.generators.java.domain.aggregateroot.id.AggregateRootIdExporter;
 import io.polygenesis.generators.java.domain.aggregateroot.id.AggregateRootIdLegacyClassTransformer;
-import io.polygenesis.generators.java.domain.domainevent.DomainEventExporter;
+import io.polygenesis.generators.java.domain.domainevent.DomainEventGenerator;
+import io.polygenesis.generators.java.domain.domainevent.DomainEventMethodTransformer;
+import io.polygenesis.generators.java.domain.domainevent.DomainEventTransformer;
 import io.polygenesis.generators.java.domain.domainmessage.data.DomainMessageDataGenerator;
 import io.polygenesis.generators.java.domain.domainmessage.data.DomainMessageDataMethodTransformer;
 import io.polygenesis.generators.java.domain.domainmessage.data.DomainMessageDataTransformer;
@@ -97,7 +99,7 @@ public final class JavaDomainMetamodelGeneratorFactory {
   private static AggregateEntityExporter aggregateEntityExporter;
   private static AggregateEntityIdExporter aggregateEntityIdExporter;
   private static ValueObjectGenerator valueObjectGenerator;
-  private static DomainEventExporter domainEventExporter;
+  private static DomainEventGenerator domainEventGenerator;
   private static PersistenceExporter persistenceExporter;
   private static DomainServiceGenerator domainServiceGenerator;
   private static SupportiveEntityGenerator supportiveEntityGenerator;
@@ -166,7 +168,12 @@ public final class JavaDomainMetamodelGeneratorFactory {
             templateEngine,
             activeFileExporter);
 
-    domainEventExporter = new DomainEventExporter(freemarkerService);
+    domainEventGenerator =
+        new DomainEventGenerator(
+            new DomainEventTransformer(
+                dataTypeTransformer, new DomainEventMethodTransformer(dataTypeTransformer)),
+            templateEngine,
+            passiveFileExporter);
 
     FunctionToLegacyMethodRepresentationTransformer functionToMethodRepresentationTransformer =
         new FunctionToLegacyMethodRepresentationTransformer(dataTypeTransformer);
@@ -291,7 +298,7 @@ public final class JavaDomainMetamodelGeneratorFactory {
         aggregateEntityExporter,
         aggregateEntityIdExporter,
         valueObjectGenerator,
-        domainEventExporter,
+        domainEventGenerator,
         persistenceExporter,
         domainServiceGenerator,
         supportiveEntityGenerator,
