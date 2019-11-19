@@ -134,12 +134,14 @@ public final class JavaDomainMetamodelGeneratorFactory {
         new StateMutationLegacyMethodTransformer(
             dataTypeTransformer, stateMutationMethodImplementorRegistry);
 
-    aggregateRootGenerator = new AggregateRootGenerator(
-        new AggregateRootTransformer(
-            dataTypeTransformer, new AggregateRootMethodTransformer(dataTypeTransformer),
-            stateMutationMethodRepresentable),
-        templateEngine,
-        activeFileExporter);
+    aggregateRootGenerator =
+        new AggregateRootGenerator(
+            new AggregateRootTransformer(
+                dataTypeTransformer,
+                new AggregateRootMethodTransformer(dataTypeTransformer),
+                stateMutationMethodRepresentable),
+            templateEngine,
+            passiveFileExporter);
 
     AggregateRootIdLegacyClassTransformer aggregateRootIdClassRepresentable =
         new AggregateRootIdLegacyClassTransformer(dataTypeTransformer);

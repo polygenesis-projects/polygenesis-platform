@@ -26,7 +26,6 @@ import io.polygenesis.core.TemplateData;
 import io.polygenesis.generators.java.apidetail.service.activity.AbstractServiceMethodImplementationTransformer;
 import io.polygenesis.models.apiimpl.ServiceMethodImplementation;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -49,7 +48,7 @@ public class CreateAggregateRootTransformer extends AbstractServiceMethodImpleme
 
     CreateAggregateRootTemplateData data =
         new CreateAggregateRootTemplateData(
-            new LinkedHashSet<>(),
+            getParameterRepresentations(source),
             getAggregateRootDataType(source),
             getAggregateRootVariable(source),
             getPropertiesFromConstructor(source, metamodelRepositories),

@@ -92,13 +92,7 @@ public class DtoDeducer {
       dtoType = DtoType.API_REQUEST;
     }
 
-//    Dto dto = new Dto(dtoType,
-//        replaceSingleValueObjectsWithPrimitives(originatingDataObject.getAsDataObject()),
-//        virtual);
-
-    Dto dto = new Dto(dtoType,
-        originatingDataObject.getAsDataObject(),
-        virtual);
+    Dto dto = new Dto(dtoType, originatingDataObject.getAsDataObject(), virtual);
 
     makeAssertionsForRequestDto(dto, function);
 
@@ -228,32 +222,5 @@ public class DtoDeducer {
               function.getThing().getThingName().getText(),
               function.getName().getText()));
     }
-  }
-
-  private DataObject replaceSingleValueObjectsWithPrimitives(DataObject originatingDataObject) {
-    DataObject dataObject = new DataObject(
-        originatingDataObject.getObjectName(),
-        originatingDataObject.getPackageName(),
-        originatingDataObject.getVariableName()
-    );
-
-    originatingDataObject.getModels().forEach(data -> {
-      if (data.isDataGroup()
-          && data.getAsDataObject().getModels().size() == 1) {
-        Data insideData = data.getAsDataObject().getModels().stream().findFirst().orElseThrow();
-        if (insideData.isDataPrimitive()) {
-          dataObject.addData(DataPrimitive.of(
-              insideData.getAsDataPrimitive().getPrimitiveType(),
-              data.getAsDataObject().getVariableName())
-          );
-        } else {
-          throw new IllegalStateException();
-        }
-      } else {
-        dataObject.addData(data);
-      }
-    });
-
-    return dataObject;
   }
 }

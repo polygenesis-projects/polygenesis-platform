@@ -23,10 +23,10 @@ package io.polygenesis.generators.java.apidetail;
 import io.polygenesis.commons.freemarker.FreemarkerConfig;
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.valueobjects.PackageName;
-import io.polygenesis.core.ActiveFileExporter;
 import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.core.Exporter;
 import io.polygenesis.core.FreemarkerTemplateEngine;
+import io.polygenesis.core.PassiveFileExporter;
 import io.polygenesis.core.TemplateEngine;
 import io.polygenesis.generators.java.apidetail.converter.DomainObjectConverterExporter;
 import io.polygenesis.generators.java.apidetail.converter.DomainObjectConverterLegacyClassTransformer;
@@ -58,7 +58,8 @@ public final class JavaApiDetailMetamodelGeneratorFactory {
 
   static {
     TemplateEngine templateEngine = new FreemarkerTemplateEngine();
-    Exporter activeFileExporter = new ActiveFileExporter();
+    // TODO: remove final Exporter activeFileExporter = new ActiveFileExporter();
+    final Exporter passiveFileExporter = new PassiveFileExporter();
     DataTypeTransformer dataTypeTransformer = new JavaDataTypeTransformer();
 
     FreemarkerService freemarkerService =
@@ -90,7 +91,7 @@ public final class JavaApiDetailMetamodelGeneratorFactory {
                 new ServiceDetailMethodTransformer(
                     dataTypeTransformer, serviceMethodActivityRegistry)),
             templateEngine,
-            activeFileExporter);
+            passiveFileExporter);
   }
 
   // ===============================================================================================

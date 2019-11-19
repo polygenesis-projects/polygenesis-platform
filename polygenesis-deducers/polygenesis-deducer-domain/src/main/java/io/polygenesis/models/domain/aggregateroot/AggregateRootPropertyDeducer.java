@@ -102,7 +102,9 @@ public class AggregateRootPropertyDeducer extends AbstractPropertyDeducer {
     Set<DomainObjectProperty<?>> properties = new LinkedHashSet<>();
 
     Optional<AbstractionScope> optionalAbstractionScope =
-        thing.getAbstractionsScopes().stream()
+        thing
+            .getAbstractionsScopes()
+            .stream()
             .filter(p -> p.getText().equals(AbstractionScope.DOMAIN_ABSTRACT_AGGREGATE_ROOT))
             .findFirst();
 
@@ -146,8 +148,8 @@ public class AggregateRootPropertyDeducer extends AbstractPropertyDeducer {
    * @param rootPackageName the root package name
    * @return the abstract aggregate root id
    */
-  protected AbstractAggregateRootId makeAbstractAggregateRootId(Thing thing,
-      PackageName rootPackageName) {
+  protected AbstractAggregateRootId makeAbstractAggregateRootId(
+      Thing thing, PackageName rootPackageName) {
     DataObject dataObject =
         new DataObject(
             new ObjectName(thing.getThingName().getText() + "Id"),

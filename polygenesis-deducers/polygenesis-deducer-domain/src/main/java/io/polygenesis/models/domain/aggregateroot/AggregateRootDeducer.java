@@ -171,7 +171,6 @@ public class AggregateRootDeducer {
               makeSuperclass(rootPackageName, thing),
               persistence));
     }
-
   }
 
   /**
@@ -210,14 +209,15 @@ public class AggregateRootDeducer {
    * @return the aggregate root
    */
   private AggregateRoot makeSuperclass(PackageName rootPackageName, Thing thing) {
-    ObjectName objectNameSuperclass = thing.getMultiTenant()
-        ? new ObjectName("TenantAggregateRoot")
-        : new ObjectName("AggregateRoot");
+    ObjectName objectNameSuperclass =
+        thing.getMultiTenant()
+            ? new ObjectName("TenantAggregateRoot")
+            : new ObjectName("AggregateRoot");
     PackageName packageName = new PackageName("com.oregor.trinity4j.domain");
 
     if (thing.getMetadataValueIfExists(ThingMetadataKey.SUPER_CLASS) != null) {
-      Thing thingSuperclass = Thing.class
-          .cast(thing.getMetadataValue(ThingMetadataKey.SUPER_CLASS));
+      Thing thingSuperclass =
+          Thing.class.cast(thing.getMetadataValue(ThingMetadataKey.SUPER_CLASS));
       objectNameSuperclass = new ObjectName(thingSuperclass.getThingName().getText());
       packageName = thingSuperclass.makePackageName(rootPackageName, thingSuperclass);
     }

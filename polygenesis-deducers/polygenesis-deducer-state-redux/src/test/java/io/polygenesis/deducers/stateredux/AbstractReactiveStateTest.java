@@ -21,7 +21,6 @@
 package io.polygenesis.deducers.stateredux;
 
 import io.polygenesis.abstraction.data.DataPrimitive;
-import io.polygenesis.abstraction.data.DataPurpose;
 import io.polygenesis.abstraction.data.PrimitiveType;
 import io.polygenesis.abstraction.thing.CqsType;
 import io.polygenesis.abstraction.thing.Function;
@@ -30,7 +29,6 @@ import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.dsl.FunctionBuilder;
 import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
 import io.polygenesis.commons.valueobjects.VariableName;
-import java.util.LinkedHashSet;
 
 /** @author Christos Tsakostas */
 public abstract class AbstractReactiveStateTest {
@@ -43,8 +41,7 @@ public abstract class AbstractReactiveStateTest {
     // =============================================================================================
     Function createFunction =
         FunctionBuilder.of(thing, "createSomeThing", Purpose.create())
-            .setReturnValue(
-                DataPrimitive.of(PrimitiveType.STRING, new VariableName("response")))
+            .setReturnValue(DataPrimitive.of(PrimitiveType.STRING, new VariableName("response")))
             .build();
 
     thing.addFunction(createFunction);
@@ -54,8 +51,7 @@ public abstract class AbstractReactiveStateTest {
     // =============================================================================================
     Function customPurposeFunction =
         FunctionBuilder.of(thing, "createSomeThing", Purpose.custom("validate", CqsType.COMMAND))
-            .setReturnValue(
-                DataPrimitive.of(PrimitiveType.STRING, new VariableName("response")))
+            .setReturnValue(DataPrimitive.of(PrimitiveType.STRING, new VariableName("response")))
             .build();
 
     thing.addFunction(customPurposeFunction);

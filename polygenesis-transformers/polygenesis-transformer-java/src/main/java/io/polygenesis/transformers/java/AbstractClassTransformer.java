@@ -447,7 +447,6 @@ public abstract class AbstractClassTransformer<S extends Nameable, F extends Fun
       stringBuilder.append(" is required\"");
       stringBuilder.append(");");
       stringBuilder.append("\n");
-      stringBuilder.append("\n");
     }
 
     stringBuilder.append("\t\t");
@@ -594,7 +593,10 @@ public abstract class AbstractClassTransformer<S extends Nameable, F extends Fun
               }
             });
 
-    return stringBuilder.toString();
+    String impl = stringBuilder.toString();
+
+    // Get rid of the last \n character
+    return impl.substring(0, impl.length() - 1);
   }
 
   /**

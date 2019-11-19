@@ -22,6 +22,7 @@ package io.polygenesis.abstraction.data;
 
 import io.polygenesis.commons.valueobjects.VariableName;
 import java.lang.annotation.Annotation;
+import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -49,7 +50,12 @@ public class DataPrimitive extends Data {
    */
   public static DataPrimitive of(PrimitiveType primitiveType, VariableName variableName) {
     return new DataPrimitive(
-        variableName, DataPurpose.any(), DataValidator.empty(), primitiveType, null, null);
+        variableName,
+        DataPurpose.any(),
+        DataValidator.empty(),
+        primitiveType,
+        new LinkedHashSet<>(),
+        null);
   }
 
   /**
@@ -60,10 +66,15 @@ public class DataPrimitive extends Data {
    * @param dataObject the data object
    * @return the data primitive
    */
-  public static DataPrimitive of(PrimitiveType primitiveType, VariableName variableName,
-      DataObject dataObject) {
+  public static DataPrimitive of(
+      PrimitiveType primitiveType, VariableName variableName, DataObject dataObject) {
     return new DataPrimitive(
-        variableName, DataPurpose.any(), DataValidator.empty(), primitiveType, null, dataObject);
+        variableName,
+        DataPurpose.any(),
+        DataValidator.empty(),
+        primitiveType,
+        new LinkedHashSet<>(),
+        dataObject);
   }
 
   /**
@@ -76,7 +87,12 @@ public class DataPrimitive extends Data {
    */
   public static DataPrimitive ofDataBusinessType(
       DataPurpose dataPurpose, PrimitiveType primitiveType, VariableName variableName) {
-    return new DataPrimitive(variableName, dataPurpose, DataValidator.empty(), primitiveType, null,
+    return new DataPrimitive(
+        variableName,
+        dataPurpose,
+        DataValidator.empty(),
+        primitiveType,
+        new LinkedHashSet<>(),
         null);
   }
 
@@ -142,8 +158,7 @@ public class DataPrimitive extends Data {
         getDataValidator(),
         getPrimitiveType(),
         getAnnotations(),
-        getDataObject()
-    );
+        getDataObject());
   }
 
   // ===============================================================================================
@@ -202,9 +217,9 @@ public class DataPrimitive extends Data {
       return false;
     }
     DataPrimitive that = (DataPrimitive) o;
-    return primitiveType == that.primitiveType &&
-        Objects.equals(annotations, that.annotations) &&
-        Objects.equals(dataObject, that.dataObject);
+    return primitiveType == that.primitiveType
+        && Objects.equals(annotations, that.annotations)
+        && Objects.equals(dataObject, that.dataObject);
   }
 
   @Override

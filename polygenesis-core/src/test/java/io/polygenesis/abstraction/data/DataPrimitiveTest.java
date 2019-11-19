@@ -55,8 +55,8 @@ public class DataPrimitiveTest extends AbstractEqualityTest<DataPrimitive> {
 
   @Test
   public void shouldInitializeDataPrimitiveWithParent() {
-    DataPrimitive dataPrimitive = DataPrimitive
-        .of(PrimitiveType.STRING, new VariableName("someVariableName"));
+    DataPrimitive dataPrimitive =
+        DataPrimitive.of(PrimitiveType.STRING, new VariableName("someVariableName"));
 
     assertThat(dataPrimitive).isNotNull();
 

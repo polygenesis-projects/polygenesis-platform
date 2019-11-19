@@ -48,7 +48,11 @@ public class DataTextBuilder {
     model = DataPrimitive.of(PrimitiveType.STRING, new VariableName(propertyName));
   }
 
-  private DataTextBuilder(DataBuilder dataBuilder, String propertyName, ObjectName objectName, PackageName packageName) {
+  private DataTextBuilder(
+      DataBuilder dataBuilder,
+      String propertyName,
+      ObjectName objectName,
+      PackageName packageName) {
     this.dataBuilder = dataBuilder;
     DataObject dataObject = new DataObject(objectName, packageName);
     model = DataPrimitive.of(PrimitiveType.STRING, new VariableName(propertyName), dataObject);
@@ -69,7 +73,11 @@ public class DataTextBuilder {
     return new DataTextBuilder(dataBuilder, propertyName);
   }
 
-  public static DataTextBuilder create(DataBuilder dataBuilder, String propertyName, ObjectName objectName, PackageName packageName) {
+  public static DataTextBuilder create(
+      DataBuilder dataBuilder,
+      String propertyName,
+      ObjectName objectName,
+      PackageName packageName) {
     return new DataTextBuilder(dataBuilder, propertyName, objectName, packageName);
   }
 

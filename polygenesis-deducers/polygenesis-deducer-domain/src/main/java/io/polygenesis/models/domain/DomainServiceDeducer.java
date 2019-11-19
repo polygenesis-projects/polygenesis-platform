@@ -85,18 +85,18 @@ public class DomainServiceDeducer implements Deducer<DomainServiceRepository> {
         .getAbstractionItemsByScope(AbstractionScope.domainService())
         .forEach(
             thing -> {
-              PackageName packageName = new PackageName(
-                  String.format("%s.%s", getRootPackageName().getText(), "service"));
+              PackageName packageName =
+                  new PackageName(
+                      String.format("%s.%s", getRootPackageName().getText(), "service"));
 
               if (thing.getMetadataValueIfExists(ThingMetadataKey.PREFERRED_PACKAGE) != null) {
-                packageName = PackageName.class
-                    .cast(thing.getMetadataValue(ThingMetadataKey.PREFERRED_PACKAGE));
+                packageName =
+                    PackageName.class.cast(
+                        thing.getMetadataValue(ThingMetadataKey.PREFERRED_PACKAGE));
               }
 
               DomainService domainService =
-                  new DomainService(
-                      new ObjectName(thing.getThingName().getText()),
-                      packageName);
+                  new DomainService(new ObjectName(thing.getThingName().getText()), packageName);
 
               thing
                   .getFunctions()

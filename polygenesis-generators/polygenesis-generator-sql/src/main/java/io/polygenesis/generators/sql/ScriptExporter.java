@@ -90,6 +90,7 @@ public class ScriptExporter {
     counter = counter + 1;
     String name = String.format("%s__%s__Initialize", counter, context);
 
-    return Paths.get(generationPath.toString(), "src/main/resources/db/migration", name + ".sql.txt");
+    return Paths.get(
+        generationPath.toString(), "src/main/resources/db/migration", name + ".sql.txt");
   }
 }

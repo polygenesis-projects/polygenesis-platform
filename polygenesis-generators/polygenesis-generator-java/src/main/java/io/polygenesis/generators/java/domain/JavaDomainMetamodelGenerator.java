@@ -136,7 +136,7 @@ public class JavaDomainMetamodelGenerator extends AbstractMetamodelGenerator {
    * @param domainMessageDataRepositoryGenerator the domain message data repository generator
    * @param domainMessagePublishedDataGenerator the domain message published data generator
    * @param domainMessagePublishedDataRepositoryGenerator the domain message published data
-   * repository generator
+   *     repository generator
    */
   public JavaDomainMetamodelGenerator(
       Path generationPath,
@@ -222,9 +222,9 @@ public class JavaDomainMetamodelGenerator extends AbstractMetamodelGenerator {
         .forEach(
             aggregateRoot -> {
               aggregateRootGenerator.generate(
-                  aggregateRoot, aggregateRootExportInfo(getGenerationPath(), aggregateRoot),
-                  getRootPackageName()
-              );
+                  aggregateRoot,
+                  aggregateRootExportInfo(getGenerationPath(), aggregateRoot),
+                  getRootPackageName());
 
               aggregateRootIdExporter.export(getGenerationPath(), aggregateRoot);
 
@@ -325,32 +325,31 @@ public class JavaDomainMetamodelGenerator extends AbstractMetamodelGenerator {
     CoreRegistry.getMetamodelRepositoryResolver()
         .resolve(modelRepositories, DomainServiceRepository.class)
         .getItems()
-        .forEach(domainService -> {
-          domainServiceGenerator.generate(
-              domainService, domainServiceExportInfo(getGenerationPath(), domainService));
+        .forEach(
+            domainService -> {
+              domainServiceGenerator.generate(
+                  domainService, domainServiceExportInfo(getGenerationPath(), domainService));
 
-          // Argument Value Objects
-          Set<Data> allArguments =
-              domainService
-                  .getDomainServiceMethods()
-                  .stream()
-                  .flatMap(domainServiceMethod -> domainServiceMethod.getFunction().getArguments()
-                      .stream())
-                  .map(argument -> argument.getData())
-                  .collect(Collectors.toSet());
+              // Argument Value Objects
+              Set<Data> allArguments =
+                  domainService
+                      .getDomainServiceMethods()
+                      .stream()
+                      .flatMap(
+                          domainServiceMethod ->
+                              domainServiceMethod.getFunction().getArguments().stream())
+                      .map(argument -> argument.getData())
+                      .collect(Collectors.toSet());
 
-          allArguments
-              .forEach(
+              allArguments.forEach(
                   data -> {
                     if (data.isDataGroup()) {
                       ValueObject valueObject = new ValueObject(data.getAsDataObject());
                       valueObjectGenerator.generate(
-                          valueObject,
-                          valueObjectExportInfo(getGenerationPath(), valueObject));
+                          valueObject, valueObjectExportInfo(getGenerationPath(), valueObject));
                     }
                   });
-
-        });
+            });
 
     // SUPPORTIVE ENTITIES
     CoreRegistry.getMetamodelRepositoryResolver()
@@ -608,8 +607,7 @@ public class JavaDomainMetamodelGenerator extends AbstractMetamodelGenerator {
             FolderFileConstants.JAVA_POSTFIX));
   }
 
-  private ExportInfo aggregateRootExportInfo(
-      Path generationPath, AggregateRoot aggregateRoot) {
+  private ExportInfo aggregateRootExportInfo(Path generationPath, AggregateRoot aggregateRoot) {
     return ExportInfo.file(
         Paths.get(
             generationPath.toString(),

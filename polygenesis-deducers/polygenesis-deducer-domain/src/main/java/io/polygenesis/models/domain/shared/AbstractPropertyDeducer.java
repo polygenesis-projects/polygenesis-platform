@@ -264,11 +264,11 @@ public abstract class AbstractPropertyDeducer {
   }
 
   private ValueObject makeValueObjectFromPrimitive(DataPrimitive dataPrimitive) {
-    DataObject dataObject = new DataObject(
-        dataPrimitive.getDataObject().getObjectName(),
-        dataPrimitive.getDataObject().getPackageName(),
-        dataPrimitive.getVariableName()
-    );
+    DataObject dataObject =
+        new DataObject(
+            dataPrimitive.getDataObject().getObjectName(),
+            dataPrimitive.getDataObject().getPackageName(),
+            dataPrimitive.getVariableName());
 
     dataObject.addData(dataPrimitive.withVariableName("value"));
 

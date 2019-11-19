@@ -99,8 +99,10 @@ public class DataBuilder {
    * @param packageName the package name
    * @return the data text builder
    */
-  public final DataTextBuilder withTextProperty(String propertyName, ObjectName objectName, PackageName packageName) {
-    DataTextBuilder dataTextBuilder = DataTextBuilder.create(this, propertyName, objectName, packageName);
+  public final DataTextBuilder withTextProperty(
+      String propertyName, ObjectName objectName, PackageName packageName) {
+    DataTextBuilder dataTextBuilder =
+        DataTextBuilder.create(this, propertyName, objectName, packageName);
 
     this.models.add(dataTextBuilder.getModel());
 

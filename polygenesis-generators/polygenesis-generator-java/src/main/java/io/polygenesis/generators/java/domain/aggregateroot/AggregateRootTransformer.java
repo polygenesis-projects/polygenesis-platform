@@ -36,7 +36,6 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
 
 /**
  * The type Aggregate root transformer.
@@ -63,7 +62,8 @@ public class AggregateRootTransformer
    * @param methodTransformer the method transformer
    * @param stateMutationMethodRepresentable the state mutation method representable
    */
-  public AggregateRootTransformer(DataTypeTransformer dataTypeTransformer,
+  public AggregateRootTransformer(
+      DataTypeTransformer dataTypeTransformer,
       MethodTransformer<Function> methodTransformer,
       StateMutationLegacyMethodTransformer stateMutationMethodRepresentable) {
     super(dataTypeTransformer, methodTransformer);
@@ -74,6 +74,7 @@ public class AggregateRootTransformer
   // OVERRIDES
   // ===============================================================================================
 
+  @SuppressWarnings("CPD-START")
   @Override
   public TemplateData transform(AggregateRoot source, Object... args) {
     Map<String, Object> dataModel = new HashMap<>();
@@ -83,8 +84,7 @@ public class AggregateRootTransformer
   }
 
   @Override
-  public Set<FieldRepresentation> staticFieldRepresentations(
-      AggregateRoot source, Object... args) {
+  public Set<FieldRepresentation> staticFieldRepresentations(AggregateRoot source, Object... args) {
     return super.staticFieldRepresentations(source, args);
   }
 
@@ -150,12 +150,15 @@ public class AggregateRootTransformer
     return stringBuilder.toString();
   }
 
+  @SuppressWarnings("CPD-END")
   @Override
   public String modifiers(AggregateRoot source, Object... args) {
     if (source.getInstantiationType().equals(InstantiationType.CONCRETE)) {
       return dataTypeTransformer.getModifierPublic();
     } else {
-      return dataTypeTransformer.getModifierPublic() + " " + dataTypeTransformer.getModifierAbstract();
+      return dataTypeTransformer.getModifierPublic()
+          + " "
+          + dataTypeTransformer.getModifierAbstract();
     }
   }
 }
