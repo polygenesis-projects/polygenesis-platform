@@ -176,9 +176,11 @@ public abstract class AbstractServiceMethodImplementor {
           "aggregateRootIdDataType",
           TextConverter.toUpperCamel(aggregateRoot.aggregateRootId().getData().getDataType()));
 
-      dataModel.put(
-          "converterVariable",
-          serviceImplementation.domainObjectConverter().getVariableName().getText());
+      if (serviceImplementation.domainObjectConverter() != null) {
+        dataModel.put(
+            "converterVariable",
+            serviceImplementation.domainObjectConverter().getVariableName().getText());
+      }
 
     } catch (Exception e) {
 
@@ -206,9 +208,11 @@ public abstract class AbstractServiceMethodImplementor {
           "aggregateRootIdDataType",
           TextConverter.toUpperCamel(projection.getObjectName().getText() + "Id"));
 
-      dataModel.put(
-          "converterVariable",
-          serviceImplementation.domainObjectConverter().getVariableName().getText());
+      if (serviceImplementation.domainObjectConverter() != null) {
+        dataModel.put(
+            "converterVariable",
+            serviceImplementation.domainObjectConverter().getVariableName().getText());
+      }
     }
     return dataModel;
   }

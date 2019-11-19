@@ -23,7 +23,6 @@ package io.polygenesis.abstraction.thing;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.polygenesis.abstraction.data.DataPrimitive;
-import io.polygenesis.abstraction.data.DataPurpose;
 import io.polygenesis.abstraction.data.PrimitiveType;
 import io.polygenesis.abstraction.thing.dsl.FunctionBuilder;
 import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
@@ -60,37 +59,33 @@ public class ThingTest extends AbstractEqualityTest<Thing> {
 
   private Function createFunction1() {
     return FunctionBuilder.of(
-            ThingBuilder.endToEnd().setThingName("thingName").createThing(),
-            "functionName",
-            Purpose.modify())
+        ThingBuilder.endToEnd().setThingName("thingName").createThing(),
+        "functionName",
+        Purpose.modify())
         .setReturnValue(createDataPrimitive())
         .build();
   }
 
   private Function createFunction2() {
     return FunctionBuilder.of(
-            ThingBuilder.endToEnd().setThingName("thingName").createThing(),
-            "anotherFunctionName",
-            Purpose.modify())
+        ThingBuilder.endToEnd().setThingName("thingName").createThing(),
+        "anotherFunctionName",
+        Purpose.modify())
         .setReturnValue(createDataPrimitive())
         .build();
   }
 
   private Function createFunction3() {
     return FunctionBuilder.of(
-            ThingBuilder.endToEnd().setThingName("thingName").createThing(),
-            "someAnotherNewFunctionName",
-            Purpose.modify())
+        ThingBuilder.endToEnd().setThingName("thingName").createThing(),
+        "someAnotherNewFunctionName",
+        Purpose.modify())
         .setReturnValue(createDataPrimitive())
         .build();
   }
 
   private DataPrimitive createDataPrimitive() {
-    return new DataPrimitive(
-        PrimitiveType.STRING,
-        new VariableName("variableName"),
-        new LinkedHashSet<>(),
-        DataPurpose.any());
+    return DataPrimitive.of(PrimitiveType.STRING, new VariableName("variableName"));
   }
 
   // ===============================================================================================

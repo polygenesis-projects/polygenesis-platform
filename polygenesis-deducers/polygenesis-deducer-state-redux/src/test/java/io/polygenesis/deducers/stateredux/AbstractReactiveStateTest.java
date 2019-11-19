@@ -44,11 +44,7 @@ public abstract class AbstractReactiveStateTest {
     Function createFunction =
         FunctionBuilder.of(thing, "createSomeThing", Purpose.create())
             .setReturnValue(
-                new DataPrimitive(
-                    PrimitiveType.STRING,
-                    new VariableName("response"),
-                    new LinkedHashSet<>(),
-                    DataPurpose.any()))
+                DataPrimitive.of(PrimitiveType.STRING, new VariableName("response")))
             .build();
 
     thing.addFunction(createFunction);
@@ -59,11 +55,7 @@ public abstract class AbstractReactiveStateTest {
     Function customPurposeFunction =
         FunctionBuilder.of(thing, "createSomeThing", Purpose.custom("validate", CqsType.COMMAND))
             .setReturnValue(
-                new DataPrimitive(
-                    PrimitiveType.STRING,
-                    new VariableName("response"),
-                    new LinkedHashSet<>(),
-                    DataPurpose.any()))
+                DataPrimitive.of(PrimitiveType.STRING, new VariableName("response")))
             .build();
 
     thing.addFunction(customPurposeFunction);

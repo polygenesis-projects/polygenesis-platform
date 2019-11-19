@@ -24,7 +24,7 @@
     <@assertionsForParameters data.parameterRepresentations></@assertionsForParameters>
 
     ${ data.aggregateRootDataType } ${ data.aggregateRootVariable } = new ${ data.aggregateRootDataType }(
-<@fillArguments data.properties data.persistenceVariable data.requestDto data.converterVariable data.multiTenant></@fillArguments>
+<@fillArguments data.properties data.persistenceVariable data.requestDto data.multiTenant data.converterVariable></@fillArguments>
     );
 
 <@storeAggregateRoot data.persistenceVariable data.aggregateRootVariable></@storeAggregateRoot>

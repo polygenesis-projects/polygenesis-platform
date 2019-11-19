@@ -21,6 +21,8 @@
 package io.polygenesis.models.domain.shared;
 
 import io.polygenesis.abstraction.data.Data;
+import io.polygenesis.abstraction.data.DataObject;
+import io.polygenesis.abstraction.data.DataPrimitive;
 import io.polygenesis.abstraction.data.DataPurpose;
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.abstraction.thing.Thing;
@@ -143,7 +145,11 @@ public abstract class AbstractPropertyDeducer {
       case OBJECT:
         return new ValueObject(thingProperty.getData().getAsDataObject());
       case PRIMITIVE:
-        return new Primitive(thingProperty.getData().getAsDataPrimitive());
+        if (thingProperty.getData().getAsDataPrimitive().getDataObject() != null) {
+          return makeValueObjectFromPrimitive(thingProperty.getData().getAsDataPrimitive());
+        } else {
+          return new Primitive(thingProperty.getData().getAsDataPrimitive());
+        }
       case THING:
         return new Reference(thingProperty.getData());
       case MAP:
@@ -255,5 +261,17 @@ public abstract class AbstractPropertyDeducer {
 
   private boolean isDataPageSize(Data data) {
     return data.getDataPurpose().equals(DataPurpose.pageSize());
+  }
+
+  private ValueObject makeValueObjectFromPrimitive(DataPrimitive dataPrimitive) {
+    DataObject dataObject = new DataObject(
+        dataPrimitive.getDataObject().getObjectName(),
+        dataPrimitive.getDataObject().getPackageName(),
+        dataPrimitive.getVariableName()
+    );
+
+    dataObject.addData(dataPrimitive.withVariableName("value"));
+
+    return new ValueObject(dataObject);
   }
 }

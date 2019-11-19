@@ -27,6 +27,7 @@ import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.commons.valueobjects.VariableName;
 import io.polygenesis.core.CoreRegistry;
 import io.polygenesis.core.MetamodelRepository;
+import io.polygenesis.models.apiimpl.DomainEntityConverter;
 import io.polygenesis.models.apiimpl.ServiceImplementation;
 import io.polygenesis.models.apiimpl.ServiceImplementationMetamodelRepository;
 import io.polygenesis.models.apiimpl.ServiceMethodImplementation;
@@ -129,10 +130,13 @@ public abstract class AbstractServiceMethodImplementationTransformer {
    */
   protected String getConverterVariable(
       ServiceMethodImplementation source, Set<MetamodelRepository<?>> metamodelRepositories) {
-    return getServiceImplementation(source, metamodelRepositories)
-        .domainObjectConverter()
-        .getVariableName()
-        .getText();
+    DomainEntityConverter domainEntityConverter = getServiceImplementation(source,
+        metamodelRepositories)
+        .domainObjectConverter();
+
+    return domainEntityConverter != null
+        ? domainEntityConverter.getVariableName().getText()
+        : null;
   }
 
   /**

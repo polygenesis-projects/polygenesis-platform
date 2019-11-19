@@ -252,11 +252,11 @@ public abstract class AbstractClassTransformer<S extends Nameable, F extends Fun
    *
    * @return the constructor representation
    */
-  protected ConstructorRepresentation createNoArgsConstructorForPersistence() {
+  protected ConstructorRepresentation createNoArgsConstructorForPersistence(String modifier) {
     String description = "No-args constructor for persistence frameworks.";
 
     return new ConstructorRepresentation(
-        new LinkedHashSet<>(), description, "private", new LinkedHashSet<>(), "\t\tsuper();");
+        new LinkedHashSet<>(), description, modifier, new LinkedHashSet<>(), "\t\tsuper();");
   }
 
   /**

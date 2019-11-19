@@ -25,7 +25,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import io.polygenesis.commons.test.AbstractEqualityTest;
 import io.polygenesis.commons.valueobjects.VariableName;
-import java.util.LinkedHashSet;
 import org.junit.Test;
 
 /** @author Christos Tsakostas */
@@ -56,12 +55,8 @@ public class DataPrimitiveTest extends AbstractEqualityTest<DataPrimitive> {
 
   @Test
   public void shouldInitializeDataPrimitiveWithParent() {
-    DataPrimitive dataPrimitive =
-        new DataPrimitive(
-            PrimitiveType.STRING,
-            new VariableName("someVariableName"),
-            new LinkedHashSet<>(),
-            DataPurpose.any());
+    DataPrimitive dataPrimitive = DataPrimitive
+        .of(PrimitiveType.STRING, new VariableName("someVariableName"));
 
     assertThat(dataPrimitive).isNotNull();
 
@@ -75,19 +70,11 @@ public class DataPrimitiveTest extends AbstractEqualityTest<DataPrimitive> {
 
   @Override
   public DataPrimitive createObject1() {
-    return new DataPrimitive(
-        PrimitiveType.STRING,
-        new VariableName("someVariableName"),
-        new LinkedHashSet<>(),
-        DataPurpose.any());
+    return DataPrimitive.of(PrimitiveType.STRING, new VariableName("someVariableName"));
   }
 
   @Override
   public DataPrimitive createObject2() {
-    return new DataPrimitive(
-        PrimitiveType.STRING,
-        new VariableName("someOtherVariableName"),
-        new LinkedHashSet<>(),
-        DataPurpose.any());
+    return DataPrimitive.of(PrimitiveType.STRING, new VariableName("someOtherVariableName"));
   }
 }

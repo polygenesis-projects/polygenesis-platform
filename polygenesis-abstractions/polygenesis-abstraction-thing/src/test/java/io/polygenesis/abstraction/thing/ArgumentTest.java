@@ -23,11 +23,9 @@ package io.polygenesis.abstraction.thing;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.polygenesis.abstraction.data.DataPrimitive;
-import io.polygenesis.abstraction.data.DataPurpose;
 import io.polygenesis.abstraction.data.PrimitiveType;
 import io.polygenesis.commons.test.AbstractEqualityTest;
 import io.polygenesis.commons.valueobjects.VariableName;
-import java.util.LinkedHashSet;
 import org.junit.Test;
 
 /** @author Christos Tsakostas */
@@ -42,19 +40,11 @@ public class ArgumentTest extends AbstractEqualityTest<Argument> {
   }
 
   private DataPrimitive createDataPrimitive1() {
-    return new DataPrimitive(
-        PrimitiveType.STRING,
-        new VariableName("someVariableName"),
-        new LinkedHashSet<>(),
-        DataPurpose.any());
+    return DataPrimitive.of(PrimitiveType.STRING, new VariableName("someVariableName"));
   }
 
   private DataPrimitive createDataPrimitive2() {
-    return new DataPrimitive(
-        PrimitiveType.STRING,
-        new VariableName("someOtherVariableName"),
-        new LinkedHashSet<>(),
-        DataPurpose.any());
+    return DataPrimitive.of(PrimitiveType.STRING, new VariableName("someOtherVariableName"));
   }
 
   @Override

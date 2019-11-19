@@ -34,6 +34,8 @@ import java.util.stream.Stream;
 public class HtmlDataTypeTransformer implements DataTypeTransformer {
 
   private static final String MODIFIER_PUBLIC = "public";
+  private static final String MODIFIER_PROTECTED = "protected";
+  private static final String MODIFIER_PRIVATE = "private";
   private static final String MODIFIER_ABSTRACT = "abstract";
   private static final String VOID = "void";
 
@@ -65,6 +67,16 @@ public class HtmlDataTypeTransformer implements DataTypeTransformer {
   @Override
   public String getModifierPublic() {
     return MODIFIER_PUBLIC;
+  }
+
+  @Override
+  public String getModifierProtected() {
+    return MODIFIER_PROTECTED;
+  }
+
+  @Override
+  public String getModifierPrivate() {
+    return MODIFIER_PRIVATE;
   }
 
   @Override

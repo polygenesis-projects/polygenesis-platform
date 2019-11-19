@@ -17,7 +17,7 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-<#macro fillArguments properties persistenceVariable requestDto converterVariable multiTenant>
+<#macro fillArguments properties persistenceVariable requestDto multiTenant converterVariable>
     <#list properties as property>
       <#switch property.propertyType>
         <#case 'AGGREGATE_ROOT_ID'>

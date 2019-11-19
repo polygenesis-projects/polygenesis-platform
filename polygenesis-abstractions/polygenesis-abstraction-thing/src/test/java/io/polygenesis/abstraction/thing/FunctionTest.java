@@ -120,10 +120,6 @@ public class FunctionTest extends AbstractEqualityTest<Function> {
   }
 
   private DataPrimitive createDataPrimitive() {
-    return new DataPrimitive(
-        PrimitiveType.STRING,
-        new VariableName("variableName"),
-        new LinkedHashSet<>(),
-        DataPurpose.any());
+    return DataPrimitive.of(PrimitiveType.STRING, new VariableName("variableName"));
   }
 }
