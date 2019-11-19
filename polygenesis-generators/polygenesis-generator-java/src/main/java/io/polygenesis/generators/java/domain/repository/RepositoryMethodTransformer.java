@@ -18,34 +18,31 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.generators.java.domainservicedetail;
+package io.polygenesis.generators.java.domain.repository;
 
+import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.core.DataTypeTransformer;
-import io.polygenesis.models.domain.DomainServiceMethod;
 import io.polygenesis.transformers.java.AbstractMethodTransformer;
-import java.util.Arrays;
-import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
 /**
- * The type Domain service detail method transformer.
+ * The type Repository method transformer.
  *
  * @author Christos Tsakostas
  */
-public class DomainServiceDetailMethodTransformer
-    extends AbstractMethodTransformer<DomainServiceMethod> {
+public class RepositoryMethodTransformer extends AbstractMethodTransformer<Function> {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
-   * Instantiates a new Domain service detail method transformer.
+   * Instantiates a new Repository method transformer.
    *
    * @param dataTypeTransformer the data type transformer
    */
-  public DomainServiceDetailMethodTransformer(DataTypeTransformer dataTypeTransformer) {
+  public RepositoryMethodTransformer(DataTypeTransformer dataTypeTransformer) {
     super(dataTypeTransformer);
   }
 
@@ -53,23 +50,27 @@ public class DomainServiceDetailMethodTransformer
   // OVERRIDES
   // ===============================================================================================
 
+  /**
+   * Modifiers string.
+   *
+   * @param source the source
+   * @param args the args
+   * @return the string
+   */
   @Override
-  public Set<String> annotations(DomainServiceMethod source, Object... args) {
-    return new LinkedHashSet<>(Arrays.asList("@Override"));
-  }
-
-  @Override
-  public String description(DomainServiceMethod source, Object... args) {
+  public String modifiers(Function source, Object... args) {
     return "";
   }
 
+  /**
+   * Imports set.
+   *
+   * @param source the source
+   * @param args the args
+   * @return the set
+   */
   @Override
-  public String modifiers(DomainServiceMethod source, Object... args) {
-    return MODIFIER_PUBLIC;
-  }
-
-  @Override
-  public Set<String> imports(DomainServiceMethod source, Object... args) {
+  public Set<String> imports(Function source, Object... args) {
     Set<String> imports = new TreeSet<>();
 
     // TODO

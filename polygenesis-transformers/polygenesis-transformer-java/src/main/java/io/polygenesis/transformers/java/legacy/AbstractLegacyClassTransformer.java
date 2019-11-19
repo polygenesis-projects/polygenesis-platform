@@ -274,7 +274,7 @@ public abstract class AbstractLegacyClassTransformer<S> extends AbstractTransfor
     String description = "No-args constructor for reflections-based frameworks.";
 
     return new ConstructorRepresentation(
-        new LinkedHashSet<>(), description, "protected", new LinkedHashSet<>(), "\t\tsuper();");
+        new LinkedHashSet<>(), description, "private", new LinkedHashSet<>(), "\t\tsuper();");
   }
 
   /**

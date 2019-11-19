@@ -22,13 +22,14 @@ package io.polygenesis.models.domain;
 
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
+import io.polygenesis.core.Nameable;
 
 /**
  * The type Persistence.
  *
  * @author Christos Tsakostas
  */
-public class Persistence {
+public class Persistence implements Nameable {
 
   private PackageName packageName;
   private ObjectName objectName;
@@ -80,6 +81,7 @@ public class Persistence {
    *
    * @return the name
    */
+  @Override
   public ObjectName getObjectName() {
     return objectName;
   }

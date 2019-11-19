@@ -18,52 +18,35 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.generators.java.domain.service;
+package io.polygenesis.generators.java.rdbms.repositoryimpl;
 
-import io.polygenesis.core.DataTypeTransformer;
-import io.polygenesis.models.domain.DomainServiceMethod;
-import io.polygenesis.transformers.java.AbstractMethodTransformer;
-import java.util.Set;
-import java.util.TreeSet;
+import io.polygenesis.core.AbstractUnitTemplateGenerator;
+import io.polygenesis.core.Exporter;
+import io.polygenesis.core.TemplateEngine;
+import io.polygenesis.models.domain.Persistence;
 
 /**
- * The type Domain service method transformer.
+ * The type Repository impl generator.
  *
  * @author Christos Tsakostas
  */
-public class DomainServiceMethodTransformer extends AbstractMethodTransformer<DomainServiceMethod> {
+public class RepositoryImplGenerator extends AbstractUnitTemplateGenerator<Persistence> {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
-   * Instantiates a new Domain service method transformer.
+   * Instantiates a new Repository impl generator.
    *
-   * @param dataTypeTransformer the data type transformer
+   * @param templateTransformer the template transformer
+   * @param templateEngine the template engine
+   * @param exporter the exporter
    */
-  public DomainServiceMethodTransformer(DataTypeTransformer dataTypeTransformer) {
-    super(dataTypeTransformer);
-  }
-
-  // ===============================================================================================
-  // OVERRIDES
-  // ===============================================================================================
-
-  @Override
-  public String modifiers(DomainServiceMethod source, Object... args) {
-    return "";
-  }
-
-  @Override
-  public Set<String> imports(DomainServiceMethod source, Object... args) {
-    Set<String> imports = new TreeSet<>();
-
-    // TODO
-    imports.add("java.time.LocalDateTime");
-
-    imports.addAll(super.imports(source, args));
-
-    return imports;
+  public RepositoryImplGenerator(
+      RepositoryImplTransformer templateTransformer,
+      TemplateEngine templateEngine,
+      Exporter exporter) {
+    super(templateTransformer, templateEngine, exporter);
   }
 }

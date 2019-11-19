@@ -54,14 +54,15 @@ import io.polygenesis.generators.java.domain.domainmessage.publisheddata.DomainM
 import io.polygenesis.generators.java.domain.domainmessage.publisheddatarepository.DomainMessagePublishedDataRepositoryGenerator;
 import io.polygenesis.generators.java.domain.domainmessage.publisheddatarepository.DomainMessagePublishedDataRepositoryMethodTransformer;
 import io.polygenesis.generators.java.domain.domainmessage.publisheddatarepository.DomainMessagePublishedDataRepositoryTransformer;
-import io.polygenesis.generators.java.domain.persistence.PersistenceExporter;
-import io.polygenesis.generators.java.domain.persistence.PersistenceLegacyInterfaceTransformer;
 import io.polygenesis.generators.java.domain.projection.exporter.ProjectionExporter;
 import io.polygenesis.generators.java.domain.projection.exporter.ProjectionIdExporter;
 import io.polygenesis.generators.java.domain.projection.exporter.ProjectionRepositoryExporter;
 import io.polygenesis.generators.java.domain.projection.transformer.ProjectionIdLegacyClassTransformer;
 import io.polygenesis.generators.java.domain.projection.transformer.ProjectionLegacyClassTransformer;
 import io.polygenesis.generators.java.domain.projection.transformer.ProjectionRepositoryLegacyInterfaceTransformer;
+import io.polygenesis.generators.java.domain.repository.RepositoryGenerator;
+import io.polygenesis.generators.java.domain.repository.RepositoryMethodTransformer;
+import io.polygenesis.generators.java.domain.repository.RepositoryTransformer;
 import io.polygenesis.generators.java.domain.service.DomainServiceGenerator;
 import io.polygenesis.generators.java.domain.service.DomainServiceMethodTransformer;
 import io.polygenesis.generators.java.domain.service.DomainServiceTransformer;
@@ -100,7 +101,7 @@ public final class JavaDomainMetamodelGeneratorFactory {
   private static AggregateEntityIdExporter aggregateEntityIdExporter;
   private static ValueObjectGenerator valueObjectGenerator;
   private static DomainEventGenerator domainEventGenerator;
-  private static PersistenceExporter persistenceExporter;
+  private static RepositoryGenerator repositoryGenerator;
   private static DomainServiceGenerator domainServiceGenerator;
   private static SupportiveEntityGenerator supportiveEntityGenerator;
   private static SupportiveEntityIdGenerator supportiveEntityIdGenerator;
@@ -175,15 +176,12 @@ public final class JavaDomainMetamodelGeneratorFactory {
             templateEngine,
             passiveFileExporter);
 
-    FunctionToLegacyMethodRepresentationTransformer functionToMethodRepresentationTransformer =
-        new FunctionToLegacyMethodRepresentationTransformer(dataTypeTransformer);
-
-    PersistenceLegacyInterfaceTransformer persistenceInterfaceRepresentable =
-        new PersistenceLegacyInterfaceTransformer(
-            dataTypeTransformer, functionToMethodRepresentationTransformer);
-
-    persistenceExporter =
-        new PersistenceExporter(freemarkerService, persistenceInterfaceRepresentable);
+    repositoryGenerator =
+        new RepositoryGenerator(
+            new RepositoryTransformer(
+                dataTypeTransformer, new RepositoryMethodTransformer(dataTypeTransformer)),
+            templateEngine,
+            passiveFileExporter);
 
     domainServiceGenerator =
         new DomainServiceGenerator(
@@ -223,6 +221,9 @@ public final class JavaDomainMetamodelGeneratorFactory {
     projectionIdExporter =
         new ProjectionIdExporter(
             freemarkerService, new ProjectionIdLegacyClassTransformer(dataTypeTransformer));
+
+    FunctionToLegacyMethodRepresentationTransformer functionToMethodRepresentationTransformer =
+        new FunctionToLegacyMethodRepresentationTransformer(dataTypeTransformer);
 
     projectionRepositoryExporter =
         new ProjectionRepositoryExporter(
@@ -299,7 +300,7 @@ public final class JavaDomainMetamodelGeneratorFactory {
         aggregateEntityIdExporter,
         valueObjectGenerator,
         domainEventGenerator,
-        persistenceExporter,
+        repositoryGenerator,
         domainServiceGenerator,
         supportiveEntityGenerator,
         supportiveEntityIdGenerator,

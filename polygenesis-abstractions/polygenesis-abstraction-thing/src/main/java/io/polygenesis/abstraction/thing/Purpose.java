@@ -80,6 +80,9 @@ public class Purpose implements Serializable {
   private static final String DECIDE = "DECIDE";
   private static final String ENCRYPT = "encrypt";
   private static final String DECRYPT = "decrypt";
+  private static final String VALIDATE = "validate";
+  private static final String CHECK_BOOLEAN = "checkBoolean";
+  private static final String GENERATE = "generate";
 
   // ===============================================================================================
   // PERIODIC_PROCESS
@@ -322,6 +325,33 @@ public class Purpose implements Serializable {
    */
   public static Purpose decrypt() {
     return new Purpose(DECRYPT, CqsType.COMMAND);
+  }
+
+  /**
+   * Validate purpose.
+   *
+   * @return the purpose
+   */
+  public static Purpose validate() {
+    return new Purpose(VALIDATE, CqsType.COMMAND);
+  }
+
+  /**
+   * Check boolean purpose.
+   *
+   * @return the purpose
+   */
+  public static Purpose checkBoolean() {
+    return new Purpose(CHECK_BOOLEAN, CqsType.COMMAND);
+  }
+
+  /**
+   * Generate purpose.
+   *
+   * @return the purpose
+   */
+  public static Purpose generate() {
+    return new Purpose(GENERATE, CqsType.COMMAND);
   }
 
   // ===============================================================================================

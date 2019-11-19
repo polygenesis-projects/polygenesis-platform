@@ -42,10 +42,10 @@ import io.polygenesis.generators.java.domain.domainmessage.publisheddata.DomainM
 import io.polygenesis.generators.java.domain.domainmessage.publisheddata.DomainMessagePublishedDataGenerator;
 import io.polygenesis.generators.java.domain.domainmessage.publisheddatarepository.DomainMessagePublishedDataRepository;
 import io.polygenesis.generators.java.domain.domainmessage.publisheddatarepository.DomainMessagePublishedDataRepositoryGenerator;
-import io.polygenesis.generators.java.domain.persistence.PersistenceExporter;
 import io.polygenesis.generators.java.domain.projection.exporter.ProjectionExporter;
 import io.polygenesis.generators.java.domain.projection.exporter.ProjectionIdExporter;
 import io.polygenesis.generators.java.domain.projection.exporter.ProjectionRepositoryExporter;
+import io.polygenesis.generators.java.domain.repository.RepositoryGenerator;
 import io.polygenesis.generators.java.domain.service.DomainServiceGenerator;
 import io.polygenesis.generators.java.domain.supportiveentity.entity.SupportiveEntityGenerator;
 import io.polygenesis.generators.java.domain.supportiveentity.id.SupportiveEntityId;
@@ -63,6 +63,7 @@ import io.polygenesis.models.domain.DomainEvent;
 import io.polygenesis.models.domain.DomainMetamodelRepository;
 import io.polygenesis.models.domain.DomainService;
 import io.polygenesis.models.domain.DomainServiceRepository;
+import io.polygenesis.models.domain.Persistence;
 import io.polygenesis.models.domain.ProjectionMetamodelRepository;
 import io.polygenesis.models.domain.PropertyType;
 import io.polygenesis.models.domain.SupportiveEntity;
@@ -91,7 +92,7 @@ public class JavaDomainMetamodelGenerator extends AbstractMetamodelGenerator {
   private final AggregateEntityIdExporter aggregateEntityIdExporter;
   private final ValueObjectGenerator valueObjectGenerator;
   private final DomainEventGenerator domainEventGenerator;
-  private final PersistenceExporter persistenceExporter;
+  private final RepositoryGenerator repositoryGenerator;
   private final DomainServiceGenerator domainServiceGenerator;
   private final SupportiveEntityGenerator supportiveEntityGenerator;
   private final SupportiveEntityIdGenerator supportiveEntityIdGenerator;
@@ -124,7 +125,7 @@ public class JavaDomainMetamodelGenerator extends AbstractMetamodelGenerator {
    * @param aggregateEntityIdExporter the aggregate entity id exporter
    * @param valueObjectGenerator the value object generator
    * @param domainEventGenerator the domain event exporter
-   * @param persistenceExporter the persistence exporter
+   * @param repositoryGenerator the persistence exporter
    * @param domainServiceGenerator the domain service generator
    * @param supportiveEntityGenerator the supportive entity exporter
    * @param supportiveEntityIdGenerator the supportive entity id exporter
@@ -150,7 +151,7 @@ public class JavaDomainMetamodelGenerator extends AbstractMetamodelGenerator {
       AggregateEntityIdExporter aggregateEntityIdExporter,
       ValueObjectGenerator valueObjectGenerator,
       DomainEventGenerator domainEventGenerator,
-      PersistenceExporter persistenceExporter,
+      RepositoryGenerator repositoryGenerator,
       DomainServiceGenerator domainServiceGenerator,
       SupportiveEntityGenerator supportiveEntityGenerator,
       SupportiveEntityIdGenerator supportiveEntityIdGenerator,
@@ -173,7 +174,7 @@ public class JavaDomainMetamodelGenerator extends AbstractMetamodelGenerator {
     this.aggregateEntityIdExporter = aggregateEntityIdExporter;
     this.valueObjectGenerator = valueObjectGenerator;
     this.domainEventGenerator = domainEventGenerator;
-    this.persistenceExporter = persistenceExporter;
+    this.repositoryGenerator = repositoryGenerator;
     this.domainServiceGenerator = domainServiceGenerator;
     this.supportiveEntityGenerator = supportiveEntityGenerator;
     this.supportiveEntityIdGenerator = supportiveEntityIdGenerator;
@@ -230,9 +231,14 @@ public class JavaDomainMetamodelGenerator extends AbstractMetamodelGenerator {
               aggregateRootIdExporter.export(getGenerationPath(), aggregateRoot);
 
               if (aggregateRoot instanceof AggregateRootPersistable) {
-                persistenceExporter.export(
-                    getGenerationPath(),
-                    ((AggregateRootPersistable) aggregateRoot).getPersistence());
+                Persistence persistence =
+                    ((AggregateRootPersistable) aggregateRoot).getPersistence();
+                repositoryGenerator.generate(
+                    persistence,
+                    exportInfo(
+                        getGenerationPath(),
+                        persistence.getPackageName(),
+                        persistence.getObjectName()));
               }
 
               // Constructor Domain Events

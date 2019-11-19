@@ -54,7 +54,7 @@ public class FetchOneAggregateRootTransformer extends AbstractServiceMethodImple
             getAggregateRootDataType(source),
             getAggregateRootVariable(source),
             new LinkedHashSet<>(),
-            getPersistenceVariable(source),
+            getRepositoryVariable(source),
             source.getServiceMethod().getRequestDto(),
             source.getServiceMethod().getResponseDto(),
             getConverterVariable(source, metamodelRepositories),

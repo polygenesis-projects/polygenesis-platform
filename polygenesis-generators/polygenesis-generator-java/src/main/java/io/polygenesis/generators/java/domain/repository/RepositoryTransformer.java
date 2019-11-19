@@ -18,45 +18,56 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.generators.java.domain.persistence;
+package io.polygenesis.generators.java.domain.repository;
 
+import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.DataTypeTransformer;
-import io.polygenesis.generators.java.domain.AbstractRepositoryLegacyInterfaceTransformer;
+import io.polygenesis.core.TemplateData;
 import io.polygenesis.models.domain.Persistence;
-import io.polygenesis.transformers.java.legacy.FunctionToLegacyMethodRepresentationTransformer;
+import io.polygenesis.transformers.java.AbstractInterfaceTransformer;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
 /**
- * The type Persistence interface representable.
+ * The type Repository transformer.
  *
  * @author Christos Tsakostas
  */
-public class PersistenceLegacyInterfaceTransformer
-    extends AbstractRepositoryLegacyInterfaceTransformer {
+public class RepositoryTransformer extends AbstractInterfaceTransformer<Persistence, Function> {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
-   * Instantiates a new Persistence interface representable.
+   * Instantiates a new Repository transformer.
    *
-   * @param dataTypeTransformer the from data type to java converter
-   * @param functionToMethodRepresentationTransformer the function to method representation
-   *     converter
+   * @param dataTypeTransformer the data type transformer
+   * @param methodTransformer the method transformer
    */
-  @SuppressWarnings("CPD-START")
-  public PersistenceLegacyInterfaceTransformer(
-      DataTypeTransformer dataTypeTransformer,
-      FunctionToLegacyMethodRepresentationTransformer functionToMethodRepresentationTransformer) {
-    super(dataTypeTransformer, functionToMethodRepresentationTransformer);
+  public RepositoryTransformer(
+      DataTypeTransformer dataTypeTransformer, RepositoryMethodTransformer methodTransformer) {
+    super(dataTypeTransformer, methodTransformer);
   }
 
   // ===============================================================================================
   // OVERRIDES
   // ===============================================================================================
+
+  @Override
+  public TemplateData transform(Persistence source, Object... args) {
+    Map<String, Object> dataModel = new HashMap<>();
+    dataModel.put("representation", create(source));
+    return new TemplateData(dataModel, "polygenesis-representation-java/Interface.java.ftl");
+  }
+
+  @Override
+  public String packageName(Persistence source, Object... args) {
+    return source.getPackageName().getText();
+  }
 
   @Override
   public Set<String> imports(Persistence source, Object... args) {
@@ -69,6 +80,19 @@ public class PersistenceLegacyInterfaceTransformer
     }
 
     return imports;
+  }
+
+  @Override
+  public String description(Persistence source, Object... args) {
+    StringBuilder stringBuilder = new StringBuilder();
+
+    stringBuilder.append("The ");
+
+    stringBuilder.append(TextConverter.toUpperCamelSpaces(source.getObjectName().getText()));
+
+    stringBuilder.append(" Database Agnostic Contract.");
+
+    return stringBuilder.toString();
   }
 
   @Override
