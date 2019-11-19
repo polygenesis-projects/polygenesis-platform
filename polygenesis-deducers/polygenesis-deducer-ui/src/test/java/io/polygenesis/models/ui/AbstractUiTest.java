@@ -41,8 +41,7 @@ public abstract class AbstractUiTest {
     // =============================================================================================
     Function createFunction =
         FunctionBuilder.of(thing, "createSomeThing", Purpose.create())
-            .setReturnValue(
-                DataPrimitive.of(PrimitiveType.STRING, new VariableName("response")))
+            .setReturnValue(DataPrimitive.of(PrimitiveType.STRING, new VariableName("response")))
             .build();
 
     thing.addFunction(createFunction);
@@ -52,9 +51,7 @@ public abstract class AbstractUiTest {
     // =============================================================================================
     Function customPurposeFunction =
         FunctionBuilder.of(thing, "createSomeThing", Purpose.custom("validate", CqsType.COMMAND))
-            .setReturnValue(
-                DataPrimitive.of(PrimitiveType.STRING, new VariableName("response"))
-            )
+            .setReturnValue(DataPrimitive.of(PrimitiveType.STRING, new VariableName("response")))
             .build();
 
     thing.addFunction(customPurposeFunction);

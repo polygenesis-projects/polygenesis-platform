@@ -34,6 +34,8 @@ import io.polygenesis.models.apiimpl.ServiceMethodImplementation;
 import io.polygenesis.models.domain.AggregateRoot;
 import io.polygenesis.models.domain.DomainMetamodelRepository;
 import io.polygenesis.models.domain.DomainObjectProperty;
+import io.polygenesis.representations.code.ParameterRepresentation;
+import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -43,6 +45,30 @@ import java.util.Set;
  * @author Christos Tsakostas
  */
 public abstract class AbstractServiceMethodImplementationTransformer {
+
+  /**
+   * Gets parameter representations.
+   *
+   * @param source the source
+   * @return the parameter representations
+   */
+  protected Set<ParameterRepresentation> getParameterRepresentations(
+      ServiceMethodImplementation source) {
+    Set<ParameterRepresentation> parameterRepresentations = new LinkedHashSet<>();
+    source
+        .getServiceMethod()
+        .getFunction()
+        .getArguments()
+        .forEach(
+            argument -> {
+              parameterRepresentations.add(
+                  new ParameterRepresentation(
+                      argument.getData().getDataType(),
+                      TextConverter.toLowerCamel(argument.getData().getVariableName().getText())));
+            });
+
+    return parameterRepresentations;
+  }
 
   /**
    * Gets aggregate root data type.
@@ -130,13 +156,10 @@ public abstract class AbstractServiceMethodImplementationTransformer {
    */
   protected String getConverterVariable(
       ServiceMethodImplementation source, Set<MetamodelRepository<?>> metamodelRepositories) {
-    DomainEntityConverter domainEntityConverter = getServiceImplementation(source,
-        metamodelRepositories)
-        .domainObjectConverter();
+    DomainEntityConverter domainEntityConverter =
+        getServiceImplementation(source, metamodelRepositories).domainObjectConverter();
 
-    return domainEntityConverter != null
-        ? domainEntityConverter.getVariableName().getText()
-        : null;
+    return domainEntityConverter != null ? domainEntityConverter.getVariableName().getText() : null;
   }
 
   /**
@@ -180,7 +203,7 @@ public abstract class AbstractServiceMethodImplementationTransformer {
                           optionalAggregateRoot.get().getObjectName().getText())))
           .getProperties();
     } else {
-      throw new IllegalStateException("should find domaim entity");
+      throw new IllegalStateException("should find domain entity");
     }
   }
 

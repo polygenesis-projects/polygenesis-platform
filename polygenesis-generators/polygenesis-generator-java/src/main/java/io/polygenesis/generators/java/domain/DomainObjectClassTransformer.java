@@ -56,7 +56,7 @@ import java.util.TreeSet;
  * @author Christos Tsakostas
  */
 public abstract class DomainObjectClassTransformer<
-    S extends BaseDomainObject, F extends FunctionProvider>
+        S extends BaseDomainObject, F extends FunctionProvider>
     extends AbstractClassTransformer<S, F> {
 
   // ===============================================================================================
@@ -167,11 +167,11 @@ public abstract class DomainObjectClassTransformer<
     // ---------------------------------------------------------------------------------------------
     // Create no-args constructor
     // ---------------------------------------------------------------------------------------------
-    constructorRepresentations.add(createNoArgsConstructorForPersistence(
-        source.getInstantiationType().equals(InstantiationType.ABSTRACT)
-            ? dataTypeTransformer.getModifierProtected()
-            : dataTypeTransformer.getModifierPrivate()
-    ));
+    constructorRepresentations.add(
+        createNoArgsConstructorForPersistence(
+            source.getInstantiationType().equals(InstantiationType.ABSTRACT)
+                ? dataTypeTransformer.getModifierProtected()
+                : dataTypeTransformer.getModifierPrivate()));
 
     // ---------------------------------------------------------------------------------------------
     // Create constructor with parameters

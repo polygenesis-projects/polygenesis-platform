@@ -160,9 +160,8 @@ public class ValueObjectTransformer extends AbstractClassTransformer<ValueObject
     // ---------------------------------------------------------------------------------------------
     // Create no-args constructor
     // ---------------------------------------------------------------------------------------------
-    constructorRepresentations.add(createNoArgsConstructorForPersistence(
-        dataTypeTransformer.getModifierPrivate()
-    ));
+    constructorRepresentations.add(
+        createNoArgsConstructorForPersistence(dataTypeTransformer.getModifierPrivate()));
 
     // ---------------------------------------------------------------------------------------------
     // Create constructor with parameters

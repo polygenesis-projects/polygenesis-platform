@@ -85,12 +85,12 @@ public class ThingBuilder extends AbstractThingBuilder<ThingBuilder> {
    */
   public static ThingBuilder endToEndChild(Thing parentThing) {
     return new ThingBuilder(
-        new LinkedHashSet<>(
-            Arrays.asList(
-                AbstractionScope.api(),
-                AbstractionScope.apiDetail(),
-                AbstractionScope.apiClientRest(),
-                AbstractionScope.domainAggregateEntity())))
+            new LinkedHashSet<>(
+                Arrays.asList(
+                    AbstractionScope.api(),
+                    AbstractionScope.apiDetail(),
+                    AbstractionScope.apiClientRest(),
+                    AbstractionScope.domainAggregateEntity())))
         .setParentThing(parentThing);
   }
 

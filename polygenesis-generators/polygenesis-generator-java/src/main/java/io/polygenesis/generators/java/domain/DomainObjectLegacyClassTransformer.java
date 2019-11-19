@@ -600,7 +600,9 @@ public abstract class DomainObjectLegacyClassTransformer<S extends BaseDomainObj
                         makeVariableDataType(property),
                         makeVariableName(property),
                         DataPurpose.thingIdentity()));
-              } else if (property.getPropertyType().equals(PropertyType.ABSTRACT_AGGREGATE_ROOT_ID)) {
+              } else if (property
+                  .getPropertyType()
+                  .equals(PropertyType.ABSTRACT_AGGREGATE_ROOT_ID)) {
                 parameterRepresentations.add(
                     new ParameterRepresentation(
                         makeVariableDataType(property),

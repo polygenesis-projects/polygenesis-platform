@@ -65,6 +65,7 @@ public class AggregateRootLegacyClassTransformer
   // OVERRIDES
   // ===============================================================================================
 
+  @SuppressWarnings("CPD-START")
   @Override
   public Set<MethodRepresentation> methodRepresentations(AggregateRoot source, Object... args) {
     Set<MethodRepresentation> methodRepresentations = new LinkedHashSet<>();
@@ -120,6 +121,7 @@ public class AggregateRootLegacyClassTransformer
     }
   }
 
+  @SuppressWarnings("CPD-END")
   @Override
   public String simpleObjectName(AggregateRoot source, Object... args) {
     StringBuilder stringBuilder = new StringBuilder();
