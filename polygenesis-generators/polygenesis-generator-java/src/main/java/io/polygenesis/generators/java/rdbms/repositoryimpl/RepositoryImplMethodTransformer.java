@@ -18,34 +18,29 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.generators.java.domainservicedetail;
+package io.polygenesis.generators.java.rdbms.repositoryimpl;
 
+import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.core.DataTypeTransformer;
-import io.polygenesis.models.domain.DomainServiceMethod;
 import io.polygenesis.transformers.java.AbstractMethodTransformer;
-import java.util.Arrays;
-import java.util.LinkedHashSet;
-import java.util.Set;
-import java.util.TreeSet;
 
 /**
- * The type Domain service detail method transformer.
+ * The type Repository impl method transformer.
  *
  * @author Christos Tsakostas
  */
-public class DomainServiceDetailMethodTransformer
-    extends AbstractMethodTransformer<DomainServiceMethod> {
+public class RepositoryImplMethodTransformer extends AbstractMethodTransformer<Function> {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
-   * Instantiates a new Domain service detail method transformer.
+   * Instantiates a new Repository impl method transformer.
    *
    * @param dataTypeTransformer the data type transformer
    */
-  public DomainServiceDetailMethodTransformer(DataTypeTransformer dataTypeTransformer) {
+  public RepositoryImplMethodTransformer(DataTypeTransformer dataTypeTransformer) {
     super(dataTypeTransformer);
   }
 
@@ -53,30 +48,4 @@ public class DomainServiceDetailMethodTransformer
   // OVERRIDES
   // ===============================================================================================
 
-  @Override
-  public Set<String> annotations(DomainServiceMethod source, Object... args) {
-    return new LinkedHashSet<>(Arrays.asList("@Override"));
-  }
-
-  @Override
-  public String description(DomainServiceMethod source, Object... args) {
-    return "";
-  }
-
-  @Override
-  public String modifiers(DomainServiceMethod source, Object... args) {
-    return MODIFIER_PUBLIC;
-  }
-
-  @Override
-  public Set<String> imports(DomainServiceMethod source, Object... args) {
-    Set<String> imports = new TreeSet<>();
-
-    // TODO
-    imports.add("java.time.LocalDateTime");
-
-    imports.addAll(super.imports(source, args));
-
-    return imports;
-  }
 }

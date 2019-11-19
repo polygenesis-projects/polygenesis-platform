@@ -215,7 +215,7 @@ public class AggregateRootDeducer {
    * @return the name
    */
   private ObjectName makePersistenceName(Thing thing) {
-    return new ObjectName(thing.getThingName().getText() + "Persistence");
+    return new ObjectName(thing.getThingName().getText() + "Repository");
   }
 
   /**

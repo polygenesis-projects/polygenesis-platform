@@ -20,43 +20,80 @@
 
 package io.polygenesis.generators.java.rdbms.repositoryimpl;
 
+import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.DataTypeTransformer;
-import io.polygenesis.generators.java.rdbms.AbstractRepositoryImplLegacyClassTransformer;
+import io.polygenesis.core.TemplateData;
 import io.polygenesis.models.domain.Persistence;
 import io.polygenesis.representations.code.ConstructorRepresentation;
+import io.polygenesis.representations.code.FieldRepresentation;
 import io.polygenesis.representations.code.ParameterRepresentation;
+import io.polygenesis.transformers.java.AbstractClassTransformer;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
 /**
- * The type Persistence impl class representable.
+ * The type Repository impl transformer.
  *
  * @author Christos Tsakostas
  */
-public class PersistenceImplLegacyClassTransformer
-    extends AbstractRepositoryImplLegacyClassTransformer {
+public class RepositoryImplTransformer extends AbstractClassTransformer<Persistence, Function> {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
-   * Instantiates a new Persistence impl class representable.
+   * Instantiates a new Repository impl transformer.
    *
-   * @param dataTypeTransformer the from data type to java converter
+   * @param dataTypeTransformer the data type transformer
+   * @param methodTransformer the method transformer
    */
-  public PersistenceImplLegacyClassTransformer(DataTypeTransformer dataTypeTransformer) {
-    super(dataTypeTransformer);
+  public RepositoryImplTransformer(
+      DataTypeTransformer dataTypeTransformer, RepositoryImplMethodTransformer methodTransformer) {
+    super(dataTypeTransformer, methodTransformer);
   }
 
   // ===============================================================================================
   // OVERRIDES
   // ===============================================================================================
+
+  @Override
+  public TemplateData transform(Persistence source, Object... args) {
+    Map<String, Object> dataModel = new HashMap<>();
+    dataModel.put("representation", create(source, args));
+    return new TemplateData(dataModel, "polygenesis-representation-java/Class.java.ftl");
+  }
+
+  @Override
+  public String packageName(Persistence source, Object... args) {
+    return source.getPackageName().getText();
+  }
+
+  @Override
+  public Set<String> annotations(Persistence source, Object... args) {
+    return new LinkedHashSet<>(Arrays.asList("@Repository"));
+  }
+
+  @Override
+  public Set<FieldRepresentation> fieldRepresentations(Persistence source, Object... args) {
+    Set<FieldRepresentation> fieldRepresentations = new LinkedHashSet<>();
+
+    fieldRepresentations.add(
+        new FieldRepresentation(
+            String.format(
+                "final %sSpringDataRepository",
+                TextConverter.toUpperCamel(source.getAggregateRootObjectName().getText())),
+            "springDataRepository"));
+
+    return fieldRepresentations;
+  }
 
   @Override
   public Set<ConstructorRepresentation> constructorRepresentations(
@@ -67,8 +104,8 @@ public class PersistenceImplLegacyClassTransformer
     parameterRepresentations.add(
         new ParameterRepresentation(
             TextConverter.toUpperCamel(source.getAggregateRootObjectName().getText())
-                + "Repository",
-            "repository"));
+                + "SpringDataRepository",
+            "springDataRepository"));
 
     parameterRepresentations.add(
         new ParameterRepresentation(
@@ -85,18 +122,26 @@ public class PersistenceImplLegacyClassTransformer
     stringBuilder.append(TextConverter.toUpperCamelSpaces(source.getObjectName().getText()));
     stringBuilder.append(" Implementation.");
 
+    StringBuilder impl = new StringBuilder();
+
+    impl.append(
+        String.format(
+            "\t\tsuper(%s.class, %s, %s, %s);",
+            TextConverter.toUpperCamel(source.getAggregateRootIdObjectName().getText()),
+            "springDataRepository",
+            "springDomainMessageDataRepository",
+            "domainMessageDataConverter"));
+
+    impl.append("\n");
+    impl.append("\t\tthis.springDataRepository = springDataRepository;");
+
     ConstructorRepresentation constructorRepresentation =
         new ConstructorRepresentation(
             new LinkedHashSet<>(),
             stringBuilder.toString(),
-            MODIFIER_PUBLIC,
+            dataTypeTransformer.getModifierPublic(),
             parameterRepresentations,
-            String.format(
-                "\t\tsuper(%s.class, %s, %s, %s);",
-                TextConverter.toUpperCamel(source.getAggregateRootIdObjectName().getText()),
-                "repository",
-                "springDomainMessageDataRepository",
-                "domainMessageDataConverter"));
+            impl.toString());
 
     return new LinkedHashSet<>(Arrays.asList(constructorRepresentation));
   }
@@ -122,6 +167,34 @@ public class PersistenceImplLegacyClassTransformer
     imports.add("org.springframework.stereotype.Repository");
 
     return imports;
+  }
+
+  @Override
+  public String description(Persistence source, Object... args) {
+    StringBuilder stringBuilder = new StringBuilder();
+
+    stringBuilder.append("The ");
+
+    stringBuilder.append(TextConverter.toUpperCamelSpaces(source.getObjectName().getText()));
+
+    stringBuilder.append(" Implementation.");
+
+    return stringBuilder.toString();
+  }
+
+  @Override
+  public String modifiers(Persistence source, Object... args) {
+    return dataTypeTransformer.getModifierPublic();
+  }
+
+  @Override
+  public String simpleObjectName(Persistence source, Object... args) {
+    StringBuilder stringBuilder = new StringBuilder();
+
+    stringBuilder.append(TextConverter.toUpperCamel(source.getObjectName().getText()));
+    stringBuilder.append("Impl");
+
+    return stringBuilder.toString();
   }
 
   @Override

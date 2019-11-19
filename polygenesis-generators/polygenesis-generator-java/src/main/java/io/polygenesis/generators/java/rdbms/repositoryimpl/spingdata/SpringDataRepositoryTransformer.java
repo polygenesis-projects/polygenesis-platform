@@ -18,47 +18,55 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.generators.java.rdbms;
+package io.polygenesis.generators.java.rdbms.repositoryimpl.spingdata;
 
+import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.DataTypeTransformer;
+import io.polygenesis.core.TemplateData;
 import io.polygenesis.models.domain.Persistence;
 import io.polygenesis.representations.code.MethodRepresentation;
-import io.polygenesis.transformers.java.legacy.AbstractLegacyInterfaceTransformer;
-import io.polygenesis.transformers.java.legacy.FunctionToLegacyMethodRepresentationTransformer;
+import io.polygenesis.transformers.java.AbstractInterfaceTransformer;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
 /**
- * The type Spring data repository interface representable.
+ * The type Spring data repository transformer.
  *
  * @author Christos Tsakostas
  */
-public class SpringDataRepositoryLegacyInterfaceTransformer
-    extends AbstractLegacyInterfaceTransformer<Persistence> {
+public class SpringDataRepositoryTransformer
+    extends AbstractInterfaceTransformer<Persistence, Function> {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
-   * Instantiates a new Spring data repository interface representable.
+   * Instantiates a new Spring data repository transformer.
    *
-   * @param dataTypeTransformer the from data type to java converter
-   * @param functionToMethodRepresentationTransformer the function to method representation
-   *     converter
+   * @param dataTypeTransformer the data type transformer
+   * @param methodTransformer the method transformer
    */
-  @SuppressWarnings("CPD-START")
-  public SpringDataRepositoryLegacyInterfaceTransformer(
+  public SpringDataRepositoryTransformer(
       DataTypeTransformer dataTypeTransformer,
-      FunctionToLegacyMethodRepresentationTransformer functionToMethodRepresentationTransformer) {
-    super(dataTypeTransformer, functionToMethodRepresentationTransformer);
+      SpringDataRepositoryMethodTransformer methodTransformer) {
+    super(dataTypeTransformer, methodTransformer);
   }
 
   // ===============================================================================================
   // OVERRIDES
   // ===============================================================================================
+
+  @Override
+  public TemplateData transform(Persistence source, Object... args) {
+    Map<String, Object> dataModel = new HashMap<>();
+    dataModel.put("representation", create(source, args));
+    return new TemplateData(dataModel, "polygenesis-representation-java/Interface.java.ftl");
+  }
 
   @Override
   public Set<MethodRepresentation> methodRepresentations(Persistence source, Object... args) {
@@ -105,15 +113,15 @@ public class SpringDataRepositoryLegacyInterfaceTransformer
 
   @Override
   public String modifiers(Persistence source, Object... args) {
-    return MODIFIER_PUBLIC;
+    return dataTypeTransformer.getModifierPublic();
   }
 
   @Override
   public String simpleObjectName(Persistence source, Object... args) {
     StringBuilder stringBuilder = new StringBuilder();
 
-    stringBuilder.append(TextConverter.toLowerCamel(source.getObjectName().getText()));
-    stringBuilder.append("Repository");
+    stringBuilder.append(TextConverter.toUpperCamel(source.getAggregateRootObjectName().getText()));
+    stringBuilder.append("SpringDataRepository");
 
     return stringBuilder.toString();
   }
@@ -123,7 +131,7 @@ public class SpringDataRepositoryLegacyInterfaceTransformer
     StringBuilder stringBuilder = new StringBuilder();
 
     stringBuilder.append(TextConverter.toUpperCamel(source.getAggregateRootObjectName().getText()));
-    stringBuilder.append("Repository");
+    stringBuilder.append("SpringDataRepository");
     stringBuilder.append(" ");
     stringBuilder.append("extends");
     stringBuilder.append(" ");

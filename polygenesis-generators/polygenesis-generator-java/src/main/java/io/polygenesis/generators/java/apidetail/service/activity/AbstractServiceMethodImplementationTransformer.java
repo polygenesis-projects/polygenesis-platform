@@ -102,14 +102,14 @@ public abstract class AbstractServiceMethodImplementationTransformer {
   }
 
   /**
-   * Gets persistence variable.
+   * Gets repository variable.
    *
    * @param source the source
-   * @return the persistence variable
+   * @return the repository variable
    */
-  protected String getPersistenceVariable(ServiceMethodImplementation source) {
+  protected String getRepositoryVariable(ServiceMethodImplementation source) {
     return TextConverter.toLowerCamel(
-        String.format("%sPersistence", source.getFunction().getThing().getThingName().getText()));
+        String.format("%sRepository", source.getFunction().getThing().getThingName().getText()));
   }
 
   /**

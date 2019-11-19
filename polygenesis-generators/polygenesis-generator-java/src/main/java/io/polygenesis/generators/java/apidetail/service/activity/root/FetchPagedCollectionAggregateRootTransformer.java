@@ -56,7 +56,7 @@ public class FetchPagedCollectionAggregateRootTransformer
     data.setAggregateRootIdDataType(getAggregateRootIdDataType(source));
 
     data.setAggregateRootVariable(getAggregateRootVariable(source));
-    data.setPersistenceVariable(getPersistenceVariable(source));
+    data.setPersistenceVariable(getRepositoryVariable(source));
     data.setReturnValue(getReturnValue(source));
     data.setRequestDto(source.getServiceMethod().getRequestDto());
     data.setResponseDto(source.getServiceMethod().getResponseDto());

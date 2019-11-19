@@ -54,7 +54,7 @@ public class EnsureExistenceOfAggregateRootTransformer
             getAggregateRootDataType(source),
             getAggregateRootVariable(source),
             getPropertiesFromConstructor(source, metamodelRepositories),
-            getPersistenceVariable(source),
+            getRepositoryVariable(source),
             source.getServiceMethod().getRequestDto(),
             source.getServiceMethod().getResponseDto(),
             getConverterVariable(source, metamodelRepositories),
