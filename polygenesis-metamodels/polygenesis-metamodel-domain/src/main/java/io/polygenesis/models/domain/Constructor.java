@@ -21,6 +21,7 @@
 package io.polygenesis.models.domain;
 
 import io.polygenesis.abstraction.thing.Function;
+import io.polygenesis.commons.assertion.Assertion;
 import java.util.Objects;
 import java.util.Set;
 
@@ -32,6 +33,7 @@ import java.util.Set;
 public class Constructor extends BaseMethod {
 
   private Set<DomainObjectProperty<?>> properties;
+  private DomainEvent domainEvent;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -49,6 +51,19 @@ public class Constructor extends BaseMethod {
   }
 
   // ===============================================================================================
+  // STATE MUTATION
+  // ===============================================================================================
+
+  /**
+   * Assign domain event.
+   *
+   * @param domainEvent the domain event
+   */
+  public void assignDomainEvent(DomainEvent domainEvent) {
+    setDomainEvent(domainEvent);
+  }
+
+  // ===============================================================================================
   // GETTERS
   // ===============================================================================================
 
@@ -61,6 +76,15 @@ public class Constructor extends BaseMethod {
     return properties;
   }
 
+  /**
+   * Gets domain event.
+   *
+   * @return the domain event
+   */
+  public DomainEvent getDomainEvent() {
+    return domainEvent;
+  }
+
   // ===============================================================================================
   // GUARDS
   // ===============================================================================================
@@ -71,7 +95,18 @@ public class Constructor extends BaseMethod {
    * @param properties the properties
    */
   private void setProperties(Set<DomainObjectProperty<?>> properties) {
+    Assertion.isNotNull(properties, "properties is required");
     this.properties = properties;
+  }
+
+  /**
+   * Sets domain event.
+   *
+   * @param domainEvent the domain event
+   */
+  private void setDomainEvent(DomainEvent domainEvent) {
+    Assertion.isNotNull(domainEvent, "domainEvent is required");
+    this.domainEvent = domainEvent;
   }
 
   // ===============================================================================================
@@ -90,11 +125,12 @@ public class Constructor extends BaseMethod {
       return false;
     }
     Constructor that = (Constructor) o;
-    return Objects.equals(properties, that.properties);
+    return Objects.equals(properties, that.properties)
+        && Objects.equals(domainEvent, that.domainEvent);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(super.hashCode(), properties);
+    return Objects.hash(super.hashCode(), properties, domainEvent);
   }
 }

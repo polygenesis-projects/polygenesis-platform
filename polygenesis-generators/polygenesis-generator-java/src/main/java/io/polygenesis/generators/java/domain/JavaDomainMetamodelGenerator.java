@@ -33,7 +33,7 @@ import io.polygenesis.generators.java.domain.aggregateentity.AggregateEntityExpo
 import io.polygenesis.generators.java.domain.aggregateentity.id.AggregateEntityIdExporter;
 import io.polygenesis.generators.java.domain.aggregateroot.AggregateRootGenerator;
 import io.polygenesis.generators.java.domain.aggregateroot.id.AggregateRootIdExporter;
-import io.polygenesis.generators.java.domain.domainevent.DomainEventExporter;
+import io.polygenesis.generators.java.domain.domainevent.DomainEventGenerator;
 import io.polygenesis.generators.java.domain.domainmessage.data.DomainMessageData;
 import io.polygenesis.generators.java.domain.domainmessage.data.DomainMessageDataGenerator;
 import io.polygenesis.generators.java.domain.domainmessage.datarepository.DomainMessageDataRepository;
@@ -59,6 +59,7 @@ import io.polygenesis.models.domain.AggregateEntityCollection;
 import io.polygenesis.models.domain.AggregateRoot;
 import io.polygenesis.models.domain.AggregateRootPersistable;
 import io.polygenesis.models.domain.BaseDomainEntity;
+import io.polygenesis.models.domain.DomainEvent;
 import io.polygenesis.models.domain.DomainMetamodelRepository;
 import io.polygenesis.models.domain.DomainService;
 import io.polygenesis.models.domain.DomainServiceRepository;
@@ -89,7 +90,7 @@ public class JavaDomainMetamodelGenerator extends AbstractMetamodelGenerator {
   private final AggregateEntityExporter aggregateEntityExporter;
   private final AggregateEntityIdExporter aggregateEntityIdExporter;
   private final ValueObjectGenerator valueObjectGenerator;
-  private final DomainEventExporter domainEventExporter;
+  private final DomainEventGenerator domainEventGenerator;
   private final PersistenceExporter persistenceExporter;
   private final DomainServiceGenerator domainServiceGenerator;
   private final SupportiveEntityGenerator supportiveEntityGenerator;
@@ -122,7 +123,7 @@ public class JavaDomainMetamodelGenerator extends AbstractMetamodelGenerator {
    * @param aggregateEntityExporter the aggregate entity exporter
    * @param aggregateEntityIdExporter the aggregate entity id exporter
    * @param valueObjectGenerator the value object generator
-   * @param domainEventExporter the domain event exporter
+   * @param domainEventGenerator the domain event exporter
    * @param persistenceExporter the persistence exporter
    * @param domainServiceGenerator the domain service generator
    * @param supportiveEntityGenerator the supportive entity exporter
@@ -148,7 +149,7 @@ public class JavaDomainMetamodelGenerator extends AbstractMetamodelGenerator {
       AggregateEntityExporter aggregateEntityExporter,
       AggregateEntityIdExporter aggregateEntityIdExporter,
       ValueObjectGenerator valueObjectGenerator,
-      DomainEventExporter domainEventExporter,
+      DomainEventGenerator domainEventGenerator,
       PersistenceExporter persistenceExporter,
       DomainServiceGenerator domainServiceGenerator,
       SupportiveEntityGenerator supportiveEntityGenerator,
@@ -171,7 +172,7 @@ public class JavaDomainMetamodelGenerator extends AbstractMetamodelGenerator {
     this.aggregateEntityExporter = aggregateEntityExporter;
     this.aggregateEntityIdExporter = aggregateEntityIdExporter;
     this.valueObjectGenerator = valueObjectGenerator;
-    this.domainEventExporter = domainEventExporter;
+    this.domainEventGenerator = domainEventGenerator;
     this.persistenceExporter = persistenceExporter;
     this.domainServiceGenerator = domainServiceGenerator;
     this.supportiveEntityGenerator = supportiveEntityGenerator;
@@ -234,7 +235,21 @@ public class JavaDomainMetamodelGenerator extends AbstractMetamodelGenerator {
                     ((AggregateRootPersistable) aggregateRoot).getPersistence());
               }
 
-              domainEventExporter.export(getGenerationPath(), null);
+              // Constructor Domain Events
+              aggregateRoot
+                  .getConstructors()
+                  .forEach(
+                      constructor -> {
+                        DomainEvent domainEvent = constructor.getDomainEvent();
+                        if (domainEvent != null) {
+                          domainEventGenerator.generate(
+                              domainEvent,
+                              exportInfo(
+                                  getGenerationPath(),
+                                  domainEvent.getPackageName(),
+                                  domainEvent.getObjectName()));
+                        }
+                      });
 
               // Aggregate Entities
               aggregateRoot
@@ -649,5 +664,19 @@ public class JavaDomainMetamodelGenerator extends AbstractMetamodelGenerator {
             "%s%s",
             TextConverter.toUpperCamel(supportiveEntityRepository.getObjectName().getText()),
             FolderFileConstants.JAVA_POSTFIX));
+  }
+
+  private ExportInfo exportInfo(
+      Path generationPath, PackageName packageName, ObjectName objectName) {
+    return ExportInfo.file(
+        Paths.get(
+            generationPath.toString(),
+            FolderFileConstants.SRC,
+            FolderFileConstants.MAIN,
+            FolderFileConstants.JAVA,
+            packageName.toPath().toString()),
+        String.format(
+            "%s%s",
+            TextConverter.toUpperCamel(objectName.getText()), FolderFileConstants.JAVA_POSTFIX));
   }
 }

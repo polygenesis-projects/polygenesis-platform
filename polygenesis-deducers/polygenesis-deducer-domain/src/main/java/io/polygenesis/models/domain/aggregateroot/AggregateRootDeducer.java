@@ -29,12 +29,14 @@ import io.polygenesis.core.AbstractionScope;
 import io.polygenesis.models.domain.AggregateRoot;
 import io.polygenesis.models.domain.AggregateRootPersistable;
 import io.polygenesis.models.domain.Constructor;
+import io.polygenesis.models.domain.DomainEvent;
 import io.polygenesis.models.domain.DomainObjectProperty;
 import io.polygenesis.models.domain.FactoryMethod;
 import io.polygenesis.models.domain.InstantiationType;
 import io.polygenesis.models.domain.Persistence;
 import io.polygenesis.models.domain.StateMutationMethod;
 import io.polygenesis.models.domain.StateQueryMethod;
+import io.polygenesis.models.domain.domainmessage.DomainEventDeducer;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -51,6 +53,7 @@ public class AggregateRootDeducer {
   // ===============================================================================================
   private final AggregateRootPropertyDeducer aggregateRootPropertyDeducer;
   private final StateMutationMethodDeducer stateMutationMethodDeducer;
+  private final DomainEventDeducer domainEventDeducer;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -61,12 +64,15 @@ public class AggregateRootDeducer {
    *
    * @param aggregateRootPropertyDeducer the aggregate root property deducer
    * @param stateMutationMethodDeducer the state mutation method deducer
+   * @param domainEventDeducer the domain event deducer
    */
   public AggregateRootDeducer(
       AggregateRootPropertyDeducer aggregateRootPropertyDeducer,
-      StateMutationMethodDeducer stateMutationMethodDeducer) {
+      StateMutationMethodDeducer stateMutationMethodDeducer,
+      DomainEventDeducer domainEventDeducer) {
     this.aggregateRootPropertyDeducer = aggregateRootPropertyDeducer;
     this.stateMutationMethodDeducer = stateMutationMethodDeducer;
+    this.domainEventDeducer = domainEventDeducer;
   }
 
   // ===============================================================================================
@@ -129,6 +135,15 @@ public class AggregateRootDeducer {
 
     Set<Constructor> constructors =
         aggregateRootPropertyDeducer.deduceConstructors(thing, rootPackageName);
+
+    if (!isAbstract(thing)) {
+      constructors.forEach(
+          constructor -> {
+            DomainEvent domainEvent =
+                domainEventDeducer.deduceFrom(rootPackageName, thing, constructor);
+            constructor.assignDomainEvent(domainEvent);
+          });
+    }
 
     Set<StateMutationMethod> stateMutationMethods =
         stateMutationMethodDeducer.deduce(thing, properties);

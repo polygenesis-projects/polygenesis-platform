@@ -47,7 +47,7 @@ public class ${ projection.objectNameWithOptionalExtendsImplements } {
   // ===============================================================================================
 
   /**
-   * No-args constructor for persistence frameworks.
+   * No-args constructor for reflections-based frameworks.
    */
   private ${ textConverter.toUpperCamel(projection.objectName) }() {
     super();

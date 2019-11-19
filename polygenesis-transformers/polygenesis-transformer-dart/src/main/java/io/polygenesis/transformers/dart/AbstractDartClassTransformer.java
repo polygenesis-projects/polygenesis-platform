@@ -256,7 +256,7 @@ public abstract class AbstractDartClassTransformer<S extends Nameable, F extends
    * @return the constructor representation
    */
   protected ConstructorRepresentation createNoArgsConstructorForPersistence() {
-    String description = "No-args constructor for persistence frameworks.";
+    String description = "No-args constructor for reflections-based frameworks.";
 
     return new ConstructorRepresentation(
         new LinkedHashSet<>(), description, "protected", new LinkedHashSet<>(), "\t\tsuper();");
