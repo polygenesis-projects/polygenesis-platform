@@ -114,7 +114,7 @@ public class ServiceImplementation implements Metamodel {
    * @return the domain object converter
    */
   public DomainEntityConverter domainObjectConverter() {
-    return domainEntityConverters.stream().findFirst().orElseThrow(IllegalArgumentException::new);
+    return domainEntityConverters.stream().findFirst().orElse(null);
   }
 
   // ===============================================================================================

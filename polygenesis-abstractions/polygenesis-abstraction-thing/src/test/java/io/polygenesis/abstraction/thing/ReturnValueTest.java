@@ -43,21 +43,11 @@ public class ReturnValueTest extends AbstractEqualityTest<ReturnValue> {
   }
 
   private DataPrimitive createDataPrimitive1() {
-    return new DataPrimitive(
-        new VariableName("someVariableName"),
-        DataPurpose.any(),
-        DataValidator.empty(),
-        PrimitiveType.STRING,
-        new LinkedHashSet<>());
+    return DataPrimitive.of(PrimitiveType.STRING, new VariableName("someVariableName"));
   }
 
   private DataPrimitive createDataPrimitive2() {
-    return new DataPrimitive(
-        new VariableName("someOtherVariableName"),
-        DataPurpose.any(),
-        DataValidator.empty(),
-        PrimitiveType.STRING,
-        new LinkedHashSet<>());
+    return DataPrimitive.of(PrimitiveType.STRING, new VariableName("someOtherVariableName"));
   }
 
   @Override

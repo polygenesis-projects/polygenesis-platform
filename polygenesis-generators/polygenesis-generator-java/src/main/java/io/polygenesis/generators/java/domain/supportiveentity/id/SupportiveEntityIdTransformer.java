@@ -94,7 +94,7 @@ public class SupportiveEntityIdTransformer
     // ---------------------------------------------------------------------------------------------
     // Create no-args constructor
     // ---------------------------------------------------------------------------------------------
-    constructorRepresentations.add(createNoArgsConstructorForPersistence());
+    constructorRepresentations.add(createNoArgsConstructorForPersistence(dataTypeTransformer.getModifierPrivate()));
 
     // ---------------------------------------------------------------------------------------------
     // Create constructor with parameters

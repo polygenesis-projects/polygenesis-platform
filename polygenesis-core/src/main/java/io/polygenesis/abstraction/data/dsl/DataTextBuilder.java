@@ -20,8 +20,11 @@
 
 package io.polygenesis.abstraction.data.dsl;
 
+import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.abstraction.data.DataPrimitive;
 import io.polygenesis.abstraction.data.PrimitiveType;
+import io.polygenesis.commons.valueobjects.ObjectName;
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.commons.valueobjects.VariableName;
 
 /**
@@ -45,6 +48,12 @@ public class DataTextBuilder {
     model = DataPrimitive.of(PrimitiveType.STRING, new VariableName(propertyName));
   }
 
+  private DataTextBuilder(DataBuilder dataBuilder, String propertyName, ObjectName objectName, PackageName packageName) {
+    this.dataBuilder = dataBuilder;
+    DataObject dataObject = new DataObject(objectName, packageName);
+    model = DataPrimitive.of(PrimitiveType.STRING, new VariableName(propertyName), dataObject);
+  }
+
   // ===============================================================================================
   // START
   // ===============================================================================================
@@ -58,6 +67,10 @@ public class DataTextBuilder {
    */
   public static DataTextBuilder create(DataBuilder dataBuilder, String propertyName) {
     return new DataTextBuilder(dataBuilder, propertyName);
+  }
+
+  public static DataTextBuilder create(DataBuilder dataBuilder, String propertyName, ObjectName objectName, PackageName packageName) {
+    return new DataTextBuilder(dataBuilder, propertyName, objectName, packageName);
   }
 
   // ===============================================================================================

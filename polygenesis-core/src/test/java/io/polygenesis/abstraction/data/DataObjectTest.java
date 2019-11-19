@@ -54,9 +54,7 @@ public class DataObjectTest extends AbstractEqualityTest<DataObject> {
             new VariableName("someVariableName"));
     dataObject.addData(childDataObject);
 
-    DataPrimitive childDataPrimitive =
-        new DataPrimitive(
-            PrimitiveType.STRING, new VariableName("someVariableName"), null, DataPurpose.any());
+    DataPrimitive childDataPrimitive = DataPrimitive.of(PrimitiveType.STRING, new VariableName("someVariableName"));
     dataObject.addData(childDataPrimitive);
 
     assertThat(dataObject.getModels().size()).isEqualTo(3);

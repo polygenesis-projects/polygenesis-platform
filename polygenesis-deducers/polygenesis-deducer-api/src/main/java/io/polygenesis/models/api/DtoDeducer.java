@@ -92,8 +92,12 @@ public class DtoDeducer {
       dtoType = DtoType.API_REQUEST;
     }
 
+//    Dto dto = new Dto(dtoType,
+//        replaceSingleValueObjectsWithPrimitives(originatingDataObject.getAsDataObject()),
+//        virtual);
+
     Dto dto = new Dto(dtoType,
-        replaceSingleValueObjectsWithPrimitives(originatingDataObject.getAsDataObject()),
+        originatingDataObject.getAsDataObject(),
         virtual);
 
     makeAssertionsForRequestDto(dto, function);

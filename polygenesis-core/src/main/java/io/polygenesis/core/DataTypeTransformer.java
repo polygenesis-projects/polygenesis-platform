@@ -43,6 +43,20 @@ public interface DataTypeTransformer {
   String getModifierPublic();
 
   /**
+   * Gets modifier protected.
+   *
+   * @return the modifier protected
+   */
+  String getModifierProtected();
+
+  /**
+   * Gets modifier private.
+   *
+   * @return the modifier private
+   */
+  String getModifierPrivate();
+
+  /**
    * Gets modifier abstract.
    *
    * @return the modifier abstract

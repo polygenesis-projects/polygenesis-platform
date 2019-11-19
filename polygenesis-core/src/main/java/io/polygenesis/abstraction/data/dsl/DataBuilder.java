@@ -24,6 +24,8 @@ import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.DataArray;
 import io.polygenesis.abstraction.data.DataMap;
 import io.polygenesis.abstraction.data.DataObject;
+import io.polygenesis.commons.valueobjects.ObjectName;
+import io.polygenesis.commons.valueobjects.PackageName;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -83,6 +85,22 @@ public class DataBuilder {
    */
   public final DataTextBuilder withTextProperty(String propertyName) {
     DataTextBuilder dataTextBuilder = DataTextBuilder.create(this, propertyName);
+
+    this.models.add(dataTextBuilder.getModel());
+
+    return dataTextBuilder;
+  }
+
+  /**
+   * With text property data text builder.
+   *
+   * @param propertyName the property name
+   * @param objectName the object name
+   * @param packageName the package name
+   * @return the data text builder
+   */
+  public final DataTextBuilder withTextProperty(String propertyName, ObjectName objectName, PackageName packageName) {
+    DataTextBuilder dataTextBuilder = DataTextBuilder.create(this, propertyName, objectName, packageName);
 
     this.models.add(dataTextBuilder.getModel());
 
