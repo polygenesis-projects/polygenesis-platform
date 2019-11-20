@@ -36,6 +36,7 @@ import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.commons.valueobjects.VariableName;
 import io.polygenesis.core.AbstractionScope;
 import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -155,7 +156,11 @@ public class PurposeFunctionBuilder {
 
     // ---------------------------------------------------------------------------------------------
     // Add Thing Identity
-    if (!thingHasIdentity(thing)) {
+    // Add Thing Identity
+    Optional<Data> optionalDataThingIdentity = getThingIdentity(thing);
+    if (optionalDataThingIdentity.isPresent()) {
+      argumentDataObject.addData(optionalDataThingIdentity.get());
+    } else {
       argumentDataObject.addData(makeThingIdentity(thing));
     }
 
@@ -208,7 +213,6 @@ public class PurposeFunctionBuilder {
    * @return the purpose function builder
    */
   public PurposeFunctionBuilder withFunctionEnsureExistence() {
-
     String functionName = "ensureExistence";
 
     // ---------------------------------------------------------------------------------------------
@@ -229,7 +233,10 @@ public class PurposeFunctionBuilder {
 
     // ---------------------------------------------------------------------------------------------
     // Add Thing Identity
-    if (!thingHasIdentity(thing)) {
+    Optional<Data> optionalDataThingIdentity = getThingIdentity(thing);
+    if (optionalDataThingIdentity.isPresent()) {
+      argumentDataObject.addData(optionalDataThingIdentity.get());
+    } else {
       argumentDataObject.addData(makeThingIdentity(thing));
     }
 
@@ -313,7 +320,11 @@ public class PurposeFunctionBuilder {
 
     // ---------------------------------------------------------------------------------------------
     // Add Thing Identity
-    if (!thingHasIdentity(thing)) {
+    // Add Thing Identity
+    Optional<Data> optionalDataThingIdentity = getThingIdentity(thing);
+    if (optionalDataThingIdentity.isPresent()) {
+      argumentDataObject.addData(optionalDataThingIdentity.get());
+    } else {
       argumentDataObject.addData(makeThingIdentity(thing));
     }
 
@@ -408,7 +419,11 @@ public class PurposeFunctionBuilder {
 
     // ---------------------------------------------------------------------------------------------
     // Add Thing Identity
-    if (!thingHasIdentity(thing)) {
+    // Add Thing Identity
+    Optional<Data> optionalDataThingIdentity = getThingIdentity(thing);
+    if (optionalDataThingIdentity.isPresent()) {
+      argumentDataObject.addData(optionalDataThingIdentity.get());
+    } else {
       argumentDataObject.addData(makeThingIdentity(thing));
     }
 
@@ -539,18 +554,27 @@ public class PurposeFunctionBuilder {
   // PRIVATE
   // ===============================================================================================
 
-  protected boolean thingHasIdentity(Thing thing) {
-    Set<Data> data =
-        thing
-            .getThingProperties()
-            .stream()
-            .map(ThingProperty::getData)
-            .filter(this::isDataThingIdentity)
-            .collect(Collectors.toSet());
-
-    return data.size() == 1 ? true : false;
+  /**
+   * Gets thing identity.
+   *
+   * @param thing the thing
+   * @return the thing identity
+   */
+  protected Optional<Data> getThingIdentity(Thing thing) {
+    return thing
+        .getThingProperties()
+        .stream()
+        .map(ThingProperty::getData)
+        .filter(this::isDataThingIdentity)
+        .findFirst();
   }
 
+  /**
+   * Is data thing identity boolean.
+   *
+   * @param data the data
+   * @return the boolean
+   */
   private boolean isDataThingIdentity(Data data) {
     return data.getDataPurpose().equals(DataPurpose.thingIdentity());
   }

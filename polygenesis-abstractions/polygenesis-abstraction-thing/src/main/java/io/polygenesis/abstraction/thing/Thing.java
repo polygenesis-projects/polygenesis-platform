@@ -335,12 +335,14 @@ public class Thing implements Abstraction {
    * @return the metadata value
    */
   public Object getMetadataValue(Object key) {
+    Assertion.isNotNull(key, "key is required");
+
     return metadata
         .stream()
         .filter(keyValue -> keyValue.getKey().equals(key))
         .map(keyValue -> keyValue.getValue())
         .findFirst()
-        .orElseThrow(IllegalArgumentException::new);
+        .orElseThrow(() -> new IllegalArgumentException(String.format("Cannot find thing metadata for key=%s", key)));
   }
 
   /**
@@ -350,6 +352,8 @@ public class Thing implements Abstraction {
    * @return the metadata value if exists
    */
   public Object getMetadataValueIfExists(Object key) {
+    Assertion.isNotNull(key, "key is required");
+
     return metadata
         .stream()
         .filter(keyValue -> keyValue.getKey().equals(key))

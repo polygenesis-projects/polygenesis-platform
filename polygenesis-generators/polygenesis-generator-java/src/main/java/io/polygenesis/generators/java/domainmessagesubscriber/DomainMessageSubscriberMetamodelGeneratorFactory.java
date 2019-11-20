@@ -110,7 +110,7 @@ public final class DomainMessageSubscriberMetamodelGeneratorFactory {
                 new DomainMessageMethodSubscriberTransformer(
                     dataTypeTransformer, new DomainMessageSubscriberActivityRegistry())),
             templateEngine,
-            passiveFileExporter);
+            activeFileExporter);
 
     incomingDomainMessageGenerator =
         new IncomingDomainMessageGenerator(

@@ -80,12 +80,25 @@ public class DomainMessageSubscriberTransformer
       DomainMessageSubscriber source, Object... args) {
     Set<FieldRepresentation> fieldRepresentations = new LinkedHashSet<>();
 
-    fieldRepresentations.add(
-        new FieldRepresentation(
-            TextConverter.toUpperCamel(
-                source.getEnsureExistenceServiceMethod().getService().getServiceName().getText()),
-            TextConverter.toLowerCamel(
-                source.getEnsureExistenceServiceMethod().getService().getServiceName().getText())));
+    if (source.getEnsureExistenceServiceMethod() != null) {
+      fieldRepresentations.add(
+          new FieldRepresentation(
+              "final " + TextConverter.toUpperCamel(
+                  source.getEnsureExistenceServiceMethod().getService().getServiceName().getText()),
+              TextConverter.toLowerCamel(
+                  source.getEnsureExistenceServiceMethod().getService().getServiceName()
+                      .getText())));
+    }
+
+    if (source.getCommandServiceMethod() != null) {
+      fieldRepresentations.add(
+          new FieldRepresentation(
+              "final " + TextConverter.toUpperCamel(
+                  source.getCommandServiceMethod().getService().getServiceName().getText()),
+              TextConverter.toLowerCamel(
+                  source.getCommandServiceMethod().getService().getServiceName()
+                      .getText())));
+    }
 
     return fieldRepresentations;
   }
@@ -97,12 +110,25 @@ public class DomainMessageSubscriberTransformer
 
     parameterRepresentations.add(new ParameterRepresentation("ObjectMapper", "objectMapper"));
 
-    parameterRepresentations.add(
-        new ParameterRepresentation(
-            TextConverter.toUpperCamel(
-                source.getEnsureExistenceServiceMethod().getService().getServiceName().getText()),
-            TextConverter.toLowerCamel(
-                source.getEnsureExistenceServiceMethod().getService().getServiceName().getText())));
+    if (source.getEnsureExistenceServiceMethod() != null) {
+      parameterRepresentations.add(
+          new ParameterRepresentation(
+              TextConverter.toUpperCamel(
+                  source.getEnsureExistenceServiceMethod().getService().getServiceName().getText()),
+              TextConverter.toLowerCamel(
+                  source.getEnsureExistenceServiceMethod().getService().getServiceName()
+                      .getText())));
+    }
+
+    if (source.getCommandServiceMethod() != null) {
+      parameterRepresentations.add(
+          new ParameterRepresentation(
+              TextConverter.toUpperCamel(
+                  source.getCommandServiceMethod().getService().getServiceName().getText()),
+              TextConverter.toLowerCamel(
+                  source.getCommandServiceMethod().getService().getServiceName()
+                      .getText())));
+    }
 
     StrBuilder implementation = new StrBuilder();
 
@@ -110,13 +136,28 @@ public class DomainMessageSubscriberTransformer
     implementation.append("super(objectMapper);");
     implementation.append("\n");
     implementation.append("\t\t");
-    implementation.append(
-        String.format(
-            "this.%s = %s;",
-            TextConverter.toLowerCamel(
-                source.getEnsureExistenceServiceMethod().getService().getServiceName().getText()),
-            TextConverter.toLowerCamel(
-                source.getEnsureExistenceServiceMethod().getService().getServiceName().getText())));
+
+    if (source.getEnsureExistenceServiceMethod() != null) {
+      implementation.append(
+          String.format(
+              "this.%s = %s;",
+              TextConverter.toLowerCamel(
+                  source.getEnsureExistenceServiceMethod().getService().getServiceName().getText()),
+              TextConverter.toLowerCamel(
+                  source.getEnsureExistenceServiceMethod().getService().getServiceName()
+                      .getText())));
+    }
+
+    if (source.getCommandServiceMethod() != null) {
+      implementation.append(
+          String.format(
+              "this.%s = %s;",
+              TextConverter.toLowerCamel(
+                  source.getCommandServiceMethod().getService().getServiceName().getText()),
+              TextConverter.toLowerCamel(
+                  source.getCommandServiceMethod().getService().getServiceName()
+                      .getText())));
+    }
 
     Set<ConstructorRepresentation> constructorRepresentations = new LinkedHashSet<>();
 
@@ -159,29 +200,44 @@ public class DomainMessageSubscriberTransformer
             domainMessageAbstractSubscriber.getPackageName().getText(),
             TextConverter.toUpperCamel(domainMessageAbstractSubscriber.getObjectName().getText())));
 
-    imports.add(
-        String.format(
-            "%s.%s",
-            source.getEnsureExistenceServiceMethod().getService().getPackageName().getText(),
-            TextConverter.toUpperCamel(
-                source.getEnsureExistenceServiceMethod().getService().getServiceName().getText())));
+    if (source.getEnsureExistenceServiceMethod() != null) {
+      imports.add(
+          String.format(
+              "%s.%s",
+              source.getEnsureExistenceServiceMethod().getService().getPackageName().getText(),
+              TextConverter.toUpperCamel(
+                  source.getEnsureExistenceServiceMethod().getService().getServiceName()
+                      .getText())));
+    }
 
-    imports.add(
-        String.format(
-            "%s.%s",
-            source
-                .getCommandServiceMethod()
-                .getRequestDto()
-                .getDataObject()
-                .getPackageName()
-                .getText(),
-            TextConverter.toUpperCamel(
-                source
-                    .getCommandServiceMethod()
-                    .getRequestDto()
-                    .getDataObject()
-                    .getObjectName()
-                    .getText())));
+    if (source.getCommandServiceMethod() != null) {
+      imports.add(
+          String.format(
+              "%s.%s",
+              source.getCommandServiceMethod().getService().getPackageName().getText(),
+              TextConverter.toUpperCamel(
+                  source.getCommandServiceMethod().getService().getServiceName()
+                      .getText())));
+    }
+
+    if (source.getCommandServiceMethod() != null) {
+      imports.add(
+          String.format(
+              "%s.%s",
+              source
+                  .getCommandServiceMethod()
+                  .getRequestDto()
+                  .getDataObject()
+                  .getPackageName()
+                  .getText(),
+              TextConverter.toUpperCamel(
+                  source
+                      .getCommandServiceMethod()
+                      .getRequestDto()
+                      .getDataObject()
+                      .getObjectName()
+                      .getText())));
+    }
 
     imports.add("com.fasterxml.jackson.databind.ObjectMapper");
     imports.add("com.fasterxml.jackson.databind.JsonNode");
@@ -192,13 +248,18 @@ public class DomainMessageSubscriberTransformer
     imports.addAll(methodTransformer.imports(source.getProcess(), args));
     imports.addAll(methodTransformer.imports(source.getGetSupportedMessageTypes(), args));
 
-    ServiceMethod ensureExistenceServiceMethod =
-        (ServiceMethod) source.getProcess().getActivity().getValue("ensureExistenceServiceMethod");
-    imports.addAll(methodTransformer.imports(ensureExistenceServiceMethod.getFunction(), args));
+    if (source.getProcess().getActivity().hasValue("ensureExistenceServiceMethod")) {
+      ServiceMethod ensureExistenceServiceMethod =
+          (ServiceMethod) source.getProcess().getActivity()
+              .getValue("ensureExistenceServiceMethod");
+      imports.addAll(methodTransformer.imports(ensureExistenceServiceMethod.getFunction(), args));
+    }
 
-    ServiceMethod commandServiceMethod =
-        (ServiceMethod) source.getProcess().getActivity().getValue("commandServiceMethod");
-    imports.addAll(methodTransformer.imports(commandServiceMethod.getFunction(), args));
+    if (source.getProcess().getActivity().hasValue("commandServiceMethod")) {
+      ServiceMethod commandServiceMethod =
+          (ServiceMethod) source.getProcess().getActivity().getValue("commandServiceMethod");
+      imports.addAll(methodTransformer.imports(commandServiceMethod.getFunction(), args));
+    }
 
     return imports;
   }

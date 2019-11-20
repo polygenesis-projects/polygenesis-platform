@@ -579,7 +579,11 @@ public abstract class AbstractClassTransformer<S extends Nameable, F extends Fun
     String impl = stringBuilder.toString();
 
     // Get rid of the last \n character
-    return impl.substring(0, impl.length() - 1);
+    if(impl.endsWith("\n")) {
+      impl = impl.substring(0, impl.length() - 1);
+    }
+
+    return impl;
   }
 
   /**
@@ -622,7 +626,11 @@ public abstract class AbstractClassTransformer<S extends Nameable, F extends Fun
     String impl = stringBuilder.toString();
 
     // Get rid of the last \n character
-    return impl.substring(0, impl.length() - 1);
+    if(impl.endsWith("\n")) {
+      impl = impl.substring(0, impl.length() - 1);
+    }
+
+    return impl;
   }
 
   /**

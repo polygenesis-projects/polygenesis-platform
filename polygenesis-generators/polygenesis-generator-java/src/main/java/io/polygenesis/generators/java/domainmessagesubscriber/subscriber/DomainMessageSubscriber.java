@@ -150,9 +150,18 @@ public class DomainMessageSubscriber extends SubscriberMetamodel {
   private Function makeProcess() {
     Set<KeyValue> keyValues = new LinkedHashSet<>();
 
-    keyValues.add(new KeyValue("messageData", getMessageData()));
-    keyValues.add(new KeyValue("ensureExistenceServiceMethod", getEnsureExistenceServiceMethod()));
-    keyValues.add(new KeyValue("commandServiceMethod", getCommandServiceMethod()));
+    if (getMessageData() != null) {
+      keyValues.add(new KeyValue("messageData", getMessageData()));
+    }
+
+    if (getEnsureExistenceServiceMethod() != null) {
+      keyValues
+          .add(new KeyValue("ensureExistenceServiceMethod", getEnsureExistenceServiceMethod()));
+    }
+
+    if (getCommandServiceMethod() != null) {
+      keyValues.add(new KeyValue("commandServiceMethod", getCommandServiceMethod()));
+    }
 
     Thing thing =
         ThingBuilder.apiClientDomainMessage().setThingName("domainMessageSubscriber").createThing();
