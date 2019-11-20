@@ -32,11 +32,11 @@ import io.polygenesis.generators.java.domainmessageactivemq.dispatcherroute.Doma
 import io.polygenesis.generators.java.domainmessageactivemq.dispatcherroute.DomainMessageMethodDispatcherRouteTransformer;
 import io.polygenesis.generators.java.domainmessageactivemq.dispatcherroute.activity.DomainMessageConfigureActivityGenerator;
 import io.polygenesis.generators.java.domainmessageactivemq.dispatcherroute.activity.DomainMessageConfigureActivityTransformer;
-import io.polygenesis.generators.java.domainmessageactivemq.publisher.DomainMessageMethodPublisherTransformer;
-import io.polygenesis.generators.java.domainmessageactivemq.publisher.DomainMessagePublisherGenerator;
-import io.polygenesis.generators.java.domainmessageactivemq.publisher.DomainMessagePublisherTransformer;
-import io.polygenesis.generators.java.domainmessageactivemq.publisher.activity.DomainMessagePublisherSendActivityGenerator;
-import io.polygenesis.generators.java.domainmessageactivemq.publisher.activity.DomainMessagePublisherSendActivityTransformer;
+import io.polygenesis.generators.java.domainmessageactivemq.forwarder.DomainMessageForwarderMethodTransformer;
+import io.polygenesis.generators.java.domainmessageactivemq.forwarder.DomainMessageForwarderGenerator;
+import io.polygenesis.generators.java.domainmessageactivemq.forwarder.DomainMessageForwarderTransformer;
+import io.polygenesis.generators.java.domainmessageactivemq.forwarder.activity.DomainMessageForwarderSendActivityGenerator;
+import io.polygenesis.generators.java.domainmessageactivemq.forwarder.activity.DomainMessageForwarderSendActivityTransformer;
 import io.polygenesis.transformers.java.JavaDataTypeTransformer;
 import java.nio.file.Path;
 
@@ -51,7 +51,7 @@ public final class DomainMessageActiveMqMetamodelGeneratorFactory {
   // DEPENDENCIES
   // ===============================================================================================
   private static DomainMessageDispatcherRouteGenerator domainMessageDispatcherRouteGenerator;
-  private static DomainMessagePublisherGenerator domainMessagePublisherGenerator;
+  private static DomainMessageForwarderGenerator domainMessageForwarderGenerator;
 
   // ===============================================================================================
   // STATIC INITIALIZATION OF DEPENDENCIES
@@ -73,14 +73,14 @@ public final class DomainMessageActiveMqMetamodelGeneratorFactory {
             templateEngine,
             exporter);
 
-    domainMessagePublisherGenerator =
-        new DomainMessagePublisherGenerator(
-            new DomainMessagePublisherTransformer(
+    domainMessageForwarderGenerator =
+        new DomainMessageForwarderGenerator(
+            new DomainMessageForwarderTransformer(
                 dataTypeTransformer,
-                new DomainMessageMethodPublisherTransformer(
+                new DomainMessageForwarderMethodTransformer(
                     dataTypeTransformer,
-                    new DomainMessagePublisherSendActivityGenerator(
-                        new DomainMessagePublisherSendActivityTransformer(), templateEngine))),
+                    new DomainMessageForwarderSendActivityGenerator(
+                        new DomainMessageForwarderSendActivityTransformer(), templateEngine))),
             templateEngine,
             exporter);
   }
@@ -112,6 +112,6 @@ public final class DomainMessageActiveMqMetamodelGeneratorFactory {
         rootPackageName,
         contextName,
         domainMessageDispatcherRouteGenerator,
-        domainMessagePublisherGenerator);
+        domainMessageForwarderGenerator);
   }
 }
