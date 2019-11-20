@@ -74,8 +74,14 @@ public class SubscriberMetamodel implements Metamodel {
     setMessageData(messageData);
     setSupportedMessageTypes(supportedMessageTypes);
     setRelatedThing(relatedThing);
-    setEnsureExistenceServiceMethod(ensureExistenceServiceMethod);
-    setCommandServiceMethod(commandServiceMethod);
+
+    if(ensureExistenceServiceMethod != null) {
+      setEnsureExistenceServiceMethod(ensureExistenceServiceMethod);
+    }
+
+    if(commandServiceMethod != null) {
+      setCommandServiceMethod(commandServiceMethod);
+    }
   }
 
   // ===============================================================================================

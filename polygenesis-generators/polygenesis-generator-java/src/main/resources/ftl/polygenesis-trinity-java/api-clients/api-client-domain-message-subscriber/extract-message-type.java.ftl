@@ -24,6 +24,8 @@
         return jsonNode.get("messageType").asText();
       } else if (jsonNode.hasNonNull("eventType")) {
         return jsonNode.get("eventType").asText();
+      } else if (jsonNode.hasNonNull("messageName")) {
+        return jsonNode.get("messageName").asText();
       }
     } catch (IOException e) {
       throw new IllegalArgumentException(

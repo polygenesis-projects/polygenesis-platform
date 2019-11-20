@@ -17,10 +17,14 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
+<#if data.ensureExistenceServiceMethod??>
     ${ textConverter.toLowerCamel(data.ensureExistenceServiceMethod.service.serviceName.text) }.${ textConverter.toLowerCamel(data.ensureExistenceServiceMethod.function.name.text) }(new ${ textConverter.toUpperCamel(data.ensureExistenceServiceMethod.requestDto.dataObject.objectName.text) }(incomingDomainMessage.getRootId()));
 
+</#if>
+<#if data.commandServiceMethod??>
     ${ textConverter.toUpperCamel(data.commandServiceMethod.requestDto.dataObject.objectName.text) } request = new ${ textConverter.toUpperCamel(data.commandServiceMethod.requestDto.dataObject.objectName.text) }();
 
+</#if>
 <#list data.messageData as item>
   <#switch item.dataPrimaryType>
     <#case 'PRIMITIVE'>
@@ -45,5 +49,6 @@
     <#break>
   </#switch>
 </#list>
+<#if data.commandServiceMethod??>
 
-    ${ textConverter.toLowerCamel(data.commandServiceMethod.service.serviceName.text) }.${ textConverter.toLowerCamel(data.commandServiceMethod.function.name.text) }(request);
+    ${ textConverter.toLowerCamel(data.commandServiceMethod.service.serviceName.text) }.${ textConverter.toLowerCamel(data.commandServiceMethod.function.name.text) }(request);</#if>

@@ -45,11 +45,28 @@ public class ProcessActivityTransformer extends AbstractServiceMethodImplementat
   @SuppressWarnings({"unchecked", "rawtypes"})
   @Override
   public TemplateData transform(Function source, Object... args) {
+    Set<Data> messageData = null;
+    ServiceMethod ensureExistenceServiceMethod = null;
+    ServiceMethod commandServiceMethod = null;
+
+    if (source.getActivity().hasValue("messageData")) {
+      messageData = (Set<Data>) source.getActivity().getValue("messageData");
+    }
+
+    if (source.getActivity().hasValue("ensureExistenceServiceMethod")) {
+      ensureExistenceServiceMethod = (ServiceMethod) source.getActivity()
+          .getValue("ensureExistenceServiceMethod");
+    }
+
+    if (source.getActivity().hasValue("commandServiceMethod")) {
+      commandServiceMethod = (ServiceMethod) source.getActivity().getValue("commandServiceMethod");
+    }
+
     ProcessActivityTemplateData data =
         new ProcessActivityTemplateData(
-            (Set<Data>) source.getActivity().getValue("messageData"),
-            (ServiceMethod) source.getActivity().getValue("ensureExistenceServiceMethod"),
-            (ServiceMethod) source.getActivity().getValue("commandServiceMethod"));
+            messageData,
+            ensureExistenceServiceMethod,
+            commandServiceMethod);
 
     Map<String, Object> dataModel = new HashMap<>();
     dataModel.put("data", data);

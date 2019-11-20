@@ -26,6 +26,7 @@ import io.polygenesis.commons.keyvalue.KeyValue;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -174,18 +175,37 @@ public class Activity {
   // ===============================================================================================
 
   /**
+   * Has value boolean.
+   *
+   * @param key the key
+   * @return the boolean
+   */
+  public Boolean hasValue(Object key) {
+    Optional<KeyValue> optionalKeyValue = getKeyValues()
+        .stream()
+        .filter(keyValue -> keyValue.getKey().equals(key))
+        .findFirst();
+
+    return optionalKeyValue.isPresent();
+  }
+
+
+  /**
    * Gets value.
    *
    * @param key the key
    * @return the value
    */
   public Object getValue(Object key) {
+    Assertion.isNotNull(key, "key is required");
+
     return getKeyValues()
         .stream()
         .filter(keyValue -> keyValue.getKey().equals(key))
         .map(keyValue -> keyValue.getValue())
         .findFirst()
-        .orElseThrow(IllegalArgumentException::new);
+        .orElseThrow(() -> new IllegalArgumentException(
+            String.format("Cannot find activity metadata for key=%s", key)));
   }
 
   // ===============================================================================================

@@ -106,6 +106,20 @@ public class SubscriberDeducer implements Deducer<SubscriberMetamodelRepository>
 
     Thing relatedThing = getRelatedThing(thing);
 
+    Function ensureExistenceFunction = getHandlerEnsureExistenceFunction(relatedThing);
+    ServiceMethod ensureExistenceServiceMethod = null;
+    if (ensureExistenceFunction != null) {
+      ensureExistenceServiceMethod = findServiceMethodFromFunction(
+          modelRepositories, ensureExistenceFunction);
+    }
+
+    Function commandFunction = getHandlerCommandFunction(thing);
+    ServiceMethod commandServiceMethod = null;
+    if (commandFunction != null) {
+      commandServiceMethod = findServiceMethodFromFunction(
+          modelRepositories, commandFunction);
+    }
+
     SubscriberMetamodel subscriberMetamodel =
         new SubscriberMetamodel(
             getRootPackageName().withSubPackage("subscribers"),
@@ -113,9 +127,8 @@ public class SubscriberDeducer implements Deducer<SubscriberMetamodelRepository>
             getMessageData(thing),
             getSupportedMessageTypes(thing),
             getRelatedThing(thing),
-            findServiceMethodFromFunction(
-                modelRepositories, getHandlerEnsureExistenceFunction(relatedThing)),
-            findServiceMethodFromFunction(modelRepositories, getHandlerCommandFunction(thing)));
+            ensureExistenceServiceMethod,
+            commandServiceMethod);
 
     return subscriberMetamodel;
   }
@@ -142,7 +155,7 @@ public class SubscriberDeducer implements Deducer<SubscriberMetamodelRepository>
         .stream()
         .filter(function -> function.getName().equals(new FunctionName("ensureExistence")))
         .findFirst()
-        .orElseThrow(IllegalArgumentException::new);
+        .orElse(null);
   }
 
   /**
@@ -152,7 +165,13 @@ public class SubscriberDeducer implements Deducer<SubscriberMetamodelRepository>
    * @return the handler command function
    */
   private Function getHandlerCommandFunction(Thing thing) {
-    return (Function) thing.getMetadataValue("process");
+    Object object = thing.getMetadataValueIfExists("process");
+
+    if (object != null) {
+      return (Function) object;
+    } else {
+      return null;
+    }
   }
 
   /**
