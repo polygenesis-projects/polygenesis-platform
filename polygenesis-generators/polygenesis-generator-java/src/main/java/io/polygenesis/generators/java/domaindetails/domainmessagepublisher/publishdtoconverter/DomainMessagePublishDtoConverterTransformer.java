@@ -112,6 +112,7 @@ public class DomainMessagePublishDtoConverterTransformer
         createEmptyConstructorWithImplementation(
             TextConverter.toUpperCamel(source.getObjectName().getText()),
             new LinkedHashSet<>(),
+            dataTypeTransformer.getModifierPublic(),
             String.format(
                 "\t\tsuper(%sDomainMessagePublishDto.class);",
                 TextConverter.toUpperCamel(contextName.getText()))));

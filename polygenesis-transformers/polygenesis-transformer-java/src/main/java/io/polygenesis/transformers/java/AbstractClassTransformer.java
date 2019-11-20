@@ -166,27 +166,23 @@ public abstract class AbstractClassTransformer<S extends Nameable, F extends Fun
    *
    * @param dataType the data type
    * @param annotations the annotations
+   * @param modifiers the modifiers
    * @param implementation the implementation
    * @return the constructor representation
    */
   @SuppressWarnings("CPD-START")
-  /**
-   * Create empty constructor with implementation constructor representation.
-   *
-   * @param dataType the data type
-   * @param annotations the annotations
-   * @param implementation the implementation
-   * @return the constructor representation
-   */
   protected ConstructorRepresentation createEmptyConstructorWithImplementation(
-      String dataType, Set<String> annotations, String implementation) {
+      String dataType,
+      Set<String> annotations,
+      String modifiers,
+      String implementation) {
     String description =
         String.format(INSTANTIATES_A_NEW_S, TextConverter.toUpperCamelSpaces(dataType));
 
     return new ConstructorRepresentation(
         annotations,
         description,
-        dataTypeTransformer.getModifierPublic(),
+        modifiers,
         new LinkedHashSet<>(),
         implementation);
   }
