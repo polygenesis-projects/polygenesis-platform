@@ -18,33 +18,33 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.generators.java.domainmessageactivemq.publisher;
+package io.polygenesis.generators.java.domainmessageactivemq.forwarder;
 
 import io.polygenesis.core.AbstractUnitTemplateGenerator;
 import io.polygenesis.core.Exporter;
 import io.polygenesis.core.TemplateEngine;
 
 /**
- * The type Domain message publisher generator.
+ * The type Domain message forwarder generator.
  *
  * @author Christos Tsakostas
  */
-public class DomainMessagePublisherGenerator
-    extends AbstractUnitTemplateGenerator<DomainMessagePublisher> {
+public class DomainMessageForwarderGenerator
+    extends AbstractUnitTemplateGenerator<DomainMessageForwarder> {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
-   * Instantiates a new Domain message publisher generator.
+   * Instantiates a new Domain message forwarder generator.
    *
    * @param templateTransformer the template transformer
    * @param templateEngine the template engine
    * @param exporter the exporter
    */
-  public DomainMessagePublisherGenerator(
-      DomainMessagePublisherTransformer templateTransformer,
+  public DomainMessageForwarderGenerator(
+      DomainMessageForwarderTransformer templateTransformer,
       TemplateEngine templateEngine,
       Exporter exporter) {
     super(templateTransformer, templateEngine, exporter);

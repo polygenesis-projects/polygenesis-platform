@@ -18,38 +18,33 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.generators.java.domainmessageactivemq.publisher.activity;
+package io.polygenesis.generators.java.domainmessageactivemq.forwarder.activity;
 
-import io.polygenesis.abstraction.thing.ActivityTemplateTransformer;
+import io.polygenesis.abstraction.thing.AbstractActivityTemplateGenerator;
 import io.polygenesis.abstraction.thing.Function;
-import io.polygenesis.core.TemplateData;
-import io.polygenesis.generators.java.apidetail.service.activity.AbstractServiceMethodImplementationTransformer;
-import java.util.HashMap;
-import java.util.Map;
+import io.polygenesis.core.TemplateEngine;
 
 /**
- * The type Domain message publisher send activity transformer.
+ * The type Domain message forwarder send activity generator.
  *
  * @author Christos Tsakostas
  */
-public class DomainMessagePublisherSendActivityTransformer
-    extends AbstractServiceMethodImplementationTransformer
-    implements ActivityTemplateTransformer<Function> {
+public class DomainMessageForwarderSendActivityGenerator
+    extends AbstractActivityTemplateGenerator<Function> {
 
   // ===============================================================================================
-  // OVERRIDES
+  // CONSTRUCTOR(S)
   // ===============================================================================================
 
-  @SuppressWarnings({"unchecked", "rawtypes"})
-  @Override
-  public TemplateData transform(Function source, Object... args) {
-    DomainMessagePublisherSendActivityTemplateData data =
-        new DomainMessagePublisherSendActivityTemplateData();
-
-    Map<String, Object> dataModel = new HashMap<>();
-    dataModel.put("data", data);
-
-    return new TemplateData(
-        dataModel, "polygenesis-trinity-java-batch-process/publisher-send.java.ftl");
+  /**
+   * Instantiates a new Domain message forwarder send activity generator.
+   *
+   * @param templateTransformer the template transformer
+   * @param templateEngine the template engine
+   */
+  public DomainMessageForwarderSendActivityGenerator(
+      DomainMessageForwarderSendActivityTransformer templateTransformer,
+      TemplateEngine templateEngine) {
+    super(templateTransformer, templateEngine);
   }
 }

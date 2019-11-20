@@ -18,7 +18,7 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.generators.java.domainmessageactivemq.publisher;
+package io.polygenesis.generators.java.domainmessageactivemq.forwarder;
 
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.commons.valueobjects.ContextName;
@@ -37,26 +37,26 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /**
- * The type Domain message publisher transformer.
+ * The type Domain message forwarder transformer.
  *
  * @author Christos Tsakostas
  */
-public class DomainMessagePublisherTransformer
-    extends AbstractClassTransformer<DomainMessagePublisher, Function> {
+public class DomainMessageForwarderTransformer
+    extends AbstractClassTransformer<DomainMessageForwarder, Function> {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
-   * Instantiates a new Domain message publisher transformer.
+   * Instantiates a new Domain message forwarder transformer.
    *
    * @param dataTypeTransformer the data type transformer
    * @param methodTransformer the method transformer
    */
-  public DomainMessagePublisherTransformer(
+  public DomainMessageForwarderTransformer(
       DataTypeTransformer dataTypeTransformer,
-      DomainMessageMethodPublisherTransformer methodTransformer) {
+      DomainMessageForwarderMethodTransformer methodTransformer) {
     super(dataTypeTransformer, methodTransformer);
   }
 
@@ -66,7 +66,7 @@ public class DomainMessagePublisherTransformer
 
   @SuppressWarnings("CPD-START")
   @Override
-  public TemplateData transform(DomainMessagePublisher source, Object... args) {
+  public TemplateData transform(DomainMessageForwarder source, Object... args) {
     Map<String, Object> dataModel = new HashMap<>();
     dataModel.put("representation", create(source, args));
 
@@ -75,7 +75,7 @@ public class DomainMessagePublisherTransformer
 
   @Override
   public Set<FieldRepresentation> fieldRepresentations(
-      DomainMessagePublisher source, Object... args) {
+      DomainMessageForwarder source, Object... args) {
     Set<FieldRepresentation> fieldRepresentations = new LinkedHashSet<>();
 
     fieldRepresentations.add(new FieldRepresentation("ProducerTemplate", "producerTemplate"));
@@ -87,7 +87,7 @@ public class DomainMessagePublisherTransformer
 
   @Override
   public Set<ConstructorRepresentation> constructorRepresentations(
-      DomainMessagePublisher source, Object... args) {
+      DomainMessageForwarder source, Object... args) {
     ContextName contextName = (ContextName) args[0];
     Set<ParameterRepresentation> parameterRepresentations = new LinkedHashSet<>();
 
@@ -96,7 +96,7 @@ public class DomainMessagePublisherTransformer
 
     String endpoint =
         String.format(
-            "context.%s.api-client.domain-message.publisher", contextName.getText().toLowerCase());
+            "context.%s.api-client.domain-message.forwarder", contextName.getText().toLowerCase());
     parameterRepresentations.add(
         new ParameterRepresentation(
             String.format("@Value(\"${%s}\") String", endpoint), "endpoint"));
@@ -117,7 +117,7 @@ public class DomainMessagePublisherTransformer
 
   @Override
   public Set<MethodRepresentation> methodRepresentations(
-      DomainMessagePublisher source, Object... args) {
+      DomainMessageForwarder source, Object... args) {
     Set<MethodRepresentation> methodRepresentations = new LinkedHashSet<>();
 
     methodRepresentations.add(methodTransformer.create(source.getSend(), args));
@@ -126,12 +126,12 @@ public class DomainMessagePublisherTransformer
   }
 
   @Override
-  public String packageName(DomainMessagePublisher source, Object... args) {
+  public String packageName(DomainMessageForwarder source, Object... args) {
     return source.getPackageName().getText();
   }
 
   @Override
-  public Set<String> imports(DomainMessagePublisher source, Object... args) {
+  public Set<String> imports(DomainMessageForwarder source, Object... args) {
     Set<String> imports = new TreeSet<>();
 
     imports.add("com.oregor.trinity4j.api.clients.domainmessage.DomainMessageForwarder");
@@ -143,13 +143,13 @@ public class DomainMessagePublisherTransformer
   }
 
   @Override
-  public Set<String> annotations(DomainMessagePublisher source, Object... args) {
+  public Set<String> annotations(DomainMessageForwarder source, Object... args) {
     return new LinkedHashSet<>(Arrays.asList("@Service"));
   }
 
   @SuppressWarnings("CPD-END")
   @Override
-  public String fullObjectName(DomainMessagePublisher source, Object... args) {
+  public String fullObjectName(DomainMessageForwarder source, Object... args) {
     return String.format("%s implements DomainMessageForwarder", simpleObjectName(source, args));
   }
 }

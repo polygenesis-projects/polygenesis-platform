@@ -18,46 +18,46 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.generators.java.domainmessageactivemq.publisher;
+package io.polygenesis.generators.java.domainmessageactivemq.forwarder;
 
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.core.DataTypeTransformer;
-import io.polygenesis.generators.java.domainmessageactivemq.publisher.activity.DomainMessagePublisherSendActivityGenerator;
+import io.polygenesis.generators.java.domainmessageactivemq.forwarder.activity.DomainMessageForwarderSendActivityGenerator;
 import io.polygenesis.transformers.java.AbstractMethodTransformer;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
- * The type Domain message method publisher transformer.
+ * The type Domain message method forwarder transformer.
  *
  * @author Christos Tsakostas
  */
-public class DomainMessageMethodPublisherTransformer extends AbstractMethodTransformer<Function> {
+public class DomainMessageForwarderMethodTransformer extends AbstractMethodTransformer<Function> {
 
   // ===============================================================================================
   // STATE / DEPENDENCIES
   // ===============================================================================================
 
-  private final DomainMessagePublisherSendActivityGenerator
-      domainMessagePublisherSendActivityGenerator;
+  private final DomainMessageForwarderSendActivityGenerator
+      domainMessageForwarderSendActivityGenerator;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
-   * Instantiates a new Domain message method publisher transformer.
+   * Instantiates a new Domain message method forwarder transformer.
    *
    * @param dataTypeTransformer the data type transformer
-   * @param domainMessagePublisherSendActivityGenerator the domain message publisher send activity
+   * @param domainMessageForwarderSendActivityGenerator the domain message forwarder send activity
    *     generator
    */
-  public DomainMessageMethodPublisherTransformer(
+  public DomainMessageForwarderMethodTransformer(
       DataTypeTransformer dataTypeTransformer,
-      DomainMessagePublisherSendActivityGenerator domainMessagePublisherSendActivityGenerator) {
+      DomainMessageForwarderSendActivityGenerator domainMessageForwarderSendActivityGenerator) {
     super(dataTypeTransformer);
-    this.domainMessagePublisherSendActivityGenerator = domainMessagePublisherSendActivityGenerator;
+    this.domainMessageForwarderSendActivityGenerator = domainMessageForwarderSendActivityGenerator;
   }
 
   // ===============================================================================================
@@ -71,6 +71,6 @@ public class DomainMessageMethodPublisherTransformer extends AbstractMethodTrans
 
   @Override
   public String implementation(Function source, Object... args) {
-    return domainMessagePublisherSendActivityGenerator.generate(source.getFunction(), args);
+    return domainMessageForwarderSendActivityGenerator.generate(source.getFunction(), args);
   }
 }

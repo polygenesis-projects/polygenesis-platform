@@ -18,33 +18,39 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.generators.java.domainmessageactivemq.publisher.activity;
+package io.polygenesis.generators.java.domainmessageactivemq.forwarder.activity;
 
-import io.polygenesis.abstraction.thing.AbstractActivityTemplateGenerator;
+import io.polygenesis.abstraction.thing.ActivityTemplateTransformer;
 import io.polygenesis.abstraction.thing.Function;
-import io.polygenesis.core.TemplateEngine;
+import io.polygenesis.core.TemplateData;
+import io.polygenesis.generators.java.apidetail.service.activity.AbstractServiceMethodImplementationTransformer;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * The type Domain message publisher send activity generator.
+ * The type Domain message forwarder send activity transformer.
  *
  * @author Christos Tsakostas
  */
-public class DomainMessagePublisherSendActivityGenerator
-    extends AbstractActivityTemplateGenerator<Function> {
+public class DomainMessageForwarderSendActivityTransformer
+    extends AbstractServiceMethodImplementationTransformer
+    implements ActivityTemplateTransformer<Function> {
 
   // ===============================================================================================
-  // CONSTRUCTOR(S)
+  // OVERRIDES
   // ===============================================================================================
 
-  /**
-   * Instantiates a new Domain message publisher send activity generator.
-   *
-   * @param templateTransformer the template transformer
-   * @param templateEngine the template engine
-   */
-  public DomainMessagePublisherSendActivityGenerator(
-      DomainMessagePublisherSendActivityTransformer templateTransformer,
-      TemplateEngine templateEngine) {
-    super(templateTransformer, templateEngine);
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  @Override
+  public TemplateData transform(Function source, Object... args) {
+    DomainMessageForwarderSendActivityTemplateData data =
+        new DomainMessageForwarderSendActivityTemplateData();
+
+    Map<String, Object> dataModel = new HashMap<>();
+    dataModel.put("data", data);
+
+    return new TemplateData(
+        dataModel, "polygenesis-trinity-java/"
+        + "api-clients/api-client-domain-message-subscriber/forwarder-send.java.ftl");
   }
 }

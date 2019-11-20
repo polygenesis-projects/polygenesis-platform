@@ -18,7 +18,7 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.generators.java.domainmessageactivemq.publisher;
+package io.polygenesis.generators.java.domainmessageactivemq.forwarder;
 
 import io.polygenesis.abstraction.data.DataPrimitive;
 import io.polygenesis.abstraction.data.PrimitiveType;
@@ -37,11 +37,11 @@ import java.util.Arrays;
 import java.util.LinkedHashSet;
 
 /**
- * The type Domain message publisher.
+ * The type Domain message forwarder.
  *
  * @author Christos Tsakostas
  */
-public class DomainMessagePublisher extends AbstractNameablePackageable {
+public class DomainMessageForwarder extends AbstractNameablePackageable {
 
   // ===============================================================================================
   // STATE
@@ -53,12 +53,12 @@ public class DomainMessagePublisher extends AbstractNameablePackageable {
   // ===============================================================================================
 
   /**
-   * Instantiates a new Domain message publisher.
+   * Instantiates a new Domain message forwarder.
    *
    * @param objectName the object name
    * @param packageName the package name
    */
-  public DomainMessagePublisher(ObjectName objectName, PackageName packageName) {
+  public DomainMessageForwarder(ObjectName objectName, PackageName packageName) {
     super(objectName, packageName);
     this.send = makeSendFunction();
   }
@@ -83,7 +83,7 @@ public class DomainMessagePublisher extends AbstractNameablePackageable {
   private Function makeSendFunction() {
     Thing thing =
         ThingBuilder.domainMessageSubscriber()
-            .setThingName("domainMessageMessagePublisher")
+            .setThingName("domainMessageMessageForwarder")
             .createThing();
 
     return new Function(

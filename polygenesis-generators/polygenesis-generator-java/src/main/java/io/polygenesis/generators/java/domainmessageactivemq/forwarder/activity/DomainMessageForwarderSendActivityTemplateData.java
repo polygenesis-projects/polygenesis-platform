@@ -18,14 +18,14 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.generators.java.domainmessageactivemq.publisher.activity;
+package io.polygenesis.generators.java.domainmessageactivemq.forwarder.activity;
 
 /**
- * The type Domain message publisher send activity template data.
+ * The type Domain message forwarder send activity template data.
  *
  * @author Christos Tsakostas
  */
-public class DomainMessagePublisherSendActivityTemplateData {
+public class DomainMessageForwarderSendActivityTemplateData {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
