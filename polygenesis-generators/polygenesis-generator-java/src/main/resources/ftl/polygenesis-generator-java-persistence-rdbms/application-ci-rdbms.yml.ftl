@@ -28,3 +28,8 @@ spring:
     properties:
       hibernate:
         dialect: com.oregor.trinity4j.domain.hibernate.CustomH2Dialect
+  flyway:
+    placeholders:
+      sql-safe-updates-off: ''
+      sql-safe-updates-on: ''
+      max-statement-time: ''

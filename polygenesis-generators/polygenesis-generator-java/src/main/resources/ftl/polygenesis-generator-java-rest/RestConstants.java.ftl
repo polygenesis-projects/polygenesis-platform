@@ -26,7 +26,7 @@ package ${ projection.packageName };
  */
 public final class RestConstants {
 
-  public static final String CONTEXT_REQUEST_MAPPING = "/api/${ textConverter.toLowerHyphen(projection.context) }";
+  public static final String CONTEXT_REQUEST_MAPPING = "/${ textConverter.toLowerHyphen(projection.context) }";
 
   private RestConstants() {
     throw new IllegalStateException("Utility class");

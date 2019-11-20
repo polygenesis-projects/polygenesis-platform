@@ -140,6 +140,7 @@ public class DtoTransformer extends AbstractClassTransformer<Dto, DtoMethod> {
         createEmptyConstructorWithImplementation(
             source.getDataObject().getObjectName().getText(),
             new LinkedHashSet<>(Collections.singletonList("@SuppressWarnings(\"CPD-START\")")),
+            dataTypeTransformer.getModifierPublic(),
             "\t\tsuper();"));
 
     // ---------------------------------------------------------------------------------------------

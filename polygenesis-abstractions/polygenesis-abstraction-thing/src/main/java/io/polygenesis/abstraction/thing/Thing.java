@@ -21,6 +21,7 @@
 package io.polygenesis.abstraction.thing;
 
 import io.polygenesis.abstraction.data.Data;
+import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.commons.keyvalue.KeyValue;
 import io.polygenesis.commons.valueobjects.ContextName;
@@ -175,6 +176,23 @@ public class Thing implements Abstraction {
     Assertion.isNotNull(metadata, "metadata is required");
 
     getMetadata().add(metadata);
+  }
+
+  // ===============================================================================================
+  // TRANSFORMATIONS
+  // ===============================================================================================
+
+  /**
+   * Gets as data object.
+   *
+   * @param rootPackageName the root package name
+   * @return the as data object
+   */
+  public DataObject getAsDataObject(PackageName rootPackageName) {
+    return new DataObject(
+        new ObjectName(getThingName().getText()),
+        makePackageName(rootPackageName, this)
+    );
   }
 
   // ===============================================================================================

@@ -91,7 +91,9 @@ public class DomainMessagePublishedDataTransformer
 
     constructorRepresentations.add(
         createEmptyConstructorWithImplementation(
-            simpleObjectName(source), new LinkedHashSet<>(), "\t\tsuper();"));
+            simpleObjectName(source), new LinkedHashSet<>(),
+            dataTypeTransformer.getModifierPrivate(),
+            "\t\tsuper();"));
 
     ConstructorRepresentation constructorRepresentation =
         new ConstructorRepresentation(
