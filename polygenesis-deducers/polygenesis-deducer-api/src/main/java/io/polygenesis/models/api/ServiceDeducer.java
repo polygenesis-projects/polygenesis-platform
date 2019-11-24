@@ -88,7 +88,7 @@ public class ServiceDeducer {
       Service service =
           new Service(
               thing.makePackageName(rootPackageName, thing),
-              new ServiceName(thing.getThingName().getText() + "Service"),
+              new ServiceName(thing.getThingName().getText() + "CommandService"),
               CqsType.COMMAND,
               thing.getThingName());
 

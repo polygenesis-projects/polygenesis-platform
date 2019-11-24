@@ -32,11 +32,6 @@ import io.polygenesis.generators.java.domainmessageactivemq.dispatcherroute.Doma
 import io.polygenesis.generators.java.domainmessageactivemq.dispatcherroute.DomainMessageMethodDispatcherRouteTransformer;
 import io.polygenesis.generators.java.domainmessageactivemq.dispatcherroute.activity.DomainMessageConfigureActivityGenerator;
 import io.polygenesis.generators.java.domainmessageactivemq.dispatcherroute.activity.DomainMessageConfigureActivityTransformer;
-import io.polygenesis.generators.java.domainmessageactivemq.forwarder.DomainMessageForwarderMethodTransformer;
-import io.polygenesis.generators.java.domainmessageactivemq.forwarder.DomainMessageForwarderGenerator;
-import io.polygenesis.generators.java.domainmessageactivemq.forwarder.DomainMessageForwarderTransformer;
-import io.polygenesis.generators.java.domainmessageactivemq.forwarder.activity.DomainMessageForwarderSendActivityGenerator;
-import io.polygenesis.generators.java.domainmessageactivemq.forwarder.activity.DomainMessageForwarderSendActivityTransformer;
 import io.polygenesis.transformers.java.JavaDataTypeTransformer;
 import java.nio.file.Path;
 
@@ -51,7 +46,7 @@ public final class DomainMessageActiveMqMetamodelGeneratorFactory {
   // DEPENDENCIES
   // ===============================================================================================
   private static DomainMessageDispatcherRouteGenerator domainMessageDispatcherRouteGenerator;
-  private static DomainMessageForwarderGenerator domainMessageForwarderGenerator;
+  // TODO private static DomainMessageForwarderGenerator domainMessageForwarderGenerator;
 
   // ===============================================================================================
   // STATIC INITIALIZATION OF DEPENDENCIES
@@ -73,16 +68,18 @@ public final class DomainMessageActiveMqMetamodelGeneratorFactory {
             templateEngine,
             exporter);
 
-    domainMessageForwarderGenerator =
-        new DomainMessageForwarderGenerator(
-            new DomainMessageForwarderTransformer(
-                dataTypeTransformer,
-                new DomainMessageForwarderMethodTransformer(
-                    dataTypeTransformer,
-                    new DomainMessageForwarderSendActivityGenerator(
-                        new DomainMessageForwarderSendActivityTransformer(), templateEngine))),
-            templateEngine,
-            exporter);
+    // TODO
+    //    domainMessageForwarderGenerator =
+    //        new DomainMessageForwarderGenerator(
+    //            new DomainMessageForwarderTransformer(
+    //                dataTypeTransformer,
+    //                new DomainMessageForwarderMethodTransformer(
+    //                    dataTypeTransformer,
+    //                    new DomainMessageForwarderSendActivityGenerator(
+    //                        new DomainMessageForwarderSendActivityTransformer(),
+    // templateEngine))),
+    //            templateEngine,
+    //            exporter);
   }
 
   // ===============================================================================================
@@ -108,10 +105,8 @@ public final class DomainMessageActiveMqMetamodelGeneratorFactory {
   public static DomainMessageActiveMqMetamodelGenerator newInstance(
       Path generationPath, PackageName rootPackageName, ContextName contextName) {
     return new DomainMessageActiveMqMetamodelGenerator(
-        generationPath,
-        rootPackageName,
-        contextName,
-        domainMessageDispatcherRouteGenerator,
-        domainMessageForwarderGenerator);
+        generationPath, rootPackageName, contextName, domainMessageDispatcherRouteGenerator
+        // TODO domainMessageForwarderGenerator
+        );
   }
 }

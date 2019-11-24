@@ -190,9 +190,7 @@ public class Thing implements Abstraction {
    */
   public DataObject getAsDataObject(PackageName rootPackageName) {
     return new DataObject(
-        new ObjectName(getThingName().getText()),
-        makePackageName(rootPackageName, this)
-    );
+        new ObjectName(getThingName().getText()), makePackageName(rootPackageName, this));
   }
 
   // ===============================================================================================
@@ -342,7 +340,10 @@ public class Thing implements Abstraction {
         .filter(keyValue -> keyValue.getKey().equals(key))
         .map(keyValue -> keyValue.getValue())
         .findFirst()
-        .orElseThrow(() -> new IllegalArgumentException(String.format("Cannot find thing metadata for key=%s", key)));
+        .orElseThrow(
+            () ->
+                new IllegalArgumentException(
+                    String.format("Cannot find thing metadata for key=%s", key)));
   }
 
   /**

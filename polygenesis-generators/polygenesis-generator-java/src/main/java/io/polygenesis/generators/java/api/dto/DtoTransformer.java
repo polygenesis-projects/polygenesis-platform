@@ -144,6 +144,21 @@ public class DtoTransformer extends AbstractClassTransformer<Dto, DtoMethod> {
             "\t\tsuper();"));
 
     // ---------------------------------------------------------------------------------------------
+    // Create constructor with Api Error
+    // ---------------------------------------------------------------------------------------------
+    if (source.getDtoType().equals(DtoType.API_RESPONSE)) {
+      Set<ParameterRepresentation> parameterRepresentations = new LinkedHashSet<>();
+
+      parameterRepresentations.add(new ParameterRepresentation("ApiError", "error"));
+
+      constructorRepresentations.add(
+          createConstructorWithImplementation(
+              source.getDataObject().getObjectName().getText(),
+              parameterRepresentations,
+              "\t\tsuper(error);"));
+    }
+
+    // ---------------------------------------------------------------------------------------------
     // Create constructor with parameters
     // ---------------------------------------------------------------------------------------------
     Set<FieldRepresentation> fieldRepresentations = fieldRepresentations(source);
@@ -199,6 +214,10 @@ public class DtoTransformer extends AbstractClassTransformer<Dto, DtoMethod> {
   @Override
   public Set<String> imports(Dto source, Object... args) {
     Set<String> imports = new TreeSet<>();
+
+    if (source.getDtoType().equals(DtoType.API_RESPONSE)) {
+      imports.add("com.oregor.trinity4j.api.ApiError");
+    }
 
     if (mapDtoTypeToInclude.containsKey(source.getDtoType())) {
       imports.add(mapDtoTypeToInclude.get(source.getDtoType()));

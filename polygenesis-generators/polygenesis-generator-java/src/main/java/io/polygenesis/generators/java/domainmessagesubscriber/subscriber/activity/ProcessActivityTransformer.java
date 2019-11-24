@@ -54,8 +54,8 @@ public class ProcessActivityTransformer extends AbstractServiceMethodImplementat
     }
 
     if (source.getActivity().hasValue("ensureExistenceServiceMethod")) {
-      ensureExistenceServiceMethod = (ServiceMethod) source.getActivity()
-          .getValue("ensureExistenceServiceMethod");
+      ensureExistenceServiceMethod =
+          (ServiceMethod) source.getActivity().getValue("ensureExistenceServiceMethod");
     }
 
     if (source.getActivity().hasValue("commandServiceMethod")) {
@@ -64,9 +64,7 @@ public class ProcessActivityTransformer extends AbstractServiceMethodImplementat
 
     ProcessActivityTemplateData data =
         new ProcessActivityTemplateData(
-            messageData,
-            ensureExistenceServiceMethod,
-            commandServiceMethod);
+            messageData, ensureExistenceServiceMethod, commandServiceMethod);
 
     Map<String, Object> dataModel = new HashMap<>();
     dataModel.put("data", data);

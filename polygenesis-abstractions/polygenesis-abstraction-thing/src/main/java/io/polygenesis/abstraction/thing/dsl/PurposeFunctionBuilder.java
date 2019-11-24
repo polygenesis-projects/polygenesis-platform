@@ -38,7 +38,6 @@ import io.polygenesis.core.AbstractionScope;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * The type Purpose function builder.

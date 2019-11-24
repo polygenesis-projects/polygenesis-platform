@@ -41,7 +41,7 @@
       <#break>
     <#case 'OBJECT'>
     if (jsonNodeBody.hasNonNull("${ textConverter.toLowerCamel(item.variableName.text) }")) {
-      // Data Primary Type Type = ${ item.dataPrimaryType } is not supported
+      request.set${ textConverter.toUpperCamel(item.variableName.text) }(jsonNodeBody.get("${ textConverter.toLowerCamel(item.variableName.text) }").get("value").asText());
     }
       <#break>
     <#default>

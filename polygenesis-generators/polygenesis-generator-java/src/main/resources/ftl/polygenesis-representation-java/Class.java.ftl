@@ -36,6 +36,11 @@ import ${ import };
 ${ annotation }
 </#list>
 ${ representation.modifiers }<#if representation.modifiers != ""> </#if>class ${ representation.fullObjectName } {
+<#if representation.getMethodRepresentationsBy('CONSTRUCTOR')?size == 0
+  && representation.fieldRepresentations?size == 0
+  && representation.staticFieldRepresentations?size == 0>
+  // No operation
+</#if>
 <#if representation.serialVersionUID??>
 
   private static final long serialVersionUID = 1L;
