@@ -155,8 +155,8 @@ public class DomainMessageSubscriber extends SubscriberMetamodel {
     }
 
     if (getEnsureExistenceServiceMethod() != null) {
-      keyValues
-          .add(new KeyValue("ensureExistenceServiceMethod", getEnsureExistenceServiceMethod()));
+      keyValues.add(
+          new KeyValue("ensureExistenceServiceMethod", getEnsureExistenceServiceMethod()));
     }
 
     if (getCommandServiceMethod() != null) {

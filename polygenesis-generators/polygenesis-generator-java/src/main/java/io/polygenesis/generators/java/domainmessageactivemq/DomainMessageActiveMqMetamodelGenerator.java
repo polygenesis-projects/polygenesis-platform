@@ -29,8 +29,6 @@ import io.polygenesis.core.ExportInfo;
 import io.polygenesis.core.MetamodelRepository;
 import io.polygenesis.generators.java.domainmessageactivemq.dispatcherroute.DomainMessageDispatcherRoute;
 import io.polygenesis.generators.java.domainmessageactivemq.dispatcherroute.DomainMessageDispatcherRouteGenerator;
-import io.polygenesis.generators.java.domainmessageactivemq.forwarder.DomainMessageForwarder;
-import io.polygenesis.generators.java.domainmessageactivemq.forwarder.DomainMessageForwarderGenerator;
 import io.polygenesis.generators.java.domainmessagesubscriber.dispatcher.DomainMessageDispatcher;
 import io.polygenesis.generators.java.shared.FolderFileConstants;
 import java.nio.file.Path;
@@ -50,7 +48,7 @@ public class DomainMessageActiveMqMetamodelGenerator extends AbstractMetamodelGe
   private final PackageName rootPackageName;
   private final ContextName contextName;
   private final DomainMessageDispatcherRouteGenerator domainMessageDispatcherRouteGenerator;
-  private final DomainMessageForwarderGenerator domainMessageForwarderGenerator;
+  // TODO: private final DomainMessageForwarderGenerator domainMessageForwarderGenerator;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -63,19 +61,16 @@ public class DomainMessageActiveMqMetamodelGenerator extends AbstractMetamodelGe
    * @param rootPackageName the root package name
    * @param contextName the context name
    * @param domainMessageDispatcherRouteGenerator the domain message dispatcher route generator
-   * @param domainMessageForwarderGenerator the domain message publisher generator
    */
   public DomainMessageActiveMqMetamodelGenerator(
       Path generationPath,
       PackageName rootPackageName,
       ContextName contextName,
-      DomainMessageDispatcherRouteGenerator domainMessageDispatcherRouteGenerator,
-      DomainMessageForwarderGenerator domainMessageForwarderGenerator) {
+      DomainMessageDispatcherRouteGenerator domainMessageDispatcherRouteGenerator) {
     super(generationPath);
     this.rootPackageName = rootPackageName;
     this.contextName = contextName;
     this.domainMessageDispatcherRouteGenerator = domainMessageDispatcherRouteGenerator;
-    this.domainMessageForwarderGenerator = domainMessageForwarderGenerator;
   }
 
   // ===============================================================================================
@@ -90,11 +85,12 @@ public class DomainMessageActiveMqMetamodelGenerator extends AbstractMetamodelGe
         domainMessageDispatcherRouteExportInfo(getGenerationPath(), domainMessageDispatcherRoute),
         contextName);
 
-    DomainMessageForwarder domainMessageForwarder = makeDomainMessageForwarder();
-    domainMessageForwarderGenerator.generate(
-        domainMessageForwarder,
-        domainMessageForwarderExportInfo(getGenerationPath(), domainMessageForwarder),
-        contextName);
+    // TODO disable for now
+    //    DomainMessageForwarder domainMessageForwarder = makeDomainMessageForwarder();
+    //    domainMessageForwarderGenerator.generate(
+    //        domainMessageForwarder,
+    //        domainMessageForwarderExportInfo(getGenerationPath(), domainMessageForwarder),
+    //        contextName);
   }
 
   // ===============================================================================================
@@ -111,13 +107,13 @@ public class DomainMessageActiveMqMetamodelGenerator extends AbstractMetamodelGe
         makeDomainMessageDispatcher());
   }
 
-  private DomainMessageForwarder makeDomainMessageForwarder() {
-    return new DomainMessageForwarder(
-        new ObjectName(
-            String.format(
-                "%sDomainMessageForwarder", TextConverter.toUpperCamel(contextName.getText()))),
-        new PackageName(String.format("%s", rootPackageName.getText())));
-  }
+  //  private DomainMessageForwarder makeDomainMessageForwarder() {
+  //    return new DomainMessageForwarder(
+  //        new ObjectName(
+  //            String.format(
+  //                "%sDomainMessageForwarder", TextConverter.toUpperCamel(contextName.getText()))),
+  //        new PackageName(String.format("%s", rootPackageName.getText())));
+  //  }
 
   private DomainMessageDispatcher makeDomainMessageDispatcher() {
     return new DomainMessageDispatcher(
@@ -146,18 +142,18 @@ public class DomainMessageActiveMqMetamodelGenerator extends AbstractMetamodelGe
             FolderFileConstants.JAVA_POSTFIX));
   }
 
-  private ExportInfo domainMessageForwarderExportInfo(
-      Path generationPath, DomainMessageForwarder domainMessageForwarder) {
-    return ExportInfo.file(
-        Paths.get(
-            generationPath.toString(),
-            FolderFileConstants.SRC,
-            FolderFileConstants.MAIN,
-            FolderFileConstants.JAVA,
-            domainMessageForwarder.getPackageName().toPath().toString()),
-        String.format(
-            "%s%s",
-            TextConverter.toUpperCamel(domainMessageForwarder.getObjectName().getText()),
-            FolderFileConstants.JAVA_POSTFIX));
-  }
+  //  private ExportInfo domainMessageForwarderExportInfo(
+  //      Path generationPath, DomainMessageForwarder domainMessageForwarder) {
+  //    return ExportInfo.file(
+  //        Paths.get(
+  //            generationPath.toString(),
+  //            FolderFileConstants.SRC,
+  //            FolderFileConstants.MAIN,
+  //            FolderFileConstants.JAVA,
+  //            domainMessageForwarder.getPackageName().toPath().toString()),
+  //        String.format(
+  //            "%s%s",
+  //            TextConverter.toUpperCamel(domainMessageForwarder.getObjectName().getText()),
+  //            FolderFileConstants.JAVA_POSTFIX));
+  //  }
 }

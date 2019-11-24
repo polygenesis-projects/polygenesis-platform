@@ -83,21 +83,29 @@ public class DomainMessageSubscriberTransformer
     if (source.getEnsureExistenceServiceMethod() != null) {
       fieldRepresentations.add(
           new FieldRepresentation(
-              "final " + TextConverter.toUpperCamel(
-                  source.getEnsureExistenceServiceMethod().getService().getServiceName().getText()),
+              "final "
+                  + TextConverter.toUpperCamel(
+                      source
+                          .getEnsureExistenceServiceMethod()
+                          .getService()
+                          .getServiceName()
+                          .getText()),
               TextConverter.toLowerCamel(
-                  source.getEnsureExistenceServiceMethod().getService().getServiceName()
+                  source
+                      .getEnsureExistenceServiceMethod()
+                      .getService()
+                      .getServiceName()
                       .getText())));
     }
 
     if (source.getCommandServiceMethod() != null) {
       fieldRepresentations.add(
           new FieldRepresentation(
-              "final " + TextConverter.toUpperCamel(
-                  source.getCommandServiceMethod().getService().getServiceName().getText()),
+              "final "
+                  + TextConverter.toUpperCamel(
+                      source.getCommandServiceMethod().getService().getServiceName().getText()),
               TextConverter.toLowerCamel(
-                  source.getCommandServiceMethod().getService().getServiceName()
-                      .getText())));
+                  source.getCommandServiceMethod().getService().getServiceName().getText())));
     }
 
     return fieldRepresentations;
@@ -116,7 +124,10 @@ public class DomainMessageSubscriberTransformer
               TextConverter.toUpperCamel(
                   source.getEnsureExistenceServiceMethod().getService().getServiceName().getText()),
               TextConverter.toLowerCamel(
-                  source.getEnsureExistenceServiceMethod().getService().getServiceName()
+                  source
+                      .getEnsureExistenceServiceMethod()
+                      .getService()
+                      .getServiceName()
                       .getText())));
     }
 
@@ -126,8 +137,7 @@ public class DomainMessageSubscriberTransformer
               TextConverter.toUpperCamel(
                   source.getCommandServiceMethod().getService().getServiceName().getText()),
               TextConverter.toLowerCamel(
-                  source.getCommandServiceMethod().getService().getServiceName()
-                      .getText())));
+                  source.getCommandServiceMethod().getService().getServiceName().getText())));
     }
 
     StrBuilder implementation = new StrBuilder();
@@ -144,7 +154,10 @@ public class DomainMessageSubscriberTransformer
               TextConverter.toLowerCamel(
                   source.getEnsureExistenceServiceMethod().getService().getServiceName().getText()),
               TextConverter.toLowerCamel(
-                  source.getEnsureExistenceServiceMethod().getService().getServiceName()
+                  source
+                      .getEnsureExistenceServiceMethod()
+                      .getService()
+                      .getServiceName()
                       .getText())));
     }
 
@@ -155,8 +168,7 @@ public class DomainMessageSubscriberTransformer
               TextConverter.toLowerCamel(
                   source.getCommandServiceMethod().getService().getServiceName().getText()),
               TextConverter.toLowerCamel(
-                  source.getCommandServiceMethod().getService().getServiceName()
-                      .getText())));
+                  source.getCommandServiceMethod().getService().getServiceName().getText())));
     }
 
     Set<ConstructorRepresentation> constructorRepresentations = new LinkedHashSet<>();
@@ -206,7 +218,10 @@ public class DomainMessageSubscriberTransformer
               "%s.%s",
               source.getEnsureExistenceServiceMethod().getService().getPackageName().getText(),
               TextConverter.toUpperCamel(
-                  source.getEnsureExistenceServiceMethod().getService().getServiceName()
+                  source
+                      .getEnsureExistenceServiceMethod()
+                      .getService()
+                      .getServiceName()
                       .getText())));
     }
 
@@ -216,8 +231,7 @@ public class DomainMessageSubscriberTransformer
               "%s.%s",
               source.getCommandServiceMethod().getService().getPackageName().getText(),
               TextConverter.toUpperCamel(
-                  source.getCommandServiceMethod().getService().getServiceName()
-                      .getText())));
+                  source.getCommandServiceMethod().getService().getServiceName().getText())));
     }
 
     if (source.getCommandServiceMethod() != null) {
@@ -250,8 +264,8 @@ public class DomainMessageSubscriberTransformer
 
     if (source.getProcess().getActivity().hasValue("ensureExistenceServiceMethod")) {
       ServiceMethod ensureExistenceServiceMethod =
-          (ServiceMethod) source.getProcess().getActivity()
-              .getValue("ensureExistenceServiceMethod");
+          (ServiceMethod)
+              source.getProcess().getActivity().getValue("ensureExistenceServiceMethod");
       imports.addAll(methodTransformer.imports(ensureExistenceServiceMethod.getFunction(), args));
     }
 

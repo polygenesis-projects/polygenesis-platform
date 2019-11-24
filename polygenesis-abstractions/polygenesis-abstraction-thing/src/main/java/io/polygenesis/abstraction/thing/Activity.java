@@ -181,14 +181,11 @@ public class Activity {
    * @return the boolean
    */
   public Boolean hasValue(Object key) {
-    Optional<KeyValue> optionalKeyValue = getKeyValues()
-        .stream()
-        .filter(keyValue -> keyValue.getKey().equals(key))
-        .findFirst();
+    Optional<KeyValue> optionalKeyValue =
+        getKeyValues().stream().filter(keyValue -> keyValue.getKey().equals(key)).findFirst();
 
     return optionalKeyValue.isPresent();
   }
-
 
   /**
    * Gets value.
@@ -204,8 +201,10 @@ public class Activity {
         .filter(keyValue -> keyValue.getKey().equals(key))
         .map(keyValue -> keyValue.getValue())
         .findFirst()
-        .orElseThrow(() -> new IllegalArgumentException(
-            String.format("Cannot find activity metadata for key=%s", key)));
+        .orElseThrow(
+            () ->
+                new IllegalArgumentException(
+                    String.format("Cannot find activity metadata for key=%s", key)));
   }
 
   // ===============================================================================================

@@ -172,19 +172,12 @@ public abstract class AbstractClassTransformer<S extends Nameable, F extends Fun
    */
   @SuppressWarnings("CPD-START")
   protected ConstructorRepresentation createEmptyConstructorWithImplementation(
-      String dataType,
-      Set<String> annotations,
-      String modifiers,
-      String implementation) {
+      String dataType, Set<String> annotations, String modifiers, String implementation) {
     String description =
         String.format(INSTANTIATES_A_NEW_S, TextConverter.toUpperCamelSpaces(dataType));
 
     return new ConstructorRepresentation(
-        annotations,
-        description,
-        modifiers,
-        new LinkedHashSet<>(),
-        implementation);
+        annotations, description, modifiers, new LinkedHashSet<>(), implementation);
   }
 
   /**
@@ -579,7 +572,7 @@ public abstract class AbstractClassTransformer<S extends Nameable, F extends Fun
     String impl = stringBuilder.toString();
 
     // Get rid of the last \n character
-    if(impl.endsWith("\n")) {
+    if (impl.endsWith("\n")) {
       impl = impl.substring(0, impl.length() - 1);
     }
 
@@ -626,7 +619,7 @@ public abstract class AbstractClassTransformer<S extends Nameable, F extends Fun
     String impl = stringBuilder.toString();
 
     // Get rid of the last \n character
-    if(impl.endsWith("\n")) {
+    if (impl.endsWith("\n")) {
       impl = impl.substring(0, impl.length() - 1);
     }
 

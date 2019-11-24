@@ -50,7 +50,8 @@ public class DomainMessageForwarderSendActivityTransformer
     dataModel.put("data", data);
 
     return new TemplateData(
-        dataModel, "polygenesis-trinity-java/"
-        + "api-clients/api-client-domain-message-subscriber/forwarder-send.java.ftl");
+        dataModel,
+        "polygenesis-trinity-java/"
+            + "api-clients/api-client-domain-message-subscriber/forwarder-send.java.ftl");
   }
 }

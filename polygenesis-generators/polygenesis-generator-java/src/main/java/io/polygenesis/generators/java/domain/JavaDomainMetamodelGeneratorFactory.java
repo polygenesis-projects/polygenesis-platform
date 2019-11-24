@@ -167,7 +167,7 @@ public final class JavaDomainMetamodelGeneratorFactory {
             new ValueObjectTransformer(
                 dataTypeTransformer, new ValueObjectMethodTransformer(dataTypeTransformer)),
             templateEngine,
-            activeFileExporter);
+            passiveFileExporter);
 
     domainEventGenerator =
         new DomainEventGenerator(

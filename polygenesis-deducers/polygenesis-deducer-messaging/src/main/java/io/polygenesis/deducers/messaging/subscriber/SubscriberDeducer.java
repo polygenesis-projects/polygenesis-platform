@@ -109,15 +109,14 @@ public class SubscriberDeducer implements Deducer<SubscriberMetamodelRepository>
     Function ensureExistenceFunction = getHandlerEnsureExistenceFunction(relatedThing);
     ServiceMethod ensureExistenceServiceMethod = null;
     if (ensureExistenceFunction != null) {
-      ensureExistenceServiceMethod = findServiceMethodFromFunction(
-          modelRepositories, ensureExistenceFunction);
+      ensureExistenceServiceMethod =
+          findServiceMethodFromFunction(modelRepositories, ensureExistenceFunction);
     }
 
     Function commandFunction = getHandlerCommandFunction(thing);
     ServiceMethod commandServiceMethod = null;
     if (commandFunction != null) {
-      commandServiceMethod = findServiceMethodFromFunction(
-          modelRepositories, commandFunction);
+      commandServiceMethod = findServiceMethodFromFunction(modelRepositories, commandFunction);
     }
 
     SubscriberMetamodel subscriberMetamodel =
