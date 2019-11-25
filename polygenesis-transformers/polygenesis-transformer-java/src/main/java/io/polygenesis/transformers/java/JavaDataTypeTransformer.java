@@ -57,6 +57,11 @@ public class JavaDataTypeTransformer implements DataTypeTransformer {
   public String convert(String dataType) {
     String candidate = TextConverter.toUpperCamel(dataType);
 
+    String[] parts = candidate.split(";");
+    if (parts.length > 1) {
+      return getArrayOfElements(parts[1]);
+    }
+
     return Stream.of(PrimitiveType.values())
         .filter(value -> value.name().equalsIgnoreCase(candidate))
         .findFirst()
@@ -87,6 +92,11 @@ public class JavaDataTypeTransformer implements DataTypeTransformer {
   @Override
   public String getVoid() {
     return VOID;
+  }
+
+  @Override
+  public String getArrayOfElements(String elementDataType) {
+    return String.format("%s[]", elementDataType);
   }
 
   // ===============================================================================================

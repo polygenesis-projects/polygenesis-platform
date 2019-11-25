@@ -35,7 +35,7 @@ public class DataArrayTest extends AbstractEqualityTest<DataArray> {
     DataArray dataArray = createObject1();
 
     assertThat(dataArray).isNotNull();
-    assertThat(dataArray.getDataType()).isEqualTo(DataPrimaryType.ARRAY.name());
+    assertThat(dataArray.getDataType()).isEqualTo("ARRAY;STRING");
     assertThat(dataArray.getVariableName()).isEqualTo(new VariableName("someVariableNames"));
     assertThat(dataArray.getArrayElement())
         .isEqualTo(DataPrimitive.of(PrimitiveType.STRING, new VariableName("var1")));

@@ -18,63 +18,13 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.core;
+package io.polygenesis.generators.java.apidetail.aspect.activity;
 
 /**
- * The type Data type transformer.
+ * The type Around activity template data.
  *
  * @author Christos Tsakostas
  */
-public interface DataTypeTransformer {
-
-  /**
-   * Convert string.
-   *
-   * @param dataType the data type
-   * @return the string
-   */
-  String convert(String dataType);
-
-  /**
-   * Gets modifier public.
-   *
-   * @return the modifier public
-   */
-  String getModifierPublic();
-
-  /**
-   * Gets modifier protected.
-   *
-   * @return the modifier protected
-   */
-  String getModifierProtected();
-
-  /**
-   * Gets modifier private.
-   *
-   * @return the modifier private
-   */
-  String getModifierPrivate();
-
-  /**
-   * Gets modifier abstract.
-   *
-   * @return the modifier abstract
-   */
-  String getModifierAbstract();
-
-  /**
-   * Gets void.
-   *
-   * @return the void
-   */
-  String getVoid();
-
-  /**
-   * Gets array of elements.
-   *
-   * @param elementDataType the element data type
-   * @return the array of elements
-   */
-  String getArrayOfElements(String elementDataType);
+public class AroundActivityTemplateData {
+  // No Template Data Needed
 }

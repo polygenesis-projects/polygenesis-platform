@@ -155,7 +155,8 @@ public final class TrinityJavaContextGeneratorFactory {
 
     if (trinityJavaContextGeneratorEnablement.isJavaApiDetailGenerator()) {
       metamodelGenerators.add(
-          javaApiDetailGenerator(exportPath, projectFolder, modulePrefix, rootPackageName));
+          javaApiDetailGenerator(
+              exportPath, projectFolder, modulePrefix, context, rootPackageName));
     }
 
     if (trinityJavaContextGeneratorEnablement.isJavaApiRestGenerator()) {
@@ -263,9 +264,14 @@ public final class TrinityJavaContextGeneratorFactory {
    * @return the java api detail generator
    */
   private static JavaApiDetailMetamodelGenerator javaApiDetailGenerator(
-      String exportPath, String projectFolder, String modulePrefix, String rootPackageName) {
+      String exportPath,
+      String projectFolder,
+      String modulePrefix,
+      String context,
+      String rootPackageName) {
     return JavaApiDetailMetamodelGeneratorFactory.newInstance(
         Paths.get(exportPath, projectFolder, modulePrefix + "-" + API_DETAIL),
+        new ContextName(context),
         new PackageName(rootPackageName));
   }
 

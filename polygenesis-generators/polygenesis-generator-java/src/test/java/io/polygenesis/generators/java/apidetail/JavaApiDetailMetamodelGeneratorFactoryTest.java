@@ -23,6 +23,7 @@ package io.polygenesis.generators.java.apidetail;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import io.polygenesis.commons.valueobjects.ContextName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -44,7 +45,7 @@ public class JavaApiDetailMetamodelGeneratorFactoryTest {
   public void shouldCreateNewInstance() {
     JavaApiDetailMetamodelGenerator javaApiGenerator =
         JavaApiDetailMetamodelGeneratorFactory.newInstance(
-            Paths.get("tmp"), new PackageName("com.oregor"));
+            Paths.get("tmp"), new ContextName("context"), new PackageName("com.oregor"));
     assertThat(javaApiGenerator).isNotNull();
   }
 }

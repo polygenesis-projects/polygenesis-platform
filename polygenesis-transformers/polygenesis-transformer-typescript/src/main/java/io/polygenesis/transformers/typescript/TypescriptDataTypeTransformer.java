@@ -89,6 +89,11 @@ public class TypescriptDataTypeTransformer implements DataTypeTransformer {
     return VOID;
   }
 
+  @Override
+  public String getArrayOfElements(String elementDataType) {
+    throw new UnsupportedOperationException();
+  }
+
   // ===============================================================================================
   // PRIVATE
   // ===============================================================================================

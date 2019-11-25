@@ -25,9 +25,11 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
 import io.polygenesis.abstraction.thing.ThingName;
+import io.polygenesis.commons.valueobjects.ContextName;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.MetamodelRepository;
+import io.polygenesis.generators.java.apidetail.aspect.ServiceAspectGenerator;
 import io.polygenesis.generators.java.apidetail.converter.DomainObjectConverterExporter;
 import io.polygenesis.generators.java.apidetail.service.ServiceDetailGenerator;
 import io.polygenesis.models.api.Service;
@@ -54,10 +56,12 @@ import org.junit.Test;
 public class JavaApiDetailMetamodelGeneratorTest {
 
   private Path generationPath;
+  private ContextName contextName;
   private PackageName rootPackageName;
   private ServiceDetailGenerator serviceDetailGenerator;
   private DomainObjectConverterExporter domainObjectConverterExporter;
   private JavaApiDetailMetamodelGenerator javaApiDetailGenerator;
+  private ServiceAspectGenerator serviceAspectGenerator;
 
   /**
    * Sets up.
@@ -67,12 +71,20 @@ public class JavaApiDetailMetamodelGeneratorTest {
   @Before
   public void setUp() {
     generationPath = Paths.get("tmp");
+    contextName = new ContextName("context");
     rootPackageName = new PackageName("com.oregor");
     serviceDetailGenerator = mock(ServiceDetailGenerator.class);
     domainObjectConverterExporter = mock(DomainObjectConverterExporter.class);
+    serviceAspectGenerator = mock(ServiceAspectGenerator.class);
+
     javaApiDetailGenerator =
         new JavaApiDetailMetamodelGenerator(
-            generationPath, rootPackageName, serviceDetailGenerator, domainObjectConverterExporter);
+            generationPath,
+            contextName,
+            rootPackageName,
+            serviceDetailGenerator,
+            domainObjectConverterExporter,
+            serviceAspectGenerator);
   }
 
   /** Should generate. */

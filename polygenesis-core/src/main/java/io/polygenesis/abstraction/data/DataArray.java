@@ -114,7 +114,7 @@ public class DataArray extends Data {
 
   @Override
   public String getDataType() {
-    return DataPrimaryType.ARRAY.name();
+    return String.format("%s;%s", DataPrimaryType.ARRAY.name(), getArrayElement().getDataType());
   }
 
   // ===============================================================================================

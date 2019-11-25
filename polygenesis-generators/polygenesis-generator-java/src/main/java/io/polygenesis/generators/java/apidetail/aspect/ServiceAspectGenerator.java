@@ -18,63 +18,34 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.core;
+package io.polygenesis.generators.java.apidetail.aspect;
+
+import io.polygenesis.core.AbstractUnitTemplateGenerator;
+import io.polygenesis.core.Exporter;
+import io.polygenesis.core.TemplateEngine;
 
 /**
- * The type Data type transformer.
+ * The type Service aspect generator.
  *
  * @author Christos Tsakostas
  */
-public interface DataTypeTransformer {
+public class ServiceAspectGenerator extends AbstractUnitTemplateGenerator<ServiceAspect> {
+
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
 
   /**
-   * Convert string.
+   * Instantiates a new Service aspect generator.
    *
-   * @param dataType the data type
-   * @return the string
+   * @param templateTransformer the template transformer
+   * @param templateEngine the template engine
+   * @param exporter the exporter
    */
-  String convert(String dataType);
-
-  /**
-   * Gets modifier public.
-   *
-   * @return the modifier public
-   */
-  String getModifierPublic();
-
-  /**
-   * Gets modifier protected.
-   *
-   * @return the modifier protected
-   */
-  String getModifierProtected();
-
-  /**
-   * Gets modifier private.
-   *
-   * @return the modifier private
-   */
-  String getModifierPrivate();
-
-  /**
-   * Gets modifier abstract.
-   *
-   * @return the modifier abstract
-   */
-  String getModifierAbstract();
-
-  /**
-   * Gets void.
-   *
-   * @return the void
-   */
-  String getVoid();
-
-  /**
-   * Gets array of elements.
-   *
-   * @param elementDataType the element data type
-   * @return the array of elements
-   */
-  String getArrayOfElements(String elementDataType);
+  public ServiceAspectGenerator(
+      ServiceAspectTransformer templateTransformer,
+      TemplateEngine templateEngine,
+      Exporter exporter) {
+    super(templateTransformer, templateEngine, exporter);
+  }
 }
