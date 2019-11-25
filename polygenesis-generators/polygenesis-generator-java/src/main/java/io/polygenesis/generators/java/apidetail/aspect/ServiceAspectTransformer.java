@@ -22,6 +22,7 @@ package io.polygenesis.generators.java.apidetail.aspect;
 
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.commons.text.TextConverter;
+import io.polygenesis.commons.valueobjects.ContextName;
 import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.core.TemplateData;
 import io.polygenesis.representations.code.ConstructorRepresentation;
@@ -71,10 +72,14 @@ public class ServiceAspectTransformer extends AbstractClassTransformer<ServiceAs
 
   @Override
   public Set<FieldRepresentation> fieldRepresentations(ServiceAspect source, Object... args) {
+    ContextName contextName = (ContextName) args[1];
     Set<FieldRepresentation> fieldRepresentations = new LinkedHashSet<>();
 
     fieldRepresentations.add(
-        new FieldRepresentation("PropertyFileAuxService", "propertyFileAuxService"));
+        new FieldRepresentation(
+            String.format(
+                "%sPropertyFileAuxService", TextConverter.toUpperCamel(contextName.getText())),
+            "propertyFileAuxService"));
 
     return fieldRepresentations;
   }
@@ -116,14 +121,12 @@ public class ServiceAspectTransformer extends AbstractClassTransformer<ServiceAs
     imports.add("com.oregor.trinity4j.api.ApiError");
     imports.add("com.oregor.trinity4j.api.ApiRequest");
     imports.add("com.oregor.trinity4j.domain.DomainException");
-    imports.add("com.oregor.trinity4j.properties.PropertyFileAuxService");
     imports.add("java.util.Locale");
     imports.add("org.aspectj.lang.ProceedingJoinPoint");
     imports.add("org.aspectj.lang.Signature");
     imports.add("org.aspectj.lang.annotation.Around");
     imports.add("org.aspectj.lang.annotation.Aspect");
     imports.add("org.aspectj.lang.reflect.MethodSignature");
-    imports.add("org.springframework.context.MessageSource");
     imports.add("org.springframework.stereotype.Component");
 
     // TODO
