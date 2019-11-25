@@ -141,7 +141,8 @@ public class JavaApiDetailMetamodelGenerator extends AbstractMetamodelGenerator 
     serviceAspectGenerator.generate(
         serviceAspect,
         serviceAspectExportInfo(getGenerationPath(), serviceAspect),
-        getRootPackageName());
+        getRootPackageName(),
+        getContextName());
   }
 
   // ===============================================================================================

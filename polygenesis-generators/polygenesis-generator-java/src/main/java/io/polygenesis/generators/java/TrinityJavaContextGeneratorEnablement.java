@@ -40,9 +40,10 @@ public class TrinityJavaContextGeneratorEnablement {
   private boolean apiClientBatchProcessMessageSubscriber = true;
   private boolean apiClientBatchProcessMessagingActivemq = true;
   private boolean apiClientBatchProcessSchedulerCamel = true;
+  private boolean aux = true;
+  private boolean auxDetailPropertyFile = true;
 
   private boolean domainDetailDomainMessagePublisher = true;
-
   private boolean domainDetailRepositoryInMemory = true;
 
   /** Instantiates a new Trinity java context generator enablement. */
@@ -62,6 +63,9 @@ public class TrinityJavaContextGeneratorEnablement {
     setApiClientBatchProcessMessageSubscriber(true);
     setApiClientBatchProcessMessagingActivemq(true);
     setApiClientBatchProcessSchedulerCamel(true);
+
+    setAux(true);
+    setAuxDetailPropertyFile(true);
 
     setDomainDetailDomainMessagePublisher(true);
     setDomainDetailRepositoryInMemory(true);
@@ -186,6 +190,24 @@ public class TrinityJavaContextGeneratorEnablement {
    */
   public boolean isApiClientBatchProcessSchedulerCamel() {
     return apiClientBatchProcessSchedulerCamel;
+  }
+
+  /**
+   * Is aux boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isAux() {
+    return aux;
+  }
+
+  /**
+   * Is aux detail property file boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isAuxDetailPropertyFile() {
+    return auxDetailPropertyFile;
   }
 
   /**
@@ -330,6 +352,24 @@ public class TrinityJavaContextGeneratorEnablement {
    */
   public void setApiClientBatchProcessSchedulerCamel(boolean apiClientBatchProcessSchedulerCamel) {
     this.apiClientBatchProcessSchedulerCamel = apiClientBatchProcessSchedulerCamel;
+  }
+
+  /**
+   * Sets aux.
+   *
+   * @param aux the aux
+   */
+  public void setAux(boolean aux) {
+    this.aux = aux;
+  }
+
+  /**
+   * Sets aux detail property file.
+   *
+   * @param auxDetailPropertyFile the aux detail property file
+   */
+  public void setAuxDetailPropertyFile(boolean auxDetailPropertyFile) {
+    this.auxDetailPropertyFile = auxDetailPropertyFile;
   }
 
   /**

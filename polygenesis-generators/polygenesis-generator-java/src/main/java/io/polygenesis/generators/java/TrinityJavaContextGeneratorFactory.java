@@ -28,6 +28,10 @@ import io.polygenesis.generators.java.api.JavaApiGeneratorFactory;
 import io.polygenesis.generators.java.api.JavaApiMetamodelGenerator;
 import io.polygenesis.generators.java.apidetail.JavaApiDetailMetamodelGenerator;
 import io.polygenesis.generators.java.apidetail.JavaApiDetailMetamodelGeneratorFactory;
+import io.polygenesis.generators.java.aux.AuxMetamodelGenerator;
+import io.polygenesis.generators.java.aux.AuxMetamodelGeneratorFactory;
+import io.polygenesis.generators.java.auxdetails.propertyfile.AuxDetailPropertyFileMetamodelGenerator;
+import io.polygenesis.generators.java.auxdetails.propertyfile.AuxDetailPropertyFileMetamodelGeneratorFactory;
 import io.polygenesis.generators.java.batchprocess.BatchProcessMetamodelGenerator;
 import io.polygenesis.generators.java.batchprocess.BatchProcessMetamodelGeneratorFactory;
 import io.polygenesis.generators.java.batchprocessactivemq.BatchProcessActiveMqMetamodelGenerator;
@@ -74,6 +78,11 @@ public final class TrinityJavaContextGeneratorFactory {
   private static final String API_DETAIL = "api-detail";
   private static final String API_CLIENTS = "api-clients";
   private static final String API_CLIENT_REST_SPRING = "api-client-rest-spring";
+
+  // AUX
+  private static final String AUX = "aux";
+  private static final String AUX_DETAILS = "aux-details";
+  private static final String AUX_DETAIL_PROPERTY_FILE = "aux-detail-property-file";
 
   // BATCH PROCESS
   private static final String API_CLIENT_BATCH_PROCESS_SUBSCRIBER =
@@ -148,6 +157,8 @@ public final class TrinityJavaContextGeneratorFactory {
     Set<MetamodelGenerator> metamodelGenerators = new LinkedHashSet<>();
 
     projectFolder = Paths.get(projectFolder, contextFolder).toString();
+    ContextName contextName = new ContextName(context);
+    PackageName rootPackageNameVo = new PackageName(rootPackageName);
 
     if (trinityJavaContextGeneratorEnablement.isJavaApiGenerator()) {
       metamodelGenerators.add(javaApiGenerator(exportPath, projectFolder, modulePrefix));
@@ -226,6 +237,20 @@ public final class TrinityJavaContextGeneratorFactory {
     }
 
     // =============================================================================================
+    // AUX & DETAILS
+    if (trinityJavaContextGeneratorEnablement.isAux()) {
+      metamodelGenerators.add(
+          auxMetamodelGenerator(
+              exportPath, projectFolder, modulePrefix, contextName, rootPackageNameVo));
+    }
+
+    if (trinityJavaContextGeneratorEnablement.isAuxDetailPropertyFile()) {
+      metamodelGenerators.add(
+          auxDetailPropertyFileMetamodelGenerator(
+              exportPath, projectFolder, modulePrefix, contextName, rootPackageNameVo));
+    }
+
+    // =============================================================================================
     // DOMAIN DETAILS
     if (trinityJavaContextGeneratorEnablement.isDomainDetailDomainMessagePublisher()) {
       metamodelGenerators.add(
@@ -240,29 +265,12 @@ public final class TrinityJavaContextGeneratorFactory {
   // PRIVATE
   // ===============================================================================================
 
-  /**
-   * Java api generator java api generator.
-   *
-   * @param exportPath the export path
-   * @param projectFolder the project folder
-   * @param modulePrefix the module prefix
-   * @return the java api generator
-   */
   private static JavaApiMetamodelGenerator javaApiGenerator(
       String exportPath, String projectFolder, String modulePrefix) {
     return JavaApiGeneratorFactory.newInstance(
         Paths.get(exportPath, projectFolder, modulePrefix + "-" + API));
   }
 
-  /**
-   * Java api detail generator java api detail generator.
-   *
-   * @param exportPath the export path
-   * @param projectFolder the project folder
-   * @param modulePrefix the module prefix
-   * @param rootPackageName the root package name
-   * @return the java api detail generator
-   */
   private static JavaApiDetailMetamodelGenerator javaApiDetailGenerator(
       String exportPath,
       String projectFolder,
@@ -275,16 +283,6 @@ public final class TrinityJavaContextGeneratorFactory {
         new PackageName(rootPackageName));
   }
 
-  /**
-   * Java api rest generator java api rest generator.
-   *
-   * @param exportPath the export path
-   * @param projectFolder the project folder
-   * @param modulePrefix the module prefix
-   * @param context the context
-   * @param rootPackageName the root package name
-   * @return the java api rest generator
-   */
   private static JavaApiRestMetamodelGenerator javaApiRestGenerator(
       String exportPath,
       String projectFolder,
@@ -301,16 +299,35 @@ public final class TrinityJavaContextGeneratorFactory {
         new ObjectName(context));
   }
 
-  /**
-   * Java rdbms generator java rdbms generator.
-   *
-   * @param exportPath the export path
-   * @param projectFolder the project folder
-   * @param modulePrefix the module prefix
-   * @param context the context
-   * @param rootPackageName the root package name
-   * @return the java rdbms generator
-   */
+  // AUX
+  private static AuxMetamodelGenerator auxMetamodelGenerator(
+      String exportPath,
+      String projectFolder,
+      String modulePrefix,
+      ContextName contextName,
+      PackageName rootPackageName) {
+    return AuxMetamodelGeneratorFactory.newInstance(
+        Paths.get(exportPath, projectFolder, modulePrefix + "-" + AUX),
+        contextName,
+        rootPackageName);
+  }
+
+  private static AuxDetailPropertyFileMetamodelGenerator auxDetailPropertyFileMetamodelGenerator(
+      String exportPath,
+      String projectFolder,
+      String modulePrefix,
+      ContextName contextName,
+      PackageName rootPackageName) {
+    return AuxDetailPropertyFileMetamodelGeneratorFactory.newInstance(
+        Paths.get(
+            exportPath,
+            projectFolder,
+            modulePrefix + "-" + AUX_DETAILS,
+            modulePrefix + "-" + AUX_DETAIL_PROPERTY_FILE),
+        contextName,
+        rootPackageName);
+  }
+
   private static JavaRdbmsMetamodelGenerator javaRdbmsGenerator(
       String exportPath,
       String projectFolder,
@@ -327,16 +344,6 @@ public final class TrinityJavaContextGeneratorFactory {
         new ObjectName(context));
   }
 
-  /**
-   * In memory metamodel generator in memory metamodel generator.
-   *
-   * @param exportPath the export path
-   * @param projectFolder the project folder
-   * @param modulePrefix the module prefix
-   * @param context the context
-   * @param rootPackageName the root package name
-   * @return the in memory metamodel generator
-   */
   private static InMemoryMetamodelGenerator inMemoryMetamodelGenerator(
       String exportPath,
       String projectFolder,
@@ -353,16 +360,6 @@ public final class TrinityJavaContextGeneratorFactory {
         new ObjectName(context));
   }
 
-  /**
-   * Java domain generator java domain generator.
-   *
-   * @param exportPath the export path
-   * @param projectFolder the project folder
-   * @param modulePrefix the module prefix
-   * @param tablePrefix the table prefix
-   * @param rootPackageName the root package name
-   * @return the java domain generator
-   */
   private static JavaDomainMetamodelGenerator javaDomainGenerator(
       String exportPath,
       String projectFolder,
@@ -377,14 +374,6 @@ public final class TrinityJavaContextGeneratorFactory {
         tablePrefix);
   }
 
-  /**
-   * Domain service implementation generator domain service implementation generator.
-   *
-   * @param exportPath the export path
-   * @param projectFolder the project folder
-   * @param modulePrefix the module prefix
-   * @return the domain service implementation generator
-   */
   private static DomainServiceDetailMetamodelGenerator domainServiceImplementationGenerator(
       String exportPath, String projectFolder, String modulePrefix) {
     return DomainServiceDetailMetamodelGeneratorFactory.newInstance(
@@ -395,14 +384,6 @@ public final class TrinityJavaContextGeneratorFactory {
             modulePrefix + "-" + DOMAIN_DETAIL_SERVICES));
   }
 
-  /**
-   * Api client domain message subscriber generator.
-   *
-   * @param exportPath the export path
-   * @param projectFolder the project folder
-   * @param modulePrefix the module prefix
-   * @return the messaging generator
-   */
   private static DomainMessageSubscriberMetamodelGenerator apiClientDomainMessageSubscriber(
       String exportPath,
       String projectFolder,
@@ -419,16 +400,6 @@ public final class TrinityJavaContextGeneratorFactory {
         new ContextName(context));
   }
 
-  /**
-   * Api client domain message subscriber active mq domain message active mq metamodel generator.
-   *
-   * @param exportPath the export path
-   * @param projectFolder the project folder
-   * @param modulePrefix the module prefix
-   * @param rootPackageName the root package name
-   * @param context the context
-   * @return the domain message active mq metamodel generator
-   */
   private static DomainMessageActiveMqMetamodelGenerator apiClientDomainMessageSubscriberActiveMq(
       String exportPath,
       String projectFolder,
@@ -445,14 +416,6 @@ public final class TrinityJavaContextGeneratorFactory {
         new ContextName(context));
   }
 
-  /**
-   * Api client periodic process periodic process metamodel generator.
-   *
-   * @param exportPath the export path
-   * @param projectFolder the project folder
-   * @param modulePrefix the module prefix
-   * @return the periodic process metamodel generator
-   */
   private static BatchProcessMetamodelGenerator apiClientBatchProcess(
       String exportPath, String projectFolder, String modulePrefix) {
     return BatchProcessMetamodelGeneratorFactory.newInstance(
@@ -463,14 +426,6 @@ public final class TrinityJavaContextGeneratorFactory {
             modulePrefix + "-" + API_CLIENT_BATCH_PROCESS_SUBSCRIBER));
   }
 
-  /**
-   * Api client batch process subscriber batch process subscriber metamodel generator.
-   *
-   * @param exportPath the export path
-   * @param projectFolder the project folder
-   * @param modulePrefix the module prefix
-   * @return the batch process subscriber metamodel generator
-   */
   private static BatchProcessSubscriberMetamodelGenerator apiClientBatchProcessSubscriber(
       String exportPath,
       String projectFolder,
@@ -487,16 +442,6 @@ public final class TrinityJavaContextGeneratorFactory {
         new ContextName(context));
   }
 
-  /**
-   * Api client batch process messaging active mq batch process active mq metamodel generator.
-   *
-   * @param exportPath the export path
-   * @param projectFolder the project folder
-   * @param modulePrefix the module prefix
-   * @param rootPackageName the root package name
-   * @param context the context
-   * @return the batch process active mq metamodel generator
-   */
   private static BatchProcessActiveMqMetamodelGenerator apiClientBatchProcessMessagingActiveMq(
       String exportPath,
       String projectFolder,
@@ -513,16 +458,6 @@ public final class TrinityJavaContextGeneratorFactory {
         new ContextName(context));
   }
 
-  /**
-   * Api client batch process scheduler.
-   *
-   * @param exportPath the export path
-   * @param projectFolder the project folder
-   * @param modulePrefix the module prefix
-   * @param rootPackageName the root package name
-   * @param context the context
-   * @return the batch process scheduler metamodel generator
-   */
   private static BatchProcessSchedulerMetamodelGenerator apiClientBatchProcessSchedulerCamel(
       String exportPath,
       String projectFolder,
@@ -539,16 +474,6 @@ public final class TrinityJavaContextGeneratorFactory {
         new ContextName(context));
   }
 
-  /**
-   * Sql metamodel generator sql metamodel generator.
-   *
-   * @param exportPath the export path
-   * @param projectFolder the project folder
-   * @param modulePrefix the module prefix
-   * @param tablePrefix the table prefix
-   * @param context the context
-   * @return the sql metamodel generator
-   */
   private static SqlMetamodelGenerator sqlMetamodelGenerator(
       String exportPath,
       String projectFolder,
@@ -565,17 +490,7 @@ public final class TrinityJavaContextGeneratorFactory {
         tablePrefix);
   }
 
-  /**
-   * Domain detail domain message publisher domain message publisher metamodel generator.
-   *
-   * @param exportPath the export path
-   * @param projectFolder the project folder
-   * @param modulePrefix the module prefix
-   * @param rootPackageName the root package name
-   * @param context the context
-   * @return the domain message publisher metamodel generator
-   */
-  public static DomainMessagePublisherMetamodelGenerator domainDetailDomainMessagePublisher(
+  private static DomainMessagePublisherMetamodelGenerator domainDetailDomainMessagePublisher(
       String exportPath,
       String projectFolder,
       String modulePrefix,
