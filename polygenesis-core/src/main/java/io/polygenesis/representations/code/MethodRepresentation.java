@@ -42,6 +42,7 @@ public class MethodRepresentation {
   private Set<ParameterRepresentation> parameterRepresentations;
   private String returnValue;
   private String implementation;
+  private Set<String> thrownExceptions;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -50,7 +51,7 @@ public class MethodRepresentation {
   /**
    * Instantiates a new Method representation.
    *
-   * @param methodRepresentationType the method type
+   * @param methodRepresentationType the method representation type
    * @param imports the imports
    * @param annotations the annotations
    * @param description the description
@@ -59,6 +60,7 @@ public class MethodRepresentation {
    * @param parameterRepresentations the parameter representations
    * @param returnValue the return value
    * @param implementation the implementation
+   * @param thrownExceptions the thrown exceptions
    */
   public MethodRepresentation(
       MethodRepresentationType methodRepresentationType,
@@ -69,7 +71,8 @@ public class MethodRepresentation {
       String methodName,
       Set<ParameterRepresentation> parameterRepresentations,
       String returnValue,
-      String implementation) {
+      String implementation,
+      Set<String> thrownExceptions) {
     setMethodRepresentationType(methodRepresentationType);
     setImports(imports);
     setAnnotations(annotations);
@@ -79,6 +82,7 @@ public class MethodRepresentation {
     setParameterRepresentations(parameterRepresentations);
     setReturnValue(returnValue);
     setImplementation(implementation);
+    setThrownExceptions(thrownExceptions);
   }
 
   // ===============================================================================================
@@ -179,6 +183,15 @@ public class MethodRepresentation {
     return implementation;
   }
 
+  /**
+   * Gets thrown exceptions.
+   *
+   * @return the thrown exceptions
+   */
+  public Set<String> getThrownExceptions() {
+    return thrownExceptions;
+  }
+
   // ===============================================================================================
   // GUARDS
   // ===============================================================================================
@@ -273,6 +286,16 @@ public class MethodRepresentation {
     this.implementation = implementation;
   }
 
+  /**
+   * Sets thrown exceptions.
+   *
+   * @param thrownExceptions the thrown exceptions
+   */
+  private void setThrownExceptions(Set<String> thrownExceptions) {
+    Assertion.isNotNull(thrownExceptions, "thrownExceptions is required");
+    this.thrownExceptions = thrownExceptions;
+  }
+
   // ===============================================================================================
   // OVERRIDES
   // ===============================================================================================
@@ -294,7 +317,8 @@ public class MethodRepresentation {
         && Objects.equals(methodName, that.methodName)
         && Objects.equals(parameterRepresentations, that.parameterRepresentations)
         && Objects.equals(returnValue, that.returnValue)
-        && Objects.equals(implementation, that.implementation);
+        && Objects.equals(implementation, that.implementation)
+        && Objects.equals(thrownExceptions, that.thrownExceptions);
   }
 
   @Override
@@ -308,6 +332,7 @@ public class MethodRepresentation {
         methodName,
         parameterRepresentations,
         returnValue,
-        implementation);
+        implementation,
+        thrownExceptions);
   }
 }

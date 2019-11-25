@@ -36,7 +36,7 @@
 <#list method.annotations as annotation>
   ${ annotation }
 </#list>
-  ${ method.modifiers }<#if method.modifiers != ""> </#if><#if method.returnValue != "">${ method.returnValue } </#if>${ method.methodName }(<@printParameters method.parameterRepresentations></@printParameters>) {
+  ${ method.modifiers }<#if method.modifiers != ""> </#if><#if method.returnValue != "">${ method.returnValue } </#if>${ method.methodName }(<@printParameters method.parameterRepresentations></@printParameters>)<#if method.thrownExceptions?size gt 0> throws </#if><#list method.thrownExceptions as thrownException>${ thrownException }<#sep>, </#sep></#list> {
 ${ method.implementation }
   }
 </#macro>

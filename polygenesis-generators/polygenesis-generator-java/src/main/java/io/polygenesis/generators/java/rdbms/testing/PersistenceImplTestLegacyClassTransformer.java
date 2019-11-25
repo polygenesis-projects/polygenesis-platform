@@ -94,7 +94,8 @@ public class PersistenceImplTestLegacyClassTransformer
             "shouldStoreAndRestore",
             new LinkedHashSet<>(),
             "void",
-            stringBuilder.toString());
+            stringBuilder.toString(),
+            new LinkedHashSet<>());
 
     return new LinkedHashSet<>(Arrays.asList(methodRepresentation));
   }

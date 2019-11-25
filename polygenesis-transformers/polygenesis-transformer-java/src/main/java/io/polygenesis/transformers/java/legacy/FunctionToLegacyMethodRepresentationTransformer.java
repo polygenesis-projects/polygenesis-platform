@@ -118,4 +118,9 @@ public class FunctionToLegacyMethodRepresentationTransformer
   public String implementation(Function source, Object... args) {
     return "";
   }
+
+  @Override
+  public Set<String> thrownExceptions(Function source, Object... args) {
+    return new LinkedHashSet<>();
+  }
 }

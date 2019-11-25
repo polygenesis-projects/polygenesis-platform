@@ -389,7 +389,8 @@ public abstract class AbstractTypescriptClassTransformer<
         String.format("get%s", TextConverter.toUpperCamel(fieldRepresentation.getVariableName())),
         new LinkedHashSet<>(),
         fieldRepresentation.getDataType(),
-        String.format("\t\treturn this.%s;", fieldRepresentation.getVariableName()));
+        String.format("\t\treturn this.%s;", fieldRepresentation.getVariableName()),
+        new LinkedHashSet<>());
   }
 
   /**
@@ -500,7 +501,8 @@ public abstract class AbstractTypescriptClassTransformer<
         String.format("set%s", TextConverter.toUpperCamel(fieldRepresentation.getVariableName())),
         parameterRepresentations,
         "void",
-        stringBuilder.toString());
+        stringBuilder.toString(),
+        new LinkedHashSet<>());
   }
 
   /**

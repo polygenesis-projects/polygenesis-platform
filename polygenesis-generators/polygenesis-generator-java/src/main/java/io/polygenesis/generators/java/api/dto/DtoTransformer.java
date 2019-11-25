@@ -200,7 +200,8 @@ public class DtoTransformer extends AbstractClassTransformer<Dto, DtoMethod> {
               "getId",
               new LinkedHashSet<>(),
               "String",
-              "\t\treturn null;"));
+              "\t\treturn null;",
+              new LinkedHashSet<>()));
     }
 
     return methodRepresentations;

@@ -84,7 +84,8 @@ public abstract class AbstractDartMethodTransformer<S extends FunctionProvider>
         methodName(source, args),
         parameterRepresentations(source, args),
         returnValue(source, args),
-        implementation(source, args));
+        implementation(source, args),
+        thrownExceptions(source, args));
   }
 
   @Override
@@ -191,6 +192,11 @@ public abstract class AbstractDartMethodTransformer<S extends FunctionProvider>
         return stringBuilder.toString();
       }
     }
+  }
+
+  @Override
+  public Set<String> thrownExceptions(S source, Object... args) {
+    return new LinkedHashSet<>();
   }
 
   // ===============================================================================================

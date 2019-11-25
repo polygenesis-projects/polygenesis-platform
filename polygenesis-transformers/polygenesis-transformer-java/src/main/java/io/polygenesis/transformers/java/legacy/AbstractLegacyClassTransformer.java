@@ -385,7 +385,8 @@ public abstract class AbstractLegacyClassTransformer<S> extends AbstractTransfor
         String.format("get%s", TextConverter.toUpperCamel(fieldRepresentation.getVariableName())),
         new LinkedHashSet<>(),
         fieldRepresentation.getDataType(),
-        String.format("\t\treturn this.%s;", fieldRepresentation.getVariableName()));
+        String.format("\t\treturn this.%s;", fieldRepresentation.getVariableName()),
+        new LinkedHashSet<>());
   }
 
   /**
@@ -492,7 +493,8 @@ public abstract class AbstractLegacyClassTransformer<S> extends AbstractTransfor
         String.format("set%s", TextConverter.toUpperCamel(fieldRepresentation.getVariableName())),
         parameterRepresentations,
         "void",
-        stringBuilder.toString());
+        stringBuilder.toString(),
+        new LinkedHashSet<>());
   }
 
   /**

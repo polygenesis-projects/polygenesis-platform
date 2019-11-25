@@ -123,4 +123,13 @@ public interface MethodTransformer<S extends FunctionProvider> {
    * @return the string
    */
   String implementation(S source, Object... args);
+
+  /**
+   * Thrown exceptions set.
+   *
+   * @param source the source
+   * @param args the args
+   * @return the set
+   */
+  Set<String> thrownExceptions(S source, Object... args);
 }

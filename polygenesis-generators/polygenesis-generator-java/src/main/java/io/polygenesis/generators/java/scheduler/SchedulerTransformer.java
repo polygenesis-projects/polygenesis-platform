@@ -84,7 +84,8 @@ public class SchedulerTransformer extends AbstractClassTransformer<Scheduler, Se
             "configure",
             new LinkedHashSet<>(),
             dataTypeTransformer.getVoid(),
-            ""));
+            "",
+            new LinkedHashSet<>()));
 
     return methodRepresentations;
   }
