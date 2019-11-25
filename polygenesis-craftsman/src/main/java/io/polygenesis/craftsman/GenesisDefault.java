@@ -171,7 +171,11 @@ public class GenesisDefault {
         Arrays.asList(
             javaApiGenerator(exportPath, projectFolder, modulePrefix + "-" + API),
             javaApiDetailGenerator(
-                exportPath, projectFolder, modulePrefix + "-" + API_DETAIL, rootPackageName),
+                exportPath,
+                projectFolder,
+                modulePrefix + "-" + API_DETAIL,
+                context,
+                rootPackageName),
             JavaApiRestGeneratorFactory.newInstance(
                 Paths.get(
                     exportPath,
@@ -233,9 +237,14 @@ public class GenesisDefault {
    * @return the java api detail generator
    */
   public static JavaApiDetailMetamodelGenerator javaApiDetailGenerator(
-      String exportPath, String projectFolder, String modulePrefix, String rootPackageName) {
+      String exportPath,
+      String projectFolder,
+      String modulePrefix,
+      String context,
+      String rootPackageName) {
     return JavaApiDetailMetamodelGeneratorFactory.newInstance(
         Paths.get(exportPath, projectFolder, modulePrefix + "-" + API_DETAIL),
+        new ContextName(context),
         new PackageName(rootPackageName));
   }
 

@@ -22,12 +22,18 @@ package io.polygenesis.generators.java.apidetail;
 
 import io.polygenesis.commons.freemarker.FreemarkerConfig;
 import io.polygenesis.commons.freemarker.FreemarkerService;
+import io.polygenesis.commons.valueobjects.ContextName;
 import io.polygenesis.commons.valueobjects.PackageName;
+import io.polygenesis.core.ActiveFileExporter;
 import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.core.Exporter;
 import io.polygenesis.core.FreemarkerTemplateEngine;
 import io.polygenesis.core.PassiveFileExporter;
 import io.polygenesis.core.TemplateEngine;
+import io.polygenesis.generators.java.apidetail.aspect.ServiceAspectActivityRegistry;
+import io.polygenesis.generators.java.apidetail.aspect.ServiceAspectGenerator;
+import io.polygenesis.generators.java.apidetail.aspect.ServiceAspectMethodTransformer;
+import io.polygenesis.generators.java.apidetail.aspect.ServiceAspectTransformer;
 import io.polygenesis.generators.java.apidetail.converter.DomainObjectConverterExporter;
 import io.polygenesis.generators.java.apidetail.converter.DomainObjectConverterLegacyClassTransformer;
 import io.polygenesis.generators.java.apidetail.converter.DomainObjectConverterLegacyMethodTransformer;
@@ -50,7 +56,8 @@ public final class JavaApiDetailMetamodelGeneratorFactory {
   // DEPENDENCIES
   // ===============================================================================================
   private static ServiceDetailGenerator serviceDetailGenerator;
-  private static final DomainObjectConverterExporter domainObjectConverterExporter;
+  private static DomainObjectConverterExporter domainObjectConverterExporter;
+  private static ServiceAspectGenerator serviceAspectGenerator;
 
   // ===============================================================================================
   // STATIC INITIALIZATION OF DEPENDENCIES
@@ -58,7 +65,7 @@ public final class JavaApiDetailMetamodelGeneratorFactory {
 
   static {
     TemplateEngine templateEngine = new FreemarkerTemplateEngine();
-    // TODO: remove final Exporter activeFileExporter = new ActiveFileExporter();
+    final Exporter activeFileExporter = new ActiveFileExporter();
     final Exporter passiveFileExporter = new PassiveFileExporter();
     DataTypeTransformer dataTypeTransformer = new JavaDataTypeTransformer();
 
@@ -81,17 +88,26 @@ public final class JavaApiDetailMetamodelGeneratorFactory {
             freemarkerService, domainObjectConverterClassRepresentable);
 
     // =============================================================================================
-    ServiceMethodActivityRegistry serviceMethodActivityRegistry =
-        new ServiceMethodActivityRegistry();
 
     serviceDetailGenerator =
         new ServiceDetailGenerator(
             new ServiceDetailTransformer(
                 dataTypeTransformer,
                 new ServiceDetailMethodTransformer(
-                    dataTypeTransformer, serviceMethodActivityRegistry)),
+                    dataTypeTransformer, new ServiceMethodActivityRegistry())),
             templateEngine,
             passiveFileExporter);
+
+    // =============================================================================================
+
+    serviceAspectGenerator =
+        new ServiceAspectGenerator(
+            new ServiceAspectTransformer(
+                dataTypeTransformer,
+                new ServiceAspectMethodTransformer(
+                    dataTypeTransformer, new ServiceAspectActivityRegistry())),
+            templateEngine,
+            activeFileExporter);
   }
 
   // ===============================================================================================
@@ -110,12 +126,18 @@ public final class JavaApiDetailMetamodelGeneratorFactory {
    * New instance java api impl generator.
    *
    * @param generationPath the generation path
+   * @param contextName the context name
    * @param rootPackageName the root package name
    * @return the java api impl generator
    */
   public static JavaApiDetailMetamodelGenerator newInstance(
-      Path generationPath, PackageName rootPackageName) {
+      Path generationPath, ContextName contextName, PackageName rootPackageName) {
     return new JavaApiDetailMetamodelGenerator(
-        generationPath, rootPackageName, serviceDetailGenerator, domainObjectConverterExporter);
+        generationPath,
+        contextName,
+        rootPackageName,
+        serviceDetailGenerator,
+        domainObjectConverterExporter,
+        serviceAspectGenerator);
   }
 }

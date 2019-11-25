@@ -116,6 +116,15 @@ public class ThingBuilder extends AbstractThingBuilder<ThingBuilder> {
   }
 
   /**
+   * Api detail service aspect thing builder.
+   *
+   * @return the thing builder
+   */
+  public static ThingBuilder apiDetailServiceAspect() {
+    return new ThingBuilder(new LinkedHashSet<>(Arrays.asList(AbstractionScope.apiDetail())));
+  }
+
+  /**
    * Projection thing builder.
    *
    * @return the thing builder

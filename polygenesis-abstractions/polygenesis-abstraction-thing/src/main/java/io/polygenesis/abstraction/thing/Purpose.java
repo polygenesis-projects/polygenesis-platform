@@ -48,6 +48,13 @@ public class Purpose implements Serializable {
   private static final String FETCH_PAGED_COLLECTION = "FETCH_PAGED_COLLECTION";
 
   // ===============================================================================================
+  // API DETAIL
+  // ===============================================================================================
+  private static final String API_DETAIL_SERVICE_ASPECT_AROUND = "API_DETAIL_SERVICE_ASPECT_AROUND";
+  private static final String API_DETAIL_SERVICE_ASPECT_GET_RETURN_VALUE =
+      "API_DETAIL_SERVICE_ASPECT_GET_RETURN_VALUE";
+
+  // ===============================================================================================
   // AGGREGATE ROOTS
   // ===============================================================================================
   private static final String AGGREGATE_ROOT_CREATE_ENTITY = "AGGREGATE_ROOT_CREATE_ENTITY";
@@ -196,6 +203,32 @@ public class Purpose implements Serializable {
   public static Purpose fetchCollection() {
     return new Purpose(FETCH_COLLECTION, CqsType.QUERY);
   }
+
+  // ===============================================================================================
+  // API DETAIL
+  // ===============================================================================================
+
+  /**
+   * Api detail service aspect around purpose.
+   *
+   * @return the purpose
+   */
+  public static Purpose apiDetailServiceAspectAround() {
+    return new Purpose(API_DETAIL_SERVICE_ASPECT_AROUND, CqsType.COMMAND);
+  }
+
+  /**
+   * Api detail service aspect get return value purpose.
+   *
+   * @return the purpose
+   */
+  public static Purpose apiDetailServiceAspectGetReturnValue() {
+    return new Purpose(API_DETAIL_SERVICE_ASPECT_GET_RETURN_VALUE, CqsType.COMMAND);
+  }
+
+  // ===============================================================================================
+  //
+  // ===============================================================================================
 
   /**
    * Fetch paged collection purpose.

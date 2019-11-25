@@ -21,11 +21,14 @@
 package io.polygenesis.generators.java.apidetail;
 
 import io.polygenesis.commons.text.TextConverter;
+import io.polygenesis.commons.valueobjects.ContextName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.AbstractMetamodelGenerator;
 import io.polygenesis.core.CoreRegistry;
 import io.polygenesis.core.ExportInfo;
 import io.polygenesis.core.MetamodelRepository;
+import io.polygenesis.generators.java.apidetail.aspect.ServiceAspect;
+import io.polygenesis.generators.java.apidetail.aspect.ServiceAspectGenerator;
 import io.polygenesis.generators.java.apidetail.converter.DomainObjectConverterExporter;
 import io.polygenesis.generators.java.apidetail.service.ServiceDetailGenerator;
 import io.polygenesis.generators.java.shared.FolderFileConstants;
@@ -43,9 +46,11 @@ import java.util.Set;
  */
 public class JavaApiDetailMetamodelGenerator extends AbstractMetamodelGenerator {
 
+  private final ContextName contextName;
   private final PackageName rootPackageName;
   private final ServiceDetailGenerator serviceDetailGenerator;
   private final DomainObjectConverterExporter domainObjectConverterExporter;
+  private final ServiceAspectGenerator serviceAspectGenerator;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -55,24 +60,39 @@ public class JavaApiDetailMetamodelGenerator extends AbstractMetamodelGenerator 
    * Instantiates a new Java api detail metamodel generator.
    *
    * @param generationPath the generation path
+   * @param contextName the context name
    * @param rootPackageName the root package name
    * @param serviceDetailGenerator the service detail generator
    * @param domainObjectConverterExporter the domain object converter exporter
+   * @param serviceAspectGenerator the service aspect generator
    */
   public JavaApiDetailMetamodelGenerator(
       Path generationPath,
+      ContextName contextName,
       PackageName rootPackageName,
       ServiceDetailGenerator serviceDetailGenerator,
-      DomainObjectConverterExporter domainObjectConverterExporter) {
+      DomainObjectConverterExporter domainObjectConverterExporter,
+      ServiceAspectGenerator serviceAspectGenerator) {
     super(generationPath);
+    this.contextName = contextName;
     this.rootPackageName = rootPackageName;
     this.serviceDetailGenerator = serviceDetailGenerator;
     this.domainObjectConverterExporter = domainObjectConverterExporter;
+    this.serviceAspectGenerator = serviceAspectGenerator;
   }
 
   // ===============================================================================================
   // GETTERS
   // ===============================================================================================
+
+  /**
+   * Gets context name.
+   *
+   * @return the context name
+   */
+  public ContextName getContextName() {
+    return contextName;
+  }
 
   /**
    * Gets root package name.
@@ -93,6 +113,7 @@ public class JavaApiDetailMetamodelGenerator extends AbstractMetamodelGenerator 
         CoreRegistry.getMetamodelRepositoryResolver()
             .resolve(metamodelRepositories, ServiceImplementationMetamodelRepository.class);
 
+    // DETAIL
     serviceImplementationModelRepository
         .getItems()
         .forEach(
@@ -103,6 +124,7 @@ public class JavaApiDetailMetamodelGenerator extends AbstractMetamodelGenerator 
                   metamodelRepositories);
             });
 
+    // CONVERTER
     DomainEntityConverterMetamodelRepository domainEntityConverterModelRepository =
         CoreRegistry.getMetamodelRepositoryResolver()
             .resolve(metamodelRepositories, DomainEntityConverterMetamodelRepository.class);
@@ -112,6 +134,14 @@ public class JavaApiDetailMetamodelGenerator extends AbstractMetamodelGenerator 
         .forEach(
             domainEntityConverter ->
                 domainObjectConverterExporter.export(getGenerationPath(), domainEntityConverter));
+
+    // SERVICE ASPECT
+    ServiceAspect serviceAspect = new ServiceAspect(getContextName(), getRootPackageName());
+
+    serviceAspectGenerator.generate(
+        serviceAspect,
+        serviceAspectExportInfo(getGenerationPath(), serviceAspect),
+        getRootPackageName());
   }
 
   // ===============================================================================================
@@ -130,5 +160,19 @@ public class JavaApiDetailMetamodelGenerator extends AbstractMetamodelGenerator 
         TextConverter.toUpperCamel(serviceImplementation.getService().getServiceName().getText())
             + "Impl"
             + FolderFileConstants.JAVA_POSTFIX);
+  }
+
+  private ExportInfo serviceAspectExportInfo(Path generationPath, ServiceAspect serviceAspect) {
+    return ExportInfo.file(
+        Paths.get(
+            generationPath.toString(),
+            FolderFileConstants.SRC,
+            FolderFileConstants.MAIN,
+            FolderFileConstants.JAVA,
+            serviceAspect.getRootPackageName().toPath().toString()),
+        String.format(
+            "%s%s",
+            TextConverter.toUpperCamel(serviceAspect.getName().getText()),
+            FolderFileConstants.JAVA_POSTFIX));
   }
 }
