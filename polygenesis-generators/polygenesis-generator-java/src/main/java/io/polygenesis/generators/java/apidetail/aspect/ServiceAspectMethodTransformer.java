@@ -20,12 +20,15 @@
 
 package io.polygenesis.generators.java.apidetail.aspect;
 
+import static java.util.Collections.singletonList;
+
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.abstraction.thing.FunctionName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.transformers.java.AbstractMethodTransformer;
 import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
@@ -112,6 +115,16 @@ public class ServiceAspectMethodTransformer extends AbstractMethodTransformer<Fu
       return serviceAspectActivityRegistry.activityFor(source, args);
     } else {
       return super.implementation(source, args);
+    }
+  }
+
+  @Override
+  public Set<String> thrownExceptions(Function source, Object... args) {
+    if (source.getName().equals(new FunctionName("around"))
+        || source.getName().equals(new FunctionName("getReturnValue"))) {
+      return new LinkedHashSet<>(singletonList("Throwable"));
+    } else {
+      return super.thrownExceptions(source, args);
     }
   }
 }

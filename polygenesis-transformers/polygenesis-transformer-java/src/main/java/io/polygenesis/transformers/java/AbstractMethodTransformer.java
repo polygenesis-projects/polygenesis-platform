@@ -77,7 +77,8 @@ public abstract class AbstractMethodTransformer<S extends FunctionProvider>
         methodName(source, args),
         parameterRepresentations(source, args),
         returnValue(source, args),
-        implementation(source, args));
+        implementation(source, args),
+        thrownExceptions(source, args));
   }
 
   @Override
@@ -180,6 +181,11 @@ public abstract class AbstractMethodTransformer<S extends FunctionProvider>
       stringBuilder.append("\t\treturn null;");
       return stringBuilder.toString();
     }
+  }
+
+  @Override
+  public Set<String> thrownExceptions(S source, Object... args) {
+    return new LinkedHashSet<>();
   }
 
   // ===============================================================================================
