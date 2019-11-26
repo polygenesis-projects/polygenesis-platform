@@ -102,17 +102,28 @@ public class PurposeFunctionBuilder {
    */
   public final PurposeFunctionBuilder withFunctionCreateNoReturnValue(
       String functionName, Set<Data> models) {
-    return withFunctionCreate(functionName, models, false);
+    return withFunctionCreate(functionName, models, new LinkedHashSet<>(), false);
   }
 
   /**
    * With function create purpose function builder.
    *
-   * @param models the models
+   * @param arguments the arguments
    * @return the purpose function builder
    */
-  public final PurposeFunctionBuilder withFunctionCreate(Set<Data> models) {
-    return withFunctionCreate("create", models, true);
+  public final PurposeFunctionBuilder withFunctionCreate(Set<Data> arguments) {
+    return withFunctionCreate("create", arguments, new LinkedHashSet<>(), true);
+  }
+
+  /**
+   * With function create purpose function builder.
+   *
+   * @param arguments the arguments
+   * @param outputs the outputs
+   * @return the purpose function builder
+   */
+  public final PurposeFunctionBuilder withFunctionCreate(Set<Data> arguments, Set<Data> outputs) {
+    return withFunctionCreate("create", arguments, outputs, true);
   }
 
   /**
@@ -123,19 +134,21 @@ public class PurposeFunctionBuilder {
    * @return the purpose function builder
    */
   public final PurposeFunctionBuilder withFunctionCreate(String functionName, Set<Data> models) {
-    return withFunctionCreate(functionName, models, true);
+    return withFunctionCreate(functionName, models, new LinkedHashSet<>(), true);
   }
 
   /**
    * With function create thing builder.
    *
    * @param functionName the function name
-   * @param models the models
+   * @param arguments the arguments
+   * @param outputs the outputs
+   * @param returnValue the return value
    * @return the thing builder
    */
   @SuppressWarnings("CPD-START")
   private PurposeFunctionBuilder withFunctionCreate(
-      String functionName, Set<Data> models, Boolean returnValue) {
+      String functionName, Set<Data> arguments, Set<Data> outputs, Boolean returnValue) {
 
     // ---------------------------------------------------------------------------------------------
     // ARGUMENTS
@@ -155,7 +168,6 @@ public class PurposeFunctionBuilder {
 
     // ---------------------------------------------------------------------------------------------
     // Add Thing Identity
-    // Add Thing Identity
     Optional<Data> optionalDataThingIdentity = getThingIdentity(thing);
     if (optionalDataThingIdentity.isPresent()) {
       argumentDataObject.addData(optionalDataThingIdentity.get());
@@ -164,7 +176,7 @@ public class PurposeFunctionBuilder {
     }
 
     // ---------------------------------------------------------------------------------------------
-    models.forEach(argumentDataObject::addData);
+    arguments.forEach(argumentDataObject::addData);
     // ---------------------------------------------------------------------------------------------
 
     // ---------------------------------------------------------------------------------------------
@@ -178,6 +190,8 @@ public class PurposeFunctionBuilder {
                       functionName, TextConverter.toUpperCamel(thing.getThingName().getText()))),
               thing.makePackageName(rootPackageNameVo, thing));
 
+      // ---------------------------------------------------------------------------------------------
+
       returnValueDataObject.addData(
           DataPrimitive.ofDataBusinessType(
               DataPurpose.thingIdentity(),
@@ -185,6 +199,10 @@ public class PurposeFunctionBuilder {
               new VariableName(
                   String.format(
                       "%sId", TextConverter.toLowerCamel(thing.getThingName().getText())))));
+
+      // ---------------------------------------------------------------------------------------------
+      outputs.forEach(returnValueDataObject::addData);
+      // ---------------------------------------------------------------------------------------------
 
       // -------------------------------------------------------------------------------------------
       // FUNCTION
