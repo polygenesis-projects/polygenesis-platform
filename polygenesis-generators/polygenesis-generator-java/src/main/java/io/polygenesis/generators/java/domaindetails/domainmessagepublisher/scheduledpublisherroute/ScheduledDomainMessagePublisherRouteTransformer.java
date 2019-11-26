@@ -73,15 +73,16 @@ public class ScheduledDomainMessagePublisherRouteTransformer
   }
 
   @Override
-  public Set<FieldRepresentation> fieldRepresentations(
+  public Set<FieldRepresentation> stateFieldRepresentations(
       ScheduledDomainMessagePublisherRoute source, Object... args) {
     Set<FieldRepresentation> fieldRepresentations = new LinkedHashSet<>();
 
     fieldRepresentations.add(
-        new FieldRepresentation(
+        FieldRepresentation.withModifiers(
             TextConverter.toUpperCamel(
                 source.getScheduledDomainMessagePublisher().getObjectName().getText()),
-            "publisher"));
+            "publisher",
+            dataTypeTransformer.getModifierPrivate()));
 
     return fieldRepresentations;
   }

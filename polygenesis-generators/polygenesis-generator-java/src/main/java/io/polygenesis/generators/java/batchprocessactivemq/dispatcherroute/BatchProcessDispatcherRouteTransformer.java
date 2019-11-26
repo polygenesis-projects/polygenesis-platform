@@ -74,17 +74,20 @@ public class BatchProcessDispatcherRouteTransformer
   }
 
   @Override
-  public Set<FieldRepresentation> fieldRepresentations(
+  public Set<FieldRepresentation> stateFieldRepresentations(
       BatchProcessDispatcherRoute source, Object... args) {
     Set<FieldRepresentation> fieldRepresentations = new LinkedHashSet<>();
 
     fieldRepresentations.add(
-        new FieldRepresentation(
+        FieldRepresentation.withModifiers(
             TextConverter.toUpperCamel(
                 source.getBatchProcessDispatcher().getObjectName().getText()),
-            "dispatcher"));
+            "dispatcher",
+            dataTypeTransformer.getModifierPrivate()));
 
-    fieldRepresentations.add(new FieldRepresentation("String", "endpoint"));
+    fieldRepresentations.add(
+        FieldRepresentation.withModifiers(
+            "String", "endpoint", dataTypeTransformer.getModifierPrivate()));
 
     return fieldRepresentations;
   }

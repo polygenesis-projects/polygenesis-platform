@@ -76,11 +76,14 @@ public class DomainEventTransformer extends DomainObjectClassTransformer<DomainE
   public Set<FieldRepresentation> staticFieldRepresentations(DomainEvent source, Object... args) {
     return new LinkedHashSet<>(
         Collections.singletonList(
-            new FieldRepresentation("static final long", "serialVersionUID = 1L")));
+            FieldRepresentation.withModifiers(
+                "static final long",
+                "serialVersionUID = 1L",
+                dataTypeTransformer.getModifierPrivate())));
   }
 
   @Override
-  public Set<FieldRepresentation> fieldRepresentations(DomainEvent source, Object... args) {
+  public Set<FieldRepresentation> stateFieldRepresentations(DomainEvent source, Object... args) {
     Set<FieldRepresentation> fieldRepresentations = new LinkedHashSet<>();
 
     source
@@ -90,8 +93,10 @@ public class DomainEventTransformer extends DomainObjectClassTransformer<DomainE
               switch (property.getPropertyType()) {
                 case REFERENCE_TO_AGGREGATE_ROOT:
                   fieldRepresentations.add(
-                      new FieldRepresentation(
-                          makeVariableDataType(property), makeVariableName(property)));
+                      FieldRepresentation.withModifiers(
+                          makeVariableDataType(property),
+                          makeVariableName(property),
+                          dataTypeTransformer.getModifierPrivate()));
                   break;
                 case AGGREGATE_ENTITY_ID:
                 case AGGREGATE_ROOT_ID:
@@ -102,41 +107,55 @@ public class DomainEventTransformer extends DomainObjectClassTransformer<DomainE
                   break;
                 case PRIMITIVE:
                   fieldRepresentations.add(
-                      new FieldRepresentation(
-                          makeVariableDataType(property), makeVariableName(property)));
+                      FieldRepresentation.withModifiers(
+                          makeVariableDataType(property),
+                          makeVariableName(property),
+                          dataTypeTransformer.getModifierPrivate()));
                   break;
                 case PRIMITIVE_COLLECTION:
                   fieldRepresentations.add(
-                      new FieldRepresentation(
-                          makeVariableDataType(property), makeVariableName(property)));
+                      FieldRepresentation.withModifiers(
+                          makeVariableDataType(property),
+                          makeVariableName(property),
+                          dataTypeTransformer.getModifierPrivate()));
                   break;
                 case VALUE_OBJECT:
                   fieldRepresentations.add(
-                      new FieldRepresentation(
-                          makeVariableDataType(property), makeVariableName(property)));
+                      FieldRepresentation.withModifiers(
+                          makeVariableDataType(property),
+                          makeVariableName(property),
+                          dataTypeTransformer.getModifierPrivate()));
                   break;
                 case VALUE_OBJECT_COLLECTION:
                   // TODO
                   throw new UnsupportedOperationException();
                 case AGGREGATE_ENTITY:
                   fieldRepresentations.add(
-                      new FieldRepresentation(
-                          makeVariableDataType(property), makeVariableName(property)));
+                      FieldRepresentation.withModifiers(
+                          makeVariableDataType(property),
+                          makeVariableName(property),
+                          dataTypeTransformer.getModifierPrivate()));
                   break;
                 case AGGREGATE_ENTITY_COLLECTION:
                   fieldRepresentations.add(
-                      new FieldRepresentation(
-                          makeVariableDataType(property), makeVariableName(property)));
+                      FieldRepresentation.withModifiers(
+                          makeVariableDataType(property),
+                          makeVariableName(property),
+                          dataTypeTransformer.getModifierPrivate()));
                   break;
                 case REFERENCE:
                   fieldRepresentations.add(
-                      new FieldRepresentation(
-                          makeVariableDataType(property), makeVariableName(property)));
+                      FieldRepresentation.withModifiers(
+                          makeVariableDataType(property),
+                          makeVariableName(property),
+                          dataTypeTransformer.getModifierPrivate()));
                   break;
                 case MAP:
                   fieldRepresentations.add(
-                      new FieldRepresentation(
-                          makeVariableDataType(property), makeVariableName(property)));
+                      FieldRepresentation.withModifiers(
+                          makeVariableDataType(property),
+                          makeVariableName(property),
+                          dataTypeTransformer.getModifierPrivate()));
                   break;
                 default:
                   throw new IllegalStateException(
@@ -180,7 +199,7 @@ public class DomainEventTransformer extends DomainObjectClassTransformer<DomainE
 
   @Override
   public Set<MethodRepresentation> methodRepresentations(DomainEvent source, Object... args) {
-    Set<FieldRepresentation> fieldRepresentations = fieldRepresentations(source);
+    Set<FieldRepresentation> fieldRepresentations = stateFieldRepresentations(source);
     return methodRepresentationsForGetters(fieldRepresentations);
   }
 

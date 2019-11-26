@@ -21,6 +21,9 @@
 package io.polygenesis.representations.code;
 
 import io.polygenesis.abstraction.data.DataPurpose;
+import io.polygenesis.commons.assertion.Assertion;
+import java.util.LinkedHashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -31,6 +34,45 @@ import java.util.Set;
 public class FieldRepresentation extends AbstractDataRepresentation {
 
   // ===============================================================================================
+  // STATE
+  // ===============================================================================================
+
+  private String modifiers;
+
+  // ===============================================================================================
+  // STATIC
+  // ===============================================================================================
+
+  /**
+   * With modifiers field representation.
+   *
+   * @param dataType the data type
+   * @param variableName the variable name
+   * @param modifiers the modifiers
+   * @return the field representation
+   */
+  public static FieldRepresentation withModifiers(
+      String dataType, String variableName, String modifiers) {
+    return new FieldRepresentation(
+        dataType, variableName, new LinkedHashSet<>(), DataPurpose.any(), modifiers);
+  }
+
+  /**
+   * With annotations field representation.
+   *
+   * @param dataType the data type
+   * @param variableName the variable name
+   * @param annotations the annotations
+   * @param modifiers the modifiers
+   * @return the field representation
+   */
+  public static FieldRepresentation withAnnotations(
+      String dataType, String variableName, Set<String> annotations, String modifiers) {
+    return new FieldRepresentation(
+        dataType, variableName, annotations, DataPurpose.any(), modifiers);
+  }
+
+  // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
@@ -39,9 +81,11 @@ public class FieldRepresentation extends AbstractDataRepresentation {
    *
    * @param dataType the data type
    * @param variableName the variable name
+   * @param modifiers the modifiers
    */
-  public FieldRepresentation(String dataType, String variableName) {
+  public FieldRepresentation(String dataType, String variableName, String modifiers) {
     super(dataType, variableName);
+    this.modifiers = modifiers;
   }
 
   /**
@@ -49,46 +93,96 @@ public class FieldRepresentation extends AbstractDataRepresentation {
    *
    * @param dataType the data type
    * @param variableName the variable name
-   * @param dataPurpose the data business type
-   */
-  public FieldRepresentation(String dataType, String variableName, DataPurpose dataPurpose) {
-    super(dataType, variableName, dataPurpose);
-  }
-
-  /**
-   * Instantiates a new Field representation.
-   *
-   * @param dataType the data type
-   * @param variableName the variable name
-   * @param annotations the annotations
-   */
-  public FieldRepresentation(String dataType, String variableName, Set<String> annotations) {
-    super(dataType, variableName, annotations, DataPurpose.any());
-  }
-
-  /**
-   * Instantiates a new Field representation.
-   *
-   * @param dataType the data type
-   * @param variableName the variable name
-   * @param annotations the annotations
-   * @param dataPurpose the data business type
+   * @param dataPurpose the data purpose
+   * @param modifiers the modifiers
    */
   public FieldRepresentation(
-      String dataType, String variableName, Set<String> annotations, DataPurpose dataPurpose) {
+      String dataType, String variableName, DataPurpose dataPurpose, String modifiers) {
+    super(dataType, variableName, dataPurpose);
+    this.modifiers = modifiers;
+  }
+
+  /**
+   * Instantiates a new Field representation.
+   *
+   * @param dataType the data type
+   * @param variableName the variable name
+   * @param annotations the annotations
+   * @param modifiers the modifiers
+   */
+  public FieldRepresentation(
+      String dataType, String variableName, Set<String> annotations, String modifiers) {
+    super(dataType, variableName, annotations);
+    this.modifiers = modifiers;
+  }
+
+  /**
+   * Instantiates a new Field representation.
+   *
+   * @param dataType the data type
+   * @param variableName the variable name
+   * @param annotations the annotations
+   * @param dataPurpose the data purpose
+   * @param modifiers the modifiers
+   */
+  public FieldRepresentation(
+      String dataType,
+      String variableName,
+      Set<String> annotations,
+      DataPurpose dataPurpose,
+      String modifiers) {
     super(dataType, variableName, annotations, dataPurpose);
+    setModifiers(modifiers);
   }
 
   // ===============================================================================================
   // GETTERS
   // ===============================================================================================
 
+  /**
+   * Gets modifiers.
+   *
+   * @return the modifiers
+   */
+  public String getModifiers() {
+    return modifiers;
+  }
+
   // ===============================================================================================
   // GUARDS
   // ===============================================================================================
+
+  /**
+   * Sets modifiers.
+   *
+   * @param modifiers the modifiers
+   */
+  private void setModifiers(String modifiers) {
+    Assertion.isNotNull(modifiers, "modifiers is required");
+    this.modifiers = modifiers;
+  }
 
   // ===============================================================================================
   // OVERRIDES
   // ===============================================================================================
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    if (!super.equals(o)) {
+      return false;
+    }
+    FieldRepresentation that = (FieldRepresentation) o;
+    return Objects.equals(modifiers, that.modifiers);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(super.hashCode(), modifiers);
+  }
 }

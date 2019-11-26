@@ -72,9 +72,9 @@ public class BatchProcessSchedulerTransformer
   }
 
   @Override
-  public Set<FieldRepresentation> fieldRepresentations(
+  public Set<FieldRepresentation> stateFieldRepresentations(
       BatchProcessSchedulerRoute source, Object... args) {
-    return super.fieldRepresentations(source, args);
+    return super.stateFieldRepresentations(source, args);
   }
 
   @Override

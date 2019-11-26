@@ -79,8 +79,8 @@ public class ProviderCollectionTransformer
   }
 
   @Override
-  public Set<FieldRepresentation> fieldRepresentations(Provider source, Object... args) {
-    return super.fieldRepresentations(source, args);
+  public Set<FieldRepresentation> stateFieldRepresentations(Provider source, Object... args) {
+    return super.stateFieldRepresentations(source, args);
   }
 
   @Override

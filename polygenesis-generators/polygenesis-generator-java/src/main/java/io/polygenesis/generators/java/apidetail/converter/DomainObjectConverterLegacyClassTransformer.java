@@ -72,7 +72,7 @@ public class DomainObjectConverterLegacyClassTransformer
   // ===============================================================================================
 
   @Override
-  public Set<FieldRepresentation> fieldRepresentations(
+  public Set<FieldRepresentation> stateFieldRepresentations(
       DomainEntityConverter source, Object... args) {
     return new LinkedHashSet<>();
   }

@@ -79,8 +79,8 @@ public class WidgetTransformer extends AbstractDartClassTransformer<Widget, Func
   }
 
   @Override
-  public Set<FieldRepresentation> fieldRepresentations(Widget source, Object... args) {
-    return super.fieldRepresentations(source, args);
+  public Set<FieldRepresentation> stateFieldRepresentations(Widget source, Object... args) {
+    return super.stateFieldRepresentations(source, args);
   }
 
   @Override

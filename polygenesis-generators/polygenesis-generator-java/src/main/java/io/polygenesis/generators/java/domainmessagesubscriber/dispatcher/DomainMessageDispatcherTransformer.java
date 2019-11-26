@@ -74,7 +74,7 @@ public class DomainMessageDispatcherTransformer
 
   @SuppressWarnings("CPD-START")
   @Override
-  public Set<FieldRepresentation> fieldRepresentations(
+  public Set<FieldRepresentation> stateFieldRepresentations(
       DomainMessageDispatcher source, Object... args) {
     Set<FieldRepresentation> fieldRepresentations = new LinkedHashSet<>();
 
@@ -82,7 +82,9 @@ public class DomainMessageDispatcherTransformer
     // private static final Logger LOG =
     // LoggerFactory.getLogger(GdprBatchProcessMessageDispatcher.class);
 
-    fieldRepresentations.add(new FieldRepresentation("ObjectMapper", "objectMapper"));
+    fieldRepresentations.add(
+        FieldRepresentation.withModifiers(
+            "ObjectMapper", "objectMapper", dataTypeTransformer.getModifierPrivate()));
 
     return fieldRepresentations;
   }

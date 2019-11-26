@@ -30,6 +30,7 @@ import io.polygenesis.representations.code.MethodRepresentation;
 import io.polygenesis.representations.code.MethodRepresentationType;
 import io.polygenesis.transformers.java.legacy.AbstractLegacyClassTransformer;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.TreeSet;
@@ -60,13 +61,14 @@ public class PersistenceImplTestLegacyClassTransformer
   // ===============================================================================================
 
   @Override
-  public Set<FieldRepresentation> fieldRepresentations(Persistence source, Object... args) {
+  public Set<FieldRepresentation> stateFieldRepresentations(Persistence source, Object... args) {
     return new LinkedHashSet<>(
-        Arrays.asList(
-            new FieldRepresentation(
+        Collections.singletonList(
+            FieldRepresentation.withAnnotations(
                 TextConverter.toUpperCamel(source.getObjectName().getText()),
                 TextConverter.toLowerCamel(source.getObjectName().getText()),
-                new LinkedHashSet<>(Arrays.asList("@Autowired")))));
+                new LinkedHashSet<>(Arrays.asList("@Autowired")),
+                dataTypeTransformer.getModifierPrivate())));
   }
 
   @Override

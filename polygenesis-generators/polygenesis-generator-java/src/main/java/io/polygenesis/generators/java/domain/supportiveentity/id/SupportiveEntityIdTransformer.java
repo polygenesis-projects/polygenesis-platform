@@ -77,13 +77,22 @@ public class SupportiveEntityIdTransformer
   public Set<FieldRepresentation> staticFieldRepresentations(
       SupportiveEntityId source, Object... args) {
     return new LinkedHashSet<>(
-        Arrays.asList(new FieldRepresentation("static final long", "serialVersionUID = 1L")));
+        Arrays.asList(
+            FieldRepresentation.withModifiers(
+                "static final long",
+                "serialVersionUID = 1L",
+                dataTypeTransformer.getModifierPrivate())));
   }
 
   @Override
-  public Set<FieldRepresentation> fieldRepresentations(SupportiveEntityId source, Object... args) {
+  public Set<FieldRepresentation> stateFieldRepresentations(
+      SupportiveEntityId source, Object... args) {
     return new LinkedHashSet<>(
-        Arrays.asList(new FieldRepresentation("static final long", "serialVersionUID = 1L")));
+        Arrays.asList(
+            FieldRepresentation.withModifiers(
+                "static final long",
+                "serialVersionUID = 1L",
+                dataTypeTransformer.getModifierPrivate())));
   }
 
   @Override

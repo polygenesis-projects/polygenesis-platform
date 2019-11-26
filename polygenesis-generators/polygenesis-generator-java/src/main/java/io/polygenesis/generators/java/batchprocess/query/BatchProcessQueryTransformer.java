@@ -73,16 +73,17 @@ public class BatchProcessQueryTransformer
   }
 
   @Override
-  public Set<FieldRepresentation> fieldRepresentations(
+  public Set<FieldRepresentation> stateFieldRepresentations(
       BatchProcessMetamodel source, Object... args) {
     Set<FieldRepresentation> fieldRepresentations = new LinkedHashSet<>();
 
     fieldRepresentations.add(
-        new FieldRepresentation(
+        FieldRepresentation.withModifiers(
             TextConverter.toUpperCamel(
                 source.getQueryServiceMethod().getService().getServiceName().getText()),
             TextConverter.toLowerCamel(
-                source.getQueryServiceMethod().getService().getServiceName().getText())));
+                source.getQueryServiceMethod().getService().getServiceName().getText()),
+            dataTypeTransformer.getModifierPrivate()));
 
     return fieldRepresentations;
   }
@@ -94,7 +95,7 @@ public class BatchProcessQueryTransformer
 
     constructorRepresentations.add(
         createConstructorWithDirectAssignmentFromFieldRepresentations(
-            simpleObjectName(source, args), fieldRepresentations(source, args)));
+            simpleObjectName(source, args), stateFieldRepresentations(source, args)));
 
     return constructorRepresentations;
   }

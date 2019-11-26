@@ -32,6 +32,7 @@ import io.polygenesis.representations.code.FieldRepresentation;
 import io.polygenesis.representations.code.MethodRepresentation;
 import io.polygenesis.transformers.java.AbstractClassTransformer;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -75,11 +76,15 @@ public class ValueObjectTransformer extends AbstractClassTransformer<ValueObject
   @Override
   public Set<FieldRepresentation> staticFieldRepresentations(ValueObject source, Object... args) {
     return new LinkedHashSet<>(
-        Arrays.asList(new FieldRepresentation("static final long", "serialVersionUID = 1L")));
+        Collections.singletonList(
+            FieldRepresentation.withModifiers(
+                "static final long",
+                "serialVersionUID = 1L",
+                dataTypeTransformer.getModifierPrivate())));
   }
 
   @Override
-  public Set<FieldRepresentation> fieldRepresentations(ValueObject source, Object... args) {
+  public Set<FieldRepresentation> stateFieldRepresentations(ValueObject source, Object... args) {
     Set<FieldRepresentation> variables = new LinkedHashSet<>();
 
     source
@@ -88,9 +93,10 @@ public class ValueObjectTransformer extends AbstractClassTransformer<ValueObject
         .forEach(
             model ->
                 variables.add(
-                    new FieldRepresentation(
+                    FieldRepresentation.withModifiers(
                         dataTypeTransformer.convert(model.getDataType()),
-                        model.getVariableName().getText())));
+                        model.getVariableName().getText(),
+                        dataTypeTransformer.getModifierPrivate())));
 
     return variables;
   }
@@ -166,7 +172,7 @@ public class ValueObjectTransformer extends AbstractClassTransformer<ValueObject
     // ---------------------------------------------------------------------------------------------
     // Create constructor with parameters
     // ---------------------------------------------------------------------------------------------
-    Set<FieldRepresentation> fieldRepresentations = fieldRepresentations(source);
+    Set<FieldRepresentation> fieldRepresentations = stateFieldRepresentations(source);
 
     if (!fieldRepresentations.isEmpty()) {
       constructorRepresentations.add(
@@ -179,7 +185,7 @@ public class ValueObjectTransformer extends AbstractClassTransformer<ValueObject
 
   @Override
   public Set<MethodRepresentation> methodRepresentations(ValueObject source, Object... args) {
-    Set<FieldRepresentation> fieldRepresentations = fieldRepresentations(source);
+    Set<FieldRepresentation> fieldRepresentations = stateFieldRepresentations(source);
     return methodRepresentationsForGettersAndGuards(fieldRepresentations);
   }
 

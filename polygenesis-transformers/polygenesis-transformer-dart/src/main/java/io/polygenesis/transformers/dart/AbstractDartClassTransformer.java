@@ -92,13 +92,24 @@ public abstract class AbstractDartClassTransformer<S extends Nameable, F extends
         simpleObjectName(source, args),
         fullObjectName(source, args),
         staticFieldRepresentations(source, args),
-        fieldRepresentations(source, args),
+        stateFieldRepresentations(source, args),
+        dependencyFieldRepresentations(source, args),
         constructorRepresentations(source, args),
         methodRepresentations(source, args));
   }
 
   @Override
-  public Set<FieldRepresentation> fieldRepresentations(S source, Object... args) {
+  public Set<FieldRepresentation> staticFieldRepresentations(S source, Object... args) {
+    return null;
+  }
+
+  @Override
+  public Set<FieldRepresentation> stateFieldRepresentations(S source, Object... args) {
+    return new LinkedHashSet<>();
+  }
+
+  @Override
+  public Set<FieldRepresentation> dependencyFieldRepresentations(S source, Object... args) {
     return new LinkedHashSet<>();
   }
 

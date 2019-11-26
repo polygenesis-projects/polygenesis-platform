@@ -74,7 +74,7 @@ public class ModelTransformer extends AbstractTypescriptClassTransformer<Dto, Mo
   }
 
   @Override
-  public Set<FieldRepresentation> fieldRepresentations(Dto source, Object... args) {
+  public Set<FieldRepresentation> stateFieldRepresentations(Dto source, Object... args) {
     Set<FieldRepresentation> fieldRepresentations = new LinkedHashSet<>();
 
     source
@@ -83,10 +83,11 @@ public class ModelTransformer extends AbstractTypescriptClassTransformer<Dto, Mo
         .forEach(
             model ->
                 fieldRepresentations.add(
-                    new FieldRepresentation(
+                    FieldRepresentation.withModifiers(
                         makeVariableDataType(
                             model.isDataGroup() ? model.getAsDataObject().asDto() : model),
-                        makeVariableName(model))));
+                        makeVariableName(model),
+                        dataTypeTransformer.getModifierPrivate())));
 
     return fieldRepresentations;
   }

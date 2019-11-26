@@ -82,6 +82,7 @@ public abstract class AbstractClassTransformer<S extends Nameable, F extends Fun
   // ===============================================================================================
 
   @Override
+  @SuppressWarnings("CPD-START")
   public ClassRepresentation create(S source, Object... args) {
     return new ClassRepresentation(
         packageName(source, args),
@@ -92,7 +93,8 @@ public abstract class AbstractClassTransformer<S extends Nameable, F extends Fun
         simpleObjectName(source, args),
         fullObjectName(source, args),
         staticFieldRepresentations(source, args),
-        fieldRepresentations(source, args),
+        stateFieldRepresentations(source, args),
+        dependencyFieldRepresentations(source, args),
         constructorRepresentations(source, args),
         methodRepresentations(source, args));
   }
@@ -103,7 +105,12 @@ public abstract class AbstractClassTransformer<S extends Nameable, F extends Fun
   }
 
   @Override
-  public Set<FieldRepresentation> fieldRepresentations(S source, Object... args) {
+  public Set<FieldRepresentation> stateFieldRepresentations(S source, Object... args) {
+    return new LinkedHashSet<>();
+  }
+
+  @Override
+  public Set<FieldRepresentation> dependencyFieldRepresentations(S source, Object... args) {
     return new LinkedHashSet<>();
   }
 

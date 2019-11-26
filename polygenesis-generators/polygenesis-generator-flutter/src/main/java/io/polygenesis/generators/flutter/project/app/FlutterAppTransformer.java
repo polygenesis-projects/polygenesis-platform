@@ -87,8 +87,8 @@ public class FlutterAppTransformer extends AbstractDartClassTransformer<FlutterA
   }
 
   @Override
-  public Set<FieldRepresentation> fieldRepresentations(FlutterApp source, Object... args) {
-    return super.fieldRepresentations(source, args);
+  public Set<FieldRepresentation> stateFieldRepresentations(FlutterApp source, Object... args) {
+    return super.stateFieldRepresentations(source, args);
   }
 
   @Override

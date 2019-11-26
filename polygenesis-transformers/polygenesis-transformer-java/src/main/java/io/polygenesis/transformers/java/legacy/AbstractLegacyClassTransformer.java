@@ -78,6 +78,7 @@ public abstract class AbstractLegacyClassTransformer<S> extends AbstractTransfor
   // ===============================================================================================
 
   @Override
+  @SuppressWarnings("CPD-START")
   public TemplateData transform(S source, Object... args) {
     throw new UnsupportedOperationException("Must be implemented");
   }
@@ -93,7 +94,8 @@ public abstract class AbstractLegacyClassTransformer<S> extends AbstractTransfor
         simpleObjectName(source, args),
         fullObjectName(source, args),
         staticFieldRepresentations(source, args),
-        fieldRepresentations(source, args),
+        stateFieldRepresentations(source, args),
+        dependencyFieldRepresentations(source, args),
         constructorRepresentations(source, args),
         methodRepresentations(source, args));
   }
@@ -169,7 +171,7 @@ public abstract class AbstractLegacyClassTransformer<S> extends AbstractTransfor
    * @param modelGroup the model group
    * @return the set
    */
-  protected Set<FieldRepresentation> fieldRepresentations(DataObject modelGroup) {
+  protected Set<FieldRepresentation> stateFieldRepresentations(DataObject modelGroup) {
     Set<FieldRepresentation> variables = new LinkedHashSet<>();
 
     modelGroup
@@ -177,11 +179,17 @@ public abstract class AbstractLegacyClassTransformer<S> extends AbstractTransfor
         .forEach(
             model ->
                 variables.add(
-                    new FieldRepresentation(
+                    FieldRepresentation.withModifiers(
                         dataTypeTransformer.convert(model.getDataType()),
-                        model.getVariableName().getText())));
+                        model.getVariableName().getText(),
+                        dataTypeTransformer.getModifierPrivate())));
 
     return variables;
+  }
+
+  @Override
+  public Set<FieldRepresentation> dependencyFieldRepresentations(S source, Object... args) {
+    return new LinkedHashSet<>();
   }
 
   /**
@@ -623,6 +631,7 @@ public abstract class AbstractLegacyClassTransformer<S> extends AbstractTransfor
    * @param parameterRepresentations the parameter representations
    * @return the string
    */
+  @SuppressWarnings("CPD-END")
   private String callSuperWithParameters(Set<ParameterRepresentation> parameterRepresentations) {
     return parameterRepresentations
         .stream()

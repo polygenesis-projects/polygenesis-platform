@@ -71,11 +71,15 @@ public class BatchProcessAbstractSubscriberTransformer
   }
 
   @Override
-  public Set<FieldRepresentation> fieldRepresentations(
+  public Set<FieldRepresentation> stateFieldRepresentations(
       BatchProcessAbstractSubscriber source, Object... args) {
     Set<FieldRepresentation> fieldRepresentations = new LinkedHashSet<>();
 
-    fieldRepresentations.add(new FieldRepresentation("BatchProcessService", "batchProcessService"));
+    fieldRepresentations.add(
+        FieldRepresentation.withModifiers(
+            "BatchProcessService",
+            "batchProcessService",
+            dataTypeTransformer.getModifierPrivate()));
 
     return fieldRepresentations;
   }

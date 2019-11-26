@@ -82,15 +82,16 @@ public class RepositoryImplTransformer extends AbstractClassTransformer<Persiste
   }
 
   @Override
-  public Set<FieldRepresentation> fieldRepresentations(Persistence source, Object... args) {
+  public Set<FieldRepresentation> stateFieldRepresentations(Persistence source, Object... args) {
     Set<FieldRepresentation> fieldRepresentations = new LinkedHashSet<>();
 
     fieldRepresentations.add(
-        new FieldRepresentation(
+        FieldRepresentation.withModifiers(
             String.format(
                 "final %sSpringDataRepository",
                 TextConverter.toUpperCamel(source.getAggregateRootObjectName().getText())),
-            "springDataRepository"));
+            "springDataRepository",
+            dataTypeTransformer.getModifierPrivate()));
 
     return fieldRepresentations;
   }

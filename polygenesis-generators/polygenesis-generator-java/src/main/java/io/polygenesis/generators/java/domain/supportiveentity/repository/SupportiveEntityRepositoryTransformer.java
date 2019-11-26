@@ -76,9 +76,9 @@ public class SupportiveEntityRepositoryTransformer
   }
 
   @Override
-  public Set<FieldRepresentation> fieldRepresentations(
+  public Set<FieldRepresentation> stateFieldRepresentations(
       SupportiveEntityRepository source, Object... args) {
-    return super.fieldRepresentations(source, args);
+    return super.stateFieldRepresentations(source, args);
   }
 
   @Override
