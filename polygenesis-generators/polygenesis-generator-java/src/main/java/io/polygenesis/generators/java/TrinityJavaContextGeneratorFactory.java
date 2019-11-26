@@ -26,6 +26,8 @@ import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.MetamodelGenerator;
 import io.polygenesis.generators.java.api.JavaApiGeneratorFactory;
 import io.polygenesis.generators.java.api.JavaApiMetamodelGenerator;
+import io.polygenesis.generators.java.apiclients.rest.JavaApiRestGeneratorFactory;
+import io.polygenesis.generators.java.apiclients.rest.JavaApiRestMetamodelGenerator;
 import io.polygenesis.generators.java.apidetail.JavaApiDetailMetamodelGenerator;
 import io.polygenesis.generators.java.apidetail.JavaApiDetailMetamodelGeneratorFactory;
 import io.polygenesis.generators.java.aux.AuxMetamodelGenerator;
@@ -54,8 +56,6 @@ import io.polygenesis.generators.java.rdbms.JavaRdbmsMetamodelGenerator;
 import io.polygenesis.generators.java.rdbms.JavaRdbmsMetamodelGeneratorFactory;
 import io.polygenesis.generators.java.repository.inmemory.InMemoryMetamodelGenerator;
 import io.polygenesis.generators.java.repository.inmemory.InMemoryMetamodelGeneratorFactory;
-import io.polygenesis.generators.java.rest.JavaApiRestGeneratorFactory;
-import io.polygenesis.generators.java.rest.JavaApiRestMetamodelGenerator;
 import io.polygenesis.generators.sql.SqlGeneratorFactory;
 import io.polygenesis.generators.sql.SqlMetamodelGenerator;
 import java.nio.file.Path;
@@ -172,7 +172,8 @@ public final class TrinityJavaContextGeneratorFactory {
 
     if (trinityJavaContextGeneratorEnablement.isJavaApiRestGenerator()) {
       metamodelGenerators.add(
-          javaApiRestGenerator(exportPath, projectFolder, modulePrefix, context, rootPackageName));
+          javaApiRestGenerator(
+              exportPath, projectFolder, modulePrefix, contextName, rootPackageName));
     }
 
     if (trinityJavaContextGeneratorEnablement.isJavaDomainGenerator()) {
@@ -287,7 +288,7 @@ public final class TrinityJavaContextGeneratorFactory {
       String exportPath,
       String projectFolder,
       String modulePrefix,
-      String context,
+      ContextName contextName,
       String rootPackageName) {
     return JavaApiRestGeneratorFactory.newInstance(
         Paths.get(
@@ -296,7 +297,7 @@ public final class TrinityJavaContextGeneratorFactory {
             modulePrefix + "-" + API_CLIENTS,
             modulePrefix + "-" + API_CLIENT_REST_SPRING),
         new PackageName(rootPackageName),
-        new ObjectName(context));
+        contextName);
   }
 
   // AUX

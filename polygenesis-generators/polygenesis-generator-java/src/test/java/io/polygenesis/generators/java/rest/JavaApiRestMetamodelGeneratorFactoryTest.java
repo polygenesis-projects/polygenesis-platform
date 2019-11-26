@@ -23,8 +23,10 @@ package io.polygenesis.generators.java.rest;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import io.polygenesis.commons.valueobjects.ObjectName;
+import io.polygenesis.commons.valueobjects.ContextName;
 import io.polygenesis.commons.valueobjects.PackageName;
+import io.polygenesis.generators.java.apiclients.rest.JavaApiRestGeneratorFactory;
+import io.polygenesis.generators.java.apiclients.rest.JavaApiRestMetamodelGenerator;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Paths;
@@ -55,7 +57,7 @@ public class JavaApiRestMetamodelGeneratorFactoryTest {
   public void shouldCreateNewInstance() {
     JavaApiRestMetamodelGenerator javaApiGenerator =
         JavaApiRestGeneratorFactory.newInstance(
-            Paths.get("tmp"), new PackageName("com.oregor"), new ObjectName("someContext"));
+            Paths.get("tmp"), new PackageName("com.oregor"), new ContextName("someContext"));
     assertThat(javaApiGenerator).isNotNull();
   }
 }

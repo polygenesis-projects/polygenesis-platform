@@ -26,12 +26,14 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-import io.polygenesis.commons.valueobjects.ObjectName;
+import io.polygenesis.commons.valueobjects.ContextName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.MetamodelRepository;
-import io.polygenesis.generators.java.rest.constants.RestConstantsProjectionExporter;
-import io.polygenesis.generators.java.rest.resource.ResourceExporter;
-import io.polygenesis.generators.java.rest.resource.testing.ResourceTestExporter;
+import io.polygenesis.generators.java.apiclients.rest.JavaApiRestMetamodelGenerator;
+import io.polygenesis.generators.java.apiclients.rest.aspect.RestServiceAspectGenerator;
+import io.polygenesis.generators.java.apiclients.rest.constants.RestConstantsProjectionExporter;
+import io.polygenesis.generators.java.apiclients.rest.resource.ResourceExporter;
+import io.polygenesis.generators.java.apiclients.rest.resourcetest.ResourceTestExporter;
 import io.polygenesis.models.rest.Resource;
 import io.polygenesis.models.rest.RestMetamodelRepository;
 import java.nio.file.Path;
@@ -51,10 +53,11 @@ public class JavaApiRestMetamodelGeneratorTest {
 
   private Path generationPath;
   private PackageName rootPackageName;
-  private ObjectName contextName;
+  private ContextName contextName;
   private ResourceExporter resourceExporter;
   private ResourceTestExporter resourceTestExporter;
   private RestConstantsProjectionExporter restConstantsProjectionExporter;
+  private RestServiceAspectGenerator restServiceAspectGenerator;
   private JavaApiRestMetamodelGenerator javaApiRestGenerator;
 
   /** Sets up. */
@@ -62,10 +65,12 @@ public class JavaApiRestMetamodelGeneratorTest {
   public void setUp() {
     generationPath = Paths.get("tmp");
     rootPackageName = new PackageName("com.oregor");
-    contextName = new ObjectName("someContext");
+    contextName = new ContextName("someContext");
     resourceExporter = mock(ResourceExporter.class);
     resourceTestExporter = mock(ResourceTestExporter.class);
     restConstantsProjectionExporter = mock(RestConstantsProjectionExporter.class);
+    restServiceAspectGenerator = mock(RestServiceAspectGenerator.class);
+
     javaApiRestGenerator =
         new JavaApiRestMetamodelGenerator(
             generationPath,
@@ -73,7 +78,8 @@ public class JavaApiRestMetamodelGeneratorTest {
             contextName,
             resourceExporter,
             resourceTestExporter,
-            restConstantsProjectionExporter);
+            restConstantsProjectionExporter,
+            restServiceAspectGenerator);
   }
 
   /** Should generate. */

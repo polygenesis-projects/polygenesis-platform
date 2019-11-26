@@ -141,7 +141,7 @@ public class BatchProcessDispatcherRouteTransformer
   public Set<String> imports(BatchProcessDispatcherRoute source, Object... args) {
     Set<String> imports = new TreeSet<>();
 
-    imports.add("org.apache.camel.spring.SpringRouteBuilder");
+    imports.add("com.oregor.trinity4j.shared.camel.DeadLetterRouteBuilder");
     imports.add("org.springframework.stereotype.Component");
     imports.add("org.springframework.beans.factory.annotation.Value");
 
@@ -170,6 +170,6 @@ public class BatchProcessDispatcherRouteTransformer
 
   @Override
   public String fullObjectName(BatchProcessDispatcherRoute source, Object... args) {
-    return String.format("%s extends SpringRouteBuilder", simpleObjectName(source, args));
+    return String.format("%s extends DeadLetterRouteBuilder", simpleObjectName(source, args));
   }
 }

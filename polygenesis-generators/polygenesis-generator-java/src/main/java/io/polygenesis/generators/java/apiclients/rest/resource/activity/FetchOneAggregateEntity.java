@@ -18,34 +18,34 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.generators.java.apidetail.aspect;
+package io.polygenesis.generators.java.apiclients.rest.resource.activity;
 
-import io.polygenesis.abstraction.thing.AbstractActivityRegistry;
-import io.polygenesis.abstraction.thing.Function;
-import io.polygenesis.abstraction.thing.Purpose;
-import io.polygenesis.abstraction.thing.ScopePurposeTuple;
-import io.polygenesis.core.AbstractionScope;
-import io.polygenesis.core.FreemarkerTemplateEngine;
-import io.polygenesis.core.TemplateEngine;
-import io.polygenesis.generators.java.apidetail.aspect.activity.AroundActivityGenerator;
-import io.polygenesis.generators.java.apidetail.aspect.activity.AroundActivityTransformer;
+import io.polygenesis.commons.freemarker.FreemarkerService;
+import io.polygenesis.models.rest.Endpoint;
+import io.polygenesis.representations.code.MethodRepresentation;
+import java.util.Map;
 
 /**
- * The type Service aspect activity registry.
+ * The type Fetch one aggregate entity.
  *
  * @author Christos Tsakostas
  */
-public class ServiceAspectActivityRegistry extends AbstractActivityRegistry<Function> {
+public class FetchOneAggregateEntity extends AbstractEndpointImplementor
+    implements EndpointImplementor {
 
   // ===============================================================================================
-  // STATIC
+  // IMPLEMENTATIONS
   // ===============================================================================================
 
-  static {
-    TemplateEngine templateEngine = new FreemarkerTemplateEngine();
+  @Override
+  public String implementationFor(
+      FreemarkerService freemarkerService,
+      Endpoint endpoint,
+      MethodRepresentation methodRepresentation) {
+    Map<String, Object> dataModel =
+        aggregateEntityDataModelWithThingIdentity(endpoint, methodRepresentation);
 
-    scopeAndPurposeMap.put(
-        new ScopePurposeTuple(AbstractionScope.apiDetail(), Purpose.apiDetailServiceAspectAround()),
-        new AroundActivityGenerator(new AroundActivityTransformer(), templateEngine));
+    return freemarkerService.exportToString(
+        dataModel, "polygenesis-implementation-java-rest/fetch-one-aggregate-entity.ftl");
   }
 }

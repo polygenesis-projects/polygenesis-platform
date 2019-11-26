@@ -18,14 +18,12 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.generators.java.batchprocessscheduler.scheduler;
+package io.polygenesis.generators.java.apiclients.rest.aspect;
 
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.core.TemplateData;
-import io.polygenesis.representations.code.ConstructorRepresentation;
-import io.polygenesis.representations.code.FieldRepresentation;
 import io.polygenesis.representations.code.MethodRepresentation;
 import io.polygenesis.transformers.java.AbstractClassTransformer;
 import java.util.Arrays;
@@ -36,26 +34,26 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /**
- * The type Batch process scheduler transformer.
+ * The type Rest service aspect transformer.
  *
  * @author Christos Tsakostas
  */
-public class BatchProcessSchedulerTransformer
-    extends AbstractClassTransformer<BatchProcessSchedulerRoute, Function> {
+public class RestServiceAspectTransformer
+    extends AbstractClassTransformer<RestServiceAspect, Function> {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
-   * Instantiates a new Batch process scheduler transformer.
+   * Instantiates a new Rest service aspect transformer.
    *
    * @param dataTypeTransformer the data type transformer
    * @param methodTransformer the method transformer
    */
-  public BatchProcessSchedulerTransformer(
+  public RestServiceAspectTransformer(
       DataTypeTransformer dataTypeTransformer,
-      BatchProcessMethodSchedulerTransformer methodTransformer) {
+      RestServiceAspectMethodTransformer methodTransformer) {
     super(dataTypeTransformer, methodTransformer);
   }
 
@@ -64,74 +62,58 @@ public class BatchProcessSchedulerTransformer
   // ===============================================================================================
 
   @Override
-  public TemplateData transform(BatchProcessSchedulerRoute source, Object... args) {
+  public TemplateData transform(RestServiceAspect source, Object... args) {
     Map<String, Object> dataModel = new HashMap<>();
-    dataModel.put("representation", create(source));
+    dataModel.put("representation", create(source, args));
 
     return new TemplateData(dataModel, "polygenesis-representation-java/Class.java.ftl");
   }
 
   @Override
-  public Set<FieldRepresentation> fieldRepresentations(
-      BatchProcessSchedulerRoute source, Object... args) {
-    return super.fieldRepresentations(source, args);
-  }
-
-  @Override
-  public Set<ConstructorRepresentation> constructorRepresentations(
-      BatchProcessSchedulerRoute source, Object... args) {
-    return super.constructorRepresentations(source, args);
-  }
-
-  @Override
-  public Set<MethodRepresentation> methodRepresentations(
-      BatchProcessSchedulerRoute source, Object... args) {
+  public Set<MethodRepresentation> methodRepresentations(RestServiceAspect source, Object... args) {
     Set<MethodRepresentation> methodRepresentations = new LinkedHashSet<>();
 
-    methodRepresentations.add(methodTransformer.create(source.getConfigure(), args));
+    methodRepresentations.add(methodTransformer.create(source.getAround(), args));
 
     return methodRepresentations;
   }
 
   @Override
-  public String packageName(BatchProcessSchedulerRoute source, Object... args) {
-    return source.getPackageName().getText();
+  public String packageName(RestServiceAspect source, Object... args) {
+    return source.getRootPackageName().getText();
   }
 
   @Override
-  public Set<String> imports(BatchProcessSchedulerRoute source, Object... args) {
+  public Set<String> imports(RestServiceAspect source, Object... args) {
     Set<String> imports = new TreeSet<>();
 
-    imports.add("com.oregor.trinity4j.shared.camel.DeadLetterRouteBuilder");
+    imports.addAll(methodTransformer.imports(source.getAround(), args));
+
+    imports.add("com.oregor.trinity4j.api.AbstractRestServiceAspect");
+    imports.add("org.aspectj.lang.ProceedingJoinPoint");
+    imports.add("org.aspectj.lang.annotation.Around");
+    imports.add("org.aspectj.lang.annotation.Aspect");
     imports.add("org.springframework.stereotype.Component");
-    imports.add("org.springframework.beans.factory.annotation.Value");
+
+    // TODO
+    imports.remove("java.lang.Object");
 
     return imports;
   }
 
   @Override
-  public Set<String> annotations(BatchProcessSchedulerRoute source, Object... args) {
-    return new LinkedHashSet<>(Arrays.asList("@Component"));
+  public Set<String> annotations(RestServiceAspect source, Object... args) {
+    return new LinkedHashSet<>(Arrays.asList("@Aspect", "@Component"));
   }
 
   @Override
-  public String description(BatchProcessSchedulerRoute source, Object... args) {
+  public String description(RestServiceAspect source, Object... args) {
     return String.format(
-        "The %s.", TextConverter.toUpperCamelSpaces(simpleObjectName(source, args)));
+        "The %s.", TextConverter.toUpperCamelSpaces(source.getObjectName().getText()));
   }
 
   @Override
-  public String modifiers(BatchProcessSchedulerRoute source, Object... args) {
-    return super.modifiers(source, args);
-  }
-
-  @Override
-  public String simpleObjectName(BatchProcessSchedulerRoute source, Object... args) {
-    return String.format("%sSchedulerRoute", super.simpleObjectName(source, args));
-  }
-
-  @Override
-  public String fullObjectName(BatchProcessSchedulerRoute source, Object... args) {
-    return String.format("%s extends DeadLetterRouteBuilder", simpleObjectName(source, args));
+  public String fullObjectName(RestServiceAspect source, Object... args) {
+    return String.format("%s extends AbstractRestServiceAspect", simpleObjectName(source, args));
   }
 }

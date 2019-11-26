@@ -18,34 +18,34 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.generators.java.apidetail.aspect;
+package io.polygenesis.generators.java.apiclients.rest.aspect;
 
-import io.polygenesis.abstraction.thing.AbstractActivityRegistry;
-import io.polygenesis.abstraction.thing.Function;
-import io.polygenesis.abstraction.thing.Purpose;
-import io.polygenesis.abstraction.thing.ScopePurposeTuple;
-import io.polygenesis.core.AbstractionScope;
-import io.polygenesis.core.FreemarkerTemplateEngine;
+import io.polygenesis.core.AbstractUnitTemplateGenerator;
+import io.polygenesis.core.Exporter;
 import io.polygenesis.core.TemplateEngine;
-import io.polygenesis.generators.java.apidetail.aspect.activity.AroundActivityGenerator;
-import io.polygenesis.generators.java.apidetail.aspect.activity.AroundActivityTransformer;
 
 /**
- * The type Service aspect activity registry.
+ * The type Rest service aspect generator.
  *
  * @author Christos Tsakostas
  */
-public class ServiceAspectActivityRegistry extends AbstractActivityRegistry<Function> {
+public class RestServiceAspectGenerator extends AbstractUnitTemplateGenerator<RestServiceAspect> {
 
   // ===============================================================================================
-  // STATIC
+  // CONSTRUCTOR(S)
   // ===============================================================================================
 
-  static {
-    TemplateEngine templateEngine = new FreemarkerTemplateEngine();
-
-    scopeAndPurposeMap.put(
-        new ScopePurposeTuple(AbstractionScope.apiDetail(), Purpose.apiDetailServiceAspectAround()),
-        new AroundActivityGenerator(new AroundActivityTransformer(), templateEngine));
+  /**
+   * Instantiates a new Rest service aspect generator.
+   *
+   * @param templateTransformer the template transformer
+   * @param templateEngine the template engine
+   * @param exporter the exporter
+   */
+  public RestServiceAspectGenerator(
+      RestServiceAspectTransformer templateTransformer,
+      TemplateEngine templateEngine,
+      Exporter exporter) {
+    super(templateTransformer, templateEngine, exporter);
   }
 }

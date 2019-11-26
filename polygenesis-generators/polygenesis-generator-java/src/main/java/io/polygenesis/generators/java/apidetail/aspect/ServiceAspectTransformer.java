@@ -26,8 +26,8 @@ import io.polygenesis.commons.valueobjects.ContextName;
 import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.core.TemplateData;
 import io.polygenesis.representations.code.ConstructorRepresentation;
-import io.polygenesis.representations.code.FieldRepresentation;
 import io.polygenesis.representations.code.MethodRepresentation;
+import io.polygenesis.representations.code.ParameterRepresentation;
 import io.polygenesis.transformers.java.AbstractClassTransformer;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -71,39 +71,24 @@ public class ServiceAspectTransformer extends AbstractClassTransformer<ServiceAs
   }
 
   @Override
-  public Set<FieldRepresentation> staticFieldRepresentations(ServiceAspect source, Object... args) {
-    Set<FieldRepresentation> fieldRepresentations = new LinkedHashSet<>();
+  public Set<ConstructorRepresentation> constructorRepresentations(
+      ServiceAspect source, Object... args) {
+    final ContextName contextName = (ContextName) args[1];
 
-    fieldRepresentations.add(
-        new FieldRepresentation(
-            "static final Logger LOG =",
-            String.format("LoggerFactory.getLogger(%s.class)", simpleObjectName(source, args))));
+    Set<ConstructorRepresentation> constructorRepresentations = new LinkedHashSet<>();
+    Set<ParameterRepresentation> parameterRepresentations = new LinkedHashSet<>();
 
-    return fieldRepresentations;
-  }
-
-  @Override
-  public Set<FieldRepresentation> fieldRepresentations(ServiceAspect source, Object... args) {
-    ContextName contextName = (ContextName) args[1];
-    Set<FieldRepresentation> fieldRepresentations = new LinkedHashSet<>();
-
-    fieldRepresentations.add(
-        new FieldRepresentation(
+    parameterRepresentations.add(
+        new ParameterRepresentation(
             String.format(
                 "%sPropertyFileAuxService", TextConverter.toUpperCamel(contextName.getText())),
             "propertyFileAuxService"));
 
-    return fieldRepresentations;
-  }
-
-  @Override
-  public Set<ConstructorRepresentation> constructorRepresentations(
-      ServiceAspect source, Object... args) {
-    Set<ConstructorRepresentation> constructorRepresentations = new LinkedHashSet<>();
-
     constructorRepresentations.add(
-        createConstructorWithDirectAssignmentFromFieldRepresentations(
-            simpleObjectName(source, args), fieldRepresentations(source, args)));
+        createConstructorWithImplementation(
+            simpleObjectName(source, args),
+            parameterRepresentations,
+            "\t\tsuper(propertyFileAuxService, \"en\");"));
 
     return constructorRepresentations;
   }
@@ -113,7 +98,6 @@ public class ServiceAspectTransformer extends AbstractClassTransformer<ServiceAs
     Set<MethodRepresentation> methodRepresentations = new LinkedHashSet<>();
 
     methodRepresentations.add(methodTransformer.create(source.getAround(), args));
-    methodRepresentations.add(methodTransformer.create(source.getGetReturnValue(), args));
 
     return methodRepresentations;
   }
@@ -128,24 +112,12 @@ public class ServiceAspectTransformer extends AbstractClassTransformer<ServiceAs
     Set<String> imports = new TreeSet<>();
 
     imports.addAll(methodTransformer.imports(source.getAround(), args));
-    imports.addAll(methodTransformer.imports(source.getGetReturnValue(), args));
 
-    imports.add("com.oregor.trinity4j.api.ApiError");
-    imports.add("com.oregor.trinity4j.api.ApiRequest");
-    imports.add("com.oregor.trinity4j.domain.DomainException");
-    imports.add("java.util.Locale");
+    imports.add("com.oregor.trinity4j.api.AbstractServiceAspect");
     imports.add("org.aspectj.lang.ProceedingJoinPoint");
-    imports.add("org.aspectj.lang.Signature");
     imports.add("org.aspectj.lang.annotation.Around");
     imports.add("org.aspectj.lang.annotation.Aspect");
-    imports.add("org.aspectj.lang.reflect.MethodSignature");
     imports.add("org.springframework.stereotype.Component");
-    imports.add("org.slf4j.Logger");
-    imports.add("org.slf4j.LoggerFactory");
-
-    // TODO
-    imports.remove("java.lang.Class<?>");
-    imports.remove("java.lang.Object");
 
     return imports;
   }
@@ -159,5 +131,10 @@ public class ServiceAspectTransformer extends AbstractClassTransformer<ServiceAs
   public String description(ServiceAspect source, Object... args) {
     return String.format(
         "The %s.", TextConverter.toUpperCamelSpaces(source.getObjectName().getText()));
+  }
+
+  @Override
+  public String fullObjectName(ServiceAspect source, Object... args) {
+    return String.format("%s extends AbstractServiceAspect", simpleObjectName(source, args));
   }
 }

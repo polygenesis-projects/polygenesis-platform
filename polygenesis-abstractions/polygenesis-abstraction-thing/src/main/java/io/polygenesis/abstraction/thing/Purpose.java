@@ -51,8 +51,12 @@ public class Purpose implements Serializable {
   // API DETAIL
   // ===============================================================================================
   private static final String API_DETAIL_SERVICE_ASPECT_AROUND = "API_DETAIL_SERVICE_ASPECT_AROUND";
-  private static final String API_DETAIL_SERVICE_ASPECT_GET_RETURN_VALUE =
-      "API_DETAIL_SERVICE_ASPECT_GET_RETURN_VALUE";
+
+  // ===============================================================================================
+  // API CLIENT REST
+  // ===============================================================================================
+  private static final String API_CLIENT_REST_SERVICE_ASPECT_AROUND =
+      "API_CLIENT_REST_SERVICE_ASPECT_AROUND";
 
   // ===============================================================================================
   // AGGREGATE ROOTS
@@ -217,13 +221,17 @@ public class Purpose implements Serializable {
     return new Purpose(API_DETAIL_SERVICE_ASPECT_AROUND, CqsType.COMMAND);
   }
 
+  // ===============================================================================================
+  // API CLIENT REST
+  // ===============================================================================================
+
   /**
-   * Api detail service aspect get return value purpose.
+   * Api client rest service aspect around purpose.
    *
    * @return the purpose
    */
-  public static Purpose apiDetailServiceAspectGetReturnValue() {
-    return new Purpose(API_DETAIL_SERVICE_ASPECT_GET_RETURN_VALUE, CqsType.COMMAND);
+  public static Purpose apiClientRestServiceAspectAround() {
+    return new Purpose(API_CLIENT_REST_SERVICE_ASPECT_AROUND, CqsType.COMMAND);
   }
 
   // ===============================================================================================

@@ -37,12 +37,12 @@ import io.polygenesis.deducers.stateredux.StateReduxDeducerFactory;
 import io.polygenesis.deducers.ui.UiContextDeducerFactory;
 import io.polygenesis.generators.java.api.JavaApiGeneratorFactory;
 import io.polygenesis.generators.java.api.JavaApiMetamodelGenerator;
+import io.polygenesis.generators.java.apiclients.rest.JavaApiRestGeneratorFactory;
 import io.polygenesis.generators.java.apidetail.JavaApiDetailMetamodelGenerator;
 import io.polygenesis.generators.java.apidetail.JavaApiDetailMetamodelGeneratorFactory;
 import io.polygenesis.generators.java.domain.JavaDomainMetamodelGeneratorFactory;
 import io.polygenesis.generators.java.domainservicedetail.DomainServiceDetailMetamodelGeneratorFactory;
 import io.polygenesis.generators.java.rdbms.JavaRdbmsMetamodelGeneratorFactory;
-import io.polygenesis.generators.java.rest.JavaApiRestGeneratorFactory;
 import io.polygenesis.generators.sql.SqlGeneratorFactory;
 import io.polygenesis.models.api.ApiDeducerFactory;
 import io.polygenesis.models.domain.DomainDeducerFactory;
@@ -183,7 +183,7 @@ public class GenesisDefault {
                     modulePrefix + "-" + API_CLIENTS,
                     modulePrefix + "-" + API_CLIENT_REST_SPRING),
                 packageName,
-                new ObjectName(context)),
+                new ContextName(context)),
             JavaRdbmsMetamodelGeneratorFactory.newInstance(
                 Paths.get(
                     exportPath,
