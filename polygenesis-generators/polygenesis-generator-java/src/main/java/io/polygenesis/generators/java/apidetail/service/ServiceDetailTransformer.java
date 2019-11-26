@@ -76,7 +76,7 @@ public class ServiceDetailTransformer
   }
 
   @Override
-  public Set<FieldRepresentation> fieldRepresentations(
+  public Set<FieldRepresentation> stateFieldRepresentations(
       ServiceImplementation source, Object... args) {
     Set<FieldRepresentation> fieldRepresentations = new LinkedHashSet<>();
 
@@ -85,9 +85,10 @@ public class ServiceDetailTransformer
         .forEach(
             dependency ->
                 fieldRepresentations.add(
-                    new FieldRepresentation(
+                    FieldRepresentation.withModifiers(
                         TextConverter.toUpperCamel(dependency.getObjectName().getText()),
-                        TextConverter.toLowerCamel(dependency.getVariableName().getText()))));
+                        TextConverter.toLowerCamel(dependency.getVariableName().getText()),
+                        dataTypeTransformer.getModifierPrivate())));
 
     return fieldRepresentations;
   }
@@ -98,7 +99,7 @@ public class ServiceDetailTransformer
     return new LinkedHashSet<>(
         Arrays.asList(
             createConstructorWithDirectAssignmentFromFieldRepresentations(
-                simpleObjectName(source), fieldRepresentations(source))));
+                simpleObjectName(source), stateFieldRepresentations(source))));
   }
 
   @Override

@@ -65,7 +65,7 @@ public class ResourceLegacyClassTransformer extends AbstractLegacyClassTransform
   // ===============================================================================================
 
   @Override
-  public Set<FieldRepresentation> fieldRepresentations(Resource source, Object... args) {
+  public Set<FieldRepresentation> stateFieldRepresentations(Resource source, Object... args) {
     Set<FieldRepresentation> fieldRepresentations = new LinkedHashSet<>();
 
     source
@@ -73,9 +73,10 @@ public class ResourceLegacyClassTransformer extends AbstractLegacyClassTransform
         .forEach(
             service ->
                 fieldRepresentations.add(
-                    new FieldRepresentation(
+                    FieldRepresentation.withModifiers(
                         TextConverter.toUpperCamel(service.getServiceName().getText()),
-                        TextConverter.toLowerCamel(service.getServiceName().getText()))));
+                        TextConverter.toLowerCamel(service.getServiceName().getText()),
+                        dataTypeTransformer.getModifierPrivate())));
 
     return fieldRepresentations;
   }
@@ -86,7 +87,7 @@ public class ResourceLegacyClassTransformer extends AbstractLegacyClassTransform
     return new LinkedHashSet<>(
         Arrays.asList(
             createConstructorWithDirectAssignmentFromFieldRepresentations(
-                source.getObjectName().getText(), fieldRepresentations(source))));
+                source.getObjectName().getText(), stateFieldRepresentations(source))));
   }
 
   @Override

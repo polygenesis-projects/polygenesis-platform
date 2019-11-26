@@ -76,4 +76,9 @@ public class FromDataTypeToTypescriptConverter {
     dataTypeMap.put(PrimitiveType.LONG, "number");
     dataTypeMap.put(PrimitiveType.BOOLEAN, "boolean");
   }
+
+  // TODO: remove
+  public String getModifierPrivate() {
+    return "private";
+  }
 }

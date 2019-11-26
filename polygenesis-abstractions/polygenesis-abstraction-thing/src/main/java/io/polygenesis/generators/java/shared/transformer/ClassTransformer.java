@@ -54,13 +54,22 @@ public interface ClassTransformer<S> extends TemplateTransformer<S> {
   Set<FieldRepresentation> staticFieldRepresentations(S source, Object... args);
 
   /**
-   * Field representations set.
+   * State field representations set.
    *
    * @param source the source
    * @param args the args
    * @return the set
    */
-  Set<FieldRepresentation> fieldRepresentations(S source, Object... args);
+  Set<FieldRepresentation> stateFieldRepresentations(S source, Object... args);
+
+  /**
+   * Dependency field representations set.
+   *
+   * @param source the source
+   * @param args the args
+   * @return the set
+   */
+  Set<FieldRepresentation> dependencyFieldRepresentations(S source, Object... args);
 
   /**
    * Constructor representations set.

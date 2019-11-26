@@ -33,6 +33,7 @@ import java.util.stream.Stream;
  */
 public class DartDataTypeTransformer implements DataTypeTransformer {
 
+  private static final String MODIFIER_FINAL = "final";
   private static final String MODIFIER_PUBLIC = "public";
   private static final String MODIFIER_PROTECTED = "protected";
   private static final String MODIFIER_PRIVATE = "private";
@@ -77,6 +78,11 @@ public class DartDataTypeTransformer implements DataTypeTransformer {
   @Override
   public String getModifierPrivate() {
     return MODIFIER_PRIVATE;
+  }
+
+  @Override
+  public String getModifierPrivateFinal() {
+    return MODIFIER_PRIVATE + " " + MODIFIER_FINAL;
   }
 
   @Override

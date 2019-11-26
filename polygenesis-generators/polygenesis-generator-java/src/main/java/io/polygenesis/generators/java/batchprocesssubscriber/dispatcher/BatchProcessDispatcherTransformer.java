@@ -74,15 +74,13 @@ public class BatchProcessDispatcherTransformer
 
   @SuppressWarnings("CPD-START")
   @Override
-  public Set<FieldRepresentation> fieldRepresentations(
+  public Set<FieldRepresentation> dependencyFieldRepresentations(
       BatchProcessDispatcher source, Object... args) {
     Set<FieldRepresentation> fieldRepresentations = new LinkedHashSet<>();
 
-    // TODO
-    // private static final Logger LOG =
-    // LoggerFactory.getLogger(GdprBatchProcessMessageDispatcher.class);
-
-    fieldRepresentations.add(new FieldRepresentation("ObjectMapper", "objectMapper"));
+    fieldRepresentations.add(
+        FieldRepresentation.withModifiers(
+            "ObjectMapper", "objectMapper", dataTypeTransformer.getModifierPrivateFinal()));
 
     return fieldRepresentations;
   }

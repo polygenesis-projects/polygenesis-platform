@@ -40,7 +40,7 @@ public class ModelRepresentable {
   // DEPENDENCIES
   // ===============================================================================================
 
-  private final FromDataTypeToTypescriptConverter fromDataTypeToTypescriptConverter;
+  private final FromDataTypeToTypescriptConverter dataTypeToTypescriptConverter;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -49,10 +49,10 @@ public class ModelRepresentable {
   /**
    * Instantiates a new model representable.
    *
-   * @param fromDataTypeToTypescriptConverter the from data type to typescript converter
+   * @param dataTypeToTypescriptConverter the from data type to typescript converter
    */
-  public ModelRepresentable(FromDataTypeToTypescriptConverter fromDataTypeToTypescriptConverter) {
-    this.fromDataTypeToTypescriptConverter = fromDataTypeToTypescriptConverter;
+  public ModelRepresentable(FromDataTypeToTypescriptConverter dataTypeToTypescriptConverter) {
+    this.dataTypeToTypescriptConverter = dataTypeToTypescriptConverter;
   }
 
   // ===============================================================================================
@@ -91,9 +91,10 @@ public class ModelRepresentable {
           .forEach(
               model ->
                   fieldRepresentations.add(
-                      new FieldRepresentation(
-                          fromDataTypeToTypescriptConverter.getDeclaredVariableType(model),
-                          model.getVariableName().getText())));
+                      FieldRepresentation.withModifiers(
+                          dataTypeToTypescriptConverter.getDeclaredVariableType(model),
+                          model.getVariableName().getText(),
+                          dataTypeToTypescriptConverter.getModifierPrivate())));
 
     } else {
       throw new IllegalArgumentException();

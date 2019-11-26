@@ -57,6 +57,13 @@ public interface DataTypeTransformer {
   String getModifierPrivate();
 
   /**
+   * Gets modifier private final.
+   *
+   * @return the modifier private final
+   */
+  String getModifierPrivateFinal();
+
+  /**
    * Gets modifier abstract.
    *
    * @return the modifier abstract

@@ -89,8 +89,8 @@ public class AggregateRootTransformer
   }
 
   @Override
-  public Set<FieldRepresentation> fieldRepresentations(AggregateRoot source, Object... args) {
-    return super.fieldRepresentations(source, args);
+  public Set<FieldRepresentation> stateFieldRepresentations(AggregateRoot source, Object... args) {
+    return super.stateFieldRepresentations(source, args);
   }
 
   @Override

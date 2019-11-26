@@ -56,7 +56,7 @@ public abstract class AbstractRepositoryImplLegacyClassTransformer
   // ===============================================================================================
 
   @Override
-  public Set<FieldRepresentation> fieldRepresentations(Persistence source, Object... args) {
+  public Set<FieldRepresentation> stateFieldRepresentations(Persistence source, Object... args) {
     return new LinkedHashSet<>();
   }
 

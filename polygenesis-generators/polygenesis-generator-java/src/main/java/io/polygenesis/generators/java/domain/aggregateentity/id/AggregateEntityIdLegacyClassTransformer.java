@@ -59,9 +59,14 @@ public class AggregateEntityIdLegacyClassTransformer
   // ===============================================================================================
 
   @Override
-  public Set<FieldRepresentation> fieldRepresentations(AggregateEntity source, Object... args) {
+  public Set<FieldRepresentation> stateFieldRepresentations(
+      AggregateEntity source, Object... args) {
     return new LinkedHashSet<>(
-        Arrays.asList(new FieldRepresentation("static final long", "serialVersionUID = 1L")));
+        Arrays.asList(
+            FieldRepresentation.withModifiers(
+                "static final long",
+                "serialVersionUID = 1L",
+                dataTypeTransformer.getModifierPrivate())));
   }
 
   @Override

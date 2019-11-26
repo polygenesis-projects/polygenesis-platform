@@ -36,9 +36,10 @@ import ${ import };
 ${ annotation }
 </#list>
 ${ representation.modifiers }<#if representation.modifiers != ""> </#if>class ${ representation.fullObjectName } {
-<#if representation.getMethodRepresentationsBy('CONSTRUCTOR')?size == 0
-  && representation.fieldRepresentations?size == 0
-  && representation.staticFieldRepresentations?size == 0>
+<#if representation.staticFieldRepresentations?size == 0
+  && representation.stateFieldRepresentations?size == 0
+  && representation.dependencyFieldRepresentations?size == 0
+  && representation.methodRepresentations?size == 0>
   // No operation
 </#if>
 <#if representation.serialVersionUID??>
@@ -56,20 +57,33 @@ ${ representation.modifiers }<#if representation.modifiers != ""> </#if>class ${
     <#list staticFieldRepresentation.annotations as annotation>
         ${ annotation }
     </#list>
-  private ${ staticFieldRepresentation.dataType } ${ staticFieldRepresentation.variableName };
+  ${ staticFieldRepresentation.modifiers } ${ staticFieldRepresentation.dataType } ${ staticFieldRepresentation.variableName };
 </#list>
-<#if representation.fieldRepresentations?size gt 0>
+<#if representation.stateFieldRepresentations?size gt 0>
 
   // ===============================================================================================
-  // STATE / DEPENDENCIES
+  // STATE
   // ===============================================================================================
 
 </#if>
-<#list representation.fieldRepresentations as fieldRepresentation>
+<#list representation.stateFieldRepresentations as fieldRepresentation>
   <#list fieldRepresentation.annotations as annotation>
   ${ annotation }
   </#list>
-  private ${ fieldRepresentation.dataType } ${ fieldRepresentation.variableName };
+  ${ fieldRepresentation.modifiers } ${ fieldRepresentation.dataType } ${ fieldRepresentation.variableName };
+</#list>
+<#if representation.dependencyFieldRepresentations?size gt 0>
+
+  // ===============================================================================================
+  // DEPENDENCIES
+  // ===============================================================================================
+
+</#if>
+<#list representation.dependencyFieldRepresentations as fieldRepresentation>
+    <#list fieldRepresentation.annotations as annotation>
+        ${ annotation }
+    </#list>
+  ${ fieldRepresentation.modifiers } ${ fieldRepresentation.dataType } ${ fieldRepresentation.variableName };
 </#list>
 <#if representation.getMethodRepresentationsBy('CONSTRUCTOR')?size gt 0>
 

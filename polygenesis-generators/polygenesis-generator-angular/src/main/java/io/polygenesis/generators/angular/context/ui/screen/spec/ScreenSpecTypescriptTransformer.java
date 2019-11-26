@@ -73,8 +73,8 @@ public class ScreenSpecTypescriptTransformer
   }
 
   @Override
-  public Set<FieldRepresentation> fieldRepresentations(Screen source, Object... args) {
-    return super.fieldRepresentations(source, args);
+  public Set<FieldRepresentation> stateFieldRepresentations(Screen source, Object... args) {
+    return super.stateFieldRepresentations(source, args);
   }
 
   @Override

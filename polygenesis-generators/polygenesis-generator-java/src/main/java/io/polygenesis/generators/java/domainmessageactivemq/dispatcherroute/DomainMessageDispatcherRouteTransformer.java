@@ -74,17 +74,20 @@ public class DomainMessageDispatcherRouteTransformer
   }
 
   @Override
-  public Set<FieldRepresentation> fieldRepresentations(
+  public Set<FieldRepresentation> stateFieldRepresentations(
       DomainMessageDispatcherRoute source, Object... args) {
     Set<FieldRepresentation> fieldRepresentations = new LinkedHashSet<>();
 
     fieldRepresentations.add(
-        new FieldRepresentation(
+        FieldRepresentation.withModifiers(
             TextConverter.toUpperCamel(
                 source.getDomainMessageDispatcher().getObjectName().getText()),
-            "dispatcher"));
+            "dispatcher",
+            dataTypeTransformer.getModifierPrivate()));
 
-    fieldRepresentations.add(new FieldRepresentation("String", "endpoint"));
+    fieldRepresentations.add(
+        FieldRepresentation.withModifiers(
+            "String", "endpoint", dataTypeTransformer.getModifierPrivate()));
 
     return fieldRepresentations;
   }

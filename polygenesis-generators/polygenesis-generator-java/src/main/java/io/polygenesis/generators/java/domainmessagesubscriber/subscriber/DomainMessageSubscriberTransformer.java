@@ -76,13 +76,13 @@ public class DomainMessageSubscriberTransformer
   }
 
   @Override
-  public Set<FieldRepresentation> fieldRepresentations(
+  public Set<FieldRepresentation> stateFieldRepresentations(
       DomainMessageSubscriber source, Object... args) {
     Set<FieldRepresentation> fieldRepresentations = new LinkedHashSet<>();
 
     if (source.getEnsureExistenceServiceMethod() != null) {
       fieldRepresentations.add(
-          new FieldRepresentation(
+          FieldRepresentation.withModifiers(
               "final "
                   + TextConverter.toUpperCamel(
                       source
@@ -91,21 +91,19 @@ public class DomainMessageSubscriberTransformer
                           .getServiceName()
                           .getText()),
               TextConverter.toLowerCamel(
-                  source
-                      .getEnsureExistenceServiceMethod()
-                      .getService()
-                      .getServiceName()
-                      .getText())));
+                  source.getEnsureExistenceServiceMethod().getService().getServiceName().getText()),
+              dataTypeTransformer.getModifierPrivate()));
     }
 
     if (source.getCommandServiceMethod() != null) {
       fieldRepresentations.add(
-          new FieldRepresentation(
+          FieldRepresentation.withModifiers(
               "final "
                   + TextConverter.toUpperCamel(
                       source.getCommandServiceMethod().getService().getServiceName().getText()),
               TextConverter.toLowerCamel(
-                  source.getCommandServiceMethod().getService().getServiceName().getText())));
+                  source.getCommandServiceMethod().getService().getServiceName().getText()),
+              dataTypeTransformer.getModifierPrivate()));
     }
 
     return fieldRepresentations;

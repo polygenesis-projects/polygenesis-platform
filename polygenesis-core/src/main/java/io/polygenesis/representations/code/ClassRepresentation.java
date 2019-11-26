@@ -22,6 +22,7 @@ package io.polygenesis.representations.code;
 
 import static java.util.stream.Collectors.toCollection;
 
+import io.polygenesis.commons.assertion.Assertion;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -34,7 +35,8 @@ import java.util.Set;
 public class ClassRepresentation extends AbstractObjectRepresentation {
 
   private Set<FieldRepresentation> staticFieldRepresentations;
-  private Set<FieldRepresentation> fieldRepresentations;
+  private Set<FieldRepresentation> stateFieldRepresentations;
+  private Set<FieldRepresentation> dependencyFieldRepresentations;
   private Set<ConstructorRepresentation> constructorRepresentations;
   private Set<MethodRepresentation> methodRepresentations;
 
@@ -53,7 +55,8 @@ public class ClassRepresentation extends AbstractObjectRepresentation {
    * @param simpleObjectName the simple object name
    * @param fullObjectName the full object name
    * @param staticFieldRepresentations the static field representations
-   * @param fieldRepresentations the field representations
+   * @param stateFieldRepresentations the state field representations
+   * @param dependencyFieldRepresentations the dependency field representations
    * @param constructorRepresentations the constructor representations
    * @param methodRepresentations the method representations
    */
@@ -66,7 +69,8 @@ public class ClassRepresentation extends AbstractObjectRepresentation {
       String simpleObjectName,
       String fullObjectName,
       Set<FieldRepresentation> staticFieldRepresentations,
-      Set<FieldRepresentation> fieldRepresentations,
+      Set<FieldRepresentation> stateFieldRepresentations,
+      Set<FieldRepresentation> dependencyFieldRepresentations,
       Set<ConstructorRepresentation> constructorRepresentations,
       Set<MethodRepresentation> methodRepresentations) {
     super(
@@ -78,7 +82,8 @@ public class ClassRepresentation extends AbstractObjectRepresentation {
         simpleObjectName,
         fullObjectName);
     setStaticFieldRepresentations(staticFieldRepresentations);
-    setFieldRepresentations(fieldRepresentations);
+    setStateFieldRepresentations(stateFieldRepresentations);
+    setDependencyFieldRepresentations(dependencyFieldRepresentations);
     setConstructorRepresentations(constructorRepresentations);
     setMethodRepresentations(methodRepresentations);
   }
@@ -101,8 +106,17 @@ public class ClassRepresentation extends AbstractObjectRepresentation {
    *
    * @return the field representations
    */
-  public Set<FieldRepresentation> getFieldRepresentations() {
-    return fieldRepresentations;
+  public Set<FieldRepresentation> getStateFieldRepresentations() {
+    return stateFieldRepresentations;
+  }
+
+  /**
+   * Gets dependency field representations.
+   *
+   * @return the dependency field representations
+   */
+  public Set<FieldRepresentation> getDependencyFieldRepresentations() {
+    return dependencyFieldRepresentations;
   }
 
   /**
@@ -154,16 +168,30 @@ public class ClassRepresentation extends AbstractObjectRepresentation {
    * @param staticFieldRepresentations the static field representations
    */
   private void setStaticFieldRepresentations(Set<FieldRepresentation> staticFieldRepresentations) {
+    Assertion.isNotNull(staticFieldRepresentations, "staticFieldRepresentations is required");
     this.staticFieldRepresentations = staticFieldRepresentations;
   }
 
   /**
    * Sets field representations.
    *
-   * @param fieldRepresentations the field representations
+   * @param stateFieldRepresentations the field representations
    */
-  private void setFieldRepresentations(Set<FieldRepresentation> fieldRepresentations) {
-    this.fieldRepresentations = fieldRepresentations;
+  private void setStateFieldRepresentations(Set<FieldRepresentation> stateFieldRepresentations) {
+    Assertion.isNotNull(stateFieldRepresentations, "stateFieldRepresentations is required");
+    this.stateFieldRepresentations = stateFieldRepresentations;
+  }
+
+  /**
+   * Sets dependency field representations.
+   *
+   * @param dependencyFieldRepresentations the dependency field representations
+   */
+  public void setDependencyFieldRepresentations(
+      Set<FieldRepresentation> dependencyFieldRepresentations) {
+    Assertion.isNotNull(
+        dependencyFieldRepresentations, "dependencyFieldRepresentations is required");
+    this.dependencyFieldRepresentations = dependencyFieldRepresentations;
   }
 
   /**
@@ -173,6 +201,7 @@ public class ClassRepresentation extends AbstractObjectRepresentation {
    */
   private void setConstructorRepresentations(
       Set<ConstructorRepresentation> constructorRepresentations) {
+    Assertion.isNotNull(constructorRepresentations, "constructorRepresentations is required");
     this.constructorRepresentations = constructorRepresentations;
   }
 
@@ -182,6 +211,7 @@ public class ClassRepresentation extends AbstractObjectRepresentation {
    * @param methodRepresentations the method representations
    */
   private void setMethodRepresentations(Set<MethodRepresentation> methodRepresentations) {
+    Assertion.isNotNull(methodRepresentations, "methodRepresentations is required");
     this.methodRepresentations = methodRepresentations;
   }
 
@@ -202,7 +232,8 @@ public class ClassRepresentation extends AbstractObjectRepresentation {
     }
     ClassRepresentation that = (ClassRepresentation) o;
     return Objects.equals(staticFieldRepresentations, that.staticFieldRepresentations)
-        && Objects.equals(fieldRepresentations, that.fieldRepresentations)
+        && Objects.equals(stateFieldRepresentations, that.stateFieldRepresentations)
+        && Objects.equals(dependencyFieldRepresentations, that.dependencyFieldRepresentations)
         && Objects.equals(constructorRepresentations, that.constructorRepresentations)
         && Objects.equals(methodRepresentations, that.methodRepresentations);
   }
@@ -212,7 +243,8 @@ public class ClassRepresentation extends AbstractObjectRepresentation {
     return Objects.hash(
         super.hashCode(),
         staticFieldRepresentations,
-        fieldRepresentations,
+        stateFieldRepresentations,
+        dependencyFieldRepresentations,
         constructorRepresentations,
         methodRepresentations);
   }

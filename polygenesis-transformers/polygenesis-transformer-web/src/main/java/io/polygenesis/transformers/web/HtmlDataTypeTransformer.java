@@ -80,6 +80,11 @@ public class HtmlDataTypeTransformer implements DataTypeTransformer {
   }
 
   @Override
+  public String getModifierPrivateFinal() {
+    return MODIFIER_PRIVATE;
+  }
+
+  @Override
   public String getModifierAbstract() {
     return MODIFIER_ABSTRACT;
   }

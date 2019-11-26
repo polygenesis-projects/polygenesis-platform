@@ -108,7 +108,7 @@ public class DtoTransformer extends AbstractClassTransformer<Dto, DtoMethod> {
   }
 
   @Override
-  public Set<FieldRepresentation> fieldRepresentations(Dto source, Object... args) {
+  public Set<FieldRepresentation> stateFieldRepresentations(Dto source, Object... args) {
     Set<FieldRepresentation> fieldRepresentations = new LinkedHashSet<>();
 
     source
@@ -119,10 +119,11 @@ public class DtoTransformer extends AbstractClassTransformer<Dto, DtoMethod> {
               String variableName = makeVariableName(model);
               if (!variableName.equalsIgnoreCase("someArrays")) {
                 fieldRepresentations.add(
-                    new FieldRepresentation(
+                    FieldRepresentation.withModifiers(
                         makeVariableDataType(
                             model.isDataGroup() ? model.getAsDataObject().asDto() : model),
-                        variableName));
+                        variableName,
+                        dataTypeTransformer.getModifierPrivate()));
               }
             });
 
@@ -161,7 +162,7 @@ public class DtoTransformer extends AbstractClassTransformer<Dto, DtoMethod> {
     // ---------------------------------------------------------------------------------------------
     // Create constructor with parameters
     // ---------------------------------------------------------------------------------------------
-    Set<FieldRepresentation> fieldRepresentations = fieldRepresentations(source);
+    Set<FieldRepresentation> fieldRepresentations = stateFieldRepresentations(source);
 
     if (!fieldRepresentations.isEmpty()) {
       constructorRepresentations.add(
@@ -186,7 +187,7 @@ public class DtoTransformer extends AbstractClassTransformer<Dto, DtoMethod> {
   public Set<MethodRepresentation> methodRepresentations(Dto source, Object... args) {
     Set<MethodRepresentation> methodRepresentations = new LinkedHashSet<>();
 
-    Set<FieldRepresentation> fieldRepresentations = fieldRepresentations(source);
+    Set<FieldRepresentation> fieldRepresentations = stateFieldRepresentations(source);
     methodRepresentations.addAll(methodRepresentationsForGettersAndSetters(fieldRepresentations));
 
     if (source.getDtoType().equals(DtoType.COLLECTION_RECORD)) {

@@ -74,13 +74,17 @@ public class BatchProcessPublisherTransformer
   }
 
   @Override
-  public Set<FieldRepresentation> fieldRepresentations(
+  public Set<FieldRepresentation> stateFieldRepresentations(
       BatchProcessMessagePublisher source, Object... args) {
     Set<FieldRepresentation> fieldRepresentations = new LinkedHashSet<>();
 
-    fieldRepresentations.add(new FieldRepresentation("ProducerTemplate", "producerTemplate"));
+    fieldRepresentations.add(
+        FieldRepresentation.withModifiers(
+            "ProducerTemplate", "producerTemplate", dataTypeTransformer.getModifierPrivate()));
 
-    fieldRepresentations.add(new FieldRepresentation("String", "endpoint"));
+    fieldRepresentations.add(
+        FieldRepresentation.withModifiers(
+            "String", "endpoint", dataTypeTransformer.getModifierPrivate()));
 
     return fieldRepresentations;
   }
