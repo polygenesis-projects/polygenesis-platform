@@ -17,19 +17,4 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-    Signature signature = proceedingJoinPoint.getSignature();
-    MethodSignature methodSignature = (MethodSignature) signature;
-
-    Class<?> returnType = methodSignature.getReturnType();
-
-    Object[] paramValues = proceedingJoinPoint.getArgs();
-    ApiRequest apiRequest = ApiRequest.class.cast(paramValues[0]);
-
-    try {
-      return proceedingJoinPoint.proceed();
-    } catch (DomainException e) {
-      return getReturnValue(returnType, apiRequest, e.getErrorCode(), e.getArguments());
-    } catch (Exception e) {
-      e.printStackTrace();
-      return getReturnValue(returnType, apiRequest, "UNEXPECTED", null);
-    }
+    return super.around(proceedingJoinPoint);

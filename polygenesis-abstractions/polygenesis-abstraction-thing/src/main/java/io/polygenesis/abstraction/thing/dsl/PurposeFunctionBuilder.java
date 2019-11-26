@@ -190,7 +190,7 @@ public class PurposeFunctionBuilder {
                       functionName, TextConverter.toUpperCamel(thing.getThingName().getText()))),
               thing.makePackageName(rootPackageNameVo, thing));
 
-      // ---------------------------------------------------------------------------------------------
+      // -------------------------------------------------------------------------------------------
 
       returnValueDataObject.addData(
           DataPrimitive.ofDataBusinessType(
@@ -200,9 +200,9 @@ public class PurposeFunctionBuilder {
                   String.format(
                       "%sId", TextConverter.toLowerCamel(thing.getThingName().getText())))));
 
-      // ---------------------------------------------------------------------------------------------
+      // -------------------------------------------------------------------------------------------
       outputs.forEach(returnValueDataObject::addData);
-      // ---------------------------------------------------------------------------------------------
+      // -------------------------------------------------------------------------------------------
 
       // -------------------------------------------------------------------------------------------
       // FUNCTION

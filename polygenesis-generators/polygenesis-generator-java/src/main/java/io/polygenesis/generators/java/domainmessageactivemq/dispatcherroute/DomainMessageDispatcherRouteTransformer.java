@@ -141,9 +141,9 @@ public class DomainMessageDispatcherRouteTransformer
   public Set<String> imports(DomainMessageDispatcherRoute source, Object... args) {
     Set<String> imports = new TreeSet<>();
 
-    imports.add("org.apache.camel.spring.SpringRouteBuilder");
     imports.add("org.springframework.stereotype.Component");
     imports.add("org.springframework.beans.factory.annotation.Value");
+    imports.add("com.oregor.trinity4j.shared.camel.DeadLetterRouteBuilder");
 
     return imports;
   }
@@ -155,6 +155,6 @@ public class DomainMessageDispatcherRouteTransformer
 
   @Override
   public String fullObjectName(DomainMessageDispatcherRoute source, Object... args) {
-    return String.format("%s extends SpringRouteBuilder", simpleObjectName(source, args));
+    return String.format("%s extends DeadLetterRouteBuilder", simpleObjectName(source, args));
   }
 }

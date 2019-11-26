@@ -18,7 +18,7 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.generators.java.apidetail.aspect;
+package io.polygenesis.generators.java.apiclients.rest.aspect;
 
 import io.polygenesis.abstraction.thing.AbstractActivityRegistry;
 import io.polygenesis.abstraction.thing.Function;
@@ -27,15 +27,15 @@ import io.polygenesis.abstraction.thing.ScopePurposeTuple;
 import io.polygenesis.core.AbstractionScope;
 import io.polygenesis.core.FreemarkerTemplateEngine;
 import io.polygenesis.core.TemplateEngine;
-import io.polygenesis.generators.java.apidetail.aspect.activity.AroundActivityGenerator;
-import io.polygenesis.generators.java.apidetail.aspect.activity.AroundActivityTransformer;
+import io.polygenesis.generators.java.apiclients.rest.aspect.activity.AroundActivityGenerator;
+import io.polygenesis.generators.java.apiclients.rest.aspect.activity.AroundActivityTransformer;
 
 /**
- * The type Service aspect activity registry.
+ * The type Rest service aspect activity registry.
  *
  * @author Christos Tsakostas
  */
-public class ServiceAspectActivityRegistry extends AbstractActivityRegistry<Function> {
+public class RestServiceAspectActivityRegistry extends AbstractActivityRegistry<Function> {
 
   // ===============================================================================================
   // STATIC

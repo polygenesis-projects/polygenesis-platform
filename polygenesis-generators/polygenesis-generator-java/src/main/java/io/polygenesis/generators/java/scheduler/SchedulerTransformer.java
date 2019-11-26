@@ -99,7 +99,7 @@ public class SchedulerTransformer extends AbstractClassTransformer<Scheduler, Se
   public Set<String> imports(Scheduler source, Object... args) {
     Set<String> imports = new TreeSet<>();
 
-    imports.add("org.apache.camel.spring.SpringRouteBuilder");
+    imports.add("com.oregor.trinity4j.shared.camel.DeadLetterRouteBuilder");
     imports.add("org.springframework.stereotype.Component");
 
     return imports;
@@ -127,6 +127,6 @@ public class SchedulerTransformer extends AbstractClassTransformer<Scheduler, Se
 
   @Override
   public String fullObjectName(Scheduler source, Object... args) {
-    return String.format("%s extends SpringRouteBuilder", simpleObjectName(source, args));
+    return String.format("%s extends DeadLetterRouteBuilder", simpleObjectName(source, args));
   }
 }

@@ -17,6 +17,8 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
+    // TODO: errorHandler(deadLetterChannel(endpoint + DEAD));
+
     from("scheduler:${ data.context }ContextDomainMessageTrigger?delay=100")
         .id("scheduler.${ data.context }ContextDomainMessageTrigger")
         .startupOrder(${ data.startupOrder })

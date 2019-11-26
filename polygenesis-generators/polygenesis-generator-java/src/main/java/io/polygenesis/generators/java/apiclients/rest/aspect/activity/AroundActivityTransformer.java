@@ -18,34 +18,34 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.generators.java.apidetail.aspect;
+package io.polygenesis.generators.java.apiclients.rest.aspect.activity;
 
-import io.polygenesis.abstraction.thing.AbstractActivityRegistry;
+import io.polygenesis.abstraction.thing.ActivityTemplateTransformer;
 import io.polygenesis.abstraction.thing.Function;
-import io.polygenesis.abstraction.thing.Purpose;
-import io.polygenesis.abstraction.thing.ScopePurposeTuple;
-import io.polygenesis.core.AbstractionScope;
-import io.polygenesis.core.FreemarkerTemplateEngine;
-import io.polygenesis.core.TemplateEngine;
-import io.polygenesis.generators.java.apidetail.aspect.activity.AroundActivityGenerator;
-import io.polygenesis.generators.java.apidetail.aspect.activity.AroundActivityTransformer;
+import io.polygenesis.core.TemplateData;
+import io.polygenesis.generators.java.apidetail.service.activity.AbstractServiceMethodImplementationTransformer;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * The type Service aspect activity registry.
+ * The type Around activity transformer.
  *
  * @author Christos Tsakostas
  */
-public class ServiceAspectActivityRegistry extends AbstractActivityRegistry<Function> {
+public class AroundActivityTransformer extends AbstractServiceMethodImplementationTransformer
+    implements ActivityTemplateTransformer<Function> {
 
   // ===============================================================================================
-  // STATIC
+  // OVERRIDES
   // ===============================================================================================
 
-  static {
-    TemplateEngine templateEngine = new FreemarkerTemplateEngine();
+  @SuppressWarnings({"unchecked"})
+  @Override
+  public TemplateData transform(Function source, Object... args) {
+    Map<String, Object> dataModel = new HashMap<>();
+    dataModel.put("data", new AroundActivityTemplateData());
 
-    scopeAndPurposeMap.put(
-        new ScopePurposeTuple(AbstractionScope.apiDetail(), Purpose.apiDetailServiceAspectAround()),
-        new AroundActivityGenerator(new AroundActivityTransformer(), templateEngine));
+    return new TemplateData(
+        dataModel, "polygenesis-trinity-java/api-detail/" + "aspect/around.java.ftl");
   }
 }

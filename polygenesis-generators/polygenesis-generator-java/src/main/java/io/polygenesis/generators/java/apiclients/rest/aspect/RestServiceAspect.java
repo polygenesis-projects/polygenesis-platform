@@ -18,7 +18,7 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.generators.java.apidetail.aspect;
+package io.polygenesis.generators.java.apiclients.rest.aspect;
 
 import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.abstraction.thing.Activity;
@@ -41,11 +41,11 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
- * The type Service aspect.
+ * The type Rest service aspect.
  *
  * @author Christos Tsakostas
  */
-public class ServiceAspect implements Nameable {
+public class RestServiceAspect implements Nameable {
 
   // ===============================================================================================
   // STATE
@@ -61,15 +61,15 @@ public class ServiceAspect implements Nameable {
   // ===============================================================================================
 
   /**
-   * Instantiates a new Service aspect.
+   * Instantiates a new Rest service aspect.
    *
    * @param contextName the context name
    * @param rootPackageName the root package name
    */
-  public ServiceAspect(ContextName contextName, PackageName rootPackageName) {
+  public RestServiceAspect(ContextName contextName, PackageName rootPackageName) {
     this.contextName = contextName;
     this.rootPackageName = rootPackageName;
-    this.name = new Name(String.format("%sServiceAspect", contextName.getText()));
+    this.name = new Name(String.format("%sRestServiceAspect", contextName.getText()));
     this.around = makeAround();
   }
 
@@ -127,11 +127,12 @@ public class ServiceAspect implements Nameable {
   private Function makeAround() {
     Set<KeyValue> keyValues = new LinkedHashSet<>();
 
-    Thing thing = ThingBuilder.apiDetailServiceAspect().setThingName("serviceAspect").createThing();
+    Thing thing =
+        ThingBuilder.apiDetailServiceAspect().setThingName("restServiceAspect").createThing();
 
     return new Function(
         thing,
-        Purpose.apiDetailServiceAspectAround(),
+        Purpose.apiClientRestServiceAspectAround(),
         new FunctionName("around"),
         new ReturnValue(
             new DataObject(
