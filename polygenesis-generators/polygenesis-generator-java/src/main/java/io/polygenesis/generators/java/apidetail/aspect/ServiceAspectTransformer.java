@@ -71,6 +71,18 @@ public class ServiceAspectTransformer extends AbstractClassTransformer<ServiceAs
   }
 
   @Override
+  public Set<FieldRepresentation> staticFieldRepresentations(ServiceAspect source, Object... args) {
+    Set<FieldRepresentation> fieldRepresentations = new LinkedHashSet<>();
+
+    fieldRepresentations.add(
+        new FieldRepresentation(
+            "static final Logger LOG =",
+            String.format("LoggerFactory.getLogger(%s.class)", simpleObjectName(source, args))));
+
+    return fieldRepresentations;
+  }
+
+  @Override
   public Set<FieldRepresentation> fieldRepresentations(ServiceAspect source, Object... args) {
     ContextName contextName = (ContextName) args[1];
     Set<FieldRepresentation> fieldRepresentations = new LinkedHashSet<>();
@@ -128,6 +140,8 @@ public class ServiceAspectTransformer extends AbstractClassTransformer<ServiceAs
     imports.add("org.aspectj.lang.annotation.Aspect");
     imports.add("org.aspectj.lang.reflect.MethodSignature");
     imports.add("org.springframework.stereotype.Component");
+    imports.add("org.slf4j.Logger");
+    imports.add("org.slf4j.LoggerFactory");
 
     // TODO
     imports.remove("java.lang.Class<?>");
