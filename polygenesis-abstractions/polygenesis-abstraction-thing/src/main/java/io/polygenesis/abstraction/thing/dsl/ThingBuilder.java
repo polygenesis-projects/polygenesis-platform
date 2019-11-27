@@ -116,6 +116,15 @@ public class ThingBuilder extends AbstractThingBuilder<ThingBuilder> {
   }
 
   /**
+   * Api client rest thing builder.
+   *
+   * @return the thing builder
+   */
+  public static ThingBuilder apiClientRest() {
+    return new ThingBuilder(new LinkedHashSet<>(Arrays.asList(AbstractionScope.apiClientRest())));
+  }
+
+  /**
    * Api detail service aspect thing builder.
    *
    * @return the thing builder

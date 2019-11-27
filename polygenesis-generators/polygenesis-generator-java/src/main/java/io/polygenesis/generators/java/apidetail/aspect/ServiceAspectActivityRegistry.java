@@ -45,7 +45,7 @@ public class ServiceAspectActivityRegistry extends AbstractActivityRegistry<Func
     TemplateEngine templateEngine = new FreemarkerTemplateEngine();
 
     scopeAndPurposeMap.put(
-        new ScopePurposeTuple(AbstractionScope.apiDetail(), Purpose.apiDetailServiceAspectAround()),
+        new ScopePurposeTuple(AbstractionScope.apiDetail(), Purpose.aspectAround()),
         new AroundActivityGenerator(new AroundActivityTransformer(), templateEngine));
   }
 }

@@ -98,11 +98,7 @@ public class RestServiceAspectMethodTransformer extends AbstractMethodTransforme
 
   @Override
   public String implementation(Function source, Object... args) {
-    if (restServiceAspectActivityRegistry.isActivitySupportedFor(source)) {
-      return restServiceAspectActivityRegistry.activityFor(source, args);
-    } else {
-      return super.implementation(source, args);
-    }
+    return restServiceAspectActivityRegistry.activityFor(source, args);
   }
 
   @Override
