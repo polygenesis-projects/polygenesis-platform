@@ -123,16 +123,14 @@ public class RestServiceAspect implements Nameable {
   // PRIVATE
   // ===============================================================================================
 
-  @SuppressWarnings("CPD-END")
   private Function makeAround() {
     Set<KeyValue> keyValues = new LinkedHashSet<>();
 
-    Thing thing =
-        ThingBuilder.apiDetailServiceAspect().setThingName("restServiceAspect").createThing();
+    Thing thing = ThingBuilder.apiClientRest().setThingName("restServiceAspect").createThing();
 
     return new Function(
         thing,
-        Purpose.apiClientRestServiceAspectAround(),
+        Purpose.aspectAround(),
         new FunctionName("around"),
         new ReturnValue(
             new DataObject(

@@ -47,7 +47,13 @@ public abstract class AbstractActivityRegistry<S extends FunctionProvider>
   @Override
   public String activityFor(S source, Object... args) {
     return activityGenerator(
-            getAbstractionScopeAsOptional(source).orElseThrow(IllegalArgumentException::new),
+            getAbstractionScopeAsOptional(source)
+                .orElseThrow(
+                    () ->
+                        new UnsupportedOperationException(
+                            String.format(
+                                "No activity found for method=%s",
+                                source.getFunction().getName().getText()))),
             source)
         .generate(source, args);
   }

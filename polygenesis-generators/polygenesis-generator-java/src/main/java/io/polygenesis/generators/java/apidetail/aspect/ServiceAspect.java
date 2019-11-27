@@ -123,7 +123,6 @@ public class ServiceAspect implements Nameable {
   // PRIVATE
   // ===============================================================================================
 
-  @SuppressWarnings("CPD-END")
   private Function makeAround() {
     Set<KeyValue> keyValues = new LinkedHashSet<>();
 
@@ -131,7 +130,7 @@ public class ServiceAspect implements Nameable {
 
     return new Function(
         thing,
-        Purpose.apiDetailServiceAspectAround(),
+        Purpose.aspectAround(),
         new FunctionName("around"),
         new ReturnValue(
             new DataObject(

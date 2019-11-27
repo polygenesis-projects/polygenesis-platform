@@ -45,7 +45,7 @@ public class RestServiceAspectActivityRegistry extends AbstractActivityRegistry<
     TemplateEngine templateEngine = new FreemarkerTemplateEngine();
 
     scopeAndPurposeMap.put(
-        new ScopePurposeTuple(AbstractionScope.apiDetail(), Purpose.apiDetailServiceAspectAround()),
+        new ScopePurposeTuple(AbstractionScope.apiClientRest(), Purpose.aspectAround()),
         new AroundActivityGenerator(new AroundActivityTransformer(), templateEngine));
   }
 }

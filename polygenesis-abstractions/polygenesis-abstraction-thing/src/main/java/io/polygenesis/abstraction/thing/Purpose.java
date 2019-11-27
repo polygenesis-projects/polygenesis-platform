@@ -48,15 +48,9 @@ public class Purpose implements Serializable {
   private static final String FETCH_PAGED_COLLECTION = "FETCH_PAGED_COLLECTION";
 
   // ===============================================================================================
-  // API DETAIL
+  // ASPECT
   // ===============================================================================================
-  private static final String API_DETAIL_SERVICE_ASPECT_AROUND = "API_DETAIL_SERVICE_ASPECT_AROUND";
-
-  // ===============================================================================================
-  // API CLIENT REST
-  // ===============================================================================================
-  private static final String API_CLIENT_REST_SERVICE_ASPECT_AROUND =
-      "API_CLIENT_REST_SERVICE_ASPECT_AROUND";
+  private static final String ASPECT_AROUND = "ASPECT_AROUND";
 
   // ===============================================================================================
   // AGGREGATE ROOTS
@@ -209,30 +203,21 @@ public class Purpose implements Serializable {
   }
 
   // ===============================================================================================
-  // API DETAIL
+  // ASPECT
   // ===============================================================================================
 
   /**
-   * Api detail service aspect around purpose.
+   * Aspect around purpose.
    *
    * @return the purpose
    */
-  public static Purpose apiDetailServiceAspectAround() {
-    return new Purpose(API_DETAIL_SERVICE_ASPECT_AROUND, CqsType.COMMAND);
+  public static Purpose aspectAround() {
+    return new Purpose(ASPECT_AROUND, CqsType.COMMAND);
   }
 
   // ===============================================================================================
   // API CLIENT REST
   // ===============================================================================================
-
-  /**
-   * Api client rest service aspect around purpose.
-   *
-   * @return the purpose
-   */
-  public static Purpose apiClientRestServiceAspectAround() {
-    return new Purpose(API_CLIENT_REST_SERVICE_ASPECT_AROUND, CqsType.COMMAND);
-  }
 
   // ===============================================================================================
   //
