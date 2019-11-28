@@ -375,8 +375,10 @@ public class Thing implements Abstraction {
         .stream()
         .filter(thingProperty -> thingProperty.getData().isThingIdentity())
         .findFirst()
-        .orElseThrow(() -> new IllegalStateException(
-            String.format("Thing %s does not have identity", getThingName().getText())));
+        .orElseThrow(
+            () ->
+                new IllegalStateException(
+                    String.format("Thing %s does not have identity", getThingName().getText())));
   }
 
   /**
@@ -387,18 +389,18 @@ public class Thing implements Abstraction {
    * @param dataPrimitive the data primitive
    * @return the thing identity as data object from data primitive
    */
-  public DataObject getThingIdentityAsDataObjectFromDataPrimitive(PackageName rootPackageName,
-      VariableName variableName, DataPrimitive dataPrimitive) {
+  public DataObject getThingIdentityAsDataObjectFromDataPrimitive(
+      PackageName rootPackageName, VariableName variableName, DataPrimitive dataPrimitive) {
     ThingProperty thingProperty = getThingIdentity();
 
     if (thingProperty.getData().isDataGroup()) {
       return thingProperty.getData().getAsDataObject();
     } else {
-      DataObject dataObject = new DataObject(
-          new ObjectName(thingProperty.getData().getVariableName().getText()),
-          makePackageName(rootPackageName, this),
-          variableName
-      );
+      DataObject dataObject =
+          new DataObject(
+              new ObjectName(thingProperty.getData().getVariableName().getText()),
+              makePackageName(rootPackageName, this),
+              variableName);
       dataObject.addData(dataPrimitive);
       return dataObject;
     }

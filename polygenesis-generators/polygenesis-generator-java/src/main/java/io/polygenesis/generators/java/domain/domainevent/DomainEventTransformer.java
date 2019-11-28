@@ -216,6 +216,8 @@ public class DomainEventTransformer extends DomainObjectClassTransformer<DomainE
     imports.add("com.oregor.trinity4j.domain.DomainMessageInfo");
     imports.add("com.oregor.trinity4j.domain.DomainMessageType");
 
+    imports.addAll(super.imports(source, args));
+
     return imports;
   }
 

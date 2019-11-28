@@ -106,7 +106,9 @@ public class DataPrimitive extends Data {
    * @return the data primitive
    */
   public static DataPrimitive ofDataBusinessTypeWithDataObject(
-      DataPurpose dataPurpose, PrimitiveType primitiveType, VariableName variableName,
+      DataPurpose dataPurpose,
+      PrimitiveType primitiveType,
+      VariableName variableName,
       DataObject dataObject) {
     return new DataPrimitive(
         variableName,
