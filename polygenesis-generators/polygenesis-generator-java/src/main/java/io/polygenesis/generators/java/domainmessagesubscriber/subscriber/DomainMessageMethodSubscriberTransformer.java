@@ -20,6 +20,8 @@
 
 package io.polygenesis.generators.java.domainmessagesubscriber.subscriber;
 
+import io.polygenesis.abstraction.data.DataObject;
+import io.polygenesis.abstraction.thing.Argument;
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.generators.java.domainmessagesubscriber.subscriber.activity.DomainMessageSubscriberActivityRegistry;
@@ -27,6 +29,7 @@ import io.polygenesis.transformers.java.AbstractMethodTransformer;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * The type Domain message method subscriber transformer.
@@ -79,5 +82,36 @@ public class DomainMessageMethodSubscriberTransformer extends AbstractMethodTran
     } else {
       return super.implementation(source, args);
     }
+  }
+
+  @Override
+  public Set<String> imports(Function source, Object... args) {
+    Set<String> imports = new TreeSet<>();
+
+    if (source.getReturnValue() != null && source.getReturnValue().getData().isDataGroup()) {
+      DataObject dataObject = source.getReturnValue().getData().getAsDataObject();
+
+      // TODO
+      // if (!dataObject.getPackageName().equals(source.getService().getPackageName())) {
+      imports.add(makeCanonicalObjectName(dataObject.getPackageName(), dataObject.getDataType()));
+      // }
+    }
+
+    source
+        .getArguments()
+        .stream()
+        .filter(argument -> argument.getData().isDataGroup())
+        .map(Argument::getData)
+        .map(DataObject.class::cast)
+        .forEach(
+            dataGroup -> {
+              // TODO
+              // if (!dataGroup.getPackageName().equals(source.getService().getPackageName())) {
+              imports.add(
+                  makeCanonicalObjectName(dataGroup.getPackageName(), dataGroup.getDataType()));
+              // }
+            });
+
+    return imports;
   }
 }

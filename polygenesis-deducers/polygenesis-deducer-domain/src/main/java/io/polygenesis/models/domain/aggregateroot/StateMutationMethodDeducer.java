@@ -21,10 +21,8 @@
 package io.polygenesis.models.domain.aggregateroot;
 
 import static io.polygenesis.models.domain.PropertyType.AGGREGATE_ENTITY_COLLECTION;
+import static java.util.stream.Collectors.toCollection;
 
-import io.polygenesis.abstraction.data.Data;
-import io.polygenesis.abstraction.data.DataPurpose;
-import io.polygenesis.abstraction.thing.Argument;
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.Thing;
@@ -125,9 +123,12 @@ public class StateMutationMethodDeducer extends AbstractPropertyDeducer {
                       convertToDomainFunction(function),
                       deduceDomainObjectPropertiesFromFunction(function));
 
-              stateMutationMethod.assignDomainEvent(
-                  domainEventMutationDeducer.deduceFrom(
-                      thingPackageName, thing, stateMutationMethod));
+              if (!function.supportsAbstractionScope(
+                  AbstractionScope.domainAbstractAggregateRoot())) {
+                stateMutationMethod.assignDomainEvent(
+                    domainEventMutationDeducer.deduceFrom(
+                        thingPackageName, thing, stateMutationMethod));
+              }
 
               stateMutationMethods.add(stateMutationMethod);
             });
@@ -142,21 +143,16 @@ public class StateMutationMethodDeducer extends AbstractPropertyDeducer {
    * @return the function
    */
   private Function convertToDomainFunction(Function function) {
-    Argument argumentDto =
-        function.getArguments().stream().findFirst().orElseThrow(IllegalArgumentException::new);
-
-    Set<Data> newArguments = new LinkedHashSet<>();
-    argumentDto
-        .getData()
-        .getAsDataObject()
-        .getModels()
-        .stream()
-        .filter(data -> !data.getDataPurpose().equals(DataPurpose.thingIdentity()))
-        .forEach(data -> newArguments.add(data));
+    Set<DomainObjectProperty<?>> domainObjectProperties =
+        deduceDomainObjectPropertiesFromFunction(function);
 
     return FunctionBuilder.of(
             function.getThing(), function.getName().getText(), function.getPurpose())
-        .addArguments(newArguments)
+        .addArguments(
+            domainObjectProperties
+                .stream()
+                .map(DomainObjectProperty::getData)
+                .collect(toCollection(LinkedHashSet::new)))
         .build();
   }
 

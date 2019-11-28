@@ -172,21 +172,7 @@ public abstract class AbstractServiceMethodImplementationTransformer {
   protected Set<DomainObjectProperty<?>> getPropertiesFromConstructor(
       ServiceMethodImplementation source, Set<MetamodelRepository<?>> metamodelRepositories) {
 
-    DomainMetamodelRepository domainMetamodelRepository =
-        CoreRegistry.getMetamodelRepositoryResolver()
-            .resolve(metamodelRepositories, DomainMetamodelRepository.class);
-
-    Optional<AggregateRoot> optionalAggregateRoot =
-        domainMetamodelRepository
-            .getItems()
-            .stream()
-            .filter(
-                aggregateRoot ->
-                    aggregateRoot
-                        .getObjectName()
-                        .getText()
-                        .equals(source.getFunction().getThing().getThingName().getText()))
-            .findFirst();
+    Optional<AggregateRoot> optionalAggregateRoot = getAggregateRoot(source, metamodelRepositories);
 
     if (optionalAggregateRoot.isPresent()) {
       return optionalAggregateRoot
@@ -199,12 +185,74 @@ public abstract class AbstractServiceMethodImplementationTransformer {
               () ->
                   new IllegalArgumentException(
                       String.format(
-                          "Cannot get constructor for %s",
+                          "Cannot get constructor for '%s'",
                           optionalAggregateRoot.get().getObjectName().getText())))
           .getProperties();
     } else {
-      throw new IllegalStateException("should find domain entity");
+      throw new IllegalStateException("should find domain aggregate root");
     }
+  }
+
+  /**
+   * Gets properties from state mutation method.
+   *
+   * @param source the source
+   * @param metamodelRepositories the metamodel repositories
+   * @return the properties from state mutation method
+   */
+  protected Set<DomainObjectProperty<?>> getPropertiesFromStateMutationMethod(
+      ServiceMethodImplementation source, Set<MetamodelRepository<?>> metamodelRepositories) {
+
+    Optional<AggregateRoot> optionalAggregateRoot = getAggregateRoot(source, metamodelRepositories);
+
+    if (optionalAggregateRoot.isPresent()) {
+      return optionalAggregateRoot
+          .get()
+          .getStateMutationMethods()
+          .stream()
+          .filter(
+              stateMutationMethod ->
+                  stateMutationMethod
+                      .getFunction()
+                      .getName()
+                      .equals(source.getFunction().getName()))
+          .findFirst()
+          .orElseThrow(
+              () ->
+                  new IllegalArgumentException(
+                      String.format(
+                          "Cannot get state mutation method '%s' for '%s'",
+                          source.getFunction().getName().getText(),
+                          optionalAggregateRoot.get().getObjectName().getText())))
+          .getProperties();
+    } else {
+      throw new IllegalStateException("should find domain aggregate root");
+    }
+  }
+
+  /**
+   * Gets aggregate root.
+   *
+   * @param source the source
+   * @param metamodelRepositories the metamodel repositories
+   * @return the aggregate root
+   */
+  protected Optional<AggregateRoot> getAggregateRoot(
+      ServiceMethodImplementation source, Set<MetamodelRepository<?>> metamodelRepositories) {
+    DomainMetamodelRepository domainMetamodelRepository =
+        CoreRegistry.getMetamodelRepositoryResolver()
+            .resolve(metamodelRepositories, DomainMetamodelRepository.class);
+
+    return domainMetamodelRepository
+        .getItems()
+        .stream()
+        .filter(
+            aggregateRoot ->
+                aggregateRoot
+                    .getObjectName()
+                    .getText()
+                    .equals(source.getFunction().getThing().getThingName().getText()))
+        .findFirst();
   }
 
   /**

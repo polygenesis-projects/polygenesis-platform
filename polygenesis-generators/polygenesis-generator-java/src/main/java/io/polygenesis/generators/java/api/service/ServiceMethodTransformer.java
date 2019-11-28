@@ -20,9 +20,13 @@
 
 package io.polygenesis.generators.java.api.service;
 
+import io.polygenesis.abstraction.data.DataObject;
+import io.polygenesis.abstraction.thing.Argument;
 import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.models.api.ServiceMethod;
 import io.polygenesis.transformers.java.AbstractMethodTransformer;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * The type Service method transformer.
@@ -51,5 +55,36 @@ public class ServiceMethodTransformer extends AbstractMethodTransformer<ServiceM
   @Override
   public String modifiers(ServiceMethod source, Object... args) {
     return "";
+  }
+
+  @Override
+  public Set<String> imports(ServiceMethod source, Object... args) {
+    Set<String> imports = new TreeSet<>();
+
+    if (source.getFunction().getReturnValue() != null
+        && source.getFunction().getReturnValue().getData().isDataGroup()) {
+      DataObject dataObject = source.getFunction().getReturnValue().getData().getAsDataObject();
+
+      if (!dataObject.getPackageName().equals(source.getService().getPackageName())) {
+        imports.add(makeCanonicalObjectName(dataObject.getPackageName(), dataObject.getDataType()));
+      }
+    }
+
+    source
+        .getFunction()
+        .getArguments()
+        .stream()
+        .filter(argument -> argument.getData().isDataGroup())
+        .map(Argument::getData)
+        .map(DataObject.class::cast)
+        .forEach(
+            dataGroup -> {
+              if (!dataGroup.getPackageName().equals(source.getService().getPackageName())) {
+                imports.add(
+                    makeCanonicalObjectName(dataGroup.getPackageName(), dataGroup.getDataType()));
+              }
+            });
+
+    return imports;
   }
 }
