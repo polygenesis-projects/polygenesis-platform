@@ -37,7 +37,7 @@ import io.polygenesis.models.domain.Persistence;
 import io.polygenesis.models.domain.StateMutationMethod;
 import io.polygenesis.models.domain.StateQueryMethod;
 import io.polygenesis.models.domain.domainmessage.DomainEventConstructorDeducer;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -88,26 +88,30 @@ public class AggregateRootDeducer {
    */
   public Set<AggregateRoot> deduceFrom(
       ThingRepository thingRepository, PackageName rootPackageName) {
-    Set<AggregateRoot> aggregateRoots = new LinkedHashSet<>();
-
+    // Get superclasses first
+    Set<AggregateRoot> abstractAggregateRoots = new LinkedHashSet<>();
     thingRepository
         .getAbstractionItemsByScopes(
             new LinkedHashSet<>(
-                Arrays.asList(
-                    AbstractionScope.domainAggregateRoot(),
-                    AbstractionScope.domainAbstractAggregateRoot())))
+                Collections.singletonList(AbstractionScope.domainAbstractAggregateRoot())))
         .stream()
         .forEach(
-            thing -> {
-              if (thing.getOptionalParent() == null) {
-                makeAggregateRoot(aggregateRoots, thing, rootPackageName);
-              } else {
-                throw new IllegalArgumentException(
-                    String.format(
-                        "The aggregate root=%s should not have a parent",
-                        thing.getThingName().getText()));
-              }
-            });
+            thing ->
+                makeAggregateRoot(
+                    abstractAggregateRoots, thing, rootPackageName, new LinkedHashSet<>()));
+
+    // Continue with subclasses
+    Set<AggregateRoot> aggregateRoots = new LinkedHashSet<>();
+    thingRepository
+        .getAbstractionItemsByScopes(
+            new LinkedHashSet<>(Collections.singletonList(AbstractionScope.domainAggregateRoot())))
+        .stream()
+        .forEach(
+            thing ->
+                makeAggregateRoot(aggregateRoots, thing, rootPackageName, abstractAggregateRoots));
+
+    // Add all
+    aggregateRoots.addAll(abstractAggregateRoots);
 
     return aggregateRoots;
   }
@@ -125,13 +129,27 @@ public class AggregateRootDeducer {
    * @return the aggregate root
    */
   private void makeAggregateRoot(
-      Set<AggregateRoot> aggregateRoots, Thing thing, PackageName rootPackageName) {
+      Set<AggregateRoot> aggregateRoots,
+      Thing thing,
+      PackageName rootPackageName,
+      Set<AggregateRoot> abstractAggregateRoots) {
+    if (thing.getOptionalParent() != null) {
+      throw new IllegalArgumentException(
+          String.format(
+              "The aggregate root=%s should not have a parent", thing.getThingName().getText()));
+    }
+
     PackageName thingPackageName = thing.makePackageName(rootPackageName, thing);
 
     ObjectName aggregateRootObjectName = makeAggregateRootName(thing);
 
+    // Start by getting the superclass
+    AggregateRoot aggregateRootSuperClass = makeSuperclass(abstractAggregateRoots, thing);
+
+    // Continue with the properties and exclude the ones already in the superclass.
     Set<DomainObjectProperty<?>> properties =
-        aggregateRootPropertyDeducer.deduceFromThing(thing, rootPackageName);
+        aggregateRootPropertyDeducer.deduceFromThing(
+            aggregateRootSuperClass, thing, rootPackageName);
 
     Set<Constructor> constructors =
         aggregateRootPropertyDeducer.deduceConstructors(thing, rootPackageName);
@@ -162,7 +180,7 @@ public class AggregateRootDeducer {
               stateMutationMethods,
               stateQueryMethods,
               factoryMethods,
-              makeSuperclass(rootPackageName, thing)));
+              aggregateRootSuperClass));
     } else {
       Persistence persistence =
           new Persistence(
@@ -183,7 +201,7 @@ public class AggregateRootDeducer {
               stateMutationMethods,
               stateQueryMethods,
               factoryMethods,
-              makeSuperclass(rootPackageName, thing),
+              aggregateRootSuperClass,
               persistence));
     }
   }
@@ -223,7 +241,7 @@ public class AggregateRootDeducer {
    *
    * @return the aggregate root
    */
-  private AggregateRoot makeSuperclass(PackageName rootPackageName, Thing thing) {
+  private AggregateRoot makeSuperclass(Set<AggregateRoot> abstractAggregateRoots, Thing thing) {
     ObjectName objectNameSuperclass =
         thing.getMultiTenant()
             ? new ObjectName("TenantAggregateRoot")
@@ -233,8 +251,22 @@ public class AggregateRootDeducer {
     if (thing.getMetadataValueIfExists(ThingMetadataKey.SUPER_CLASS) != null) {
       Thing thingSuperclass =
           Thing.class.cast(thing.getMetadataValue(ThingMetadataKey.SUPER_CLASS));
-      objectNameSuperclass = new ObjectName(thingSuperclass.getThingName().getText());
-      packageName = thingSuperclass.makePackageName(rootPackageName, thingSuperclass);
+
+      return abstractAggregateRoots
+          .stream()
+          .filter(
+              aggregateRoot ->
+                  aggregateRoot
+                      .getObjectName()
+                      .equals(new ObjectName(thingSuperclass.getThingName().getText())))
+          .findFirst()
+          .orElseThrow(
+              () ->
+                  new IllegalStateException(
+                      String.format(
+                          "Could not find superclass=%s for thing=%s",
+                          thingSuperclass.getThingName().getText(),
+                          thing.getThingName().getText())));
     }
 
     return new AggregateRoot(

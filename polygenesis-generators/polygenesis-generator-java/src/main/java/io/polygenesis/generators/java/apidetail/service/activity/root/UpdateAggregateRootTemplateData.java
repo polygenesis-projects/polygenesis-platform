@@ -34,6 +34,12 @@ import java.util.Set;
 public class UpdateAggregateRootTemplateData extends AbstractAggregateRootTemplateData {
 
   // ===============================================================================================
+  // STATE
+  // ===============================================================================================
+
+  private String stateMutationMethodName;
+
+  // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
@@ -52,6 +58,7 @@ public class UpdateAggregateRootTemplateData extends AbstractAggregateRootTempla
    * @param returnValue the return value
    * @param aggregateRootIdDataType the aggregate root id data type
    * @param thingIdentity the thing identity
+   * @param stateMutationMethodName the state mutation method name
    */
   public UpdateAggregateRootTemplateData(
       Set<ParameterRepresentation> parameterRepresentations,
@@ -65,7 +72,8 @@ public class UpdateAggregateRootTemplateData extends AbstractAggregateRootTempla
       Boolean multiTenant,
       String returnValue,
       String aggregateRootIdDataType,
-      Data thingIdentity) {
+      Data thingIdentity,
+      String stateMutationMethodName) {
     super(
         parameterRepresentations,
         aggregateRootDataType,
@@ -79,5 +87,31 @@ public class UpdateAggregateRootTemplateData extends AbstractAggregateRootTempla
         returnValue,
         aggregateRootIdDataType,
         thingIdentity);
+    this.stateMutationMethodName = stateMutationMethodName;
+  }
+
+  // ===============================================================================================
+  // GETTERS
+  // ===============================================================================================
+
+  /**
+   * Gets state mutation method name.
+   *
+   * @return the state mutation method name
+   */
+  public String getStateMutationMethodName() {
+    return stateMutationMethodName;
+  }
+
+  @Override
+  public String toString() {
+    return "UpdateAggregateRootTemplateData{"
+        + "getProperties='"
+        + getProperties()
+        + '\''
+        + "stateMutationMethodName='"
+        + stateMutationMethodName
+        + '\''
+        + '}';
   }
 }

@@ -26,6 +26,7 @@ import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.AbstractionScope;
 import io.polygenesis.models.domain.AbstractAggregateRootId;
+import io.polygenesis.models.domain.AggregateRoot;
 import io.polygenesis.models.domain.AggregateRootId;
 import io.polygenesis.models.domain.DomainObjectProperty;
 import io.polygenesis.models.domain.GenericTypeParameter;
@@ -69,11 +70,13 @@ public class AggregateRootPropertyDeducer extends AbstractPropertyDeducer {
   /**
    * Deduce from Thing.
    *
+   * @param aggregateRootSuperClass the aggregate root super class
    * @param thing the thing
    * @param rootPackageName the root package name
    * @return the set
    */
-  public Set<DomainObjectProperty<?>> deduceFromThing(Thing thing, PackageName rootPackageName) {
+  public Set<DomainObjectProperty<?>> deduceFromThing(
+      AggregateRoot aggregateRootSuperClass, Thing thing, PackageName rootPackageName) {
     Set<DomainObjectProperty<?>> properties = new LinkedHashSet<>();
 
     assertThatThingHasIdentity(thing);
@@ -84,6 +87,9 @@ public class AggregateRootPropertyDeducer extends AbstractPropertyDeducer {
         getThingPropertiesSuitableForDomainModel(thing)
             .stream()
             .map(this::toDomainObjectProperty)
+            .filter(
+                property ->
+                    !checkIfPropertyIsDefinedInSuperClass(property, aggregateRootSuperClass))
             .collect(Collectors.toCollection(LinkedHashSet::new)));
 
     properties.addAll(
@@ -168,5 +174,21 @@ public class AggregateRootPropertyDeducer extends AbstractPropertyDeducer {
         new DataObject(new ObjectName("TenantId"), new PackageName("com.oregor.trinity4j.domain"));
 
     return new TenantId(dataObject);
+  }
+
+  /**
+   * Check if property is defined in super class boolean.
+   *
+   * @param property the property
+   * @param aggregateRootSuperClass the aggregate root super class
+   * @return the boolean
+   */
+  protected boolean checkIfPropertyIsDefinedInSuperClass(
+      DomainObjectProperty<?> property, AggregateRoot aggregateRootSuperClass) {
+    return aggregateRootSuperClass
+        .getProperties()
+        .stream()
+        .anyMatch(
+            propertyInSuperclass -> propertyInSuperclass.getData().equals(property.getData()));
   }
 }

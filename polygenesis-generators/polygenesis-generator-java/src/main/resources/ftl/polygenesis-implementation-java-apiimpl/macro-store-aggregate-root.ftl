@@ -18,5 +18,5 @@
  ===========================LICENSE_END==================================
 -->
 <#macro storeAggregateRoot persistenceVariable aggregateRootVariable>
-    ${ persistenceVariable }.store(${ aggregateRootVariable });
+    ${ aggregateRootVariable } = ${ persistenceVariable }.store(${ aggregateRootVariable });
 </#macro>

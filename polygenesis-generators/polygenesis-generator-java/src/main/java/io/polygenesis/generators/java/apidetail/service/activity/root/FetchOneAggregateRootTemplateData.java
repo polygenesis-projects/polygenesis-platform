@@ -52,6 +52,7 @@ public class FetchOneAggregateRootTemplateData extends UpdateAggregateRootTempla
    * @param returnValue the return value
    * @param aggregateRootIdDataType the aggregate root id data type
    * @param thingIdentity the thing identity
+   * @param stateMutationMethodName the state mutation method name
    */
   public FetchOneAggregateRootTemplateData(
       Set<ParameterRepresentation> parameterRepresentations,
@@ -65,7 +66,8 @@ public class FetchOneAggregateRootTemplateData extends UpdateAggregateRootTempla
       Boolean multiTenant,
       String returnValue,
       String aggregateRootIdDataType,
-      Data thingIdentity) {
+      Data thingIdentity,
+      String stateMutationMethodName) {
     super(
         parameterRepresentations,
         aggregateRootDataType,
@@ -78,6 +80,7 @@ public class FetchOneAggregateRootTemplateData extends UpdateAggregateRootTempla
         multiTenant,
         returnValue,
         aggregateRootIdDataType,
-        thingIdentity);
+        thingIdentity,
+        stateMutationMethodName);
   }
 }

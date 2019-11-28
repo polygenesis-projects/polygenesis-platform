@@ -26,7 +26,6 @@ import io.polygenesis.core.TemplateData;
 import io.polygenesis.generators.java.apidetail.service.activity.AbstractServiceMethodImplementationTransformer;
 import io.polygenesis.models.apiimpl.ServiceMethodImplementation;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -50,10 +49,10 @@ public class UpdateAggregateRootTransformer extends AbstractServiceMethodImpleme
     @SuppressWarnings("CPD-START")
     UpdateAggregateRootTemplateData data =
         new UpdateAggregateRootTemplateData(
-            new LinkedHashSet<>(),
+            getParameterRepresentations(source),
             getAggregateRootDataType(source),
             getAggregateRootVariable(source),
-            new LinkedHashSet<>(),
+            getPropertiesFromStateMutationMethod(source, metamodelRepositories),
             getRepositoryVariable(source),
             source.getServiceMethod().getRequestDto(),
             source.getServiceMethod().getResponseDto(),
@@ -61,7 +60,8 @@ public class UpdateAggregateRootTransformer extends AbstractServiceMethodImpleme
             source.getFunction().getThing().getMultiTenant(),
             getReturnValue(source),
             getAggregateRootIdDataType(source),
-            getThingIdentity(source));
+            getThingIdentity(source),
+            source.getFunction().getName().getText());
 
     @SuppressWarnings("CPD-END")
     Map<String, Object> dataModel = new HashMap<>();

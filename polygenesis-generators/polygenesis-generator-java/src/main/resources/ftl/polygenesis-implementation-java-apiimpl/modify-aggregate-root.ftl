@@ -20,14 +20,16 @@
 <#include "../polygenesis-implementation-java-shared/macro-assertions-for-parameters.ftl">
 <#include "macro-restore-aggregate-root.ftl">
 <#include "macro-store-aggregate-root.ftl">
+<#include "macro-fill-arguments.ftl">
 <@assertionsForParameters data.parameterRepresentations></@assertionsForParameters>
 
 <@restoreAggregateRoot data.persistenceVariable data.aggregateRootIdDataType data.aggregateRootDataType data.aggregateRootVariable data.requestDto data.thingIdentity data.multiTenant></@restoreAggregateRoot>
 
-    // TODO: implementation
+    ${data.aggregateRootVariable}.${data.stateMutationMethodName}(
+<@fillArguments data.properties data.persistenceVariable data.requestDto data.multiTenant?c data.converterVariable></@fillArguments>
+    );
 
 <@storeAggregateRoot data.persistenceVariable data.aggregateRootVariable></@storeAggregateRoot>
 <#if !data.responseDto.getVirtual()>
 
-    return new ${ data.returnValue }(${ data.aggregateRootVariable }.getId().getTypeId().toString());
-</#if>
+    return new ${ data.returnValue }(${ data.aggregateRootVariable }.getId().getTypeId().toString());</#if>

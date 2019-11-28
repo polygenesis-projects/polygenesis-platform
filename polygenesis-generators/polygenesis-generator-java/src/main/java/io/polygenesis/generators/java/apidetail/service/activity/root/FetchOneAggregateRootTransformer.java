@@ -50,7 +50,7 @@ public class FetchOneAggregateRootTransformer extends AbstractServiceMethodImple
     @SuppressWarnings("CPD-START")
     FetchOneAggregateRootTemplateData data =
         new FetchOneAggregateRootTemplateData(
-            new LinkedHashSet<>(),
+            getParameterRepresentations(source),
             getAggregateRootDataType(source),
             getAggregateRootVariable(source),
             new LinkedHashSet<>(),
@@ -61,7 +61,8 @@ public class FetchOneAggregateRootTransformer extends AbstractServiceMethodImple
             source.getFunction().getThing().getMultiTenant(),
             getReturnValue(source),
             getAggregateRootIdDataType(source),
-            getThingIdentity(source));
+            getThingIdentity(source),
+            source.getFunction().getName().getText());
 
     @SuppressWarnings("CPD-END")
     Map<String, Object> dataModel = new HashMap<>();
