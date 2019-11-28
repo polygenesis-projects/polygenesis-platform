@@ -24,6 +24,7 @@ import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.DataArray;
 import io.polygenesis.abstraction.data.DataMap;
 import io.polygenesis.abstraction.data.DataObject;
+import io.polygenesis.abstraction.data.DataPrimitive;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import java.util.LinkedHashSet;
@@ -222,6 +223,17 @@ public class DataBuilder {
    * @return the data builder
    */
   public final DataBuilder withArrayData(DataArray dataArray) {
+    this.models.add(dataArray);
+    return this;
+  }
+
+  /**
+   * With data primitive data builder.
+   *
+   * @param dataArray the data array
+   * @return the data builder
+   */
+  public final DataBuilder withDataPrimitive(DataPrimitive dataArray) {
     this.models.add(dataArray);
     return this;
   }

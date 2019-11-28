@@ -17,6 +17,7 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
+<#include "./macro-fill-argument-value-object.ftl">
 <#macro fillArguments properties persistenceVariable requestDto multiTenant converterVariable>
     <#list properties as property>
       <#switch property.propertyType>
@@ -25,7 +26,7 @@
 <#--        ${ persistenceVariable }.nextId(UUID.fromString(${ requestDto.dataObject.objectName.text }.getTenantId()))<#sep>,</#sep>-->
         ${ persistenceVariable }.nextId()<#sep>,</#sep>
           <#else>
-        ${ persistenceVariable }.nextId()<#sep>,</#sep>
+        ${ requestDto.dataObject.objectName.text }.get${ textConverter.toUpperCamel(property.data.variableName.text) }() == null ? ${ persistenceVariable }.nextId() : new ${ textConverter.toUpperCamel(property.data.variableName.text) }(UUID.fromString(${ requestDto.dataObject.objectName.text }.get${ textConverter.toUpperCamel(property.data.variableName.text) }()))<#sep>,</#sep>
           </#if>
         <#break>
         <#case 'PROJECTION_ID'>
@@ -43,7 +44,7 @@
         ${ requestDto.dataObject.objectName.text }.get${ textConverter.toUpperCamel(property.data.variableName.text) }()<#sep>,</#sep>
           <#break>
         <#case 'VALUE_OBJECT'>
-        new ${ textConverter.toUpperCamel(property.data.objectName.text) }(${ requestDto.dataObject.objectName.text }.get${ textConverter.toUpperCamel(property.data.variableName.text) }())<#sep>,</#sep>
+        <@fillArgumentValueObject property persistenceVariable requestDto multiTenant converterVariable></@fillArgumentValueObject><#sep>,</#sep>
           <#break>
         <#case 'SINGLE_VALUE_OBJECT'>
         ${ converterVariable }.convertToVo(${ requestDto.dataObject.objectName.text }.get${ textConverter.toUpperCamel(property.data.variableName.text) }())<#sep>,</#sep>
