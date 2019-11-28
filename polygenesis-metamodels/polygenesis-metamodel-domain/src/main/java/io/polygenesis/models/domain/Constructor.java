@@ -32,7 +32,9 @@ import java.util.Set;
  */
 public class Constructor extends BaseMethod {
 
+  @SuppressWarnings("CPD-START")
   private Set<DomainObjectProperty<?>> properties;
+
   private DomainEvent domainEvent;
 
   // ===============================================================================================

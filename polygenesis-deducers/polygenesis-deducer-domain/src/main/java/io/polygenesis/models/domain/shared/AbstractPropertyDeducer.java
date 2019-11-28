@@ -81,6 +81,22 @@ public abstract class AbstractPropertyDeducer {
   }
 
   /**
+   * Deduce domain object properties from function set.
+   *
+   * @param function the function
+   * @return the set
+   */
+  public Set<DomainObjectProperty<?>> deduceDomainObjectPropertiesFromFunction(Function function) {
+    Set<DomainObjectProperty<?>> properties = new LinkedHashSet<>();
+
+    Set<ThingProperty> thingProperties = getThingPropertiesFromFunction(function);
+
+    properties.addAll(this.toDomainObjectProperties(thingProperties));
+
+    return properties;
+  }
+
+  /**
    * Deduce constructors set.
    *
    * @param thing the thing

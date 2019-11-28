@@ -176,17 +176,26 @@ public class DomainEventTransformer extends DomainObjectClassTransformer<DomainE
     // ---------------------------------------------------------------------------------------------
     // Create no-args constructor
     // ---------------------------------------------------------------------------------------------
-    constructorRepresentations.add(
-        createNoArgsConstructorForPersistence(
-            source.getInstantiationType().equals(InstantiationType.ABSTRACT)
-                ? dataTypeTransformer.getModifierProtected()
-                : dataTypeTransformer.getModifierPrivate()));
+    boolean hasNonEmptyConstructors =
+        source
+            .getConstructors()
+            .stream()
+            .anyMatch(constructor -> !constructor.getProperties().isEmpty());
+
+    if (hasNonEmptyConstructors) {
+      constructorRepresentations.add(
+          createNoArgsConstructorForPersistence(
+              source.getInstantiationType().equals(InstantiationType.ABSTRACT)
+                  ? dataTypeTransformer.getModifierProtected()
+                  : dataTypeTransformer.getModifierPrivate()));
+    }
 
     // ---------------------------------------------------------------------------------------------
     // Create constructor with parameters
     // ---------------------------------------------------------------------------------------------
     source
         .getConstructors()
+        .stream()
         .forEach(
             constructor ->
                 constructorRepresentations.add(

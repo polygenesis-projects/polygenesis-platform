@@ -36,7 +36,7 @@ import io.polygenesis.models.domain.InstantiationType;
 import io.polygenesis.models.domain.Persistence;
 import io.polygenesis.models.domain.StateMutationMethod;
 import io.polygenesis.models.domain.StateQueryMethod;
-import io.polygenesis.models.domain.domainmessage.DomainEventDeducer;
+import io.polygenesis.models.domain.domainmessage.DomainEventConstructorDeducer;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -53,7 +53,7 @@ public class AggregateRootDeducer {
   // ===============================================================================================
   private final AggregateRootPropertyDeducer aggregateRootPropertyDeducer;
   private final StateMutationMethodDeducer stateMutationMethodDeducer;
-  private final DomainEventDeducer domainEventDeducer;
+  private final DomainEventConstructorDeducer domainEventConstructorDeducer;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -64,15 +64,15 @@ public class AggregateRootDeducer {
    *
    * @param aggregateRootPropertyDeducer the aggregate root property deducer
    * @param stateMutationMethodDeducer the state mutation method deducer
-   * @param domainEventDeducer the domain event deducer
+   * @param domainEventConstructorDeducer the domain event deducer
    */
   public AggregateRootDeducer(
       AggregateRootPropertyDeducer aggregateRootPropertyDeducer,
       StateMutationMethodDeducer stateMutationMethodDeducer,
-      DomainEventDeducer domainEventDeducer) {
+      DomainEventConstructorDeducer domainEventConstructorDeducer) {
     this.aggregateRootPropertyDeducer = aggregateRootPropertyDeducer;
     this.stateMutationMethodDeducer = stateMutationMethodDeducer;
-    this.domainEventDeducer = domainEventDeducer;
+    this.domainEventConstructorDeducer = domainEventConstructorDeducer;
   }
 
   // ===============================================================================================
@@ -126,7 +126,7 @@ public class AggregateRootDeducer {
    */
   private void makeAggregateRoot(
       Set<AggregateRoot> aggregateRoots, Thing thing, PackageName rootPackageName) {
-    PackageName packageName = thing.makePackageName(rootPackageName, thing);
+    PackageName thingPackageName = thing.makePackageName(rootPackageName, thing);
 
     ObjectName aggregateRootObjectName = makeAggregateRootName(thing);
 
@@ -140,13 +140,13 @@ public class AggregateRootDeducer {
       constructors.forEach(
           constructor -> {
             DomainEvent domainEvent =
-                domainEventDeducer.deduceFrom(rootPackageName, thing, constructor);
+                domainEventConstructorDeducer.deduceFrom(rootPackageName, thing, constructor);
             constructor.assignDomainEvent(domainEvent);
           });
     }
 
     Set<StateMutationMethod> stateMutationMethods =
-        stateMutationMethodDeducer.deduce(thing, properties);
+        stateMutationMethodDeducer.deduce(thingPackageName, thing, properties);
     Set<StateQueryMethod> stateQueryMethods = new LinkedHashSet<>();
     Set<FactoryMethod> factoryMethods = new LinkedHashSet<>();
 
@@ -155,7 +155,7 @@ public class AggregateRootDeducer {
           new AggregateRoot(
               isAbstract(thing) ? InstantiationType.ABSTRACT : InstantiationType.CONCRETE,
               aggregateRootObjectName,
-              packageName,
+              thingPackageName,
               properties,
               constructors,
               thing.getMultiTenant(),
@@ -166,7 +166,7 @@ public class AggregateRootDeducer {
     } else {
       Persistence persistence =
           new Persistence(
-              packageName,
+              thingPackageName,
               makePersistenceName(thing),
               aggregateRootObjectName,
               makeAggregateRootIdName(thing),
@@ -176,7 +176,7 @@ public class AggregateRootDeducer {
           new AggregateRootPersistable(
               isAbstract(thing) ? InstantiationType.ABSTRACT : InstantiationType.CONCRETE,
               aggregateRootObjectName,
-              packageName,
+              thingPackageName,
               properties,
               constructors,
               thing.getMultiTenant(),

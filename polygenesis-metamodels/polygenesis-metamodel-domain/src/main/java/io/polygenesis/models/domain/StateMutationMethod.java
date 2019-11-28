@@ -23,6 +23,7 @@ package io.polygenesis.models.domain;
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.commons.assertion.Assertion;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * The type State mutation command.
@@ -31,39 +32,51 @@ import java.util.Objects;
  */
 public class StateMutationMethod extends BaseMethod {
 
-  // ===============================================================================================
-  // STATE
-  // ===============================================================================================
+  @SuppressWarnings("CPD-START")
+  private Set<DomainObjectProperty<?>> properties;
 
   private DomainEvent domainEvent;
 
   // ===============================================================================================
-  // CONSTRUCTOR(S)
+  // StateMutationMethod(S)
   // ===============================================================================================
 
   /**
    * Instantiates a new State mutation method.
    *
    * @param function the function
+   * @param properties the properties
    */
-  public StateMutationMethod(Function function) {
+  public StateMutationMethod(Function function, Set<DomainObjectProperty<?>> properties) {
     super(function);
+    setProperties(properties);
   }
 
+  // ===============================================================================================
+  // STATE MUTATION
+  // ===============================================================================================
+
   /**
-   * Instantiates a new State mutation method.
+   * Assign domain event.
    *
-   * @param function the function
    * @param domainEvent the domain event
    */
-  public StateMutationMethod(Function function, DomainEvent domainEvent) {
-    super(function);
+  public void assignDomainEvent(DomainEvent domainEvent) {
     setDomainEvent(domainEvent);
   }
 
   // ===============================================================================================
   // GETTERS
   // ===============================================================================================
+
+  /**
+   * Gets properties.
+   *
+   * @return the properties
+   */
+  public Set<DomainObjectProperty<?>> getProperties() {
+    return properties;
+  }
 
   /**
    * Gets domain event.
@@ -77,6 +90,16 @@ public class StateMutationMethod extends BaseMethod {
   // ===============================================================================================
   // GUARDS
   // ===============================================================================================
+
+  /**
+   * Sets properties.
+   *
+   * @param properties the properties
+   */
+  private void setProperties(Set<DomainObjectProperty<?>> properties) {
+    Assertion.isNotNull(properties, "properties is required");
+    this.properties = properties;
+  }
 
   /**
    * Sets domain event.
@@ -104,11 +127,12 @@ public class StateMutationMethod extends BaseMethod {
       return false;
     }
     StateMutationMethod that = (StateMutationMethod) o;
-    return Objects.equals(domainEvent, that.domainEvent);
+    return Objects.equals(properties, that.properties)
+        && Objects.equals(domainEvent, that.domainEvent);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(super.hashCode(), domainEvent);
+    return Objects.hash(super.hashCode(), properties, domainEvent);
   }
 }
