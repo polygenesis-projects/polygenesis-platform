@@ -30,11 +30,14 @@ import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.dsl.FunctionBuilder;
 import io.polygenesis.commons.text.TextConverter;
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.AbstractionScope;
 import io.polygenesis.models.domain.AggregateEntity;
 import io.polygenesis.models.domain.AggregateEntityCollection;
 import io.polygenesis.models.domain.DomainObjectProperty;
 import io.polygenesis.models.domain.StateMutationMethod;
+import io.polygenesis.models.domain.domainmessage.DomainEventMutationDeducer;
+import io.polygenesis.models.domain.shared.AbstractPropertyDeducer;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -43,24 +46,50 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class StateMutationMethodDeducer {
+public class StateMutationMethodDeducer extends AbstractPropertyDeducer {
+
+  // ===============================================================================================
+  // DEPENDENCIES
+  // ===============================================================================================
+  private final DomainEventMutationDeducer domainEventMutationDeducer;
+
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
+  /**
+   * Instantiates a new State mutation method deducer.
+   *
+   * @param domainEventMutationDeducer the domain event mutation deducer
+   */
+  public StateMutationMethodDeducer(DomainEventMutationDeducer domainEventMutationDeducer) {
+    this.domainEventMutationDeducer = domainEventMutationDeducer;
+  }
 
   // ===============================================================================================
   // FUNCTIONALITY
   // ===============================================================================================
 
+  @Override
+  protected Set<DomainObjectProperty<?>> makeIdentityDomainObjectProperties(
+      Thing thing, PackageName rootPackageName) {
+    throw new UnsupportedOperationException();
+  }
+
   /**
    * Deduce set.
    *
+   * @param thingPackageName the thing package name
    * @param thing the thing
    * @param properties the properties
    * @return the set
    */
-  public Set<StateMutationMethod> deduce(Thing thing, Set<DomainObjectProperty<?>> properties) {
+  public Set<StateMutationMethod> deduce(
+      PackageName thingPackageName, Thing thing, Set<DomainObjectProperty<?>> properties) {
     Set<StateMutationMethod> stateMutationMethods = new LinkedHashSet<>();
 
     stateMutationMethods.addAll(deduceForAggregateEntities(thing, properties));
-    stateMutationMethods.addAll(deduceForStateMutation(thing));
+    stateMutationMethods.addAll(deduceForStateMutation(thingPackageName, thing));
 
     return stateMutationMethods;
   }
@@ -75,7 +104,8 @@ public class StateMutationMethodDeducer {
    * @param thing the thing
    * @return the set
    */
-  private Set<StateMutationMethod> deduceForStateMutation(Thing thing) {
+  private Set<StateMutationMethod> deduceForStateMutation(
+      PackageName thingPackageName, Thing thing) {
     Set<StateMutationMethod> stateMutationMethods = new LinkedHashSet<>();
 
     thing
@@ -89,9 +119,18 @@ public class StateMutationMethodDeducer {
                     || function.supportsAbstractionScope(AbstractionScope.domainAggregateEntity()))
         .filter(function -> function.getPurpose().isModify())
         .forEach(
-            function ->
-                stateMutationMethods.add(
-                    new StateMutationMethod(convertToDomainFunction(function))));
+            function -> {
+              StateMutationMethod stateMutationMethod =
+                  new StateMutationMethod(
+                      convertToDomainFunction(function),
+                      deduceDomainObjectPropertiesFromFunction(function));
+
+              stateMutationMethod.assignDomainEvent(
+                  domainEventMutationDeducer.deduceFrom(
+                      thingPackageName, thing, stateMutationMethod));
+
+              stateMutationMethods.add(stateMutationMethod);
+            });
 
     return stateMutationMethods;
   }
@@ -180,7 +219,8 @@ public class StateMutationMethodDeducer {
    */
   private StateMutationMethod aggregateRootCreateEntity(
       Thing thing, AggregateEntity aggregateEntity) {
-    return new StateMutationMethod(
+
+    Function function =
         FunctionBuilder.of(
                 thing,
                 String.format(
@@ -188,7 +228,9 @@ public class StateMutationMethodDeducer {
                     TextConverter.toUpperCamel(aggregateEntity.getObjectName().getText())),
                 Purpose.aggregateRootCreateEntity())
             .setReturnValue(aggregateEntity.getData())
-            .build());
+            .build();
+
+    return new StateMutationMethod(function, deduceDomainObjectPropertiesFromFunction(function));
   }
 
   /**
@@ -200,7 +242,7 @@ public class StateMutationMethodDeducer {
    */
   private StateMutationMethod aggregateRootUpdateEntity(
       Thing thing, AggregateEntity aggregateEntity) {
-    return new StateMutationMethod(
+    Function function =
         FunctionBuilder.of(
                 thing,
                 String.format(
@@ -208,7 +250,9 @@ public class StateMutationMethodDeducer {
                     TextConverter.toUpperCamel(aggregateEntity.getObjectName().getText())),
                 Purpose.aggregateRootUpdateEntity())
             .setReturnValue(aggregateEntity.getData())
-            .build());
+            .build();
+
+    return new StateMutationMethod(function, deduceDomainObjectPropertiesFromFunction(function));
   }
 
   /**
@@ -220,7 +264,7 @@ public class StateMutationMethodDeducer {
    */
   private StateMutationMethod aggregateRootDeleteEntity(
       Thing thing, AggregateEntity aggregateEntity) {
-    return new StateMutationMethod(
+    Function function =
         FunctionBuilder.of(
                 thing,
                 String.format(
@@ -228,6 +272,8 @@ public class StateMutationMethodDeducer {
                     TextConverter.toUpperCamel(aggregateEntity.getObjectName().getText())),
                 Purpose.aggregateRootDeleteEntity())
             .setReturnValue(aggregateEntity.getData())
-            .build());
+            .build();
+
+    return new StateMutationMethod(function, deduceDomainObjectPropertiesFromFunction(function));
   }
 }

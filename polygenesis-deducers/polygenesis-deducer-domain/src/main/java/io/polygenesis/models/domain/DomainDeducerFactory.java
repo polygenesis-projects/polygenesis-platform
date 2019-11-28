@@ -26,7 +26,8 @@ import io.polygenesis.models.domain.aggregateroot.AggregateEntityPropertyDeducer
 import io.polygenesis.models.domain.aggregateroot.AggregateRootDeducer;
 import io.polygenesis.models.domain.aggregateroot.AggregateRootPropertyDeducer;
 import io.polygenesis.models.domain.aggregateroot.StateMutationMethodDeducer;
-import io.polygenesis.models.domain.domainmessage.DomainEventDeducer;
+import io.polygenesis.models.domain.domainmessage.DomainEventConstructorDeducer;
+import io.polygenesis.models.domain.domainmessage.DomainEventMutationDeducer;
 
 /**
  * The type Domain deducer factory.
@@ -54,13 +55,11 @@ public final class DomainDeducerFactory {
     AggregateRootPropertyDeducer aggregateRootPropertyDeducer =
         new AggregateRootPropertyDeducer(aggregateEntityDeducer);
 
-    DomainEventDeducer domainEventDeducer = new DomainEventDeducer();
-
-    StateMutationMethodDeducer stateMutationMethodDeducer = new StateMutationMethodDeducer();
-
     aggregateRootDeducer =
         new AggregateRootDeducer(
-            aggregateRootPropertyDeducer, stateMutationMethodDeducer, domainEventDeducer);
+            aggregateRootPropertyDeducer,
+            new StateMutationMethodDeducer(new DomainEventMutationDeducer()),
+            new DomainEventConstructorDeducer());
   }
 
   // ===============================================================================================

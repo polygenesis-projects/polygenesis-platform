@@ -601,6 +601,10 @@ public abstract class AbstractClassTransformer<S extends Nameable, F extends Fun
     String callSuperWithParameters = callSuperWithParameters(parameterRepresentations);
     if (!callSuperWithParameters.equals("")) {
       stringBuilder.append(String.format("\t\tsuper(%s);%n", callSuperWithParameters));
+    } else {
+      if (parameterRepresentations.isEmpty()) {
+        return "\t\tsuper();";
+      }
     }
 
     parameterRepresentations

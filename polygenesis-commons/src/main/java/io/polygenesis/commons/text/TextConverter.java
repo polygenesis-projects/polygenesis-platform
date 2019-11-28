@@ -161,6 +161,16 @@ public final class TextConverter {
     return English.plural(input);
   }
 
+  /**
+   * To past tense string.
+   *
+   * @param input the input
+   * @return the string
+   */
+  public static String toPastTense(String input) {
+    return PastTense.make(input);
+  }
+
   // ===============================================================================================
   // PRIVATE
   // ===============================================================================================

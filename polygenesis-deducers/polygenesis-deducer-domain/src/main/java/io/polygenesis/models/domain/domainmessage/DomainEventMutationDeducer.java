@@ -29,33 +29,45 @@ import io.polygenesis.models.domain.DomainEvent;
 import io.polygenesis.models.domain.DomainObjectProperty;
 import io.polygenesis.models.domain.InstantiationType;
 import io.polygenesis.models.domain.PropertyType;
+import io.polygenesis.models.domain.StateMutationMethod;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
- * The type Domain event deducer.
+ * The type Domain event mutation deducer.
  *
  * @author Christos Tsakostas
  */
-public class DomainEventDeducer {
+public class DomainEventMutationDeducer {
 
   /**
    * Deduce from domain event.
    *
-   * @param constructor the constructor
+   * @param thingPackageName the thing package name
+   * @param thing the thing
+   * @param stateMutationMethod the state mutation method
    * @return the domain event
    */
-  public DomainEvent deduceFrom(PackageName rootPackageName, Thing thing, Constructor constructor) {
-    Set<DomainObjectProperty<?>> properties = constructor.getProperties();
+  @SuppressWarnings("CPD-START")
+  public DomainEvent deduceFrom(
+      PackageName thingPackageName, Thing thing, StateMutationMethod stateMutationMethod) {
+    Set<DomainObjectProperty<?>> properties = stateMutationMethod.getProperties();
     Set<Constructor> constructors =
-        new LinkedHashSet<>(Collections.singletonList(makeDomainEventConstructor(constructor)));
+        new LinkedHashSet<>(
+            Collections.singletonList(makeDomainEventConstructor(stateMutationMethod)));
 
     return new DomainEvent(
         InstantiationType.CONCRETE,
         new ObjectName(
-            String.format("%sCreated", TextConverter.toUpperCamel(thing.getThingName().getText()))),
-        thing.makePackageName(rootPackageName, thing),
+            String.format(
+                "%s%s",
+                TextConverter.toUpperCamel(thing.getThingName().getText()),
+                // Use past tense
+                TextConverter.toUpperCamel(
+                    TextConverter.toPastTense(
+                        stateMutationMethod.getFunction().getName().getText())))),
+        thingPackageName,
         properties,
         constructors,
         thing.getMultiTenant());
@@ -65,10 +77,10 @@ public class DomainEventDeducer {
   // PRIVATE
   // ===============================================================================================
 
-  private Constructor makeDomainEventConstructor(Constructor constructor) {
+  private Constructor makeDomainEventConstructor(StateMutationMethod stateMutationMethod) {
     Set<DomainObjectProperty<?>> properties = new LinkedHashSet<>();
 
-    constructor
+    stateMutationMethod
         .getProperties()
         .forEach(
             property -> {
@@ -77,6 +89,6 @@ public class DomainEventDeducer {
               }
             });
 
-    return new Constructor(constructor.getFunction(), properties);
+    return new Constructor(stateMutationMethod.getFunction(), properties);
   }
 }

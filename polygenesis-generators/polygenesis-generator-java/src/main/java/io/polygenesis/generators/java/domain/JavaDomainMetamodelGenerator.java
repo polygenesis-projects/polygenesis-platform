@@ -258,6 +258,23 @@ public class JavaDomainMetamodelGenerator extends AbstractMetamodelGenerator {
                         }
                       });
 
+              // State Mutation Methods Domain Events
+              aggregateRoot
+                  .getStateMutationMethods()
+                  .forEach(
+                      constructor -> {
+                        DomainEvent domainEvent = constructor.getDomainEvent();
+                        if (domainEvent != null) {
+                          domainEventGenerator.generate(
+                              domainEvent,
+                              exportInfo(
+                                  getGenerationPath(),
+                                  domainEvent.getPackageName(),
+                                  domainEvent.getObjectName()),
+                              getRootPackageName());
+                        }
+                      });
+
               // Aggregate Entities
               aggregateRoot
                   .getProperties()
