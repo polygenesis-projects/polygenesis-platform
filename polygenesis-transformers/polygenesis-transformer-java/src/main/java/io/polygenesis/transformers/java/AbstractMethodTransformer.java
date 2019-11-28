@@ -116,17 +116,21 @@ public abstract class AbstractMethodTransformer<S extends FunctionProvider>
               // }
 
               // Dto Primitives that correspond to Domain Value Objects
-              dataGroup.getModels()
+              dataGroup
+                  .getModels()
                   .stream()
-                  .filter(data -> data.isDataPrimitive()
-                      && data.getAsDataPrimitive().getDataObject() != null)
+                  .filter(
+                      data ->
+                          data.isDataPrimitive()
+                              && data.getAsDataPrimitive().getDataObject() != null)
                   .map(data -> data.getAsDataPrimitive().getDataObject())
-                  .forEach(dataObject -> {
-                    // TODO: check for identical package
-                    imports.add(
-                        makeCanonicalObjectName(dataObject.getPackageName(),
-                            dataObject.getDataType()));
-                  });
+                  .forEach(
+                      dataObject -> {
+                        // TODO: check for identical package
+                        imports.add(
+                            makeCanonicalObjectName(
+                                dataObject.getPackageName(), dataObject.getDataType()));
+                      });
             });
 
     return imports;

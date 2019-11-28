@@ -30,7 +30,6 @@ import io.polygenesis.abstraction.data.DataPurpose;
 import io.polygenesis.abstraction.thing.FunctionProvider;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.commons.valueobjects.PackageName;
-import io.polygenesis.commons.valueobjects.VariableName;
 import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.generators.java.shared.transformer.MethodTransformer;
 import io.polygenesis.models.domain.AbstractAggregateRootId;

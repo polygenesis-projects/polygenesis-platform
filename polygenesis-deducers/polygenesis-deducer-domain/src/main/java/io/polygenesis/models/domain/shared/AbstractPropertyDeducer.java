@@ -270,7 +270,7 @@ public abstract class AbstractPropertyDeducer {
             dataPrimitive.getDataObject().getPackageName(),
             dataPrimitive.getVariableName());
 
-    if(dataPrimitive.getDataObject().getModels().isEmpty()) {
+    if (dataPrimitive.getDataObject().getModels().isEmpty()) {
       dataObject.addData(dataPrimitive.withVariableName("value"));
     } else {
       dataObject.addData(dataPrimitive.getDataObject().getModels());

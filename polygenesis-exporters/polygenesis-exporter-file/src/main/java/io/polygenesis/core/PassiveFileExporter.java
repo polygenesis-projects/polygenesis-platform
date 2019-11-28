@@ -41,9 +41,7 @@ public class PassiveFileExporter extends ActiveFileExporter {
   // CONSTRUCTOR
   // ===============================================================================================
 
-  /**
-   * Instantiates a new Passive file exporter.
-   */
+  /** Instantiates a new Passive file exporter. */
   public PassiveFileExporter() {
     if (System.getenv().get("enforceOverwrite") != null) {
       this.enforceOverwrite = true;
@@ -64,8 +62,8 @@ public class PassiveFileExporter extends ActiveFileExporter {
     Assertion.isNotNull(exportInfo.getFileName(), "exportInfo.getFileName() is required");
 
     if (!Paths.get(exportInfo.getGenerationPath().toString(), exportInfo.getFileName())
-        .toFile()
-        .exists()
+            .toFile()
+            .exists()
         || enforceOverwrite) {
       super.export(byteArrayOutputStream, exportInfo);
     }

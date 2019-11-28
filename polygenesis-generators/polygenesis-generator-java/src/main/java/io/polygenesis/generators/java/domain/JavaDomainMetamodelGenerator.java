@@ -253,7 +253,8 @@ public class JavaDomainMetamodelGenerator extends AbstractMetamodelGenerator {
                               exportInfo(
                                   getGenerationPath(),
                                   domainEvent.getPackageName(),
-                                  domainEvent.getObjectName()));
+                                  domainEvent.getObjectName()),
+                              getRootPackageName());
                         }
                       });
 

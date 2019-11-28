@@ -149,10 +149,9 @@ public abstract class Data {
       return (DataObject) this;
     } else {
       throw new IllegalStateException(
-          String.format("Data of type=%s with name=%s is not a DataObject",
-              getDataPrimaryType().name(),
-              getVariableName().getText()
-          ));
+          String.format(
+              "Data of type=%s with name=%s is not a DataObject",
+              getDataPrimaryType().name(), getVariableName().getText()));
     }
   }
 
