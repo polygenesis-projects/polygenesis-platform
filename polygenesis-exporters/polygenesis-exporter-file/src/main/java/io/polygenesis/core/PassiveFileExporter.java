@@ -31,6 +31,31 @@ import java.nio.file.Paths;
  */
 public class PassiveFileExporter extends ActiveFileExporter {
 
+  // ===============================================================================================
+  // STATE
+  // ===============================================================================================
+
+  private final Boolean enforceOverwrite;
+
+  // ===============================================================================================
+  // CONSTRUCTOR
+  // ===============================================================================================
+
+  /**
+   * Instantiates a new Passive file exporter.
+   */
+  public PassiveFileExporter() {
+    if (System.getenv().get("enforceOverwrite") != null) {
+      this.enforceOverwrite = true;
+    } else {
+      this.enforceOverwrite = false;
+    }
+  }
+
+  // ===============================================================================================
+  // OVERRIDES
+  // ===============================================================================================
+
   @Override
   public void export(ByteArrayOutputStream byteArrayOutputStream, ExportInfo exportInfo) {
     Assertion.isNotNull(exportInfo, "exportInfo is required");
@@ -40,7 +65,8 @@ public class PassiveFileExporter extends ActiveFileExporter {
 
     if (!Paths.get(exportInfo.getGenerationPath().toString(), exportInfo.getFileName())
         .toFile()
-        .exists()) {
+        .exists()
+        || enforceOverwrite) {
       super.export(byteArrayOutputStream, exportInfo);
     }
   }

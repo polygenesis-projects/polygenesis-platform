@@ -262,7 +262,8 @@ public class ServiceDetailTransformer
               imports.addAll(methodTransformer.imports(method));
 
               if (method.getServiceMethod().getFunction().getPurpose().isFetchOne()
-                  || method.getServiceMethod().getFunction().getPurpose().isModify()) {
+                  || method.getServiceMethod().getFunction().getPurpose().isModify()
+                  || method.getServiceMethod().getFunction().getPurpose().isCreate()) {
                 imports.add("java.util.UUID");
               }
             });

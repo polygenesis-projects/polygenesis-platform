@@ -22,11 +22,13 @@ package io.polygenesis.abstraction.thing;
 
 import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.DataObject;
+import io.polygenesis.abstraction.data.DataPrimitive;
 import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.commons.keyvalue.KeyValue;
 import io.polygenesis.commons.valueobjects.ContextName;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
+import io.polygenesis.commons.valueobjects.VariableName;
 import io.polygenesis.core.Abstraction;
 import io.polygenesis.core.AbstractionScope;
 import java.util.LinkedHashSet;
@@ -363,6 +365,45 @@ public class Thing implements Abstraction {
         .orElse(null);
   }
 
+  /**
+   * Gets thing identity.
+   *
+   * @return the thing identity
+   */
+  public ThingProperty getThingIdentity() {
+    return getThingProperties()
+        .stream()
+        .filter(thingProperty -> thingProperty.getData().isThingIdentity())
+        .findFirst()
+        .orElseThrow(() -> new IllegalStateException(
+            String.format("Thing %s does not have identity", getThingName().getText())));
+  }
+
+  /**
+   * Gets thing identity as data object from data primitive.
+   *
+   * @param rootPackageName the root package name
+   * @param variableName the variable name
+   * @param dataPrimitive the data primitive
+   * @return the thing identity as data object from data primitive
+   */
+  public DataObject getThingIdentityAsDataObjectFromDataPrimitive(PackageName rootPackageName,
+      VariableName variableName, DataPrimitive dataPrimitive) {
+    ThingProperty thingProperty = getThingIdentity();
+
+    if (thingProperty.getData().isDataGroup()) {
+      return thingProperty.getData().getAsDataObject();
+    } else {
+      DataObject dataObject = new DataObject(
+          new ObjectName(thingProperty.getData().getVariableName().getText()),
+          makePackageName(rootPackageName, this),
+          variableName
+      );
+      dataObject.addData(dataPrimitive);
+      return dataObject;
+    }
+  }
+
   // ===============================================================================================
   // GUARDS
   // ===============================================================================================
@@ -478,29 +519,6 @@ public class Thing implements Abstraction {
 
     thingProperties.addAll(newThingProperties);
   }
-
-  //  protected void ensureThingProperties(Thing thing) {
-  //    if (thing.getThingProperties().isEmpty()) {
-  //      Set<ThingProperty> thingProperties = new LinkedHashSet<>();
-  //
-  //      thing
-  //          .getFunctions()
-  //          .stream()
-  //          .map(Function::getArguments)
-  //          .flatMap(arguments -> arguments.stream().map(Argument::getData))
-  //          .filter(Data::isDataGroup)
-  //          .map(Data::getAsDataObject)
-  //          .flatMap(dataGroup -> dataGroup.getModels().stream())
-  //          // TODO
-  //          .filter(
-  //              data ->
-  //                  data.getDataPurpose().equals(DataPurpose.any())
-  //                      || data.getDataPurpose().equals(DataPurpose.referenceToThing()))
-  //          .forEach(data -> thingProperties.add(new ThingProperty(data)));
-  //
-  //      thing.assignThingProperties(thingProperties);
-  //    }
-  //  }
 
   // ===============================================================================================
   // OVERRIDES

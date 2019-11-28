@@ -96,6 +96,27 @@ public class DataPrimitive extends Data {
         null);
   }
 
+  /**
+   * Of data business type with data object data primitive.
+   *
+   * @param dataPurpose the data purpose
+   * @param primitiveType the primitive type
+   * @param variableName the variable name
+   * @param dataObject the data object
+   * @return the data primitive
+   */
+  public static DataPrimitive ofDataBusinessTypeWithDataObject(
+      DataPurpose dataPurpose, PrimitiveType primitiveType, VariableName variableName,
+      DataObject dataObject) {
+    return new DataPrimitive(
+        variableName,
+        dataPurpose,
+        DataValidator.empty(),
+        primitiveType,
+        new LinkedHashSet<>(),
+        dataObject);
+  }
+
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================

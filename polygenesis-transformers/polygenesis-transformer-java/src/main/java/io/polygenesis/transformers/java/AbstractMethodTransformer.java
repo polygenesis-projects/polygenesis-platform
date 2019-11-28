@@ -94,10 +94,10 @@ public abstract class AbstractMethodTransformer<S extends FunctionProvider>
         && source.getFunction().getReturnValue().getData().isDataGroup()) {
       DataObject dataObject = source.getFunction().getReturnValue().getData().getAsDataObject();
 
-      // TODO
-      //            if (!dataObject.getPackageName().equals(source.getPackageName())) {
+      // TODO: check for identical package
+      // if (!dataObject.getPackageName().equals(source.getPackageName())) {
       imports.add(makeCanonicalObjectName(dataObject.getPackageName(), dataObject.getDataType()));
-      //            }
+      // }
     }
 
     source
@@ -109,11 +109,24 @@ public abstract class AbstractMethodTransformer<S extends FunctionProvider>
         .map(DataObject.class::cast)
         .forEach(
             dataGroup -> {
-              // TODO
-              //              if (!dataGroup.getPackageName().equals(source.getPackageName())) {
+              // TODO: check for identical package
+              // if (!dataGroup.getPackageName().equals(source.getPackageName())) {
               imports.add(
                   makeCanonicalObjectName(dataGroup.getPackageName(), dataGroup.getDataType()));
-              //              }
+              // }
+
+              // Dto Primitives that correspond to Domain Value Objects
+              dataGroup.getModels()
+                  .stream()
+                  .filter(data -> data.isDataPrimitive()
+                      && data.getAsDataPrimitive().getDataObject() != null)
+                  .map(data -> data.getAsDataPrimitive().getDataObject())
+                  .forEach(dataObject -> {
+                    // TODO: check for identical package
+                    imports.add(
+                        makeCanonicalObjectName(dataObject.getPackageName(),
+                            dataObject.getDataType()));
+                  });
             });
 
     return imports;
