@@ -28,11 +28,13 @@ import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.ThingProperty;
 import io.polygenesis.commons.valueobjects.PackageName;
+import io.polygenesis.models.domain.BaseDomainEntity;
 import io.polygenesis.models.domain.Constructor;
 import io.polygenesis.models.domain.DomainObjectProperty;
 import io.polygenesis.models.domain.Mapper;
 import io.polygenesis.models.domain.Primitive;
 import io.polygenesis.models.domain.PrimitiveCollection;
+import io.polygenesis.models.domain.PropertyType;
 import io.polygenesis.models.domain.Reference;
 import io.polygenesis.models.domain.ValueObject;
 import io.polygenesis.models.domain.ValueObjectCollection;
@@ -103,7 +105,8 @@ public abstract class AbstractPropertyDeducer {
    * @param rootPackageName the root package name
    * @return the set
    */
-  public Set<Constructor> deduceConstructors(Thing thing, PackageName rootPackageName) {
+  public Set<Constructor> deduceConstructors(
+      BaseDomainEntity superClass, Thing thing, PackageName rootPackageName) {
     Set<Constructor> constructors = new LinkedHashSet<>();
 
     thing
@@ -115,13 +118,41 @@ public abstract class AbstractPropertyDeducer {
         .forEach(
             function -> {
               Set<ThingProperty> thingProperties = getThingPropertiesFromFunction(function);
-
               Set<DomainObjectProperty<?>> properties = new LinkedHashSet<>();
 
               properties.addAll(makeIdentityDomainObjectProperties(thing, rootPackageName));
               properties.addAll(this.toDomainObjectProperties(thingProperties));
 
-              constructors.add(new Constructor(function, properties));
+              // Inherit properties from superclass
+              if (superClass != null && !superClass.getConstructors().isEmpty()) {
+                superClass
+                    .getConstructors()
+                    .stream()
+                    .forEach(
+                        superClassConstructor -> {
+                          // Super class
+                          Set<DomainObjectProperty<?>> superClassProperties =
+                              superClassConstructor
+                                  .getProperties()
+                                  .stream()
+                                  .filter(
+                                      property ->
+                                          !property
+                                                  .getPropertyType()
+                                                  .equals(PropertyType.AGGREGATE_ROOT_ID)
+                                              && !property
+                                                  .getPropertyType()
+                                                  .equals(PropertyType.ABSTRACT_AGGREGATE_ROOT_ID))
+                                  .collect(Collectors.toCollection(LinkedHashSet::new));
+
+                          // Add
+                          constructors.add(
+                              new Constructor(function, properties, superClassProperties));
+                        });
+              } else {
+                // Add
+                constructors.add(new Constructor(function, properties));
+              }
             });
 
     return constructors;

@@ -18,56 +18,44 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.generators.java.implementations.domain;
+package io.polygenesis.generators.java.domain.aggregateroot.activity.statemutation;
 
+import io.polygenesis.abstraction.thing.AbstractActivityRegistry;
 import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.ScopePurposeTuple;
-import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.core.AbstractionScope;
-import io.polygenesis.generators.java.implementations.AbstractMethodImplementorRegistry;
+import io.polygenesis.core.FreemarkerTemplateEngine;
+import io.polygenesis.core.TemplateEngine;
 import io.polygenesis.models.domain.StateMutationMethod;
 
 /**
- * The type State mutation method implementor registry.
+ * The type Aggregate root state mutation activity registry.
  *
  * @author Christos Tsakostas
  */
-public class StateMutationMethodImplementorRegistry
-    extends AbstractMethodImplementorRegistry<StateMutationMethod> {
+public class AggregateRootStateMutationActivityRegistry
+    extends AbstractActivityRegistry<StateMutationMethod> {
 
   // ===============================================================================================
-  // CONSTRUCTORS
+  // STATIC
   // ===============================================================================================
 
-  /**
-   * Instantiates a new State mutation method implementor registry.
-   *
-   * @param freemarkerService the freemarker service
-   */
-  public StateMutationMethodImplementorRegistry(FreemarkerService freemarkerService) {
-    super(freemarkerService);
-  }
+  static {
+    TemplateEngine templateEngine = new FreemarkerTemplateEngine();
 
-  // ===============================================================================================
-  // IMPLEMENTATIONS
-  // ===============================================================================================
+    // ABSTRACT AGGREGATE ROOT
+    scopeAndPurposeMap.put(
+        new ScopePurposeTuple(AbstractionScope.domainAbstractAggregateRoot(), Purpose.create()),
+        new ConstructorActivityGenerator(new ConstructorActivityTransformer(), templateEngine));
 
-  @Override
-  public void initializeScopeAndPurposeMap() {
     // AGGREGATE ROOT
     scopeAndPurposeMap.put(
-        new ScopePurposeTuple(
-            AbstractionScope.domainAggregateRoot(), Purpose.aggregateRootCreateEntity()),
-        new CreateAggregateEntity());
+        new ScopePurposeTuple(AbstractionScope.domainAggregateRoot(), Purpose.create()),
+        new ConstructorActivityGenerator(new ConstructorActivityTransformer(), templateEngine));
 
+    // ALL AGGREGATE ROOTS
     scopeAndPurposeMap.put(
-        new ScopePurposeTuple(
-            AbstractionScope.domainAggregateRoot(), Purpose.aggregateRootUpdateEntity()),
-        new UpdateAggregateEntity());
-
-    scopeAndPurposeMap.put(
-        new ScopePurposeTuple(
-            AbstractionScope.domainAggregateRoot(), Purpose.aggregateRootDeleteEntity()),
-        new DeleteAggregateEntity());
+        new ScopePurposeTuple(AbstractionScope.domainAggregateRoot(), Purpose.modify()),
+        new ModifyActivityGenerator(new ModifyActivityTransformer(), templateEngine));
   }
 }

@@ -18,11 +18,11 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.generators.java.domain.aggregateentity.id;
+package io.polygenesis.generators.java.domain.aggregaterootid;
 
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.DataTypeTransformer;
-import io.polygenesis.models.domain.AggregateEntity;
+import io.polygenesis.models.domain.AggregateRoot;
 import io.polygenesis.representations.code.ConstructorRepresentation;
 import io.polygenesis.representations.code.FieldRepresentation;
 import io.polygenesis.representations.code.MethodRepresentation;
@@ -34,23 +34,23 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /**
- * The type Aggregate entity id class representable.
+ * The type Aggregate root projection converter.
  *
  * @author Christos Tsakostas
  */
-public class AggregateEntityIdLegacyClassTransformer
-    extends AbstractLegacyClassTransformer<AggregateEntity> {
+public class AggregateRootIdLegacyClassTransformer
+    extends AbstractLegacyClassTransformer<AggregateRoot> {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
-   * Instantiates a new Aggregate entity id class representable.
+   * Instantiates a new Aggregate root id class representable.
    *
    * @param dataTypeTransformer the from data type to java converter
    */
-  public AggregateEntityIdLegacyClassTransformer(DataTypeTransformer dataTypeTransformer) {
+  public AggregateRootIdLegacyClassTransformer(DataTypeTransformer dataTypeTransformer) {
     super(dataTypeTransformer);
   }
 
@@ -59,8 +59,7 @@ public class AggregateEntityIdLegacyClassTransformer
   // ===============================================================================================
 
   @Override
-  public Set<FieldRepresentation> stateFieldRepresentations(
-      AggregateEntity source, Object... args) {
+  public Set<FieldRepresentation> stateFieldRepresentations(AggregateRoot source, Object... args) {
     return new LinkedHashSet<>(
         Arrays.asList(
             FieldRepresentation.withModifiers(
@@ -71,7 +70,7 @@ public class AggregateEntityIdLegacyClassTransformer
 
   @Override
   public Set<ConstructorRepresentation> constructorRepresentations(
-      AggregateEntity source, Object... args) {
+      AggregateRoot source, Object... args) {
     Set<ConstructorRepresentation> constructorRepresentations = new LinkedHashSet<>();
 
     // ---------------------------------------------------------------------------------------------
@@ -82,31 +81,30 @@ public class AggregateEntityIdLegacyClassTransformer
     // ---------------------------------------------------------------------------------------------
     // Create constructor with parameters
     // ---------------------------------------------------------------------------------------------
-
     constructorRepresentations.add(
         createConstructorWithImplementation(
             source.getObjectName().getText(),
-            new LinkedHashSet<>(Arrays.asList(new ParameterRepresentation("UUID", "entityId"))),
-            "\t\tsuper(entityId);"));
+            new LinkedHashSet<>(Arrays.asList(new ParameterRepresentation("UUID", "rootId"))),
+            "\t\tsuper(rootId);"));
 
     return constructorRepresentations;
   }
 
   @Override
-  public Set<MethodRepresentation> methodRepresentations(AggregateEntity source, Object... args) {
+  public Set<MethodRepresentation> methodRepresentations(AggregateRoot source, Object... args) {
     return new LinkedHashSet<>();
   }
 
   @Override
-  public String packageName(AggregateEntity source, Object... args) {
+  public String packageName(AggregateRoot source, Object... args) {
     return source.getPackageName().getText();
   }
 
   @Override
-  public Set<String> imports(AggregateEntity source, Object... args) {
+  public Set<String> imports(AggregateRoot source, Object... args) {
     Set<String> imports = new TreeSet<>();
 
-    imports.add("com.oregor.trinity4j.domain.AggregateEntityId");
+    imports.add("com.oregor.trinity4j.domain.AggregateRootId");
     imports.add("javax.persistence.Embeddable");
     imports.add("java.util.UUID");
 
@@ -114,30 +112,30 @@ public class AggregateEntityIdLegacyClassTransformer
   }
 
   @Override
-  public Set<String> annotations(AggregateEntity source, Object... args) {
+  public Set<String> annotations(AggregateRoot source, Object... args) {
     return new LinkedHashSet<>(Arrays.asList("@Embeddable"));
   }
 
   @Override
-  public String description(AggregateEntity source, Object... args) {
+  public String description(AggregateRoot source, Object... args) {
     StringBuilder stringBuilder = new StringBuilder();
 
     stringBuilder.append("The ");
 
     stringBuilder.append(TextConverter.toUpperCamelSpaces(source.getObjectName().getText()));
 
-    stringBuilder.append(" Aggregate Entity Id.");
+    stringBuilder.append(" Aggregate Root Id.");
 
     return stringBuilder.toString();
   }
 
   @Override
-  public String modifiers(AggregateEntity source, Object... args) {
+  public String modifiers(AggregateRoot source, Object... args) {
     return MODIFIER_PUBLIC;
   }
 
   @Override
-  public String simpleObjectName(AggregateEntity source, Object... args) {
+  public String simpleObjectName(AggregateRoot source, Object... args) {
     StringBuilder stringBuilder = new StringBuilder();
 
     stringBuilder.append(TextConverter.toLowerCamel(source.getObjectName().getText()));
@@ -147,13 +145,14 @@ public class AggregateEntityIdLegacyClassTransformer
   }
 
   @Override
-  public String fullObjectName(AggregateEntity source, Object... args) {
+  public String fullObjectName(AggregateRoot source, Object... args) {
     StringBuilder stringBuilder = new StringBuilder();
 
     stringBuilder.append(TextConverter.toUpperCamel(source.getObjectName().getText()));
     stringBuilder.append("Id");
     stringBuilder.append(" extends ");
-    stringBuilder.append("AggregateEntityId");
+
+    stringBuilder.append("AggregateRootId");
 
     return stringBuilder.toString();
   }

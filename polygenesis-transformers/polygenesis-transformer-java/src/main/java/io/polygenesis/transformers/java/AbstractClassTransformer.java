@@ -614,9 +614,7 @@ public abstract class AbstractClassTransformer<S extends Nameable, F extends Fun
                 !parameterRepresentation.getDataPurpose().equals(DataPurpose.superclassParameter()))
         .forEach(
             parameterRepresentation -> {
-              if (parameterRepresentation.getDataPurpose().equals(DataPurpose.thingIdentity())) {
-                throw new UnsupportedOperationException();
-              } else {
+              if (!parameterRepresentation.getDataPurpose().equals(DataPurpose.thingIdentity())) {
                 stringBuilder.append("\t\t");
                 stringBuilder.append("this.");
                 stringBuilder.append(

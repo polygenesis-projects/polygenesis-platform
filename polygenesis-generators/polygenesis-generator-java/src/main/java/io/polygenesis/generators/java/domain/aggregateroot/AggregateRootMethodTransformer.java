@@ -32,6 +32,12 @@ import io.polygenesis.transformers.java.AbstractMethodTransformer;
 public class AggregateRootMethodTransformer extends AbstractMethodTransformer<Function> {
 
   // ===============================================================================================
+  // DEPENDENCIES
+  // ===============================================================================================
+
+  private final AggregateRootActivityRegistry aggregateRootActivityRegistry;
+
+  // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
@@ -39,13 +45,25 @@ public class AggregateRootMethodTransformer extends AbstractMethodTransformer<Fu
    * Instantiates a new Aggregate root method transformer.
    *
    * @param dataTypeTransformer the data type transformer
+   * @param aggregateRootActivityRegistry the aggregate root activity registry
    */
-  public AggregateRootMethodTransformer(DataTypeTransformer dataTypeTransformer) {
+  public AggregateRootMethodTransformer(
+      DataTypeTransformer dataTypeTransformer,
+      AggregateRootActivityRegistry aggregateRootActivityRegistry) {
     super(dataTypeTransformer);
+    this.aggregateRootActivityRegistry = aggregateRootActivityRegistry;
   }
 
   // ===============================================================================================
   // OVERRIDES
   // ===============================================================================================
 
+  @Override
+  public String implementation(Function source, Object... args) {
+    if (aggregateRootActivityRegistry.isActivitySupportedFor(source)) {
+      return aggregateRootActivityRegistry.activityFor(source, args);
+    } else {
+      return super.implementation(source, args);
+    }
+  }
 }

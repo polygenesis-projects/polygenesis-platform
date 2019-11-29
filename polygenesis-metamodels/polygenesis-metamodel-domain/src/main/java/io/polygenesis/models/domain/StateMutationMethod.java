@@ -35,6 +35,7 @@ public class StateMutationMethod extends BaseMethod {
   @SuppressWarnings("CPD-START")
   private Set<DomainObjectProperty<?>> properties;
 
+  private Set<DomainObjectProperty<?>> superClassProperties;
   private DomainEvent domainEvent;
 
   // ===============================================================================================
@@ -50,6 +51,22 @@ public class StateMutationMethod extends BaseMethod {
   public StateMutationMethod(Function function, Set<DomainObjectProperty<?>> properties) {
     super(function);
     setProperties(properties);
+  }
+
+  /**
+   * Instantiates a new State mutation method.
+   *
+   * @param function the function
+   * @param properties the properties
+   * @param superClassProperties the super class properties
+   */
+  public StateMutationMethod(
+      Function function,
+      Set<DomainObjectProperty<?>> properties,
+      Set<DomainObjectProperty<?>> superClassProperties) {
+    super(function);
+    setProperties(properties);
+    setSuperClassProperties(superClassProperties);
   }
 
   // ===============================================================================================
@@ -79,6 +96,15 @@ public class StateMutationMethod extends BaseMethod {
   }
 
   /**
+   * Gets super class properties.
+   *
+   * @return the super class properties
+   */
+  public Set<DomainObjectProperty<?>> getSuperClassProperties() {
+    return superClassProperties;
+  }
+
+  /**
    * Gets domain event.
    *
    * @return the domain event
@@ -99,6 +125,16 @@ public class StateMutationMethod extends BaseMethod {
   private void setProperties(Set<DomainObjectProperty<?>> properties) {
     Assertion.isNotNull(properties, "properties is required");
     this.properties = properties;
+  }
+
+  /**
+   * Sets super class properties.
+   *
+   * @param superClassProperties the super class properties
+   */
+  public void setSuperClassProperties(Set<DomainObjectProperty<?>> superClassProperties) {
+    Assertion.isNotNull(superClassProperties, "superClassProperties is required");
+    this.superClassProperties = superClassProperties;
   }
 
   /**
@@ -128,11 +164,12 @@ public class StateMutationMethod extends BaseMethod {
     }
     StateMutationMethod that = (StateMutationMethod) o;
     return Objects.equals(properties, that.properties)
+        && Objects.equals(superClassProperties, that.superClassProperties)
         && Objects.equals(domainEvent, that.domainEvent);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(super.hashCode(), properties, domainEvent);
+    return Objects.hash(super.hashCode(), properties, superClassProperties, domainEvent);
   }
 }

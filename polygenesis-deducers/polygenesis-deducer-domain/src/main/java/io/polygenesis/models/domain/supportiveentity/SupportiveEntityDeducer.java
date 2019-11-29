@@ -105,6 +105,6 @@ public class SupportiveEntityDeducer implements Deducer<SupportiveEntityMetamode
                     "supportive",
                     thing.getThingName().getText().toLowerCase())),
             supportiveEntityPropertyDeducer.deduceFromThing(thing, rootPackageName),
-            supportiveEntityPropertyDeducer.deduceConstructors(thing, rootPackageName)));
+            supportiveEntityPropertyDeducer.deduceConstructors(null, thing, rootPackageName)));
   }
 }
