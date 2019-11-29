@@ -32,13 +32,16 @@ import io.polygenesis.core.PassiveFileExporter;
 import io.polygenesis.core.TemplateEngine;
 import io.polygenesis.generators.java.domain.aggregateentity.AggregateEntityExporter;
 import io.polygenesis.generators.java.domain.aggregateentity.AggregateEntityLegacyClassTransformer;
-import io.polygenesis.generators.java.domain.aggregateentity.id.AggregateEntityIdExporter;
-import io.polygenesis.generators.java.domain.aggregateentity.id.AggregateEntityIdLegacyClassTransformer;
+import io.polygenesis.generators.java.domain.aggregateentityid.AggregateEntityIdExporter;
+import io.polygenesis.generators.java.domain.aggregateentityid.AggregateEntityIdLegacyClassTransformer;
+import io.polygenesis.generators.java.domain.aggregateroot.AggregateRootActivityRegistry;
 import io.polygenesis.generators.java.domain.aggregateroot.AggregateRootGenerator;
 import io.polygenesis.generators.java.domain.aggregateroot.AggregateRootMethodTransformer;
 import io.polygenesis.generators.java.domain.aggregateroot.AggregateRootTransformer;
-import io.polygenesis.generators.java.domain.aggregateroot.id.AggregateRootIdExporter;
-import io.polygenesis.generators.java.domain.aggregateroot.id.AggregateRootIdLegacyClassTransformer;
+import io.polygenesis.generators.java.domain.aggregateroot.activity.statemutation.AggregateRootStateMutationActivityRegistry;
+import io.polygenesis.generators.java.domain.aggregateroot.activity.statemutation.AggregateRootStateMutationMethodTransformer;
+import io.polygenesis.generators.java.domain.aggregaterootid.AggregateRootIdExporter;
+import io.polygenesis.generators.java.domain.aggregaterootid.AggregateRootIdLegacyClassTransformer;
 import io.polygenesis.generators.java.domain.domainevent.DomainEventGenerator;
 import io.polygenesis.generators.java.domain.domainevent.DomainEventMethodTransformer;
 import io.polygenesis.generators.java.domain.domainevent.DomainEventTransformer;
@@ -78,7 +81,6 @@ import io.polygenesis.generators.java.domain.supportiveentity.repository.Support
 import io.polygenesis.generators.java.domain.valueobject.ValueObjectGenerator;
 import io.polygenesis.generators.java.domain.valueobject.ValueObjectMethodTransformer;
 import io.polygenesis.generators.java.domain.valueobject.ValueObjectTransformer;
-import io.polygenesis.generators.java.implementations.domain.StateMutationMethodImplementorRegistry;
 import io.polygenesis.transformers.java.JavaDataTypeTransformer;
 import io.polygenesis.transformers.java.legacy.FunctionToLegacyMethodRepresentationTransformer;
 import java.nio.file.Path;
@@ -130,19 +132,14 @@ public final class JavaDomainMetamodelGeneratorFactory {
     FreemarkerService freemarkerService =
         new FreemarkerService(FreemarkerConfig.getInstance().getConfiguration());
 
-    StateMutationMethodImplementorRegistry stateMutationMethodImplementorRegistry =
-        new StateMutationMethodImplementorRegistry(freemarkerService);
-
-    StateMutationLegacyMethodTransformer stateMutationMethodRepresentable =
-        new StateMutationLegacyMethodTransformer(
-            dataTypeTransformer, stateMutationMethodImplementorRegistry);
-
     aggregateRootGenerator =
         new AggregateRootGenerator(
             new AggregateRootTransformer(
                 dataTypeTransformer,
-                new AggregateRootMethodTransformer(dataTypeTransformer),
-                stateMutationMethodRepresentable),
+                new AggregateRootMethodTransformer(
+                    dataTypeTransformer, new AggregateRootActivityRegistry()),
+                new AggregateRootStateMutationMethodTransformer(
+                    dataTypeTransformer, new AggregateRootStateMutationActivityRegistry())),
             templateEngine,
             passiveFileExporter);
 

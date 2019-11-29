@@ -18,11 +18,11 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.generators.java.domain.aggregateentity.id;
+package io.polygenesis.generators.java.domain.aggregaterootid;
 
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.models.domain.AggregateEntity;
+import io.polygenesis.models.domain.AggregateRoot;
 import io.polygenesis.models.domain.InstantiationType;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -30,34 +30,34 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * The type Aggregate entity id exporter.
+ * The type Aggregate root exporter.
  *
  * @author Christos Tsakostas
  */
-public class AggregateEntityIdExporter {
+public class AggregateRootIdExporter {
 
   // ===============================================================================================
   // DEPENDENCIES
   // ===============================================================================================
 
   private final FreemarkerService freemarkerService;
-  private final AggregateEntityIdLegacyClassTransformer aggregateEntityIdClassRepresentable;
+  private final AggregateRootIdLegacyClassTransformer aggregateRootIdClassRepresentable;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
-   * Instantiates a new Aggregate entity id exporter.
+   * Instantiates a new Aggregate root projection exporter.
    *
    * @param freemarkerService the freemarker service
-   * @param aggregateEntityIdClassRepresentable the aggregate entity id class representable
+   * @param aggregateRootIdClassRepresentable the aggregate root ID projection converter
    */
-  public AggregateEntityIdExporter(
+  public AggregateRootIdExporter(
       FreemarkerService freemarkerService,
-      AggregateEntityIdLegacyClassTransformer aggregateEntityIdClassRepresentable) {
+      AggregateRootIdLegacyClassTransformer aggregateRootIdClassRepresentable) {
     this.freemarkerService = freemarkerService;
-    this.aggregateEntityIdClassRepresentable = aggregateEntityIdClassRepresentable;
+    this.aggregateRootIdClassRepresentable = aggregateRootIdClassRepresentable;
   }
 
   // ===============================================================================================
@@ -68,27 +68,28 @@ public class AggregateEntityIdExporter {
    * Export.
    *
    * @param generationPath the generation path
-   * @param aggregateEntity the aggregateEntity
+   * @param aggregateRoot the aggregateRoot
    */
-  public void export(Path generationPath, AggregateEntity aggregateEntity) {
+  public void export(Path generationPath, AggregateRoot aggregateRoot) {
     Map<String, Object> dataModel = new HashMap<>();
-    if (aggregateEntity.getInstantiationType().equals(InstantiationType.ABSTRACT)) {
+    if (aggregateRoot.getInstantiationType().equals(InstantiationType.ABSTRACT)) {
       return;
     }
 
-    dataModel.put("representation", aggregateEntityIdClassRepresentable.create(aggregateEntity));
+    dataModel.put("representation", aggregateRootIdClassRepresentable.create(aggregateRoot));
 
     freemarkerService.export(
         dataModel,
         "polygenesis-representation-java/Class.java.ftl",
-        makeFileName(generationPath, aggregateEntity));
+        makeFileName(generationPath, aggregateRoot));
   }
 
-  private Path makeFileName(Path generationPath, AggregateEntity aggregateEntity) {
+  private Path makeFileName(Path generationPath, AggregateRoot aggregateRoot) {
+
     return Paths.get(
         generationPath.toString(),
         "src/main/java",
-        aggregateEntity.getPackageName().toPath().toString(),
-        TextConverter.toUpperCamel(aggregateEntity.getObjectName().getText()) + "Id.java");
+        aggregateRoot.getPackageName().toPath().toString(),
+        TextConverter.toUpperCamel(aggregateRoot.getObjectName().getText()) + "Id.java");
   }
 }

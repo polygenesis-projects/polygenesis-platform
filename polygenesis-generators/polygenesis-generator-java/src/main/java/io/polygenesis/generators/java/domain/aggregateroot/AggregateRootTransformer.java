@@ -25,12 +25,10 @@ import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.core.TemplateData;
 import io.polygenesis.generators.java.domain.DomainObjectClassTransformer;
-import io.polygenesis.generators.java.domain.StateMutationLegacyMethodTransformer;
+import io.polygenesis.generators.java.domain.aggregateroot.activity.statemutation.AggregateRootStateMutationMethodTransformer;
 import io.polygenesis.generators.java.shared.transformer.MethodTransformer;
 import io.polygenesis.models.domain.AggregateRoot;
 import io.polygenesis.models.domain.InstantiationType;
-import io.polygenesis.representations.code.ConstructorRepresentation;
-import io.polygenesis.representations.code.FieldRepresentation;
 import io.polygenesis.representations.code.MethodRepresentation;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -49,7 +47,8 @@ public class AggregateRootTransformer
   // DEPENDENCIES
   // ===============================================================================================
 
-  private final StateMutationLegacyMethodTransformer stateMutationMethodRepresentable;
+  private final AggregateRootStateMutationMethodTransformer
+      aggregateRootStateMutationMethodTransformer;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -60,14 +59,14 @@ public class AggregateRootTransformer
    *
    * @param dataTypeTransformer the data type transformer
    * @param methodTransformer the method transformer
-   * @param stateMutationMethodRepresentable the state mutation method representable
+   * @param aggregateRootStateMutationMethodTransformer the state mutation method representable
    */
   public AggregateRootTransformer(
       DataTypeTransformer dataTypeTransformer,
       MethodTransformer<Function> methodTransformer,
-      StateMutationLegacyMethodTransformer stateMutationMethodRepresentable) {
+      AggregateRootStateMutationMethodTransformer aggregateRootStateMutationMethodTransformer) {
     super(dataTypeTransformer, methodTransformer);
-    this.stateMutationMethodRepresentable = stateMutationMethodRepresentable;
+    this.aggregateRootStateMutationMethodTransformer = aggregateRootStateMutationMethodTransformer;
   }
 
   // ===============================================================================================
@@ -84,33 +83,24 @@ public class AggregateRootTransformer
   }
 
   @Override
-  public Set<FieldRepresentation> staticFieldRepresentations(AggregateRoot source, Object... args) {
-    return super.staticFieldRepresentations(source, args);
-  }
-
-  @Override
-  public Set<FieldRepresentation> stateFieldRepresentations(AggregateRoot source, Object... args) {
-    return super.stateFieldRepresentations(source, args);
-  }
-
-  @Override
-  public Set<ConstructorRepresentation> constructorRepresentations(
-      AggregateRoot source, Object... args) {
-    return super.constructorRepresentations(source, args);
-  }
-
-  @Override
   public Set<MethodRepresentation> methodRepresentations(AggregateRoot source, Object... args) {
     Set<MethodRepresentation> methodRepresentations = new LinkedHashSet<>();
 
     methodRepresentations.addAll(super.methodRepresentations(source, args));
 
     source
+        .getConstructors()
+        .forEach(
+            stateMutationMethod ->
+                methodRepresentations.add(
+                    aggregateRootStateMutationMethodTransformer.create(stateMutationMethod)));
+
+    source
         .getStateMutationMethods()
         .forEach(
             stateMutationMethod ->
                 methodRepresentations.add(
-                    stateMutationMethodRepresentable.create(stateMutationMethod)));
+                    aggregateRootStateMutationMethodTransformer.create(stateMutationMethod)));
 
     return methodRepresentations;
   }

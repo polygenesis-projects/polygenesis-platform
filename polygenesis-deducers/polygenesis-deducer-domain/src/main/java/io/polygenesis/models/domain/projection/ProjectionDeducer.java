@@ -110,7 +110,7 @@ public class ProjectionDeducer implements Deducer<ProjectionMetamodelRepository>
                     "%s.%s",
                     rootPackageName.getText(), thing.getThingName().getText().toLowerCase())),
             projectionPropertyDeducer.deduceFromThing(thing, rootPackageName),
-            projectionPropertyDeducer.deduceConstructors(thing, rootPackageName),
+            projectionPropertyDeducer.deduceConstructors(null, thing, rootPackageName),
             thing.getMultiTenant(),
             persistence,
             makeSuperclass(thing.getMultiTenant())));

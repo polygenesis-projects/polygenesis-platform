@@ -18,43 +18,32 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.models.domain;
+package io.polygenesis.generators.java.domain.aggregateroot.activity.statemutation;
 
-import io.polygenesis.abstraction.thing.Function;
-import java.util.Set;
+import io.polygenesis.abstraction.thing.AbstractActivityTemplateGenerator;
+import io.polygenesis.core.TemplateEngine;
+import io.polygenesis.models.domain.StateMutationMethod;
 
 /**
- * The type Constructor.
+ * The type Constructor activity generator.
  *
  * @author Christos Tsakostas
  */
-public class Constructor extends StateMutationMethod {
+public class ConstructorActivityGenerator
+    extends AbstractActivityTemplateGenerator<StateMutationMethod> {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
-   * Instantiates a new Constructor.
+   * Instantiates a new Constructor activity generator.
    *
-   * @param function the function
-   * @param properties the properties
+   * @param templateTransformer the template transformer
+   * @param templateEngine the template engine
    */
-  public Constructor(Function function, Set<DomainObjectProperty<?>> properties) {
-    super(function, properties);
-  }
-
-  /**
-   * Instantiates a new Constructor.
-   *
-   * @param function the function
-   * @param properties the properties
-   * @param superClassProperties the super class properties
-   */
-  public Constructor(
-      Function function,
-      Set<DomainObjectProperty<?>> properties,
-      Set<DomainObjectProperty<?>> superClassProperties) {
-    super(function, properties, superClassProperties);
+  public ConstructorActivityGenerator(
+      ConstructorActivityTransformer templateTransformer, TemplateEngine templateEngine) {
+    super(templateTransformer, templateEngine);
   }
 }

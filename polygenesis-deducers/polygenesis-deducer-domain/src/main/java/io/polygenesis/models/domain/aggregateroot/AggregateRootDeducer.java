@@ -152,7 +152,8 @@ public class AggregateRootDeducer {
             aggregateRootSuperClass, thing, rootPackageName);
 
     Set<Constructor> constructors =
-        aggregateRootPropertyDeducer.deduceConstructors(thing, rootPackageName);
+        aggregateRootPropertyDeducer.deduceConstructors(
+            aggregateRootSuperClass, thing, rootPackageName);
 
     if (!isAbstract(thing)) {
       constructors.forEach(
