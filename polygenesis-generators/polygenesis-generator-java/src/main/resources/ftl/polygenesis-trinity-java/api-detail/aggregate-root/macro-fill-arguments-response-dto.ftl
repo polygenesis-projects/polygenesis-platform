@@ -17,21 +17,21 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-<#macro fillFetchOneResponseDtoArguments responseDto aggregateRootVariable converterVariable>
-<#list responseDto.dataObject.models as data >
-  <#switch data.dataPrimaryType>
-    <#case 'PRIMITIVE'>
-        <#if data.dataObject??>
-      ${ aggregateRootVariable }.get${ textConverter.toUpperCamel(data.variableName.text) }().getValue()<#sep>,</#sep>
+<#include "../../../polygenesis-implementation-java-apiimpl/macro-fill-argument-value-object.ftl">
+<#macro fillArgumentsResponseDto properties persistenceVariable responseDto multiTenant converterVariable>
+    <#list responseDto.dataObject.models as modelData>
+      <#if modelData.dataPurpose.text == 'THING_IDENTITY'>
+        ${ data.aggregateRootVariable }.getId().getTypeId().toString()<#sep>,</#sep>
+      <#elseif modelData.dataPurpose.text == 'TENANT_IDENTITY'>
+        // TODO: TENANT_IDENTITY
+      <#elseif modelData.dataPurpose.text == 'PARENT_THING_IDENTITY'>
+        // TODO: PARENT_THING_IDENTITY
+      <#else>
+        <#if modelData.dataObject??>
+        ${ data.aggregateRootVariable }.get${ textConverter.toUpperCamel(modelData.variableName.text) }().getValue()<#sep>,</#sep>
         <#else>
-      ${ aggregateRootVariable }.get${ textConverter.toUpperCamel(data.variableName.text) }()<#sep>,</#sep>
+        ${ data.aggregateRootVariable }.get${ textConverter.toUpperCamel(modelData.variableName.text) }()<#sep>,</#sep>
+        </#if>
       </#if>
-    <#break>
-    <#case 'OBJECT'>
-      ${converterVariable}.convertTo${ textConverter.toUpperCamel(data.objectName.text) }Dto(${ aggregateRootVariable }.get${ textConverter.toUpperCamel(data.variableName.text) }())<#sep>,</#sep>
-      <#break>
-    <#default>
-      // Data Primary Type Type = ${ data.dataPrimaryType } is not supported
-  </#switch>
-</#list>
+    </#list>
 </#macro>
