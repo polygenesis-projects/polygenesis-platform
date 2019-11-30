@@ -22,8 +22,10 @@ package io.polygenesis.generators.java.apidetail.service.activity.root;
 
 import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.DataObject;
+import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
+import io.polygenesis.generators.java.apidetail.service.activity.common.AggregateRootData;
 import io.polygenesis.models.api.Dto;
 import io.polygenesis.models.api.DtoType;
 import io.polygenesis.models.domain.DomainObjectProperty;
@@ -38,6 +40,7 @@ import java.util.Set;
  */
 public abstract class AbstractAggregateRootTemplateData {
 
+  private AggregateRootData aggregateRootData;
   private Set<ParameterRepresentation> parameterRepresentations;
   private String aggregateRootDataType;
   private String aggregateRootVariable;
@@ -61,6 +64,7 @@ public abstract class AbstractAggregateRootTemplateData {
   /** Instantiates a new Abstract aggregate root template data. */
   @SuppressWarnings("CPD-START")
   public AbstractAggregateRootTemplateData() {
+    aggregateRootData = null;
     parameterRepresentations = new LinkedHashSet<>();
     aggregateRootDataType = "aggregateRootDataType";
     aggregateRootVariable = "aggregateRootVariable";
@@ -68,6 +72,7 @@ public abstract class AbstractAggregateRootTemplateData {
     persistenceVariable = "persistenceVariable";
     requestDto =
         new Dto(
+            ThingBuilder.app("dummy").createThing(),
             DtoType.API_REQUEST,
             new DataObject(new ObjectName("requestDto"), new PackageName("com.oregor")),
             false);
@@ -79,6 +84,7 @@ public abstract class AbstractAggregateRootTemplateData {
   /**
    * Instantiates a new Abstract aggregate root template data.
    *
+   * @param aggregateRootData the aggregate root data
    * @param parameterRepresentations the parameter representations
    * @param aggregateRootDataType the aggregate root data type
    * @param aggregateRootVariable the aggregate root variable
@@ -93,6 +99,7 @@ public abstract class AbstractAggregateRootTemplateData {
    * @param thingIdentity the thing identity
    */
   public AbstractAggregateRootTemplateData(
+      AggregateRootData aggregateRootData,
       Set<ParameterRepresentation> parameterRepresentations,
       String aggregateRootDataType,
       String aggregateRootVariable,
@@ -105,6 +112,7 @@ public abstract class AbstractAggregateRootTemplateData {
       String returnValue,
       String aggregateRootIdDataType,
       Data thingIdentity) {
+    this.aggregateRootData = aggregateRootData;
     this.parameterRepresentations = parameterRepresentations;
     this.aggregateRootDataType = aggregateRootDataType;
     this.aggregateRootVariable = aggregateRootVariable;
@@ -122,6 +130,15 @@ public abstract class AbstractAggregateRootTemplateData {
   // ===============================================================================================
   // GETTERS
   // ===============================================================================================
+
+  /**
+   * Gets aggregate root data.
+   *
+   * @return the aggregate root data
+   */
+  public AggregateRootData getAggregateRootData() {
+    return aggregateRootData;
+  }
 
   /**
    * Gets parameter representations.

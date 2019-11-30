@@ -31,6 +31,7 @@ import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
+import io.polygenesis.commons.valueobjects.VariableName;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -71,10 +72,11 @@ public class DtoDeducer {
           new DataObject(
               new ObjectName(
                   String.format(
-                      "%s%sVirtualRequest",
+                      "%s%sRequest",
                       TextConverter.toUpperCamel(function.getName().getText()),
                       TextConverter.toUpperCamel(function.getThing().getThingName().getText()))),
-              function.getThing().makePackageName(rootPackageName, function.getThing()));
+              function.getThing().makePackageName(rootPackageName, function.getThing()),
+              new VariableName("request"));
 
       if (function.getArguments() != null) {
         function.getArguments().forEach(argument -> finalDataObject.addData(argument.getData()));
@@ -92,7 +94,8 @@ public class DtoDeducer {
       dtoType = DtoType.API_REQUEST;
     }
 
-    Dto dto = new Dto(dtoType, originatingDataObject.getAsDataObject(), virtual);
+    Dto dto =
+        new Dto(function.getThing(), dtoType, originatingDataObject.getAsDataObject(), virtual);
 
     makeAssertionsForRequestDto(dto, function);
 
@@ -122,7 +125,7 @@ public class DtoDeducer {
           new DataObject(
               new ObjectName(
                   String.format(
-                      "%s%sVirtualResponse",
+                      "%s%sResponse",
                       TextConverter.toUpperCamel(function.getName().getText()),
                       TextConverter.toUpperCamel(function.getThing().getThingName().getText()))),
               function.getThing().makePackageName(rootPackageName, function.getThing()));
@@ -143,7 +146,7 @@ public class DtoDeducer {
       dtoType = DtoType.API_RESPONSE;
     }
 
-    Dto dto = new Dto(dtoType, originatingDataObject, virtual);
+    Dto dto = new Dto(function.getThing(), dtoType, originatingDataObject, virtual);
 
     makeAssertionsForResponseDto(dto, function);
 

@@ -17,7 +17,5 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-
 <#macro returnValue serviceName serviceMethodName requestDto>
-    return ${ serviceName }.${ serviceMethodName }(${ requestDto.dataObject.objectName.text });
-</#macro>
+    return ${ serviceName }.${ serviceMethodName }(${ requestDto.dataObject.variableName.text });</#macro>

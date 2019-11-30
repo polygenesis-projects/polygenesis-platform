@@ -20,34 +20,17 @@
 
 package io.polygenesis.deducers.apiimpl;
 
-import io.polygenesis.abstraction.data.Data;
-import io.polygenesis.abstraction.data.DataObject;
-import io.polygenesis.abstraction.thing.Function;
-import io.polygenesis.abstraction.thing.Purpose;
-import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.ThingRepository;
-import io.polygenesis.abstraction.thing.dsl.FunctionBuilder;
-import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
-import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.core.AbstractionRepository;
-import io.polygenesis.core.AbstractionScope;
 import io.polygenesis.core.CoreRegistry;
 import io.polygenesis.core.Deducer;
 import io.polygenesis.core.MetamodelRepository;
-import io.polygenesis.models.api.Dto;
-import io.polygenesis.models.api.Service;
 import io.polygenesis.models.api.ServiceMetamodelRepository;
 import io.polygenesis.models.apiimpl.DomainEntityConverter;
 import io.polygenesis.models.apiimpl.DomainEntityConverterMetamodelRepository;
-import io.polygenesis.models.apiimpl.DomainEntityConverterMethod;
-import io.polygenesis.models.domain.BaseDomainEntity;
-import io.polygenesis.models.domain.DomainMetamodelRepository;
+import io.polygenesis.models.domain.AggregateRootMetamodelRepository;
 import io.polygenesis.models.domain.ProjectionMetamodelRepository;
-import io.polygenesis.models.domain.PropertyType;
-import io.polygenesis.models.domain.ValueObject;
 import java.util.LinkedHashSet;
-import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -55,8 +38,26 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class DomainEntityConverterDeducer extends BaseApiImplementationDeducer
+public class DomainEntityConverterDeducer
     implements Deducer<DomainEntityConverterMetamodelRepository> {
+
+  // ===============================================================================================
+  // DEPENDENCIES
+  // ===============================================================================================
+
+  private final AggregateRootConverterDeducer aggregateRootConverterDeducer;
+  private final ProjectionConverterDeducer projectionConverterDeducer;
+
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
+  public DomainEntityConverterDeducer(
+      AggregateRootConverterDeducer aggregateRootConverterDeducer,
+      ProjectionConverterDeducer projectionConverterDeducer) {
+    this.aggregateRootConverterDeducer = aggregateRootConverterDeducer;
+    this.projectionConverterDeducer = projectionConverterDeducer;
+  }
 
   // ===============================================================================================
   // OVERRIDES
@@ -72,9 +73,9 @@ public class DomainEntityConverterDeducer extends BaseApiImplementationDeducer
         CoreRegistry.getMetamodelRepositoryResolver()
             .resolve(metamodelRepositories, ServiceMetamodelRepository.class);
 
-    DomainMetamodelRepository domainModelRepository =
+    AggregateRootMetamodelRepository aggregateRootMetamodelRepository =
         CoreRegistry.getMetamodelRepositoryResolver()
-            .resolve(metamodelRepositories, DomainMetamodelRepository.class);
+            .resolve(metamodelRepositories, AggregateRootMetamodelRepository.class);
 
     ProjectionMetamodelRepository projectionMetamodelRepository =
         CoreRegistry.getMetamodelRepositoryResolver()
@@ -85,7 +86,7 @@ public class DomainEntityConverterDeducer extends BaseApiImplementationDeducer
         CoreRegistry.getAbstractionRepositoryResolver()
             .resolve(abstractionRepositories, ThingRepository.class),
         serviceModelRepository,
-        domainModelRepository,
+        aggregateRootMetamodelRepository,
         projectionMetamodelRepository);
 
     return new DomainEntityConverterMetamodelRepository(domainEntityConverters);
@@ -101,236 +102,22 @@ public class DomainEntityConverterDeducer extends BaseApiImplementationDeducer
    * @param domainEntityConverters the domain entity converters
    * @param thingRepository the thing repository
    * @param serviceModelRepository the service model repository
-   * @param domainModelRepository the domain model repository
+   * @param aggregateRootMetamodelRepository the domain model repository
    * @param projectionMetamodelRepository the projection metamodel repository
    */
   protected void fillDomainEntityConverters(
       Set<DomainEntityConverter> domainEntityConverters,
       ThingRepository thingRepository,
       ServiceMetamodelRepository serviceModelRepository,
-      DomainMetamodelRepository domainModelRepository,
+      AggregateRootMetamodelRepository aggregateRootMetamodelRepository,
       ProjectionMetamodelRepository projectionMetamodelRepository) {
-    thingRepository
-        .getAbstractionItemsByScope(AbstractionScope.api())
-        .forEach(
-            thing -> {
-              Optional<BaseDomainEntity> optionalDomainObject =
-                  getOptionalDomainEntity(
-                      thing, domainModelRepository, projectionMetamodelRepository);
 
-              if (optionalDomainObject.isPresent()) {
-                domainEntityConverters.add(
-                    deduceDomainEntityConverter(
-                        optionalDomainObject.get(),
-                        serviceModelRepository.getServicesBy(thing.getThingName())));
-              }
-            });
-  }
+    domainEntityConverters.addAll(
+        aggregateRootConverterDeducer.deduce(
+            thingRepository, serviceModelRepository, aggregateRootMetamodelRepository));
 
-  /**
-   * Deduce domain entity converter domain entity converter.
-   *
-   * @param domainEntity the domain entity
-   * @param services the services
-   * @return the domain entity converter
-   */
-  public DomainEntityConverter deduceDomainEntityConverter(
-      BaseDomainEntity domainEntity, Set<Service> services) {
-    Set<DomainEntityConverterMethod> methods = new LinkedHashSet<>();
-
-    deduceValueObjectFromDto(methods, domainEntity, services);
-    deduceFetchCollectionDtoFromDomainObject(methods, domainEntity, services);
-
-    return new DomainEntityConverter(domainEntity, methods);
-  }
-
-  // ===============================================================================================
-  // PRIVATE
-  // ===============================================================================================
-
-  /**
-   * Deduce value object from dto.
-   *
-   * @param methods the methods
-   * @param domainObject the domain object
-   * @param services the services
-   */
-  private void deduceValueObjectFromDto(
-      Set<DomainEntityConverterMethod> methods,
-      BaseDomainEntity domainObject,
-      Set<Service> services) {
-
-    domainObject
-        .getProperties()
-        .forEach(
-            property -> {
-              if (property.getPropertyType().equals(PropertyType.VALUE_OBJECT)) {
-                ValueObject valueObject = (ValueObject) property;
-
-                services.forEach(
-                    service ->
-                        service
-                            .getDtos()
-                            .forEach(
-                                dto -> {
-                                  if (dto.getDataObject().equals(valueObject.getData().asDto())) {
-                                    makeValueObjectConversion(methods, dto, valueObject);
-                                  }
-                                }));
-              }
-            });
-  }
-
-  /**
-   * Make value object conversion.
-   *
-   * @param methods the methods
-   * @param dto the dto
-   * @param valueObject the value object
-   */
-  private void makeValueObjectConversion(
-      Set<DomainEntityConverterMethod> methods, Dto dto, ValueObject valueObject) {
-    Thing thing = ThingBuilder.endToEnd().setThingName("Converter").createThing();
-
-    Dto dtoToUse = dto.withVariableNameEqualToObjectName();
-    ValueObject valueObjectToUse = valueObject.withVariableNameEqualToObjectName();
-
-    // TO VALUE OBJECT
-    Function functionToVo =
-        FunctionBuilder.of(thing, "convertToVo", Purpose.convertDtoToVo())
-            .setReturnValue(valueObjectToUse.getData())
-            .addArgument(dtoToUse.getDataObject())
-            .build();
-
-    methods.add(new DomainEntityConverterMethod(functionToVo, dtoToUse, valueObjectToUse));
-
-    // TO DTO
-    Optional<DomainEntityConverterMethod> optionalDomainEntityConverterMethod =
-        methods
-            .stream()
-            .filter(
-                domainEntityConverterMethod ->
-                    domainEntityConverterMethod
-                        .getFunction()
-                        .getName()
-                        .getText()
-                        .equals(
-                            String.format(
-                                "convertTo%s",
-                                TextConverter.toUpperCamel(dto.getObjectName().getText()))))
-            .findFirst();
-
-    if (!optionalDomainEntityConverterMethod.isPresent()) {
-      Function functionToDto =
-          FunctionBuilder.of(
-                  thing,
-                  String.format(
-                      "convertTo%s", TextConverter.toUpperCamel(dto.getObjectName().getText())),
-                  Purpose.convertVoToDto())
-              .setReturnValue(dto.getDataObject())
-              .addArgument(valueObjectToUse.getData())
-              .build();
-
-      methods.add(new DomainEntityConverterMethod(functionToDto, valueObjectToUse, dto));
-    }
-  }
-
-  /**
-   * Deduce fetch collection dto from domain object.
-   *
-   * @param methods the methods
-   * @param domainObject the domain object
-   * @param services the services
-   */
-  private void deduceFetchCollectionDtoFromDomainObject(
-      Set<DomainEntityConverterMethod> methods,
-      BaseDomainEntity domainObject,
-      Set<Service> services) {
-
-    services.forEach(
-        service ->
-            service
-                .getServiceMethods()
-                .stream()
-                .filter(
-                    method ->
-                        method.getFunction().getPurpose().isFetchCollection()
-                            || method.getFunction().getPurpose().isFetchPagedCollection())
-                .forEach(
-                    method -> {
-                      Dto dtoCollectionRecord =
-                          findDtoInServiceFromDataGroup(
-                              service,
-                              method
-                                  .getResponseDto()
-                                  .getArrayElementAsOptional()
-                                  .orElseThrow(IllegalArgumentException::new));
-
-                      makeCollectionRecord(methods, dtoCollectionRecord, domainObject);
-                    }));
-  }
-
-  /**
-   * Make collection record.
-   *
-   * @param methods the methods
-   * @param dtoCollectionRecord the dto collection record
-   * @param domainObject the domain object
-   */
-  private void makeCollectionRecord(
-      Set<DomainEntityConverterMethod> methods,
-      Dto dtoCollectionRecord,
-      BaseDomainEntity domainObject) {
-
-    Thing thing = ThingBuilder.endToEnd().setThingName("Converter").createThing();
-
-    Function function =
-        FunctionBuilder.of(
-                thing,
-                String.format(
-                    "convertTo%s",
-                    TextConverter.toUpperCamel(dtoCollectionRecord.getDataObject().getDataType())),
-                Purpose.convertDomainObjectToCollectionRecord())
-            .setReturnValue(dtoCollectionRecord.getDataObject())
-            .addArgument(transformDomainObjectToDataGroup(domainObject))
-            .build();
-
-    methods.add(new DomainEntityConverterMethod(function, domainObject, dtoCollectionRecord));
-  }
-
-  /**
-   * Transform domain object to data group data group.
-   *
-   * @param domainObject the domain object
-   * @return the data group
-   */
-  private DataObject transformDomainObjectToDataGroup(BaseDomainEntity domainObject) {
-
-    DataObject dataObject =
-        new DataObject(
-            new ObjectName(domainObject.getObjectName().getText()), domainObject.getPackageName());
-
-    domainObject.getProperties().forEach(property -> dataObject.addData(property.getData()));
-
-    return dataObject;
-  }
-
-  /**
-   * Find dto in service from data group dto.
-   *
-   * @param service the service
-   * @param dataGroup the data group
-   * @return the dto
-   */
-  private Dto findDtoInServiceFromDataGroup(Service service, Data dataGroup) {
-    return service
-        .getDtos()
-        .stream()
-        .filter(dto -> dto.getDataObject().equals(dataGroup))
-        .findFirst()
-        .orElseThrow(
-            () ->
-                new IllegalArgumentException(
-                    String.format("Cannot find %s in Service DTOs", dataGroup.getDataType())));
+    domainEntityConverters.addAll(
+        projectionConverterDeducer.deduce(
+            thingRepository, serviceModelRepository, projectionMetamodelRepository));
   }
 }

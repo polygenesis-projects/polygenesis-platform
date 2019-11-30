@@ -22,7 +22,6 @@ package io.polygenesis.transformers.java;
 
 import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.abstraction.data.PrimitiveType;
-import io.polygenesis.abstraction.thing.Argument;
 import io.polygenesis.abstraction.thing.FunctionProvider;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.commons.valueobjects.PackageName;
@@ -100,38 +99,15 @@ public abstract class AbstractMethodTransformer<S extends FunctionProvider>
       // }
     }
 
-    source
-        .getFunction()
-        .getArguments()
-        .stream()
-        .filter(argument -> argument.getData().isDataGroup())
-        .map(Argument::getData)
-        .map(DataObject.class::cast)
-        .forEach(
-            dataGroup -> {
-              // TODO: check for identical package
-              // if (!dataGroup.getPackageName().equals(source.getPackageName())) {
-              imports.add(
-                  makeCanonicalObjectName(dataGroup.getPackageName(), dataGroup.getDataType()));
-              // }
-
-              // Dto Primitives that correspond to Domain Value Objects
-              dataGroup
-                  .getModels()
-                  .stream()
-                  .filter(
-                      data ->
-                          data.isDataPrimitive()
-                              && data.getAsDataPrimitive().getDataObject() != null)
-                  .map(data -> data.getAsDataPrimitive().getDataObject())
-                  .forEach(
-                      dataObject -> {
-                        // TODO: check for identical package
-                        imports.add(
-                            makeCanonicalObjectName(
-                                dataObject.getPackageName(), dataObject.getDataType()));
-                      });
-            });
+    Set<DataObject> dataObjects = source.getFunction().getAllArgumentsDataObjects();
+    dataObjects.forEach(
+        dataObject -> {
+          // TODO: check for identical package
+          // if (!dataGroup.getPackageName().equals(source.getPackageName())) {
+          imports.add(
+              makeCanonicalObjectName(dataObject.getPackageName(), dataObject.getDataType()));
+          // }
+        });
 
     return imports;
   }

@@ -79,11 +79,7 @@ public class JavaApiMetamodelGenerator extends AbstractMetamodelGenerator {
               service
                   .getDtos()
                   .forEach(
-                      dto -> {
-                        if (!dto.getVirtual()) {
-                          dtoGenerator.generate(dto, dtoExportInfo(getGenerationPath(), dto));
-                        }
-                      });
+                      dto -> dtoGenerator.generate(dto, dtoExportInfo(getGenerationPath(), dto)));
             });
   }
 

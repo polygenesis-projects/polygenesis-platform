@@ -18,10 +18,10 @@
  ===========================LICENSE_END==================================
 -->
 <#include "../polygenesis-implementation-java-shared/macro-assertions-for-parameters.ftl">
-<#include "macro-restore-aggregate-root.ftl">
+<#include "../polygenesis-trinity-java/api-detail/aggregate-root/macro-restore-aggregate-root.ftl">
 <@assertionsForParameters data.parameterRepresentations></@assertionsForParameters>
 
-<@restoreAggregateRoot data.persistenceVariable data.aggregateRootIdDataType data.aggregateRootDataType data.aggregateRootVariable data.requestDto data.parentThingIdentity data.multiTenant></@restoreAggregateRoot>
+<@restoreAggregateRoot data.aggregateRootData data.persistenceVariable data.aggregateRootIdDataType data.aggregateRootDataType data.aggregateRootVariable data.requestDto data.parentThingIdentity data.multiTenant></@restoreAggregateRoot>
 
     <#--Paginated<${ aggregateRootDataType }> paginated = ${ persistenceVariable }.findPaginated(<#if multiTenant>UUID.fromString(${ requestDto.dataObject.variableName.text }.getTenantId()), </#if>${ requestDto.dataObject.objectName.text }.getPageNumber(), ${ requestDto.dataObject.objectName.text }.getPageSize());-->
 

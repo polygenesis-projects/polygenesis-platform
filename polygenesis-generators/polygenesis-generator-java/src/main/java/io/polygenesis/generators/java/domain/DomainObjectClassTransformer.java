@@ -89,6 +89,7 @@ public abstract class DomainObjectClassTransformer<
             property -> {
               switch (property.getPropertyType()) {
                 case REFERENCE_TO_AGGREGATE_ROOT:
+                case REFERENCE_TO_ABSTRACT_AGGREGATE_ROOT:
                   fieldRepresentations.add(
                       FieldRepresentation.withAnnotations(
                           makeVariableDataType(property),
@@ -183,18 +184,6 @@ public abstract class DomainObjectClassTransformer<
             source.getInstantiationType().equals(InstantiationType.ABSTRACT)
                 ? dataTypeTransformer.getModifierProtected()
                 : dataTypeTransformer.getModifierPrivate()));
-
-    // ---------------------------------------------------------------------------------------------
-    // Create constructor with parameters
-    // ---------------------------------------------------------------------------------------------
-    source
-        .getConstructors()
-        .forEach(
-            constructor ->
-                constructorRepresentations.add(
-                    createConstructorWithSetters(
-                        source.getObjectName().getText(),
-                        makeConstructorParameterRepresentation(constructor.getProperties()))));
 
     return constructorRepresentations;
   }
@@ -310,7 +299,8 @@ public abstract class DomainObjectClassTransformer<
   private Set<String> importsReferenceToAggregateRoot(DomainObjectProperty<?> property) {
     Set<String> imports = new TreeSet<>();
 
-    if (property.getPropertyType().equals(PropertyType.REFERENCE_TO_AGGREGATE_ROOT)) {
+    if (property.getPropertyType().equals(PropertyType.REFERENCE_TO_AGGREGATE_ROOT)
+        || property.getPropertyType().equals(PropertyType.REFERENCE_TO_ABSTRACT_AGGREGATE_ROOT)) {
       imports.add("javax.persistence.FetchType");
       imports.add("javax.persistence.JoinColumn");
       imports.add("javax.persistence.JoinColumns");
@@ -394,7 +384,7 @@ public abstract class DomainObjectClassTransformer<
       if (source.getDomainObjectType().equals(DomainObjectType.AGGREGATE_ROOT)) {
         stringBuilder.append("<I extends AggregateRootId>");
       } else if (source.getDomainObjectType().equals(DomainObjectType.AGGREGATE_ENTITY)) {
-        stringBuilder.append("<I extends AggregateEntityId>");
+        stringBuilder.append("<I extends AggregateEntityId<UUID>>");
       } else {
         throw new UnsupportedOperationException();
       }
@@ -589,7 +579,11 @@ public abstract class DomainObjectClassTransformer<
             dataTypeTransformer.convert(mapper.getTypeParameterDataKey().getDataType()),
             dataTypeTransformer.convert(mapper.getTypeParameterDataValue().getDataType()));
       default:
-        return dataTypeTransformer.convert(property.getData().getDataType());
+        if (property.getPropertyType().equals(PropertyType.REFERENCE_TO_ABSTRACT_AGGREGATE_ROOT)) {
+          return dataTypeTransformer.convert(property.getData().getDataType()) + "<?>";
+        } else {
+          return dataTypeTransformer.convert(property.getData().getDataType());
+        }
     }
   }
 

@@ -64,7 +64,7 @@ public class BatchProcessTransformer
   @Override
   public TemplateData transform(BatchProcessMetamodel source, Object... args) {
     Map<String, Object> dataModel = new HashMap<>();
-    dataModel.put("representation", create(source));
+    dataModel.put("representation", create(source, args));
 
     return new TemplateData(dataModel, "polygenesis-representation-java/Class.java.ftl");
   }

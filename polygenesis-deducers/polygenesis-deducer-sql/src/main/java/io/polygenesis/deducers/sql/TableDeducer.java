@@ -180,6 +180,7 @@ public class TableDeducer {
             case AGGREGATE_ROOT_ID:
             case AGGREGATE_ENTITY_ID:
             case REFERENCE_TO_AGGREGATE_ROOT:
+            case REFERENCE_TO_ABSTRACT_AGGREGATE_ROOT:
               break;
             case PRIMITIVE:
               columns.add(getColumnForPrimitive(property.getData(), ""));

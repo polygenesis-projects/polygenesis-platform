@@ -94,8 +94,7 @@ public class ScheduledDomainMessagePublisherRoute extends AbstractNameablePackag
 
   private Function makeConfigureFunction() {
     Thing thing =
-        ThingBuilder.domainDetailDomainMessagePublisher()
-            .setThingName("scheduledDomainMessagePublisherRoute")
+        ThingBuilder.domainDetailDomainMessagePublisher("scheduledDomainMessagePublisherRoute")
             .createThing();
 
     return new Function(

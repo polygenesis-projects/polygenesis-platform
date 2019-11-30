@@ -406,6 +406,14 @@ public class Thing implements Abstraction {
     }
   }
 
+  public boolean extendsThing() {
+    return getMetadataValueIfExists(ThingMetadataKey.SUPER_CLASS) != null;
+  }
+
+  public boolean doesNotExtendThing() {
+    return getMetadataValueIfExists(ThingMetadataKey.SUPER_CLASS) == null;
+  }
+
   // ===============================================================================================
   // GUARDS
   // ===============================================================================================
@@ -514,9 +522,6 @@ public class Thing implements Abstraction {
         .getArguments()
         .stream()
         .map(Argument::getData)
-        .filter(Data::isDataGroup)
-        .map(Data::getAsDataObject)
-        .flatMap(dataGroup -> dataGroup.getModels().stream())
         .forEach(data -> newThingProperties.add(new ThingProperty(data)));
 
     thingProperties.addAll(newThingProperties);

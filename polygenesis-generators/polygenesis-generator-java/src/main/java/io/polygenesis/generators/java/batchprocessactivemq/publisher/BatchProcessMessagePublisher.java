@@ -81,10 +81,7 @@ public class BatchProcessMessagePublisher extends AbstractNameablePackageable {
   // ===============================================================================================
 
   private Function makeSendFunction() {
-    Thing thing =
-        ThingBuilder.apiClientBatchProcess()
-            .setThingName("batchProcessMessagePublisher")
-            .createThing();
+    Thing thing = ThingBuilder.apiClientBatchProcess("batchProcessMessagePublisher").createThing();
 
     return new Function(
         thing,

@@ -21,6 +21,7 @@
 package io.polygenesis.generators.java.apidetail.service.activity.root;
 
 import io.polygenesis.abstraction.data.Data;
+import io.polygenesis.generators.java.apidetail.service.activity.common.AggregateRootData;
 import io.polygenesis.models.api.Dto;
 import io.polygenesis.models.domain.DomainObjectProperty;
 import io.polygenesis.representations.code.ParameterRepresentation;
@@ -54,6 +55,7 @@ public class CreateAggregateRootTemplateData extends AbstractAggregateRootTempla
    * @param thingIdentity the thing identity
    */
   public CreateAggregateRootTemplateData(
+      AggregateRootData aggregateRootData,
       Set<ParameterRepresentation> parameterRepresentations,
       String aggregateRootDataType,
       String aggregateRootVariable,
@@ -67,6 +69,7 @@ public class CreateAggregateRootTemplateData extends AbstractAggregateRootTempla
       String aggregateRootIdDataType,
       Data thingIdentity) {
     super(
+        aggregateRootData,
         parameterRepresentations,
         aggregateRootDataType,
         aggregateRootVariable,

@@ -22,8 +22,6 @@ package io.polygenesis.generators.java.api.service;
 
 import static java.util.stream.Collectors.toCollection;
 
-import io.polygenesis.abstraction.data.DataObject;
-import io.polygenesis.abstraction.thing.Argument;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.core.TemplateData;
@@ -35,7 +33,6 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
 
 /**
  * The type Service transformer.
@@ -66,7 +63,7 @@ public class ServiceTransformer extends AbstractInterfaceTransformer<Service, Se
   @Override
   public TemplateData transform(Service source, Object... args) {
     Map<String, Object> dataModel = new HashMap<>();
-    dataModel.put("representation", create(source));
+    dataModel.put("representation", create(source, args));
 
     return new TemplateData(dataModel, "polygenesis-representation-java/Interface.java.ftl");
   }
@@ -83,48 +80,6 @@ public class ServiceTransformer extends AbstractInterfaceTransformer<Service, Se
   @Override
   public String packageName(Service source, Object... args) {
     return source.getPackageName().getText();
-  }
-
-  @Override
-  public Set<String> imports(Service source, Object... args) {
-    Set<String> imports = new TreeSet<>();
-
-    source
-        .getServiceMethods()
-        .forEach(
-            method -> {
-              imports.addAll(methodTransformer.imports(method));
-
-              if (method.getFunction().getReturnValue() != null
-                  && method.getFunction().getReturnValue().getData().isDataGroup()) {
-                DataObject dataObject =
-                    method.getFunction().getReturnValue().getData().getAsDataObject();
-
-                if (!dataObject.getPackageName().equals(source.getPackageName())) {
-                  imports.add(
-                      makeCanonicalObjectName(
-                          dataObject.getPackageName(), dataObject.getDataType()));
-                }
-              }
-
-              method
-                  .getFunction()
-                  .getArguments()
-                  .stream()
-                  .filter(argument -> argument.getData().isDataGroup())
-                  .map(Argument::getData)
-                  .map(DataObject.class::cast)
-                  .forEach(
-                      dataGroup -> {
-                        if (!dataGroup.getPackageName().equals(source.getPackageName())) {
-                          imports.add(
-                              makeCanonicalObjectName(
-                                  dataGroup.getPackageName(), dataGroup.getDataType()));
-                        }
-                      });
-            });
-
-    return imports;
   }
 
   @Override

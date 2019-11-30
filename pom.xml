@@ -242,7 +242,7 @@
       <!--ABSTRACTIONS-->
       <dependency>
         <groupId>io.polygenesis.abstractions</groupId>
-        <artifactId>polygenesis-abstraction-data</artifactId>
+        <artifactId>polygenesis-abstraction-code</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>

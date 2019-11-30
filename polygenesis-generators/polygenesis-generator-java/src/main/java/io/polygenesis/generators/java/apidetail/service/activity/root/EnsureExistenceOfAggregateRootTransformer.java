@@ -49,6 +49,7 @@ public class EnsureExistenceOfAggregateRootTransformer
 
     EnsureExistenceOfAggregateRootTemplateData data =
         new EnsureExistenceOfAggregateRootTemplateData(
+            getAggregateRootData(source),
             getParameterRepresentations(source),
             getAggregateRootDataType(source),
             getAggregateRootVariable(source),

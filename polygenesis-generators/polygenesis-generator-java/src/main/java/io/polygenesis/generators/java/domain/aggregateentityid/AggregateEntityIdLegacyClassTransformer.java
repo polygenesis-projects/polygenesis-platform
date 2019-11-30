@@ -153,7 +153,7 @@ public class AggregateEntityIdLegacyClassTransformer
     stringBuilder.append(TextConverter.toUpperCamel(source.getObjectName().getText()));
     stringBuilder.append("Id");
     stringBuilder.append(" extends ");
-    stringBuilder.append("AggregateEntityId");
+    stringBuilder.append("AggregateEntityId<UUID>");
 
     return stringBuilder.toString();
   }

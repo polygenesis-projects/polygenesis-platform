@@ -49,6 +49,7 @@ public class UpdateAggregateRootTransformer extends AbstractServiceMethodImpleme
     @SuppressWarnings("CPD-START")
     UpdateAggregateRootTemplateData data =
         new UpdateAggregateRootTemplateData(
+            getAggregateRootData(source),
             getParameterRepresentations(source),
             getAggregateRootDataType(source),
             getAggregateRootVariable(source),
@@ -68,6 +69,7 @@ public class UpdateAggregateRootTransformer extends AbstractServiceMethodImpleme
     dataModel.put("data", data);
 
     return new TemplateData(
-        dataModel, "polygenesis-implementation-java-apiimpl/modify-aggregate-root.ftl");
+        dataModel,
+        "polygenesis-trinity-java/api-detail/" + "aggregate-root/modify-aggregate-root.java.ftl");
   }
 }

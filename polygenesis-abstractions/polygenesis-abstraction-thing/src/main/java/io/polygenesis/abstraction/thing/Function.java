@@ -20,8 +20,11 @@
 
 package io.polygenesis.abstraction.thing;
 
+import io.polygenesis.abstraction.data.Data;
+import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.core.AbstractionScope;
+import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -119,6 +122,61 @@ public class Function implements FunctionProvider {
     }
 
     return false;
+  }
+
+  /**
+   * Gets all arguments data objects.
+   *
+   * @return the all arguments data objects
+   */
+  public Set<DataObject> getAllArgumentsDataObjects() {
+    Set<DataObject> dataObjects = new LinkedHashSet<>();
+
+    if (getArguments() != null) {
+      // Ge Data Objects
+      getArguments()
+          .stream()
+          .filter(argument -> argument.getData().isDataGroup())
+          .map(Argument::getData)
+          .map(DataObject.class::cast)
+          .forEach(dataObject -> fillDataObjects(dataObjects, dataObject));
+
+      // Ge Data Objects inside Data Primitives
+      getArguments()
+          .stream()
+          .filter(argument -> argument.getData().isDataPrimitive())
+          .map(Argument::getData)
+          .map(Data::getAsDataPrimitive)
+          .filter(dataPrimitive -> dataPrimitive.getDataObject() != null)
+          .map(dataPrimitive -> dataPrimitive.getDataObject())
+          .forEach(dataObject -> fillDataObjects(dataObjects, dataObject));
+    }
+
+    return dataObjects;
+  }
+
+  // ===============================================================================================
+  // QUERIES - PRIVATE
+  // ===============================================================================================
+
+  private void fillDataObjects(Set<DataObject> dataObjects, DataObject dataObject) {
+    dataObjects.add(dataObject);
+
+    dataObject
+        .getModels()
+        .stream()
+        .filter(data -> data.isDataGroup())
+        .map(DataObject.class::cast)
+        .forEach(dataObjectInternal -> fillDataObjects(dataObjects, dataObjectInternal));
+
+    dataObject
+        .getModels()
+        .stream()
+        .filter(data -> data.isDataPrimitive())
+        .map(Data::getAsDataPrimitive)
+        .filter(dataPrimitive -> dataPrimitive.getDataObject() != null)
+        .map(dataPrimitive -> dataPrimitive.getDataObject())
+        .forEach(dataObjectInternal -> fillDataObjects(dataObjects, dataObjectInternal));
   }
 
   // ===============================================================================================
@@ -282,14 +340,11 @@ public class Function implements FunctionProvider {
     Function function = (Function) o;
     return Objects.equals(purpose, function.purpose)
         && Objects.equals(name, function.name)
-        && Objects.equals(returnValue, function.returnValue)
-        && Objects.equals(arguments, function.arguments)
-        && Objects.equals(activity, function.activity)
         && Objects.equals(abstractionScopes, function.abstractionScopes);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(purpose, name, returnValue, arguments, activity, abstractionScopes);
+    return Objects.hash(purpose, name, abstractionScopes);
   }
 }

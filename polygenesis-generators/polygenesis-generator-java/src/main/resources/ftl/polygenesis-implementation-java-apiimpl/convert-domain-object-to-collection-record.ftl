@@ -27,7 +27,14 @@
       <#else>
       <#switch data.dataPrimaryType>
         <#case 'PRIMITIVE'>
+          <#if data.dataObject??>
+        ${ from.data.variableName.text }.get${ textConverter.toUpperCamel(data.variableName.text) }().getValue()<#sep>,</#sep>
+          <#else>
         ${ from.data.variableName.text }.get${ textConverter.toUpperCamel(data.variableName.text) }()<#sep>,</#sep>
+          </#if>
+        <#break>
+        <#case 'VALUE_OBJECT'>
+        ${ from.data.variableName.text }.get${ textConverter.toUpperCamel(data.variableName.text) }().getValue()<#sep>,</#sep>
         <#break>
         <#case 'OBJECT'>
         convertTo${ textConverter.toUpperCamel(data.objectName.text) }Dto(${ from.data.variableName.text }.get${ textConverter.toUpperCamel(data.variableName.text) }())<#sep>,</#sep>

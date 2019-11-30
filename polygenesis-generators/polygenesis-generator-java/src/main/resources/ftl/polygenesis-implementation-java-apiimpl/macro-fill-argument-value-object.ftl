@@ -21,14 +21,16 @@
 <#compress>
   <#if property.data.getAsDataObject().models?size == 1 >
     <#if property.data.getAsDataObject().models[0].primitiveType == 'STRING'>
-      new ${ textConverter.toUpperCamel(property.data.objectName.text) }(${ requestDto.dataObject.objectName.text }.get${ textConverter.toUpperCamel(property.data.variableName.text) }())
+      new ${ textConverter.toUpperCamel(property.data.objectName.text) }(${ requestDto.dataObject.variableName.text }.get${ textConverter.toUpperCamel(property.data.variableName.text) }())
+    <#elseif property.data.getAsDataObject().models[0].primitiveType == 'DECIMAL'>
+      new ${ textConverter.toUpperCamel(property.data.objectName.text) }(${ requestDto.dataObject.variableName.text }.get${ textConverter.toUpperCamel(property.data.variableName.text) }())
     <#elseif property.data.getAsDataObject().models[0].primitiveType == 'UUID'>
-      new ${ textConverter.toUpperCamel(property.data.objectName.text) }(UUID.fromString(${ requestDto.dataObject.objectName.text }.get${ textConverter.toUpperCamel(property.data.variableName.text) }()))
+      new ${ textConverter.toUpperCamel(property.data.objectName.text) }(UUID.fromString(${ requestDto.dataObject.variableName.text }.get${ textConverter.toUpperCamel(property.data.variableName.text) }()))
     <#else>
-        // TODO: ${property.data.getAsDataObject().models[0].primitiveType} is not supported yet
+        null // TODO: ${property.data.getAsDataObject().models[0].primitiveType} is not supported yet
     </#if>
   <#else>
-        // TODO: value object has more than one fields
+        null // TODO: value object '${ property.data.getAsDataObject().objectName.text }' has more than one fields
   </#if>
 </#compress>
 </#macro>

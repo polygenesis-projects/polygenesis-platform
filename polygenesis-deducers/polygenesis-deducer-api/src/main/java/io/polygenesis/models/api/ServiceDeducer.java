@@ -94,6 +94,11 @@ public class ServiceDeducer {
 
       appendCommandMethods(service, thing, rootPackageName);
 
+      // CHILDREN
+      thing
+          .getChildren()
+          .forEach(childThing -> appendCommandMethods(service, childThing, rootPackageName));
+
       services.add(service);
     }
 
@@ -106,6 +111,11 @@ public class ServiceDeducer {
               thing.getThingName());
 
       appendQueryMethods(service, thing, rootPackageName);
+
+      // CHILDREN
+      thing
+          .getChildren()
+          .forEach(childThing -> appendQueryMethods(service, childThing, rootPackageName));
 
       services.add(service);
     }

@@ -94,9 +94,7 @@ public class SupportiveEntityInitialization extends AbstractNameablePackageable 
 
   private Function makeAfterPropertiesSet() {
     Thing thing =
-        ThingBuilder.domainDetailRepositoryInMemory()
-            .setThingName("supportiveEntityInitialization")
-            .createThing();
+        ThingBuilder.domainDetailRepositoryInMemory("supportiveEntityInitialization").createThing();
 
     return new Function(
         thing,

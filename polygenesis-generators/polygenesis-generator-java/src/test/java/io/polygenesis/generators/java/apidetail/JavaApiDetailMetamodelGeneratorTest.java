@@ -39,7 +39,7 @@ import io.polygenesis.models.apiimpl.DomainEntityConverterMetamodelRepository;
 import io.polygenesis.models.apiimpl.ServiceImplementation;
 import io.polygenesis.models.apiimpl.ServiceImplementationMetamodelRepository;
 import io.polygenesis.models.domain.AggregateRoot;
-import io.polygenesis.models.domain.DomainMetamodelRepository;
+import io.polygenesis.models.domain.AggregateRootMetamodelRepository;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -126,14 +126,14 @@ public class JavaApiDetailMetamodelGeneratorTest {
     return new ServiceMetamodelRepository(services);
   }
 
-  private DomainMetamodelRepository createDomainModelRepository() {
+  private AggregateRootMetamodelRepository createDomainModelRepository() {
     Set<AggregateRoot> aggregateRoots = new LinkedHashSet<>();
 
     AggregateRoot aggregateRoot = mock(AggregateRoot.class);
     given(aggregateRoot.getObjectName()).willReturn(new ObjectName("someThing"));
     aggregateRoots.add(aggregateRoot);
 
-    return new DomainMetamodelRepository(aggregateRoots);
+    return new AggregateRootMetamodelRepository(aggregateRoots);
   }
 
   private DomainEntityConverterMetamodelRepository createDomainEntityConverterModelRepository() {

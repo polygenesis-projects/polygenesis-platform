@@ -34,7 +34,7 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class DomainDeducer implements Deducer<DomainMetamodelRepository> {
+public class DomainDeducer implements Deducer<AggregateRootMetamodelRepository> {
 
   // ===============================================================================================
   // DEPENDENCIES
@@ -62,10 +62,10 @@ public class DomainDeducer implements Deducer<DomainMetamodelRepository> {
   // ===============================================================================================
 
   @Override
-  public DomainMetamodelRepository deduce(
+  public AggregateRootMetamodelRepository deduce(
       Set<AbstractionRepository<?>> abstractionRepositories,
       Set<MetamodelRepository<?>> metamodelRepositories) {
-    return new DomainMetamodelRepository(
+    return new AggregateRootMetamodelRepository(
         aggregateRootDeducer.deduceFrom(
             CoreRegistry.getAbstractionRepositoryResolver()
                 .resolve(abstractionRepositories, ThingRepository.class),

@@ -21,6 +21,7 @@
 package io.polygenesis.generators.java.domain.valueobject;
 
 import io.polygenesis.core.AbstractUnitTemplateGenerator;
+import io.polygenesis.core.ExportInfo;
 import io.polygenesis.core.Exporter;
 import io.polygenesis.core.TemplateEngine;
 import io.polygenesis.models.domain.ValueObject;
@@ -48,5 +49,16 @@ public class ValueObjectGenerator extends AbstractUnitTemplateGenerator<ValueObj
       TemplateEngine templateEngine,
       Exporter exporter) {
     super(templateTransformer, templateEngine, exporter);
+  }
+
+  // ===============================================================================================
+  // OVERRIDES
+  // ===============================================================================================
+
+  @Override
+  public void generate(ValueObject source, ExportInfo exportInfo, Object... args) {
+    if (source.isCommon()) {
+      super.generate(source, exportInfo, args);
+    }
   }
 }

@@ -21,6 +21,8 @@
 package io.polygenesis.generators.java.apidetail.service.activity.entity;
 
 import io.polygenesis.abstraction.data.Data;
+import io.polygenesis.generators.java.apidetail.service.activity.common.AggregateEntityData;
+import io.polygenesis.generators.java.apidetail.service.activity.common.AggregateRootData;
 import io.polygenesis.models.api.Dto;
 import io.polygenesis.models.domain.DomainObjectProperty;
 import io.polygenesis.representations.code.ParameterRepresentation;
@@ -40,6 +42,8 @@ public class CreateAggregateEntityTemplateData extends AbstractAggregateEntityTe
   /**
    * Instantiates a new Create aggregate entity template data.
    *
+   * @param aggregateRootData the aggregate root data
+   * @param aggregateEntityData the aggregate entity data
    * @param aggregateRootIdDataType the aggregate root id data type
    * @param parentThingIdentity the parent thing identity
    * @param parameterRepresentations the parameter representations
@@ -54,6 +58,8 @@ public class CreateAggregateEntityTemplateData extends AbstractAggregateEntityTe
    * @param returnValue the return value
    */
   public CreateAggregateEntityTemplateData(
+      AggregateRootData aggregateRootData,
+      AggregateEntityData aggregateEntityData,
       String aggregateRootIdDataType,
       Data parentThingIdentity,
       Set<ParameterRepresentation> parameterRepresentations,
@@ -67,6 +73,8 @@ public class CreateAggregateEntityTemplateData extends AbstractAggregateEntityTe
       Boolean multiTenant,
       String returnValue) {
     super(
+        aggregateRootData,
+        aggregateEntityData,
         aggregateRootIdDataType,
         parentThingIdentity,
         parameterRepresentations,

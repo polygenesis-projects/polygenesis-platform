@@ -47,8 +47,7 @@ public class MessageSubscriberThingBuilder
    * @param abstractionScopes the abstraction scopes
    */
   private MessageSubscriberThingBuilder(String thingName, Set<AbstractionScope> abstractionScopes) {
-    super(MessageSubscriberThingBuilder.class, abstractionScopes);
-    setThingName(thingName);
+    super(MessageSubscriberThingBuilder.class, thingName, abstractionScopes);
   }
 
   // ===============================================================================================

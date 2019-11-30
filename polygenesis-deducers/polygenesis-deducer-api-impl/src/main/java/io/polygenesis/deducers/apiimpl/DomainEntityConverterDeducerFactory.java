@@ -31,9 +31,23 @@ public class DomainEntityConverterDeducerFactory {
   // DEPENDENCIES
   // ===============================================================================================
 
+  private static AggregateRootConverterDeducer aggregateRootConverterDeducer;
+  private static ProjectionConverterDeducer projectionConverterDeducer;
+
   // ===============================================================================================
   // STATIC INITIALIZATION OF DEPENDENCIES
   // ===============================================================================================
+
+  static {
+    ValueObjectDtoDeducer valueObjectDtoDeducer = new ValueObjectDtoDeducer();
+    CollectionRecordDeducer collectionRecordDeducer = new CollectionRecordDeducer();
+
+    aggregateRootConverterDeducer =
+        new AggregateRootConverterDeducer(valueObjectDtoDeducer, collectionRecordDeducer);
+
+    projectionConverterDeducer =
+        new ProjectionConverterDeducer(valueObjectDtoDeducer, collectionRecordDeducer);
+  }
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -52,6 +66,7 @@ public class DomainEntityConverterDeducerFactory {
    * @return the domain entity converter deducer
    */
   public static DomainEntityConverterDeducer newInstance() {
-    return new DomainEntityConverterDeducer();
+    return new DomainEntityConverterDeducer(
+        aggregateRootConverterDeducer, projectionConverterDeducer);
   }
 }

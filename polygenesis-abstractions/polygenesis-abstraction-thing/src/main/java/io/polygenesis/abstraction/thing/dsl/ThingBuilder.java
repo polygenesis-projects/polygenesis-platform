@@ -20,6 +20,8 @@
 
 package io.polygenesis.abstraction.thing.dsl;
 
+import static java.util.Collections.singletonList;
+
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.ThingMetadataKey;
 import io.polygenesis.commons.keyvalue.KeyValue;
@@ -49,8 +51,8 @@ public class ThingBuilder extends AbstractThingBuilder<ThingBuilder> {
    *
    * @return the thing builder
    */
-  public static ThingBuilder app() {
-    return new ThingBuilder(new LinkedHashSet<>(Arrays.asList(AbstractionScope.app())));
+  public static ThingBuilder app(String thingName) {
+    return new ThingBuilder(thingName, new LinkedHashSet<>(singletonList(AbstractionScope.app())));
   }
 
   /**
@@ -58,8 +60,8 @@ public class ThingBuilder extends AbstractThingBuilder<ThingBuilder> {
    *
    * @return the thing builder
    */
-  public static ThingBuilder api() {
-    return new ThingBuilder(new LinkedHashSet<>(Arrays.asList(AbstractionScope.api())));
+  public static ThingBuilder api(String thingName) {
+    return new ThingBuilder(thingName, new LinkedHashSet<>(singletonList(AbstractionScope.api())));
   }
 
   /**
@@ -67,14 +69,16 @@ public class ThingBuilder extends AbstractThingBuilder<ThingBuilder> {
    *
    * @return the thing builder
    */
-  public static ThingBuilder endToEnd() {
+  public static ThingBuilder endToEnd(String thingName) {
     return new ThingBuilder(
-        new LinkedHashSet<>(
-            Arrays.asList(
-                AbstractionScope.api(),
-                AbstractionScope.apiDetail(),
-                AbstractionScope.apiClientRest(),
-                AbstractionScope.domainAggregateRoot())));
+            thingName,
+            new LinkedHashSet<>(
+                Arrays.asList(
+                    AbstractionScope.api(),
+                    AbstractionScope.apiDetail(),
+                    AbstractionScope.apiClientRest(),
+                    AbstractionScope.domainAggregateRoot())))
+        .withThingIdentity();
   }
 
   /**
@@ -83,15 +87,18 @@ public class ThingBuilder extends AbstractThingBuilder<ThingBuilder> {
    * @param parentThing the parent thing
    * @return the thing builder
    */
-  public static ThingBuilder endToEndChild(Thing parentThing) {
+  public static ThingBuilder endToEndChild(String thingName, Thing parentThing) {
     return new ThingBuilder(
+            thingName,
             new LinkedHashSet<>(
                 Arrays.asList(
                     AbstractionScope.api(),
                     AbstractionScope.apiDetail(),
                     AbstractionScope.apiClientRest(),
                     AbstractionScope.domainAggregateEntity())))
-        .setParentThing(parentThing);
+        .withThingIdentity()
+        .setParentThing(parentThing)
+        .withParentThingIdentity();
   }
 
   /**
@@ -99,8 +106,9 @@ public class ThingBuilder extends AbstractThingBuilder<ThingBuilder> {
    *
    * @return the thing builder
    */
-  public static ThingBuilder apiClientBatchProcess() {
+  public static ThingBuilder apiClientBatchProcess(String thingName) {
     return new ThingBuilder(
+        thingName,
         new LinkedHashSet<>(
             Arrays.asList(AbstractionScope.api(), AbstractionScope.apiClientBatchProcess())));
   }
@@ -110,9 +118,9 @@ public class ThingBuilder extends AbstractThingBuilder<ThingBuilder> {
    *
    * @return the thing builder
    */
-  public static ThingBuilder apiClientDomainMessage() {
+  public static ThingBuilder apiClientDomainMessage(String thingName) {
     return new ThingBuilder(
-        new LinkedHashSet<>(Arrays.asList(AbstractionScope.apiClientMessaging())));
+        thingName, new LinkedHashSet<>(singletonList(AbstractionScope.apiClientMessaging())));
   }
 
   /**
@@ -120,8 +128,9 @@ public class ThingBuilder extends AbstractThingBuilder<ThingBuilder> {
    *
    * @return the thing builder
    */
-  public static ThingBuilder apiClientRest() {
-    return new ThingBuilder(new LinkedHashSet<>(Arrays.asList(AbstractionScope.apiClientRest())));
+  public static ThingBuilder apiClientRest(String thingName) {
+    return new ThingBuilder(
+        thingName, new LinkedHashSet<>(singletonList(AbstractionScope.apiClientRest())));
   }
 
   /**
@@ -129,8 +138,9 @@ public class ThingBuilder extends AbstractThingBuilder<ThingBuilder> {
    *
    * @return the thing builder
    */
-  public static ThingBuilder apiDetailServiceAspect() {
-    return new ThingBuilder(new LinkedHashSet<>(Arrays.asList(AbstractionScope.apiDetail())));
+  public static ThingBuilder apiDetailServiceAspect(String thingName) {
+    return new ThingBuilder(
+        thingName, new LinkedHashSet<>(singletonList(AbstractionScope.apiDetail())));
   }
 
   /**
@@ -138,8 +148,9 @@ public class ThingBuilder extends AbstractThingBuilder<ThingBuilder> {
    *
    * @return the thing builder
    */
-  public static ThingBuilder projection() {
+  public static ThingBuilder projection(String thingName) {
     return new ThingBuilder(
+        thingName,
         new LinkedHashSet<>(Arrays.asList(AbstractionScope.api(), AbstractionScope.projection())));
   }
 
@@ -148,9 +159,11 @@ public class ThingBuilder extends AbstractThingBuilder<ThingBuilder> {
    *
    * @return the thing builder
    */
-  public static ThingBuilder supportiveEntity() {
+  public static ThingBuilder supportiveEntity(String thingName) {
     return new ThingBuilder(
-        new LinkedHashSet<>(Arrays.asList(AbstractionScope.domainSupportiveEntity())));
+            thingName,
+            new LinkedHashSet<>(singletonList(AbstractionScope.domainSupportiveEntity())))
+        .withThingIdentity();
   }
 
   /**
@@ -158,9 +171,11 @@ public class ThingBuilder extends AbstractThingBuilder<ThingBuilder> {
    *
    * @return the thing builder
    */
-  public static ThingBuilder domainAbstractAggregateRoot() {
+  public static ThingBuilder domainAbstractAggregateRoot(String thingName) {
     return new ThingBuilder(
-        new LinkedHashSet<>(Arrays.asList(AbstractionScope.domainAbstractAggregateRoot())));
+            thingName,
+            new LinkedHashSet<>(singletonList(AbstractionScope.domainAbstractAggregateRoot())))
+        .withThingIdentity();
   }
 
   /**
@@ -168,8 +183,9 @@ public class ThingBuilder extends AbstractThingBuilder<ThingBuilder> {
    *
    * @return the thing builder
    */
-  public static ThingBuilder domainService() {
-    return new ThingBuilder(new LinkedHashSet<>(Arrays.asList(AbstractionScope.domainService())));
+  public static ThingBuilder domainService(String thingName) {
+    return new ThingBuilder(
+        thingName, new LinkedHashSet<>(singletonList(AbstractionScope.domainService())));
   }
 
   /**
@@ -177,9 +193,9 @@ public class ThingBuilder extends AbstractThingBuilder<ThingBuilder> {
    *
    * @return the thing builder
    */
-  public static ThingBuilder domainAggregateRoot() {
+  public static ThingBuilder domainAggregateRoot(String thingName) {
     return new ThingBuilder(
-        new LinkedHashSet<>(Arrays.asList(AbstractionScope.domainAggregateRoot())));
+        thingName, new LinkedHashSet<>(singletonList(AbstractionScope.domainAggregateRoot())));
   }
 
   /**
@@ -187,9 +203,12 @@ public class ThingBuilder extends AbstractThingBuilder<ThingBuilder> {
    *
    * @return the thing builder
    */
-  public static ThingBuilder domainAggregateEntity() {
+  public static ThingBuilder domainAggregateEntity(String thingName, Thing parentThing) {
     return new ThingBuilder(
-        new LinkedHashSet<>(Arrays.asList(AbstractionScope.domainAggregateEntity())));
+            thingName, new LinkedHashSet<>(singletonList(AbstractionScope.domainAggregateEntity())))
+        .withThingIdentity()
+        .setParentThing(parentThing)
+        .withParentThingIdentity();
   }
 
   /**
@@ -197,9 +216,9 @@ public class ThingBuilder extends AbstractThingBuilder<ThingBuilder> {
    *
    * @return the thing builder
    */
-  public static ThingBuilder domainMessageSubscriber() {
+  public static ThingBuilder domainMessageSubscriber(String thingName) {
     return new ThingBuilder(
-        new LinkedHashSet<>(Arrays.asList(AbstractionScope.apiClientMessaging())));
+        thingName, new LinkedHashSet<>(singletonList(AbstractionScope.apiClientMessaging())));
   }
 
   /**
@@ -207,9 +226,9 @@ public class ThingBuilder extends AbstractThingBuilder<ThingBuilder> {
    *
    * @return the thing builder
    */
-  public static ThingBuilder domainDetailDomainMessagePublisher() {
+  public static ThingBuilder domainDetailDomainMessagePublisher(String thingName) {
     return new ThingBuilder(
-        new LinkedHashSet<>(Arrays.asList(AbstractionScope.domainDetailPublisher())));
+        thingName, new LinkedHashSet<>(singletonList(AbstractionScope.domainDetailPublisher())));
   }
 
   /**
@@ -217,9 +236,10 @@ public class ThingBuilder extends AbstractThingBuilder<ThingBuilder> {
    *
    * @return the thing builder
    */
-  public static ThingBuilder domainDetailRepositoryInMemory() {
+  public static ThingBuilder domainDetailRepositoryInMemory(String thingName) {
     return new ThingBuilder(
-        new LinkedHashSet<>(Arrays.asList(AbstractionScope.domainDetailRepositoryInMemory())));
+        thingName,
+        new LinkedHashSet<>(singletonList(AbstractionScope.domainDetailRepositoryInMemory())));
   }
 
   // ===============================================================================================
@@ -253,7 +273,7 @@ public class ThingBuilder extends AbstractThingBuilder<ThingBuilder> {
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
-  private ThingBuilder(Set<AbstractionScope> abstractionScopes) {
-    super(ThingBuilder.class, abstractionScopes);
+  private ThingBuilder(String thingName, Set<AbstractionScope> abstractionScopes) {
+    super(ThingBuilder.class, thingName, abstractionScopes);
   }
 }

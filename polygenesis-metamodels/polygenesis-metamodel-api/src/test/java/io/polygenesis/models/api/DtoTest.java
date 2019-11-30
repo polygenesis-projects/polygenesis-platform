@@ -21,8 +21,10 @@
 package io.polygenesis.models.api;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 
 import io.polygenesis.abstraction.data.DataObject;
+import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.commons.test.AbstractEqualityTest;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
@@ -31,10 +33,15 @@ import org.junit.Test;
 /** @author Christos Tsakostas */
 public class DtoTest extends AbstractEqualityTest<Dto> {
 
+  private Thing relatedThing = mock(Thing.class);
+
   @Test
   public void shouldCreateDto() {
+    Thing relatedThing = mock(Thing.class);
+
     Dto dto =
         new Dto(
+            relatedThing,
             DtoType.API_REQUEST,
             new DataObject(new ObjectName("asd"), new PackageName("com.oregor")),
             false);
@@ -48,6 +55,7 @@ public class DtoTest extends AbstractEqualityTest<Dto> {
   @Override
   public Dto createObject1() {
     return new Dto(
+        relatedThing,
         DtoType.API_REQUEST,
         new DataObject(new ObjectName("asd"), new PackageName("com.oregor")),
         false);
@@ -56,6 +64,7 @@ public class DtoTest extends AbstractEqualityTest<Dto> {
   @Override
   public Dto createObject2() {
     return new Dto(
+        relatedThing,
         DtoType.API_REQUEST,
         new DataObject(new ObjectName("xyz"), new PackageName("com.oregor")),
         false);

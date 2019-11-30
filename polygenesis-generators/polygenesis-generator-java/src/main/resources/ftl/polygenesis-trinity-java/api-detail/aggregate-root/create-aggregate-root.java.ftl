@@ -18,20 +18,19 @@
  ===========================LICENSE_END==================================
 -->
 <#include "../../../polygenesis-implementation-java-shared/macro-assertions-for-parameters.ftl">
-<#include "../../../polygenesis-implementation-java-apiimpl/macro-restore-aggregate-root.ftl">
-<#include "../../../polygenesis-implementation-java-apiimpl/macro-store-aggregate-root.ftl">
+<#include "macro-restore-aggregate-root.ftl">
+<#include "macro-store-aggregate-root.ftl">
 <#include "../../../polygenesis-implementation-java-apiimpl/macro-fill-arguments.ftl">
 <#include "./macro-fill-arguments-response-dto.ftl">
     <@assertionsForParameters data.parameterRepresentations></@assertionsForParameters>
 
     ${ data.aggregateRootDataType } ${ data.aggregateRootVariable } = new ${ data.aggregateRootDataType }(
-<@fillArguments data.properties data.persistenceVariable data.requestDto data.multiTenant data.converterVariable></@fillArguments>
+<@fillArguments data.properties data.persistenceVariable data.requestDto data.multiTenant data.converterVariable!"No Converter"></@fillArguments>
     );
 
-<@storeAggregateRoot data.persistenceVariable data.aggregateRootVariable></@storeAggregateRoot>
+<@storeAggregateRoot data.aggregateRootData></@storeAggregateRoot>
 <#if !data.responseDto.getVirtual()>
 
-<#--    return new ${ data.returnValue }(${ data.aggregateRootVariable }.getId().getTypeId().toString());</#if>-->
     return new ${ data.returnValue }(
-<@fillArgumentsResponseDto data.properties data.persistenceVariable data.responseDto data.multiTenant data.converterVariable></@fillArgumentsResponseDto>
+<@fillArgumentsResponseDto data.properties data.persistenceVariable data.responseDto data.multiTenant data.converterVariable!"No Converter"></@fillArgumentsResponseDto>
     );</#if>

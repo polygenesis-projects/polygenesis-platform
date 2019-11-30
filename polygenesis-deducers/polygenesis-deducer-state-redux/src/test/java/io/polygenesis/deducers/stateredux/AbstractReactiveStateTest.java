@@ -34,7 +34,7 @@ import io.polygenesis.commons.valueobjects.VariableName;
 public abstract class AbstractReactiveStateTest {
 
   protected Thing createThing() {
-    Thing thing = ThingBuilder.endToEnd().setThingName("someThing").createThing();
+    Thing thing = ThingBuilder.endToEnd("someThing").createThing();
 
     // =============================================================================================
     // CREATE

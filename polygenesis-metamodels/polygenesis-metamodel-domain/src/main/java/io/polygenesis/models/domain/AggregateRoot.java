@@ -45,7 +45,6 @@ public class AggregateRoot extends BaseDomainEntity
   // STATE
   // ===============================================================================================
 
-  private Set<StateMutationMethod> stateMutationMethods;
   private Set<StateQueryMethod> stateQueryMethods;
   private Set<FactoryMethod> factoryMethods;
   private AggregateRoot superClass;
@@ -63,7 +62,6 @@ public class AggregateRoot extends BaseDomainEntity
    * @param properties the properties
    * @param constructors the constructors
    * @param multiTenant the multi tenant
-   * @param stateMutationMethods the state mutation methods
    * @param stateQueryMethods the state query methods
    * @param factoryMethods the factory methods
    */
@@ -74,7 +72,6 @@ public class AggregateRoot extends BaseDomainEntity
       Set<DomainObjectProperty<?>> properties,
       Set<Constructor> constructors,
       Boolean multiTenant,
-      Set<StateMutationMethod> stateMutationMethods,
       Set<StateQueryMethod> stateQueryMethods,
       Set<FactoryMethod> factoryMethods) {
     super(
@@ -85,7 +82,6 @@ public class AggregateRoot extends BaseDomainEntity
         properties,
         constructors,
         multiTenant);
-    setStateMutationMethods(stateMutationMethods);
     setStateQueryMethods(stateQueryMethods);
     setFactoryMethods(factoryMethods);
   }
@@ -99,7 +95,6 @@ public class AggregateRoot extends BaseDomainEntity
    * @param properties the properties
    * @param constructors the constructors
    * @param multiTenant the multi tenant
-   * @param stateMutationMethods the state mutation methods
    * @param stateQueryMethods the state query methods
    * @param factoryMethods the factory methods
    * @param superClass the super class
@@ -111,7 +106,6 @@ public class AggregateRoot extends BaseDomainEntity
       Set<DomainObjectProperty<?>> properties,
       Set<Constructor> constructors,
       Boolean multiTenant,
-      Set<StateMutationMethod> stateMutationMethods,
       Set<StateQueryMethod> stateQueryMethods,
       Set<FactoryMethod> factoryMethods,
       AggregateRoot superClass) {
@@ -123,7 +117,6 @@ public class AggregateRoot extends BaseDomainEntity
         properties,
         constructors,
         multiTenant);
-    setStateMutationMethods(stateMutationMethods);
     setStateQueryMethods(stateQueryMethods);
     setFactoryMethods(factoryMethods);
     setSuperClass(superClass);
@@ -145,15 +138,6 @@ public class AggregateRoot extends BaseDomainEntity
   // ===============================================================================================
   // GETTERS
   // ===============================================================================================
-
-  /**
-   * Gets state mutation methods.
-   *
-   * @return the state mutation methods
-   */
-  public Set<StateMutationMethod> getStateMutationMethods() {
-    return stateMutationMethods;
-  }
 
   /**
    * Gets state query methods.
@@ -229,16 +213,6 @@ public class AggregateRoot extends BaseDomainEntity
   // ===============================================================================================
   // GUARDS
   // ===============================================================================================
-
-  /**
-   * Sets state mutation methods.
-   *
-   * @param stateMutationMethods the state mutation methods
-   */
-  private void setStateMutationMethods(Set<StateMutationMethod> stateMutationMethods) {
-    Assertion.isNotNull(stateMutationMethods, "stateMutationMethods is required");
-    this.stateMutationMethods = stateMutationMethods;
-  }
 
   /**
    * Sets state query methods.
@@ -319,8 +293,7 @@ public class AggregateRoot extends BaseDomainEntity
       return false;
     }
     AggregateRoot that = (AggregateRoot) o;
-    return Objects.equals(stateMutationMethods, that.stateMutationMethods)
-        && Objects.equals(stateQueryMethods, that.stateQueryMethods)
+    return Objects.equals(stateQueryMethods, that.stateQueryMethods)
         && Objects.equals(factoryMethods, that.factoryMethods)
         && Objects.equals(superClass, that.superClass);
   }
@@ -328,7 +301,6 @@ public class AggregateRoot extends BaseDomainEntity
   @Override
   @SuppressWarnings("CPD-END")
   public int hashCode() {
-    return Objects.hash(
-        super.hashCode(), stateMutationMethods, stateQueryMethods, factoryMethods, superClass);
+    return Objects.hash(super.hashCode(), stateQueryMethods, factoryMethods, superClass);
   }
 }

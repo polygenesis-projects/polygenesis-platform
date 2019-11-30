@@ -81,17 +81,6 @@ public class ThingRepository implements AbstractionRepository<Thing> {
         .stream()
         .filter(thing -> thing.getAbstractionsScopes().contains(abstractionScope))
         .collect(Collectors.toSet());
-
-    //    switch (abstractionScope.getText()) {
-    //      case AbstractionScope.API:
-    //        return getApiThings();
-    //      case AbstractionScope.DOMAIN:
-    //        return getDomainModelThings();
-    //      case AbstractionScope.DOMAIN_SERVICE:
-    //        return getDomainServiceThings();
-    //      default:
-    //        throw new IllegalStateException();
-    //    }
   }
 
   @Override
@@ -108,40 +97,6 @@ public class ThingRepository implements AbstractionRepository<Thing> {
   public void addAbstractionItem(Thing abstraction) {
     things.add(abstraction);
   }
-
-  // ===============================================================================================
-  // PRIVATE
-  // ===============================================================================================
-
-  //  private Set<Thing> getApiThings() {
-  //    return things
-  //        .stream()
-  //        .filter(
-  //            thing ->
-  //                thing.getThingType().equals(ThingType.DOMAIN_AGGREGATE_ROOT)
-  //                    || thing.getThingType().equals(ThingType.DOMAIN_AGGREGATE_ENTITY)
-  //                    || thing.getThingType().equals(ThingType.DOMAIN_SUPPORTIVE_ENTITY)
-  //                    || thing.getThingType().equals(ThingType.PROJECTION))
-  //        .collect(Collectors.toCollection(LinkedHashSet::new));
-  //  }
-  //
-  //  private Set<Thing> getDomainModelThings() {
-  //    return things
-  //        .stream()
-  //        .filter(
-  //            thing ->
-  //                thing.getThingType().equals(ThingType.DOMAIN_AGGREGATE_ROOT)
-  //                    || thing.getThingType().equals(ThingType.DOMAIN_AGGREGATE_ENTITY)
-  //                    || thing.getThingType().equals(ThingType.DOMAIN_SUPPORTIVE_ENTITY))
-  //        .collect(Collectors.toCollection(LinkedHashSet::new));
-  //  }
-  //
-  //  private Set<Thing> getDomainServiceThings() {
-  //    return things
-  //        .stream()
-  //        .filter(thing -> thing.getThingType().equals(ThingType.DOMAIN_SERVICE))
-  //        .collect(Collectors.toCollection(LinkedHashSet::new));
-  //  }
 
   // ===============================================================================================
   // GUARDS

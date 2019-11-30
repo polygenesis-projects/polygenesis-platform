@@ -80,7 +80,7 @@ public class DefaultSpreadsheetDeducerStrategyTest {
   private ThingRepository thingRepository() {
     Set<Thing> things = new LinkedHashSet<>();
 
-    Thing thing = ThingBuilder.endToEnd().setThingName("Customer").createThing();
+    Thing thing = ThingBuilder.endToEnd("Customer").createThing();
 
     thing.addFunctions(
         PurposeFunctionBuilder.forThing(thing, "com.oregor")

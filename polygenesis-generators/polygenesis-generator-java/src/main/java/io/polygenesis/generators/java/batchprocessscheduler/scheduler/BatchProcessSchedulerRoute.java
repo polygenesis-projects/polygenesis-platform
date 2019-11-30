@@ -87,10 +87,7 @@ public class BatchProcessSchedulerRoute extends BatchProcessMetamodel {
   // ===============================================================================================
 
   private Function makeConfigureFunction() {
-    Thing thing =
-        ThingBuilder.apiClientBatchProcess()
-            .setThingName("batchProcessSchedulerRoute")
-            .createThing();
+    Thing thing = ThingBuilder.apiClientBatchProcess("batchProcessSchedulerRoute").createThing();
 
     return new Function(
         thing,

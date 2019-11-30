@@ -33,9 +33,9 @@ import io.polygenesis.models.apiimpl.DomainEntityConverterMetamodelRepository;
 import io.polygenesis.models.apiimpl.ServiceDependency;
 import io.polygenesis.models.apiimpl.ServiceImplementation;
 import io.polygenesis.models.apiimpl.ServiceImplementationMetamodelRepository;
+import io.polygenesis.models.domain.AggregateRootMetamodelRepository;
 import io.polygenesis.models.domain.AggregateRootPersistable;
 import io.polygenesis.models.domain.BaseDomainEntity;
-import io.polygenesis.models.domain.DomainMetamodelRepository;
 import io.polygenesis.models.domain.Persistence;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
@@ -47,7 +47,7 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class ServiceImplementationDeducer extends BaseApiImplementationDeducer
+public class ServiceImplementationDeducer
     implements Deducer<ServiceImplementationMetamodelRepository> {
 
   // ===============================================================================================
@@ -82,9 +82,9 @@ public class ServiceImplementationDeducer extends BaseApiImplementationDeducer
         CoreRegistry.getMetamodelRepositoryResolver()
             .resolve(metamodelRepositories, ServiceMetamodelRepository.class);
 
-    DomainMetamodelRepository domainModelRepository =
+    AggregateRootMetamodelRepository aggregateRootMetamodelRepository =
         CoreRegistry.getMetamodelRepositoryResolver()
-            .resolve(metamodelRepositories, DomainMetamodelRepository.class);
+            .resolve(metamodelRepositories, AggregateRootMetamodelRepository.class);
 
     DomainEntityConverterMetamodelRepository domainEntityConverterModelRepository =
         CoreRegistry.getMetamodelRepositoryResolver()
@@ -96,7 +96,7 @@ public class ServiceImplementationDeducer extends BaseApiImplementationDeducer
         serviceImplementations,
         serviceModelRepository,
         domainEntityConverterModelRepository,
-        domainModelRepository);
+        aggregateRootMetamodelRepository);
 
     return new ServiceImplementationMetamodelRepository(serviceImplementations);
   }
@@ -117,7 +117,7 @@ public class ServiceImplementationDeducer extends BaseApiImplementationDeducer
       Set<ServiceImplementation> serviceImplementations,
       ServiceMetamodelRepository serviceModelRepository,
       DomainEntityConverterMetamodelRepository domainEntityConverterModelRepository,
-      DomainMetamodelRepository domainModelRepository) {
+      AggregateRootMetamodelRepository domainModelRepository) {
     serviceModelRepository
         .getItems()
         .forEach(
@@ -140,7 +140,7 @@ public class ServiceImplementationDeducer extends BaseApiImplementationDeducer
   private ServiceImplementation makeServiceImplementation(
       Service service,
       Set<DomainEntityConverter> domainEntityConverters,
-      DomainMetamodelRepository domainModelRepository) {
+      AggregateRootMetamodelRepository domainModelRepository) {
 
     Optional<DomainEntityConverter> optionalDomainEntityConverter =
         getOptionalDomainObjectConverter(
@@ -230,5 +230,40 @@ public class ServiceImplementationDeducer extends BaseApiImplementationDeducer
             domainEntityConverter.getVariableName()));
 
     return dependencies;
+  }
+
+  /**
+   * Gets optional domain object converter.
+   *
+   * @param domainEntityConverters the domain object converters
+   * @param domainObjectName the domain object name
+   * @return the optional domain object converter
+   */
+  protected Optional<DomainEntityConverter> getOptionalDomainObjectConverter(
+      Set<DomainEntityConverter> domainEntityConverters, ObjectName domainObjectName) {
+    return domainEntityConverters
+        .stream()
+        .filter(
+            domainObjectConverter ->
+                domainObjectConverter.getDomainEntity().getObjectName().equals(domainObjectName))
+        .findFirst();
+  }
+
+  /**
+   * Aggregate root parent optional.
+   *
+   * @param domainModelRepository the domain model repository
+   * @param domainEntity the domain entity
+   * @return the optional
+   */
+  protected Optional<AggregateRootPersistable> aggregateRootParent(
+      AggregateRootMetamodelRepository domainModelRepository, BaseDomainEntity domainEntity) {
+
+    return domainModelRepository
+        .getItems()
+        .stream()
+        .filter(aggregateRoot -> aggregateRoot.contains(domainEntity))
+        .map(AggregateRootPersistable.class::cast)
+        .findFirst();
   }
 }

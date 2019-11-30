@@ -102,7 +102,7 @@ public class StateMutationMethodDeducer extends AbstractPropertyDeducer {
    * @param thing the thing
    * @return the set
    */
-  private Set<StateMutationMethod> deduceForStateMutation(
+  public Set<StateMutationMethod> deduceForStateMutation(
       PackageName thingPackageName, Thing thing) {
     Set<StateMutationMethod> stateMutationMethods = new LinkedHashSet<>();
 
@@ -216,17 +216,26 @@ public class StateMutationMethodDeducer extends AbstractPropertyDeducer {
   private StateMutationMethod aggregateRootCreateEntity(
       Thing thing, AggregateEntity aggregateEntity) {
 
+    StateMutationMethod stateMutationMethodAggregateEntityCreate =
+        aggregateEntity.findOneStateMutationMethodByPurpose(Purpose.create());
+
     Function function =
         FunctionBuilder.of(
                 thing,
                 String.format(
-                    "define%s",
-                    TextConverter.toUpperCamel(aggregateEntity.getObjectName().getText())),
+                    "add%s", TextConverter.toUpperCamel(aggregateEntity.getObjectName().getText())),
                 Purpose.aggregateRootCreateEntity())
             .setReturnValue(aggregateEntity.getData())
+            .addArguments(
+                stateMutationMethodAggregateEntityCreate
+                    .getProperties()
+                    .stream()
+                    .map(property -> property.getData())
+                    .collect(toCollection(LinkedHashSet::new)))
             .build();
 
-    return new StateMutationMethod(function, deduceDomainObjectPropertiesFromFunction(function));
+    return new StateMutationMethod(
+        function, stateMutationMethodAggregateEntityCreate.getProperties());
   }
 
   /**

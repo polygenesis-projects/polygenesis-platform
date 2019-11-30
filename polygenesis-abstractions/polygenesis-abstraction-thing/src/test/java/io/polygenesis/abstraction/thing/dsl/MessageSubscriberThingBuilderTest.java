@@ -30,7 +30,7 @@ public class MessageSubscriberThingBuilderTest {
 
   @Test
   public void shouldCreateMessageSubscriber() {
-    Thing user = ThingBuilder.endToEnd().setThingName("user").createThing();
+    Thing user = ThingBuilder.endToEnd("user").createThing();
 
     Thing onUserCreated =
         MessageSubscriberThingBuilder.of("onUserCreated").setRelatedThing(user).createThing();

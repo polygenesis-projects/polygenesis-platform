@@ -68,7 +68,7 @@ public class SupportiveEntityIdTransformer
   @Override
   public TemplateData transform(SupportiveEntityId source, Object... args) {
     Map<String, Object> dataModel = new HashMap<>();
-    dataModel.put("representation", create(source));
+    dataModel.put("representation", create(source, args));
 
     return new TemplateData(dataModel, "polygenesis-representation-java/Class.java.ftl");
   }

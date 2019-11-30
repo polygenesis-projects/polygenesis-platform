@@ -57,5 +57,21 @@ public class AggregateRootStateMutationActivityRegistry
     scopeAndPurposeMap.put(
         new ScopePurposeTuple(AbstractionScope.domainAggregateRoot(), Purpose.modify()),
         new ModifyActivityGenerator(new ModifyActivityTransformer(), templateEngine));
+
+    // AGGREGATE ENTITIES
+    scopeAndPurposeMap.put(
+        new ScopePurposeTuple(
+            AbstractionScope.domainAggregateRoot(), Purpose.aggregateRootCreateEntity()),
+        new EntityAddActivityGenerator(new EntityAddActivityTransformer(), templateEngine));
+
+    scopeAndPurposeMap.put(
+        new ScopePurposeTuple(
+            AbstractionScope.domainAggregateRoot(), Purpose.aggregateRootUpdateEntity()),
+        new EntityModifyActivityGenerator(new EntityModifyActivityTransformer(), templateEngine));
+
+    scopeAndPurposeMap.put(
+        new ScopePurposeTuple(
+            AbstractionScope.domainAggregateRoot(), Purpose.aggregateRootDeleteEntity()),
+        new EntityRemoveActivityGenerator(new EntityRemoveActivityTransformer(), templateEngine));
   }
 }

@@ -87,8 +87,7 @@ public class BatchProcessAbstractSubscriber extends AbstractNameablePackageable 
    * @return the function
    */
   private Function makeProcessFunction() {
-    Thing thing =
-        ThingBuilder.apiClientBatchProcess().setThingName("abstractSubscriber").createThing();
+    Thing thing = ThingBuilder.apiClientBatchProcess("abstractSubscriber").createThing();
 
     return new Function(
         thing,

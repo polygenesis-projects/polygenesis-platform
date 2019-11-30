@@ -17,7 +17,6 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-
 <#macro setRootIdInRequest requestDto thingIdentityVariableName>
     ${ requestDto.dataObject.variableName.text }.set${ textConverter.toUpperCamel(thingIdentityVariableName) }(${ thingIdentityVariableName });
 </#macro>

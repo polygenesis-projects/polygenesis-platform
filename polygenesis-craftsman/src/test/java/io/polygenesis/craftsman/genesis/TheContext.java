@@ -36,7 +36,7 @@ public class TheContext {
    * @return the thing
    */
   public static Thing create(String rootPackageName) {
-    Thing thing = ThingBuilder.endToEnd().setThingName("context").createThing();
+    Thing thing = ThingBuilder.endToEnd("context").createThing();
 
     thing.addFunctions(
         PurposeFunctionBuilder.forThing(thing, rootPackageName)

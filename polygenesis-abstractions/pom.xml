@@ -14,8 +14,8 @@
   <packaging>pom</packaging>
 
   <modules>
+    <module>polygenesis-abstraction-code</module>
     <module>polygenesis-abstraction-thing</module>
-    <module>polygenesis-abstraction-data</module>
   </modules>
 
 </project>

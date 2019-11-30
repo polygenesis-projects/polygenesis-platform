@@ -46,6 +46,8 @@ public enum PropertyType {
   PROJECTION_ID,
   /** Reference to aggregate root property type. */
   REFERENCE_TO_AGGREGATE_ROOT,
+  /** Reference to abstract aggregate root property type. */
+  REFERENCE_TO_ABSTRACT_AGGREGATE_ROOT,
   /** Reference property type. */
   REFERENCE,
   /** Supportive entity id property type. */

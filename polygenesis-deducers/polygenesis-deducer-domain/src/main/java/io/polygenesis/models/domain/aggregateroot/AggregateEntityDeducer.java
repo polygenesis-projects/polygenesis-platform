@@ -28,6 +28,7 @@ import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.models.domain.AggregateEntity;
 import io.polygenesis.models.domain.AggregateEntityCollection;
 import io.polygenesis.models.domain.InstantiationType;
+import io.polygenesis.models.domain.StateMutationMethod;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -42,6 +43,7 @@ public class AggregateEntityDeducer {
   // DEPENDENCIES
   // ===============================================================================================
   private final AggregateEntityPropertyDeducer aggregateEntityPropertyDeducer;
+  private final StateMutationMethodDeducer stateMutationMethodDeducer;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -51,9 +53,13 @@ public class AggregateEntityDeducer {
    * Instantiates a new Aggregate entity deducer.
    *
    * @param aggregateEntityPropertyDeducer the aggregate entity property deducer
+   * @param stateMutationMethodDeducer the state mutation method deducer
    */
-  public AggregateEntityDeducer(AggregateEntityPropertyDeducer aggregateEntityPropertyDeducer) {
+  public AggregateEntityDeducer(
+      AggregateEntityPropertyDeducer aggregateEntityPropertyDeducer,
+      StateMutationMethodDeducer stateMutationMethodDeducer) {
     this.aggregateEntityPropertyDeducer = aggregateEntityPropertyDeducer;
+    this.stateMutationMethodDeducer = stateMutationMethodDeducer;
   }
 
   // ===============================================================================================
@@ -112,14 +118,24 @@ public class AggregateEntityDeducer {
    */
   private AggregateEntity deduceAggregateEntity(
       Thing thingParent, Thing thingChild, PackageName rootPackageName) {
-    return new AggregateEntity(
-        InstantiationType.CONCRETE,
-        new ObjectName(thingChild.getThingName().getText()),
-        thingParent.makePackageName(rootPackageName, thingParent),
-        aggregateEntityPropertyDeducer.deduceFrom(thingParent, thingChild, rootPackageName),
-        aggregateEntityPropertyDeducer.deduceConstructors(null, thingChild, rootPackageName),
-        thingParent.getMultiTenant(),
-        makeSuperclass(thingParent.getMultiTenant()));
+    PackageName thingPackageName = thingParent.makePackageName(rootPackageName, thingParent);
+
+    AggregateEntity aggregateEntity =
+        new AggregateEntity(
+            InstantiationType.CONCRETE,
+            new ObjectName(thingChild.getThingName().getText()),
+            thingPackageName,
+            aggregateEntityPropertyDeducer.deduceFrom(thingParent, thingChild, rootPackageName),
+            aggregateEntityPropertyDeducer.deduceConstructors(null, thingChild, rootPackageName),
+            thingParent.getMultiTenant(),
+            makeSuperclass(thingParent.getMultiTenant()));
+
+    Set<StateMutationMethod> stateMutationMethods =
+        stateMutationMethodDeducer.deduceForStateMutation(thingPackageName, thingChild);
+
+    aggregateEntity.addStateMutationMethods(stateMutationMethods);
+
+    return aggregateEntity;
   }
 
   /**

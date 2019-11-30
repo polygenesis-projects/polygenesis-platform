@@ -163,8 +163,7 @@ public class DomainMessageSubscriber extends SubscriberMetamodel {
       keyValues.add(new KeyValue("commandServiceMethod", getCommandServiceMethod()));
     }
 
-    Thing thing =
-        ThingBuilder.apiClientDomainMessage().setThingName("domainMessageSubscriber").createThing();
+    Thing thing = ThingBuilder.apiClientDomainMessage("domainMessageSubscriber").createThing();
 
     return new Function(
         thing,
@@ -189,8 +188,7 @@ public class DomainMessageSubscriber extends SubscriberMetamodel {
   }
 
   private Function makeGetSupportedMessageTypes() {
-    Thing thing =
-        ThingBuilder.apiClientDomainMessage().setThingName("domainMessageSubscriber").createThing();
+    Thing thing = ThingBuilder.apiClientDomainMessage("domainMessageSubscriber").createThing();
 
     Set<KeyValue> keyValues = new LinkedHashSet<>();
 

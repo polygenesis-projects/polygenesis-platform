@@ -30,8 +30,12 @@ import io.polygenesis.core.Exporter;
 import io.polygenesis.core.FreemarkerTemplateEngine;
 import io.polygenesis.core.PassiveFileExporter;
 import io.polygenesis.core.TemplateEngine;
-import io.polygenesis.generators.java.domain.aggregateentity.AggregateEntityExporter;
-import io.polygenesis.generators.java.domain.aggregateentity.AggregateEntityLegacyClassTransformer;
+import io.polygenesis.generators.java.common.ParameterRepresentationsService;
+import io.polygenesis.generators.java.domain.aggregateentity.AggregateEntityGenerator;
+import io.polygenesis.generators.java.domain.aggregateentity.AggregateEntityMethodTransformer;
+import io.polygenesis.generators.java.domain.aggregateentity.AggregateEntityTransformer;
+import io.polygenesis.generators.java.domain.aggregateentity.activity.statemutation.AggregateEntityStateMutationActivityRegistry;
+import io.polygenesis.generators.java.domain.aggregateentity.activity.statemutation.AggregateEntityStateMutationMethodTransformer;
 import io.polygenesis.generators.java.domain.aggregateentityid.AggregateEntityIdExporter;
 import io.polygenesis.generators.java.domain.aggregateentityid.AggregateEntityIdLegacyClassTransformer;
 import io.polygenesis.generators.java.domain.aggregateroot.AggregateRootActivityRegistry;
@@ -99,7 +103,7 @@ public final class JavaDomainMetamodelGeneratorFactory {
 
   private static AggregateRootGenerator aggregateRootGenerator;
   private static AggregateRootIdExporter aggregateRootIdExporter;
-  private static AggregateEntityExporter aggregateEntityExporter;
+  private static AggregateEntityGenerator aggregateEntityGenerator;
   private static AggregateEntityIdExporter aggregateEntityIdExporter;
   private static ValueObjectGenerator valueObjectGenerator;
   private static DomainEventGenerator domainEventGenerator;
@@ -139,7 +143,9 @@ public final class JavaDomainMetamodelGeneratorFactory {
                 new AggregateRootMethodTransformer(
                     dataTypeTransformer, new AggregateRootActivityRegistry()),
                 new AggregateRootStateMutationMethodTransformer(
-                    dataTypeTransformer, new AggregateRootStateMutationActivityRegistry())),
+                    dataTypeTransformer,
+                    new AggregateRootStateMutationActivityRegistry(),
+                    new ParameterRepresentationsService(dataTypeTransformer))),
             templateEngine,
             passiveFileExporter);
 
@@ -149,10 +155,17 @@ public final class JavaDomainMetamodelGeneratorFactory {
     aggregateRootIdExporter =
         new AggregateRootIdExporter(freemarkerService, aggregateRootIdClassRepresentable);
 
-    AggregateEntityLegacyClassTransformer aggregateEntityClassRepresentable =
-        new AggregateEntityLegacyClassTransformer(dataTypeTransformer);
-    aggregateEntityExporter =
-        new AggregateEntityExporter(freemarkerService, aggregateEntityClassRepresentable);
+    aggregateEntityGenerator =
+        new AggregateEntityGenerator(
+            new AggregateEntityTransformer(
+                dataTypeTransformer,
+                new AggregateEntityMethodTransformer(dataTypeTransformer),
+                new AggregateEntityStateMutationMethodTransformer(
+                    dataTypeTransformer,
+                    new AggregateEntityStateMutationActivityRegistry(),
+                    new ParameterRepresentationsService(dataTypeTransformer))),
+            templateEngine,
+            passiveFileExporter);
 
     AggregateEntityIdLegacyClassTransformer aggregateEntityIdClassRepresentable =
         new AggregateEntityIdLegacyClassTransformer(dataTypeTransformer);
@@ -293,7 +306,7 @@ public final class JavaDomainMetamodelGeneratorFactory {
         contextName,
         aggregateRootGenerator,
         aggregateRootIdExporter,
-        aggregateEntityExporter,
+        aggregateEntityGenerator,
         aggregateEntityIdExporter,
         valueObjectGenerator,
         domainEventGenerator,

@@ -82,9 +82,7 @@ public class DomainMessageForwarder extends AbstractNameablePackageable {
 
   private Function makeSendFunction() {
     Thing thing =
-        ThingBuilder.domainMessageSubscriber()
-            .setThingName("domainMessageMessageForwarder")
-            .createThing();
+        ThingBuilder.domainMessageSubscriber("domainMessageMessageForwarder").createThing();
 
     return new Function(
         thing,

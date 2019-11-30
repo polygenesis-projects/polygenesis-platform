@@ -19,10 +19,10 @@
       <artifactId>polygenesis-core</artifactId>
     </dependency>
 
-    <!--ABSTRACTION DATA-->
+    <!--ABSTRACTION CODE-->
     <dependency>
       <groupId>io.polygenesis.abstractions</groupId>
-      <artifactId>polygenesis-abstraction-data</artifactId>
+      <artifactId>polygenesis-abstraction-code</artifactId>
     </dependency>
 
     <!--TEST-->

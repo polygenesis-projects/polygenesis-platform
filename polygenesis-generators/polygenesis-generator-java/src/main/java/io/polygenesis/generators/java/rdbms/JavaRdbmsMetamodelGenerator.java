@@ -43,8 +43,8 @@ import io.polygenesis.generators.java.rdbms.repositoryimpl.RepositoryImplGenerat
 import io.polygenesis.generators.java.rdbms.repositoryimpl.spingdata.SpringDataRepositoryGenerator;
 import io.polygenesis.generators.java.rdbms.testing.PersistenceImplTestExporter;
 import io.polygenesis.generators.java.shared.FolderFileConstants;
+import io.polygenesis.models.domain.AggregateRootMetamodelRepository;
 import io.polygenesis.models.domain.AggregateRootPersistable;
-import io.polygenesis.models.domain.DomainMetamodelRepository;
 import io.polygenesis.models.domain.Persistence;
 import io.polygenesis.models.domain.ProjectionMetamodelRepository;
 import java.nio.file.Path;
@@ -202,7 +202,7 @@ public class JavaRdbmsMetamodelGenerator extends AbstractMetamodelGenerator {
 
   private void aggregateRoots(Set<MetamodelRepository<?>> modelRepositories) {
     CoreRegistry.getMetamodelRepositoryResolver()
-        .resolve(modelRepositories, DomainMetamodelRepository.class)
+        .resolve(modelRepositories, AggregateRootMetamodelRepository.class)
         .getItems()
         .stream()
         .filter(aggregateRoot -> aggregateRoot instanceof AggregateRootPersistable)

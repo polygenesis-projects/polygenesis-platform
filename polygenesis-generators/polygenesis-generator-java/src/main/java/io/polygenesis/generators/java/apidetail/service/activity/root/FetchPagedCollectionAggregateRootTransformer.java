@@ -45,7 +45,7 @@ public class FetchPagedCollectionAggregateRootTransformer
   @SuppressWarnings({"unchecked", "rawtypes"})
   @Override
   public TemplateData transform(ServiceMethodImplementation source, Object... args) {
-    Set<MetamodelRepository<?>> metamodelRepositories = (Set<MetamodelRepository<?>>) args[0];
+    final Set<MetamodelRepository<?>> metamodelRepositories = (Set<MetamodelRepository<?>>) args[0];
 
     FetchPagedCollectionAggregateRootTemplateData data =
         new FetchPagedCollectionAggregateRootTemplateData();
@@ -60,11 +60,13 @@ public class FetchPagedCollectionAggregateRootTransformer
     data.setReturnValue(getReturnValue(source));
     data.setRequestDto(source.getServiceMethod().getRequestDto());
     data.setResponseDto(source.getServiceMethod().getResponseDto());
-    data.setConverterVariable(
-        getServiceImplementation(source, metamodelRepositories)
-            .domainObjectConverter()
-            .getVariableName()
-            .getText());
+    if (getServiceImplementation(source, metamodelRepositories).domainObjectConverter() != null) {
+      data.setConverterVariable(
+          getServiceImplementation(source, metamodelRepositories)
+              .domainObjectConverter()
+              .getVariableName()
+              .getText());
+    }
 
     data.setMultiTenant(source.getFunction().getThing().getMultiTenant());
 

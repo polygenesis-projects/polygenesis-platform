@@ -37,7 +37,6 @@ import io.polygenesis.models.domain.Persistence;
 import io.polygenesis.models.domain.StateMutationMethod;
 import io.polygenesis.models.domain.StateQueryMethod;
 import io.polygenesis.models.domain.domainmessage.DomainEventConstructorDeducer;
-import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -88,23 +87,32 @@ public class AggregateRootDeducer {
    */
   public Set<AggregateRoot> deduceFrom(
       ThingRepository thingRepository, PackageName rootPackageName) {
-    // Get superclasses first
     Set<AggregateRoot> abstractAggregateRoots = new LinkedHashSet<>();
+
+    // Get abstract superclasses first
     thingRepository
-        .getAbstractionItemsByScopes(
-            new LinkedHashSet<>(
-                Collections.singletonList(AbstractionScope.domainAbstractAggregateRoot())))
+        .getAbstractionItemsByScope(AbstractionScope.domainAbstractAggregateRoot())
         .stream()
+        .filter(Thing::doesNotExtendThing)
         .forEach(
             thing ->
                 makeAggregateRoot(
-                    abstractAggregateRoots, thing, rootPackageName, new LinkedHashSet<>()));
+                    abstractAggregateRoots, thing, rootPackageName, abstractAggregateRoots));
+
+    // Get abstract subclasses of abstract superclasses
+    thingRepository
+        .getAbstractionItemsByScope(AbstractionScope.domainAbstractAggregateRoot())
+        .stream()
+        .filter(Thing::extendsThing)
+        .forEach(
+            thing ->
+                makeAggregateRoot(
+                    abstractAggregateRoots, thing, rootPackageName, abstractAggregateRoots));
 
     // Continue with subclasses
     Set<AggregateRoot> aggregateRoots = new LinkedHashSet<>();
     thingRepository
-        .getAbstractionItemsByScopes(
-            new LinkedHashSet<>(Collections.singletonList(AbstractionScope.domainAggregateRoot())))
+        .getAbstractionItemsByScope(AbstractionScope.domainAggregateRoot())
         .stream()
         .forEach(
             thing ->
@@ -170,7 +178,7 @@ public class AggregateRootDeducer {
     Set<FactoryMethod> factoryMethods = new LinkedHashSet<>();
 
     if (isAbstract(thing)) {
-      aggregateRoots.add(
+      AggregateRoot aggregateRoot =
           new AggregateRoot(
               isAbstract(thing) ? InstantiationType.ABSTRACT : InstantiationType.CONCRETE,
               aggregateRootObjectName,
@@ -178,10 +186,15 @@ public class AggregateRootDeducer {
               properties,
               constructors,
               thing.getMultiTenant(),
-              stateMutationMethods,
               stateQueryMethods,
               factoryMethods,
-              aggregateRootSuperClass));
+              aggregateRootSuperClass);
+
+      // Add State Mutation Methods
+      aggregateRoot.addStateMutationMethods(stateMutationMethods);
+
+      // Add
+      aggregateRoots.add(aggregateRoot);
     } else {
       Persistence persistence =
           new Persistence(
@@ -191,7 +204,7 @@ public class AggregateRootDeducer {
               makeAggregateRootIdName(thing),
               thing.getMultiTenant());
 
-      aggregateRoots.add(
+      AggregateRootPersistable aggregateRootPersistable =
           new AggregateRootPersistable(
               isAbstract(thing) ? InstantiationType.ABSTRACT : InstantiationType.CONCRETE,
               aggregateRootObjectName,
@@ -199,11 +212,16 @@ public class AggregateRootDeducer {
               properties,
               constructors,
               thing.getMultiTenant(),
-              stateMutationMethods,
               stateQueryMethods,
               factoryMethods,
               aggregateRootSuperClass,
-              persistence));
+              persistence);
+
+      // Add State Mutation Methods
+      aggregateRootPersistable.addStateMutationMethods(stateMutationMethods);
+
+      // Add
+      aggregateRoots.add(aggregateRootPersistable);
     }
   }
 
@@ -277,7 +295,6 @@ public class AggregateRootDeducer {
         new LinkedHashSet<>(),
         new LinkedHashSet<>(),
         thing.getMultiTenant(),
-        new LinkedHashSet<>(),
         new LinkedHashSet<>(),
         new LinkedHashSet<>());
   }

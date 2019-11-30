@@ -51,6 +51,8 @@ public class FetchOneAggregateEntityTransformer
     @SuppressWarnings("CPD-START")
     FetchOneAggregateEntityTemplateData data =
         new FetchOneAggregateEntityTemplateData(
+            getAggregateRootData(source),
+            getAggregateEntityData(source, metamodelRepositories),
             getAggregateRootIdDataType(source),
             getThingIdentity(source),
             new LinkedHashSet<>(),

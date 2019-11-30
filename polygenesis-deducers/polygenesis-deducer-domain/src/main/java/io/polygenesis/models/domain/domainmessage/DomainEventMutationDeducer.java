@@ -84,7 +84,8 @@ public class DomainEventMutationDeducer {
         .getProperties()
         .forEach(
             property -> {
-              if (!property.getPropertyType().equals(PropertyType.AGGREGATE_ROOT_ID)) {
+              if (!property.getPropertyType().equals(PropertyType.AGGREGATE_ROOT_ID)
+                  && !property.getPropertyType().equals(PropertyType.TENANT_ID)) {
                 properties.add(property);
               }
             });

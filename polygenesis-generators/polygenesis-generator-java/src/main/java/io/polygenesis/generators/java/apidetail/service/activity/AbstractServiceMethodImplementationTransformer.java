@@ -20,19 +20,28 @@
 
 package io.polygenesis.generators.java.apidetail.service.activity;
 
+import static io.polygenesis.models.domain.PropertyType.ABSTRACT_AGGREGATE_ROOT_ID;
+import static io.polygenesis.models.domain.PropertyType.AGGREGATE_ROOT_ID;
+import static io.polygenesis.models.domain.PropertyType.TENANT_ID;
+
 import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.DataPrimitive;
 import io.polygenesis.abstraction.data.PrimitiveType;
+import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.commons.valueobjects.VariableName;
 import io.polygenesis.core.CoreRegistry;
 import io.polygenesis.core.MetamodelRepository;
+import io.polygenesis.generators.java.apidetail.service.activity.common.AggregateEntityData;
+import io.polygenesis.generators.java.apidetail.service.activity.common.AggregateRootData;
 import io.polygenesis.models.apiimpl.DomainEntityConverter;
 import io.polygenesis.models.apiimpl.ServiceImplementation;
 import io.polygenesis.models.apiimpl.ServiceImplementationMetamodelRepository;
 import io.polygenesis.models.apiimpl.ServiceMethodImplementation;
+import io.polygenesis.models.domain.AggregateEntity;
 import io.polygenesis.models.domain.AggregateRoot;
-import io.polygenesis.models.domain.DomainMetamodelRepository;
+import io.polygenesis.models.domain.AggregateRootMetamodelRepository;
+import io.polygenesis.models.domain.Constructor;
 import io.polygenesis.models.domain.DomainObjectProperty;
 import io.polygenesis.representations.code.ParameterRepresentation;
 import java.util.LinkedHashSet;
@@ -46,6 +55,135 @@ import java.util.Set;
  */
 public abstract class AbstractServiceMethodImplementationTransformer {
 
+  // ===============================================================================================
+  // AGGREGATE ROOT DATA
+  // ===============================================================================================
+
+  /**
+   * Gets aggregate root data.
+   *
+   * @param source the source
+   * @return the aggregate root data
+   */
+  public AggregateRootData getAggregateRootData(ServiceMethodImplementation source) {
+    Thing currentThing = source.getFunction().getThing();
+    Thing aggregateRootThing = getTopAggregateRootThing(currentThing);
+
+    return new AggregateRootData(
+        getAggregateRootDataTypeByThing(aggregateRootThing),
+        getAggregateRootVariableByThing(aggregateRootThing),
+        getAggregateRootIdDataTypeByThing(aggregateRootThing),
+        getAggregateRootIdVariableByThing(aggregateRootThing),
+        getRepositoryVariableByThing(aggregateRootThing),
+        aggregateRootThing.getMultiTenant());
+  }
+
+  private Thing getTopAggregateRootThing(Thing thing) {
+    if (thing.getOptionalParent() != null) {
+      return getTopAggregateRootThing(thing.getOptionalParent());
+    } else {
+      return thing;
+    }
+  }
+
+  private String getAggregateRootDataTypeByThing(Thing aggregateRootThing) {
+    return TextConverter.toUpperCamel(aggregateRootThing.getThingName().getText());
+  }
+
+  private String getAggregateRootVariableByThing(Thing aggregateRootThing) {
+    return TextConverter.toLowerCamel(aggregateRootThing.getThingName().getText());
+  }
+
+  private String getAggregateRootIdDataTypeByThing(Thing aggregateRootThing) {
+    return TextConverter.toUpperCamel(
+        String.format("%sId", aggregateRootThing.getThingName().getText()));
+  }
+
+  private String getAggregateRootIdVariableByThing(Thing aggregateRootThing) {
+    return TextConverter.toLowerCamel(
+        String.format("%sId", aggregateRootThing.getThingName().getText()));
+  }
+
+  private String getRepositoryVariableByThing(Thing aggregateRootThing) {
+    return TextConverter.toLowerCamel(
+        String.format("%sRepository", aggregateRootThing.getThingName().getText()));
+  }
+
+  // ===============================================================================================
+  // AGGREGATE ROOT DATA
+  // ===============================================================================================
+
+  /**
+   * Gets aggregate entity data.
+   *
+   * @param source the source
+   * @return the aggregate entity data
+   */
+  public AggregateEntityData getAggregateEntityData(
+      ServiceMethodImplementation source, Set<MetamodelRepository<?>> metamodelRepositories) {
+    Thing currentThing = source.getFunction().getThing();
+
+    AggregateEntity aggregateEntity =
+        AggregateEntity.class.cast(
+            CoreRegistry.getMetamodelRepositoryResolver()
+                .resolve(metamodelRepositories, AggregateRootMetamodelRepository.class)
+                .findEntityByThingName(currentThing.getThingName()));
+
+    return new AggregateEntityData(
+        getAggregateEntityDataTypeByThing(currentThing),
+        getAggregateEntityVariableByThing(currentThing),
+        getAggregateEntityIdDataTypeByThing(currentThing),
+        getAggregateEntityIdVariableByThing(currentThing),
+        getRepositoryVariableByThing(currentThing),
+        getParentMethodName(source, currentThing),
+        getProperties(source, aggregateEntity),
+        currentThing.getMultiTenant());
+  }
+
+  private String getAggregateEntityDataTypeByThing(Thing aggregateEntityThing) {
+    return TextConverter.toUpperCamel(aggregateEntityThing.getThingName().getText());
+  }
+
+  private String getAggregateEntityVariableByThing(Thing aggregateEntityThing) {
+    return TextConverter.toLowerCamel(aggregateEntityThing.getThingName().getText());
+  }
+
+  private String getAggregateEntityIdDataTypeByThing(Thing aggregateEntityThing) {
+    return TextConverter.toUpperCamel(
+        String.format("%sId", aggregateEntityThing.getThingName().getText()));
+  }
+
+  private String getAggregateEntityIdVariableByThing(Thing aggregateEntityThing) {
+    return TextConverter.toLowerCamel(
+        String.format("%sId", aggregateEntityThing.getThingName().getText()));
+  }
+
+  private String getParentMethodName(
+      ServiceMethodImplementation source, Thing aggregateEntityThing) {
+    String entityName = TextConverter.toUpperCamel(aggregateEntityThing.getThingName().getText());
+
+    if (source.getFunction().getPurpose().isCreate()) {
+      return String.format("add%s", entityName);
+    } else if (source.getFunction().getPurpose().isModify()) {
+      return String.format("%sId", entityName);
+    } else if (source.getFunction().getPurpose().isFetchOne()) {
+      return String.format("%sId", entityName);
+    } else if (source.getFunction().getPurpose().isFetchPagedCollection()) {
+      return String.format("%sId", entityName);
+    } else if (source.getFunction().getPurpose().isFetchCollection()) {
+      return String.format("%sId", entityName);
+    } else {
+      throw new IllegalStateException(
+          String.format(
+              "Cannot getParentMethodName for functions=%s",
+              source.getFunction().getName().getText()));
+    }
+  }
+
+  // ===============================================================================================
+  //
+  // ===============================================================================================
+
   /**
    * Gets parameter representations.
    *
@@ -55,17 +193,17 @@ public abstract class AbstractServiceMethodImplementationTransformer {
   protected Set<ParameterRepresentation> getParameterRepresentations(
       ServiceMethodImplementation source) {
     Set<ParameterRepresentation> parameterRepresentations = new LinkedHashSet<>();
-    source
-        .getServiceMethod()
-        .getFunction()
-        .getArguments()
-        .forEach(
-            argument -> {
-              parameterRepresentations.add(
-                  new ParameterRepresentation(
-                      argument.getData().getDataType(),
-                      TextConverter.toLowerCamel(argument.getData().getVariableName().getText())));
-            });
+
+    parameterRepresentations.add(
+        new ParameterRepresentation(
+            source.getServiceMethod().getRequestDto().getDataObject().getDataType(),
+            TextConverter.toLowerCamel(
+                source
+                    .getServiceMethod()
+                    .getRequestDto()
+                    .getDataObject()
+                    .getVariableName()
+                    .getText())));
 
     return parameterRepresentations;
   }
@@ -175,19 +313,22 @@ public abstract class AbstractServiceMethodImplementationTransformer {
     Optional<AggregateRoot> optionalAggregateRoot = getAggregateRoot(source, metamodelRepositories);
 
     if (optionalAggregateRoot.isPresent()) {
-      return optionalAggregateRoot
-          .get()
-          .getConstructors()
-          .stream()
-          .filter(constructor -> constructor.getFunction().equals(source.getFunction()))
-          .findFirst()
-          .orElseThrow(
-              () ->
-                  new IllegalArgumentException(
-                      String.format(
-                          "Cannot get constructor for '%s'",
-                          optionalAggregateRoot.get().getObjectName().getText())))
-          .getProperties();
+      Constructor constructorFound =
+          optionalAggregateRoot
+              .get()
+              .getConstructors()
+              .stream()
+              .filter(constructor -> constructor.getFunction().equals(source.getFunction()))
+              .findFirst()
+              .orElseThrow(
+                  () ->
+                      new IllegalArgumentException(
+                          String.format(
+                              "Cannot get constructor for '%s'",
+                              optionalAggregateRoot.get().getObjectName().getText())));
+
+      return getReorderedPropertiesBySuperClass(
+          constructorFound.getProperties(), constructorFound.getSuperClassProperties());
     } else {
       throw new IllegalStateException("should find domain aggregate root");
     }
@@ -221,7 +362,8 @@ public abstract class AbstractServiceMethodImplementationTransformer {
               () ->
                   new IllegalArgumentException(
                       String.format(
-                          "Cannot get state mutation method '%s' for '%s'",
+                          "Cannot get state mutation method '%s' for '%s'. "
+                              + "Check the state mutation deducer.",
                           source.getFunction().getName().getText(),
                           optionalAggregateRoot.get().getObjectName().getText())))
           .getProperties();
@@ -239,11 +381,11 @@ public abstract class AbstractServiceMethodImplementationTransformer {
    */
   protected Optional<AggregateRoot> getAggregateRoot(
       ServiceMethodImplementation source, Set<MetamodelRepository<?>> metamodelRepositories) {
-    DomainMetamodelRepository domainMetamodelRepository =
+    AggregateRootMetamodelRepository aggregateRootMetamodelRepository =
         CoreRegistry.getMetamodelRepositoryResolver()
-            .resolve(metamodelRepositories, DomainMetamodelRepository.class);
+            .resolve(metamodelRepositories, AggregateRootMetamodelRepository.class);
 
-    return domainMetamodelRepository
+    return aggregateRootMetamodelRepository
         .getItems()
         .stream()
         .filter(
@@ -278,5 +420,76 @@ public abstract class AbstractServiceMethodImplementationTransformer {
                 serviceImplementation.getService().equals(source.getServiceMethod().getService()))
         .findFirst()
         .orElseThrow(IllegalStateException::new);
+  }
+
+  /**
+   * Gets reordered properties by super class.
+   *
+   * @param thisClassProperties the this class properties
+   * @param superClassProperties the super class properties
+   * @return the reordered properties by super class
+   */
+  protected Set<DomainObjectProperty<?>> getReorderedPropertiesBySuperClass(
+      Set<DomainObjectProperty<?>> thisClassProperties,
+      Set<DomainObjectProperty<?>> superClassProperties) {
+    Set<DomainObjectProperty<?>> domainObjectProperties = new LinkedHashSet<>();
+
+    // 1. Start by adding IDs
+    thisClassProperties
+        .stream()
+        .filter(
+            property ->
+                property.getPropertyType().equals(ABSTRACT_AGGREGATE_ROOT_ID)
+                    || property.getPropertyType().equals(AGGREGATE_ROOT_ID)
+                    || property.getPropertyType().equals(TENANT_ID))
+        .forEach(property -> domainObjectProperties.add(property));
+
+    // 2. Continue with superClass properties
+    if (superClassProperties != null) {
+      superClassProperties
+          .stream()
+          .filter(
+              property ->
+                  !property.getPropertyType().equals(ABSTRACT_AGGREGATE_ROOT_ID)
+                      && !property.getPropertyType().equals(AGGREGATE_ROOT_ID)
+                      && !property.getPropertyType().equals(TENANT_ID))
+          .forEach(property -> domainObjectProperties.add(property));
+    }
+
+    // 3. Finish with this class properties
+    thisClassProperties
+        .stream()
+        .filter(
+            property ->
+                !property.getPropertyType().equals(ABSTRACT_AGGREGATE_ROOT_ID)
+                    && !property.getPropertyType().equals(AGGREGATE_ROOT_ID)
+                    && !property.getPropertyType().equals(TENANT_ID))
+        .forEach(property -> domainObjectProperties.add(property));
+
+    return domainObjectProperties;
+  }
+
+  protected Set<DomainObjectProperty<?>> getProperties(
+      ServiceMethodImplementation source, AggregateEntity aggregateEntity) {
+
+    if (source.getFunction().getPurpose().isCreate()) {
+      return aggregateEntity
+          .getConstructors()
+          .stream()
+          .filter(mutationMethod -> mutationMethod.getFunction().equals(source.getFunction()))
+          .map(stateMutationMethod -> stateMutationMethod.getProperties())
+          .findFirst()
+          .orElseThrow();
+    } else if (source.getFunction().getPurpose().isModify()) {
+      return aggregateEntity
+          .getStateMutationMethods()
+          .stream()
+          .filter(mutationMethod -> mutationMethod.getFunction().equals(source.getFunction()))
+          .map(stateMutationMethod -> stateMutationMethod.getProperties())
+          .findFirst()
+          .orElseThrow();
+    } else {
+      return new LinkedHashSet<>();
+    }
   }
 }
