@@ -37,7 +37,7 @@ public class ThingTest extends AbstractEqualityTest<Thing> {
 
   @Test
   public void shouldCreateThingWithName() {
-    Thing thing = ThingBuilder.endToEnd().setThingName("someThingName").createThing();
+    Thing thing = ThingBuilder.endToEnd("someThingName").createThing();
 
     assertThat(thing).isNotNull();
 
@@ -59,16 +59,14 @@ public class ThingTest extends AbstractEqualityTest<Thing> {
 
   private Function createFunction1() {
     return FunctionBuilder.of(
-            ThingBuilder.endToEnd().setThingName("thingName").createThing(),
-            "functionName",
-            Purpose.modify())
+            ThingBuilder.endToEnd("thingName").createThing(), "functionName", Purpose.modify())
         .setReturnValue(createDataPrimitive())
         .build();
   }
 
   private Function createFunction2() {
     return FunctionBuilder.of(
-            ThingBuilder.endToEnd().setThingName("thingName").createThing(),
+            ThingBuilder.endToEnd("thingName").createThing(),
             "anotherFunctionName",
             Purpose.modify())
         .setReturnValue(createDataPrimitive())
@@ -77,7 +75,7 @@ public class ThingTest extends AbstractEqualityTest<Thing> {
 
   private Function createFunction3() {
     return FunctionBuilder.of(
-            ThingBuilder.endToEnd().setThingName("thingName").createThing(),
+            ThingBuilder.endToEnd("thingName").createThing(),
             "someAnotherNewFunctionName",
             Purpose.modify())
         .setReturnValue(createDataPrimitive())
@@ -93,11 +91,11 @@ public class ThingTest extends AbstractEqualityTest<Thing> {
   // ===============================================================================================
   @Override
   public Thing createObject1() {
-    return ThingBuilder.endToEnd().setThingName("xxx").createThing();
+    return ThingBuilder.endToEnd("xxx").createThing();
   }
 
   @Override
   public Thing createObject2() {
-    return ThingBuilder.endToEnd().setThingName("yyy").createThing();
+    return ThingBuilder.endToEnd("yyy").createThing();
   }
 }

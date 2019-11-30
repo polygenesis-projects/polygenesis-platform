@@ -82,8 +82,7 @@ public class DomainMessagePublishDtoConverter extends AbstractNameablePackageabl
 
   private Function makeGetContextFunction() {
     Thing thing =
-        ThingBuilder.domainDetailDomainMessagePublisher()
-            .setThingName("domainMessagePublishDtoConverter")
+        ThingBuilder.domainDetailDomainMessagePublisher("domainMessagePublishDtoConverter")
             .createThing();
 
     return new Function(

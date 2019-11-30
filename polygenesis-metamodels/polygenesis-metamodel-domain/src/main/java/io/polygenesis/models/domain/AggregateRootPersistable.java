@@ -53,7 +53,6 @@ public class AggregateRootPersistable extends AggregateRoot {
    * @param properties the properties
    * @param constructors the constructors
    * @param multiTenant the multi tenant
-   * @param stateMutationMethods the state mutation methods
    * @param stateQueryMethods the state query methods
    * @param factoryMethods the factory methods
    * @param superClass the super class
@@ -66,7 +65,6 @@ public class AggregateRootPersistable extends AggregateRoot {
       Set<DomainObjectProperty<?>> properties,
       Set<Constructor> constructors,
       Boolean multiTenant,
-      Set<StateMutationMethod> stateMutationMethods,
       Set<StateQueryMethod> stateQueryMethods,
       Set<FactoryMethod> factoryMethods,
       AggregateRoot superClass,
@@ -78,7 +76,6 @@ public class AggregateRootPersistable extends AggregateRoot {
         properties,
         constructors,
         multiTenant,
-        stateMutationMethods,
         stateQueryMethods,
         factoryMethods,
         superClass);

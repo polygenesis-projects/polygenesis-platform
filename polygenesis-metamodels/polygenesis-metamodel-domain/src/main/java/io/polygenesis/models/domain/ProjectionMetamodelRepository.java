@@ -20,7 +20,12 @@
 
 package io.polygenesis.models.domain;
 
+import io.polygenesis.abstraction.thing.Thing;
+import io.polygenesis.abstraction.thing.ThingName;
+import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.core.AbstractMetamodelRepository;
+import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -28,7 +33,8 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class ProjectionMetamodelRepository extends AbstractMetamodelRepository<Projection> {
+public class ProjectionMetamodelRepository extends AbstractMetamodelRepository<Projection>
+    implements DomainMetamodelRepository<Projection> {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -41,5 +47,29 @@ public class ProjectionMetamodelRepository extends AbstractMetamodelRepository<P
    */
   public ProjectionMetamodelRepository(Set<Projection> items) {
     super(items);
+  }
+
+  // ===============================================================================================
+  // FUNCTIONALITY
+  // ===============================================================================================
+
+  @Override
+  public BaseDomainEntity findEntityByThingName(ThingName thingName) {
+    throw new UnsupportedOperationException();
+  }
+
+  public Set<Projection> findByThings(Set<Thing> things) {
+    Set<Projection> projections = new LinkedHashSet<>();
+
+    things.forEach(
+        thing -> {
+          Optional<Projection> optionalProjection =
+              getItemByObjectName(new ObjectName(thing.getThingName().getText()));
+          if (optionalProjection.isPresent()) {
+            projections.add(optionalProjection.get());
+          }
+        });
+
+    return projections;
   }
 }

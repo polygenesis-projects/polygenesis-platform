@@ -50,6 +50,8 @@ public class CreateAggregateEntityTransformer extends AbstractServiceMethodImple
     @SuppressWarnings("CPD-START")
     CreateAggregateEntityTemplateData data =
         new CreateAggregateEntityTemplateData(
+            getAggregateRootData(source),
+            getAggregateEntityData(source, metamodelRepositories),
             getAggregateRootIdDataType(source),
             getThingIdentity(source),
             new LinkedHashSet<>(),
@@ -68,6 +70,8 @@ public class CreateAggregateEntityTransformer extends AbstractServiceMethodImple
     dataModel.put("data", data);
 
     return new TemplateData(
-        dataModel, "polygenesis-implementation-java-apiimpl/create-aggregate-entity.ftl");
+        dataModel,
+        "polygenesis-trinity-java/api-detail/"
+            + "aggregate-entity/create-aggregate-entity.java.ftl");
   }
 }

@@ -93,8 +93,7 @@ public class BatchProcessDispatcherRoute extends AbstractNameablePackageable {
   // ===============================================================================================
 
   private Function makeConfigureFunction() {
-    Thing thing =
-        ThingBuilder.apiClientBatchProcess().setThingName("abstractSubscriber").createThing();
+    Thing thing = ThingBuilder.apiClientBatchProcess("abstractSubscriber").createThing();
 
     return new Function(
         thing,

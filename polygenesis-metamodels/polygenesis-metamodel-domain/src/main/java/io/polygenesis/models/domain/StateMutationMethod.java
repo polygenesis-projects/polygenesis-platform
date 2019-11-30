@@ -32,14 +32,21 @@ import java.util.Set;
  */
 public class StateMutationMethod extends BaseMethod {
 
+  // ===============================================================================================
+  // STATE
+  // ===============================================================================================
+
   @SuppressWarnings("CPD-START")
   private Set<DomainObjectProperty<?>> properties;
 
+  // superClassProperties is Used only for construction state mutation
   private Set<DomainObjectProperty<?>> superClassProperties;
+
+  // Used only for Aggregate Roots
   private DomainEvent domainEvent;
 
   // ===============================================================================================
-  // StateMutationMethod(S)
+  // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**

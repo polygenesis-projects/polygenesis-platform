@@ -99,8 +99,7 @@ public class BatchProcessSubscriber extends BatchProcessMetamodel {
    * @return the function
    */
   private Function makeGetSupportedMessageTypesFunction() {
-    Thing thing =
-        ThingBuilder.apiClientBatchProcess().setThingName("batchProcessSubscriber").createThing();
+    Thing thing = ThingBuilder.apiClientBatchProcess("batchProcessSubscriber").createThing();
 
     return new Function(
         thing,

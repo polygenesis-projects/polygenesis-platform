@@ -582,7 +582,10 @@ public class Purpose implements Serializable {
    * @return the boolean
    */
   public boolean isModify() {
-    return getText().equals(MODIFY);
+    return getText().equals(MODIFY)
+        || getText().equals(AGGREGATE_ROOT_CREATE_ENTITY)
+        || getText().equals(AGGREGATE_ROOT_UPDATE_ENTITY)
+        || getText().equals(AGGREGATE_ROOT_DELETE_ENTITY);
   }
 
   /**

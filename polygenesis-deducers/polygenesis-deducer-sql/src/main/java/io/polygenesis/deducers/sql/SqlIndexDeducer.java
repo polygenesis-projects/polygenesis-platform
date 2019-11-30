@@ -24,7 +24,7 @@ import io.polygenesis.core.AbstractionRepository;
 import io.polygenesis.core.CoreRegistry;
 import io.polygenesis.core.Deducer;
 import io.polygenesis.core.MetamodelRepository;
-import io.polygenesis.models.domain.DomainMetamodelRepository;
+import io.polygenesis.models.domain.AggregateRootMetamodelRepository;
 import io.polygenesis.models.sql.Index;
 import io.polygenesis.models.sql.SqlIndexMetamodelRepository;
 import java.util.LinkedHashSet;
@@ -66,7 +66,7 @@ public class SqlIndexDeducer implements Deducer<SqlIndexMetamodelRepository> {
     Set<Index> indices = new LinkedHashSet<>();
 
     CoreRegistry.getMetamodelRepositoryResolver()
-        .resolve(metamodelRepositories, DomainMetamodelRepository.class)
+        .resolve(metamodelRepositories, AggregateRootMetamodelRepository.class)
         .getItems()
         .forEach(aggregateRoot -> indices.add(indexDeducer.deduce()));
 

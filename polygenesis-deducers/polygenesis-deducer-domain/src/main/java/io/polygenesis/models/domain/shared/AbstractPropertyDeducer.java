@@ -24,6 +24,7 @@ import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.abstraction.data.DataPrimitive;
 import io.polygenesis.abstraction.data.DataPurpose;
+import io.polygenesis.abstraction.thing.Argument;
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.ThingProperty;
@@ -38,6 +39,7 @@ import io.polygenesis.models.domain.PropertyType;
 import io.polygenesis.models.domain.Reference;
 import io.polygenesis.models.domain.ValueObject;
 import io.polygenesis.models.domain.ValueObjectCollection;
+import io.polygenesis.models.domain.ValueObjectType;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -101,6 +103,7 @@ public abstract class AbstractPropertyDeducer {
   /**
    * Deduce constructors set.
    *
+   * @param superClass the super class
    * @param thing the thing
    * @param rootPackageName the root package name
    * @return the set
@@ -142,7 +145,13 @@ public abstract class AbstractPropertyDeducer {
                                                   .equals(PropertyType.AGGREGATE_ROOT_ID)
                                               && !property
                                                   .getPropertyType()
-                                                  .equals(PropertyType.ABSTRACT_AGGREGATE_ROOT_ID))
+                                                  .equals(PropertyType.ABSTRACT_AGGREGATE_ROOT_ID)
+                                              && !property
+                                                  .getPropertyType()
+                                                  .equals(PropertyType.AGGREGATE_ENTITY_ID)
+                                              && !property
+                                                  .getPropertyType()
+                                                  .equals(PropertyType.TENANT_ID))
                                   .collect(Collectors.toCollection(LinkedHashSet::new));
 
                           // Add
@@ -264,27 +273,15 @@ public abstract class AbstractPropertyDeducer {
     if (function.getArguments() != null) {
       function
           .getArguments()
-          .forEach(
-              argument -> {
-                if (argument.getData().isDataGroup()) {
-                  argument
-                      .getData()
-                      .getAsDataObject()
-                      .getModels()
-                      .forEach(
-                          model -> {
-                            if (!isDataThingIdentity(model)
-                                && !isDataParentThingIdentity(model)
-                                && !isDataPageNumber(model)
-                                && !isDataPageSize(model)) {
-                              thingProperties.add(new ThingProperty(model));
-                            }
-                          });
-
-                } else {
-                  throw new IllegalStateException();
-                }
-              });
+          .stream()
+          .map(Argument::getData)
+          .filter(
+              data ->
+                  !isDataThingIdentity(data)
+                      && !isDataParentThingIdentity(data)
+                      && !isDataPageNumber(data)
+                      && !isDataPageSize(data))
+          .forEach(data -> thingProperties.add(new ThingProperty(data)));
     }
 
     return thingProperties;
@@ -319,10 +316,10 @@ public abstract class AbstractPropertyDeducer {
 
     if (dataPrimitive.getDataObject().getModels().isEmpty()) {
       dataObject.addData(dataPrimitive.withVariableName("value"));
+      return new ValueObject(dataObject);
     } else {
       dataObject.addData(dataPrimitive.getDataObject().getModels());
+      return new ValueObject(dataObject, ValueObjectType.REFERENCE_TO_AGGREGATE_ROOT_ID);
     }
-
-    return new ValueObject(dataObject);
   }
 }

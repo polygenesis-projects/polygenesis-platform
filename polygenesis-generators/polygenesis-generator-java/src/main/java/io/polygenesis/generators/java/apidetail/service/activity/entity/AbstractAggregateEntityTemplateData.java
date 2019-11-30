@@ -24,9 +24,12 @@ import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.abstraction.data.DataPrimitive;
 import io.polygenesis.abstraction.data.PrimitiveType;
+import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.commons.valueobjects.VariableName;
+import io.polygenesis.generators.java.apidetail.service.activity.common.AggregateEntityData;
+import io.polygenesis.generators.java.apidetail.service.activity.common.AggregateRootData;
 import io.polygenesis.models.api.Dto;
 import io.polygenesis.models.api.DtoType;
 import io.polygenesis.models.domain.DomainObjectProperty;
@@ -40,6 +43,9 @@ import java.util.Set;
  * @author Christos Tsakostas
  */
 public abstract class AbstractAggregateEntityTemplateData {
+
+  private AggregateRootData aggregateRootData;
+  private AggregateEntityData aggregateEntityData;
 
   private String aggregateRootIdDataType;
   private Data parentThingIdentity;
@@ -64,6 +70,8 @@ public abstract class AbstractAggregateEntityTemplateData {
   /** Instantiates a new Abstract aggregate entity template data. */
   @SuppressWarnings("CPD-START")
   public AbstractAggregateEntityTemplateData() {
+    aggregateRootData = null;
+    aggregateEntityData = null;
     aggregateRootIdDataType = "aggregateRootIdDataType";
     parentThingIdentity = DataPrimitive.of(PrimitiveType.STRING, new VariableName("thingIdentity"));
 
@@ -74,6 +82,7 @@ public abstract class AbstractAggregateEntityTemplateData {
     persistenceVariable = "persistenceVariable";
     requestDto =
         new Dto(
+            ThingBuilder.app("dummy").createThing(),
             DtoType.API_REQUEST,
             new DataObject(new ObjectName("requestDto"), new PackageName("com.oregor")),
             false);
@@ -85,6 +94,8 @@ public abstract class AbstractAggregateEntityTemplateData {
   /**
    * Instantiates a new Abstract aggregate entity template data.
    *
+   * @param aggregateRootData the aggregate root data
+   * @param aggregateEntityData the aggregate entity data
    * @param aggregateRootIdDataType the aggregate root id data type
    * @param parentThingIdentity the parent thing identity
    * @param parameterRepresentations the parameter representations
@@ -99,6 +110,8 @@ public abstract class AbstractAggregateEntityTemplateData {
    * @param returnValue the return value
    */
   public AbstractAggregateEntityTemplateData(
+      AggregateRootData aggregateRootData,
+      AggregateEntityData aggregateEntityData,
       String aggregateRootIdDataType,
       Data parentThingIdentity,
       Set<ParameterRepresentation> parameterRepresentations,
@@ -111,6 +124,8 @@ public abstract class AbstractAggregateEntityTemplateData {
       String converterVariable,
       Boolean multiTenant,
       String returnValue) {
+    this.aggregateRootData = aggregateRootData;
+    this.aggregateEntityData = aggregateEntityData;
     this.aggregateRootIdDataType = aggregateRootIdDataType;
     this.parentThingIdentity = parentThingIdentity;
     this.parameterRepresentations = parameterRepresentations;
@@ -128,6 +143,24 @@ public abstract class AbstractAggregateEntityTemplateData {
   // ===============================================================================================
   // GETTERS
   // ===============================================================================================
+
+  /**
+   * Gets aggregate entity data.
+   *
+   * @return the aggregate entity data
+   */
+  public AggregateEntityData getAggregateEntityData() {
+    return aggregateEntityData;
+  }
+
+  /**
+   * Gets aggregate root data.
+   *
+   * @return the aggregate root data
+   */
+  public AggregateRootData getAggregateRootData() {
+    return aggregateRootData;
+  }
 
   /**
    * Gets aggregate root id data type.
@@ -240,6 +273,24 @@ public abstract class AbstractAggregateEntityTemplateData {
   // ===============================================================================================
   // SETTERS
   // ===============================================================================================
+
+  /**
+   * Sets aggregate root data.
+   *
+   * @param aggregateRootData the aggregate root data
+   */
+  public void setAggregateRootData(AggregateRootData aggregateRootData) {
+    this.aggregateRootData = aggregateRootData;
+  }
+
+  /**
+   * Sets aggregate entity data.
+   *
+   * @param aggregateEntityData the aggregate entity data
+   */
+  public void setAggregateEntityData(AggregateEntityData aggregateEntityData) {
+    this.aggregateEntityData = aggregateEntityData;
+  }
 
   /**
    * Sets aggregate root id data type.

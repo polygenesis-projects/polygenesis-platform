@@ -21,6 +21,7 @@
 package io.polygenesis.generators.java.apidetail.service.activity.root;
 
 import io.polygenesis.abstraction.data.DataObject;
+import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.models.api.Dto;
@@ -69,12 +70,14 @@ public class FetchPagedCollectionAggregateRootTemplateData {
 
     requestDto =
         new Dto(
+            ThingBuilder.app("dummy").createThing(),
             DtoType.API_REQUEST,
             new DataObject(new ObjectName("requestDto"), new PackageName("com.oregor")),
             false);
 
     responseDto =
         new Dto(
+            ThingBuilder.app("dummy").createThing(),
             DtoType.API_REQUEST,
             new DataObject(new ObjectName("responseDto"), new PackageName("com.oregor")),
             false);

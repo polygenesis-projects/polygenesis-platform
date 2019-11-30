@@ -22,6 +22,7 @@ package io.polygenesis.models.domain;
 
 import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.DataObject;
+import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.Nameable;
@@ -38,6 +39,12 @@ public class ValueObject extends BaseProperty<DataObject> implements Nameable, P
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
+  private ValueObjectType valueObjectType;
+
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
   /**
    * Instantiates a new Value object.
    *
@@ -45,6 +52,18 @@ public class ValueObject extends BaseProperty<DataObject> implements Nameable, P
    */
   public ValueObject(DataObject data) {
     super(PropertyType.VALUE_OBJECT, data);
+    setValueObjectType(ValueObjectType.COMMON);
+  }
+
+  /**
+   * Instantiates a new Value object.
+   *
+   * @param data the data
+   * @param valueObjectType the value object type
+   */
+  public ValueObject(DataObject data, ValueObjectType valueObjectType) {
+    super(PropertyType.VALUE_OBJECT, data);
+    this.valueObjectType = valueObjectType;
   }
 
   // ===============================================================================================
@@ -58,6 +77,55 @@ public class ValueObject extends BaseProperty<DataObject> implements Nameable, P
    */
   public ValueObject withVariableNameEqualToObjectName() {
     return new ValueObject(getData().withVariableNameEqualToObjectName());
+  }
+
+  // ===============================================================================================
+  // QUERIES
+  // ===============================================================================================
+
+  /**
+   * Is common boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isCommon() {
+    return getValueObjectType().equals(ValueObjectType.COMMON);
+  }
+
+  /**
+   * Is reference to aggregate root id boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isReferenceToAggregateRootId() {
+    return getValueObjectType().equals(ValueObjectType.REFERENCE_TO_AGGREGATE_ROOT_ID);
+  }
+
+  // ===============================================================================================
+  // GETTERS
+  // ===============================================================================================
+
+  /**
+   * Gets value object type.
+   *
+   * @return the value object type
+   */
+  public ValueObjectType getValueObjectType() {
+    return valueObjectType;
+  }
+
+  // ===============================================================================================
+  // GUARDS
+  // ===============================================================================================
+
+  /**
+   * Sets value object type.
+   *
+   * @param valueObjectType the value object type
+   */
+  private void setValueObjectType(ValueObjectType valueObjectType) {
+    Assertion.isNotNull(valueObjectType, "valueObjectType is required");
+    this.valueObjectType = valueObjectType;
   }
 
   // ===============================================================================================

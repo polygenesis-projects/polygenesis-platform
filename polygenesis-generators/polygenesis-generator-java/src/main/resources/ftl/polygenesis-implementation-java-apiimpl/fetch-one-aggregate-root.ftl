@@ -18,12 +18,12 @@
  ===========================LICENSE_END==================================
 -->
 <#include "../polygenesis-implementation-java-shared/macro-assertions-for-parameters.ftl">
-<#include "macro-restore-aggregate-root.ftl">
+<#include "../polygenesis-trinity-java/api-detail/aggregate-root/macro-restore-aggregate-root.ftl">
 <#include "macro-fill-fetch-one-response-dto-arguments.ftl">
 <@assertionsForParameters data.parameterRepresentations></@assertionsForParameters>
 
-<@restoreAggregateRoot data.persistenceVariable data.aggregateRootIdDataType data.aggregateRootDataType data.aggregateRootVariable data.requestDto data.thingIdentity data.multiTenant></@restoreAggregateRoot>
+<@restoreAggregateRoot data.aggregateRootData data.persistenceVariable data.aggregateRootIdDataType data.aggregateRootDataType data.aggregateRootVariable data.requestDto data.thingIdentity data.multiTenant></@restoreAggregateRoot>
 
     return new ${ data.returnValue }(
-      <@fillFetchOneResponseDtoArguments data.responseDto data.aggregateRootVariable data.converterVariable></@fillFetchOneResponseDtoArguments>
+      <@fillFetchOneResponseDtoArguments data.responseDto data.aggregateRootVariable data.converterVariable!"No Converter"></@fillFetchOneResponseDtoArguments>
     );

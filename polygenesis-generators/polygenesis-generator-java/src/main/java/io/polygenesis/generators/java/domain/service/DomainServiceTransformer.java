@@ -64,7 +64,7 @@ public class DomainServiceTransformer
   @Override
   public TemplateData transform(DomainService source, Object... args) {
     Map<String, Object> dataModel = new HashMap<>();
-    dataModel.put("representation", create(source));
+    dataModel.put("representation", create(source, args));
     return new TemplateData(dataModel, "polygenesis-representation-java/Interface.java.ftl");
   }
 

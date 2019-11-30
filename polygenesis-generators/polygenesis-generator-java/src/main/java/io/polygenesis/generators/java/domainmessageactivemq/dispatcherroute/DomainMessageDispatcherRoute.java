@@ -94,9 +94,7 @@ public class DomainMessageDispatcherRoute extends AbstractNameablePackageable {
 
   private Function makeConfigureFunction() {
     Thing thing =
-        ThingBuilder.domainMessageSubscriber()
-            .setThingName("domainMessageDispatcherRoute")
-            .createThing();
+        ThingBuilder.domainMessageSubscriber("domainMessageDispatcherRoute").createThing();
 
     return new Function(
         thing,

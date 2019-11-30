@@ -48,6 +48,7 @@ public class CreateAggregateRootTransformer extends AbstractServiceMethodImpleme
 
     CreateAggregateRootTemplateData data =
         new CreateAggregateRootTemplateData(
+            getAggregateRootData(source),
             getParameterRepresentations(source),
             getAggregateRootDataType(source),
             getAggregateRootVariable(source),

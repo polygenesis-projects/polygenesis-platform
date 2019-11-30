@@ -23,6 +23,7 @@ package io.polygenesis.generators.java.apidetail.service;
 import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.generators.java.apidetail.service.activity.ServiceMethodActivityRegistry;
 import io.polygenesis.models.apiimpl.ServiceMethodImplementation;
+import io.polygenesis.representations.code.ParameterRepresentation;
 import io.polygenesis.transformers.java.AbstractMethodTransformer;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -62,7 +63,20 @@ public class ServiceDetailMethodTransformer
   // OVERRIDES
   // ===============================================================================================
 
-  @SuppressWarnings({"rawtypes", "unchecked"})
+  @Override
+  public Set<ParameterRepresentation> parameterRepresentations(
+      ServiceMethodImplementation source, Object... args) {
+    Set<ParameterRepresentation> parameterRepresentations = new LinkedHashSet<>();
+
+    parameterRepresentations.add(
+        new ParameterRepresentation(
+            dataTypeTransformer.convert(
+                source.getServiceMethod().getRequestDto().getDataObject().getDataType()),
+            source.getServiceMethod().getRequestDto().getDataObject().getVariableName().getText()));
+
+    return parameterRepresentations;
+  }
+
   @Override
   public String implementation(ServiceMethodImplementation source, Object... args) {
     if (serviceMethodActivityRegistry.isActivitySupportedFor(source)) {

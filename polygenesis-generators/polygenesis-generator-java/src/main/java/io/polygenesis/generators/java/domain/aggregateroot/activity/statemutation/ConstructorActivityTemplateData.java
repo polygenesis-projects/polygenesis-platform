@@ -141,9 +141,8 @@ public class ConstructorActivityTemplateData {
           .filter(
               property ->
                   !property.getPropertyType().equals(PropertyType.AGGREGATE_ROOT_ID)
-                      && !property
-                          .getPropertyType()
-                          .equals(PropertyType.ABSTRACT_AGGREGATE_ROOT_ID))
+                      && !property.getPropertyType().equals(PropertyType.AGGREGATE_ROOT_ID)
+                      && !property.getPropertyType().equals(PropertyType.TENANT_ID))
           .forEach(
               property -> {
                 domainEventParameterRepresentations.add(

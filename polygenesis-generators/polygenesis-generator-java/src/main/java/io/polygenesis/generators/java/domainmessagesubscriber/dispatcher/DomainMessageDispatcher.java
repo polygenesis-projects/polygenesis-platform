@@ -90,8 +90,7 @@ public class DomainMessageDispatcher extends AbstractNameablePackageable {
    */
   @SuppressWarnings("CPD-END")
   private Function makeExtractMessageTypeFunction() {
-    Thing thing =
-        ThingBuilder.apiClientBatchProcess().setThingName("domainMessageDispatcher").createThing();
+    Thing thing = ThingBuilder.apiClientBatchProcess("domainMessageDispatcher").createThing();
 
     return new Function(
         thing,

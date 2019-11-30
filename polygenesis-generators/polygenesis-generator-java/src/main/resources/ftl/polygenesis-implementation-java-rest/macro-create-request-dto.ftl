@@ -17,7 +17,6 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-
 <#macro createRequestDto requestDto>
-    ${ textConverter.toUpperCamel(requestDto.dataObject.objectName.text) } ${ requestDto.dataObject.objectName.text } = new ${ textConverter.toUpperCamel(requestDto.dataObject.objectName.text) }();
+    ${ textConverter.toUpperCamel(requestDto.dataObject.objectName.text) } ${ requestDto.dataObject.variableName.text } = new ${ textConverter.toUpperCamel(requestDto.dataObject.objectName.text) }();
 </#macro>

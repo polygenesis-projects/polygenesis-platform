@@ -40,7 +40,7 @@ public class TheThing {
    * @return the thing
    */
   public static io.polygenesis.abstraction.thing.Thing create(String rootPackageName) {
-    Thing thing = ThingBuilder.endToEnd().setThingName("thing").createThing();
+    Thing thing = ThingBuilder.endToEnd("thing").createThing();
 
     thing.addFunctions(
         PurposeFunctionBuilder.forThing(thing, rootPackageName)

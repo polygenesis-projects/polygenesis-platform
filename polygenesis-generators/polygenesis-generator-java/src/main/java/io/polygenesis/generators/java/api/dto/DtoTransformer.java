@@ -103,7 +103,7 @@ public class DtoTransformer extends AbstractClassTransformer<Dto, DtoMethod> {
   @Override
   public TemplateData transform(Dto source, Object... args) {
     Map<String, Object> dataModel = new HashMap<>();
-    dataModel.put("representation", create(source));
+    dataModel.put("representation", create(source, args));
     return new TemplateData(dataModel, "polygenesis-representation-java/Class.java.ftl");
   }
 
@@ -147,7 +147,9 @@ public class DtoTransformer extends AbstractClassTransformer<Dto, DtoMethod> {
     // ---------------------------------------------------------------------------------------------
     // Create constructor with Api Error
     // ---------------------------------------------------------------------------------------------
-    if (source.getDtoType().equals(DtoType.API_RESPONSE)) {
+    if (source.getDtoType().equals(DtoType.API_RESPONSE)
+        || source.getDtoType().equals(DtoType.API_COLLECTION_RESPONSE)
+        || source.getDtoType().equals(DtoType.API_PAGED_COLLECTION_RESPONSE)) {
       Set<ParameterRepresentation> parameterRepresentations = new LinkedHashSet<>();
 
       parameterRepresentations.add(new ParameterRepresentation("ApiError", "error"));
@@ -217,7 +219,9 @@ public class DtoTransformer extends AbstractClassTransformer<Dto, DtoMethod> {
   public Set<String> imports(Dto source, Object... args) {
     Set<String> imports = new TreeSet<>();
 
-    if (source.getDtoType().equals(DtoType.API_RESPONSE)) {
+    if (source.getDtoType().equals(DtoType.API_RESPONSE)
+        || source.getDtoType().equals(DtoType.API_COLLECTION_RESPONSE)
+        || source.getDtoType().equals(DtoType.API_PAGED_COLLECTION_RESPONSE)) {
       imports.add("com.oregor.trinity4j.api.ApiError");
     }
 

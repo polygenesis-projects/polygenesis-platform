@@ -67,6 +67,10 @@ public final class PastTense {
       pastTense = pastTense + "ed";
     }
 
+    if (pastTense.endsWith("yed")) {
+      pastTense = pastTense.replace("yed", "ied");
+    }
+
     return pastTense;
   }
 }

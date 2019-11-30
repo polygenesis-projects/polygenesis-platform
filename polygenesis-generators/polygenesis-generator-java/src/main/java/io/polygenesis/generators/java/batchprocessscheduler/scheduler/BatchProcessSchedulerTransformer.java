@@ -66,7 +66,7 @@ public class BatchProcessSchedulerTransformer
   @Override
   public TemplateData transform(BatchProcessSchedulerRoute source, Object... args) {
     Map<String, Object> dataModel = new HashMap<>();
-    dataModel.put("representation", create(source));
+    dataModel.put("representation", create(source, args));
 
     return new TemplateData(dataModel, "polygenesis-representation-java/Class.java.ftl");
   }

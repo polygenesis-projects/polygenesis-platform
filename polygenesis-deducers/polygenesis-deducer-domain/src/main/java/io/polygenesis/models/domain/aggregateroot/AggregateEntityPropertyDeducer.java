@@ -21,12 +21,16 @@
 package io.polygenesis.models.domain.aggregateroot;
 
 import io.polygenesis.abstraction.data.DataObject;
+import io.polygenesis.abstraction.data.DataPurpose;
+import io.polygenesis.abstraction.data.DataValidator;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.commons.valueobjects.VariableName;
+import io.polygenesis.core.AbstractionScope;
 import io.polygenesis.models.domain.AggregateEntityId;
 import io.polygenesis.models.domain.DomainObjectProperty;
+import io.polygenesis.models.domain.ReferenceToAbstractAggregateRoot;
 import io.polygenesis.models.domain.ReferenceToAggregateRoot;
 import io.polygenesis.models.domain.shared.AbstractPropertyDeducer;
 import java.util.LinkedHashSet;
@@ -74,9 +78,6 @@ public class AggregateEntityPropertyDeducer extends AbstractPropertyDeducer {
 
     properties.addAll(makeIdentityDomainObjectProperties(thingChild, rootPackageName));
 
-    //    properties.add(makeAggregateEntityId(thingChild, rootPackageName));
-    //    properties.add(makeReferenceToAggregateRoot(thingParent, rootPackageName));
-
     properties.addAll(
         getThingPropertiesSuitableForDomainModel(thingChild)
             .stream()
@@ -96,7 +97,13 @@ public class AggregateEntityPropertyDeducer extends AbstractPropertyDeducer {
     Set<DomainObjectProperty<?>> properties = new LinkedHashSet<>();
 
     properties.add(makeAggregateEntityId(thing, rootPackageName));
-    properties.add(makeReferenceToAggregateRoot(thing.getOptionalParent(), rootPackageName));
+
+    if (isAbstract(thing.getOptionalParent())) {
+      properties.add(
+          makeReferenceToAbstractAggregateRoot(thing.getOptionalParent(), rootPackageName));
+    } else {
+      properties.add(makeReferenceToAggregateRoot(thing.getOptionalParent(), rootPackageName));
+    }
 
     return properties;
   }
@@ -113,26 +120,44 @@ public class AggregateEntityPropertyDeducer extends AbstractPropertyDeducer {
    * @return the aggregate entity id
    */
   protected AggregateEntityId makeAggregateEntityId(Thing thing, PackageName rootPackageName) {
+    String variableAndId = thing.getThingName().getText() + "Id";
     DataObject dataObject =
         new DataObject(
-            new ObjectName(thing.getThingName().getText() + "Id"),
-            thing.makePackageName(rootPackageName, thing));
+            new VariableName(variableAndId),
+            DataPurpose.thingIdentity(),
+            DataValidator.empty(),
+            new ObjectName(variableAndId),
+            thing.makePackageName(rootPackageName, thing),
+            new LinkedHashSet<>());
 
     return new AggregateEntityId(dataObject);
   }
 
-  /**
-   * Make reference to aggregate root reference to aggregate root.
-   *
-   * @param thingParent the thingParent
-   * @return the reference to aggregate root
-   */
   private ReferenceToAggregateRoot makeReferenceToAggregateRoot(
       Thing thingParent, PackageName rootPackageName) {
     return new ReferenceToAggregateRoot(
         new DataObject(
+            new VariableName(thingParent.getThingName().getText()),
+            DataPurpose.referenceToThingByValue(),
+            DataValidator.empty(),
             new ObjectName(thingParent.getThingName().getText()),
             thingParent.makePackageName(rootPackageName, thingParent),
-            new VariableName(thingParent.getThingName().getText())));
+            new LinkedHashSet<>()));
+  }
+
+  private ReferenceToAbstractAggregateRoot makeReferenceToAbstractAggregateRoot(
+      Thing thingParent, PackageName rootPackageName) {
+    return new ReferenceToAbstractAggregateRoot(
+        new DataObject(
+            new VariableName(thingParent.getThingName().getText()),
+            DataPurpose.referenceToThingByValue(),
+            DataValidator.empty(),
+            new ObjectName(thingParent.getThingName().getText()),
+            thingParent.makePackageName(rootPackageName, thingParent),
+            new LinkedHashSet<>()));
+  }
+
+  private Boolean isAbstract(Thing thing) {
+    return thing.getAbstractionsScopes().contains(AbstractionScope.domainAbstractAggregateRoot());
   }
 }

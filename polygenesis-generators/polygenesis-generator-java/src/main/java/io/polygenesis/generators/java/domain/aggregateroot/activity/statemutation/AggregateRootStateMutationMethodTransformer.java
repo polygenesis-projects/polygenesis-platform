@@ -20,13 +20,11 @@
 
 package io.polygenesis.generators.java.domain.aggregateroot.activity.statemutation;
 
-import static io.polygenesis.models.domain.PropertyType.ABSTRACT_AGGREGATE_ROOT_ID;
-import static io.polygenesis.models.domain.PropertyType.AGGREGATE_ROOT_ID;
-
-import io.polygenesis.abstraction.data.DataPurpose;
 import io.polygenesis.abstraction.data.PrimitiveType;
+import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.DataTypeTransformer;
+import io.polygenesis.generators.java.common.ParameterRepresentationsService;
 import io.polygenesis.models.domain.StateMutationMethod;
 import io.polygenesis.representations.code.MethodRepresentationType;
 import io.polygenesis.representations.code.ParameterRepresentation;
@@ -46,6 +44,7 @@ public class AggregateRootStateMutationMethodTransformer
   // DEPENDENCIES
   // ===============================================================================================
   private final AggregateRootStateMutationActivityRegistry aggregateRootActivityRegistry;
+  private final ParameterRepresentationsService parameterRepresentationsService;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -56,12 +55,16 @@ public class AggregateRootStateMutationMethodTransformer
    *
    * @param dataTypeTransformer the data type transformer
    * @param aggregateRootActivityRegistry the aggregate root activity registry
+   * @param parameterRepresentationsService the parameter representations service
    */
+  @SuppressWarnings("CPD-START")
   public AggregateRootStateMutationMethodTransformer(
       DataTypeTransformer dataTypeTransformer,
-      AggregateRootStateMutationActivityRegistry aggregateRootActivityRegistry) {
+      AggregateRootStateMutationActivityRegistry aggregateRootActivityRegistry,
+      ParameterRepresentationsService parameterRepresentationsService) {
     super(dataTypeTransformer);
     this.aggregateRootActivityRegistry = aggregateRootActivityRegistry;
+    this.parameterRepresentationsService = parameterRepresentationsService;
   }
 
   // ===============================================================================================
@@ -100,66 +103,15 @@ public class AggregateRootStateMutationMethodTransformer
   public Set<ParameterRepresentation> parameterRepresentations(
       StateMutationMethod source, Object... args) {
     if (source.getFunction().getPurpose().isCreate()) {
-      Set<ParameterRepresentation> parameterRepresentations = new LinkedHashSet<>();
-
-      // 1. Start by adding IDs
-      source
-          .getProperties()
-          .stream()
-          .filter(
-              property ->
-                  property.getPropertyType().equals(ABSTRACT_AGGREGATE_ROOT_ID)
-                      || property.getPropertyType().equals(AGGREGATE_ROOT_ID))
-          .forEach(
-              property -> {
-                String dataType = dataTypeTransformer.convert(property.getData().getDataType());
-                DataPurpose dataPurpose = DataPurpose.thingIdentity();
-
-                if (property.getPropertyType().equals(ABSTRACT_AGGREGATE_ROOT_ID)) {
-                  dataType = "I";
-                }
-                parameterRepresentations.add(
-                    new ParameterRepresentation(
-                        dataType, property.getData().getVariableName().getText(), dataPurpose));
-              });
-
-      // 2. Continue with superClass properties
-      if (source.getSuperClassProperties() != null) {
-        source
-            .getSuperClassProperties()
-            .stream()
-            .filter(
-                property ->
-                    !property.getPropertyType().equals(ABSTRACT_AGGREGATE_ROOT_ID)
-                        && !property.getPropertyType().equals(AGGREGATE_ROOT_ID))
-            .forEach(
-                property -> {
-                  parameterRepresentations.add(
-                      new ParameterRepresentation(
-                          dataTypeTransformer.convert(property.getData().getDataType()),
-                          property.getData().getVariableName().getText(),
-                          DataPurpose.superclassParameter()));
-                });
-      }
-
-      // 3. Finish with this class properties
-      source
-          .getProperties()
-          .stream()
-          .filter(
-              property ->
-                  !property.getPropertyType().equals(ABSTRACT_AGGREGATE_ROOT_ID)
-                      && !property.getPropertyType().equals(AGGREGATE_ROOT_ID))
-          .forEach(
-              property -> {
-                parameterRepresentations.add(
-                    new ParameterRepresentation(
-                        dataTypeTransformer.convert(property.getData().getDataType()),
-                        property.getData().getVariableName().getText(),
-                        DataPurpose.any()));
-              });
-
-      return parameterRepresentations;
+      return parameterRepresentationsService.getArgumentsForConstruction(
+          source.getProperties(),
+          source.getSuperClassProperties() != null
+              ? source.getSuperClassProperties()
+              : new LinkedHashSet<>());
+    } else if (source.getFunction().getPurpose().equals(Purpose.aggregateRootCreateEntity())
+        || source.getFunction().getPurpose().equals(Purpose.aggregateRootUpdateEntity())) {
+      return parameterRepresentationsService.getMethodArgumentsForCreateOrModifyAggregateEntity(
+          source.getProperties());
     } else {
       return super.parameterRepresentations(source, args);
     }

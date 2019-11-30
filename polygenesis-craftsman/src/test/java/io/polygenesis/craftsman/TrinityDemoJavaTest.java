@@ -138,7 +138,7 @@ public class TrinityDemoJavaTest {
   }
 
   private Thing createTodo(PackageName rootPackageName) {
-    Thing task = ThingBuilder.endToEnd().setThingName("task").setMultiTenant(false).createThing();
+    Thing task = ThingBuilder.endToEnd("task").setMultiTenant(false).createThing();
 
     task.addFunctions(
         PurposeFunctionBuilder.forThing(task, rootPackageName.getText())

@@ -23,6 +23,7 @@ package io.polygenesis.models.api;
 import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.DataArray;
 import io.polygenesis.abstraction.data.DataObject;
+import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.core.Nameable;
@@ -40,6 +41,7 @@ public class Dto implements Nameable {
   // STATE
   // ===============================================================================================
 
+  private Thing relatedThing;
   private DtoType dtoType;
   private DataObject dataObject;
   private Boolean virtual;
@@ -52,11 +54,13 @@ public class Dto implements Nameable {
   /**
    * Instantiates a new Dto.
    *
+   * @param relatedThing the related thing
    * @param dtoType the dto type
    * @param dataObject the data group
    * @param virtual the virtual
    */
-  public Dto(DtoType dtoType, DataObject dataObject, Boolean virtual) {
+  public Dto(Thing relatedThing, DtoType dtoType, DataObject dataObject, Boolean virtual) {
+    setRelatedThing(relatedThing);
     setDtoType(dtoType);
     setDataObject(dataObject);
     setVirtual(virtual);
@@ -65,12 +69,15 @@ public class Dto implements Nameable {
   /**
    * Instantiates a new Dto.
    *
+   * @param relatedThing the related thing
    * @param dtoType the dto type
    * @param dataObject the data object
    * @param virtual the virtual
    * @param parent the parent
    */
-  public Dto(DtoType dtoType, DataObject dataObject, Boolean virtual, Dto parent) {
+  public Dto(
+      Thing relatedThing, DtoType dtoType, DataObject dataObject, Boolean virtual, Dto parent) {
+    setRelatedThing(relatedThing);
     setDtoType(dtoType);
     setDataObject(dataObject);
     setVirtual(virtual);
@@ -87,12 +94,25 @@ public class Dto implements Nameable {
    * @return the dto
    */
   public Dto withVariableNameEqualToObjectName() {
-    return new Dto(getDtoType(), getDataObject().withVariableNameEqualToObjectName(), getVirtual());
+    return new Dto(
+        getRelatedThing(),
+        getDtoType(),
+        getDataObject().withVariableNameEqualToObjectName(),
+        getVirtual());
   }
 
   // ===============================================================================================
   // GETTERS
   // ===============================================================================================
+
+  /**
+   * Gets related thing.
+   *
+   * @return the related thing
+   */
+  public Thing getRelatedThing() {
+    return relatedThing;
+  }
 
   /**
    * Gets dto type.
@@ -173,6 +193,16 @@ public class Dto implements Nameable {
   // ===============================================================================================
 
   /**
+   * Sets related thing.
+   *
+   * @param relatedThing the related thing
+   */
+  private void setRelatedThing(Thing relatedThing) {
+    Assertion.isNotNull(relatedThing, "relatedThing is required");
+    this.relatedThing = relatedThing;
+  }
+
+  /**
    * Sets dto type.
    *
    * @param dtoType the dto type
@@ -230,7 +260,8 @@ public class Dto implements Nameable {
       return false;
     }
     Dto dto = (Dto) o;
-    return dtoType == dto.dtoType
+    return Objects.equals(relatedThing, dto.relatedThing)
+        && dtoType == dto.dtoType
         && Objects.equals(dataObject, dto.dataObject)
         && Objects.equals(virtual, dto.virtual)
         && Objects.equals(parent, dto.parent);
@@ -238,6 +269,6 @@ public class Dto implements Nameable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(dtoType, dataObject, virtual, parent);
+    return Objects.hash(relatedThing, dtoType, dataObject, virtual, parent);
   }
 }

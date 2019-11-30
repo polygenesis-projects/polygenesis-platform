@@ -20,11 +20,17 @@
 
 package io.polygenesis.abstraction.thing.dsl;
 
+import io.polygenesis.abstraction.data.DataPrimitive;
+import io.polygenesis.abstraction.data.DataPurpose;
+import io.polygenesis.abstraction.data.PrimitiveType;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.ThingName;
 import io.polygenesis.abstraction.thing.ThingProperty;
+import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.commons.keyvalue.KeyValue;
+import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.commons.valueobjects.ContextName;
+import io.polygenesis.commons.valueobjects.VariableName;
 import io.polygenesis.core.AbstractionScope;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -59,10 +65,13 @@ public abstract class AbstractThingBuilder<T extends AbstractThingBuilder<?>> {
    * Instantiates a new Abstract thing builder.
    *
    * @param builderClass the builder class
+   * @param thingName the thing name
    * @param abstractionScopes the abstraction scopes
    */
-  public AbstractThingBuilder(Class<T> builderClass, Set<AbstractionScope> abstractionScopes) {
+  public AbstractThingBuilder(
+      Class<T> builderClass, String thingName, Set<AbstractionScope> abstractionScopes) {
     this.builderClass = builderClass;
+    setThingName(thingName);
     setAbstractionScopes(abstractionScopes);
   }
 
@@ -80,35 +89,13 @@ public abstract class AbstractThingBuilder<T extends AbstractThingBuilder<?>> {
   }
 
   /**
-   * Sets thing name.
-   *
-   * @param thingName the thing name
-   * @return the thing name
-   */
-  public T setThingName(String thingName) {
-    this.thingName = new ThingName(thingName);
-    return builderClass.cast(this);
-  }
-
-  /**
-   * Sets abstraction scopes.
-   *
-   * @param abstractionScopes the abstraction scopes
-   * @return the abstraction scopes
-   */
-  public T setAbstractionScopes(Set<AbstractionScope> abstractionScopes) {
-    this.abstractionScopes = abstractionScopes;
-    return builderClass.cast(this);
-  }
-
-  /**
-   * Sets thing properties.
+   * Adds thing properties.
    *
    * @param thingProperties the thing properties
    * @return the thing properties
    */
-  public T setThingProperties(Set<ThingProperty> thingProperties) {
-    this.thingProperties = thingProperties;
+  public T addThingProperties(Set<ThingProperty> thingProperties) {
+    this.thingProperties.addAll(thingProperties);
     return builderClass.cast(this);
   }
 
@@ -124,17 +111,6 @@ public abstract class AbstractThingBuilder<T extends AbstractThingBuilder<?>> {
   }
 
   /**
-   * Sets parent thing.
-   *
-   * @param parentThing the parent thing
-   * @return the parent thing
-   */
-  public T setParentThing(Thing parentThing) {
-    this.parentThing = parentThing;
-    return builderClass.cast(this);
-  }
-
-  /**
    * Add metadata t.
    *
    * @param metadata the metadata
@@ -142,6 +118,79 @@ public abstract class AbstractThingBuilder<T extends AbstractThingBuilder<?>> {
    */
   public T addMetadata(KeyValue metadata) {
     this.metadata.add(metadata);
+    return builderClass.cast(this);
+  }
+
+  /**
+   * With thing identity t.
+   *
+   * @return the t
+   */
+  public T withThingIdentity() {
+    this.thingProperties.add(
+        new ThingProperty(
+            DataPrimitive.ofDataBusinessType(
+                DataPurpose.thingIdentity(),
+                PrimitiveType.STRING,
+                new VariableName(
+                    String.format("%sId", TextConverter.toLowerCamel(thingName.getText()))))));
+    return builderClass.cast(this);
+  }
+
+  /**
+   * With parent thing identity t.
+   *
+   * @return the t
+   */
+  public T withParentThingIdentity() {
+    Assertion.isNotNull(parentThing, "parentThing should not be NULL");
+
+    this.thingProperties.add(
+        new ThingProperty(
+            DataPrimitive.ofDataBusinessType(
+                DataPurpose.parentThingIdentity(),
+                PrimitiveType.STRING,
+                new VariableName(
+                    String.format(
+                        "%sId",
+                        TextConverter.toLowerCamel(parentThing.getThingName().getText()))))));
+    return builderClass.cast(this);
+  }
+
+  // ===============================================================================================
+  // PROTECTED SETTERS
+  // ===============================================================================================
+
+  /**
+   * Sets thing name.
+   *
+   * @param thingName the thing name
+   * @return the thing name
+   */
+  protected T setThingName(String thingName) {
+    this.thingName = new ThingName(thingName);
+    return builderClass.cast(this);
+  }
+
+  /**
+   * Sets abstraction scopes.
+   *
+   * @param abstractionScopes the abstraction scopes
+   * @return the abstraction scopes
+   */
+  protected T setAbstractionScopes(Set<AbstractionScope> abstractionScopes) {
+    this.abstractionScopes = abstractionScopes;
+    return builderClass.cast(this);
+  }
+
+  /**
+   * Sets parent thing.
+   *
+   * @param parentThing the parent thing
+   * @return the parent thing
+   */
+  protected T setParentThing(Thing parentThing) {
+    this.parentThing = parentThing;
     return builderClass.cast(this);
   }
 

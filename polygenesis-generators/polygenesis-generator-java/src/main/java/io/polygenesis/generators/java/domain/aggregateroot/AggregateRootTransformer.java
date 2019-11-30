@@ -34,6 +34,7 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * The type Aggregate root transformer.
@@ -80,6 +81,23 @@ public class AggregateRootTransformer
     dataModel.put("representation", create(source, args));
 
     return new TemplateData(dataModel, "polygenesis-representation-java/Class.java.ftl");
+  }
+
+  @Override
+  public Set<String> imports(AggregateRoot source, Object... args) {
+    Set<String> imports = new TreeSet<>();
+
+    imports.addAll(super.imports(source, args));
+
+    source
+        .getStateMutationMethods()
+        .forEach(
+            stateMutationMethod ->
+                imports.addAll(
+                    aggregateRootStateMutationMethodTransformer.imports(
+                        stateMutationMethod, args)));
+
+    return imports;
   }
 
   @Override

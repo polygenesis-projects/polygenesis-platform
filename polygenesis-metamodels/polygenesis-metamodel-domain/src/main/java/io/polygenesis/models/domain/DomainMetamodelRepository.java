@@ -20,28 +20,31 @@
 
 package io.polygenesis.models.domain;
 
-import io.polygenesis.core.AbstractMetamodelRepository;
-import io.polygenesis.core.MetamodelRepository;
+import io.polygenesis.abstraction.thing.Thing;
+import io.polygenesis.abstraction.thing.ThingName;
 import java.util.Set;
 
 /**
- * The type Domain model repository.
+ * The interface Domain metamodel repository.
  *
+ * @param <T> the type parameter
  * @author Christos Tsakostas
  */
-public class DomainMetamodelRepository extends AbstractMetamodelRepository<AggregateRoot>
-    implements MetamodelRepository<AggregateRoot> {
-
-  // ===============================================================================================
-  // CONSTRUCTOR(S)
-  // ===============================================================================================
+public interface DomainMetamodelRepository<T> {
 
   /**
-   * Instantiates a new Domain model repository.
+   * Find entity by thing name base domain entity.
    *
-   * @param items the items
+   * @param thingName the thing name
+   * @return the base domain entity
    */
-  public DomainMetamodelRepository(Set<AggregateRoot> items) {
-    super(items);
-  }
+  BaseDomainEntity findEntityByThingName(ThingName thingName);
+
+  /**
+   * Find by things set.
+   *
+   * @param things the things
+   * @return the set
+   */
+  Set<T> findByThings(Set<Thing> things);
 }

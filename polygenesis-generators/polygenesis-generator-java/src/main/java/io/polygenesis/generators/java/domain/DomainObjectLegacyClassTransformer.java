@@ -380,7 +380,7 @@ public abstract class DomainObjectLegacyClassTransformer<S extends BaseDomainObj
       if (source.getDomainObjectType().equals(DomainObjectType.AGGREGATE_ROOT)) {
         stringBuilder.append("<I extends AggregateRootId>");
       } else if (source.getDomainObjectType().equals(DomainObjectType.AGGREGATE_ENTITY)) {
-        stringBuilder.append("<I extends AggregateEntityId>");
+        stringBuilder.append("<I extends AggregateEntityId<UUID>>");
       } else {
         throw new UnsupportedOperationException();
       }

@@ -21,6 +21,7 @@
 package io.polygenesis.generators.java.apidetail.service.activity.root;
 
 import io.polygenesis.abstraction.data.Data;
+import io.polygenesis.generators.java.apidetail.service.activity.common.AggregateRootData;
 import io.polygenesis.models.api.Dto;
 import io.polygenesis.models.domain.DomainObjectProperty;
 import io.polygenesis.representations.code.ParameterRepresentation;
@@ -55,6 +56,7 @@ public class FetchOneAggregateRootTemplateData extends UpdateAggregateRootTempla
    * @param stateMutationMethodName the state mutation method name
    */
   public FetchOneAggregateRootTemplateData(
+      AggregateRootData aggregateRootData,
       Set<ParameterRepresentation> parameterRepresentations,
       String aggregateRootDataType,
       String aggregateRootVariable,
@@ -69,6 +71,7 @@ public class FetchOneAggregateRootTemplateData extends UpdateAggregateRootTempla
       Data thingIdentity,
       String stateMutationMethodName) {
     super(
+        aggregateRootData,
         parameterRepresentations,
         aggregateRootDataType,
         aggregateRootVariable,

@@ -85,11 +85,22 @@ ${ representation.modifiers }<#if representation.modifiers != ""> </#if>class ${
     </#list>
   ${ fieldRepresentation.modifiers } ${ fieldRepresentation.dataType } ${ fieldRepresentation.variableName };
 </#list>
-<#if representation.getMethodRepresentationsBy('CONSTRUCTOR')?size gt 0>
+<#if representation.constructorRepresentations?size gt 0
+  || representation.getMethodRepresentationsBy('CONSTRUCTOR')?size gt 0>
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
+
+  <#if representation.constructorRepresentations?size gt 0>
+  <#list representation.constructorRepresentations as constructor>
+      <@printConstructor constructor>
+      </@printConstructor>
+      <#sep>
+
+      </#sep>
+  </#list>
+  </#if>
 
   <#list representation.getMethodRepresentationsBy('CONSTRUCTOR') as method>
     <@printMethod method>
@@ -98,21 +109,6 @@ ${ representation.modifiers }<#if representation.modifiers != ""> </#if>class ${
 
     </#sep>
   </#list>
-<#else>
-  <#if representation.constructorRepresentations?size gt 0>
-
-  // ===============================================================================================
-  // CONSTRUCTOR(S)
-  // ===============================================================================================
-
-    <#list representation.constructorRepresentations as constructor>
-      <@printConstructor constructor>
-      </@printConstructor>
-      <#sep>
-
-      </#sep>
-    </#list>
-  </#if>
 </#if>
 <#if representation.getMethodRepresentationsBy('MODIFY')?size gt 0>
 

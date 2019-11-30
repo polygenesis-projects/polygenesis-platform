@@ -55,7 +55,7 @@ public class ThingRepositoryTest {
   private Set<Thing> createThings() {
     Set<Thing> things = new LinkedHashSet<>();
 
-    Thing someThing = ThingBuilder.endToEnd().setThingName("someThing").createThing();
+    Thing someThing = ThingBuilder.endToEnd("someThing").createThing();
 
     Function someFunction = FunctionBuilder.of(someThing, "someFunction", Purpose.create()).build();
 

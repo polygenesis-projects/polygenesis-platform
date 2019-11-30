@@ -36,7 +36,6 @@ import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.commons.valueobjects.VariableName;
 import io.polygenesis.core.AbstractionScope;
 import java.util.LinkedHashSet;
-import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -151,35 +150,6 @@ public class PurposeFunctionBuilder {
       String functionName, Set<Data> arguments, Set<Data> outputs, Boolean returnValue) {
 
     // ---------------------------------------------------------------------------------------------
-    // ARGUMENTS
-    DataObject argumentDataObject =
-        new DataObject(
-            new ObjectName(
-                String.format(
-                    "%s%sRequest",
-                    functionName, TextConverter.toUpperCamel(thing.getThingName().getText()))),
-            thing.makePackageName(rootPackageNameVo, thing));
-
-    // ---------------------------------------------------------------------------------------------
-    // Add Parent Thing Identity if Any
-    if (thing.getOptionalParent() != null) {
-      argumentDataObject.addData(makeParentThingIdentity(thing.getOptionalParent()));
-    }
-
-    // ---------------------------------------------------------------------------------------------
-    // Add Thing Identity
-    Optional<Data> optionalDataThingIdentity = getThingIdentity(thing);
-    if (optionalDataThingIdentity.isPresent()) {
-      argumentDataObject.addData(optionalDataThingIdentity.get());
-    } else {
-      argumentDataObject.addData(makeThingIdentity(thing));
-    }
-
-    // ---------------------------------------------------------------------------------------------
-    arguments.forEach(argumentDataObject::addData);
-    // ---------------------------------------------------------------------------------------------
-
-    // ---------------------------------------------------------------------------------------------
     // RETURN VALUE
     if (returnValue) {
       DataObject returnValueDataObject =
@@ -209,14 +179,14 @@ public class PurposeFunctionBuilder {
       Function function =
           FunctionBuilder.of(thing, functionName, Purpose.create())
               .setReturnValue(returnValueDataObject)
-              .addArgument(argumentDataObject)
+              .addArguments(generateArgumentsData(thing, arguments))
               .build();
 
       this.functions.add(function);
     } else {
       Function function =
           FunctionBuilder.of(thing, functionName, Purpose.create())
-              .addArgument(argumentDataObject)
+              .addArguments(generateArgumentsData(thing, arguments))
               .build();
 
       this.functions.add(function);
@@ -232,36 +202,9 @@ public class PurposeFunctionBuilder {
   public PurposeFunctionBuilder withFunctionEnsureExistence() {
     String functionName = "ensureExistence";
 
-    // ---------------------------------------------------------------------------------------------
-    // ARGUMENTS
-    DataObject argumentDataObject =
-        new DataObject(
-            new ObjectName(
-                String.format(
-                    "%s%sRequest",
-                    functionName, TextConverter.toUpperCamel(thing.getThingName().getText()))),
-            thing.makePackageName(rootPackageNameVo, thing));
-
-    // ---------------------------------------------------------------------------------------------
-    // Add Parent Thing Identity if Any
-    if (thing.getOptionalParent() != null) {
-      argumentDataObject.addData(makeParentThingIdentity(thing.getOptionalParent()));
-    }
-
-    // ---------------------------------------------------------------------------------------------
-    // Add Thing Identity
-    Optional<Data> optionalDataThingIdentity = getThingIdentity(thing);
-    if (optionalDataThingIdentity.isPresent()) {
-      argumentDataObject.addData(optionalDataThingIdentity.get());
-    } else {
-      argumentDataObject.addData(makeThingIdentity(thing));
-    }
-
-    // ---------------------------------------------------------------------------------------------
-    // RETURN VALUE
     Function function =
         FunctionBuilder.of(thing, functionName, Purpose.ensureExistence())
-            .addArgument(argumentDataObject)
+            .addArguments(generateArgumentsData(thing))
             .build();
 
     this.functions.add(function);
@@ -306,48 +249,19 @@ public class PurposeFunctionBuilder {
   }
 
   /**
-   * With function modify thing builder.
+   * With function modify purpose function builder.
    *
    * @param functionName the function name
-   * @param models the models
-   * @return the thing builder
+   * @param arguments the arguments
+   * @param returnValue the return value
+   * @param abstractionScopes the abstraction scopes
+   * @return the purpose function builder
    */
   private PurposeFunctionBuilder withFunctionModify(
       String functionName,
-      Set<Data> models,
+      Set<Data> arguments,
       Boolean returnValue,
       Set<AbstractionScope> abstractionScopes) {
-
-    // ---------------------------------------------------------------------------------------------
-    // ARGUMENTS
-    // ---------------------------------------------------------------------------------------------
-    DataObject argumentDataObject =
-        new DataObject(
-            new ObjectName(
-                String.format(
-                    "%s%sRequest",
-                    functionName, TextConverter.toUpperCamel(thing.getThingName().getText()))),
-            thing.makePackageName(rootPackageNameVo, thing));
-
-    // ---------------------------------------------------------------------------------------------
-    // Add Parent Thing Identity if Any
-    if (thing.getOptionalParent() != null) {
-      argumentDataObject.addData(makeParentThingIdentity(thing.getOptionalParent()));
-    }
-
-    // ---------------------------------------------------------------------------------------------
-    // Add Thing Identity
-    // Add Thing Identity
-    Optional<Data> optionalDataThingIdentity = getThingIdentity(thing);
-    if (optionalDataThingIdentity.isPresent()) {
-      argumentDataObject.addData(optionalDataThingIdentity.get());
-    } else {
-      argumentDataObject.addData(makeThingIdentity(thing));
-    }
-
-    // ---------------------------------------------------------------------------------------------
-    models.forEach(argumentDataObject::addData);
-    // ---------------------------------------------------------------------------------------------
 
     // ---------------------------------------------------------------------------------------------
     // RETURN VALUE
@@ -378,7 +292,7 @@ public class PurposeFunctionBuilder {
       Function function =
           FunctionBuilder.of(thing, functionName, Purpose.modify())
               .setReturnValue(returnValueDataObject)
-              .addArgument(argumentDataObject)
+              .addArguments(generateArgumentsData(thing, arguments))
               .setAbstractionScopes(abstractionScopes)
               .build();
 
@@ -390,7 +304,7 @@ public class PurposeFunctionBuilder {
 
       Function function =
           FunctionBuilder.of(thing, functionName, Purpose.modify())
-              .addArgument(argumentDataObject)
+              .addArguments(generateArgumentsData(thing, arguments))
               .setAbstractionScopes(abstractionScopes)
               .build();
 
@@ -426,23 +340,18 @@ public class PurposeFunctionBuilder {
             new ObjectName(
                 String.format(
                     "Fetch%sRequest", TextConverter.toUpperCamel(thing.getThingName().getText()))),
-            thing.makePackageName(rootPackageNameVo, thing));
+            thing.makePackageName(rootPackageNameVo, thing),
+            new VariableName("request"));
 
     // ---------------------------------------------------------------------------------------------
     // Add Parent Thing Identity if Any
     if (thing.getOptionalParent() != null) {
-      argumentDataObject.addData(makeParentThingIdentity(thing.getOptionalParent()));
+      argumentDataObject.addData(getParentThingIdentity(thing));
     }
 
     // ---------------------------------------------------------------------------------------------
     // Add Thing Identity
-    // Add Thing Identity
-    Optional<Data> optionalDataThingIdentity = getThingIdentity(thing);
-    if (optionalDataThingIdentity.isPresent()) {
-      argumentDataObject.addData(optionalDataThingIdentity.get());
-    } else {
-      argumentDataObject.addData(makeThingIdentity(thing));
-    }
+    argumentDataObject.addData(getThingIdentity(thing));
 
     // ---------------------------------------------------------------------------------------------
     // RETURN VALUE
@@ -465,7 +374,7 @@ public class PurposeFunctionBuilder {
     Function function =
         FunctionBuilder.of(thing, "fetch", Purpose.fetchOne())
             .setReturnValue(returnValueDataObject)
-            .addArgument(argumentDataObject)
+            .addArguments(argumentDataObject.getModels())
             .build();
 
     this.functions.add(function);
@@ -489,12 +398,13 @@ public class PurposeFunctionBuilder {
                 String.format(
                     "Fetch%sCollectionRequest",
                     TextConverter.toUpperCamel(thing.getThingName().getText()))),
-            thing.makePackageName(rootPackageNameVo, thing));
+            thing.makePackageName(rootPackageNameVo, thing),
+            new VariableName("request"));
 
     // ---------------------------------------------------------------------------------------------
     // Add Parent Thing Identity if Any
     if (thing.getOptionalParent() != null) {
-      argumentDataObject.addData(makeParentThingIdentity(thing.getOptionalParent()));
+      argumentDataObject.addData(getParentThingIdentity(thing));
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -547,7 +457,7 @@ public class PurposeFunctionBuilder {
     Function function =
         FunctionBuilder.of(thing, "fetchPagedCollection", Purpose.fetchPagedCollection())
             .setReturnValue(dataObjectReturnValue)
-            .addArgument(argumentDataObject)
+            .addArguments(argumentDataObject.getModels())
             .build();
 
     this.functions.add(function);
@@ -571,57 +481,55 @@ public class PurposeFunctionBuilder {
   // PRIVATE
   // ===============================================================================================
 
-  /**
-   * Gets thing identity.
-   *
-   * @param thing the thing
-   * @return the thing identity
-   */
-  protected Optional<Data> getThingIdentity(Thing thing) {
+  private Set<Data> generateArgumentsData(Thing thing) {
+    return generateArgumentsData(thing, new LinkedHashSet<>());
+  }
+
+  private Set<Data> generateArgumentsData(Thing thing, Set<Data> data) {
+    Set<Data> argumentsData = new LinkedHashSet<>();
+
+    // ---------------------------------------------------------------------------------------------
+    // Add Parent Thing Identity if Any
+    if (thing.getOptionalParent() != null) {
+      argumentsData.add(getParentThingIdentity(thing));
+    }
+
+    // ---------------------------------------------------------------------------------------------
+    // Add Thing Identity
+    argumentsData.add(getThingIdentity(thing));
+
+    // ---------------------------------------------------------------------------------------------
+    // Add the provided data
+    argumentsData.addAll(data);
+
+    return argumentsData;
+  }
+
+  private Data getThingIdentity(Thing thing) {
     return thing
         .getThingProperties()
         .stream()
         .map(ThingProperty::getData)
         .filter(this::isDataThingIdentity)
-        .findFirst();
+        .findFirst()
+        .orElseThrow();
   }
 
-  /**
-   * Is data thing identity boolean.
-   *
-   * @param data the data
-   * @return the boolean
-   */
+  private Data getParentThingIdentity(Thing thing) {
+    return thing
+        .getThingProperties()
+        .stream()
+        .map(ThingProperty::getData)
+        .filter(this::isDataParentThingIdentity)
+        .findFirst()
+        .orElseThrow();
+  }
+
   private boolean isDataThingIdentity(Data data) {
     return data.getDataPurpose().equals(DataPurpose.thingIdentity());
   }
 
-  /**
-   * Make thing identity data primitive.
-   *
-   * @param thing the thing
-   * @return the data primitive
-   */
-  private DataPrimitive makeThingIdentity(Thing thing) {
-    return DataPrimitive.ofDataBusinessType(
-        DataPurpose.thingIdentity(),
-        PrimitiveType.STRING,
-        new VariableName(
-            String.format("%sId", TextConverter.toLowerCamel(thing.getThingName().getText()))));
-  }
-
-  /**
-   * Make parent thing identity data primitive.
-   *
-   * @param parentThing the parent thing
-   * @return the data primitive
-   */
-  private DataPrimitive makeParentThingIdentity(Thing parentThing) {
-    return DataPrimitive.ofDataBusinessType(
-        DataPurpose.parentThingIdentity(),
-        PrimitiveType.STRING,
-        new VariableName(
-            String.format(
-                "%sId", TextConverter.toLowerCamel(parentThing.getThingName().getText()))));
+  private boolean isDataParentThingIdentity(Data data) {
+    return data.getDataPurpose().equals(DataPurpose.parentThingIdentity());
   }
 }

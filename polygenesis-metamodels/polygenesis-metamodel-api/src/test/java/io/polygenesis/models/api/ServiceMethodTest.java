@@ -34,20 +34,25 @@ import io.polygenesis.commons.valueobjects.PackageName;
 /** @author Christos Tsakostas */
 public class ServiceMethodTest extends AbstractEqualityTest<ServiceMethod> {
 
+  private Thing relatedThing = mock(Thing.class);
+
   @Override
   public ServiceMethod createObject1() {
     Dto requestDto =
         new Dto(
+            relatedThing,
             DtoType.API_REQUEST,
             new DataObject(new ObjectName("asd"), new PackageName("com.oregor")),
             false);
+
     Dto responseDto =
         new Dto(
+            relatedThing,
             DtoType.API_REQUEST,
             new DataObject(new ObjectName("xyz"), new PackageName("com.oregor")),
             false);
 
-    Thing thing = ThingBuilder.endToEnd().setThingName("customer").createThing();
+    Thing thing = ThingBuilder.endToEnd("customer").createThing();
     return new ServiceMethod(
         mock(Service.class),
         FunctionBuilder.of(thing, "create", Purpose.create()).build(),
@@ -59,16 +64,20 @@ public class ServiceMethodTest extends AbstractEqualityTest<ServiceMethod> {
   public ServiceMethod createObject2() {
     Dto requestDto =
         new Dto(
+            relatedThing,
             DtoType.API_REQUEST,
             new DataObject(new ObjectName("qwe"), new PackageName("com.oregor")),
             false);
+
     Dto responseDto =
         new Dto(
+            relatedThing,
             DtoType.API_REQUEST,
             new DataObject(new ObjectName("iop"), new PackageName("com.oregor")),
             false);
 
-    Thing thing = ThingBuilder.endToEnd().setThingName("user").createThing();
+    Thing thing = ThingBuilder.endToEnd("user").createThing();
+
     return new ServiceMethod(
         mock(Service.class),
         FunctionBuilder.of(thing, "create", Purpose.create()).build(),

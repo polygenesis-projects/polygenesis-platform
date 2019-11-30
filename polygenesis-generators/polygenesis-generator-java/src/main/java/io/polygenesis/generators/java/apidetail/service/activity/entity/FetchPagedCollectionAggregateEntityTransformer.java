@@ -51,6 +51,8 @@ public class FetchPagedCollectionAggregateEntityTransformer
     @SuppressWarnings("CPD-START")
     FetchPagedCollectionAggregateEntityTemplateData data =
         new FetchPagedCollectionAggregateEntityTemplateData(
+            getAggregateRootData(source),
+            getAggregateEntityData(source, metamodelRepositories),
             getAggregateRootIdDataType(source),
             getParentThingIdentity(),
             new LinkedHashSet<>(),

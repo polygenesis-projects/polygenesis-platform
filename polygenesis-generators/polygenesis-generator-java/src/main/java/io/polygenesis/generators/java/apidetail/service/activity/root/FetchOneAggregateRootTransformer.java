@@ -50,6 +50,7 @@ public class FetchOneAggregateRootTransformer extends AbstractServiceMethodImple
     @SuppressWarnings("CPD-START")
     FetchOneAggregateRootTemplateData data =
         new FetchOneAggregateRootTemplateData(
+            getAggregateRootData(source),
             getParameterRepresentations(source),
             getAggregateRootDataType(source),
             getAggregateRootVariable(source),

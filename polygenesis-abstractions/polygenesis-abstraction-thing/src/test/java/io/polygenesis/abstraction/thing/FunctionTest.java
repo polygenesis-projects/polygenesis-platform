@@ -78,9 +78,7 @@ public class FunctionTest extends AbstractEqualityTest<Function> {
   @Override
   public Function createObject1() {
     return FunctionBuilder.of(
-            ThingBuilder.endToEnd().setThingName("thingName").createThing(),
-            "functionName",
-            Purpose.create())
+            ThingBuilder.endToEnd("thingName").createThing(), "functionName", Purpose.create())
         .setReturnValue(createDataPrimitive())
         .build();
   }
@@ -88,7 +86,7 @@ public class FunctionTest extends AbstractEqualityTest<Function> {
   @Override
   public Function createObject2() {
     return FunctionBuilder.of(
-            ThingBuilder.endToEnd().setThingName("thingName").createThing(),
+            ThingBuilder.endToEnd("thingName").createThing(),
             "anotherFunctionName",
             Purpose.create())
         .setReturnValue(createDataPrimitive())
@@ -101,18 +99,14 @@ public class FunctionTest extends AbstractEqualityTest<Function> {
 
   private Function createFunctionWithReturnValueAndNoArguments() {
     return FunctionBuilder.of(
-            ThingBuilder.endToEnd().setThingName("thingName").createThing(),
-            "functionName",
-            Purpose.create())
+            ThingBuilder.endToEnd("thingName").createThing(), "functionName", Purpose.create())
         .setReturnValue(createDataPrimitive())
         .build();
   }
 
   private Function createFunctionWithArgumentsAndNoReturnValue() {
     return FunctionBuilder.of(
-            ThingBuilder.endToEnd().setThingName("thingName").createThing(),
-            "functionName",
-            Purpose.create())
+            ThingBuilder.endToEnd("thingName").createThing(), "functionName", Purpose.create())
         .addArgument(DataPrimitive.of(PrimitiveType.STRING, new VariableName("jsonMessage")))
         .build();
   }

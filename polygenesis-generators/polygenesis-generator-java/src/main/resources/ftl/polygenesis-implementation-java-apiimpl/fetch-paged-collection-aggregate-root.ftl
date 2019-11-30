@@ -18,11 +18,11 @@
  ===========================LICENSE_END==================================
 -->
 <#include "../polygenesis-implementation-java-shared/macro-assertions-for-parameters.ftl">
-<#include "macro-restore-aggregate-root.ftl">
+<#include "../polygenesis-trinity-java/api-detail/aggregate-root/macro-restore-aggregate-root.ftl">
 <@assertionsForParameters data.parameterRepresentations></@assertionsForParameters>
 
 <#--    Paginated<${ aggregateRootDataType }> paginated = ${ persistenceVariable }.findPaginated(<#if multiTenant>UUID.fromString(${ requestDto.dataObject.variableName.text }.getTenantId()), </#if>${ requestDto.dataObject.objectName.text }.getPageNumber(), ${ requestDto.dataObject.objectName.text }.getPageSize());-->
-    Paginated<${ data.aggregateRootDataType }> paginated = ${ data.persistenceVariable }.findPaginated(<#if data.multiTenant>new TenantId(UUID.fromString(${ data.requestDto.dataObject.variableName.text }.getTenantId())), </#if>${ data.requestDto.dataObject.objectName.text }.getPageNumber(), ${ data.requestDto.dataObject.objectName.text }.getPageSize());
+    Paginated<${ data.aggregateRootDataType }> paginated = ${ data.persistenceVariable }.findPaginated(<#if data.multiTenant>new TenantId(UUID.fromString(${ data.requestDto.dataObject.variableName.text }.getTenantId())), </#if>${ data.requestDto.dataObject.variableName.text }.getPageNumber(), ${ data.requestDto.dataObject.variableName.text }.getPageSize());
 
     return new ${ data.returnValue }(
         StreamSupport
@@ -31,6 +31,6 @@
             .collect(Collectors.toList()),
         paginated.getTotalPages(),
         paginated.getTotalElements(),
-        ${ data.requestDto.dataObject.objectName.text }.getPageNumber(),
-        ${ data.requestDto.dataObject.objectName.text }.getPageSize()
+        ${ data.requestDto.dataObject.variableName.text }.getPageNumber(),
+        ${ data.requestDto.dataObject.variableName.text }.getPageSize()
     );

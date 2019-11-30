@@ -20,13 +20,12 @@
 
 package io.polygenesis.generators.java.api.service;
 
-import io.polygenesis.abstraction.data.DataObject;
-import io.polygenesis.abstraction.thing.Argument;
 import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.models.api.ServiceMethod;
+import io.polygenesis.representations.code.ParameterRepresentation;
 import io.polygenesis.transformers.java.AbstractMethodTransformer;
+import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.TreeSet;
 
 /**
  * The type Service method transformer.
@@ -58,33 +57,15 @@ public class ServiceMethodTransformer extends AbstractMethodTransformer<ServiceM
   }
 
   @Override
-  public Set<String> imports(ServiceMethod source, Object... args) {
-    Set<String> imports = new TreeSet<>();
+  public Set<ParameterRepresentation> parameterRepresentations(
+      ServiceMethod source, Object... args) {
+    Set<ParameterRepresentation> parameterRepresentations = new LinkedHashSet<>();
 
-    if (source.getFunction().getReturnValue() != null
-        && source.getFunction().getReturnValue().getData().isDataGroup()) {
-      DataObject dataObject = source.getFunction().getReturnValue().getData().getAsDataObject();
+    parameterRepresentations.add(
+        new ParameterRepresentation(
+            dataTypeTransformer.convert(source.getRequestDto().getDataObject().getDataType()),
+            source.getRequestDto().getDataObject().getVariableName().getText()));
 
-      if (!dataObject.getPackageName().equals(source.getService().getPackageName())) {
-        imports.add(makeCanonicalObjectName(dataObject.getPackageName(), dataObject.getDataType()));
-      }
-    }
-
-    source
-        .getFunction()
-        .getArguments()
-        .stream()
-        .filter(argument -> argument.getData().isDataGroup())
-        .map(Argument::getData)
-        .map(DataObject.class::cast)
-        .forEach(
-            dataGroup -> {
-              if (!dataGroup.getPackageName().equals(source.getService().getPackageName())) {
-                imports.add(
-                    makeCanonicalObjectName(dataGroup.getPackageName(), dataGroup.getDataType()));
-              }
-            });
-
-    return imports;
+    return parameterRepresentations;
   }
 }

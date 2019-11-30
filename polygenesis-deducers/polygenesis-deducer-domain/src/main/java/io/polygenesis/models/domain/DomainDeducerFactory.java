@@ -50,7 +50,9 @@ public final class DomainDeducerFactory {
         new AggregateEntityPropertyDeducer();
 
     AggregateEntityDeducer aggregateEntityDeducer =
-        new AggregateEntityDeducer(aggregateEntityPropertyDeducer);
+        new AggregateEntityDeducer(
+            aggregateEntityPropertyDeducer,
+            new StateMutationMethodDeducer(new DomainEventMutationDeducer()));
 
     AggregateRootPropertyDeducer aggregateRootPropertyDeducer =
         new AggregateRootPropertyDeducer(aggregateEntityDeducer);

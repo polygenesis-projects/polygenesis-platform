@@ -88,7 +88,7 @@ public class ScriptExporter {
 
   private Path makeFileName(Path generationPath, String context) {
     counter = counter + 1;
-    String name = String.format("%s__%s__Initialize", counter, context);
+    String name = String.format("V%s__%s__Initialize", counter, context);
 
     return Paths.get(
         generationPath.toString(), "src/main/resources/db/migration", name + ".sql.txt");

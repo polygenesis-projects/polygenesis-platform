@@ -110,10 +110,15 @@ public class DtoExporterTest {
             CqsType.COMMAND,
             thingName);
 
+    Thing relatedThing = mock(Thing.class);
     service.appendServiceMethod(
         makeFunctionCreate(),
-        new Dto(DtoType.API_REQUEST, argument.getData().getAsDataObject(), false),
-        new Dto(DtoType.API_RESPONSE, createReturnValue.getData().getAsDataObject(), false));
+        new Dto(relatedThing, DtoType.API_REQUEST, argument.getData().getAsDataObject(), false),
+        new Dto(
+            relatedThing,
+            DtoType.API_RESPONSE,
+            createReturnValue.getData().getAsDataObject(),
+            false));
 
     return service;
   }
@@ -137,7 +142,7 @@ public class DtoExporterTest {
   }
 
   private Function makeFunctionCreate() {
-    Thing thing = ThingBuilder.endToEnd().setThingName("customer").createThing();
+    Thing thing = ThingBuilder.endToEnd("customer").createThing();
 
     return FunctionBuilder.of(thing, "create", Purpose.create())
         .setReturnValue(DataPrimitive.of(PrimitiveType.STRING, new VariableName("someRet")))

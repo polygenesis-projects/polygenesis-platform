@@ -126,7 +126,7 @@ public class ServiceAspect implements Nameable {
   private Function makeAround() {
     Set<KeyValue> keyValues = new LinkedHashSet<>();
 
-    Thing thing = ThingBuilder.apiDetailServiceAspect().setThingName("serviceAspect").createThing();
+    Thing thing = ThingBuilder.apiDetailServiceAspect("serviceAspect").createThing();
 
     return new Function(
         thing,

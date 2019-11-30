@@ -187,22 +187,15 @@ public class EndpointLegacyMethodTransformer extends AbstractLegacyMethodTransfo
         break;
     }
 
-    source
-        .getServiceMethod()
-        .getFunction()
-        .getArguments()
-        .forEach(
-            argument -> {
-              if (argument.getData().isDataGroup()
-                  && (source.getServiceMethod().getFunction().getPurpose().isCreate()
-                      || source.getServiceMethod().getFunction().getPurpose().isModify())) {
-                parameterRepresentations.add(
-                    new ParameterRepresentation(
-                        dataTypeTransformer.convert(argument.getData().getDataType()),
-                        argument.getData().getVariableName().getText(),
-                        new LinkedHashSet<>(Arrays.asList("@RequestBody"))));
-              }
-            });
+    if (source.getServiceMethod().getFunction().getPurpose().isCreate()
+        || source.getServiceMethod().getFunction().getPurpose().isModify()) {
+      parameterRepresentations.add(
+          new ParameterRepresentation(
+              dataTypeTransformer.convert(
+                  source.getServiceMethod().getRequestDto().getDataObject().getDataType()),
+              source.getServiceMethod().getRequestDto().getDataObject().getVariableName().getText(),
+              new LinkedHashSet<>(Arrays.asList("@RequestBody"))));
+    }
 
     parameterRepresentations.add(
         new ParameterRepresentation("HttpServletRequest", "httpServletRequest"));

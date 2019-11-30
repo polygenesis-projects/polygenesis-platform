@@ -103,8 +103,7 @@ public class IncomingDomainMessage extends AbstractNameablePackageable {
   // ===============================================================================================
 
   private Function makeGetMessageId() {
-    Thing thing =
-        ThingBuilder.apiClientDomainMessage().setThingName("incomingDomainMessage").createThing();
+    Thing thing = ThingBuilder.apiClientDomainMessage("incomingDomainMessage").createThing();
 
     return new Function(
         thing,
@@ -117,8 +116,7 @@ public class IncomingDomainMessage extends AbstractNameablePackageable {
   }
 
   private Function makeGetRootId() {
-    Thing thing =
-        ThingBuilder.apiClientDomainMessage().setThingName("incomingDomainMessage").createThing();
+    Thing thing = ThingBuilder.apiClientDomainMessage("incomingDomainMessage").createThing();
 
     return new Function(
         thing,
@@ -131,8 +129,7 @@ public class IncomingDomainMessage extends AbstractNameablePackageable {
   }
 
   private Function makeGetMessageBody() {
-    Thing thing =
-        ThingBuilder.apiClientDomainMessage().setThingName("incomingDomainMessage").createThing();
+    Thing thing = ThingBuilder.apiClientDomainMessage("incomingDomainMessage").createThing();
 
     return new Function(
         thing,
