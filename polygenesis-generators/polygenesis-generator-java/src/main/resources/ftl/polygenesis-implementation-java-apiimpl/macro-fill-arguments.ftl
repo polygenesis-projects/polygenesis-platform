@@ -33,11 +33,13 @@
         <#case 'AGGREGATE_ROOT_ID'>
           <#if multiTenant>
 <#--        ${ persistenceVariable }.nextId(UUID.fromString(${ requestDto.dataObject.variableName.text }.getTenantId()))<#sep>,</#sep>-->
-        ${ persistenceVariable }.nextId()<#sep>,</#sep>
+        ${ requestDto.dataObject.variableName.text }.get${ textConverter.toUpperCamel(property.data.variableName.text) }() == null ? ${ persistenceVariable }.nextId() : new ${ textConverter.toUpperCamel(property.data.variableName.text) }(UUID.fromString(${ requestDto.dataObject.variableName.text }.get${ textConverter.toUpperCamel(property.data.variableName.text) }()))<#sep>,</#sep>
           <#else>
         ${ requestDto.dataObject.variableName.text }.get${ textConverter.toUpperCamel(property.data.variableName.text) }() == null ? ${ persistenceVariable }.nextId() : new ${ textConverter.toUpperCamel(property.data.variableName.text) }(UUID.fromString(${ requestDto.dataObject.variableName.text }.get${ textConverter.toUpperCamel(property.data.variableName.text) }()))<#sep>,</#sep>
           </#if>
         <#break>
+        <#case 'AGGREGATE_ENTITY_ID'>
+          <#break>
         <#case 'PROJECTION_ID'>
           <#if multiTenant>
           <#--        ${ persistenceVariable }.nextId(UUID.fromString(${ requestDto.dataObject.variableName.text }.getTenantId()))<#sep>,</#sep>-->
