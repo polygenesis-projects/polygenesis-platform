@@ -20,17 +20,16 @@
 <#macro fillArgumentValueObject property persistenceVariable requestDto multiTenant converterVariable>
 <#compress>
   <#if property.data.getAsDataObject().models?size == 1 >
-    <#if property.data.getAsDataObject().models[0].primitiveType == 'STRING'>
-      new ${ textConverter.toUpperCamel(property.data.objectName.text) }(${ requestDto.dataObject.variableName.text }.get${ textConverter.toUpperCamel(property.data.variableName.text) }())
-    <#elseif property.data.getAsDataObject().models[0].primitiveType == 'DECIMAL'>
+    <#if property.data.getAsDataObject().models[0].primitiveType == 'STRING'
+        || property.data.getAsDataObject().models[0].primitiveType == 'DECIMAL'>
       new ${ textConverter.toUpperCamel(property.data.objectName.text) }(${ requestDto.dataObject.variableName.text }.get${ textConverter.toUpperCamel(property.data.variableName.text) }())
     <#elseif property.data.getAsDataObject().models[0].primitiveType == 'UUID'>
       new ${ textConverter.toUpperCamel(property.data.objectName.text) }(UUID.fromString(${ requestDto.dataObject.variableName.text }.get${ textConverter.toUpperCamel(property.data.variableName.text) }()))
     <#else>
-        null // TODO: ${property.data.getAsDataObject().models[0].primitiveType} is not supported yet
+      null // TODO: ${property.data.getAsDataObject().models[0].primitiveType} is not supported yet
     </#if>
   <#else>
-        null // TODO: value object '${ property.data.getAsDataObject().objectName.text }' has more than one fields
+      ${converterVariable}.convertTo${ textConverter.toUpperCamel(property.data.objectName.text) }Vo(${ requestDto.dataObject.variableName.text }.get${ textConverter.toUpperCamel(property.data.variableName.text) }())
   </#if>
 </#compress>
 </#macro>
