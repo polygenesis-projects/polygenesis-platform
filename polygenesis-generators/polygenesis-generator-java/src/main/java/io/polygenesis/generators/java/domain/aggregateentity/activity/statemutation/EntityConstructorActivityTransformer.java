@@ -22,7 +22,6 @@ package io.polygenesis.generators.java.domain.aggregateentity.activity.statemuta
 
 import io.polygenesis.abstraction.thing.ActivityTemplateTransformer;
 import io.polygenesis.core.TemplateData;
-import io.polygenesis.generators.java.apidetail.service.activity.AbstractServiceMethodImplementationTransformer;
 import io.polygenesis.models.domain.DomainEvent;
 import io.polygenesis.models.domain.StateMutationMethod;
 import io.polygenesis.representations.code.ParameterRepresentation;
@@ -36,7 +35,6 @@ import java.util.Set;
  * @author Christos Tsakostas
  */
 public class EntityConstructorActivityTransformer
-    extends AbstractServiceMethodImplementationTransformer
     implements ActivityTemplateTransformer<StateMutationMethod> {
 
   // ===============================================================================================

@@ -24,7 +24,6 @@ import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.thing.ActivityTemplateTransformer;
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.core.TemplateData;
-import io.polygenesis.generators.java.apidetail.service.activity.AbstractServiceMethodImplementationTransformer;
 import io.polygenesis.models.api.ServiceMethod;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,8 +34,7 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class ProcessActivityTransformer extends AbstractServiceMethodImplementationTransformer
-    implements ActivityTemplateTransformer<Function> {
+public class ProcessActivityTransformer implements ActivityTemplateTransformer<Function> {
 
   // ===============================================================================================
   // OVERRIDES

@@ -18,47 +18,46 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.generators.java.domain.projection.exporter;
+package io.polygenesis.generators.java.domain.projection.id;
 
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.generators.java.domain.projection.transformer.ProjectionRepositoryLegacyInterfaceTransformer;
-import io.polygenesis.models.domain.Persistence;
+import io.polygenesis.models.domain.InstantiationType;
+import io.polygenesis.models.domain.Projection;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * The type Projection repository exporter.
+ * The type Aggregate root exporter.
  *
  * @author Christos Tsakostas
  */
-public class ProjectionRepositoryExporter {
+public class ProjectionIdExporter {
 
   // ===============================================================================================
   // DEPENDENCIES
   // ===============================================================================================
 
   private final FreemarkerService freemarkerService;
-  private final ProjectionRepositoryLegacyInterfaceTransformer
-      projectionRepositoryInterfaceRepresentable;
+  private final ProjectionIdLegacyClassTransformer projectionIdClassRepresentable;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
-   * Instantiates a new Persistence exporter.
+   * Instantiates a new Aggregate root projection exporter.
    *
    * @param freemarkerService the freemarker service
-   * @param projectionRepositoryInterfaceRepresentable the persistence projection converter
+   * @param projectionIdClassRepresentable the aggregate root ID projection converter
    */
-  public ProjectionRepositoryExporter(
+  public ProjectionIdExporter(
       FreemarkerService freemarkerService,
-      ProjectionRepositoryLegacyInterfaceTransformer projectionRepositoryInterfaceRepresentable) {
+      ProjectionIdLegacyClassTransformer projectionIdClassRepresentable) {
     this.freemarkerService = freemarkerService;
-    this.projectionRepositoryInterfaceRepresentable = projectionRepositoryInterfaceRepresentable;
+    this.projectionIdClassRepresentable = projectionIdClassRepresentable;
   }
 
   // ===============================================================================================
@@ -69,24 +68,28 @@ public class ProjectionRepositoryExporter {
    * Export.
    *
    * @param generationPath the generation path
-   * @param persistence the persistence
+   * @param projection the projection
    */
-  public void export(Path generationPath, Persistence persistence) {
+  public void export(Path generationPath, Projection projection) {
     Map<String, Object> dataModel = new HashMap<>();
-    dataModel.put("representation", projectionRepositoryInterfaceRepresentable.create(persistence));
+    if (projection.getInstantiationType().equals(InstantiationType.ABSTRACT)) {
+      return;
+    }
+
+    dataModel.put("representation", projectionIdClassRepresentable.create(projection));
 
     freemarkerService.export(
         dataModel,
-        "polygenesis-representation-java/Interface.java.ftl",
-        makeFileName(generationPath, persistence));
+        "polygenesis-representation-java/Class.java.ftl",
+        makeFileName(generationPath, projection));
   }
 
-  private Path makeFileName(Path generationPath, Persistence persistence) {
+  private Path makeFileName(Path generationPath, Projection projection) {
 
     return Paths.get(
         generationPath.toString(),
         "src/main/java",
-        persistence.getPackageName().toPath().toString(),
-        TextConverter.toUpperCamel(persistence.getObjectName().getText()) + ".java");
+        projection.getPackageName().toPath().toString(),
+        TextConverter.toUpperCamel(projection.getObjectName().getText()) + "Id.java");
   }
 }

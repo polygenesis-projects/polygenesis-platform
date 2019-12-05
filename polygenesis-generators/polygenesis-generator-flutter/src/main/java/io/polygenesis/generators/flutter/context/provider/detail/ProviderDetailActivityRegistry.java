@@ -20,21 +20,19 @@
 
 package io.polygenesis.generators.flutter.context.provider.detail;
 
+import io.polygenesis.abstraction.thing.AbstractActivityRegistry;
 import io.polygenesis.abstraction.thing.AbstractActivityTemplateGenerator;
-import io.polygenesis.abstraction.thing.ActivityRegistry;
 import io.polygenesis.abstraction.thing.ScopePurposeTuple;
-import io.polygenesis.core.AbstractionScope;
 import io.polygenesis.metamodels.stateprovider.ProviderMethod;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * The type Provider detail activity registry.
  *
  * @author Christos Tsakostas
  */
-public class ProviderDetailActivityRegistry implements ActivityRegistry<ProviderMethod> {
+public class ProviderDetailActivityRegistry extends AbstractActivityRegistry<ProviderMethod> {
 
   // ===============================================================================================
   // STATIC
@@ -45,47 +43,11 @@ public class ProviderDetailActivityRegistry implements ActivityRegistry<Provider
       new HashMap<>();
 
   // ===============================================================================================
-  // OVERRIDES
+  // CONSTRUCTOR(S)
   // ===============================================================================================
 
-  @SuppressWarnings({"rawtypes", "unchecked"})
-  @Override
-  public String activityFor(ProviderMethod source, Object... args) {
-    return activityGenerator(
-            getAbstractionScopeAsOptional(source).orElseThrow(IllegalArgumentException::new),
-            source)
-        .generate(source, args);
-  }
-
-  @Override
-  public Boolean isActivitySupportedFor(ProviderMethod source) {
-    return getAbstractionScopeAsOptional(source).isPresent();
-  }
-
-  // ===============================================================================================
-  // PRIVATE
-  // ===============================================================================================
-
-  private Optional<AbstractionScope> getAbstractionScopeAsOptional(
-      ProviderMethod serviceMethodImplementation) {
-    return serviceMethodImplementation
-        .getFunction()
-        .getThing()
-        .getAbstractionsScopes()
-        .stream()
-        .filter(
-            abstractionScope ->
-                scopeAndPurposeMap.containsKey(
-                    new ScopePurposeTuple(
-                        abstractionScope, serviceMethodImplementation.getFunction().getPurpose())))
-        .findFirst();
-  }
-
-  @SuppressWarnings({"rawtypes", "unchecked", "CPD-END"})
-  private AbstractActivityTemplateGenerator activityGenerator(
-      AbstractionScope abstractionScope, ProviderMethod serviceMethodImplementation) {
-    return scopeAndPurposeMap.get(
-        new ScopePurposeTuple(
-            abstractionScope, serviceMethodImplementation.getFunction().getPurpose()));
+  /** Instantiates a new Provider detail activity registry. */
+  public ProviderDetailActivityRegistry() {
+    super(scopeAndPurposeMap);
   }
 }

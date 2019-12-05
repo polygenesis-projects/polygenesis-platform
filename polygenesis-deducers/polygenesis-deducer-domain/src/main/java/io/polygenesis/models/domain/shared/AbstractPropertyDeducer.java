@@ -154,11 +154,11 @@ public abstract class AbstractPropertyDeducer {
 
                           // Add
                           constructors.add(
-                              new Constructor(function, properties, superClassProperties));
+                              new Constructor(null, function, properties, superClassProperties));
                         });
               } else {
                 // Add
-                constructors.add(new Constructor(function, properties));
+                constructors.add(new Constructor(null, function, properties));
               }
             });
 

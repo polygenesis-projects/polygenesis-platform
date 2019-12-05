@@ -27,6 +27,7 @@ import io.polygenesis.core.AbstractMetamodelRepository;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * The type Projection metamodel repository.
@@ -55,7 +56,16 @@ public class ProjectionMetamodelRepository extends AbstractMetamodelRepository<P
 
   @Override
   public BaseDomainEntity findEntityByThingName(ThingName thingName) {
-    throw new UnsupportedOperationException();
+    Set<BaseDomainEntity> entities = new LinkedHashSet<>();
+
+    entities.addAll(
+        getItems().stream().map(BaseDomainEntity.class::cast).collect(Collectors.toSet()));
+
+    return entities
+        .stream()
+        .filter(entity -> entity.getObjectName().equals(new ObjectName(thingName.getText())))
+        .findFirst()
+        .orElseThrow();
   }
 
   public Set<Projection> findByThings(Set<Thing> things) {

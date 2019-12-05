@@ -21,12 +21,15 @@
 package io.polygenesis.generators.java.domain.aggregateentity.activity.statemutation;
 
 import io.polygenesis.abstraction.thing.AbstractActivityRegistry;
+import io.polygenesis.abstraction.thing.AbstractActivityTemplateGenerator;
 import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.ScopePurposeTuple;
 import io.polygenesis.core.AbstractionScope;
 import io.polygenesis.core.FreemarkerTemplateEngine;
 import io.polygenesis.core.TemplateEngine;
 import io.polygenesis.models.domain.StateMutationMethod;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The type Aggregate entity state mutation activity registry.
@@ -40,6 +43,9 @@ public class AggregateEntityStateMutationActivityRegistry
   // STATIC
   // ===============================================================================================
 
+  private static Map<ScopePurposeTuple, AbstractActivityTemplateGenerator<?>> scopeAndPurposeMap =
+      new HashMap<>();
+
   static {
     TemplateEngine templateEngine = new FreemarkerTemplateEngine();
 
@@ -51,5 +57,14 @@ public class AggregateEntityStateMutationActivityRegistry
     scopeAndPurposeMap.put(
         new ScopePurposeTuple(AbstractionScope.domainAggregateEntity(), Purpose.modify()),
         new EntityModifyActivityGenerator(new EntityModifyActivityTransformer(), templateEngine));
+  }
+
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
+  /** Instantiates a new Aggregate entity state mutation activity registry. */
+  public AggregateEntityStateMutationActivityRegistry() {
+    super(scopeAndPurposeMap);
   }
 }

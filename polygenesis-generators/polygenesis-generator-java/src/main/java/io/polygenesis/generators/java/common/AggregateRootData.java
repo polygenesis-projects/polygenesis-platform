@@ -18,7 +18,7 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.generators.java.apidetail.service.activity.common;
+package io.polygenesis.generators.java.common;
 
 /**
  * The type Aggregate root data.

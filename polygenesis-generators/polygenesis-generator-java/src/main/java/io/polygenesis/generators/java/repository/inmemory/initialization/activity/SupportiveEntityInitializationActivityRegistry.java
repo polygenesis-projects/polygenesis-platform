@@ -21,12 +21,15 @@
 package io.polygenesis.generators.java.repository.inmemory.initialization.activity;
 
 import io.polygenesis.abstraction.thing.AbstractActivityRegistry;
+import io.polygenesis.abstraction.thing.AbstractActivityTemplateGenerator;
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.ScopePurposeTuple;
 import io.polygenesis.core.AbstractionScope;
 import io.polygenesis.core.FreemarkerTemplateEngine;
 import io.polygenesis.core.TemplateEngine;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The type Supportive entity initialization activity registry.
@@ -40,6 +43,9 @@ public class SupportiveEntityInitializationActivityRegistry
   // STATIC
   // ===============================================================================================
 
+  private static Map<ScopePurposeTuple, AbstractActivityTemplateGenerator<?>> scopeAndPurposeMap =
+      new HashMap<>();
+
   static {
     TemplateEngine templateEngine = new FreemarkerTemplateEngine();
 
@@ -48,5 +54,14 @@ public class SupportiveEntityInitializationActivityRegistry
             AbstractionScope.domainDetailRepositoryInMemory(), Purpose.afterPropertiesSet()),
         new AfterPropertiesSetActivityGenerator(
             new AfterPropertiesSetActivityTransformer(), templateEngine));
+  }
+
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
+  /** Instantiates a new Supportive entity initialization activity registry. */
+  public SupportiveEntityInitializationActivityRegistry() {
+    super(scopeAndPurposeMap);
   }
 }

@@ -31,7 +31,7 @@ import io.polygenesis.models.api.Dto;
 import io.polygenesis.models.api.Service;
 import io.polygenesis.models.api.ServiceMetamodelRepository;
 import io.polygenesis.models.apiimpl.DomainEntityConverterMethod;
-import io.polygenesis.models.domain.AggregateRoot;
+import io.polygenesis.models.domain.BaseDomainObject;
 import io.polygenesis.models.domain.DomainMetamodelRepository;
 import io.polygenesis.models.domain.ValueObject;
 import java.util.LinkedHashSet;
@@ -50,21 +50,21 @@ public class ValueObjectDtoDeducer {
    *
    * @param serviceModelRepository the service model repository
    * @param domainMetamodelRepository the domain metamodel repository
-   * @param aggregateRoot the aggregate root
+   * @param domainObject the aggregate root
    * @param valueObjects the value objects
    * @return the set
    */
   public Set<DomainEntityConverterMethod> deduceMethods(
       ServiceMetamodelRepository serviceModelRepository,
       DomainMetamodelRepository<?> domainMetamodelRepository,
-      AggregateRoot aggregateRoot,
+      BaseDomainObject domainObject,
       Set<ValueObject> valueObjects) {
     // Prepare DomainEntityConverterMethods
     Set<DomainEntityConverterMethod> methods = new LinkedHashSet<>();
 
     // Find ValueObject-Dto Pairs
     Set<ValueObjectDtoPair> valueObjectDtoPairs =
-        findValueObjectDtoPairs(serviceModelRepository, aggregateRoot, valueObjects);
+        findValueObjectDtoPairs(serviceModelRepository, domainObject, valueObjects);
 
     // Make and add conversion methods
     valueObjectDtoPairs.forEach(
@@ -75,7 +75,7 @@ public class ValueObjectDtoDeducer {
 
     methods.addAll(
         collectionRecordDeducer.deduceMethods(
-            serviceModelRepository, domainMetamodelRepository, aggregateRoot));
+            serviceModelRepository, domainMetamodelRepository, domainObject));
 
     return methods;
   }
@@ -86,13 +86,12 @@ public class ValueObjectDtoDeducer {
 
   private Set<ValueObjectDtoPair> findValueObjectDtoPairs(
       ServiceMetamodelRepository serviceModelRepository,
-      AggregateRoot aggregateRoot,
+      BaseDomainObject domainObject,
       Set<ValueObject> valueObjects) {
     Set<ValueObjectDtoPair> valueObjectDtoPairs = new LinkedHashSet<>();
 
     Set<Service> services =
-        serviceModelRepository.getServicesBy(
-            new ThingName(aggregateRoot.getObjectName().getText()));
+        serviceModelRepository.getServicesBy(new ThingName(domainObject.getObjectName().getText()));
 
     valueObjects.forEach(
         valueObject -> {

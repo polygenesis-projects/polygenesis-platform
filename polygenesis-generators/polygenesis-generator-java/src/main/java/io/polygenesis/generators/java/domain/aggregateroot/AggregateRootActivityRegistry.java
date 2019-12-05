@@ -21,6 +21,7 @@
 package io.polygenesis.generators.java.domain.aggregateroot;
 
 import io.polygenesis.abstraction.thing.AbstractActivityRegistry;
+import io.polygenesis.abstraction.thing.AbstractActivityTemplateGenerator;
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.ScopePurposeTuple;
@@ -29,6 +30,8 @@ import io.polygenesis.core.FreemarkerTemplateEngine;
 import io.polygenesis.core.TemplateEngine;
 import io.polygenesis.generators.java.domain.aggregateroot.activity.statemutation.ConstructorActivityGenerator;
 import io.polygenesis.generators.java.domain.aggregateroot.activity.statemutation.ConstructorActivityTransformer;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The type Aggregate root activity registry.
@@ -40,6 +43,9 @@ public class AggregateRootActivityRegistry extends AbstractActivityRegistry<Func
   // ===============================================================================================
   // STATIC
   // ===============================================================================================
+
+  private static Map<ScopePurposeTuple, AbstractActivityTemplateGenerator<?>> scopeAndPurposeMap =
+      new HashMap<>();
 
   static {
     TemplateEngine templateEngine = new FreemarkerTemplateEngine();
@@ -53,5 +59,14 @@ public class AggregateRootActivityRegistry extends AbstractActivityRegistry<Func
     scopeAndPurposeMap.put(
         new ScopePurposeTuple(AbstractionScope.domainAggregateRoot(), Purpose.create()),
         new ConstructorActivityGenerator(new ConstructorActivityTransformer(), templateEngine));
+  }
+
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
+  /** Instantiates a new Aggregate root activity registry. */
+  public AggregateRootActivityRegistry() {
+    super(scopeAndPurposeMap);
   }
 }

@@ -23,7 +23,6 @@ package io.polygenesis.generators.java.batchprocesssubscriber.dispatcher.activit
 import io.polygenesis.abstraction.thing.ActivityTemplateTransformer;
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.core.TemplateData;
-import io.polygenesis.generators.java.apidetail.service.activity.AbstractServiceMethodImplementationTransformer;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,7 +32,6 @@ import java.util.Map;
  * @author Christos Tsakostas
  */
 public class BatchProcessExtractMessageTypeActivityTransformer
-    extends AbstractServiceMethodImplementationTransformer
     implements ActivityTemplateTransformer<Function> {
 
   // ===============================================================================================

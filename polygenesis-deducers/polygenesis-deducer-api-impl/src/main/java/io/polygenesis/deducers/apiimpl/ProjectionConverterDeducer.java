@@ -125,12 +125,12 @@ public class ProjectionConverterDeducer {
     // ValueObjectDto
     methods.addAll(
         valueObjectDtoDeducer.deduceMethods(
-            serviceModelRepository, domainMetamodelRepository, null, new LinkedHashSet<>()));
+            serviceModelRepository, domainMetamodelRepository, projection, new LinkedHashSet<>()));
 
     // CollectionRecords conversion methods
     methods.addAll(
         collectionRecordDeducer.deduceMethods(
-            serviceModelRepository, domainMetamodelRepository, null));
+            serviceModelRepository, domainMetamodelRepository, projection));
 
     if (methods.isEmpty()) {
       return Optional.empty();

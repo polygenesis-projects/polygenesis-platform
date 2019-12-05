@@ -20,8 +20,8 @@
 
 package io.polygenesis.generators.java.apidetail.service.activity;
 
+import io.polygenesis.abstraction.thing.AbstractActivityRegistry;
 import io.polygenesis.abstraction.thing.AbstractActivityTemplateGenerator;
-import io.polygenesis.abstraction.thing.ActivityRegistry;
 import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.ScopePurposeTuple;
 import io.polygenesis.core.AbstractionScope;
@@ -45,10 +45,10 @@ import io.polygenesis.generators.java.apidetail.service.activity.root.FetchPaged
 import io.polygenesis.generators.java.apidetail.service.activity.root.FetchPagedCollectionAggregateRootTransformer;
 import io.polygenesis.generators.java.apidetail.service.activity.root.UpdateAggregateRootGenerator;
 import io.polygenesis.generators.java.apidetail.service.activity.root.UpdateAggregateRootTransformer;
+import io.polygenesis.generators.java.common.ParentCallingChildDataService;
 import io.polygenesis.models.apiimpl.ServiceMethodImplementation;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * The type Service method activity registry.
@@ -56,7 +56,7 @@ import java.util.Optional;
  * @author Christos Tsakostas
  */
 public class ServiceMethodActivityRegistry
-    implements ActivityRegistry<ServiceMethodImplementation> {
+    extends AbstractActivityRegistry<ServiceMethodImplementation> {
 
   // ===============================================================================================
   // STATIC
@@ -66,113 +66,91 @@ public class ServiceMethodActivityRegistry
       new HashMap<>();
 
   static {
-    TemplateEngine templateEngine = new FreemarkerTemplateEngine();
+    final TemplateEngine templateEngine = new FreemarkerTemplateEngine();
+    final ParentCallingChildDataService parentCallingChildDataService =
+        new ParentCallingChildDataService();
 
     // AGGREGATE ROOT
     scopeAndPurposeMap.put(
         new ScopePurposeTuple(AbstractionScope.domainAggregateRoot(), Purpose.ensureExistence()),
         new EnsureExistenceOfAggregateRootGenerator(
-            new EnsureExistenceOfAggregateRootTransformer(), templateEngine));
+            new EnsureExistenceOfAggregateRootTransformer(parentCallingChildDataService),
+            templateEngine));
 
     scopeAndPurposeMap.put(
         new ScopePurposeTuple(AbstractionScope.domainAggregateRoot(), Purpose.create()),
-        new CreateAggregateRootGenerator(new CreateAggregateRootTransformer(), templateEngine));
+        new CreateAggregateRootGenerator(
+            new CreateAggregateRootTransformer(parentCallingChildDataService), templateEngine));
 
     scopeAndPurposeMap.put(
         new ScopePurposeTuple(AbstractionScope.domainAggregateRoot(), Purpose.modify()),
-        new UpdateAggregateRootGenerator(new UpdateAggregateRootTransformer(), templateEngine));
+        new UpdateAggregateRootGenerator(
+            new UpdateAggregateRootTransformer(parentCallingChildDataService), templateEngine));
 
     scopeAndPurposeMap.put(
         new ScopePurposeTuple(AbstractionScope.domainAggregateRoot(), Purpose.fetchOne()),
-        new FetchOneAggregateRootGenerator(new FetchOneAggregateRootTransformer(), templateEngine));
+        new FetchOneAggregateRootGenerator(
+            new FetchOneAggregateRootTransformer(parentCallingChildDataService), templateEngine));
 
     scopeAndPurposeMap.put(
         new ScopePurposeTuple(
             AbstractionScope.domainAggregateRoot(), Purpose.fetchPagedCollection()),
         new FetchPagedCollectionAggregateRootGenerator(
-            new FetchPagedCollectionAggregateRootTransformer(), templateEngine));
+            new FetchPagedCollectionAggregateRootTransformer(parentCallingChildDataService),
+            templateEngine));
 
     // AGGREGATE ENTITY
     scopeAndPurposeMap.put(
         new ScopePurposeTuple(AbstractionScope.domainAggregateEntity(), Purpose.create()),
-        new CreateAggregateEntityGenerator(new CreateAggregateEntityTransformer(), templateEngine));
+        new CreateAggregateEntityGenerator(
+            new CreateAggregateEntityTransformer(parentCallingChildDataService), templateEngine));
 
     scopeAndPurposeMap.put(
         new ScopePurposeTuple(AbstractionScope.domainAggregateEntity(), Purpose.modify()),
-        new UpdateAggregateEntityGenerator(new UpdateAggregateEntityTransformer(), templateEngine));
+        new UpdateAggregateEntityGenerator(
+            new UpdateAggregateEntityTransformer(parentCallingChildDataService), templateEngine));
 
     scopeAndPurposeMap.put(
         new ScopePurposeTuple(AbstractionScope.domainAggregateEntity(), Purpose.fetchOne()),
         new FetchOneAggregateEntityGenerator(
-            new FetchOneAggregateEntityTransformer(), templateEngine));
+            new FetchOneAggregateEntityTransformer(parentCallingChildDataService), templateEngine));
 
     scopeAndPurposeMap.put(
         new ScopePurposeTuple(
             AbstractionScope.domainAggregateEntity(), Purpose.fetchPagedCollection()),
         new FetchPagedCollectionAggregateEntityGenerator(
-            new FetchPagedCollectionAggregateEntityTransformer(), templateEngine));
+            new FetchPagedCollectionAggregateEntityTransformer(parentCallingChildDataService),
+            templateEngine));
 
     // PROJECTION
     scopeAndPurposeMap.put(
         new ScopePurposeTuple(AbstractionScope.projection(), Purpose.create()),
-        new CreateAggregateRootGenerator(new CreateAggregateRootTransformer(), templateEngine));
+        new CreateAggregateRootGenerator(
+            new CreateAggregateRootTransformer(parentCallingChildDataService), templateEngine));
 
     scopeAndPurposeMap.put(
         new ScopePurposeTuple(AbstractionScope.projection(), Purpose.modify()),
-        new UpdateAggregateRootGenerator(new UpdateAggregateRootTransformer(), templateEngine));
+        new UpdateAggregateRootGenerator(
+            new UpdateAggregateRootTransformer(parentCallingChildDataService), templateEngine));
 
     scopeAndPurposeMap.put(
         new ScopePurposeTuple(AbstractionScope.projection(), Purpose.fetchOne()),
-        new FetchOneAggregateRootGenerator(new FetchOneAggregateRootTransformer(), templateEngine));
+        new FetchOneAggregateRootGenerator(
+            new FetchOneAggregateRootTransformer(parentCallingChildDataService), templateEngine));
 
     scopeAndPurposeMap.put(
         new ScopePurposeTuple(AbstractionScope.projection(), Purpose.fetchPagedCollection()),
         new FetchPagedCollectionAggregateRootGenerator(
-            new FetchPagedCollectionAggregateRootTransformer(), templateEngine));
+            new FetchPagedCollectionAggregateRootTransformer(parentCallingChildDataService),
+            templateEngine));
   }
 
   // ===============================================================================================
-  // OVERRIDES
+  // CONSTRUCTOR(S)
   // ===============================================================================================
 
-  @SuppressWarnings({"rawtypes", "unchecked"})
-  @Override
-  public String activityFor(ServiceMethodImplementation source, Object... args) {
-    return activityGenerator(
-            getAbstractionScopeAsOptional(source).orElseThrow(IllegalArgumentException::new),
-            source)
-        .generate(source, args);
-  }
-
-  @Override
-  public Boolean isActivitySupportedFor(ServiceMethodImplementation source) {
-    return getAbstractionScopeAsOptional(source).isPresent();
-  }
-
-  // ===============================================================================================
-  // PRIVATE
-  // ===============================================================================================
-
-  private Optional<AbstractionScope> getAbstractionScopeAsOptional(
-      ServiceMethodImplementation serviceMethodImplementation) {
-    return serviceMethodImplementation
-        .getFunction()
-        .getThing()
-        .getAbstractionsScopes()
-        .stream()
-        .filter(
-            abstractionScope ->
-                scopeAndPurposeMap.containsKey(
-                    new ScopePurposeTuple(
-                        abstractionScope, serviceMethodImplementation.getFunction().getPurpose())))
-        .findFirst();
-  }
-
-  @SuppressWarnings({"rawtypes", "unchecked"})
-  private AbstractActivityTemplateGenerator activityGenerator(
-      AbstractionScope abstractionScope, ServiceMethodImplementation serviceMethodImplementation) {
-    return scopeAndPurposeMap.get(
-        new ScopePurposeTuple(
-            abstractionScope, serviceMethodImplementation.getFunction().getPurpose()));
+  /** Instantiates a new Service method activity registry. */
+  public ServiceMethodActivityRegistry() {
+    super(scopeAndPurposeMap);
   }
 }

@@ -21,12 +21,15 @@
 package io.polygenesis.generators.java.domainmessagesubscriber.incomingdomainmessage.activity;
 
 import io.polygenesis.abstraction.thing.AbstractActivityRegistry;
+import io.polygenesis.abstraction.thing.AbstractActivityTemplateGenerator;
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.ScopePurposeTuple;
 import io.polygenesis.core.AbstractionScope;
 import io.polygenesis.core.FreemarkerTemplateEngine;
 import io.polygenesis.core.TemplateEngine;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The type Incoming domain message activity registry.
@@ -38,6 +41,9 @@ public class IncomingDomainMessageActivityRegistry extends AbstractActivityRegis
   // ===============================================================================================
   // STATIC
   // ===============================================================================================
+
+  private static Map<ScopePurposeTuple, AbstractActivityTemplateGenerator<?>> scopeAndPurposeMap =
+      new HashMap<>();
 
   static {
     TemplateEngine templateEngine = new FreemarkerTemplateEngine();
@@ -57,5 +63,14 @@ public class IncomingDomainMessageActivityRegistry extends AbstractActivityRegis
             AbstractionScope.apiClientMessaging(), Purpose.incomingDomainMessageGetMessageBody()),
         new GetMessageBodyActivityGenerator(
             new GetMessageBodyActivityTransformer(), templateEngine));
+  }
+
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
+  /** Instantiates a new Incoming domain message activity registry. */
+  public IncomingDomainMessageActivityRegistry() {
+    super(scopeAndPurposeMap);
   }
 }

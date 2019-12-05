@@ -23,7 +23,6 @@ package io.polygenesis.generators.java.batchprocess.query.activity;
 import io.polygenesis.abstraction.thing.ActivityTemplateTransformer;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.TemplateData;
-import io.polygenesis.generators.java.apidetail.service.activity.AbstractServiceMethodImplementationTransformer;
 import io.polygenesis.models.api.ServiceMethod;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,8 +32,7 @@ import java.util.Map;
  *
  * @author Christos Tsakostas
  */
-public class ProcessQueryActivityTransformer extends AbstractServiceMethodImplementationTransformer
-    implements ActivityTemplateTransformer<ServiceMethod> {
+public class ProcessQueryActivityTransformer implements ActivityTemplateTransformer<ServiceMethod> {
 
   // ===============================================================================================
   // OVERRIDES

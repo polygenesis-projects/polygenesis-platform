@@ -412,7 +412,7 @@ public class TableDeducer {
       DomainObjectProperty<?> property) {
     Set<Column> columns = new LinkedHashSet<>();
 
-    addAggregateRootIdInColumnSetAsPrimaryKey(columns, baseDomainObjectParent);
+    addAggregateRootIdInColumnSetAsPrimaryKeyForAggregateEntity(columns, baseDomainObjectParent);
     addAggregateEntityIdInColumnSet(columns);
 
     columns.addAll(getColumnsByProperties(baseDomainObjectChild.getProperties()));
@@ -430,43 +430,32 @@ public class TableDeducer {
         baseDomainObjectChild.getMultiTenant());
   }
 
-  /**
-   * Add aggregate root id in column set as primary key.
-   *
-   * @param columns the columns
-   * @param baseDomainObject the aggregate root
-   */
   private void addAggregateRootIdInColumnSetAsPrimaryKey(
       Set<Column> columns, BaseDomainObject baseDomainObject) {
-    addAggregateRootIdInColumnSet(columns, baseDomainObject, true);
+    addAggregateRootIdInColumnSet(columns, baseDomainObject, true, true);
   }
 
-  /**
-   * Add aggregate root id in column set without primary key.
-   *
-   * @param columns the columns
-   * @param baseDomainObject the aggregate root
-   */
+  private void addAggregateRootIdInColumnSetAsPrimaryKeyForAggregateEntity(
+      Set<Column> columns, BaseDomainObject baseDomainObject) {
+    addAggregateRootIdInColumnSet(columns, baseDomainObject, true, false);
+  }
+
   private void addAggregateRootIdInColumnSetWithoutPrimaryKey(
       Set<Column> columns, BaseDomainObject baseDomainObject) {
-    addAggregateRootIdInColumnSet(columns, baseDomainObject, false);
+    addAggregateRootIdInColumnSet(columns, baseDomainObject, false, false);
   }
 
-  /**
-   * Add aggregate root id in column set.
-   *
-   * @param columns the columns
-   * @param baseDomainObject the aggregate root
-   * @param addAsPrimaryKey the add as primary key
-   */
   private void addAggregateRootIdInColumnSet(
-      Set<Column> columns, BaseDomainObject baseDomainObject, boolean addAsPrimaryKey) {
+      Set<Column> columns,
+      BaseDomainObject baseDomainObject,
+      boolean addAsPrimaryKey,
+      boolean addTenantId) {
     // Add Object Id
     columns.add(
         new Column(
             "root_id", ColumnDataType.BINARY, 16, 0, RequiredType.REQUIRED, addAsPrimaryKey));
 
-    if (baseDomainObject.getMultiTenant()) {
+    if (baseDomainObject.getMultiTenant() && addTenantId) {
       // Add Tenant Id
       columns.add(
           new Column(

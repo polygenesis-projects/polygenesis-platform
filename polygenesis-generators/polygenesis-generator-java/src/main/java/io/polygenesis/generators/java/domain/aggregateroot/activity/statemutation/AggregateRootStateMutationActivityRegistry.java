@@ -21,12 +21,16 @@
 package io.polygenesis.generators.java.domain.aggregateroot.activity.statemutation;
 
 import io.polygenesis.abstraction.thing.AbstractActivityRegistry;
+import io.polygenesis.abstraction.thing.AbstractActivityTemplateGenerator;
 import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.ScopePurposeTuple;
 import io.polygenesis.core.AbstractionScope;
 import io.polygenesis.core.FreemarkerTemplateEngine;
 import io.polygenesis.core.TemplateEngine;
+import io.polygenesis.generators.java.common.AggregateEntityDataService;
 import io.polygenesis.models.domain.StateMutationMethod;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The type Aggregate root state mutation activity registry.
@@ -40,8 +44,12 @@ public class AggregateRootStateMutationActivityRegistry
   // STATIC
   // ===============================================================================================
 
+  private static Map<ScopePurposeTuple, AbstractActivityTemplateGenerator<?>> scopeAndPurposeMap =
+      new HashMap<>();
+
   static {
-    TemplateEngine templateEngine = new FreemarkerTemplateEngine();
+    final TemplateEngine templateEngine = new FreemarkerTemplateEngine();
+    final AggregateEntityDataService aggregateEntityDataService = new AggregateEntityDataService();
 
     // ABSTRACT AGGREGATE ROOT
     scopeAndPurposeMap.put(
@@ -62,16 +70,28 @@ public class AggregateRootStateMutationActivityRegistry
     scopeAndPurposeMap.put(
         new ScopePurposeTuple(
             AbstractionScope.domainAggregateRoot(), Purpose.aggregateRootCreateEntity()),
-        new EntityAddActivityGenerator(new EntityAddActivityTransformer(), templateEngine));
+        new EntityAddActivityGenerator(
+            new EntityAddActivityTransformer(aggregateEntityDataService), templateEngine));
 
     scopeAndPurposeMap.put(
         new ScopePurposeTuple(
             AbstractionScope.domainAggregateRoot(), Purpose.aggregateRootUpdateEntity()),
-        new EntityModifyActivityGenerator(new EntityModifyActivityTransformer(), templateEngine));
+        new EntityModifyActivityGenerator(
+            new EntityModifyActivityTransformer(aggregateEntityDataService), templateEngine));
 
     scopeAndPurposeMap.put(
         new ScopePurposeTuple(
             AbstractionScope.domainAggregateRoot(), Purpose.aggregateRootDeleteEntity()),
-        new EntityRemoveActivityGenerator(new EntityRemoveActivityTransformer(), templateEngine));
+        new EntityRemoveActivityGenerator(
+            new EntityRemoveActivityTransformer(aggregateEntityDataService), templateEngine));
+  }
+
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
+  /** Instantiates a new Aggregate root state mutation activity registry. */
+  public AggregateRootStateMutationActivityRegistry() {
+    super(scopeAndPurposeMap);
   }
 }

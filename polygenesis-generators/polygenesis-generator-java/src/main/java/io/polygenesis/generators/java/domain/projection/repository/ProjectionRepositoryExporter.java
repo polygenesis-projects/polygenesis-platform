@@ -18,47 +18,46 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.generators.java.domain.projection.exporter;
+package io.polygenesis.generators.java.domain.projection.repository;
 
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.generators.java.domain.projection.transformer.ProjectionIdLegacyClassTransformer;
-import io.polygenesis.models.domain.InstantiationType;
-import io.polygenesis.models.domain.Projection;
+import io.polygenesis.models.domain.Persistence;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * The type Aggregate root exporter.
+ * The type Projection repository exporter.
  *
  * @author Christos Tsakostas
  */
-public class ProjectionIdExporter {
+public class ProjectionRepositoryExporter {
 
   // ===============================================================================================
   // DEPENDENCIES
   // ===============================================================================================
 
   private final FreemarkerService freemarkerService;
-  private final ProjectionIdLegacyClassTransformer projectionIdClassRepresentable;
+  private final ProjectionRepositoryLegacyInterfaceTransformer
+      projectionRepositoryInterfaceRepresentable;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
-   * Instantiates a new Aggregate root projection exporter.
+   * Instantiates a new Persistence exporter.
    *
    * @param freemarkerService the freemarker service
-   * @param projectionIdClassRepresentable the aggregate root ID projection converter
+   * @param projectionRepositoryInterfaceRepresentable the persistence projection converter
    */
-  public ProjectionIdExporter(
+  public ProjectionRepositoryExporter(
       FreemarkerService freemarkerService,
-      ProjectionIdLegacyClassTransformer projectionIdClassRepresentable) {
+      ProjectionRepositoryLegacyInterfaceTransformer projectionRepositoryInterfaceRepresentable) {
     this.freemarkerService = freemarkerService;
-    this.projectionIdClassRepresentable = projectionIdClassRepresentable;
+    this.projectionRepositoryInterfaceRepresentable = projectionRepositoryInterfaceRepresentable;
   }
 
   // ===============================================================================================
@@ -69,28 +68,24 @@ public class ProjectionIdExporter {
    * Export.
    *
    * @param generationPath the generation path
-   * @param projection the projection
+   * @param persistence the persistence
    */
-  public void export(Path generationPath, Projection projection) {
+  public void export(Path generationPath, Persistence persistence) {
     Map<String, Object> dataModel = new HashMap<>();
-    if (projection.getInstantiationType().equals(InstantiationType.ABSTRACT)) {
-      return;
-    }
-
-    dataModel.put("representation", projectionIdClassRepresentable.create(projection));
+    dataModel.put("representation", projectionRepositoryInterfaceRepresentable.create(persistence));
 
     freemarkerService.export(
         dataModel,
-        "polygenesis-representation-java/Class.java.ftl",
-        makeFileName(generationPath, projection));
+        "polygenesis-representation-java/Interface.java.ftl",
+        makeFileName(generationPath, persistence));
   }
 
-  private Path makeFileName(Path generationPath, Projection projection) {
+  private Path makeFileName(Path generationPath, Persistence persistence) {
 
     return Paths.get(
         generationPath.toString(),
         "src/main/java",
-        projection.getPackageName().toPath().toString(),
-        TextConverter.toUpperCamel(projection.getObjectName().getText()) + "Id.java");
+        persistence.getPackageName().toPath().toString(),
+        TextConverter.toUpperCamel(persistence.getObjectName().getText()) + ".java");
   }
 }

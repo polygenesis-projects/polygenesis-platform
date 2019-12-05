@@ -28,8 +28,9 @@ import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.commons.valueobjects.VariableName;
-import io.polygenesis.generators.java.apidetail.service.activity.common.AggregateEntityData;
-import io.polygenesis.generators.java.apidetail.service.activity.common.AggregateRootData;
+import io.polygenesis.generators.java.common.AggregateEntityData;
+import io.polygenesis.generators.java.common.AggregateRootData;
+import io.polygenesis.generators.java.common.ParentCallingChildData;
 import io.polygenesis.models.api.Dto;
 import io.polygenesis.models.api.DtoType;
 import io.polygenesis.models.domain.DomainObjectProperty;
@@ -46,6 +47,7 @@ public abstract class AbstractAggregateEntityTemplateData {
 
   private AggregateRootData aggregateRootData;
   private AggregateEntityData aggregateEntityData;
+  private ParentCallingChildData parentCallingChildData;
 
   private String aggregateRootIdDataType;
   private Data parentThingIdentity;
@@ -72,6 +74,7 @@ public abstract class AbstractAggregateEntityTemplateData {
   public AbstractAggregateEntityTemplateData() {
     aggregateRootData = null;
     aggregateEntityData = null;
+    parentCallingChildData = null;
     aggregateRootIdDataType = "aggregateRootIdDataType";
     parentThingIdentity = DataPrimitive.of(PrimitiveType.STRING, new VariableName("thingIdentity"));
 
@@ -96,6 +99,7 @@ public abstract class AbstractAggregateEntityTemplateData {
    *
    * @param aggregateRootData the aggregate root data
    * @param aggregateEntityData the aggregate entity data
+   * @param parentCallingChildData the parent calling child data
    * @param aggregateRootIdDataType the aggregate root id data type
    * @param parentThingIdentity the parent thing identity
    * @param parameterRepresentations the parameter representations
@@ -112,6 +116,7 @@ public abstract class AbstractAggregateEntityTemplateData {
   public AbstractAggregateEntityTemplateData(
       AggregateRootData aggregateRootData,
       AggregateEntityData aggregateEntityData,
+      ParentCallingChildData parentCallingChildData,
       String aggregateRootIdDataType,
       Data parentThingIdentity,
       Set<ParameterRepresentation> parameterRepresentations,
@@ -126,6 +131,7 @@ public abstract class AbstractAggregateEntityTemplateData {
       String returnValue) {
     this.aggregateRootData = aggregateRootData;
     this.aggregateEntityData = aggregateEntityData;
+    this.parentCallingChildData = parentCallingChildData;
     this.aggregateRootIdDataType = aggregateRootIdDataType;
     this.parentThingIdentity = parentThingIdentity;
     this.parameterRepresentations = parameterRepresentations;
@@ -160,6 +166,15 @@ public abstract class AbstractAggregateEntityTemplateData {
    */
   public AggregateRootData getAggregateRootData() {
     return aggregateRootData;
+  }
+
+  /**
+   * Gets parent calling child data.
+   *
+   * @return the parent calling child data
+   */
+  public ParentCallingChildData getParentCallingChildData() {
+    return parentCallingChildData;
   }
 
   /**

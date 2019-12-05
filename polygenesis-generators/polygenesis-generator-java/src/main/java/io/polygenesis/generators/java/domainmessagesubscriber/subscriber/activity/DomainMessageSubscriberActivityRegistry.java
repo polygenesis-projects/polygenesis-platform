@@ -20,8 +20,8 @@
 
 package io.polygenesis.generators.java.domainmessagesubscriber.subscriber.activity;
 
+import io.polygenesis.abstraction.thing.AbstractActivityRegistry;
 import io.polygenesis.abstraction.thing.AbstractActivityTemplateGenerator;
-import io.polygenesis.abstraction.thing.ActivityRegistry;
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.ScopePurposeTuple;
@@ -30,14 +30,13 @@ import io.polygenesis.core.FreemarkerTemplateEngine;
 import io.polygenesis.core.TemplateEngine;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * The type Domain message subscriber activity registry.
  *
  * @author Christos Tsakostas
  */
-public class DomainMessageSubscriberActivityRegistry implements ActivityRegistry<Function> {
+public class DomainMessageSubscriberActivityRegistry extends AbstractActivityRegistry<Function> {
 
   // ===============================================================================================
   // STATIC
@@ -62,44 +61,11 @@ public class DomainMessageSubscriberActivityRegistry implements ActivityRegistry
   }
 
   // ===============================================================================================
-  // OVERRIDES
+  // CONSTRUCTOR(S)
   // ===============================================================================================
 
-  @SuppressWarnings({"rawtypes", "unchecked"})
-  @Override
-  public String activityFor(Function source, Object... args) {
-    return activityGenerator(
-            getAbstractionScopeAsOptional(source).orElseThrow(IllegalArgumentException::new),
-            source)
-        .generate(source, args);
-  }
-
-  @Override
-  public Boolean isActivitySupportedFor(Function source) {
-    return getAbstractionScopeAsOptional(source).isPresent();
-  }
-
-  // ===============================================================================================
-  // PRIVATE
-  // ===============================================================================================
-
-  private Optional<AbstractionScope> getAbstractionScopeAsOptional(Function function) {
-    return function
-        .getFunction()
-        .getThing()
-        .getAbstractionsScopes()
-        .stream()
-        .filter(
-            abstractionScope ->
-                scopeAndPurposeMap.containsKey(
-                    new ScopePurposeTuple(abstractionScope, function.getFunction().getPurpose())))
-        .findFirst();
-  }
-
-  @SuppressWarnings({"rawtypes", "unchecked"})
-  private AbstractActivityTemplateGenerator activityGenerator(
-      AbstractionScope abstractionScope, Function function) {
-    return scopeAndPurposeMap.get(
-        new ScopePurposeTuple(abstractionScope, function.getFunction().getPurpose()));
+  /** Instantiates a new Domain message subscriber activity registry. */
+  public DomainMessageSubscriberActivityRegistry() {
+    super(scopeAndPurposeMap);
   }
 }

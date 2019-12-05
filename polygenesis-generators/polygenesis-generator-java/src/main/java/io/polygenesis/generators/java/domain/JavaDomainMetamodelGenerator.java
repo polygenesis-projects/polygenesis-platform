@@ -42,9 +42,9 @@ import io.polygenesis.generators.java.domain.domainmessage.publisheddata.DomainM
 import io.polygenesis.generators.java.domain.domainmessage.publisheddata.DomainMessagePublishedDataGenerator;
 import io.polygenesis.generators.java.domain.domainmessage.publisheddatarepository.DomainMessagePublishedDataRepository;
 import io.polygenesis.generators.java.domain.domainmessage.publisheddatarepository.DomainMessagePublishedDataRepositoryGenerator;
-import io.polygenesis.generators.java.domain.projection.exporter.ProjectionExporter;
-import io.polygenesis.generators.java.domain.projection.exporter.ProjectionIdExporter;
-import io.polygenesis.generators.java.domain.projection.exporter.ProjectionRepositoryExporter;
+import io.polygenesis.generators.java.domain.projection.id.ProjectionIdExporter;
+import io.polygenesis.generators.java.domain.projection.projection.ProjectionExporter;
+import io.polygenesis.generators.java.domain.projection.repository.ProjectionRepositoryExporter;
 import io.polygenesis.generators.java.domain.repository.RepositoryGenerator;
 import io.polygenesis.generators.java.domain.service.DomainServiceGenerator;
 import io.polygenesis.generators.java.domain.supportiveentity.entity.SupportiveEntityGenerator;

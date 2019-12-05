@@ -225,6 +225,9 @@ public abstract class DomainObjectClassTransformer<
       imports.add("com.oregor.trinity4j.commons.assertion.Assertion");
     }
 
+    // TODO:
+    imports.add("com.oregor.trinity4j.domain.UuidGenerator");
+
     imports.addAll(importsSuperClass(source));
     imports.addAll(importsSupportiveEntity(source, args));
 

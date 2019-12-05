@@ -21,9 +21,11 @@
 package io.polygenesis.generators.java.apidetail.service.activity.entity;
 
 import io.polygenesis.abstraction.thing.ActivityTemplateTransformer;
+import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.core.MetamodelRepository;
 import io.polygenesis.core.TemplateData;
 import io.polygenesis.generators.java.apidetail.service.activity.AbstractServiceMethodImplementationTransformer;
+import io.polygenesis.generators.java.common.ParentCallingChildDataService;
 import io.polygenesis.models.apiimpl.ServiceMethodImplementation;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -39,6 +41,21 @@ public class UpdateAggregateEntityTransformer extends AbstractServiceMethodImple
     implements ActivityTemplateTransformer<ServiceMethodImplementation> {
 
   // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
+  /**
+   * Instantiates a new Update aggregate entity transformer.
+   *
+   * @param parentCallingChildDataService the parent calling child data service
+   */
+  @SuppressWarnings("CPD-START")
+  public UpdateAggregateEntityTransformer(
+      ParentCallingChildDataService parentCallingChildDataService) {
+    super(parentCallingChildDataService);
+  }
+
+  // ===============================================================================================
   // OVERRIDES
   // ===============================================================================================
 
@@ -46,12 +63,14 @@ public class UpdateAggregateEntityTransformer extends AbstractServiceMethodImple
   @Override
   public TemplateData transform(ServiceMethodImplementation source, Object... args) {
     Set<MetamodelRepository<?>> metamodelRepositories = (Set<MetamodelRepository<?>>) args[0];
+    Thing currentThing = source.getFunction().getThing();
 
     @SuppressWarnings("CPD-START")
     UpdateAggregateEntityTemplateData data =
         new UpdateAggregateEntityTemplateData(
             getAggregateRootData(source),
-            getAggregateEntityData(source, metamodelRepositories),
+            getAggregateEntityData(source),
+            parentCallingChildDataService.get(source, currentThing),
             getAggregateRootIdDataType(source),
             getThingIdentity(source),
             new LinkedHashSet<>(),

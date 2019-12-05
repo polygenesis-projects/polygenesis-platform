@@ -20,11 +20,29 @@
 
 package io.polygenesis.generators.java.domain.aggregateroot.activity.statemutation;
 
+import io.polygenesis.generators.java.common.AggregateEntityData;
+import io.polygenesis.models.domain.DomainObjectProperty;
+import java.util.Set;
+
 /**
  * The type Entity add activity template data.
  *
  * @author Christos Tsakostas
  */
-public class EntityAddActivityTemplateData {
-  // Noop
+public class EntityAddActivityTemplateData extends AbstractEntityMutationActivityTemplateData {
+
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
+  /**
+   * Instantiates a new Entity add activity template data.
+   *
+   * @param aggregateEntityData the aggregate entity data
+   * @param properties the properties
+   */
+  public EntityAddActivityTemplateData(
+      AggregateEntityData aggregateEntityData, Set<DomainObjectProperty<?>> properties) {
+    super(aggregateEntityData, properties);
+  }
 }

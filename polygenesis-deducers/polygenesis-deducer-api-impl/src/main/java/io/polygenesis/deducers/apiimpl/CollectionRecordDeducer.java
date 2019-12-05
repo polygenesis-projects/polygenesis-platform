@@ -32,8 +32,8 @@ import io.polygenesis.models.api.DtoType;
 import io.polygenesis.models.api.Service;
 import io.polygenesis.models.api.ServiceMetamodelRepository;
 import io.polygenesis.models.apiimpl.DomainEntityConverterMethod;
-import io.polygenesis.models.domain.AggregateRoot;
 import io.polygenesis.models.domain.BaseDomainEntity;
+import io.polygenesis.models.domain.BaseDomainObject;
 import io.polygenesis.models.domain.DomainMetamodelRepository;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -51,18 +51,18 @@ public class CollectionRecordDeducer {
    *
    * @param serviceModelRepository the service model repository
    * @param domainMetamodelRepository the domain metamodel repository
-   * @param aggregateRoot the aggregate root
+   * @param domainObject the aggregate root
    * @return the set
    */
   public Set<DomainEntityConverterMethod> deduceMethods(
       ServiceMetamodelRepository serviceModelRepository,
       DomainMetamodelRepository<?> domainMetamodelRepository,
-      AggregateRoot aggregateRoot) {
+      BaseDomainObject domainObject) {
     Set<DomainEntityConverterMethod> methods = new LinkedHashSet<>();
 
     Set<CollectionRecordEntityPair> collectionRecordEntityPairs =
         findCollectionRecordEntityPairs(
-            serviceModelRepository, domainMetamodelRepository, aggregateRoot);
+            serviceModelRepository, domainMetamodelRepository, domainObject);
 
     collectionRecordEntityPairs.forEach(
         pair -> methods.add(makeCollectionRecordConversionMethod(pair)));
@@ -77,12 +77,11 @@ public class CollectionRecordDeducer {
   private Set<CollectionRecordEntityPair> findCollectionRecordEntityPairs(
       ServiceMetamodelRepository serviceModelRepository,
       DomainMetamodelRepository<?> domainMetamodelRepository,
-      AggregateRoot aggregateRoot) {
+      BaseDomainObject domainObject) {
     Set<CollectionRecordEntityPair> collectionRecordEntityPairs = new LinkedHashSet<>();
 
     Set<Service> services =
-        serviceModelRepository.getServicesBy(
-            new ThingName(aggregateRoot.getObjectName().getText()));
+        serviceModelRepository.getServicesBy(new ThingName(domainObject.getObjectName().getText()));
 
     Set<Dto> dtos =
         services

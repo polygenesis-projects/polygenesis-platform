@@ -131,17 +131,10 @@ public class ParameterRepresentationsService {
     return parameterRepresentations;
   }
 
-  /**
-   * Gets method arguments for create or modify aggregate entity.
-   *
-   * @param thisClassProperties the this class properties
-   * @return the method arguments for create or modify aggregate entity
-   */
-  public Set<ParameterRepresentation> getMethodArgumentsForCreateOrModifyAggregateEntity(
+  public Set<ParameterRepresentation> getMethodArgumentsForCreateAggregateEntity(
       Set<DomainObjectProperty<?>> thisClassProperties) {
     Set<ParameterRepresentation> parameterRepresentations = new LinkedHashSet<>();
 
-    // 3. Finish with this class properties
     thisClassProperties
         .stream()
         .filter(
@@ -162,6 +155,30 @@ public class ParameterRepresentationsService {
                       property.getData().getVariableName().getText(),
                       DataPurpose.any()));
             });
+
+    return parameterRepresentations;
+  }
+
+  public Set<ParameterRepresentation> getMethodArgumentsForModifyAggregateEntity(
+      Set<DomainObjectProperty<?>> thisClassProperties) {
+    Set<ParameterRepresentation> parameterRepresentations = new LinkedHashSet<>();
+
+    // 1. Start with AggregateEntityId
+    thisClassProperties
+        .stream()
+        .filter(property -> property.getPropertyType().equals(PropertyType.AGGREGATE_ENTITY_ID))
+        .forEach(
+            property -> {
+              parameterRepresentations.add(
+                  new ParameterRepresentation(
+                      makeDataType(property),
+                      property.getData().getVariableName().getText(),
+                      DataPurpose.thingIdentity()));
+            });
+
+    // 2. Continue with the rest like in the constructor
+    parameterRepresentations.addAll(
+        getMethodArgumentsForCreateAggregateEntity(thisClassProperties));
 
     return parameterRepresentations;
   }
