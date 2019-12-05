@@ -24,6 +24,7 @@ import io.polygenesis.abstraction.thing.ActivityTemplateTransformer;
 import io.polygenesis.core.MetamodelRepository;
 import io.polygenesis.core.TemplateData;
 import io.polygenesis.generators.java.apidetail.service.activity.AbstractServiceMethodImplementationTransformer;
+import io.polygenesis.generators.java.common.ParentCallingChildDataService;
 import io.polygenesis.models.apiimpl.ServiceMethodImplementation;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,6 +37,20 @@ import java.util.Set;
  */
 public class CreateAggregateRootTransformer extends AbstractServiceMethodImplementationTransformer
     implements ActivityTemplateTransformer<ServiceMethodImplementation> {
+
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
+  /**
+   * Instantiates a new Create aggregate root transformer.
+   *
+   * @param parentCallingChildDataService the parent calling child data service
+   */
+  public CreateAggregateRootTransformer(
+      ParentCallingChildDataService parentCallingChildDataService) {
+    super(parentCallingChildDataService);
+  }
 
   // ===============================================================================================
   // OVERRIDES

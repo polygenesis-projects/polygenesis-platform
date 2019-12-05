@@ -25,8 +25,8 @@
 
 <@restoreAggregateRoot data.aggregateRootData data.aggregateRootData.aggregateRootRepositoryVariable data.aggregateRootData.aggregateRootIdDataType data.aggregateRootData.aggregateRootDataType data.aggregateRootData.aggregateRootVariable data.requestDto data.parentThingIdentity data.aggregateRootData.multiTenant></@restoreAggregateRoot>
 
-    ${ data.aggregateEntityData.dataType } ${ data.aggregateEntityData.variable } = ${ data.aggregateRootData.aggregateRootVariable }.${data.aggregateEntityData.parentMethodName}(
-<@fillArguments data.aggregateEntityData.properties data.aggregateRootData.aggregateRootRepositoryVariable data.requestDto data.multiTenant data.converterVariable!"No Converter"></@fillArguments>
+    ${ data.aggregateEntityData.dataType } ${ data.aggregateEntityData.variable } = ${ data.aggregateRootData.aggregateRootVariable }.${data.parentCallingChildData.parentMethodName}(
+<@fillArguments data.properties data.aggregateRootData.aggregateRootRepositoryVariable data.requestDto data.multiTenant data.converterVariable!"No Converter"></@fillArguments>
     );
 
 <@storeAggregateRoot data.aggregateRootData></@storeAggregateRoot>

@@ -90,6 +90,6 @@ public class DomainEventMutationDeducer {
               }
             });
 
-    return new Constructor(stateMutationMethod.getFunction(), properties);
+    return new Constructor(null, stateMutationMethod.getFunction(), properties);
   }
 }

@@ -17,9 +17,18 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-    // TODO
-    if(1 == 1) {
-      throw new UnsupportedOperationException("Add entity must be implemented by developers");
-    }
+    ${ data.aggregateEntityData.dataType } ${ data.aggregateEntityData.variable } = new ${ data.aggregateEntityData.dataType }(
+      <#list data.properties as property>
+          <#if property.propertyType == 'AGGREGATE_ENTITY_ID'>
+        new ${ data.aggregateEntityData.idDataType }(UuidGenerator.timeBasedUuid())<#sep>, </#sep>
+          <#elseif property.propertyType == 'REFERENCE_TO_AGGREGATE_ROOT'>
+        this<#sep>, </#sep>
+          <#else>
+        ${ property.data.variableName.text }<#sep>, </#sep>
+          </#if>
+      </#list>
+    );
 
-    return null;
+    get${ textConverter.toUpperCamel(data.aggregateEntityData.variablePlural) }().add(${ data.aggregateEntityData.variable });
+
+    return ${ data.aggregateEntityData.variable };

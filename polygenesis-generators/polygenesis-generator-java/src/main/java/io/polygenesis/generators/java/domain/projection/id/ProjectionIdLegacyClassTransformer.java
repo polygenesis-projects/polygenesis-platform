@@ -18,7 +18,7 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.generators.java.domain.projection.transformer;
+package io.polygenesis.generators.java.domain.projection.id;
 
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.DataTypeTransformer;

@@ -510,7 +510,12 @@ public class PurposeFunctionBuilder {
         .stream()
         .filter(this::isDataThingIdentity)
         .findFirst()
-        .orElseThrow();
+        .orElseThrow(
+            () ->
+                new IllegalStateException(
+                    String.format(
+                        "Thing with name='%s' is not uniquely identified",
+                        thing.getThingName().getText())));
   }
 
   private Data getParentThingIdentity(Thing thing) {

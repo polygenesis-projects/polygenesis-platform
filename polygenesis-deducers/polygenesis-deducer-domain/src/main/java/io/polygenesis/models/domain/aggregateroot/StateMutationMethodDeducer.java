@@ -120,6 +120,7 @@ public class StateMutationMethodDeducer extends AbstractPropertyDeducer {
             function -> {
               StateMutationMethod stateMutationMethod =
                   new StateMutationMethod(
+                      null,
                       convertToDomainFunction(function),
                       deduceDomainObjectPropertiesFromFunction(function));
 
@@ -201,7 +202,7 @@ public class StateMutationMethodDeducer extends AbstractPropertyDeducer {
         aggregateRootUpdateEntity(thing, aggregateEntityCollection.getAggregateEntity()));
 
     stateMutationMethods.add(
-        aggregateRootDeleteEntity(thing, aggregateEntityCollection.getAggregateEntity()));
+        aggregateRootRemoveEntity(thing, aggregateEntityCollection.getAggregateEntity()));
 
     return stateMutationMethods;
   }
@@ -235,7 +236,7 @@ public class StateMutationMethodDeducer extends AbstractPropertyDeducer {
             .build();
 
     return new StateMutationMethod(
-        function, stateMutationMethodAggregateEntityCreate.getProperties());
+        aggregateEntity, function, stateMutationMethodAggregateEntityCreate.getProperties());
   }
 
   /**
@@ -247,6 +248,10 @@ public class StateMutationMethodDeducer extends AbstractPropertyDeducer {
    */
   private StateMutationMethod aggregateRootUpdateEntity(
       Thing thing, AggregateEntity aggregateEntity) {
+
+    StateMutationMethod stateMutationMethodAggregateEntityModify =
+        aggregateEntity.findOneStateMutationMethodByPurpose(Purpose.modify());
+
     Function function =
         FunctionBuilder.of(
                 thing,
@@ -255,19 +260,26 @@ public class StateMutationMethodDeducer extends AbstractPropertyDeducer {
                     TextConverter.toUpperCamel(aggregateEntity.getObjectName().getText())),
                 Purpose.aggregateRootUpdateEntity())
             .setReturnValue(aggregateEntity.getData())
+            .addArguments(
+                stateMutationMethodAggregateEntityModify
+                    .getProperties()
+                    .stream()
+                    .map(property -> property.getData())
+                    .collect(toCollection(LinkedHashSet::new)))
             .build();
 
-    return new StateMutationMethod(function, deduceDomainObjectPropertiesFromFunction(function));
+    return new StateMutationMethod(
+        aggregateEntity, function, stateMutationMethodAggregateEntityModify.getProperties());
   }
 
   /**
-   * Aggregate root delete entity state mutation method.
+   * Aggregate root remove entity state mutation method.
    *
    * @param thing the thing
    * @param aggregateEntity the aggregate entity
    * @return the state mutation method
    */
-  private StateMutationMethod aggregateRootDeleteEntity(
+  private StateMutationMethod aggregateRootRemoveEntity(
       Thing thing, AggregateEntity aggregateEntity) {
     Function function =
         FunctionBuilder.of(
@@ -279,6 +291,7 @@ public class StateMutationMethodDeducer extends AbstractPropertyDeducer {
             .setReturnValue(aggregateEntity.getData())
             .build();
 
-    return new StateMutationMethod(function, deduceDomainObjectPropertiesFromFunction(function));
+    return new StateMutationMethod(
+        aggregateEntity, function, deduceDomainObjectPropertiesFromFunction(function));
   }
 }

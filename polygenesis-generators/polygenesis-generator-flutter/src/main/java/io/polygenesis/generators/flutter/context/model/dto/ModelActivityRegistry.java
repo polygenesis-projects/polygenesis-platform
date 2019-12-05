@@ -20,20 +20,18 @@
 
 package io.polygenesis.generators.flutter.context.model.dto;
 
+import io.polygenesis.abstraction.thing.AbstractActivityRegistry;
 import io.polygenesis.abstraction.thing.AbstractActivityTemplateGenerator;
-import io.polygenesis.abstraction.thing.ActivityRegistry;
 import io.polygenesis.abstraction.thing.ScopePurposeTuple;
-import io.polygenesis.core.AbstractionScope;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * The type Model activity registry.
  *
  * @author Christos Tsakostas
  */
-public class ModelActivityRegistry implements ActivityRegistry<ModelMethod> {
+public class ModelActivityRegistry extends AbstractActivityRegistry<ModelMethod> {
 
   // ===============================================================================================
   // STATIC
@@ -44,46 +42,11 @@ public class ModelActivityRegistry implements ActivityRegistry<ModelMethod> {
       new HashMap<>();
 
   // ===============================================================================================
-  // OVERRIDES
+  // CONSTRUCTOR(S)
   // ===============================================================================================
 
-  @SuppressWarnings({"unchecked"})
-  @Override
-  public String activityFor(ModelMethod source, Object... args) {
-    return activityGenerator(
-            getAbstractionScopeAsOptional(source).orElseThrow(IllegalArgumentException::new),
-            source)
-        .generate(source, args);
-  }
-
-  @Override
-  public Boolean isActivitySupportedFor(ModelMethod source) {
-    return getAbstractionScopeAsOptional(source).isPresent();
-  }
-
-  // ===============================================================================================
-  // PRIVATE
-  // ===============================================================================================
-
-  private Optional<AbstractionScope> getAbstractionScopeAsOptional(ModelMethod modelMethod) {
-    return modelMethod
-        .getFunction()
-        .getThing()
-        .getAbstractionsScopes()
-        .stream()
-        .filter(
-            abstractionScope ->
-                scopeAndPurposeMap.containsKey(
-                    new ScopePurposeTuple(
-                        abstractionScope, modelMethod.getFunction().getPurpose())))
-        .findFirst();
-  }
-
-  @SuppressWarnings({"rawtypes", "unchecked", "CPD-END"})
-  private AbstractActivityTemplateGenerator activityGenerator(
-      AbstractionScope abstractionScope, ModelMethod serviceMethodImplementation) {
-    return scopeAndPurposeMap.get(
-        new ScopePurposeTuple(
-            abstractionScope, serviceMethodImplementation.getFunction().getPurpose()));
+  /** Instantiates a new Model activity registry. */
+  public ModelActivityRegistry() {
+    super(scopeAndPurposeMap);
   }
 }

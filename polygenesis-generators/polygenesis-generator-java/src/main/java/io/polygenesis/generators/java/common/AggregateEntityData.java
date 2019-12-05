@@ -18,10 +18,7 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.generators.java.apidetail.service.activity.common;
-
-import io.polygenesis.models.domain.DomainObjectProperty;
-import java.util.Set;
+package io.polygenesis.generators.java.common;
 
 /**
  * The type Aggregate entity data.
@@ -36,12 +33,9 @@ public class AggregateEntityData {
 
   private String dataType;
   private String variable;
+  private String variablePlural;
   private String idDataType;
   private String idVariable;
-  private String repositoryVariable;
-  private String parentMethodName;
-  private Set<DomainObjectProperty<?>> properties;
-  private Boolean multiTenant;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -52,30 +46,21 @@ public class AggregateEntityData {
    *
    * @param dataType the data type
    * @param variable the variable
+   * @param variablePlural the variable plural
    * @param idDataType the id data type
    * @param idVariable the id variable
-   * @param repositoryVariable the repository variable
-   * @param parentMethodName the parent method name
-   * @param properties the properties
-   * @param multiTenant the multi tenant
    */
   public AggregateEntityData(
       String dataType,
       String variable,
+      String variablePlural,
       String idDataType,
-      String idVariable,
-      String repositoryVariable,
-      String parentMethodName,
-      Set<DomainObjectProperty<?>> properties,
-      Boolean multiTenant) {
+      String idVariable) {
     this.dataType = dataType;
     this.variable = variable;
+    this.variablePlural = variablePlural;
     this.idDataType = idDataType;
     this.idVariable = idVariable;
-    this.repositoryVariable = repositoryVariable;
-    this.parentMethodName = parentMethodName;
-    this.properties = properties;
-    this.multiTenant = multiTenant;
   }
 
   // ===============================================================================================
@@ -101,6 +86,15 @@ public class AggregateEntityData {
   }
 
   /**
+   * Gets variable plural.
+   *
+   * @return the variable plural
+   */
+  public String getVariablePlural() {
+    return variablePlural;
+  }
+
+  /**
    * Gets id data type.
    *
    * @return the id data type
@@ -116,41 +110,5 @@ public class AggregateEntityData {
    */
   public String getIdVariable() {
     return idVariable;
-  }
-
-  /**
-   * Gets repository variable.
-   *
-   * @return the repository variable
-   */
-  public String getRepositoryVariable() {
-    return repositoryVariable;
-  }
-
-  /**
-   * Gets parent method name.
-   *
-   * @return the parent method name
-   */
-  public String getParentMethodName() {
-    return parentMethodName;
-  }
-
-  /**
-   * Gets properties.
-   *
-   * @return the properties
-   */
-  public Set<DomainObjectProperty<?>> getProperties() {
-    return properties;
-  }
-
-  /**
-   * Gets multi tenant.
-   *
-   * @return the multi tenant
-   */
-  public Boolean getMultiTenant() {
-    return multiTenant;
   }
 }

@@ -108,9 +108,11 @@ public class AggregateRootStateMutationMethodTransformer
           source.getSuperClassProperties() != null
               ? source.getSuperClassProperties()
               : new LinkedHashSet<>());
-    } else if (source.getFunction().getPurpose().equals(Purpose.aggregateRootCreateEntity())
-        || source.getFunction().getPurpose().equals(Purpose.aggregateRootUpdateEntity())) {
-      return parameterRepresentationsService.getMethodArgumentsForCreateOrModifyAggregateEntity(
+    } else if (source.getFunction().getPurpose().equals(Purpose.aggregateRootCreateEntity())) {
+      return parameterRepresentationsService.getMethodArgumentsForCreateAggregateEntity(
+          source.getProperties());
+    } else if (source.getFunction().getPurpose().equals(Purpose.aggregateRootUpdateEntity())) {
+      return parameterRepresentationsService.getMethodArgumentsForModifyAggregateEntity(
           source.getProperties());
     } else {
       return super.parameterRepresentations(source, args);

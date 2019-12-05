@@ -407,12 +407,40 @@ public class Thing implements Abstraction {
     }
   }
 
+  /**
+   * Extends thing boolean.
+   *
+   * @return the boolean
+   */
   public boolean extendsThing() {
     return getMetadataValueIfExists(ThingMetadataKey.SUPER_CLASS) != null;
   }
 
+  /**
+   * Does not extend thing boolean.
+   *
+   * @return the boolean
+   */
   public boolean doesNotExtendThing() {
     return getMetadataValueIfExists(ThingMetadataKey.SUPER_CLASS) == null;
+  }
+
+  /**
+   * Gets all nested children.
+   *
+   * @return the all nested children
+   */
+  public Set<Thing> getAllNestedChildren() {
+    Set<Thing> allNestedChildren = new LinkedHashSet<>();
+
+    fillAllNestedChildren(allNestedChildren, this);
+
+    return allNestedChildren;
+  }
+
+  private void fillAllNestedChildren(Set<Thing> allNestedChildren, Thing thing) {
+    allNestedChildren.add(thing);
+    thing.getChildren().forEach(child -> fillAllNestedChildren(allNestedChildren, child));
   }
 
   // ===============================================================================================

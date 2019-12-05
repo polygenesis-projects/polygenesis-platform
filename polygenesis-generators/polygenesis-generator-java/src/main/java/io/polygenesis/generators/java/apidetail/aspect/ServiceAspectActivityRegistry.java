@@ -21,6 +21,7 @@
 package io.polygenesis.generators.java.apidetail.aspect;
 
 import io.polygenesis.abstraction.thing.AbstractActivityRegistry;
+import io.polygenesis.abstraction.thing.AbstractActivityTemplateGenerator;
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.ScopePurposeTuple;
@@ -29,6 +30,8 @@ import io.polygenesis.core.FreemarkerTemplateEngine;
 import io.polygenesis.core.TemplateEngine;
 import io.polygenesis.generators.java.apidetail.aspect.activity.AroundActivityGenerator;
 import io.polygenesis.generators.java.apidetail.aspect.activity.AroundActivityTransformer;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The type Service aspect activity registry.
@@ -41,11 +44,23 @@ public class ServiceAspectActivityRegistry extends AbstractActivityRegistry<Func
   // STATIC
   // ===============================================================================================
 
+  private static Map<ScopePurposeTuple, AbstractActivityTemplateGenerator<?>> scopeAndPurposeMap =
+      new HashMap<>();
+
   static {
     TemplateEngine templateEngine = new FreemarkerTemplateEngine();
 
     scopeAndPurposeMap.put(
         new ScopePurposeTuple(AbstractionScope.apiDetail(), Purpose.aspectAround()),
         new AroundActivityGenerator(new AroundActivityTransformer(), templateEngine));
+  }
+
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
+  /** Instantiates a new Service aspect activity registry. */
+  public ServiceAspectActivityRegistry() {
+    super(scopeAndPurposeMap);
   }
 }

@@ -20,21 +20,19 @@
 
 package io.polygenesis.generators.angular.context.ui.screen.spec;
 
+import io.polygenesis.abstraction.thing.AbstractActivityRegistry;
 import io.polygenesis.abstraction.thing.AbstractActivityTemplateGenerator;
-import io.polygenesis.abstraction.thing.ActivityRegistry;
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.abstraction.thing.ScopePurposeTuple;
-import io.polygenesis.core.AbstractionScope;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * The type Screen spec typescript activity registry.
  *
  * @author Christos Tsakostas
  */
-public class ScreenSpecTypescriptActivityRegistry implements ActivityRegistry<Function> {
+public class ScreenSpecTypescriptActivityRegistry extends AbstractActivityRegistry<Function> {
 
   // ===============================================================================================
   // STATIC
@@ -45,47 +43,11 @@ public class ScreenSpecTypescriptActivityRegistry implements ActivityRegistry<Fu
       new HashMap<>();
 
   // ===============================================================================================
-  // OVERRIDES
+  // CONSTRUCTOR(S)
   // ===============================================================================================
 
-  @SuppressWarnings({"rawtypes", "unchecked"})
-  @Override
-  public String activityFor(Function source, Object... args) {
-    return activityGenerator(
-            getAbstractionScopeAsOptional(source).orElseThrow(IllegalArgumentException::new),
-            source)
-        .generate(source, args);
-  }
-
-  @Override
-  public Boolean isActivitySupportedFor(Function source) {
-    return getAbstractionScopeAsOptional(source).isPresent();
-  }
-
-  // ===============================================================================================
-  // PRIVATE
-  // ===============================================================================================
-
-  private Optional<AbstractionScope> getAbstractionScopeAsOptional(
-      Function serviceMethodImplementation) {
-    return serviceMethodImplementation
-        .getFunction()
-        .getThing()
-        .getAbstractionsScopes()
-        .stream()
-        .filter(
-            abstractionScope ->
-                scopeAndPurposeMap.containsKey(
-                    new ScopePurposeTuple(
-                        abstractionScope, serviceMethodImplementation.getFunction().getPurpose())))
-        .findFirst();
-  }
-
-  @SuppressWarnings({"rawtypes", "unchecked", "CPD-END"})
-  private AbstractActivityTemplateGenerator activityGenerator(
-      AbstractionScope abstractionScope, Function serviceMethodImplementation) {
-    return scopeAndPurposeMap.get(
-        new ScopePurposeTuple(
-            abstractionScope, serviceMethodImplementation.getFunction().getPurpose()));
+  /** Instantiates a new Screen spec typescript activity registry. */
+  public ScreenSpecTypescriptActivityRegistry() {
+    super(scopeAndPurposeMap);
   }
 }

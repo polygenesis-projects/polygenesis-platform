@@ -21,6 +21,7 @@
 package io.polygenesis.generators.flutter.project.app;
 
 import io.polygenesis.abstraction.thing.AbstractActivityRegistry;
+import io.polygenesis.abstraction.thing.AbstractActivityTemplateGenerator;
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.ScopePurposeTuple;
@@ -30,6 +31,8 @@ import io.polygenesis.core.TemplateEngine;
 import io.polygenesis.generators.flutter.project.FlutterProjectDataExtractor;
 import io.polygenesis.generators.flutter.project.app.activity.BuildActivityGenerator;
 import io.polygenesis.generators.flutter.project.app.activity.BuildActivityTransformer;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The type Flutter app activity registry.
@@ -42,6 +45,9 @@ public class FlutterAppActivityRegistry extends AbstractActivityRegistry<Functio
   // STATIC
   // ===============================================================================================
 
+  private static Map<ScopePurposeTuple, AbstractActivityTemplateGenerator<?>> scopeAndPurposeMap =
+      new HashMap<>();
+
   static {
     TemplateEngine templateEngine = new FreemarkerTemplateEngine();
     FlutterProjectDataExtractor flutterProjectDataExtractor = new FlutterProjectDataExtractor();
@@ -50,5 +56,14 @@ public class FlutterAppActivityRegistry extends AbstractActivityRegistry<Functio
         new ScopePurposeTuple(AbstractionScope.app(), Purpose.build()),
         new BuildActivityGenerator(
             new BuildActivityTransformer(flutterProjectDataExtractor), templateEngine));
+  }
+
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
+  /** Instantiates a new Flutter app activity registry. */
+  public FlutterAppActivityRegistry() {
+    super(scopeAndPurposeMap);
   }
 }

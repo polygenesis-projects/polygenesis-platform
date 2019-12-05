@@ -81,6 +81,6 @@ public class DomainEventConstructorDeducer {
               }
             });
 
-    return new Constructor(constructor.getFunction(), properties);
+    return new Constructor(null, constructor.getFunction(), properties);
   }
 }

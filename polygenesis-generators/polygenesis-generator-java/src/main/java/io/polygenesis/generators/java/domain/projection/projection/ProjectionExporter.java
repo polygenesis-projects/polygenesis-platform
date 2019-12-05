@@ -18,12 +18,11 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.generators.java.domain.projection.exporter;
+package io.polygenesis.generators.java.domain.projection.projection;
 
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.commons.valueobjects.PackageName;
-import io.polygenesis.generators.java.domain.projection.transformer.ProjectionLegacyClassTransformer;
 import io.polygenesis.models.domain.Projection;
 import java.nio.file.Path;
 import java.nio.file.Paths;

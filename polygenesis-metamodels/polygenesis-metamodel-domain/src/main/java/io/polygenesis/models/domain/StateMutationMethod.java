@@ -37,6 +37,8 @@ public class StateMutationMethod extends BaseMethod {
   // ===============================================================================================
 
   @SuppressWarnings("CPD-START")
+  private BaseDomainObject mutatedObject;
+
   private Set<DomainObjectProperty<?>> properties;
 
   // superClassProperties is Used only for construction state mutation
@@ -52,28 +54,34 @@ public class StateMutationMethod extends BaseMethod {
   /**
    * Instantiates a new State mutation method.
    *
+   * @param mutatedObject the mutates object
    * @param function the function
    * @param properties the properties
    */
-  public StateMutationMethod(Function function, Set<DomainObjectProperty<?>> properties) {
+  public StateMutationMethod(
+      BaseDomainObject mutatedObject, Function function, Set<DomainObjectProperty<?>> properties) {
     super(function);
     setProperties(properties);
+    setMutatedObject(mutatedObject);
   }
 
   /**
    * Instantiates a new State mutation method.
    *
+   * @param mutatedObject the mutates object
    * @param function the function
    * @param properties the properties
    * @param superClassProperties the super class properties
    */
   public StateMutationMethod(
+      BaseDomainObject mutatedObject,
       Function function,
       Set<DomainObjectProperty<?>> properties,
       Set<DomainObjectProperty<?>> superClassProperties) {
     super(function);
     setProperties(properties);
     setSuperClassProperties(superClassProperties);
+    setMutatedObject(mutatedObject);
   }
 
   // ===============================================================================================
@@ -92,6 +100,15 @@ public class StateMutationMethod extends BaseMethod {
   // ===============================================================================================
   // GETTERS
   // ===============================================================================================
+
+  /**
+   * Gets mutates object.
+   *
+   * @return the mutates object
+   */
+  public BaseDomainObject getMutatedObject() {
+    return mutatedObject;
+  }
 
   /**
    * Gets properties.
@@ -123,6 +140,16 @@ public class StateMutationMethod extends BaseMethod {
   // ===============================================================================================
   // GUARDS
   // ===============================================================================================
+
+  /**
+   * Sets mutates object.
+   *
+   * @param mutatedObject the mutates object
+   */
+  private void setMutatedObject(BaseDomainObject mutatedObject) {
+    // TODO: Assertion.isNotNull(mutatesObject, "mutatesObject is required");
+    this.mutatedObject = mutatedObject;
+  }
 
   /**
    * Sets properties.
@@ -170,13 +197,15 @@ public class StateMutationMethod extends BaseMethod {
       return false;
     }
     StateMutationMethod that = (StateMutationMethod) o;
-    return Objects.equals(properties, that.properties)
+    return Objects.equals(mutatedObject, that.mutatedObject)
+        && Objects.equals(properties, that.properties)
         && Objects.equals(superClassProperties, that.superClassProperties)
         && Objects.equals(domainEvent, that.domainEvent);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(super.hashCode(), properties, superClassProperties, domainEvent);
+    return Objects.hash(
+        super.hashCode(), mutatedObject, properties, superClassProperties, domainEvent);
   }
 }

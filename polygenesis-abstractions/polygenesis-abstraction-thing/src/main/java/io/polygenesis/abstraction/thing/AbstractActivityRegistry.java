@@ -21,7 +21,6 @@
 package io.polygenesis.abstraction.thing;
 
 import io.polygenesis.core.AbstractionScope;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -35,13 +34,28 @@ public abstract class AbstractActivityRegistry<S extends FunctionProvider>
     implements ActivityRegistry<S> {
 
   // ===============================================================================================
-  // STATIC
+  // STATE
   // ===============================================================================================
 
-  /** The constant scopeAndPurposeMap. */
-  @SuppressWarnings("CPD-START")
-  protected static Map<ScopePurposeTuple, AbstractActivityTemplateGenerator<?>> scopeAndPurposeMap =
-      new HashMap<>();
+  private final Map<ScopePurposeTuple, AbstractActivityTemplateGenerator<?>> scopeAndPurposeMap;
+
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
+  /**
+   * Instantiates a new Abstract activity registry.
+   *
+   * @param scopeAndPurposeMap the scope and purpose map
+   */
+  public AbstractActivityRegistry(
+      Map<ScopePurposeTuple, AbstractActivityTemplateGenerator<?>> scopeAndPurposeMap) {
+    this.scopeAndPurposeMap = scopeAndPurposeMap;
+  }
+
+  // ===============================================================================================
+  // OVERRIDES
+  // ===============================================================================================
 
   @SuppressWarnings({"unchecked"})
   @Override

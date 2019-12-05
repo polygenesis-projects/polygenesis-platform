@@ -25,7 +25,7 @@ import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
-import io.polygenesis.generators.java.apidetail.service.activity.common.AggregateRootData;
+import io.polygenesis.generators.java.common.AggregateRootData;
 import io.polygenesis.models.api.Dto;
 import io.polygenesis.models.api.DtoType;
 import io.polygenesis.models.domain.DomainObjectProperty;

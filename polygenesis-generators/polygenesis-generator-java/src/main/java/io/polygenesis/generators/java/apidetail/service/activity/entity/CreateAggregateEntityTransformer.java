@@ -21,12 +21,16 @@
 package io.polygenesis.generators.java.apidetail.service.activity.entity;
 
 import io.polygenesis.abstraction.thing.ActivityTemplateTransformer;
+import io.polygenesis.abstraction.thing.Thing;
+import io.polygenesis.core.CoreRegistry;
 import io.polygenesis.core.MetamodelRepository;
 import io.polygenesis.core.TemplateData;
 import io.polygenesis.generators.java.apidetail.service.activity.AbstractServiceMethodImplementationTransformer;
+import io.polygenesis.generators.java.common.ParentCallingChildDataService;
 import io.polygenesis.models.apiimpl.ServiceMethodImplementation;
+import io.polygenesis.models.domain.AggregateEntity;
+import io.polygenesis.models.domain.AggregateRootMetamodelRepository;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -39,6 +43,21 @@ public class CreateAggregateEntityTransformer extends AbstractServiceMethodImple
     implements ActivityTemplateTransformer<ServiceMethodImplementation> {
 
   // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
+  /**
+   * Instantiates a new Create aggregate entity transformer.
+   *
+   * @param parentCallingChildDataService the parent calling child data service
+   */
+  @SuppressWarnings("CPD-START")
+  public CreateAggregateEntityTransformer(
+      ParentCallingChildDataService parentCallingChildDataService) {
+    super(parentCallingChildDataService);
+  }
+
+  // ===============================================================================================
   // OVERRIDES
   // ===============================================================================================
 
@@ -46,18 +65,26 @@ public class CreateAggregateEntityTransformer extends AbstractServiceMethodImple
   @Override
   public TemplateData transform(ServiceMethodImplementation source, Object... args) {
     Set<MetamodelRepository<?>> metamodelRepositories = (Set<MetamodelRepository<?>>) args[0];
+    Thing currentThing = source.getFunction().getThing();
+
+    AggregateEntity aggregateEntity =
+        AggregateEntity.class.cast(
+            CoreRegistry.getMetamodelRepositoryResolver()
+                .resolve(metamodelRepositories, AggregateRootMetamodelRepository.class)
+                .findEntityByThingName(currentThing.getThingName()));
 
     @SuppressWarnings("CPD-START")
     CreateAggregateEntityTemplateData data =
         new CreateAggregateEntityTemplateData(
             getAggregateRootData(source),
-            getAggregateEntityData(source, metamodelRepositories),
+            getAggregateEntityData(source),
+            parentCallingChildDataService.get(source, currentThing),
             getAggregateRootIdDataType(source),
             getThingIdentity(source),
-            new LinkedHashSet<>(),
+            getParameterRepresentations(source),
             getAggregateRootDataType(source),
             getAggregateRootVariable(source),
-            new LinkedHashSet<>(),
+            getProperties(source, aggregateEntity),
             getRepositoryVariable(source),
             source.getServiceMethod().getRequestDto(),
             source.getServiceMethod().getResponseDto(),

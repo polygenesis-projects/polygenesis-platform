@@ -21,7 +21,7 @@
 package io.polygenesis.generators.java.apidetail.service.activity.root;
 
 import io.polygenesis.abstraction.data.Data;
-import io.polygenesis.generators.java.apidetail.service.activity.common.AggregateRootData;
+import io.polygenesis.generators.java.common.AggregateRootData;
 import io.polygenesis.models.api.Dto;
 import io.polygenesis.models.domain.DomainObjectProperty;
 import io.polygenesis.representations.code.ParameterRepresentation;

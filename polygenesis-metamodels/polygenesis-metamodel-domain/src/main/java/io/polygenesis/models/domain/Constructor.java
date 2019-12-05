@@ -37,24 +37,28 @@ public class Constructor extends StateMutationMethod {
   /**
    * Instantiates a new Constructor.
    *
+   * @param mutatesObject the mutates object
    * @param function the function
    * @param properties the properties
    */
-  public Constructor(Function function, Set<DomainObjectProperty<?>> properties) {
-    super(function, properties);
+  public Constructor(
+      BaseDomainObject mutatesObject, Function function, Set<DomainObjectProperty<?>> properties) {
+    super(mutatesObject, function, properties);
   }
 
   /**
    * Instantiates a new Constructor.
    *
+   * @param mutatesObject the mutates object
    * @param function the function
    * @param properties the properties
    * @param superClassProperties the super class properties
    */
   public Constructor(
+      BaseDomainObject mutatesObject,
       Function function,
       Set<DomainObjectProperty<?>> properties,
       Set<DomainObjectProperty<?>> superClassProperties) {
-    super(function, properties, superClassProperties);
+    super(mutatesObject, function, properties, superClassProperties);
   }
 }

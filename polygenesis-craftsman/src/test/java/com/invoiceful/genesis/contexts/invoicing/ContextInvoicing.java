@@ -49,6 +49,10 @@ public class ContextInvoicing {
         //        .addThing(OutgoingDocument.create(document, rootPackageName))
 
         .addThing(invoice)
+
+        // Projections
+        // .addThing(InvoicesPerYear.create(rootPackageName))
+
         .build();
   }
 }

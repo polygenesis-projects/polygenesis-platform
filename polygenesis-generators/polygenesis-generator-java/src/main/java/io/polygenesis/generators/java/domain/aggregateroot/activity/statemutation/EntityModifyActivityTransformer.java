@@ -22,7 +22,7 @@ package io.polygenesis.generators.java.domain.aggregateroot.activity.statemutati
 
 import io.polygenesis.abstraction.thing.ActivityTemplateTransformer;
 import io.polygenesis.core.TemplateData;
-import io.polygenesis.generators.java.apidetail.service.activity.AbstractServiceMethodImplementationTransformer;
+import io.polygenesis.generators.java.common.AggregateEntityDataService;
 import io.polygenesis.models.domain.StateMutationMethod;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,8 +32,27 @@ import java.util.Map;
  *
  * @author Christos Tsakostas
  */
-public class EntityModifyActivityTransformer extends AbstractServiceMethodImplementationTransformer
+public class EntityModifyActivityTransformer
     implements ActivityTemplateTransformer<StateMutationMethod> {
+
+  // ===============================================================================================
+  // STATE
+  // ===============================================================================================
+
+  private final AggregateEntityDataService aggregateEntityDataService;
+
+  // ===============================================================================================
+  // CONSTRUCTOR(S)
+  // ===============================================================================================
+
+  /**
+   * Instantiates a new Entity modify activity transformer.
+   *
+   * @param aggregateEntityDataService the aggregate entity data service
+   */
+  public EntityModifyActivityTransformer(AggregateEntityDataService aggregateEntityDataService) {
+    this.aggregateEntityDataService = aggregateEntityDataService;
+  }
 
   // ===============================================================================================
   // OVERRIDES
@@ -43,7 +62,11 @@ public class EntityModifyActivityTransformer extends AbstractServiceMethodImplem
   @Override
   public TemplateData transform(StateMutationMethod source, Object... args) {
     Map<String, Object> dataModel = new HashMap<>();
-    dataModel.put("data", new EntityModifyActivityTemplateData());
+
+    dataModel.put(
+        "data",
+        new EntityAddActivityTemplateData(
+            aggregateEntityDataService.get(source.getMutatedObject()), source.getProperties()));
 
     return new TemplateData(
         dataModel, "polygenesis-trinity-java/domain/" + "aggregate-root/entity-modify.java.ftl");

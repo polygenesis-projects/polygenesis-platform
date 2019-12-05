@@ -96,7 +96,7 @@ public class ServiceDeducer {
 
       // CHILDREN
       thing
-          .getChildren()
+          .getAllNestedChildren()
           .forEach(childThing -> appendCommandMethods(service, childThing, rootPackageName));
 
       services.add(service);
@@ -114,7 +114,7 @@ public class ServiceDeducer {
 
       // CHILDREN
       thing
-          .getChildren()
+          .getAllNestedChildren()
           .forEach(childThing -> appendQueryMethods(service, childThing, rootPackageName));
 
       services.add(service);

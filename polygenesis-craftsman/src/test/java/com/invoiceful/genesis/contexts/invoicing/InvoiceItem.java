@@ -51,6 +51,8 @@ public class InvoiceItem {
             .withCrudFunction(data(rootPackageName))
             .build());
 
+    // invoiceItem.addChild(InvoiceItemTax.create(invoiceItem, rootPackageName));
+
     return invoiceItem;
   }
 

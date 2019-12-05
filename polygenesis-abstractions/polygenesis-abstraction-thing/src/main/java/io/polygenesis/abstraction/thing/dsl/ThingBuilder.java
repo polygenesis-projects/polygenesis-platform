@@ -150,8 +150,10 @@ public class ThingBuilder extends AbstractThingBuilder<ThingBuilder> {
    */
   public static ThingBuilder projection(String thingName) {
     return new ThingBuilder(
-        thingName,
-        new LinkedHashSet<>(Arrays.asList(AbstractionScope.api(), AbstractionScope.projection())));
+            thingName,
+            new LinkedHashSet<>(
+                Arrays.asList(AbstractionScope.api(), AbstractionScope.projection())))
+        .withThingIdentity();
   }
 
   /**
