@@ -26,7 +26,6 @@ import io.polygenesis.abstraction.thing.Activity;
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.abstraction.thing.FunctionName;
 import io.polygenesis.abstraction.thing.Purpose;
-import io.polygenesis.abstraction.thing.ReturnValue;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
 import io.polygenesis.commons.valueobjects.ObjectName;
@@ -109,7 +108,7 @@ public class IncomingDomainMessage extends AbstractNameablePackageable {
         thing,
         Purpose.incomingDomainMessageGetMessageId(),
         new FunctionName("getMessageId"),
-        new ReturnValue(DataPrimitive.of(PrimitiveType.STRING, VariableName.response())),
+        DataPrimitive.of(PrimitiveType.STRING, VariableName.response()),
         new LinkedHashSet<>(),
         Activity.empty(),
         thing.getAbstractionsScopes());
@@ -122,7 +121,7 @@ public class IncomingDomainMessage extends AbstractNameablePackageable {
         thing,
         Purpose.incomingDomainMessageGetMessageId(),
         new FunctionName("getRootId"),
-        new ReturnValue(DataPrimitive.of(PrimitiveType.STRING, VariableName.response())),
+        DataPrimitive.of(PrimitiveType.STRING, VariableName.response()),
         new LinkedHashSet<>(),
         Activity.empty(),
         thing.getAbstractionsScopes());
@@ -135,7 +134,7 @@ public class IncomingDomainMessage extends AbstractNameablePackageable {
         thing,
         Purpose.incomingDomainMessageGetMessageId(),
         new FunctionName("getMessageBody"),
-        new ReturnValue(DataPrimitive.of(PrimitiveType.STRING, VariableName.response())),
+        DataPrimitive.of(PrimitiveType.STRING, VariableName.response()),
         new LinkedHashSet<>(),
         Activity.empty(),
         thing.getAbstractionsScopes());

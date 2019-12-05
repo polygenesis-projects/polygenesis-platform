@@ -377,7 +377,6 @@ public class JavaDomainMetamodelGenerator extends AbstractMetamodelGenerator {
                       .flatMap(
                           domainServiceMethod ->
                               domainServiceMethod.getFunction().getArguments().stream())
-                      .map(argument -> argument.getData())
                       .collect(Collectors.toSet());
 
               allArguments.forEach(

@@ -90,8 +90,8 @@ public abstract class AbstractMethodTransformer<S extends FunctionProvider>
     Set<String> imports = new TreeSet<>();
 
     if (source.getFunction().getReturnValue() != null
-        && source.getFunction().getReturnValue().getData().isDataGroup()) {
-      DataObject dataObject = source.getFunction().getReturnValue().getData().getAsDataObject();
+        && source.getFunction().getReturnValue().isDataGroup()) {
+      DataObject dataObject = source.getFunction().getReturnValue().getAsDataObject();
 
       // TODO: check for identical package
       // if (!dataObject.getPackageName().equals(source.getPackageName())) {
@@ -149,8 +149,8 @@ public abstract class AbstractMethodTransformer<S extends FunctionProvider>
             argument ->
                 parameterRepresentations.add(
                     new ParameterRepresentation(
-                        dataTypeTransformer.convert(argument.getData().getDataType()),
-                        argument.getData().getVariableName().getText())));
+                        dataTypeTransformer.convert(argument.getDataType()),
+                        argument.getVariableName().getText())));
 
     return parameterRepresentations;
   }
@@ -158,7 +158,7 @@ public abstract class AbstractMethodTransformer<S extends FunctionProvider>
   @Override
   public String returnValue(S source, Object... args) {
     if (source.getFunction().getReturnValue() != null) {
-      return makeVariableDataType(source.getFunction().getReturnValue().getData());
+      return makeVariableDataType(source.getFunction().getReturnValue());
     } else {
       return dataTypeTransformer.convert(PrimitiveType.VOID.name());
     }

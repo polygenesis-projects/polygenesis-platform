@@ -26,7 +26,6 @@ import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.abstraction.data.DataPrimitive;
 import io.polygenesis.abstraction.data.DataPurpose;
-import io.polygenesis.abstraction.thing.Argument;
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.commons.valueobjects.ObjectName;
@@ -58,10 +57,10 @@ public class DtoDeducer {
     Boolean virtual = false;
 
     if (function.getArguments() != null && function.getArguments().size() == 1) {
-      Argument argument =
+      Data argument =
           function.getArguments().stream().findFirst().orElseThrow(IllegalArgumentException::new);
-      if (argument.getData().isDataGroup()) {
-        originatingDataObject = argument.getData().getAsDataObject();
+      if (argument.isDataGroup()) {
+        originatingDataObject = argument.getAsDataObject();
       }
     }
 
@@ -79,7 +78,7 @@ public class DtoDeducer {
               new VariableName("request"));
 
       if (function.getArguments() != null) {
-        function.getArguments().forEach(argument -> finalDataObject.addData(argument.getData()));
+        function.getArguments().forEach(argument -> finalDataObject.addData(argument));
       }
 
       originatingDataObject = finalDataObject;
@@ -114,8 +113,8 @@ public class DtoDeducer {
     DataObject originatingDataObject = null;
     Boolean virtual = false;
 
-    if (function.getReturnValue() != null && function.getReturnValue().getData().isDataGroup()) {
-      originatingDataObject = function.getReturnValue().getData().getAsDataObject();
+    if (function.getReturnValue() != null && function.getReturnValue().isDataGroup()) {
+      originatingDataObject = function.getReturnValue().getAsDataObject();
     }
 
     if (originatingDataObject == null) {
@@ -131,7 +130,7 @@ public class DtoDeducer {
               function.getThing().makePackageName(rootPackageName, function.getThing()));
 
       if (function.getReturnValue() != null) {
-        virtualResponseDataObject.addData(function.getReturnValue().getData());
+        virtualResponseDataObject.addData(function.getReturnValue());
       }
 
       originatingDataObject = virtualResponseDataObject;

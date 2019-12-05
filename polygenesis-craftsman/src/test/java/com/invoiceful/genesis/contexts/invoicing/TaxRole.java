@@ -23,7 +23,6 @@ package com.invoiceful.genesis.contexts.invoicing;
 import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.dsl.DataBuilder;
 import io.polygenesis.abstraction.thing.Thing;
-import io.polygenesis.abstraction.thing.ThingProperty;
 import io.polygenesis.abstraction.thing.dsl.PurposeFunctionBuilder;
 import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
 import java.util.LinkedHashSet;
@@ -51,11 +50,10 @@ public class TaxRole {
   // DATA
   // ===============================================================================================
 
-  private static Set<ThingProperty> thingProperties() {
+  private static Set<Data> thingProperties() {
     return DataBuilder.create()
         .build()
         .stream()
-        .map(ThingProperty::new)
         .collect(Collectors.toCollection(LinkedHashSet::new));
   }
 

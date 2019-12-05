@@ -20,79 +20,75 @@
 
 package io.polygenesis.abstraction.data;
 
-import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.commons.valueobjects.VariableName;
+import io.polygenesis.commons.assertion.Assertion;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
- * The type data array.
+ * The type Data repository.
  *
  * @author Christos Tsakostas
  */
-public class DataArray extends AbstractData {
-
-  private final Data arrayElement;
+public class DataRepository {
 
   // ===============================================================================================
-  // STATIC
+  // STATE
   // ===============================================================================================
 
-  /**
-   * Of data array.
-   *
-   * @param arrayElement the array element
-   * @return the data array
-   */
-  public static DataArray of(Data arrayElement) {
-    return new DataArray(VariableName.response(), arrayElement);
-  }
-
-  /**
-   * Of data array.
-   *
-   * @param arrayElement the array element
-   * @param variableName the variable name
-   * @return the data array
-   */
-  public static DataArray of(Data arrayElement, String variableName) {
-    return new DataArray(new VariableName(variableName), arrayElement);
-  }
+  private Set<Data> data;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
+  /** Instantiates a new Data repository. */
+  public DataRepository() {
+    data = new LinkedHashSet<>();
+  }
+
+  // ===============================================================================================
+  // STATE MUTATION
+  // ===============================================================================================
+
   /**
-   * Instantiates a new Data array.
+   * Add data.
    *
-   * @param variableName the variable name
-   * @param arrayElement the array element
+   * @param data the data
    */
-  public DataArray(VariableName variableName, Data arrayElement) {
-    this(variableName, DataPurpose.any(), DataValidator.empty(), arrayElement);
+  public void addData(Data data) {
+    Assertion.isNotNull(data, "data is required");
+    getData().add(data);
   }
 
   /**
-   * Instantiates a new Data array.
+   * Add data.
    *
-   * @param variableName the variable name
-   * @param dataPurpose the data business type
-   * @param dataValidator the data validator
-   * @param arrayElement the array element
+   * @param data the data
    */
-  public DataArray(
-      VariableName variableName,
-      DataPurpose dataPurpose,
-      DataValidator dataValidator,
-      Data arrayElement) {
-    super(
-        DataPrimaryType.ARRAY,
-        variableName != null
-            ? new VariableName(TextConverter.toPlural(variableName.getText()))
-            : null,
-        dataPurpose,
-        dataValidator);
-    this.arrayElement = arrayElement;
+  public void addSetOfData(Set<Data> data) {
+    Assertion.isNotNull(data, "data is required");
+    getData().addAll(data);
+  }
+
+  // ===============================================================================================
+  // QUERIES
+  // ===============================================================================================
+
+  /**
+   * Find by data purpose set.
+   *
+   * @param dataPurpose the data purpose
+   * @return the set
+   */
+  public Set<Data> findByDataPurpose(DataPurpose... dataPurpose) {
+    PredicateDataPurpose predicateDataPurpose =
+        new PredicateDataPurpose(Arrays.stream(dataPurpose));
+
+    return getData().stream().filter(predicateDataPurpose::contains).collect(Collectors.toSet());
   }
 
   // ===============================================================================================
@@ -100,21 +96,12 @@ public class DataArray extends AbstractData {
   // ===============================================================================================
 
   /**
-   * Gets array element.
+   * Gets data.
    *
-   * @return the array element
+   * @return the data
    */
-  public Data getArrayElement() {
-    return arrayElement;
-  }
-
-  // ===============================================================================================
-  // ABSTRACT IMPLEMENTATION
-  // ===============================================================================================
-
-  @Override
-  public String getDataType() {
-    return String.format("%s;%s", DataPrimaryType.ARRAY.name(), getArrayElement().getDataType());
+  public Set<Data> getData() {
+    return data;
   }
 
   // ===============================================================================================
@@ -129,15 +116,40 @@ public class DataArray extends AbstractData {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    if (!super.equals(o)) {
-      return false;
-    }
-    DataArray that = (DataArray) o;
-    return Objects.equals(arrayElement, that.arrayElement);
+    DataRepository that = (DataRepository) o;
+    return Objects.equals(data, that.data);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(super.hashCode(), arrayElement);
+    return Objects.hash(data);
+  }
+
+  // ===============================================================================================
+  // PREDICATES
+  // ===============================================================================================
+
+  private static class PredicateDataPurpose {
+
+    private Set<DataPurpose> dataPurposes;
+
+    /**
+     * Instantiates a new Predicate data purpose.
+     *
+     * @param dataPurposesStream the data purposes stream
+     */
+    public PredicateDataPurpose(Stream<DataPurpose> dataPurposesStream) {
+      this.dataPurposes = dataPurposesStream.collect(Collectors.toSet());
+    }
+
+    /**
+     * Contains boolean.
+     *
+     * @param data the data
+     * @return the boolean
+     */
+    public boolean contains(Data data) {
+      return dataPurposes.contains(data.getDataPurpose());
+    }
   }
 }

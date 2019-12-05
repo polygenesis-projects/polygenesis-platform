@@ -22,7 +22,6 @@ package io.polygenesis.generators.java.domaindetails.domainmessagepublisher.publ
 
 import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.abstraction.thing.Activity;
-import io.polygenesis.abstraction.thing.Argument;
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.abstraction.thing.FunctionName;
 import io.polygenesis.abstraction.thing.Purpose;
@@ -96,14 +95,13 @@ public class DomainMessagePublisher extends AbstractNameablePackageable {
         null,
         new LinkedHashSet<>(
             Arrays.asList(
-                new Argument(
-                    new DataObject(
-                        new ObjectName(
-                            String.format(
-                                "%sDomainMessagePublishDto",
-                                TextConverter.toUpperCamel(contextName.getText()))),
-                        getPackageName(),
-                        new VariableName("domainMessagePublishDto"))))),
+                new DataObject(
+                    new ObjectName(
+                        String.format(
+                            "%sDomainMessagePublishDto",
+                            TextConverter.toUpperCamel(contextName.getText()))),
+                    getPackageName(),
+                    new VariableName("domainMessagePublishDto")))),
         Activity.empty(),
         thing.getAbstractionsScopes());
   }

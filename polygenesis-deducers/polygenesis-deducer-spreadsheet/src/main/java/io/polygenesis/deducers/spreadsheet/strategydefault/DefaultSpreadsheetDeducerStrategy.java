@@ -20,8 +20,8 @@
 
 package io.polygenesis.deducers.spreadsheet.strategydefault;
 
+import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.thing.Thing;
-import io.polygenesis.abstraction.thing.ThingProperty;
 import io.polygenesis.abstraction.thing.ThingRepository;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.commons.valueobjects.Name;
@@ -94,10 +94,7 @@ public class DefaultSpreadsheetDeducerStrategy implements SpreadsheetDeducerStra
 
     thing
         .getThingProperties()
-        .forEach(
-            thingProperty ->
-                cells.addAll(
-                    deduceCellsForThingProperty(thingProperty, atomicIndex.getAndIncrement())));
+        .forEach(data -> cells.addAll(deduceCellsForData(data, atomicIndex.getAndIncrement())));
 
     return new Sheet(new Name(thing.getThingName().getText()), cells);
   }
@@ -105,22 +102,20 @@ public class DefaultSpreadsheetDeducerStrategy implements SpreadsheetDeducerStra
   /**
    * Deduce cells for thing property set.
    *
-   * @param thingProperty the thing property
+   * @param data the thing property
    * @param index the index
    * @return the set
    */
-  private Set<Cell> deduceCellsForThingProperty(ThingProperty thingProperty, Integer index) {
+  private Set<Cell> deduceCellsForData(Data data, Integer index) {
     return new LinkedHashSet<>(
         Arrays.asList(
             new Cell(
                 new RowIndex(index),
                 new ColumnIndex(0),
-                new Value(thingProperty.getData().getVariableName().getText())),
+                new Value(data.getVariableName().getText())),
             new Cell(
                 new RowIndex(index),
                 new ColumnIndex(1),
-                new Value(
-                    TextConverter.toUpperCamelSpaces(
-                        thingProperty.getData().getVariableName().getText())))));
+                new Value(TextConverter.toUpperCamelSpaces(data.getVariableName().getText())))));
   }
 }

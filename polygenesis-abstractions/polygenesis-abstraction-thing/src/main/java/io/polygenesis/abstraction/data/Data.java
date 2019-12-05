@@ -21,7 +21,6 @@
 package io.polygenesis.abstraction.data;
 
 import io.polygenesis.commons.valueobjects.VariableName;
-import java.util.Objects;
 
 /**
  * This is the base class for any Data.
@@ -36,90 +35,42 @@ import java.util.Objects;
  *
  * @author Christos Tsakostas
  */
-public abstract class Data {
-
-  // ===============================================================================================
-  // STATE
-  // ===============================================================================================
-
-  private final DataPrimaryType dataPrimaryType;
-  private final VariableName variableName;
-  private final DataPurpose dataPurpose;
-  private final DataValidator dataValidator;
-
-  // ===============================================================================================
-  // CONSTRUCTOR(S)
-  // ===============================================================================================
-
-  /**
-   * Instantiates a new Data.
-   *
-   * @param dataPrimaryType the data primary type
-   * @param variableName the variable name
-   * @param dataPurpose the data business type
-   * @param dataValidator the data validator
-   */
-  public Data(
-      DataPrimaryType dataPrimaryType,
-      VariableName variableName,
-      DataPurpose dataPurpose,
-      DataValidator dataValidator) {
-    this.dataPrimaryType = dataPrimaryType;
-    this.variableName = variableName;
-    this.dataPurpose = dataPurpose;
-    this.dataValidator = dataValidator;
-  }
-
-  // ===============================================================================================
-  // ABSTRACT
-  // ===============================================================================================
+public interface Data {
 
   /**
    * Gets data type.
    *
    * @return the data type
    */
-  public abstract String getDataType();
-
-  // ===============================================================================================
-  // GETTERS
-  // ===============================================================================================
+  String getDataType();
 
   /**
    * Gets data primary type.
    *
    * @return the data primary type
    */
-  public DataPrimaryType getDataPrimaryType() {
-    return dataPrimaryType;
-  }
+  DataPrimaryType getDataPrimaryType();
 
   /**
    * Gets variable name.
    *
    * @return the variable name
    */
-  public VariableName getVariableName() {
-    return variableName;
-  }
+  VariableName getVariableName();
 
   /**
    * Gets data business type.
    *
    * @return the data business type
    */
-  public DataPurpose getDataPurpose() {
-    return dataPurpose;
-  }
+  DataPurpose getDataPurpose();
 
   /**
    * Gets data validator.
    *
    * @return the data validator
    */
-  public DataValidator getDataValidator() {
-    return dataValidator;
-  }
+  DataValidator getDataValidator();
 
   // ===============================================================================================
   // QUERIES
@@ -130,138 +81,68 @@ public abstract class Data {
    *
    * @return the as data primitive
    */
-  public DataPrimitive getAsDataPrimitive() {
-    if (isDataPrimitive()) {
-      return (DataPrimitive) this;
-    } else {
-      throw new IllegalStateException(
-          String.format("Data of type=%s is not a DataPrimitive", getDataPrimaryType().name()));
-    }
-  }
+  DataPrimitive getAsDataPrimitive();
 
   /**
    * Gets as data object.
    *
    * @return the as data object
    */
-  public DataObject getAsDataObject() {
-    if (isDataGroup()) {
-      return (DataObject) this;
-    } else {
-      throw new IllegalStateException(
-          String.format(
-              "Data of type=%s with name=%s is not a DataObject",
-              getDataPrimaryType().name(), getVariableName().getText()));
-    }
-  }
+  DataObject getAsDataObject();
 
   /**
    * Gets as data array.
    *
    * @return the as data array
    */
-  public DataArray getAsDataArray() {
-    if (isDataArray()) {
-      return DataArray.class.cast(this);
-    } else {
-      throw new IllegalStateException(
-          String.format("Data of type=%s is not a DataArray", getDataPrimaryType().name()));
-    }
-  }
+  DataArray getAsDataArray();
 
   /**
    * Gets as data map.
    *
    * @return the as data map
    */
-  public DataMap getAsDataMap() {
-    if (isDataMap()) {
-      return (DataMap) this;
-    } else {
-      throw new IllegalStateException(
-          String.format("Data of type=%s is not a DataMap", getDataPrimaryType().name()));
-    }
-  }
+  DataMap getAsDataMap();
 
   /**
    * Is primitive.
    *
    * @return the boolean
    */
-  public boolean isDataPrimitive() {
-    return getDataPrimaryType().equals(DataPrimaryType.PRIMITIVE);
-  }
+  boolean isDataPrimitive();
 
   /**
    * Is data group boolean.
    *
    * @return the boolean
    */
-  public boolean isDataGroup() {
-    return getDataPrimaryType().equals(DataPrimaryType.OBJECT);
-  }
+  boolean isDataGroup();
 
   /**
    * Is data array boolean.
    *
    * @return the boolean
    */
-  public boolean isDataArray() {
-    return getDataPrimaryType().equals(DataPrimaryType.ARRAY);
-  }
+  boolean isDataArray();
 
   /**
    * Is data map boolean.
    *
    * @return the boolean
    */
-  public boolean isDataMap() {
-    return getDataPrimaryType().equals(DataPrimaryType.MAP);
-  }
+  boolean isDataMap();
 
   /**
    * Is thing identity boolean.
    *
    * @return the boolean
    */
-  public boolean isThingIdentity() {
-    return getDataPurpose().equals(DataPurpose.thingIdentity());
-  }
+  boolean isThingIdentity();
 
   /**
    * Is parent thing identity boolean.
    *
    * @return the boolean
    */
-  public boolean isParentThingIdentity() {
-    return getDataPurpose().equals(DataPurpose.parentThingIdentity());
-  }
-
-  // ===============================================================================================
-  // GUARDS
-  // ===============================================================================================
-
-  // ===============================================================================================
-  // OVERRIDES
-  // ===============================================================================================
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    Data data = (Data) o;
-    return dataPrimaryType == data.dataPrimaryType
-        && Objects.equals(variableName, data.variableName)
-        && Objects.equals(dataPurpose, data.dataPurpose)
-        && Objects.equals(dataValidator, data.dataValidator);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(dataPrimaryType, variableName, dataPurpose, dataValidator);
-  }
+  boolean isParentThingIdentity();
 }

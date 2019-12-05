@@ -24,10 +24,8 @@ import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.abstraction.data.DataPrimitive;
 import io.polygenesis.abstraction.data.DataPurpose;
-import io.polygenesis.abstraction.thing.Argument;
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.abstraction.thing.Thing;
-import io.polygenesis.abstraction.thing.ThingProperty;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.models.domain.BaseDomainEntity;
 import io.polygenesis.models.domain.Constructor;
@@ -93,7 +91,7 @@ public abstract class AbstractPropertyDeducer {
   public Set<DomainObjectProperty<?>> deduceDomainObjectPropertiesFromFunction(Function function) {
     Set<DomainObjectProperty<?>> properties = new LinkedHashSet<>();
 
-    Set<ThingProperty> thingProperties = getThingPropertiesFromFunction(function);
+    Set<Data> thingProperties = getThingPropertiesFromFunction(function);
 
     properties.addAll(this.toDomainObjectProperties(thingProperties));
 
@@ -120,7 +118,7 @@ public abstract class AbstractPropertyDeducer {
                 function.getPurpose().isCreate() || function.getPurpose().isEnsureExistence())
         .forEach(
             function -> {
-              Set<ThingProperty> thingProperties = getThingPropertiesFromFunction(function);
+              Set<Data> thingProperties = getThingPropertiesFromFunction(function);
               Set<DomainObjectProperty<?>> properties = new LinkedHashSet<>();
 
               properties.addAll(makeIdentityDomainObjectProperties(thing, rootPackageName));
@@ -173,8 +171,7 @@ public abstract class AbstractPropertyDeducer {
    * @param thingProperties the thing properties
    * @return the set
    */
-  protected Set<DomainObjectProperty<?>> toDomainObjectProperties(
-      Set<ThingProperty> thingProperties) {
+  protected Set<DomainObjectProperty<?>> toDomainObjectProperties(Set<Data> thingProperties) {
     return thingProperties
         .stream()
         .map(this::toDomainObjectProperty)
@@ -184,37 +181,35 @@ public abstract class AbstractPropertyDeducer {
   /**
    * To domain object property domain object property.
    *
-   * @param thingProperty the thing property
+   * @param data the thing property
    * @return the domain object property
    */
-  protected DomainObjectProperty<?> toDomainObjectProperty(ThingProperty thingProperty) {
-    switch (thingProperty.getData().getDataPrimaryType()) {
+  protected DomainObjectProperty<?> toDomainObjectProperty(Data data) {
+    switch (data.getDataPrimaryType()) {
       case ARRAY:
-        switch (thingProperty.getData().getAsDataArray().getArrayElement().getDataPrimaryType()) {
+        switch (data.getAsDataArray().getArrayElement().getDataPrimaryType()) {
           case PRIMITIVE:
-            return new PrimitiveCollection(thingProperty.getData().getAsDataArray());
+            return new PrimitiveCollection(data.getAsDataArray());
           case OBJECT:
-            return new ValueObjectCollection(thingProperty.getData().getAsDataArray());
+            return new ValueObjectCollection(data.getAsDataArray());
           default:
             throw new UnsupportedOperationException();
         }
       case OBJECT:
-        return new ValueObject(thingProperty.getData().getAsDataObject());
+        return new ValueObject(data.getAsDataObject());
       case PRIMITIVE:
-        if (thingProperty.getData().getAsDataPrimitive().getDataObject() != null) {
-          return makeValueObjectFromPrimitive(thingProperty.getData().getAsDataPrimitive());
+        if (data.getAsDataPrimitive().getDataObject() != null) {
+          return makeValueObjectFromPrimitive(data.getAsDataPrimitive());
         } else {
-          return new Primitive(thingProperty.getData().getAsDataPrimitive());
+          return new Primitive(data.getAsDataPrimitive());
         }
       case THING:
-        return new Reference(thingProperty.getData());
+        return new Reference(data);
       case MAP:
-        return new Mapper(thingProperty.getData().getAsDataMap());
+        return new Mapper(data.getAsDataMap());
       default:
         throw new UnsupportedOperationException(
-            String.format(
-                "Cannot make DomainObjectProperty for %s",
-                thingProperty.getData().getDataPrimaryType()));
+            String.format("Cannot make DomainObjectProperty for %s", data.getDataPrimaryType()));
     }
   }
 
@@ -228,7 +223,6 @@ public abstract class AbstractPropertyDeducer {
         thing
             .getThingProperties()
             .stream()
-            .map(ThingProperty::getData)
             .filter(this::isDataThingIdentity)
             .collect(Collectors.toSet());
 
@@ -248,16 +242,16 @@ public abstract class AbstractPropertyDeducer {
    * @param thing the thing
    * @return the thing properties for domain
    */
-  protected Set<ThingProperty> getThingPropertiesSuitableForDomainModel(Thing thing) {
+  protected Set<Data> getThingPropertiesSuitableForDomainModel(Thing thing) {
     return thing
         .getThingProperties()
         .stream()
         .filter(
-            thingProperty ->
-                !isDataThingIdentity(thingProperty.getData())
-                    && !isDataParentThingIdentity(thingProperty.getData())
-                    && !isDataPageNumber(thingProperty.getData())
-                    && !isDataPageSize(thingProperty.getData()))
+            data ->
+                !isDataThingIdentity(data)
+                    && !isDataParentThingIdentity(data)
+                    && !isDataPageNumber(data)
+                    && !isDataPageSize(data))
         .collect(Collectors.toCollection(LinkedHashSet::new));
   }
 
@@ -267,21 +261,20 @@ public abstract class AbstractPropertyDeducer {
    * @param function the function
    * @return the thing properties from function
    */
-  protected Set<ThingProperty> getThingPropertiesFromFunction(Function function) {
-    Set<ThingProperty> thingProperties = new LinkedHashSet<>();
+  protected Set<Data> getThingPropertiesFromFunction(Function function) {
+    Set<Data> thingProperties = new LinkedHashSet<>();
 
     if (function.getArguments() != null) {
       function
           .getArguments()
           .stream()
-          .map(Argument::getData)
           .filter(
               data ->
                   !isDataThingIdentity(data)
                       && !isDataParentThingIdentity(data)
                       && !isDataPageNumber(data)
                       && !isDataPageSize(data))
-          .forEach(data -> thingProperties.add(new ThingProperty(data)));
+          .forEach(data -> thingProperties.add(data));
     }
 
     return thingProperties;

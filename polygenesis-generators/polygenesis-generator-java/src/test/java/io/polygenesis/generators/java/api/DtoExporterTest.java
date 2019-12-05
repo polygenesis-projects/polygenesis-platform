@@ -22,14 +22,13 @@ package io.polygenesis.generators.java.api;
 
 import static org.mockito.Mockito.mock;
 
+import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.abstraction.data.DataPrimitive;
 import io.polygenesis.abstraction.data.PrimitiveType;
-import io.polygenesis.abstraction.thing.Argument;
 import io.polygenesis.abstraction.thing.CqsType;
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.abstraction.thing.Purpose;
-import io.polygenesis.abstraction.thing.ReturnValue;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.ThingName;
 import io.polygenesis.abstraction.thing.dsl.FunctionBuilder;
@@ -88,9 +87,9 @@ public class DtoExporterTest {
         new DataObject(
             new ObjectName("CreateBusinessResponse"),
             new PackageName("com.oregor.microservice.some.business"));
-    ReturnValue createReturnValue = new ReturnValue(returnValueDataObject);
+    Data createReturnValue = returnValueDataObject;
 
-    Set<Argument> createArguments = new LinkedHashSet<>();
+    Set<Data> createArguments = new LinkedHashSet<>();
     DataObject argumentDataObject =
         new DataObject(
             new ObjectName("CreateBusinessRequest"),
@@ -99,9 +98,7 @@ public class DtoExporterTest {
     // postal address
     argumentDataObject.addData(postalAddress());
 
-    Argument argument = new Argument(argumentDataObject);
-
-    createArguments.add(argument);
+    createArguments.add(argumentDataObject);
 
     Service service =
         new Service(
@@ -113,12 +110,8 @@ public class DtoExporterTest {
     Thing relatedThing = mock(Thing.class);
     service.appendServiceMethod(
         makeFunctionCreate(),
-        new Dto(relatedThing, DtoType.API_REQUEST, argument.getData().getAsDataObject(), false),
-        new Dto(
-            relatedThing,
-            DtoType.API_RESPONSE,
-            createReturnValue.getData().getAsDataObject(),
-            false));
+        new Dto(relatedThing, DtoType.API_REQUEST, argumentDataObject, false),
+        new Dto(relatedThing, DtoType.API_RESPONSE, createReturnValue.getAsDataObject(), false));
 
     return service;
   }

@@ -206,8 +206,7 @@ public class EndpointLegacyMethodTransformer extends AbstractLegacyMethodTransfo
   @Override
   public String returnValue(Endpoint source, Object... args) {
     if (source.getServiceMethod().getFunction().getReturnValue() != null) {
-      return makeVariableDataType(
-          source.getServiceMethod().getFunction().getReturnValue().getData());
+      return makeVariableDataType(source.getServiceMethod().getFunction().getReturnValue());
     } else {
       return dataTypeTransformer.convert(PrimitiveType.VOID.name());
     }

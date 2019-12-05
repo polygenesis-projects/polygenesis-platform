@@ -20,12 +20,13 @@
 
 package io.polygenesis.abstraction.thing.dsl;
 
+import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.DataPrimitive;
 import io.polygenesis.abstraction.data.DataPurpose;
+import io.polygenesis.abstraction.data.DataRepository;
 import io.polygenesis.abstraction.data.PrimitiveType;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.ThingName;
-import io.polygenesis.abstraction.thing.ThingProperty;
 import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.commons.keyvalue.KeyValue;
 import io.polygenesis.commons.text.TextConverter;
@@ -52,7 +53,7 @@ public abstract class AbstractThingBuilder<T extends AbstractThingBuilder<?>> {
   private String contextName;
   private ThingName thingName;
   private Set<AbstractionScope> abstractionScopes;
-  private Set<ThingProperty> thingProperties = new LinkedHashSet<>();
+  private DataRepository thingProperties = new DataRepository();
   private Boolean multiTenant = false;
   private Thing parentThing;
   private Set<KeyValue> metadata = new LinkedHashSet<>();
@@ -94,8 +95,8 @@ public abstract class AbstractThingBuilder<T extends AbstractThingBuilder<?>> {
    * @param thingProperties the thing properties
    * @return the thing properties
    */
-  public T addThingProperties(Set<ThingProperty> thingProperties) {
-    this.thingProperties.addAll(thingProperties);
+  public T addThingProperties(Set<Data> thingProperties) {
+    this.thingProperties.addSetOfData(thingProperties);
     return builderClass.cast(this);
   }
 
@@ -127,13 +128,12 @@ public abstract class AbstractThingBuilder<T extends AbstractThingBuilder<?>> {
    * @return the t
    */
   public T withThingIdentity() {
-    this.thingProperties.add(
-        new ThingProperty(
-            DataPrimitive.ofDataBusinessType(
-                DataPurpose.thingIdentity(),
-                PrimitiveType.STRING,
-                new VariableName(
-                    String.format("%sId", TextConverter.toLowerCamel(thingName.getText()))))));
+    this.thingProperties.addData(
+        DataPrimitive.ofDataBusinessType(
+            DataPurpose.thingIdentity(),
+            PrimitiveType.STRING,
+            new VariableName(
+                String.format("%sId", TextConverter.toLowerCamel(thingName.getText())))));
     return builderClass.cast(this);
   }
 
@@ -145,15 +145,13 @@ public abstract class AbstractThingBuilder<T extends AbstractThingBuilder<?>> {
   public T withParentThingIdentity() {
     Assertion.isNotNull(parentThing, "parentThing should not be NULL");
 
-    this.thingProperties.add(
-        new ThingProperty(
-            DataPrimitive.ofDataBusinessType(
-                DataPurpose.parentThingIdentity(),
-                PrimitiveType.STRING,
-                new VariableName(
-                    String.format(
-                        "%sId",
-                        TextConverter.toLowerCamel(parentThing.getThingName().getText()))))));
+    this.thingProperties.addData(
+        DataPrimitive.ofDataBusinessType(
+            DataPurpose.parentThingIdentity(),
+            PrimitiveType.STRING,
+            new VariableName(
+                String.format(
+                    "%sId", TextConverter.toLowerCamel(parentThing.getThingName().getText())))));
     return builderClass.cast(this);
   }
 

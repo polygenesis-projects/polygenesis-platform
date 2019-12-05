@@ -26,11 +26,9 @@ import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.abstraction.data.DataPrimitive;
 import io.polygenesis.abstraction.data.PrimitiveType;
 import io.polygenesis.abstraction.thing.Activity;
-import io.polygenesis.abstraction.thing.Argument;
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.abstraction.thing.FunctionName;
 import io.polygenesis.abstraction.thing.Purpose;
-import io.polygenesis.abstraction.thing.ReturnValue;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
 import io.polygenesis.commons.keyvalue.KeyValue;
@@ -172,17 +170,14 @@ public class DomainMessageSubscriber extends SubscriberMetamodel {
         null,
         new LinkedHashSet<>(
             Arrays.asList(
-                new Argument(
-                    new DataObject(
-                        new ObjectName(
-                            String.format("%sIncomingDomainMessage", contextName.getText())),
-                        getRootPackageName(),
-                        new VariableName("incomingDomainMessage"))),
-                new Argument(
-                    new DataObject(
-                        new ObjectName("JsonNode"),
-                        new PackageName("com.fasterxml.jackson.databind"),
-                        new VariableName("jsonNodeBody"))))),
+                new DataObject(
+                    new ObjectName(String.format("%sIncomingDomainMessage", contextName.getText())),
+                    getRootPackageName(),
+                    new VariableName("incomingDomainMessage")),
+                new DataObject(
+                    new ObjectName("JsonNode"),
+                    new PackageName("com.fasterxml.jackson.databind"),
+                    new VariableName("jsonNodeBody")))),
         Activity.keyValues(keyValues),
         thing.getAbstractionsScopes());
   }
@@ -198,8 +193,7 @@ public class DomainMessageSubscriber extends SubscriberMetamodel {
         thing,
         Purpose.domainMessageSubscriberSupportedTypes(),
         new FunctionName("getSupportedMessageTypes"),
-        new ReturnValue(
-            DataArray.of(DataPrimitive.of(PrimitiveType.STRING, VariableName.response()))),
+        DataArray.of(DataPrimitive.of(PrimitiveType.STRING, VariableName.response())),
         new LinkedHashSet<>(),
         Activity.keyValues(keyValues),
         thing.getAbstractionsScopes());

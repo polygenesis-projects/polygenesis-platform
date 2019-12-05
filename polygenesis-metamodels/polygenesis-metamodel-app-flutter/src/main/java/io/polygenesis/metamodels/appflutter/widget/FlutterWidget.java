@@ -20,9 +20,9 @@
 
 package io.polygenesis.metamodels.appflutter.widget;
 
+import io.polygenesis.abstraction.data.DataRepository;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.ThingName;
-import io.polygenesis.abstraction.thing.ThingProperty;
 import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.commons.keyvalue.KeyValue;
 import io.polygenesis.commons.valueobjects.ContextName;
@@ -64,7 +64,7 @@ public class FlutterWidget extends AbstractFlutterThing<FlutterWidget> {
             abstractionScopes,
             widget.getFeature().getContextName(),
             new ThingName(widget.getName().getText()),
-            new LinkedHashSet<>(),
+            new DataRepository(),
             false,
             null,
             new LinkedHashSet<>(),
@@ -95,7 +95,7 @@ public class FlutterWidget extends AbstractFlutterThing<FlutterWidget> {
       Set<AbstractionScope> abstractionScopes,
       ContextName contextName,
       ThingName thingName,
-      Set<ThingProperty> thingProperties,
+      DataRepository thingProperties,
       Boolean multiTenant,
       Thing optionalParent,
       Set<KeyValue> metadata,

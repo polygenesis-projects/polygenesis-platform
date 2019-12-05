@@ -31,7 +31,7 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class DataPrimitive extends Data {
+public class DataPrimitive extends AbstractData {
 
   private final PrimitiveType primitiveType;
   private final Set<Annotation> annotations;

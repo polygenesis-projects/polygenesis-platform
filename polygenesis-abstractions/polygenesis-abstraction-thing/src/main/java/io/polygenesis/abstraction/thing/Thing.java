@@ -23,6 +23,7 @@ package io.polygenesis.abstraction.thing;
 import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.abstraction.data.DataPrimitive;
+import io.polygenesis.abstraction.data.DataRepository;
 import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.commons.keyvalue.KeyValue;
 import io.polygenesis.commons.valueobjects.ContextName;
@@ -54,7 +55,7 @@ public class Thing implements Abstraction {
   private Set<AbstractionScope> abstractionScopes = new LinkedHashSet<>();
   private ContextName contextName;
   private ThingName thingName;
-  private Set<ThingProperty> thingProperties;
+  private DataRepository thingProperties;
   private Set<Function> functions;
   private Boolean multiTenant;
   private Set<Thing> children;
@@ -80,7 +81,7 @@ public class Thing implements Abstraction {
       Set<AbstractionScope> abstractionScopes,
       ContextName contextName,
       ThingName thingName,
-      Set<ThingProperty> thingProperties,
+      DataRepository thingProperties,
       Boolean multiTenant,
       Thing optionalParent,
       Set<KeyValue> metadata) {
@@ -111,8 +112,8 @@ public class Thing implements Abstraction {
   public void addData(Set<Data> data) {
     Assertion.isNotNull(data, "data is required");
 
-    thingProperties.addAll(
-        data.stream().map(ThingProperty::new).collect(Collectors.toCollection(LinkedHashSet::new)));
+    thingProperties.addSetOfData(
+        data.stream().collect(Collectors.toCollection(LinkedHashSet::new)));
   }
 
   /**
@@ -261,8 +262,8 @@ public class Thing implements Abstraction {
    *
    * @return the thing properties
    */
-  public Set<ThingProperty> getThingProperties() {
-    return thingProperties;
+  public Set<Data> getThingProperties() {
+    return thingProperties.getData();
   }
 
   /**
@@ -370,10 +371,10 @@ public class Thing implements Abstraction {
    *
    * @return the thing identity
    */
-  public ThingProperty getThingIdentity() {
+  public Data getThingIdentity() {
     return getThingProperties()
         .stream()
-        .filter(thingProperty -> thingProperty.getData().isThingIdentity())
+        .filter(data -> data.isThingIdentity())
         .findFirst()
         .orElseThrow(
             () ->
@@ -391,14 +392,14 @@ public class Thing implements Abstraction {
    */
   public DataObject getThingIdentityAsDataObjectFromDataPrimitive(
       PackageName rootPackageName, VariableName variableName, DataPrimitive dataPrimitive) {
-    ThingProperty thingProperty = getThingIdentity();
+    Data data = getThingIdentity();
 
-    if (thingProperty.getData().isDataGroup()) {
-      return thingProperty.getData().getAsDataObject();
+    if (data.isDataGroup()) {
+      return data.getAsDataObject();
     } else {
       DataObject dataObject =
           new DataObject(
-              new ObjectName(thingProperty.getData().getVariableName().getText()),
+              new ObjectName(data.getVariableName().getText()),
               makePackageName(rootPackageName, this),
               variableName);
       dataObject.addData(dataPrimitive);
@@ -452,7 +453,7 @@ public class Thing implements Abstraction {
    *
    * @param thingProperties the thing properties
    */
-  private void setThingProperties(Set<ThingProperty> thingProperties) {
+  private void setThingProperties(DataRepository thingProperties) {
     Assertion.isNotNull(thingProperties, "thingProperties is required");
     this.thingProperties = thingProperties;
   }
@@ -516,15 +517,11 @@ public class Thing implements Abstraction {
       return;
     }
 
-    Set<ThingProperty> newThingProperties = new LinkedHashSet<>();
+    Set<Data> newThingProperties = new LinkedHashSet<>();
 
-    function
-        .getArguments()
-        .stream()
-        .map(Argument::getData)
-        .forEach(data -> newThingProperties.add(new ThingProperty(data)));
+    function.getArguments().stream().forEach(data -> newThingProperties.add(data));
 
-    thingProperties.addAll(newThingProperties);
+    thingProperties.addSetOfData(newThingProperties);
   }
 
   // ===============================================================================================

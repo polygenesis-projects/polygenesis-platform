@@ -29,7 +29,6 @@ import io.polygenesis.abstraction.data.PrimitiveType;
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.Thing;
-import io.polygenesis.abstraction.thing.ThingProperty;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
@@ -509,7 +508,6 @@ public class PurposeFunctionBuilder {
     return thing
         .getThingProperties()
         .stream()
-        .map(ThingProperty::getData)
         .filter(this::isDataThingIdentity)
         .findFirst()
         .orElseThrow();
@@ -519,7 +517,6 @@ public class PurposeFunctionBuilder {
     return thing
         .getThingProperties()
         .stream()
-        .map(ThingProperty::getData)
         .filter(this::isDataParentThingIdentity)
         .findFirst()
         .orElseThrow();

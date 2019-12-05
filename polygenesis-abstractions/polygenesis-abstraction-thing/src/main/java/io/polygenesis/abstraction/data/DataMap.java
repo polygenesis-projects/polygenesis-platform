@@ -28,7 +28,7 @@ import java.util.Objects;
  *
  * @author Christos Tsakostas
  */
-public class DataMap extends Data {
+public class DataMap extends AbstractData {
 
   // ===============================================================================================
   // STATE

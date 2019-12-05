@@ -35,7 +35,7 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class DataObject extends Data {
+public class DataObject extends AbstractData {
 
   private final ObjectName objectName;
   private final PackageName packageName;

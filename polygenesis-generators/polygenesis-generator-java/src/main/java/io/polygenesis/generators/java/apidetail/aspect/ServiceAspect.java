@@ -22,11 +22,9 @@ package io.polygenesis.generators.java.apidetail.aspect;
 
 import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.abstraction.thing.Activity;
-import io.polygenesis.abstraction.thing.Argument;
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.abstraction.thing.FunctionName;
 import io.polygenesis.abstraction.thing.Purpose;
-import io.polygenesis.abstraction.thing.ReturnValue;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
 import io.polygenesis.commons.keyvalue.KeyValue;
@@ -132,16 +130,14 @@ public class ServiceAspect implements Nameable {
         thing,
         Purpose.aspectAround(),
         new FunctionName("around"),
-        new ReturnValue(
-            new DataObject(
-                new ObjectName("Object"), new PackageName("java.lang"), VariableName.response())),
+        new DataObject(
+            new ObjectName("Object"), new PackageName("java.lang"), VariableName.response()),
         new LinkedHashSet<>(
             Arrays.asList(
-                new Argument(
-                    new DataObject(
-                        new ObjectName("ProceedingJoinPoint"),
-                        new PackageName("org.aspectj.lang"),
-                        new VariableName("proceedingJoinPoint"))))),
+                new DataObject(
+                    new ObjectName("ProceedingJoinPoint"),
+                    new PackageName("org.aspectj.lang"),
+                    new VariableName("proceedingJoinPoint")))),
         Activity.keyValues(keyValues),
         thing.getAbstractionsScopes());
   }
