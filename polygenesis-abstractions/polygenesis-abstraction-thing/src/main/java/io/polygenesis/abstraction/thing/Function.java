@@ -45,8 +45,8 @@ public class Function implements FunctionProvider {
   private Thing thing;
   private Purpose purpose;
   private FunctionName name;
-  private ReturnValue returnValue;
-  private Set<Argument> arguments;
+  private Data returnValue;
+  private Set<Data> arguments;
   private Activity activity;
   private Set<AbstractionScope> abstractionScopes;
 
@@ -69,8 +69,8 @@ public class Function implements FunctionProvider {
       Thing thing,
       Purpose purpose,
       FunctionName name,
-      ReturnValue returnValue,
-      Set<Argument> arguments,
+      Data returnValue,
+      Set<Data> arguments,
       Activity activity,
       Set<AbstractionScope> abstractionScopes) {
     setThing(thing);
@@ -136,16 +136,14 @@ public class Function implements FunctionProvider {
       // Ge Data Objects
       getArguments()
           .stream()
-          .filter(argument -> argument.getData().isDataGroup())
-          .map(Argument::getData)
+          .filter(argument -> argument.isDataGroup())
           .map(DataObject.class::cast)
           .forEach(dataObject -> fillDataObjects(dataObjects, dataObject));
 
       // Ge Data Objects inside Data Primitives
       getArguments()
           .stream()
-          .filter(argument -> argument.getData().isDataPrimitive())
-          .map(Argument::getData)
+          .filter(argument -> argument.isDataPrimitive())
           .map(Data::getAsDataPrimitive)
           .filter(dataPrimitive -> dataPrimitive.getDataObject() != null)
           .map(dataPrimitive -> dataPrimitive.getDataObject())
@@ -215,7 +213,7 @@ public class Function implements FunctionProvider {
    *
    * @return the return value
    */
-  public ReturnValue getReturnValue() {
+  public Data getReturnValue() {
     return returnValue;
   }
 
@@ -224,7 +222,7 @@ public class Function implements FunctionProvider {
    *
    * @return the arguments
    */
-  public Set<Argument> getArguments() {
+  public Set<Data> getArguments() {
     return arguments;
   }
 
@@ -285,7 +283,7 @@ public class Function implements FunctionProvider {
    *
    * @param returnValue the return value
    */
-  private void setReturnValue(ReturnValue returnValue) {
+  private void setReturnValue(Data returnValue) {
     Assertion.isNotNull(returnValue, "returnValue is required");
     this.returnValue = returnValue;
   }
@@ -295,7 +293,7 @@ public class Function implements FunctionProvider {
    *
    * @param arguments the arguments
    */
-  private void setArguments(Set<Argument> arguments) {
+  private void setArguments(Set<Data> arguments) {
     Assertion.isNotNull(arguments, "arguments is required");
     this.arguments = arguments;
   }

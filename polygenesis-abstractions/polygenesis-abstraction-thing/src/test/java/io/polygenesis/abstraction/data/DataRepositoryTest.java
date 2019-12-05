@@ -18,43 +18,36 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.abstraction.thing;
+package io.polygenesis.abstraction.data;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.polygenesis.abstraction.data.Data;
-import io.polygenesis.abstraction.data.DataPrimitive;
-import io.polygenesis.abstraction.data.PrimitiveType;
-import io.polygenesis.commons.test.AbstractEqualityTest;
 import io.polygenesis.commons.valueobjects.VariableName;
+import org.junit.Before;
 import org.junit.Test;
 
 /** @author Christos Tsakostas */
-public class ReturnValueTest extends AbstractEqualityTest<Data> {
+public class DataRepositoryTest {
+
+  private DataRepository dataRepository;
+
+  @Before
+  public void setUp() {
+    dataRepository = new DataRepository();
+  }
 
   @Test
-  public void shouldSucceedToInstantiate() {
-    Data returnValue = createDataPrimitive1();
+  public void findByDataPurpose() {
+    dataRepository.addData(DataPrimitive.of(PrimitiveType.STRING, new VariableName("asd")));
+    dataRepository.addData(DataPrimitive.of(PrimitiveType.STRING, new VariableName("xyz")));
 
-    assertThat(returnValue).isNotNull();
-    assertThat(returnValue).isEqualTo(createDataPrimitive1());
-  }
-
-  private DataPrimitive createDataPrimitive1() {
-    return DataPrimitive.of(PrimitiveType.STRING, new VariableName("someVariableName"));
-  }
-
-  private DataPrimitive createDataPrimitive2() {
-    return DataPrimitive.of(PrimitiveType.STRING, new VariableName("someOtherVariableName"));
-  }
-
-  @Override
-  public Data createObject1() {
-    return createDataPrimitive1();
-  }
-
-  @Override
-  public Data createObject2() {
-    return createDataPrimitive2();
+    assertThat(dataRepository.findByDataPurpose(DataPurpose.thingIdentity())).isEmpty();
+    assertThat(
+            dataRepository.findByDataPurpose(
+                DataPurpose.thingIdentity(), DataPurpose.tenantIdentity()))
+        .isEmpty();
+    assertThat(dataRepository.findByDataPurpose(DataPurpose.any())).hasSize(2);
+    assertThat(dataRepository.findByDataPurpose(DataPurpose.thingIdentity(), DataPurpose.any()))
+        .hasSize(2);
   }
 }

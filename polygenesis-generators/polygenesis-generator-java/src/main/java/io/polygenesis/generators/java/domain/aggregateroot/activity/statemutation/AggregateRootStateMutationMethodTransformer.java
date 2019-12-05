@@ -123,7 +123,7 @@ public class AggregateRootStateMutationMethodTransformer
       return "";
     } else {
       if (source.getFunction().getReturnValue() != null) {
-        return makeVariableDataType(source.getFunction().getReturnValue().getData());
+        return makeVariableDataType(source.getFunction().getReturnValue());
       } else {
         return dataTypeTransformer.convert(PrimitiveType.VOID.name());
       }

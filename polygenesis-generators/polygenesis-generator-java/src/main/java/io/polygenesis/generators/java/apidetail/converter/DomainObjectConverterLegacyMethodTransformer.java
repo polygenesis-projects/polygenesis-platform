@@ -133,8 +133,8 @@ public class DomainObjectConverterLegacyMethodTransformer
             argument ->
                 parameterRepresentations.add(
                     new ParameterRepresentation(
-                        dataTypeTransformer.convert(argument.getData().getDataType()),
-                        argument.getData().getVariableName().getText())));
+                        dataTypeTransformer.convert(argument.getDataType()),
+                        argument.getVariableName().getText())));
 
     return parameterRepresentations;
   }
@@ -142,7 +142,7 @@ public class DomainObjectConverterLegacyMethodTransformer
   @Override
   public String returnValue(DomainEntityConverterMethod source, Object... args) {
     if (source.getFunction().getReturnValue() != null) {
-      return makeVariableDataType(source.getFunction().getReturnValue().getData());
+      return makeVariableDataType(source.getFunction().getReturnValue());
     } else {
       return dataTypeTransformer.convert(PrimitiveType.VOID.name());
     }

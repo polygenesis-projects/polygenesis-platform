@@ -23,7 +23,6 @@ package io.polygenesis.transformers.dart;
 import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.abstraction.data.PrimitiveType;
 import io.polygenesis.abstraction.thing.ActivityRegistry;
-import io.polygenesis.abstraction.thing.Argument;
 import io.polygenesis.abstraction.thing.FunctionProvider;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.commons.valueobjects.PackageName;
@@ -98,8 +97,8 @@ public abstract class AbstractDartMethodTransformer<S extends FunctionProvider>
     Set<String> imports = new TreeSet<>();
 
     if (source.getFunction().getReturnValue() != null
-        && source.getFunction().getReturnValue().getData().isDataGroup()) {
-      DataObject dataObject = source.getFunction().getReturnValue().getData().getAsDataObject();
+        && source.getFunction().getReturnValue().isDataGroup()) {
+      DataObject dataObject = source.getFunction().getReturnValue().getAsDataObject();
 
       // TODO
       //            if (!dataObject.getPackageName().equals(source.getPackageName())) {
@@ -111,8 +110,7 @@ public abstract class AbstractDartMethodTransformer<S extends FunctionProvider>
         .getFunction()
         .getArguments()
         .stream()
-        .filter(argument -> argument.getData().isDataGroup())
-        .map(Argument::getData)
+        .filter(argument -> argument.isDataGroup())
         .map(DataObject.class::cast)
         .forEach(
             dataGroup -> {
@@ -163,8 +161,8 @@ public abstract class AbstractDartMethodTransformer<S extends FunctionProvider>
             argument ->
                 parameterRepresentations.add(
                     new ParameterRepresentation(
-                        dataTypeTransformer.convert(argument.getData().getDataType()),
-                        argument.getData().getVariableName().getText())));
+                        dataTypeTransformer.convert(argument.getDataType()),
+                        argument.getVariableName().getText())));
 
     return parameterRepresentations;
   }
@@ -172,7 +170,7 @@ public abstract class AbstractDartMethodTransformer<S extends FunctionProvider>
   @Override
   public String returnValue(S source, Object... args) {
     if (source.getFunction().getReturnValue() != null) {
-      return makeVariableDataType(source.getFunction().getReturnValue().getData());
+      return makeVariableDataType(source.getFunction().getReturnValue());
     } else {
       return dataTypeTransformer.convert(PrimitiveType.VOID.name());
     }

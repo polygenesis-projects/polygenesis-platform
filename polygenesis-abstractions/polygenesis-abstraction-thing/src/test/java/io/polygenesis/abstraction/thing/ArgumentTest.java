@@ -22,6 +22,7 @@ package io.polygenesis.abstraction.thing;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.DataPrimitive;
 import io.polygenesis.abstraction.data.PrimitiveType;
 import io.polygenesis.commons.test.AbstractEqualityTest;
@@ -29,14 +30,14 @@ import io.polygenesis.commons.valueobjects.VariableName;
 import org.junit.Test;
 
 /** @author Christos Tsakostas */
-public class ArgumentTest extends AbstractEqualityTest<Argument> {
+public class ArgumentTest extends AbstractEqualityTest<Data> {
 
   @Test
   public void shouldSucceedToInstantiate() {
-    Argument argument = new Argument(createDataPrimitive1());
+    Data argument = createDataPrimitive1();
 
     assertThat(argument).isNotNull();
-    assertThat(argument.getData()).isEqualTo(createDataPrimitive1());
+    assertThat(argument).isEqualTo(createDataPrimitive1());
   }
 
   private DataPrimitive createDataPrimitive1() {
@@ -48,12 +49,12 @@ public class ArgumentTest extends AbstractEqualityTest<Argument> {
   }
 
   @Override
-  public Argument createObject1() {
-    return new Argument(createDataPrimitive1());
+  public Data createObject1() {
+    return createDataPrimitive1();
   }
 
   @Override
-  public Argument createObject2() {
-    return new Argument(createDataPrimitive2());
+  public Data createObject2() {
+    return createDataPrimitive2();
   }
 }

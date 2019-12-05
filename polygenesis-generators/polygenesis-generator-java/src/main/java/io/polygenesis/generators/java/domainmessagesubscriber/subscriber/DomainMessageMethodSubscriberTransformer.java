@@ -21,7 +21,6 @@
 package io.polygenesis.generators.java.domainmessagesubscriber.subscriber;
 
 import io.polygenesis.abstraction.data.DataObject;
-import io.polygenesis.abstraction.thing.Argument;
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.generators.java.domainmessagesubscriber.subscriber.activity.DomainMessageSubscriberActivityRegistry;
@@ -88,8 +87,8 @@ public class DomainMessageMethodSubscriberTransformer extends AbstractMethodTran
   public Set<String> imports(Function source, Object... args) {
     Set<String> imports = new TreeSet<>();
 
-    if (source.getReturnValue() != null && source.getReturnValue().getData().isDataGroup()) {
-      DataObject dataObject = source.getReturnValue().getData().getAsDataObject();
+    if (source.getReturnValue() != null && source.getReturnValue().isDataGroup()) {
+      DataObject dataObject = source.getReturnValue().getAsDataObject();
 
       // TODO
       // if (!dataObject.getPackageName().equals(source.getService().getPackageName())) {
@@ -100,8 +99,7 @@ public class DomainMessageMethodSubscriberTransformer extends AbstractMethodTran
     source
         .getArguments()
         .stream()
-        .filter(argument -> argument.getData().isDataGroup())
-        .map(Argument::getData)
+        .filter(argument -> argument.isDataGroup())
         .map(DataObject.class::cast)
         .forEach(
             dataGroup -> {

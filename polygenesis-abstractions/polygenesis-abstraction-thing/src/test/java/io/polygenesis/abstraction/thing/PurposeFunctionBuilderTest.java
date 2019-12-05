@@ -53,7 +53,7 @@ public class PurposeFunctionBuilderTest {
 
     Function function = functions.stream().findFirst().orElseThrow(IllegalStateException::new);
     assertThat(function.getName()).isEqualTo(new FunctionName("modify"));
-    assertThat(function.getReturnValue().getData().getAsDataObject().getObjectName().getText())
+    assertThat(function.getReturnValue().getAsDataObject().getObjectName().getText())
         .isEqualTo("modifyBusinessResponse");
   }
 
@@ -70,7 +70,7 @@ public class PurposeFunctionBuilderTest {
     Function function = functions.stream().findFirst().orElseThrow(IllegalStateException::new);
     assertThat(function.getName().getText())
         .isEqualTo(new FunctionName("modifyDescription").getText());
-    assertThat(function.getReturnValue().getData().getAsDataObject().getObjectName().getText())
+    assertThat(function.getReturnValue().getAsDataObject().getObjectName().getText())
         .isEqualTo("modifyDescriptionBusinessResponse");
   }
 

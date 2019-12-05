@@ -23,7 +23,6 @@ package io.polygenesis.generators.java.batchprocessactivemq.publisher;
 import io.polygenesis.abstraction.data.DataPrimitive;
 import io.polygenesis.abstraction.data.PrimitiveType;
 import io.polygenesis.abstraction.thing.Activity;
-import io.polygenesis.abstraction.thing.Argument;
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.abstraction.thing.FunctionName;
 import io.polygenesis.abstraction.thing.Purpose;
@@ -89,8 +88,7 @@ public class BatchProcessMessagePublisher extends AbstractNameablePackageable {
         new FunctionName("send"),
         null,
         new LinkedHashSet<>(
-            Arrays.asList(
-                new Argument(DataPrimitive.of(PrimitiveType.STRING, new VariableName("message"))))),
+            Arrays.asList(DataPrimitive.of(PrimitiveType.STRING, new VariableName("message")))),
         Activity.empty(),
         thing.getAbstractionsScopes());
   }

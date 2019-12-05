@@ -21,11 +21,11 @@
 package io.polygenesis.metamodels.appflutter;
 
 import io.polygenesis.abstraction.data.DataObject;
+import io.polygenesis.abstraction.data.DataRepository;
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.ThingName;
-import io.polygenesis.abstraction.thing.ThingProperty;
 import io.polygenesis.abstraction.thing.dsl.FunctionBuilder;
 import io.polygenesis.commons.keyvalue.KeyValue;
 import io.polygenesis.commons.valueobjects.ContextName;
@@ -62,7 +62,7 @@ public abstract class AbstractFlutterThing<S extends Thing> extends Thing {
       Set<AbstractionScope> abstractionScopes,
       ContextName contextName,
       ThingName thingName,
-      Set<ThingProperty> thingProperties,
+      DataRepository thingProperties,
       Boolean multiTenant,
       Thing optionalParent,
       Set<KeyValue> metadata) {

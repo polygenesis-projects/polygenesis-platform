@@ -26,7 +26,6 @@ import io.polygenesis.abstraction.thing.Activity;
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.abstraction.thing.FunctionName;
 import io.polygenesis.abstraction.thing.Purpose;
-import io.polygenesis.abstraction.thing.ReturnValue;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
 import io.polygenesis.commons.valueobjects.ObjectName;
@@ -89,7 +88,7 @@ public class DomainMessagePublishDtoConverter extends AbstractNameablePackageabl
         thing,
         Purpose.domainMessagePublisherGetContext(),
         new FunctionName("getContext"),
-        new ReturnValue(DataPrimitive.of(PrimitiveType.STRING, VariableName.response())),
+        DataPrimitive.of(PrimitiveType.STRING, VariableName.response()),
         new LinkedHashSet<>(),
         Activity.empty(),
         thing.getAbstractionsScopes());

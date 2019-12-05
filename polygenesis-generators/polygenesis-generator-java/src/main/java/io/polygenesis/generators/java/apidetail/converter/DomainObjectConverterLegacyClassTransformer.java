@@ -22,7 +22,6 @@ package io.polygenesis.generators.java.apidetail.converter;
 
 import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.DataObject;
-import io.polygenesis.abstraction.thing.Argument;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.models.apiimpl.DomainEntityConverter;
@@ -117,7 +116,6 @@ public class DomainObjectConverterLegacyClassTransformer
             .stream()
             .map(DomainEntityConverterMethod::getFunction)
             .flatMap(function -> function.getArguments().stream())
-            .map(Argument::getData)
             .filter(Data::isDataGroup)
             .map(DataObject.class::cast)
             .filter(dataGroup -> !dataGroup.getPackageName().equals(source.getPackageName()))
@@ -129,7 +127,7 @@ public class DomainObjectConverterLegacyClassTransformer
             .stream()
             .map(DomainEntityConverterMethod::getFunction)
             .filter(function -> function.getReturnValue() != null)
-            .map(function -> function.getReturnValue().getData())
+            .map(function -> function.getReturnValue())
             .filter(Data::isDataGroup)
             .map(DataObject.class::cast)
             .filter(dataGroup -> !dataGroup.getPackageName().equals(source.getPackageName()))

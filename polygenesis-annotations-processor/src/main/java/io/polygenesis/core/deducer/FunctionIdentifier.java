@@ -26,7 +26,7 @@ import io.polygenesis.core.Argument;
 import io.polygenesis.core.Function;
 import io.polygenesis.core.FunctionName;
 import io.polygenesis.core.Goal;
-import io.polygenesis.core.ReturnValue;
+import io.polygenesis.core.Data;
 import io.polygenesis.core.Thing;
 import io.polygenesis.core.ThingBuilder;
 import io.polygenesis.core.ThingName;
@@ -133,7 +133,7 @@ public class FunctionIdentifier {
                 methodOutputDescriptor.getClazz(),
                 null);
 
-        ReturnValue returnValue = new ReturnValue(dataDeducer.deduceResponse(output));
+        Data returnValue = new Data(dataDeducer.deduceResponse(output));
 
         // =========================================================================================
         // METHOD INPUTS

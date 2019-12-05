@@ -27,7 +27,6 @@ import io.polygenesis.abstraction.thing.Activity;
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.abstraction.thing.FunctionName;
 import io.polygenesis.abstraction.thing.Purpose;
-import io.polygenesis.abstraction.thing.ReturnValue;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
 import io.polygenesis.commons.keyvalue.KeyValue;
@@ -105,8 +104,7 @@ public class BatchProcessSubscriber extends BatchProcessMetamodel {
         thing,
         Purpose.reset(),
         new FunctionName("getSupportedMessageTypes"),
-        new ReturnValue(
-            DataArray.of(DataPrimitive.of(PrimitiveType.STRING, VariableName.response()))),
+        DataArray.of(DataPrimitive.of(PrimitiveType.STRING, VariableName.response())),
         new LinkedHashSet<>(Arrays.asList()),
         Activity.keyValues(
             new LinkedHashSet<>(

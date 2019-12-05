@@ -99,8 +99,8 @@ public class FunctionToLegacyMethodRepresentationTransformer
             argument ->
                 parameterRepresentations.add(
                     new ParameterRepresentation(
-                        dataTypeTransformer.convert(argument.getData().getDataType()),
-                        argument.getData().getVariableName().getText())));
+                        dataTypeTransformer.convert(argument.getDataType()),
+                        argument.getVariableName().getText())));
 
     return parameterRepresentations;
   }
@@ -108,7 +108,7 @@ public class FunctionToLegacyMethodRepresentationTransformer
   @Override
   public String returnValue(Function source, Object... args) {
     if (source.getReturnValue() != null) {
-      return makeVariableDataType(source.getReturnValue().getData());
+      return makeVariableDataType(source.getReturnValue());
     } else {
       return dataTypeTransformer.convert(PrimitiveType.VOID.name());
     }

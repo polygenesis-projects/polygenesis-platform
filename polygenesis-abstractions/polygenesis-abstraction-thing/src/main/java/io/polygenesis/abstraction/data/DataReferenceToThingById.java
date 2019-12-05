@@ -31,7 +31,7 @@ import java.util.Objects;
  *
  * @author Christos Tsakostas
  */
-public class DataReferenceToThingById extends Data {
+public class DataReferenceToThingById extends AbstractData {
 
   // ===============================================================================================
   // STATE

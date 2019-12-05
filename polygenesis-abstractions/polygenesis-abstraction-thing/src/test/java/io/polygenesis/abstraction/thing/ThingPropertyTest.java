@@ -20,21 +20,22 @@
 
 package io.polygenesis.abstraction.thing;
 
+import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.DataPrimitive;
 import io.polygenesis.abstraction.data.PrimitiveType;
 import io.polygenesis.commons.test.AbstractEqualityTest;
 import io.polygenesis.commons.valueobjects.VariableName;
 
 /** @author Christos Tsakostas */
-public class ThingPropertyTest extends AbstractEqualityTest<ThingProperty> {
+public class ThingPropertyTest extends AbstractEqualityTest<Data> {
 
   @Override
-  public ThingProperty createObject1() {
-    return new ThingProperty(DataPrimitive.of(PrimitiveType.STRING, new VariableName("var1")));
+  public Data createObject1() {
+    return DataPrimitive.of(PrimitiveType.STRING, new VariableName("var1"));
   }
 
   @Override
-  public ThingProperty createObject2() {
-    return new ThingProperty(DataPrimitive.of(PrimitiveType.STRING, new VariableName("var2")));
+  public Data createObject2() {
+    return DataPrimitive.of(PrimitiveType.STRING, new VariableName("var2"));
   }
 }

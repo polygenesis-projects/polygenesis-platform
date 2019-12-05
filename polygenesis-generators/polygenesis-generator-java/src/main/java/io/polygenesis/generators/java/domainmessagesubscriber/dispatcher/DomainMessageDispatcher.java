@@ -23,11 +23,9 @@ package io.polygenesis.generators.java.domainmessagesubscriber.dispatcher;
 import io.polygenesis.abstraction.data.DataPrimitive;
 import io.polygenesis.abstraction.data.PrimitiveType;
 import io.polygenesis.abstraction.thing.Activity;
-import io.polygenesis.abstraction.thing.Argument;
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.abstraction.thing.FunctionName;
 import io.polygenesis.abstraction.thing.Purpose;
-import io.polygenesis.abstraction.thing.ReturnValue;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
 import io.polygenesis.commons.valueobjects.ObjectName;
@@ -96,10 +94,9 @@ public class DomainMessageDispatcher extends AbstractNameablePackageable {
         thing,
         Purpose.reset(),
         new FunctionName("extractMessageType"),
-        new ReturnValue(DataPrimitive.of(PrimitiveType.STRING, VariableName.response())),
+        DataPrimitive.of(PrimitiveType.STRING, VariableName.response()),
         new LinkedHashSet<>(
-            Arrays.asList(
-                new Argument(DataPrimitive.of(PrimitiveType.STRING, new VariableName("message"))))),
+            Arrays.asList(DataPrimitive.of(PrimitiveType.STRING, new VariableName("message")))),
         Activity.empty(),
         thing.getAbstractionsScopes());
   }

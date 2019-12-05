@@ -22,11 +22,9 @@ package io.polygenesis.abstraction.thing.dsl;
 
 import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.thing.Activity;
-import io.polygenesis.abstraction.thing.Argument;
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.abstraction.thing.FunctionName;
 import io.polygenesis.abstraction.thing.Purpose;
-import io.polygenesis.abstraction.thing.ReturnValue;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.core.AbstractionScope;
@@ -50,8 +48,8 @@ public abstract class AbstractFunctionBuilder<T extends AbstractFunctionBuilder<
   private Thing thing;
   private Purpose purpose;
   private FunctionName name;
-  private ReturnValue returnValue;
-  private Set<Argument> arguments;
+  private Data returnValue;
+  private Set<Data> arguments;
   private Activity activity;
   private Set<AbstractionScope> abstractionScopes;
 
@@ -94,7 +92,7 @@ public abstract class AbstractFunctionBuilder<T extends AbstractFunctionBuilder<
    * @return the t
    */
   public T addArgument(Data data) {
-    this.arguments.add(new Argument(data));
+    this.arguments.add(data);
     return builderClass.cast(this);
   }
 
@@ -105,7 +103,7 @@ public abstract class AbstractFunctionBuilder<T extends AbstractFunctionBuilder<
    * @return the t
    */
   public T addArguments(Set<Data> dataSet) {
-    dataSet.forEach(data -> this.arguments.add(new Argument(data)));
+    dataSet.forEach(data -> this.arguments.add(data));
     return builderClass.cast(this);
   }
 
@@ -120,7 +118,7 @@ public abstract class AbstractFunctionBuilder<T extends AbstractFunctionBuilder<
    * @return the return value
    */
   public T setReturnValue(Data data) {
-    this.returnValue = new ReturnValue(data);
+    this.returnValue = data;
     return builderClass.cast(this);
   }
 
