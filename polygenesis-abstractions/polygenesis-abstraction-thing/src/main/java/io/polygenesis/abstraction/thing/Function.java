@@ -22,6 +22,7 @@ package io.polygenesis.abstraction.thing;
 
 import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.DataObject;
+import io.polygenesis.abstraction.data.DataRepository;
 import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.core.AbstractionScope;
 import java.util.LinkedHashSet;
@@ -46,9 +47,10 @@ public class Function implements FunctionProvider {
   private Purpose purpose;
   private FunctionName name;
   private Data returnValue;
-  private Set<Data> arguments;
+  private DataRepository arguments;
   private Activity activity;
   private Set<AbstractionScope> abstractionScopes;
+  private Function delegatesToFunction;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -70,7 +72,7 @@ public class Function implements FunctionProvider {
       Purpose purpose,
       FunctionName name,
       Data returnValue,
-      Set<Data> arguments,
+      DataRepository arguments,
       Activity activity,
       Set<AbstractionScope> abstractionScopes) {
     setThing(thing);
@@ -90,6 +92,31 @@ public class Function implements FunctionProvider {
     }
 
     setAbstractionScopes(abstractionScopes);
+  }
+
+  /**
+   * Instantiates a new Function.
+   *
+   * @param thing the thing
+   * @param purpose the purpose
+   * @param name the name
+   * @param returnValue the return value
+   * @param arguments the arguments
+   * @param activity the activity
+   * @param abstractionScopes the abstraction scopes
+   * @param delegatesToFunction the delegates to function
+   */
+  public Function(
+      Thing thing,
+      Purpose purpose,
+      FunctionName name,
+      Data returnValue,
+      DataRepository arguments,
+      Activity activity,
+      Set<AbstractionScope> abstractionScopes,
+      Function delegatesToFunction) {
+    this(thing, purpose, name, returnValue, arguments, activity, abstractionScopes);
+    setDelegatesToFunction(delegatesToFunction);
   }
 
   // ===============================================================================================
@@ -135,6 +162,7 @@ public class Function implements FunctionProvider {
     if (getArguments() != null) {
       // Ge Data Objects
       getArguments()
+          .getData()
           .stream()
           .filter(argument -> argument.isDataGroup())
           .map(DataObject.class::cast)
@@ -142,6 +170,7 @@ public class Function implements FunctionProvider {
 
       // Ge Data Objects inside Data Primitives
       getArguments()
+          .getData()
           .stream()
           .filter(argument -> argument.isDataPrimitive())
           .map(Data::getAsDataPrimitive)
@@ -222,7 +251,7 @@ public class Function implements FunctionProvider {
    *
    * @return the arguments
    */
-  public Set<Data> getArguments() {
+  public DataRepository getArguments() {
     return arguments;
   }
 
@@ -242,6 +271,15 @@ public class Function implements FunctionProvider {
    */
   public Set<AbstractionScope> getAbstractionScopes() {
     return abstractionScopes;
+  }
+
+  /**
+   * Gets delegates to function.
+   *
+   * @return the delegates to function
+   */
+  public Function getDelegatesToFunction() {
+    return delegatesToFunction;
   }
 
   // ===============================================================================================
@@ -293,7 +331,7 @@ public class Function implements FunctionProvider {
    *
    * @param arguments the arguments
    */
-  private void setArguments(Set<Data> arguments) {
+  private void setArguments(DataRepository arguments) {
     Assertion.isNotNull(arguments, "arguments is required");
     this.arguments = arguments;
   }
@@ -316,6 +354,16 @@ public class Function implements FunctionProvider {
   private void setAbstractionScopes(Set<AbstractionScope> abstractionScopes) {
     Assertion.isNotNull(abstractionScopes, "abstractionScopes is required");
     this.abstractionScopes = abstractionScopes;
+  }
+
+  /**
+   * Sets delegates to function.
+   *
+   * @param delegatesToFunction the delegates to function
+   */
+  private void setDelegatesToFunction(Function delegatesToFunction) {
+    Assertion.isNotNull(delegatesToFunction, "delegatesToFunction is required");
+    this.delegatesToFunction = delegatesToFunction;
   }
 
   // ===============================================================================================

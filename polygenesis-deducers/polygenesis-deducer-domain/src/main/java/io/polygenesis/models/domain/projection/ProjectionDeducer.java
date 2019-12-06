@@ -30,10 +30,15 @@ import io.polygenesis.core.AbstractionScope;
 import io.polygenesis.core.CoreRegistry;
 import io.polygenesis.core.Deducer;
 import io.polygenesis.core.MetamodelRepository;
+import io.polygenesis.models.domain.Constructor;
+import io.polygenesis.models.domain.DomainObjectProperty;
 import io.polygenesis.models.domain.InstantiationType;
 import io.polygenesis.models.domain.Persistence;
 import io.polygenesis.models.domain.Projection;
 import io.polygenesis.models.domain.ProjectionMetamodelRepository;
+import io.polygenesis.models.domain.common.ConstructorsDeducer;
+import io.polygenesis.models.domain.common.DomainObjectPropertiesDeducer;
+import io.polygenesis.models.domain.common.IdentityDomainObjectPropertiesDeducer;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -48,7 +53,9 @@ public class ProjectionDeducer implements Deducer<ProjectionMetamodelRepository>
   // DEPENDENCIES
   // ===============================================================================================
   private final PackageName rootPackageName;
-  private final ProjectionPropertyDeducer projectionPropertyDeducer;
+  private final ConstructorsDeducer constructorsDeducer;
+  private final DomainObjectPropertiesDeducer domainObjectPropertiesDeducer;
+  private final IdentityDomainObjectPropertiesDeducer identityDomainObjectPropertiesDeducer;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -58,12 +65,19 @@ public class ProjectionDeducer implements Deducer<ProjectionMetamodelRepository>
    * Instantiates a new Projection deducer.
    *
    * @param rootPackageName the root package name
-   * @param projectionPropertyDeducer the projection property deducer
+   * @param constructorsDeducer the constructors deducer
+   * @param domainObjectPropertiesDeducer the domain object properties deducer
+   * @param identityDomainObjectPropertiesDeducer the identity domain object properties deducer
    */
   public ProjectionDeducer(
-      PackageName rootPackageName, ProjectionPropertyDeducer projectionPropertyDeducer) {
+      PackageName rootPackageName,
+      ConstructorsDeducer constructorsDeducer,
+      DomainObjectPropertiesDeducer domainObjectPropertiesDeducer,
+      IdentityDomainObjectPropertiesDeducer identityDomainObjectPropertiesDeducer) {
     this.rootPackageName = rootPackageName;
-    this.projectionPropertyDeducer = projectionPropertyDeducer;
+    this.constructorsDeducer = constructorsDeducer;
+    this.domainObjectPropertiesDeducer = domainObjectPropertiesDeducer;
+    this.identityDomainObjectPropertiesDeducer = identityDomainObjectPropertiesDeducer;
   }
 
   // ===============================================================================================
@@ -101,7 +115,13 @@ public class ProjectionDeducer implements Deducer<ProjectionMetamodelRepository>
             new ObjectName(String.format("%sId", thing.getThingName().getText())),
             thing.getMultiTenant());
 
-    projections.add(
+    Set<DomainObjectProperty<?>> properties =
+        domainObjectPropertiesDeducer.deduceDomainObjectPropertiesFromThing(
+            identityDomainObjectPropertiesDeducer.makeProjectionIdentityDomainObjectProperties(
+                thing, rootPackageName),
+            thing);
+
+    Projection projection =
         new Projection(
             InstantiationType.CONCRETE,
             new ObjectName(thing.getThingName().getText()),
@@ -109,11 +129,24 @@ public class ProjectionDeducer implements Deducer<ProjectionMetamodelRepository>
                 String.format(
                     "%s.%s",
                     rootPackageName.getText(), thing.getThingName().getText().toLowerCase())),
-            projectionPropertyDeducer.deduceFromThing(thing, rootPackageName),
-            projectionPropertyDeducer.deduceConstructors(null, thing, rootPackageName),
-            thing.getMultiTenant(),
-            persistence,
-            makeSuperclass(thing.getMultiTenant())));
+            properties,
+            thing.getMultiTenant());
+
+    // Get Constructors
+    Set<Constructor> constructors =
+        constructorsDeducer.deduceConstructors(
+            rootPackageName,
+            null,
+            identityDomainObjectPropertiesDeducer.makeProjectionIdentityDomainObjectProperties(
+                thing, rootPackageName),
+            thing);
+
+    // Add Constructors
+    projection.addConstructors(constructors);
+
+    projection.assignSuperClass(makeSuperclass(thing.getMultiTenant()));
+    projection.assignPersistence(persistence);
+    projections.add(projection);
   }
 
   private Projection makeSuperclass(Boolean multiTenant) {
@@ -122,9 +155,6 @@ public class ProjectionDeducer implements Deducer<ProjectionMetamodelRepository>
         multiTenant ? new ObjectName("TenantProjection") : new ObjectName("Projection"),
         new PackageName("com.oregor.trinity4j.domain"),
         new LinkedHashSet<>(),
-        new LinkedHashSet<>(),
-        multiTenant,
-        null,
-        null);
+        multiTenant);
   }
 }

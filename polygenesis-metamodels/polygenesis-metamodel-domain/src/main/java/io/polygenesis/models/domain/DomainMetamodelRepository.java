@@ -38,7 +38,7 @@ public interface DomainMetamodelRepository<T> {
    * @param thingName the thing name
    * @return the base domain entity
    */
-  BaseDomainEntity findEntityByThingName(ThingName thingName);
+  DomainObject findEntityByThingName(ThingName thingName);
 
   /**
    * Find by things set.

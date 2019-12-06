@@ -143,7 +143,7 @@ public class DomainEventTransformer extends DomainObjectClassTransformer<DomainE
                           makeVariableName(property),
                           dataTypeTransformer.getModifierPrivate()));
                   break;
-                case REFERENCE:
+                case REFERENCE_BY_ID:
                   fieldRepresentations.add(
                       FieldRepresentation.withModifiers(
                           makeVariableDataType(property),

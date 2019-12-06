@@ -131,7 +131,13 @@ public class ParameterRepresentationsService {
     return parameterRepresentations;
   }
 
-  public Set<ParameterRepresentation> getMethodArgumentsForCreateAggregateEntity(
+  /**
+   * Gets method arguments without identities and references.
+   *
+   * @param thisClassProperties the this class properties
+   * @return the method arguments without identities and references
+   */
+  public Set<ParameterRepresentation> getMethodArgumentsWithoutIdentitiesAndReferences(
       Set<DomainObjectProperty<?>> thisClassProperties) {
     Set<ParameterRepresentation> parameterRepresentations = new LinkedHashSet<>();
 
@@ -159,6 +165,12 @@ public class ParameterRepresentationsService {
     return parameterRepresentations;
   }
 
+  /**
+   * Gets method arguments for modify aggregate entity.
+   *
+   * @param thisClassProperties the this class properties
+   * @return the method arguments for modify aggregate entity
+   */
   public Set<ParameterRepresentation> getMethodArgumentsForModifyAggregateEntity(
       Set<DomainObjectProperty<?>> thisClassProperties) {
     Set<ParameterRepresentation> parameterRepresentations = new LinkedHashSet<>();
@@ -178,7 +190,7 @@ public class ParameterRepresentationsService {
 
     // 2. Continue with the rest like in the constructor
     parameterRepresentations.addAll(
-        getMethodArgumentsForCreateAggregateEntity(thisClassProperties));
+        getMethodArgumentsWithoutIdentitiesAndReferences(thisClassProperties));
 
     return parameterRepresentations;
   }

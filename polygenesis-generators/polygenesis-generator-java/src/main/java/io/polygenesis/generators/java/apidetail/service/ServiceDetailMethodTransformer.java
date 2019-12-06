@@ -21,7 +21,6 @@
 package io.polygenesis.generators.java.apidetail.service;
 
 import io.polygenesis.core.DataTypeTransformer;
-import io.polygenesis.generators.java.apidetail.service.activity.ServiceMethodActivityRegistry;
 import io.polygenesis.models.apiimpl.ServiceMethodImplementation;
 import io.polygenesis.representations.code.ParameterRepresentation;
 import io.polygenesis.transformers.java.AbstractMethodTransformer;
@@ -40,7 +39,7 @@ public class ServiceDetailMethodTransformer
   // DEPENDENCIES
   // ===============================================================================================
 
-  private final ServiceMethodActivityRegistry serviceMethodActivityRegistry;
+  private final ServiceDetailMethodActivityRegistry serviceDetailMethodActivityRegistry;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -50,13 +49,13 @@ public class ServiceDetailMethodTransformer
    * Instantiates a new Service detail method transformer.
    *
    * @param dataTypeTransformer the data type transformer
-   * @param serviceMethodActivityRegistry the service method activity registry
+   * @param serviceDetailMethodActivityRegistry the service detail method activity registry
    */
   public ServiceDetailMethodTransformer(
       DataTypeTransformer dataTypeTransformer,
-      ServiceMethodActivityRegistry serviceMethodActivityRegistry) {
+      ServiceDetailMethodActivityRegistry serviceDetailMethodActivityRegistry) {
     super(dataTypeTransformer);
-    this.serviceMethodActivityRegistry = serviceMethodActivityRegistry;
+    this.serviceDetailMethodActivityRegistry = serviceDetailMethodActivityRegistry;
   }
 
   // ===============================================================================================
@@ -79,10 +78,15 @@ public class ServiceDetailMethodTransformer
 
   @Override
   public String implementation(ServiceMethodImplementation source, Object... args) {
-    if (serviceMethodActivityRegistry.isActivitySupportedFor(source)) {
-      return serviceMethodActivityRegistry.activityFor(source, args);
+    if (serviceDetailMethodActivityRegistry.isActivitySupportedFor(source)) {
+      return serviceDetailMethodActivityRegistry.activityFor(source, args);
     } else {
-      return super.implementation(source, args);
+      StringBuilder stringBuilder = new StringBuilder();
+      stringBuilder.append(super.implementation(source, args));
+      stringBuilder.append(
+          String.format(
+              " // No impl found for purpose=%s", source.getFunction().getPurpose().getText()));
+      return stringBuilder.toString();
     }
   }
 

@@ -20,6 +20,8 @@
 
 package io.polygenesis.models.domain;
 
+import io.polygenesis.abstraction.data.Data;
+import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import java.util.Set;
@@ -29,7 +31,7 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class DomainEvent extends BaseDomainObject {
+public class DomainEvent extends DomainObject {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -42,14 +44,12 @@ public class DomainEvent extends BaseDomainObject {
    * @param objectName the object name
    * @param packageName the package name
    * @param properties the properties
-   * @param constructors the constructors
    */
   public DomainEvent(
       InstantiationType instantiationType,
       ObjectName objectName,
       PackageName packageName,
       Set<DomainObjectProperty<?>> properties,
-      Set<Constructor> constructors,
       Boolean multiTenant) {
     super(
         DomainObjectType.DOMAIN_EVENT,
@@ -57,7 +57,6 @@ public class DomainEvent extends BaseDomainObject {
         objectName,
         packageName,
         properties,
-        constructors,
         multiTenant);
   }
 
@@ -71,8 +70,22 @@ public class DomainEvent extends BaseDomainObject {
   }
 
   @Override
-  public BaseDomainObject getSuperClass() {
-    // TODO
-    return null;
+  public DomainObject getSuperClass() {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public PropertyType getPropertyType() {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public DataObject getData() {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public Data getTypeParameterData() {
+    throw new UnsupportedOperationException();
   }
 }

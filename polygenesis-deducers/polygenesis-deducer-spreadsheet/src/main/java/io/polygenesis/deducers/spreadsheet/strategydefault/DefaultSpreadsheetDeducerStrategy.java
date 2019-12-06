@@ -94,6 +94,7 @@ public class DefaultSpreadsheetDeducerStrategy implements SpreadsheetDeducerStra
 
     thing
         .getThingProperties()
+        .getData()
         .forEach(data -> cells.addAll(deduceCellsForData(data, atomicIndex.getAndIncrement())));
 
     return new Sheet(new Name(thing.getThingName().getText()), cells);

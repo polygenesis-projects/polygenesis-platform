@@ -20,6 +20,7 @@
 
 package io.polygenesis.generators.java.batchprocessscheduler.scheduler;
 
+import io.polygenesis.abstraction.data.DataRepository;
 import io.polygenesis.abstraction.thing.Activity;
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.abstraction.thing.FunctionName;
@@ -31,7 +32,6 @@ import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.models.api.Dto;
 import io.polygenesis.models.api.ServiceMethod;
 import io.polygenesis.models.periodicprocess.BatchProcessMetamodel;
-import java.util.LinkedHashSet;
 
 /**
  * The type Batch process scheduler route.
@@ -94,7 +94,7 @@ public class BatchProcessSchedulerRoute extends BatchProcessMetamodel {
         Purpose.reset(),
         new FunctionName("configure"),
         null,
-        new LinkedHashSet<>(),
+        new DataRepository(),
         Activity.empty(),
         thing.getAbstractionsScopes());
   }

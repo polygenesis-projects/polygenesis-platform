@@ -19,6 +19,7 @@
 -->
     ${ data.aggregateEntityData.dataType } ${ data.aggregateEntityData.variable } = new ${ data.aggregateEntityData.dataType }(
       <#list data.properties as property>
+        // ${property.propertyType}
           <#if property.propertyType == 'AGGREGATE_ENTITY_ID'>
         new ${ data.aggregateEntityData.idDataType }(UuidGenerator.timeBasedUuid())<#sep>, </#sep>
           <#elseif property.propertyType == 'REFERENCE_TO_AGGREGATE_ROOT'>

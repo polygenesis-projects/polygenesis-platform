@@ -21,6 +21,7 @@
 package io.polygenesis.models.domain;
 
 import io.polygenesis.abstraction.thing.Function;
+import io.polygenesis.commons.valueobjects.PackageName;
 import java.util.Set;
 
 /**
@@ -40,10 +41,14 @@ public class Constructor extends StateMutationMethod {
    * @param mutatesObject the mutates object
    * @param function the function
    * @param properties the properties
+   * @param rootPackageName the root package name
    */
   public Constructor(
-      BaseDomainObject mutatesObject, Function function, Set<DomainObjectProperty<?>> properties) {
-    super(mutatesObject, function, properties);
+      DomainObject mutatesObject,
+      Function function,
+      Set<DomainObjectProperty<?>> properties,
+      PackageName rootPackageName) {
+    super(mutatesObject, function, properties, rootPackageName);
   }
 
   /**
@@ -53,12 +58,14 @@ public class Constructor extends StateMutationMethod {
    * @param function the function
    * @param properties the properties
    * @param superClassProperties the super class properties
+   * @param rootPackageName the root package name
    */
   public Constructor(
-      BaseDomainObject mutatesObject,
+      DomainObject mutatesObject,
       Function function,
       Set<DomainObjectProperty<?>> properties,
-      Set<DomainObjectProperty<?>> superClassProperties) {
-    super(mutatesObject, function, properties, superClassProperties);
+      Set<DomainObjectProperty<?>> superClassProperties,
+      PackageName rootPackageName) {
+    super(mutatesObject, function, properties, superClassProperties, rootPackageName);
   }
 }

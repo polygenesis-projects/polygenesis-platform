@@ -20,8 +20,6 @@
 
 package io.polygenesis.generators.java.common;
 
-import io.polygenesis.abstraction.thing.Thing;
-import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.models.apiimpl.ServiceMethodImplementation;
 
 /**
@@ -39,37 +37,17 @@ public class ParentCallingChildDataService {
    * Get parent calling child data.
    *
    * @param source the source
-   * @param aggregateEntityThing the aggregate entity thing
    * @return the parent calling child data
    */
-  public ParentCallingChildData get(
-      ServiceMethodImplementation source, Thing aggregateEntityThing) {
-    return new ParentCallingChildData(getParentMethodName(source, aggregateEntityThing));
+  public ParentCallingChildData get(ServiceMethodImplementation source) {
+    return new ParentCallingChildData(getParentMethodName(source));
   }
 
   // ===============================================================================================
   // PRIVATE
   // ===============================================================================================
 
-  private String getParentMethodName(
-      ServiceMethodImplementation source, Thing aggregateEntityThing) {
-    String entityName = TextConverter.toUpperCamel(aggregateEntityThing.getThingName().getText());
-
-    if (source.getFunction().getPurpose().isCreate()) {
-      return String.format("add%s", entityName);
-    } else if (source.getFunction().getPurpose().isModify()) {
-      return String.format("%sId", entityName);
-    } else if (source.getFunction().getPurpose().isFetchOne()) {
-      return String.format("%sId", entityName);
-    } else if (source.getFunction().getPurpose().isFetchPagedCollection()) {
-      return String.format("%sId", entityName);
-    } else if (source.getFunction().getPurpose().isFetchCollection()) {
-      return String.format("%sId", entityName);
-    } else {
-      throw new IllegalStateException(
-          String.format(
-              "Cannot getParentMethodName for functions=%s",
-              source.getFunction().getName().getText()));
-    }
+  private String getParentMethodName(ServiceMethodImplementation source) {
+    return source.getFunction().getName().getText();
   }
 }

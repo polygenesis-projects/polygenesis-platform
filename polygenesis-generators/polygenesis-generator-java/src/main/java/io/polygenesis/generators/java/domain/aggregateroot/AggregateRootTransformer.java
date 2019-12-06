@@ -27,7 +27,7 @@ import io.polygenesis.core.TemplateData;
 import io.polygenesis.generators.java.domain.DomainObjectClassTransformer;
 import io.polygenesis.generators.java.domain.aggregateroot.activity.statemutation.AggregateRootStateMutationMethodTransformer;
 import io.polygenesis.generators.java.shared.transformer.MethodTransformer;
-import io.polygenesis.models.domain.AggregateRoot;
+import io.polygenesis.models.domain.DomainObject;
 import io.polygenesis.models.domain.InstantiationType;
 import io.polygenesis.representations.code.MethodRepresentation;
 import java.util.HashMap;
@@ -41,8 +41,7 @@ import java.util.TreeSet;
  *
  * @author Christos Tsakostas
  */
-public class AggregateRootTransformer
-    extends DomainObjectClassTransformer<AggregateRoot, Function> {
+public class AggregateRootTransformer extends DomainObjectClassTransformer<DomainObject, Function> {
 
   // ===============================================================================================
   // DEPENDENCIES
@@ -76,7 +75,7 @@ public class AggregateRootTransformer
 
   @SuppressWarnings("CPD-START")
   @Override
-  public TemplateData transform(AggregateRoot source, Object... args) {
+  public TemplateData transform(DomainObject source, Object... args) {
     Map<String, Object> dataModel = new HashMap<>();
     dataModel.put("representation", create(source, args));
 
@@ -84,7 +83,7 @@ public class AggregateRootTransformer
   }
 
   @Override
-  public Set<String> imports(AggregateRoot source, Object... args) {
+  public Set<String> imports(DomainObject source, Object... args) {
     Set<String> imports = new TreeSet<>();
 
     imports.addAll(super.imports(source, args));
@@ -101,7 +100,7 @@ public class AggregateRootTransformer
   }
 
   @Override
-  public Set<MethodRepresentation> methodRepresentations(AggregateRoot source, Object... args) {
+  public Set<MethodRepresentation> methodRepresentations(DomainObject source, Object... args) {
     Set<MethodRepresentation> methodRepresentations = new LinkedHashSet<>();
 
     methodRepresentations.addAll(super.methodRepresentations(source, args));
@@ -124,12 +123,12 @@ public class AggregateRootTransformer
   }
 
   @Override
-  public String packageName(AggregateRoot source, Object... args) {
+  public String packageName(DomainObject source, Object... args) {
     return source.getPackageName().getText();
   }
 
   @Override
-  public Set<String> annotations(AggregateRoot source, Object... args) {
+  public Set<String> annotations(DomainObject source, Object... args) {
     Set<String> annotations = new LinkedHashSet<>();
 
     if (source.getInstantiationType().equals(InstantiationType.CONCRETE)) {
@@ -146,7 +145,7 @@ public class AggregateRootTransformer
   }
 
   @Override
-  public String description(AggregateRoot source, Object... args) {
+  public String description(DomainObject source, Object... args) {
     StringBuilder stringBuilder = new StringBuilder();
 
     stringBuilder.append("The ");
@@ -160,7 +159,7 @@ public class AggregateRootTransformer
 
   @SuppressWarnings("CPD-END")
   @Override
-  public String modifiers(AggregateRoot source, Object... args) {
+  public String modifiers(DomainObject source, Object... args) {
     if (source.getInstantiationType().equals(InstantiationType.CONCRETE)) {
       return dataTypeTransformer.getModifierPublic();
     } else {

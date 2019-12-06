@@ -47,6 +47,12 @@ public class ResourceExporter {
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
+  /**
+   * Instantiates a new Resource exporter.
+   *
+   * @param freemarkerService the freemarker service
+   * @param resourceClassRepresentable the resource class representable
+   */
   public ResourceExporter(
       FreemarkerService freemarkerService,
       ResourceLegacyClassTransformer resourceClassRepresentable) {
@@ -63,6 +69,7 @@ public class ResourceExporter {
    *
    * @param generationPath the generation path
    * @param resource the resource
+   * @param rootPackageName the root package name
    */
   public void export(Path generationPath, Resource resource, PackageName rootPackageName) {
     Map<String, Object> dataModel = new HashMap<>();

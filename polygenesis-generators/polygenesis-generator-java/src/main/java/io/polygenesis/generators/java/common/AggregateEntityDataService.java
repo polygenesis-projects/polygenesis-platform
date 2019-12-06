@@ -22,7 +22,7 @@ package io.polygenesis.generators.java.common;
 
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.models.domain.BaseDomainObject;
+import io.polygenesis.models.domain.DomainObject;
 
 /**
  * The type Aggregate entity data service.
@@ -41,7 +41,7 @@ public class AggregateEntityDataService {
    * @param domainObject the domain object
    * @return the aggregate entity data
    */
-  public AggregateEntityData get(BaseDomainObject domainObject) {
+  public AggregateEntityData get(DomainObject domainObject) {
 
     return new AggregateEntityData(
         TextConverter.toUpperCamel(domainObject.getObjectName().getText()),

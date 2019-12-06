@@ -43,7 +43,7 @@ import io.polygenesis.generators.java.domain.domainmessage.publisheddata.DomainM
 import io.polygenesis.generators.java.domain.domainmessage.publisheddatarepository.DomainMessagePublishedDataRepository;
 import io.polygenesis.generators.java.domain.domainmessage.publisheddatarepository.DomainMessagePublishedDataRepositoryGenerator;
 import io.polygenesis.generators.java.domain.projection.id.ProjectionIdExporter;
-import io.polygenesis.generators.java.domain.projection.projection.ProjectionExporter;
+import io.polygenesis.generators.java.domain.projection.projection.ProjectionGenerator;
 import io.polygenesis.generators.java.domain.projection.repository.ProjectionRepositoryExporter;
 import io.polygenesis.generators.java.domain.repository.RepositoryGenerator;
 import io.polygenesis.generators.java.domain.service.DomainServiceGenerator;
@@ -55,15 +55,14 @@ import io.polygenesis.generators.java.domain.supportiveentity.repository.Support
 import io.polygenesis.generators.java.domain.valueobject.ValueObjectGenerator;
 import io.polygenesis.generators.java.shared.FolderFileConstants;
 import io.polygenesis.models.domain.AggregateEntity;
-import io.polygenesis.models.domain.AggregateEntityCollection;
-import io.polygenesis.models.domain.AggregateRoot;
-import io.polygenesis.models.domain.AggregateRootMetamodelRepository;
-import io.polygenesis.models.domain.AggregateRootPersistable;
-import io.polygenesis.models.domain.BaseDomainEntity;
 import io.polygenesis.models.domain.DomainEvent;
+import io.polygenesis.models.domain.DomainObject;
+import io.polygenesis.models.domain.DomainObjectMetamodelRepository;
+import io.polygenesis.models.domain.DomainObjectType;
 import io.polygenesis.models.domain.DomainService;
 import io.polygenesis.models.domain.DomainServiceRepository;
 import io.polygenesis.models.domain.Persistence;
+import io.polygenesis.models.domain.Projection;
 import io.polygenesis.models.domain.ProjectionMetamodelRepository;
 import io.polygenesis.models.domain.PropertyType;
 import io.polygenesis.models.domain.SupportiveEntity;
@@ -98,7 +97,7 @@ public class JavaDomainMetamodelGenerator extends AbstractMetamodelGenerator {
   private final SupportiveEntityIdGenerator supportiveEntityIdGenerator;
   private final SupportiveEntityRepositoryGenerator supportiveEntityRepositoryGenerator;
   private final ConstantsExporter constantsExporter;
-  private final ProjectionExporter projectionExporter;
+  private final ProjectionGenerator projectionGenerator;
   private final ProjectionIdExporter projectionIdExporter;
   private final ProjectionRepositoryExporter projectionRepositoryExporter;
 
@@ -131,7 +130,7 @@ public class JavaDomainMetamodelGenerator extends AbstractMetamodelGenerator {
    * @param supportiveEntityIdGenerator the supportive entity id generator
    * @param supportiveEntityRepositoryGenerator the supportive entity repository generator
    * @param constantsExporter the constants exporter
-   * @param projectionExporter the projection exporter
+   * @param projectionGenerator the projection generator
    * @param projectionIdExporter the projection id exporter
    * @param projectionRepositoryExporter the projection repository exporter
    * @param domainMessageDataGenerator the domain message data generator
@@ -157,7 +156,7 @@ public class JavaDomainMetamodelGenerator extends AbstractMetamodelGenerator {
       SupportiveEntityIdGenerator supportiveEntityIdGenerator,
       SupportiveEntityRepositoryGenerator supportiveEntityRepositoryGenerator,
       ConstantsExporter constantsExporter,
-      ProjectionExporter projectionExporter,
+      ProjectionGenerator projectionGenerator,
       ProjectionIdExporter projectionIdExporter,
       ProjectionRepositoryExporter projectionRepositoryExporter,
       DomainMessageDataGenerator domainMessageDataGenerator,
@@ -180,7 +179,7 @@ public class JavaDomainMetamodelGenerator extends AbstractMetamodelGenerator {
     this.supportiveEntityIdGenerator = supportiveEntityIdGenerator;
     this.supportiveEntityRepositoryGenerator = supportiveEntityRepositoryGenerator;
     this.constantsExporter = constantsExporter;
-    this.projectionExporter = projectionExporter;
+    this.projectionGenerator = projectionGenerator;
     this.projectionIdExporter = projectionIdExporter;
     this.projectionRepositoryExporter = projectionRepositoryExporter;
     this.domainMessageDataGenerator = domainMessageDataGenerator;
@@ -219,7 +218,7 @@ public class JavaDomainMetamodelGenerator extends AbstractMetamodelGenerator {
   @Override
   public void generate(Set<MetamodelRepository<?>> modelRepositories) {
     CoreRegistry.getMetamodelRepositoryResolver()
-        .resolve(modelRepositories, AggregateRootMetamodelRepository.class)
+        .resolve(modelRepositories, DomainObjectMetamodelRepository.class)
         .getItems()
         .forEach(
             aggregateRoot -> {
@@ -230,9 +229,8 @@ public class JavaDomainMetamodelGenerator extends AbstractMetamodelGenerator {
 
               aggregateRootIdExporter.export(getGenerationPath(), aggregateRoot);
 
-              if (aggregateRoot instanceof AggregateRootPersistable) {
-                Persistence persistence =
-                    ((AggregateRootPersistable) aggregateRoot).getPersistence();
+              if (aggregateRoot.getPersistence() != null) {
+                Persistence persistence = aggregateRoot.getPersistence();
                 repositoryGenerator.generate(
                     persistence,
                     exportInfo(
@@ -275,78 +273,6 @@ public class JavaDomainMetamodelGenerator extends AbstractMetamodelGenerator {
                         }
                       });
 
-              // Aggregate Entities
-              aggregateRoot
-                  .getProperties()
-                  .stream()
-                  .filter(
-                      property -> property.getPropertyType().equals(PropertyType.AGGREGATE_ENTITY))
-                  .forEach(
-                      property -> {
-                        AggregateEntity aggregateEntity = (AggregateEntity) property;
-                        aggregateEntityIdExporter.export(getGenerationPath(), aggregateEntity);
-
-                        aggregateEntityGenerator.generate(
-                            aggregateEntity,
-                            aggregateEntityExportInfo(getGenerationPath(), aggregateEntity),
-                            getRootPackageName(),
-                            aggregateRoot);
-
-                        // Value Objects
-                        aggregateEntity
-                            .getProperties()
-                            .forEach(
-                                aggregateEntityProperty -> {
-                                  if (aggregateEntityProperty
-                                      .getPropertyType()
-                                      .equals(PropertyType.VALUE_OBJECT)) {
-                                    valueObjectGenerator.generate(
-                                        (ValueObject) aggregateEntityProperty,
-                                        valueObjectExportInfo(
-                                            getGenerationPath(),
-                                            (ValueObject) aggregateEntityProperty));
-                                  }
-                                });
-                      });
-
-              // Aggregate Entities From Collections
-              aggregateRoot
-                  .getProperties()
-                  .stream()
-                  .filter(
-                      property ->
-                          property
-                              .getPropertyType()
-                              .equals(PropertyType.AGGREGATE_ENTITY_COLLECTION))
-                  .forEach(
-                      property -> {
-                        AggregateEntity aggregateEntity =
-                            ((AggregateEntityCollection) property).getAggregateEntity();
-                        aggregateEntityIdExporter.export(getGenerationPath(), aggregateEntity);
-
-                        aggregateEntityGenerator.generate(
-                            aggregateEntity,
-                            aggregateEntityExportInfo(getGenerationPath(), aggregateEntity),
-                            getRootPackageName(),
-                            aggregateRoot);
-
-                        // Value Objects
-                        aggregateEntity
-                            .getProperties()
-                            .forEach(
-                                aggregateEntityProperty -> {
-                                  if (aggregateEntityProperty
-                                      .getPropertyType()
-                                      .equals(PropertyType.VALUE_OBJECT)) {
-                                    valueObjectGenerator.generate(
-                                        (ValueObject) aggregateEntityProperty,
-                                        valueObjectExportInfo(
-                                            getGenerationPath(),
-                                            (ValueObject) aggregateEntityProperty));
-                                  }
-                                });
-                      });
-
               // Value Objects
               aggregateRoot
                   .getProperties()
@@ -376,7 +302,7 @@ public class JavaDomainMetamodelGenerator extends AbstractMetamodelGenerator {
                       .stream()
                       .flatMap(
                           domainServiceMethod ->
-                              domainServiceMethod.getFunction().getArguments().stream())
+                              domainServiceMethod.getFunction().getArguments().getData().stream())
                       .collect(Collectors.toSet());
 
               allArguments.forEach(
@@ -439,6 +365,9 @@ public class JavaDomainMetamodelGenerator extends AbstractMetamodelGenerator {
 
     constantsExporter.export(getGenerationPath(), getRootPackageName(), getTablePrefix());
 
+    // =============================================================================================
+    generateAggregateEntities(modelRepositories);
+
     generateProjections(modelRepositories);
 
     // =============================================================================================
@@ -475,6 +404,42 @@ public class JavaDomainMetamodelGenerator extends AbstractMetamodelGenerator {
   // PRIVATE
   // ===============================================================================================
 
+  private void generateAggregateEntities(Set<MetamodelRepository<?>> modelRepositories) {
+    CoreRegistry.getMetamodelRepositoryResolver()
+        .resolve(modelRepositories, DomainObjectMetamodelRepository.class)
+        .getItems()
+        .stream()
+        .filter(
+            domainObject ->
+                domainObject.getDomainObjectType().equals(DomainObjectType.AGGREGATE_ENTITY))
+        .map(AggregateEntity.class::cast)
+        .forEach(
+            aggregateEntity -> {
+              aggregateEntityIdExporter.export(getGenerationPath(), aggregateEntity);
+
+              aggregateEntityGenerator.generate(
+                  aggregateEntity,
+                  aggregateEntityExportInfo(getGenerationPath(), aggregateEntity),
+                  getRootPackageName(),
+                  aggregateEntity.getParent());
+
+              // Value Objects
+              aggregateEntity
+                  .getProperties()
+                  .forEach(
+                      aggregateEntityProperty -> {
+                        if (aggregateEntityProperty
+                            .getPropertyType()
+                            .equals(PropertyType.VALUE_OBJECT)) {
+                          valueObjectGenerator.generate(
+                              (ValueObject) aggregateEntityProperty,
+                              valueObjectExportInfo(
+                                  getGenerationPath(), (ValueObject) aggregateEntityProperty));
+                        }
+                      });
+            });
+  }
+
   private void generateProjections(Set<MetamodelRepository<?>> modelRepositories) {
     CoreRegistry.getMetamodelRepositoryResolver()
         .resolve(modelRepositories, ProjectionMetamodelRepository.class)
@@ -482,7 +447,12 @@ public class JavaDomainMetamodelGenerator extends AbstractMetamodelGenerator {
         .forEach(
             projection -> {
               projectionIdExporter.export(getGenerationPath(), projection);
-              projectionExporter.export(getGenerationPath(), projection, getRootPackageName());
+
+              projectionGenerator.generate(
+                  projection,
+                  projectionExportInfo(getGenerationPath(), projection),
+                  getRootPackageName());
+
               if (projection.getPersistence() != null) {
                 projectionRepositoryExporter.export(
                     getGenerationPath(), projection.getPersistence());
@@ -491,8 +461,8 @@ public class JavaDomainMetamodelGenerator extends AbstractMetamodelGenerator {
             });
   }
 
-  private void exportValueObjects(BaseDomainEntity baseDomainEntity) {
-    baseDomainEntity
+  private void exportValueObjects(DomainObject domainObject) {
+    domainObject
         .getProperties()
         .forEach(
             property -> {
@@ -645,7 +615,7 @@ public class JavaDomainMetamodelGenerator extends AbstractMetamodelGenerator {
             FolderFileConstants.JAVA_POSTFIX));
   }
 
-  private ExportInfo aggregateRootExportInfo(Path generationPath, AggregateRoot aggregateRoot) {
+  private ExportInfo aggregateRootExportInfo(Path generationPath, DomainObject aggregateRoot) {
     return ExportInfo.file(
         Paths.get(
             generationPath.toString(),
@@ -701,6 +671,20 @@ public class JavaDomainMetamodelGenerator extends AbstractMetamodelGenerator {
         String.format(
             "%s%s",
             TextConverter.toUpperCamel(aggregateEntity.getObjectName().getText()),
+            FolderFileConstants.JAVA_POSTFIX));
+  }
+
+  private ExportInfo projectionExportInfo(Path generationPath, Projection projection) {
+    return ExportInfo.file(
+        Paths.get(
+            generationPath.toString(),
+            FolderFileConstants.SRC,
+            FolderFileConstants.MAIN,
+            FolderFileConstants.JAVA,
+            projection.getPackageName().toPath().toString()),
+        String.format(
+            "%s%s",
+            TextConverter.toUpperCamel(projection.getObjectName().getText()),
             FolderFileConstants.JAVA_POSTFIX));
   }
 

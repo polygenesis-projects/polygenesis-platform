@@ -24,6 +24,7 @@ import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.abstraction.thing.CqsType;
 import io.polygenesis.abstraction.thing.Function;
+import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.ThingName;
 import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.commons.valueobjects.ObjectName;
@@ -160,8 +161,8 @@ public class Service implements Metamodel {
           .stream()
           .forEach(
               method -> {
-                addDto(cachedDtos, method.getRequestDto());
-                addDto(cachedDtos, method.getResponseDto());
+                addDto(cachedDtos, method.getRequestDto(), method);
+                addDto(cachedDtos, method.getResponseDto(), method);
               });
     }
 
@@ -178,21 +179,28 @@ public class Service implements Metamodel {
    * @param dtos the dtos
    * @param dto the dto
    */
-  private void addDto(Set<Dto> dtos, Dto dto) {
+  private void addDto(Set<Dto> dtos, Dto dto, ServiceMethod serviceMethod) {
     dtos.add(dto);
 
     if (dto.getArrayElementAsOptional().isPresent()) {
       Data arrayElement =
           dto.getArrayElementAsOptional().orElseThrow(IllegalArgumentException::new);
       if (arrayElement.isDataGroup()) {
+
+        Thing relatedThing =
+            serviceMethod.getFunction().getDelegatesToFunction() != null
+                ? serviceMethod.getFunction().getDelegatesToFunction().getThing()
+                : dto.getRelatedThing();
+
         addDto(
             dtos,
             new Dto(
-                dto.getRelatedThing(),
+                relatedThing,
                 DtoType.COLLECTION_RECORD,
                 arrayElement.getAsDataObject(),
                 false,
-                dto));
+                dto),
+            serviceMethod);
       }
     }
 
@@ -217,7 +225,10 @@ public class Service implements Metamodel {
                               String.format("%sDto", dataObject.getObjectName().getText())));
                 }
 
-                addDto(dtos, new Dto(dto.getRelatedThing(), dtoType, dataObject, false, dto));
+                addDto(
+                    dtos,
+                    new Dto(dto.getRelatedThing(), dtoType, dataObject, false, dto),
+                    serviceMethod);
               }
             });
   }

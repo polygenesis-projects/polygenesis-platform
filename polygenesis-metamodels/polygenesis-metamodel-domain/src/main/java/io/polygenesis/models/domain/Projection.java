@@ -24,7 +24,6 @@ import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.abstraction.data.DataPurpose;
 import io.polygenesis.abstraction.data.DataValidator;
-import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.commons.valueobjects.VariableName;
@@ -37,15 +36,8 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class Projection extends BaseDomainEntity
+public class Projection extends DomainObject
     implements DomainObjectProperty<DataObject>, Metamodel {
-
-  // ===============================================================================================
-  // STATE
-  // ===============================================================================================
-
-  private Persistence persistence;
-  private Projection superClass;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -58,71 +50,21 @@ public class Projection extends BaseDomainEntity
    * @param objectName the object name
    * @param packageName the package name
    * @param properties the properties
-   * @param constructors the constructors
    * @param multiTenant the multi tenant
-   * @param persistence the persistence
-   * @param superClass the super class
    */
   public Projection(
       InstantiationType instantiationType,
       ObjectName objectName,
       PackageName packageName,
       Set<DomainObjectProperty<?>> properties,
-      Set<Constructor> constructors,
-      Boolean multiTenant,
-      Persistence persistence,
-      Projection superClass) {
+      Boolean multiTenant) {
     super(
         DomainObjectType.PROJECTION,
         instantiationType,
         objectName,
         packageName,
         properties,
-        constructors,
         multiTenant);
-    if (persistence != null) {
-      setPersistence(persistence);
-    }
-    if (superClass != null) {
-      setSuperClass(superClass);
-    }
-  }
-
-  // ===============================================================================================
-  // GETTERS
-  // ===============================================================================================
-
-  /**
-   * Gets persistence.
-   *
-   * @return the persistence
-   */
-  public Persistence getPersistence() {
-    return persistence;
-  }
-
-  // ===============================================================================================
-  // GUARDS
-  // ===============================================================================================
-
-  /**
-   * Sets persistence.
-   *
-   * @param persistence the persistence
-   */
-  private void setPersistence(Persistence persistence) {
-    Assertion.isNotNull(persistence, "persistence is required");
-    this.persistence = persistence;
-  }
-
-  /**
-   * Sets super class.
-   *
-   * @param superClass the super class
-   */
-  private void setSuperClass(Projection superClass) {
-    Assertion.isNotNull(superClass, "superClass is required");
-    this.superClass = superClass;
   }
 
   // ===============================================================================================
@@ -130,18 +72,8 @@ public class Projection extends BaseDomainEntity
   // ===============================================================================================
 
   @Override
-  public boolean hasSuperclass() {
-    return superClass != null;
-  }
-
-  @Override
-  public BaseDomainObject getSuperClass() {
-    return superClass;
-  }
-
-  @Override
   public PropertyType getPropertyType() {
-    return PropertyType.REFERENCE;
+    return PropertyType.REFERENCE_BY_ID;
   }
 
   @Override
@@ -161,4 +93,8 @@ public class Projection extends BaseDomainEntity
   public Data getTypeParameterData() {
     throw new UnsupportedOperationException();
   }
+
+  // ===============================================================================================
+  // OVERRIDES
+  // ===============================================================================================
 }

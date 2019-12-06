@@ -98,6 +98,7 @@ public class DomainMessageMethodSubscriberTransformer extends AbstractMethodTran
 
     source
         .getArguments()
+        .getData()
         .stream()
         .filter(argument -> argument.isDataGroup())
         .map(DataObject.class::cast)

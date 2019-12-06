@@ -21,6 +21,7 @@
 package io.polygenesis.generators.java.batchprocesssubscriber.abstractsubscriber;
 
 import io.polygenesis.abstraction.data.DataPrimitive;
+import io.polygenesis.abstraction.data.DataRepository;
 import io.polygenesis.abstraction.data.PrimitiveType;
 import io.polygenesis.abstraction.thing.Activity;
 import io.polygenesis.abstraction.thing.Function;
@@ -32,8 +33,6 @@ import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.commons.valueobjects.VariableName;
 import io.polygenesis.core.AbstractNameablePackageable;
-import java.util.Arrays;
-import java.util.LinkedHashSet;
 
 /**
  * The type Batch process abstract subscriber.
@@ -93,8 +92,7 @@ public class BatchProcessAbstractSubscriber extends AbstractNameablePackageable 
         Purpose.reset(),
         new FunctionName("process"),
         null,
-        new LinkedHashSet<>(
-            Arrays.asList(DataPrimitive.of(PrimitiveType.STRING, new VariableName("message")))),
+        new DataRepository(DataPrimitive.of(PrimitiveType.STRING, new VariableName("message"))),
         Activity.empty(),
         thing.getAbstractionsScopes());
   }

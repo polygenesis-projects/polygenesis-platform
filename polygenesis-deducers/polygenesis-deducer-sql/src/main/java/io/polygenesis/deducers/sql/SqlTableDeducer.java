@@ -24,7 +24,7 @@ import io.polygenesis.core.AbstractionRepository;
 import io.polygenesis.core.CoreRegistry;
 import io.polygenesis.core.Deducer;
 import io.polygenesis.core.MetamodelRepository;
-import io.polygenesis.models.domain.AggregateRootMetamodelRepository;
+import io.polygenesis.models.domain.DomainObjectMetamodelRepository;
 import io.polygenesis.models.domain.ProjectionMetamodelRepository;
 import io.polygenesis.models.sql.Column;
 import io.polygenesis.models.sql.ColumnDataType;
@@ -66,7 +66,7 @@ public class SqlTableDeducer implements Deducer<SqlTableMetamodelRepository> {
     Set<Table> tables = new LinkedHashSet<>();
 
     CoreRegistry.getMetamodelRepositoryResolver()
-        .resolve(metamodelRepositories, AggregateRootMetamodelRepository.class)
+        .resolve(metamodelRepositories, DomainObjectMetamodelRepository.class)
         .getItems()
         .forEach(aggregateRoot -> tables.addAll(tableDeducer.deduce(aggregateRoot)));
 

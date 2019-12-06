@@ -145,6 +145,7 @@ public abstract class AbstractMethodTransformer<S extends FunctionProvider>
     source
         .getFunction()
         .getArguments()
+        .getData()
         .forEach(
             argument ->
                 parameterRepresentations.add(

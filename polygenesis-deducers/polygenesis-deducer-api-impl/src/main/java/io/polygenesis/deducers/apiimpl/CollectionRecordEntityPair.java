@@ -21,7 +21,7 @@
 package io.polygenesis.deducers.apiimpl;
 
 import io.polygenesis.models.api.Dto;
-import io.polygenesis.models.domain.BaseDomainEntity;
+import io.polygenesis.models.domain.DomainObject;
 import java.util.Objects;
 
 /**
@@ -36,7 +36,7 @@ public class CollectionRecordEntityPair {
   // ===============================================================================================
 
   private Dto dto;
-  private BaseDomainEntity entity;
+  private DomainObject entity;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -48,7 +48,7 @@ public class CollectionRecordEntityPair {
    * @param dto the dto
    * @param entity the entity
    */
-  public CollectionRecordEntityPair(Dto dto, BaseDomainEntity entity) {
+  public CollectionRecordEntityPair(Dto dto, DomainObject entity) {
     this.dto = dto;
     this.entity = entity;
   }
@@ -71,7 +71,7 @@ public class CollectionRecordEntityPair {
    *
    * @return the entity
    */
-  public BaseDomainEntity getEntity() {
+  public DomainObject getEntity() {
     return entity;
   }
 

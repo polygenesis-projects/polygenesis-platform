@@ -507,6 +507,7 @@ public class PurposeFunctionBuilder {
   private Data getThingIdentity(Thing thing) {
     return thing
         .getThingProperties()
+        .getData()
         .stream()
         .filter(this::isDataThingIdentity)
         .findFirst()
@@ -521,6 +522,7 @@ public class PurposeFunctionBuilder {
   private Data getParentThingIdentity(Thing thing) {
     return thing
         .getThingProperties()
+        .getData()
         .stream()
         .filter(this::isDataParentThingIdentity)
         .findFirst()

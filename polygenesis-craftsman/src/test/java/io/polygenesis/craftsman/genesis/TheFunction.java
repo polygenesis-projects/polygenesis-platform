@@ -40,7 +40,7 @@ public class TheFunction {
    * @return the thing
    */
   public static Thing create(String rootPackageName, Thing parentThing) {
-    Thing thing = ThingBuilder.endToEndChild("function", parentThing).createThing();
+    Thing thing = ThingBuilder.endToEndChildWithIdentity("function", parentThing).createThing();
 
     thing.addFunctions(
         PurposeFunctionBuilder.forThing(thing, rootPackageName)

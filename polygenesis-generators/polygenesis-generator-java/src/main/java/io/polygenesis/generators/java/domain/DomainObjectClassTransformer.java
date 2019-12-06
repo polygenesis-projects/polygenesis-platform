@@ -33,7 +33,7 @@ import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.generators.java.shared.transformer.MethodTransformer;
 import io.polygenesis.models.domain.AbstractAggregateRootId;
-import io.polygenesis.models.domain.BaseDomainObject;
+import io.polygenesis.models.domain.DomainObject;
 import io.polygenesis.models.domain.DomainObjectProperty;
 import io.polygenesis.models.domain.DomainObjectType;
 import io.polygenesis.models.domain.InstantiationType;
@@ -56,7 +56,7 @@ import java.util.TreeSet;
  * @author Christos Tsakostas
  */
 public abstract class DomainObjectClassTransformer<
-        S extends BaseDomainObject, F extends FunctionProvider>
+        S extends DomainObject, F extends FunctionProvider>
     extends AbstractClassTransformer<S, F> {
 
   // ===============================================================================================
@@ -129,8 +129,14 @@ public abstract class DomainObjectClassTransformer<
                           dataTypeTransformer.getModifierPrivate()));
                   break;
                 case VALUE_OBJECT_COLLECTION:
-                  // TODO
-                  throw new UnsupportedOperationException();
+                  fieldRepresentations.add(
+                      FieldRepresentation.withAnnotations(
+                          makeVariableDataType(property),
+                          makeVariableName(property),
+                          makeAnnotationsForValueObjectCollection(
+                              source, property.getData().getAsDataArray()),
+                          dataTypeTransformer.getModifierPrivate()));
+                  break;
                 case AGGREGATE_ENTITY:
                   fieldRepresentations.add(
                       FieldRepresentation.withAnnotations(
@@ -147,7 +153,7 @@ public abstract class DomainObjectClassTransformer<
                           makeAnnotationsForAggregateEntityCollection(source),
                           dataTypeTransformer.getModifierPrivate()));
                   break;
-                case REFERENCE:
+                case REFERENCE_BY_ID:
                   fieldRepresentations.add(
                       FieldRepresentation.withModifiers(
                           makeVariableDataType(property),
@@ -238,7 +244,7 @@ public abstract class DomainObjectClassTransformer<
     Set<String> imports = new TreeSet<>();
 
     if (source.hasSuperclass()) {
-      BaseDomainObject superClass = source.getSuperClass();
+      DomainObject superClass = source.getSuperClass();
 
       imports.add(
           String.format(
@@ -254,7 +260,7 @@ public abstract class DomainObjectClassTransformer<
     Set<String> imports = new TreeSet<>();
     PackageName rootPackageName = (PackageName) args[0];
 
-    if (!source.getDomainObjectType().equals(DomainObjectType.HELPER_ENTITY)) {
+    if (!source.getDomainObjectType().equals(DomainObjectType.SUPPORTIVE_ENTITY)) {
       if (source.getInstantiationType().equals(InstantiationType.CONCRETE)) {
         imports.add(rootPackageName.getText() + ".Constants");
         imports.add("javax.persistence.Entity");
@@ -395,7 +401,7 @@ public abstract class DomainObjectClassTransformer<
 
     stringBuilder.append(" extends ");
     if (source.hasSuperclass()) {
-      BaseDomainObject superClass = source.getSuperClass();
+      DomainObject superClass = source.getSuperClass();
 
       stringBuilder.append(TextConverter.toUpperCamel(superClass.getObjectName().getText()));
     } else {
@@ -502,6 +508,41 @@ public abstract class DomainObjectClassTransformer<
         String.format(
             "@Column(name = \"%s\")",
             TextConverter.toLowerCamel(dataArray.getArrayElement().getVariableName().getText())));
+
+    return annotations;
+  }
+
+  protected Set<String> makeAnnotationsForValueObjectCollection(S source, DataArray dataArray) {
+    Set<String> annotations = new LinkedHashSet<>();
+
+    annotations.add("@ElementCollection");
+
+    String tableName =
+        String.format(
+            "%s_%s",
+            TextConverter.toLowerUnderscore(source.getObjectName().getText()),
+            TextConverter.toLowerUnderscore(dataArray.getVariableName().getText()));
+
+    StringBuilder stringBuilder = new StringBuilder();
+    stringBuilder.append(String.format("@CollectionTable(%n"));
+    stringBuilder.append(
+        String.format("\t\t\tname = Constants.DEFAULT_TABLE_PREFIX + \"%s\",%n", tableName));
+    stringBuilder.append(String.format("\t\t\tjoinColumns = {%n"));
+    stringBuilder.append(String.format("\t\t\t\t\t@JoinColumn(name = \"%s\")", "root_id"));
+    if (source.getMultiTenant()) {
+      // TODO
+      stringBuilder.append("");
+      //      stringBuilder.append(String.format(",%n"));
+      //      stringBuilder.append(String.format("\t\t\t\t\t@JoinColumn(name = \"%s\")%n",
+      // "tenant_id"));
+    } else {
+      stringBuilder.append(String.format("%n"));
+    }
+
+    stringBuilder.append(String.format("\t\t\t}%n"));
+    stringBuilder.append("\t)");
+
+    annotations.add(stringBuilder.toString());
 
     return annotations;
   }

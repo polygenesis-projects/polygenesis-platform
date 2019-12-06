@@ -31,12 +31,12 @@
 <#if isPropertyContainedInRequestDto(property, requestDto) == 'true'>
       <#switch property.propertyType>
         <#case 'AGGREGATE_ROOT_ID'>
-          <#if multiTenant>
+<#--          <#if multiTenant>-->
 <#--        ${ persistenceVariable }.nextId(UUID.fromString(${ requestDto.dataObject.variableName.text }.getTenantId()))<#sep>,</#sep>-->
         ${ requestDto.dataObject.variableName.text }.get${ textConverter.toUpperCamel(property.data.variableName.text) }() == null ? ${ persistenceVariable }.nextId() : new ${ textConverter.toUpperCamel(property.data.variableName.text) }(UUID.fromString(${ requestDto.dataObject.variableName.text }.get${ textConverter.toUpperCamel(property.data.variableName.text) }()))<#sep>,</#sep>
-          <#else>
-        ${ requestDto.dataObject.variableName.text }.get${ textConverter.toUpperCamel(property.data.variableName.text) }() == null ? ${ persistenceVariable }.nextId() : new ${ textConverter.toUpperCamel(property.data.variableName.text) }(UUID.fromString(${ requestDto.dataObject.variableName.text }.get${ textConverter.toUpperCamel(property.data.variableName.text) }()))<#sep>,</#sep>
-          </#if>
+<#--          <#else>-->
+<#--        ${ requestDto.dataObject.variableName.text }.get${ textConverter.toUpperCamel(property.data.variableName.text) }() == null ? ${ persistenceVariable }.nextId() : new ${ textConverter.toUpperCamel(property.data.variableName.text) }(UUID.fromString(${ requestDto.dataObject.variableName.text }.get${ textConverter.toUpperCamel(property.data.variableName.text) }()))<#sep>,</#sep>-->
+<#--          </#if>-->
         <#break>
         <#case 'AGGREGATE_ENTITY_ID'>
           <#break>

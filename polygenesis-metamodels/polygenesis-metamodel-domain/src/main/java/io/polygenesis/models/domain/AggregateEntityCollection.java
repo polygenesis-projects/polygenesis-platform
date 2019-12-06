@@ -23,7 +23,6 @@ package io.polygenesis.models.domain;
 import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.DataArray;
 import io.polygenesis.commons.assertion.Assertion;
-import java.util.Objects;
 
 /**
  * The type Aggregate entity collection.
@@ -41,6 +40,15 @@ public class AggregateEntityCollection extends BaseProperty<DataArray> {
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
+
+  /**
+   * Instantiates a new Aggregate entity collection.
+   *
+   * @param data the data
+   */
+  public AggregateEntityCollection(DataArray data) {
+    super(PropertyType.AGGREGATE_ENTITY_COLLECTION, data);
+  }
 
   /**
    * Instantiates a new Aggregate entity collection.
@@ -93,23 +101,4 @@ public class AggregateEntityCollection extends BaseProperty<DataArray> {
   // OVERRIDES
   // ===============================================================================================
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    if (!super.equals(o)) {
-      return false;
-    }
-    AggregateEntityCollection that = (AggregateEntityCollection) o;
-    return Objects.equals(aggregateEntity, that.aggregateEntity);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(super.hashCode(), aggregateEntity);
-  }
 }

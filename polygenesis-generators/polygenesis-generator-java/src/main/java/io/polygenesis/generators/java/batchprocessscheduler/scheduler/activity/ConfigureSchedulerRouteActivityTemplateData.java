@@ -20,7 +20,7 @@
 
 package io.polygenesis.generators.java.batchprocessscheduler.scheduler.activity;
 
-import io.polygenesis.generators.java.apidetail.service.activity.entity.AbstractAggregateEntityTemplateData;
+import io.polygenesis.generators.java.apidetail.service.activity.root.entity.AbstractAggregateEntityTemplateData;
 
 /**
  * The type Configure scheduler route activity template data.

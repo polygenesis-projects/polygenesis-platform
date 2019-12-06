@@ -22,7 +22,7 @@ package io.polygenesis.generators.java.domain.aggregaterootid;
 
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.models.domain.AggregateRoot;
+import io.polygenesis.models.domain.DomainObject;
 import io.polygenesis.models.domain.InstantiationType;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -70,7 +70,7 @@ public class AggregateRootIdExporter {
    * @param generationPath the generation path
    * @param aggregateRoot the aggregateRoot
    */
-  public void export(Path generationPath, AggregateRoot aggregateRoot) {
+  public void export(Path generationPath, DomainObject aggregateRoot) {
     Map<String, Object> dataModel = new HashMap<>();
     if (aggregateRoot.getInstantiationType().equals(InstantiationType.ABSTRACT)) {
       return;
@@ -84,7 +84,7 @@ public class AggregateRootIdExporter {
         makeFileName(generationPath, aggregateRoot));
   }
 
-  private Path makeFileName(Path generationPath, AggregateRoot aggregateRoot) {
+  private Path makeFileName(Path generationPath, DomainObject aggregateRoot) {
 
     return Paths.get(
         generationPath.toString(),

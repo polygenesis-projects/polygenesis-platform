@@ -24,7 +24,7 @@ import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.ScopePurposeTuple;
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.core.AbstractionScope;
-import io.polygenesis.models.apiimpl.DomainEntityConverterMethod;
+import io.polygenesis.models.apiimpl.DomainObjectConverterMethod;
 import io.polygenesis.representations.code.MethodRepresentation;
 import java.util.HashMap;
 import java.util.Map;
@@ -68,22 +68,22 @@ public class ConverterMethodImplementationRegistry {
    * Implementation optional.
    *
    * @param freemarkerService the freemarker service
-   * @param domainEntityConverterMethod the domain object converter method
+   * @param domainObjectConverterMethod the domain object converter method
    * @param methodRepresentation the method representation
    * @return the optional
    */
   public Optional<String> implementation(
       FreemarkerService freemarkerService,
-      DomainEntityConverterMethod domainEntityConverterMethod,
+      DomainObjectConverterMethod domainObjectConverterMethod,
       MethodRepresentation methodRepresentation) {
-    if (isConverterMethodSupported(domainEntityConverterMethod)) {
+    if (isConverterMethodSupported(domainObjectConverterMethod)) {
       return Optional.of(
           domainObjectConverterMethodImplementorFor(
-                  getAbstractionScopeAsOptional(domainEntityConverterMethod)
+                  getAbstractionScopeAsOptional(domainObjectConverterMethod)
                       .orElseThrow(IllegalArgumentException::new),
-                  domainEntityConverterMethod)
+                  domainObjectConverterMethod)
               .implementationFor(
-                  freemarkerService, domainEntityConverterMethod, methodRepresentation));
+                  freemarkerService, domainObjectConverterMethod, methodRepresentation));
     } else {
       return Optional.empty();
     }
@@ -92,12 +92,12 @@ public class ConverterMethodImplementationRegistry {
   /**
    * Is converter method supported boolean.
    *
-   * @param domainEntityConverterMethod the domain object converter method
+   * @param domainObjectConverterMethod the domain object converter method
    * @return the boolean
    */
   public boolean isConverterMethodSupported(
-      DomainEntityConverterMethod domainEntityConverterMethod) {
-    return getAbstractionScopeAsOptional(domainEntityConverterMethod).isPresent();
+      DomainObjectConverterMethod domainObjectConverterMethod) {
+    return getAbstractionScopeAsOptional(domainObjectConverterMethod).isPresent();
   }
 
   // ===============================================================================================
@@ -105,8 +105,8 @@ public class ConverterMethodImplementationRegistry {
   // ===============================================================================================
 
   private Optional<AbstractionScope> getAbstractionScopeAsOptional(
-      DomainEntityConverterMethod domainEntityConverterMethod) {
-    return domainEntityConverterMethod
+      DomainObjectConverterMethod domainObjectConverterMethod) {
+    return domainObjectConverterMethod
         .getFunction()
         .getThing()
         .getAbstractionsScopes()
@@ -115,14 +115,14 @@ public class ConverterMethodImplementationRegistry {
             abstractionScope ->
                 scopeAndPurposeMap.containsKey(
                     new ScopePurposeTuple(
-                        abstractionScope, domainEntityConverterMethod.getFunction().getPurpose())))
+                        abstractionScope, domainObjectConverterMethod.getFunction().getPurpose())))
         .findFirst();
   }
 
   private DomainObjectConverterMethodImplementor domainObjectConverterMethodImplementorFor(
-      AbstractionScope abstractionScope, DomainEntityConverterMethod domainEntityConverterMethod) {
+      AbstractionScope abstractionScope, DomainObjectConverterMethod domainObjectConverterMethod) {
     return scopeAndPurposeMap.get(
         new ScopePurposeTuple(
-            abstractionScope, domainEntityConverterMethod.getFunction().getPurpose()));
+            abstractionScope, domainObjectConverterMethod.getFunction().getPurpose()));
   }
 }

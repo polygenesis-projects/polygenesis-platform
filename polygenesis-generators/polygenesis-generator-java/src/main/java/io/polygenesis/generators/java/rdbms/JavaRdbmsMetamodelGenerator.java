@@ -43,8 +43,7 @@ import io.polygenesis.generators.java.rdbms.repositoryimpl.RepositoryImplGenerat
 import io.polygenesis.generators.java.rdbms.repositoryimpl.spingdata.SpringDataRepositoryGenerator;
 import io.polygenesis.generators.java.rdbms.testing.PersistenceImplTestExporter;
 import io.polygenesis.generators.java.shared.FolderFileConstants;
-import io.polygenesis.models.domain.AggregateRootMetamodelRepository;
-import io.polygenesis.models.domain.AggregateRootPersistable;
+import io.polygenesis.models.domain.DomainObjectMetamodelRepository;
 import io.polygenesis.models.domain.Persistence;
 import io.polygenesis.models.domain.ProjectionMetamodelRepository;
 import java.nio.file.Path;
@@ -202,35 +201,32 @@ public class JavaRdbmsMetamodelGenerator extends AbstractMetamodelGenerator {
 
   private void aggregateRoots(Set<MetamodelRepository<?>> modelRepositories) {
     CoreRegistry.getMetamodelRepositoryResolver()
-        .resolve(modelRepositories, AggregateRootMetamodelRepository.class)
+        .resolve(modelRepositories, DomainObjectMetamodelRepository.class)
         .getItems()
         .stream()
-        .filter(aggregateRoot -> aggregateRoot instanceof AggregateRootPersistable)
-        .map(AggregateRootPersistable.class::cast)
+        .filter(aggregateRoot -> aggregateRoot.getPersistence() != null)
         .forEach(
             aggregateRoot -> {
-              if (aggregateRoot instanceof AggregateRootPersistable) {
-                Persistence persistence = aggregateRoot.getPersistence();
+              Persistence persistence = aggregateRoot.getPersistence();
 
-                repositoryImplGenerator.generate(
-                    persistence,
-                    repositoryImplExportInfo(
-                        getGenerationPath(),
-                        persistence.getPackageName(),
-                        persistence.getObjectName().getText()),
-                    getRootPackageName(),
-                    getContextName());
+              repositoryImplGenerator.generate(
+                  persistence,
+                  repositoryImplExportInfo(
+                      getGenerationPath(),
+                      persistence.getPackageName(),
+                      persistence.getObjectName().getText()),
+                  getRootPackageName(),
+                  getContextName());
 
-                persistenceImplTestExporter.export(
-                    getGenerationPath(), persistence, getRootPackageName(), getContextName());
+              persistenceImplTestExporter.export(
+                  getGenerationPath(), persistence, getRootPackageName(), getContextName());
 
-                springDataRepositoryGenerator.generate(
-                    persistence,
-                    repositorySpringDataExportInfo(
-                        getGenerationPath(),
-                        persistence.getPackageName(),
-                        persistence.getAggregateRootObjectName().getText()));
-              }
+              springDataRepositoryGenerator.generate(
+                  persistence,
+                  repositorySpringDataExportInfo(
+                      getGenerationPath(),
+                      persistence.getPackageName(),
+                      persistence.getAggregateRootObjectName().getText()));
             });
   }
 

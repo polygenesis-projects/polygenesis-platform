@@ -63,8 +63,9 @@ import io.polygenesis.generators.java.domain.domainmessage.publisheddatareposito
 import io.polygenesis.generators.java.domain.domainmessage.publisheddatarepository.DomainMessagePublishedDataRepositoryTransformer;
 import io.polygenesis.generators.java.domain.projection.id.ProjectionIdExporter;
 import io.polygenesis.generators.java.domain.projection.id.ProjectionIdLegacyClassTransformer;
-import io.polygenesis.generators.java.domain.projection.projection.ProjectionExporter;
-import io.polygenesis.generators.java.domain.projection.projection.ProjectionLegacyClassTransformer;
+import io.polygenesis.generators.java.domain.projection.projection.ProjectionGenerator;
+import io.polygenesis.generators.java.domain.projection.projection.ProjectionMethodTransformer;
+import io.polygenesis.generators.java.domain.projection.projection.ProjectionTransformer;
 import io.polygenesis.generators.java.domain.projection.repository.ProjectionRepositoryExporter;
 import io.polygenesis.generators.java.domain.projection.repository.ProjectionRepositoryLegacyInterfaceTransformer;
 import io.polygenesis.generators.java.domain.repository.RepositoryGenerator;
@@ -113,7 +114,7 @@ public final class JavaDomainMetamodelGeneratorFactory {
   private static SupportiveEntityIdGenerator supportiveEntityIdGenerator;
   private static SupportiveEntityRepositoryGenerator supportiveEntityRepositoryGenerator;
   private static ConstantsExporter constantsExporter;
-  private static ProjectionExporter projectionExporter;
+  private static ProjectionGenerator projectionGenerator;
   private static ProjectionIdExporter projectionIdExporter;
   private static ProjectionRepositoryExporter projectionRepositoryExporter;
 
@@ -224,9 +225,12 @@ public final class JavaDomainMetamodelGeneratorFactory {
 
     constantsExporter = new ConstantsExporter(freemarkerService);
 
-    projectionExporter =
-        new ProjectionExporter(
-            freemarkerService, new ProjectionLegacyClassTransformer(dataTypeTransformer));
+    projectionGenerator =
+        new ProjectionGenerator(
+            new ProjectionTransformer(
+                dataTypeTransformer, new ProjectionMethodTransformer(dataTypeTransformer)),
+            templateEngine,
+            activeFileExporter);
 
     projectionIdExporter =
         new ProjectionIdExporter(
@@ -316,7 +320,7 @@ public final class JavaDomainMetamodelGeneratorFactory {
         supportiveEntityIdGenerator,
         supportiveEntityRepositoryGenerator,
         constantsExporter,
-        projectionExporter,
+        projectionGenerator,
         projectionIdExporter,
         projectionRepositoryExporter,
         domainMessageDataGenerator,

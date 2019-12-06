@@ -55,11 +55,10 @@ public class ProjectionMetamodelRepository extends AbstractMetamodelRepository<P
   // ===============================================================================================
 
   @Override
-  public BaseDomainEntity findEntityByThingName(ThingName thingName) {
-    Set<BaseDomainEntity> entities = new LinkedHashSet<>();
+  public DomainObject findEntityByThingName(ThingName thingName) {
+    Set<DomainObject> entities = new LinkedHashSet<>();
 
-    entities.addAll(
-        getItems().stream().map(BaseDomainEntity.class::cast).collect(Collectors.toSet()));
+    entities.addAll(getItems().stream().map(DomainObject.class::cast).collect(Collectors.toSet()));
 
     return entities
         .stream()

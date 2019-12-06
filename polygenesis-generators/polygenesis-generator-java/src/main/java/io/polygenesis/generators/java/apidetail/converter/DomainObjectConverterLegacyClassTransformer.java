@@ -24,8 +24,8 @@ import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.DataTypeTransformer;
-import io.polygenesis.models.apiimpl.DomainEntityConverter;
-import io.polygenesis.models.apiimpl.DomainEntityConverterMethod;
+import io.polygenesis.models.apiimpl.DomainObjectConverter;
+import io.polygenesis.models.apiimpl.DomainObjectConverterMethod;
 import io.polygenesis.representations.code.ConstructorRepresentation;
 import io.polygenesis.representations.code.FieldRepresentation;
 import io.polygenesis.representations.code.MethodRepresentation;
@@ -41,7 +41,7 @@ import java.util.stream.Collectors;
  * @author Christos Tsakostas
  */
 public class DomainObjectConverterLegacyClassTransformer
-    extends AbstractLegacyClassTransformer<DomainEntityConverter> {
+    extends AbstractLegacyClassTransformer<DomainObjectConverter> {
 
   // ===============================================================================================
   // DEPENDENCIES
@@ -72,19 +72,19 @@ public class DomainObjectConverterLegacyClassTransformer
 
   @Override
   public Set<FieldRepresentation> stateFieldRepresentations(
-      DomainEntityConverter source, Object... args) {
+      DomainObjectConverter source, Object... args) {
     return new LinkedHashSet<>();
   }
 
   @Override
   public Set<ConstructorRepresentation> constructorRepresentations(
-      DomainEntityConverter source, Object... args) {
+      DomainObjectConverter source, Object... args) {
     return new LinkedHashSet<>();
   }
 
   @Override
   public Set<MethodRepresentation> methodRepresentations(
-      DomainEntityConverter source, Object... args) {
+      DomainObjectConverter source, Object... args) {
     Set<MethodRepresentation> methodRepresentations = new LinkedHashSet<>();
 
     source
@@ -97,12 +97,12 @@ public class DomainObjectConverterLegacyClassTransformer
   }
 
   @Override
-  public String packageName(DomainEntityConverter source, Object... args) {
+  public String packageName(DomainObjectConverter source, Object... args) {
     return source.getPackageName().getText();
   }
 
   @Override
-  public Set<String> imports(DomainEntityConverter source, Object... args) {
+  public Set<String> imports(DomainObjectConverter source, Object... args) {
     Set<String> imports = new TreeSet<>();
 
     imports.add("com.oregor.trinity4j.commons.assertion.Assertion");
@@ -114,8 +114,8 @@ public class DomainObjectConverterLegacyClassTransformer
         source
             .getMethods()
             .stream()
-            .map(DomainEntityConverterMethod::getFunction)
-            .flatMap(function -> function.getArguments().stream())
+            .map(DomainObjectConverterMethod::getFunction)
+            .flatMap(function -> function.getArguments().getData().stream())
             .filter(Data::isDataGroup)
             .map(DataObject.class::cast)
             .filter(dataGroup -> !dataGroup.getPackageName().equals(source.getPackageName()))
@@ -125,7 +125,7 @@ public class DomainObjectConverterLegacyClassTransformer
         source
             .getMethods()
             .stream()
-            .map(DomainEntityConverterMethod::getFunction)
+            .map(DomainObjectConverterMethod::getFunction)
             .filter(function -> function.getReturnValue() != null)
             .map(function -> function.getReturnValue())
             .filter(Data::isDataGroup)
@@ -145,7 +145,7 @@ public class DomainObjectConverterLegacyClassTransformer
   }
 
   @Override
-  public Set<String> annotations(DomainEntityConverter source, Object... args) {
+  public Set<String> annotations(DomainObjectConverter source, Object... args) {
     Set<String> annotations = new LinkedHashSet<>();
 
     annotations.add("@Component");
@@ -154,7 +154,7 @@ public class DomainObjectConverterLegacyClassTransformer
   }
 
   @Override
-  public String description(DomainEntityConverter source, Object... args) {
+  public String description(DomainObjectConverter source, Object... args) {
     StringBuilder stringBuilder = new StringBuilder();
 
     stringBuilder.append(TextConverter.toUpperCamelSpaces(source.getObjectName().getText()));
@@ -165,12 +165,12 @@ public class DomainObjectConverterLegacyClassTransformer
   }
 
   @Override
-  public String modifiers(DomainEntityConverter source, Object... args) {
+  public String modifiers(DomainObjectConverter source, Object... args) {
     return MODIFIER_PUBLIC;
   }
 
   @Override
-  public String simpleObjectName(DomainEntityConverter source, Object... args) {
+  public String simpleObjectName(DomainObjectConverter source, Object... args) {
     StringBuilder stringBuilder = new StringBuilder();
 
     stringBuilder.append(TextConverter.toUpperCamel(source.getObjectName().getText()));
@@ -179,7 +179,7 @@ public class DomainObjectConverterLegacyClassTransformer
   }
 
   @Override
-  public String fullObjectName(DomainEntityConverter source, Object... args) {
+  public String fullObjectName(DomainObjectConverter source, Object... args) {
     return simpleObjectName(source);
   }
 }

@@ -74,7 +74,7 @@ public class DataPrimitive extends AbstractData {
         DataValidator.empty(),
         primitiveType,
         new LinkedHashSet<>(),
-        dataObject);
+        dataObject.withVariableName(variableName.getText()));
   }
 
   /**

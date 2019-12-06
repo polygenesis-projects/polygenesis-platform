@@ -49,6 +49,7 @@ public class ThingBuilder extends AbstractThingBuilder<ThingBuilder> {
   /**
    * App thing builder.
    *
+   * @param thingName the thing name
    * @return the thing builder
    */
   public static ThingBuilder app(String thingName) {
@@ -58,6 +59,7 @@ public class ThingBuilder extends AbstractThingBuilder<ThingBuilder> {
   /**
    * Api thing builder.
    *
+   * @param thingName the thing name
    * @return the thing builder
    */
   public static ThingBuilder api(String thingName) {
@@ -67,6 +69,7 @@ public class ThingBuilder extends AbstractThingBuilder<ThingBuilder> {
   /**
    * End to end thing builder.
    *
+   * @param thingName the thing name
    * @return the thing builder
    */
   public static ThingBuilder endToEnd(String thingName) {
@@ -82,12 +85,13 @@ public class ThingBuilder extends AbstractThingBuilder<ThingBuilder> {
   }
 
   /**
-   * End to end child thing builder.
+   * End to end child with identity thing builder.
    *
+   * @param thingName the thing name
    * @param parentThing the parent thing
    * @return the thing builder
    */
-  public static ThingBuilder endToEndChild(String thingName, Thing parentThing) {
+  public static ThingBuilder endToEndChildWithIdentity(String thingName, Thing parentThing) {
     return new ThingBuilder(
             thingName,
             new LinkedHashSet<>(
@@ -102,8 +106,29 @@ public class ThingBuilder extends AbstractThingBuilder<ThingBuilder> {
   }
 
   /**
+   * End to end child without identity thing builder.
+   *
+   * @param thingName the thing name
+   * @param parentThing the parent thing
+   * @return the thing builder
+   */
+  public static ThingBuilder endToEndChildWithoutIdentity(String thingName, Thing parentThing) {
+    return new ThingBuilder(
+            thingName,
+            new LinkedHashSet<>(
+                Arrays.asList(
+                    AbstractionScope.api(),
+                    AbstractionScope.apiDetail(),
+                    AbstractionScope.apiClientRest(),
+                    AbstractionScope.domainAggregateEntity())))
+        .setParentThing(parentThing)
+        .withParentThingIdentity();
+  }
+
+  /**
    * Api client batch process thing builder.
    *
+   * @param thingName the thing name
    * @return the thing builder
    */
   public static ThingBuilder apiClientBatchProcess(String thingName) {
@@ -116,6 +141,7 @@ public class ThingBuilder extends AbstractThingBuilder<ThingBuilder> {
   /**
    * Api client domain message thing builder.
    *
+   * @param thingName the thing name
    * @return the thing builder
    */
   public static ThingBuilder apiClientDomainMessage(String thingName) {
@@ -126,6 +152,7 @@ public class ThingBuilder extends AbstractThingBuilder<ThingBuilder> {
   /**
    * Api client rest thing builder.
    *
+   * @param thingName the thing name
    * @return the thing builder
    */
   public static ThingBuilder apiClientRest(String thingName) {
@@ -136,6 +163,7 @@ public class ThingBuilder extends AbstractThingBuilder<ThingBuilder> {
   /**
    * Api detail service aspect thing builder.
    *
+   * @param thingName the thing name
    * @return the thing builder
    */
   public static ThingBuilder apiDetailServiceAspect(String thingName) {
@@ -146,6 +174,7 @@ public class ThingBuilder extends AbstractThingBuilder<ThingBuilder> {
   /**
    * Projection thing builder.
    *
+   * @param thingName the thing name
    * @return the thing builder
    */
   public static ThingBuilder projection(String thingName) {
@@ -159,6 +188,7 @@ public class ThingBuilder extends AbstractThingBuilder<ThingBuilder> {
   /**
    * Supportive entity thing builder.
    *
+   * @param thingName the thing name
    * @return the thing builder
    */
   public static ThingBuilder supportiveEntity(String thingName) {
@@ -171,6 +201,7 @@ public class ThingBuilder extends AbstractThingBuilder<ThingBuilder> {
   /**
    * Domain abstract aggregate root thing builder.
    *
+   * @param thingName the thing name
    * @return the thing builder
    */
   public static ThingBuilder domainAbstractAggregateRoot(String thingName) {
@@ -183,6 +214,7 @@ public class ThingBuilder extends AbstractThingBuilder<ThingBuilder> {
   /**
    * Domain service thing builder.
    *
+   * @param thingName the thing name
    * @return the thing builder
    */
   public static ThingBuilder domainService(String thingName) {
@@ -193,6 +225,7 @@ public class ThingBuilder extends AbstractThingBuilder<ThingBuilder> {
   /**
    * Domain aggregate root thing builder.
    *
+   * @param thingName the thing name
    * @return the thing builder
    */
   public static ThingBuilder domainAggregateRoot(String thingName) {
@@ -203,6 +236,8 @@ public class ThingBuilder extends AbstractThingBuilder<ThingBuilder> {
   /**
    * Domain aggregate entity thing builder.
    *
+   * @param thingName the thing name
+   * @param parentThing the parent thing
    * @return the thing builder
    */
   public static ThingBuilder domainAggregateEntity(String thingName, Thing parentThing) {
@@ -216,6 +251,7 @@ public class ThingBuilder extends AbstractThingBuilder<ThingBuilder> {
   /**
    * Domain message subscriber thing builder.
    *
+   * @param thingName the thing name
    * @return the thing builder
    */
   public static ThingBuilder domainMessageSubscriber(String thingName) {
@@ -226,6 +262,7 @@ public class ThingBuilder extends AbstractThingBuilder<ThingBuilder> {
   /**
    * Domain detail domain message publisher thing builder.
    *
+   * @param thingName the thing name
    * @return the thing builder
    */
   public static ThingBuilder domainDetailDomainMessagePublisher(String thingName) {
@@ -236,6 +273,7 @@ public class ThingBuilder extends AbstractThingBuilder<ThingBuilder> {
   /**
    * Domain detail repository in memory thing builder.
    *
+   * @param thingName the thing name
    * @return the thing builder
    */
   public static ThingBuilder domainDetailRepositoryInMemory(String thingName) {

@@ -32,7 +32,7 @@ import io.polygenesis.generators.java.apidetail.aspect.ServiceAspectGenerator;
 import io.polygenesis.generators.java.apidetail.converter.DomainObjectConverterExporter;
 import io.polygenesis.generators.java.apidetail.service.ServiceDetailGenerator;
 import io.polygenesis.generators.java.shared.FolderFileConstants;
-import io.polygenesis.models.apiimpl.DomainEntityConverterMetamodelRepository;
+import io.polygenesis.models.apiimpl.DomainObjectConverterMetamodelRepository;
 import io.polygenesis.models.apiimpl.ServiceImplementation;
 import io.polygenesis.models.apiimpl.ServiceImplementationMetamodelRepository;
 import java.nio.file.Path;
@@ -125,15 +125,15 @@ public class JavaApiDetailMetamodelGenerator extends AbstractMetamodelGenerator 
             });
 
     // CONVERTER
-    DomainEntityConverterMetamodelRepository domainEntityConverterModelRepository =
+    DomainObjectConverterMetamodelRepository domainObjectConverterMetamodelRepository =
         CoreRegistry.getMetamodelRepositoryResolver()
-            .resolve(metamodelRepositories, DomainEntityConverterMetamodelRepository.class);
+            .resolve(metamodelRepositories, DomainObjectConverterMetamodelRepository.class);
 
-    domainEntityConverterModelRepository
+    domainObjectConverterMetamodelRepository
         .getItems()
         .forEach(
-            domainEntityConverter ->
-                domainObjectConverterExporter.export(getGenerationPath(), domainEntityConverter));
+            domainObjectConverter ->
+                domainObjectConverterExporter.export(getGenerationPath(), domainObjectConverter));
 
     // SERVICE ASPECT
     ServiceAspect serviceAspect = new ServiceAspect(getContextName(), getRootPackageName());

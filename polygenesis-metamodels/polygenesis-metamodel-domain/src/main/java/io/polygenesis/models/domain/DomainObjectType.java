@@ -44,8 +44,8 @@ public enum DomainObjectType {
   DOMAIN_EVENT,
   /** Domain command domain object type. */
   DOMAIN_COMMAND,
-  /** Helper entity domain object type. */
-  HELPER_ENTITY,
+  /** Supportive entity domain object type. */
+  SUPPORTIVE_ENTITY,
   /** Value object domain object type. */
   VALUE_OBJECT,
   /** Projection domain object type. */

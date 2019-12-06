@@ -20,6 +20,7 @@
 
 package io.polygenesis.generators.java.domainmessageactivemq.dispatcherroute;
 
+import io.polygenesis.abstraction.data.DataRepository;
 import io.polygenesis.abstraction.thing.Activity;
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.abstraction.thing.FunctionName;
@@ -30,7 +31,6 @@ import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.AbstractNameablePackageable;
 import io.polygenesis.generators.java.domainmessagesubscriber.dispatcher.DomainMessageDispatcher;
-import java.util.LinkedHashSet;
 
 /**
  * The type Domain message dispatcher route.
@@ -101,7 +101,7 @@ public class DomainMessageDispatcherRoute extends AbstractNameablePackageable {
         Purpose.reset(),
         new FunctionName("configure"),
         null,
-        new LinkedHashSet<>(),
+        new DataRepository(),
         Activity.empty(),
         thing.getAbstractionsScopes());
   }

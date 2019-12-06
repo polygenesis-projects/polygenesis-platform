@@ -95,6 +95,7 @@ public class FunctionToLegacyMethodRepresentationTransformer
 
     source
         .getArguments()
+        .getData()
         .forEach(
             argument ->
                 parameterRepresentations.add(

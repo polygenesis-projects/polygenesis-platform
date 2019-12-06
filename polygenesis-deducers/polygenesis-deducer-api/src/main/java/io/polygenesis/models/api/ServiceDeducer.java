@@ -94,10 +94,11 @@ public class ServiceDeducer {
 
       appendCommandMethods(service, thing, rootPackageName);
 
-      // CHILDREN
-      thing
-          .getAllNestedChildren()
-          .forEach(childThing -> appendCommandMethods(service, childThing, rootPackageName));
+      //      // CHILDREN
+      //      thing
+      //          .getAllNestedChildren()
+      //          .forEach(childThing -> appendCommandMethods(service, childThing,
+      // rootPackageName));
 
       services.add(service);
     }
@@ -112,10 +113,10 @@ public class ServiceDeducer {
 
       appendQueryMethods(service, thing, rootPackageName);
 
-      // CHILDREN
-      thing
-          .getAllNestedChildren()
-          .forEach(childThing -> appendQueryMethods(service, childThing, rootPackageName));
+      //      // CHILDREN
+      //      thing
+      //          .getAllNestedChildren()
+      //          .forEach(childThing -> appendQueryMethods(service, childThing, rootPackageName));
 
       services.add(service);
     }

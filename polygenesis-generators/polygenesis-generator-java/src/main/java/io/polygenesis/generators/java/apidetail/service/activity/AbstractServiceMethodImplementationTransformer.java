@@ -32,17 +32,17 @@ import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.commons.valueobjects.VariableName;
 import io.polygenesis.core.CoreRegistry;
 import io.polygenesis.core.MetamodelRepository;
-import io.polygenesis.generators.java.common.AggregateEntityData;
+import io.polygenesis.generators.java.common.AggregateEntityDataService;
 import io.polygenesis.generators.java.common.AggregateRootData;
 import io.polygenesis.generators.java.common.ParentCallingChildDataService;
-import io.polygenesis.models.apiimpl.DomainEntityConverter;
+import io.polygenesis.models.apiimpl.DomainObjectConverter;
 import io.polygenesis.models.apiimpl.ServiceImplementation;
 import io.polygenesis.models.apiimpl.ServiceImplementationMetamodelRepository;
 import io.polygenesis.models.apiimpl.ServiceMethodImplementation;
 import io.polygenesis.models.domain.AggregateEntity;
-import io.polygenesis.models.domain.AggregateRoot;
-import io.polygenesis.models.domain.AggregateRootMetamodelRepository;
 import io.polygenesis.models.domain.Constructor;
+import io.polygenesis.models.domain.DomainObject;
+import io.polygenesis.models.domain.DomainObjectMetamodelRepository;
 import io.polygenesis.models.domain.DomainObjectProperty;
 import io.polygenesis.representations.code.ParameterRepresentation;
 import java.util.LinkedHashSet;
@@ -60,6 +60,8 @@ public abstract class AbstractServiceMethodImplementationTransformer {
   // STATE
   // ===============================================================================================
 
+  /** The Aggregate entity data service. */
+  protected final AggregateEntityDataService aggregateEntityDataService;
   /** The Parent calling child data service. */
   protected final ParentCallingChildDataService parentCallingChildDataService;
 
@@ -70,10 +72,13 @@ public abstract class AbstractServiceMethodImplementationTransformer {
   /**
    * Instantiates a new Abstract service method implementation transformer.
    *
+   * @param aggregateEntityDataService the aggregate entity data service
    * @param parentCallingChildDataService the parent calling child data service
    */
-  protected AbstractServiceMethodImplementationTransformer(
+  public AbstractServiceMethodImplementationTransformer(
+      AggregateEntityDataService aggregateEntityDataService,
       ParentCallingChildDataService parentCallingChildDataService) {
+    this.aggregateEntityDataService = aggregateEntityDataService;
     this.parentCallingChildDataService = parentCallingChildDataService;
   }
 
@@ -129,46 +134,6 @@ public abstract class AbstractServiceMethodImplementationTransformer {
   private String getRepositoryVariableByThing(Thing aggregateRootThing) {
     return TextConverter.toLowerCamel(
         String.format("%sRepository", aggregateRootThing.getThingName().getText()));
-  }
-
-  // ===============================================================================================
-  // AGGREGATE ROOT DATA
-  // ===============================================================================================
-
-  /**
-   * Gets aggregate entity data.
-   *
-   * @param source the source
-   * @return the aggregate entity data
-   */
-  @SuppressWarnings("CPD-START")
-  public AggregateEntityData getAggregateEntityData(ServiceMethodImplementation source) {
-    Thing currentThing = source.getFunction().getThing();
-
-    return new AggregateEntityData(
-        getAggregateEntityDataTypeByThing(currentThing),
-        getAggregateEntityVariableByThing(currentThing),
-        TextConverter.toPlural(TextConverter.toLowerCamel(currentThing.getThingName().getText())),
-        getAggregateEntityIdDataTypeByThing(currentThing),
-        getAggregateEntityIdVariableByThing(currentThing));
-  }
-
-  private String getAggregateEntityDataTypeByThing(Thing aggregateEntityThing) {
-    return TextConverter.toUpperCamel(aggregateEntityThing.getThingName().getText());
-  }
-
-  private String getAggregateEntityVariableByThing(Thing aggregateEntityThing) {
-    return TextConverter.toLowerCamel(aggregateEntityThing.getThingName().getText());
-  }
-
-  private String getAggregateEntityIdDataTypeByThing(Thing aggregateEntityThing) {
-    return TextConverter.toUpperCamel(
-        String.format("%sId", aggregateEntityThing.getThingName().getText()));
-  }
-
-  private String getAggregateEntityIdVariableByThing(Thing aggregateEntityThing) {
-    return TextConverter.toLowerCamel(
-        String.format("%sId", aggregateEntityThing.getThingName().getText()));
   }
 
   // ===============================================================================================
@@ -285,10 +250,10 @@ public abstract class AbstractServiceMethodImplementationTransformer {
    */
   protected String getConverterVariable(
       ServiceMethodImplementation source, Set<MetamodelRepository<?>> metamodelRepositories) {
-    DomainEntityConverter domainEntityConverter =
+    DomainObjectConverter domainObjectConverter =
         getServiceImplementation(source, metamodelRepositories).domainObjectConverter();
 
-    return domainEntityConverter != null ? domainEntityConverter.getVariableName().getText() : null;
+    return domainObjectConverter != null ? domainObjectConverter.getVariableName().getText() : null;
   }
 
   /**
@@ -301,7 +266,7 @@ public abstract class AbstractServiceMethodImplementationTransformer {
   protected Set<DomainObjectProperty<?>> getPropertiesFromConstructor(
       ServiceMethodImplementation source, Set<MetamodelRepository<?>> metamodelRepositories) {
 
-    Optional<AggregateRoot> optionalAggregateRoot = getAggregateRoot(source, metamodelRepositories);
+    Optional<DomainObject> optionalAggregateRoot = getAggregateRoot(source, metamodelRepositories);
 
     if (optionalAggregateRoot.isPresent()) {
       Constructor constructorFound =
@@ -335,7 +300,7 @@ public abstract class AbstractServiceMethodImplementationTransformer {
   protected Set<DomainObjectProperty<?>> getPropertiesFromStateMutationMethod(
       ServiceMethodImplementation source, Set<MetamodelRepository<?>> metamodelRepositories) {
 
-    Optional<AggregateRoot> optionalAggregateRoot = getAggregateRoot(source, metamodelRepositories);
+    Optional<DomainObject> optionalAggregateRoot = getAggregateRoot(source, metamodelRepositories);
 
     if (optionalAggregateRoot.isPresent()) {
       return optionalAggregateRoot
@@ -370,13 +335,13 @@ public abstract class AbstractServiceMethodImplementationTransformer {
    * @param metamodelRepositories the metamodel repositories
    * @return the aggregate root
    */
-  protected Optional<AggregateRoot> getAggregateRoot(
+  protected Optional<DomainObject> getAggregateRoot(
       ServiceMethodImplementation source, Set<MetamodelRepository<?>> metamodelRepositories) {
-    AggregateRootMetamodelRepository aggregateRootMetamodelRepository =
+    DomainObjectMetamodelRepository domainObjectMetamodelRepository =
         CoreRegistry.getMetamodelRepositoryResolver()
-            .resolve(metamodelRepositories, AggregateRootMetamodelRepository.class);
+            .resolve(metamodelRepositories, DomainObjectMetamodelRepository.class);
 
-    return aggregateRootMetamodelRepository
+    return domainObjectMetamodelRepository
         .getItems()
         .stream()
         .filter(
@@ -470,11 +435,15 @@ public abstract class AbstractServiceMethodImplementationTransformer {
   protected Set<DomainObjectProperty<?>> getProperties(
       ServiceMethodImplementation source, AggregateEntity aggregateEntity) {
 
-    if (source.getFunction().getPurpose().isCreate()) {
+    if (source.getFunction().getPurpose().isEntityCreate()) {
       return aggregateEntity
           .getConstructors()
           .stream()
-          .filter(mutationMethod -> mutationMethod.getFunction().equals(source.getFunction()))
+          .filter(
+              mutationMethod ->
+                  mutationMethod
+                      .getFunction()
+                      .equals(source.getFunction().getDelegatesToFunction()))
           .map(stateMutationMethod -> stateMutationMethod.getProperties())
           .findFirst()
           .orElseThrow();
@@ -482,7 +451,11 @@ public abstract class AbstractServiceMethodImplementationTransformer {
       return aggregateEntity
           .getStateMutationMethods()
           .stream()
-          .filter(mutationMethod -> mutationMethod.getFunction().equals(source.getFunction()))
+          .filter(
+              mutationMethod ->
+                  mutationMethod
+                      .getFunction()
+                      .equals(source.getFunction().getDelegatesToFunction()))
           .map(stateMutationMethod -> stateMutationMethod.getProperties())
           .findFirst()
           .orElseThrow();

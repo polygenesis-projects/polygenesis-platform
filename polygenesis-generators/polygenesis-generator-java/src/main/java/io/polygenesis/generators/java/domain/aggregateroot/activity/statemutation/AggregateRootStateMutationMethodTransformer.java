@@ -20,6 +20,7 @@
 
 package io.polygenesis.generators.java.domain.aggregateroot.activity.statemutation;
 
+import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.abstraction.data.PrimitiveType;
 import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.commons.text.TextConverter;
@@ -31,6 +32,7 @@ import io.polygenesis.representations.code.ParameterRepresentation;
 import io.polygenesis.transformers.java.AbstractMethodTransformer;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * The type Aggregate root state mutation method transformer.
@@ -72,6 +74,23 @@ public class AggregateRootStateMutationMethodTransformer
   // ===============================================================================================
 
   @Override
+  public Set<String> imports(StateMutationMethod source, Object... args) {
+    Set<String> imports = new TreeSet<>();
+
+    Set<DataObject> dataObjects = source.getFunction().getAllArgumentsDataObjects();
+    dataObjects.forEach(
+        dataObject -> {
+          //          if
+          // (!source.getMutatedObject().getPackageName().equals(dataObject.getPackageName())) {
+          imports.add(
+              makeCanonicalObjectName(dataObject.getPackageName(), dataObject.getDataType()));
+          //          }
+        });
+
+    return imports;
+  }
+
+  @Override
   public String methodName(StateMutationMethod source, Object... args) {
     if (source.getFunction().getPurpose().isCreate()) {
       return TextConverter.toUpperCamel(source.getFunction().getThing().getThingName().getText());
@@ -108,10 +127,13 @@ public class AggregateRootStateMutationMethodTransformer
           source.getSuperClassProperties() != null
               ? source.getSuperClassProperties()
               : new LinkedHashSet<>());
-    } else if (source.getFunction().getPurpose().equals(Purpose.aggregateRootCreateEntity())) {
-      return parameterRepresentationsService.getMethodArgumentsForCreateAggregateEntity(
+    } else if (source.getFunction().getPurpose().equals(Purpose.modify())) {
+      return parameterRepresentationsService.getMethodArgumentsWithoutIdentitiesAndReferences(
           source.getProperties());
-    } else if (source.getFunction().getPurpose().equals(Purpose.aggregateRootUpdateEntity())) {
+    } else if (source.getFunction().getPurpose().equals(Purpose.entityCreate())) {
+      return parameterRepresentationsService.getMethodArgumentsWithoutIdentitiesAndReferences(
+          source.getProperties());
+    } else if (source.getFunction().getPurpose().equals(Purpose.entityModify())) {
       return parameterRepresentationsService.getMethodArgumentsForModifyAggregateEntity(
           source.getProperties());
     } else {
@@ -124,8 +146,9 @@ public class AggregateRootStateMutationMethodTransformer
     if (source.getFunction().getPurpose().isCreate()) {
       return "";
     } else {
-      if (source.getFunction().getReturnValue() != null) {
-        return makeVariableDataType(source.getFunction().getReturnValue());
+      if (!source.getReturnValue().getData().isEmpty()) {
+        return makeVariableDataType(
+            source.getReturnValue().getData().stream().findFirst().orElseThrow());
       } else {
         return dataTypeTransformer.convert(PrimitiveType.VOID.name());
       }

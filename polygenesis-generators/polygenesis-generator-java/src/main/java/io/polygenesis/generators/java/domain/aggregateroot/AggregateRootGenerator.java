@@ -23,14 +23,14 @@ package io.polygenesis.generators.java.domain.aggregateroot;
 import io.polygenesis.core.AbstractUnitTemplateGenerator;
 import io.polygenesis.core.Exporter;
 import io.polygenesis.core.TemplateEngine;
-import io.polygenesis.models.domain.AggregateRoot;
+import io.polygenesis.models.domain.DomainObject;
 
 /**
  * The type Aggregate root generator.
  *
  * @author Christos Tsakostas
  */
-public class AggregateRootGenerator extends AbstractUnitTemplateGenerator<AggregateRoot> {
+public class AggregateRootGenerator extends AbstractUnitTemplateGenerator<DomainObject> {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)

@@ -21,6 +21,7 @@
 package io.polygenesis.generators.java.domain.aggregateentity.activity.statemutation;
 
 import io.polygenesis.abstraction.data.PrimitiveType;
+import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.generators.java.common.ParameterRepresentationsService;
@@ -109,6 +110,9 @@ public class AggregateEntityStateMutationMethodTransformer
           source.getSuperClassProperties() != null
               ? source.getSuperClassProperties()
               : new LinkedHashSet<>());
+    } else if (source.getFunction().getPurpose().equals(Purpose.modify())) {
+      return parameterRepresentationsService.getMethodArgumentsWithoutIdentitiesAndReferences(
+          source.getProperties());
     } else {
       return super.parameterRepresentations(source, args);
     }
@@ -119,8 +123,9 @@ public class AggregateEntityStateMutationMethodTransformer
     if (source.getFunction().getPurpose().isCreate()) {
       return "";
     } else {
-      if (source.getFunction().getReturnValue() != null) {
-        return makeVariableDataType(source.getFunction().getReturnValue());
+      if (!source.getReturnValue().getData().isEmpty()) {
+        return makeVariableDataType(
+            source.getReturnValue().getData().stream().findFirst().orElseThrow());
       } else {
         return dataTypeTransformer.convert(PrimitiveType.VOID.name());
       }

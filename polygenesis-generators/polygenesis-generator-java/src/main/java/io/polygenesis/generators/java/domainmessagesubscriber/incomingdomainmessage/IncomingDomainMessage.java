@@ -21,6 +21,7 @@
 package io.polygenesis.generators.java.domainmessagesubscriber.incomingdomainmessage;
 
 import io.polygenesis.abstraction.data.DataPrimitive;
+import io.polygenesis.abstraction.data.DataRepository;
 import io.polygenesis.abstraction.data.PrimitiveType;
 import io.polygenesis.abstraction.thing.Activity;
 import io.polygenesis.abstraction.thing.Function;
@@ -32,7 +33,6 @@ import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.commons.valueobjects.VariableName;
 import io.polygenesis.core.AbstractNameablePackageable;
-import java.util.LinkedHashSet;
 
 /**
  * The type Incoming domain message.
@@ -109,7 +109,7 @@ public class IncomingDomainMessage extends AbstractNameablePackageable {
         Purpose.incomingDomainMessageGetMessageId(),
         new FunctionName("getMessageId"),
         DataPrimitive.of(PrimitiveType.STRING, VariableName.response()),
-        new LinkedHashSet<>(),
+        new DataRepository(),
         Activity.empty(),
         thing.getAbstractionsScopes());
   }
@@ -122,7 +122,7 @@ public class IncomingDomainMessage extends AbstractNameablePackageable {
         Purpose.incomingDomainMessageGetMessageId(),
         new FunctionName("getRootId"),
         DataPrimitive.of(PrimitiveType.STRING, VariableName.response()),
-        new LinkedHashSet<>(),
+        new DataRepository(),
         Activity.empty(),
         thing.getAbstractionsScopes());
   }
@@ -135,7 +135,7 @@ public class IncomingDomainMessage extends AbstractNameablePackageable {
         Purpose.incomingDomainMessageGetMessageId(),
         new FunctionName("getMessageBody"),
         DataPrimitive.of(PrimitiveType.STRING, VariableName.response()),
-        new LinkedHashSet<>(),
+        new DataRepository(),
         Activity.empty(),
         thing.getAbstractionsScopes());
   }

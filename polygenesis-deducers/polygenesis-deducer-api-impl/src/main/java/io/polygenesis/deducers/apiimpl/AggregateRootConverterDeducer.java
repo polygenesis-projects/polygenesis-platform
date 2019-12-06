@@ -24,10 +24,10 @@ import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.ThingRepository;
 import io.polygenesis.core.AbstractionScope;
 import io.polygenesis.models.api.ServiceMetamodelRepository;
-import io.polygenesis.models.apiimpl.DomainEntityConverter;
-import io.polygenesis.models.apiimpl.DomainEntityConverterMethod;
-import io.polygenesis.models.domain.AggregateRoot;
-import io.polygenesis.models.domain.AggregateRootMetamodelRepository;
+import io.polygenesis.models.apiimpl.DomainObjectConverter;
+import io.polygenesis.models.apiimpl.DomainObjectConverterMethod;
+import io.polygenesis.models.domain.DomainObject;
+import io.polygenesis.models.domain.DomainObjectMetamodelRepository;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Optional;
@@ -73,25 +73,25 @@ public class AggregateRootConverterDeducer {
    *
    * @param thingRepository the thing repository
    * @param serviceModelRepository the service model repository
-   * @param aggregateRootMetamodelRepository the domain metamodel repository
+   * @param domainObjectMetamodelRepository the domain metamodel repository
    * @return the set
    */
-  public Set<DomainEntityConverter> deduce(
+  public Set<DomainObjectConverter> deduce(
       ThingRepository thingRepository,
       ServiceMetamodelRepository serviceModelRepository,
-      AggregateRootMetamodelRepository aggregateRootMetamodelRepository) {
-    Set<DomainEntityConverter> domainEntityConverters = new LinkedHashSet<>();
+      DomainObjectMetamodelRepository domainObjectMetamodelRepository) {
+    Set<DomainObjectConverter> domainObjectConverters = new LinkedHashSet<>();
 
     Set<Thing> things = findThingsInApiAndDomainAggregateRootScopes(thingRepository);
-    Set<AggregateRoot> aggregateRoots = aggregateRootMetamodelRepository.findByThings(things);
+    Set<DomainObject> aggregateRoots = domainObjectMetamodelRepository.findByThings(things);
 
     fillConverters(
-        domainEntityConverters,
+        domainObjectConverters,
         serviceModelRepository,
-        aggregateRootMetamodelRepository,
+        domainObjectMetamodelRepository,
         aggregateRoots);
 
-    return domainEntityConverters;
+    return domainObjectConverters;
   }
 
   // ===============================================================================================
@@ -99,17 +99,17 @@ public class AggregateRootConverterDeducer {
   // ===============================================================================================
 
   private void fillConverters(
-      Set<DomainEntityConverter> domainEntityConverters,
+      Set<DomainObjectConverter> domainObjectConverters,
       ServiceMetamodelRepository serviceModelRepository,
-      AggregateRootMetamodelRepository aggregateRootMetamodelRepository,
-      Set<AggregateRoot> aggregateRoots) {
+      DomainObjectMetamodelRepository domainObjectMetamodelRepository,
+      Set<DomainObject> aggregateRoots) {
     aggregateRoots.forEach(
         aggregateRoot -> {
-          Optional<DomainEntityConverter> optionalDomainEntityConverter =
+          Optional<DomainObjectConverter> optionalDomainObjectConverter =
               deduceConverterForAggregateRoot(
-                  serviceModelRepository, aggregateRootMetamodelRepository, aggregateRoot);
-          if (optionalDomainEntityConverter.isPresent()) {
-            domainEntityConverters.add(optionalDomainEntityConverter.get());
+                  serviceModelRepository, domainObjectMetamodelRepository, aggregateRoot);
+          if (optionalDomainObjectConverter.isPresent()) {
+            domainObjectConverters.add(optionalDomainObjectConverter.get());
           }
         });
   }
@@ -118,29 +118,29 @@ public class AggregateRootConverterDeducer {
   // PRIVATE - DEDUCE
   // ===============================================================================================
 
-  private Optional<DomainEntityConverter> deduceConverterForAggregateRoot(
+  private Optional<DomainObjectConverter> deduceConverterForAggregateRoot(
       ServiceMetamodelRepository serviceModelRepository,
-      AggregateRootMetamodelRepository aggregateRootMetamodelRepository,
-      AggregateRoot aggregateRoot) {
-    Set<DomainEntityConverterMethod> methods = new LinkedHashSet<>();
+      DomainObjectMetamodelRepository domainObjectMetamodelRepository,
+      DomainObject aggregateRoot) {
+    Set<DomainObjectConverterMethod> methods = new LinkedHashSet<>();
 
     // ValueObjectDto
     methods.addAll(
         valueObjectDtoDeducer.deduceMethods(
             serviceModelRepository,
-            aggregateRootMetamodelRepository,
+            domainObjectMetamodelRepository,
             aggregateRoot,
-            aggregateRootMetamodelRepository.getAllValueObjectsByAggregateRoot(aggregateRoot)));
+            domainObjectMetamodelRepository.getAllValueObjectsByDomainObject(aggregateRoot)));
 
     // CollectionRecords conversion methods
     methods.addAll(
         collectionRecordDeducer.deduceMethods(
-            serviceModelRepository, aggregateRootMetamodelRepository, aggregateRoot));
+            serviceModelRepository, domainObjectMetamodelRepository, aggregateRoot));
 
     if (methods.isEmpty()) {
       return Optional.empty();
     } else {
-      return Optional.of(new DomainEntityConverter(aggregateRoot, methods));
+      return Optional.of(new DomainObjectConverter(aggregateRoot, methods));
     }
   }
 

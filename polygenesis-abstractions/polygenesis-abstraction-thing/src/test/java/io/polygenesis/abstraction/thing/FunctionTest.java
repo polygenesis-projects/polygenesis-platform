@@ -55,7 +55,7 @@ public class FunctionTest extends AbstractEqualityTest<Function> {
     assertThat(function1.getName()).isNotNull();
     assertThat(function1.getReturnValue()).isNotNull();
 
-    assertThat(function1.getArguments()).isEmpty();
+    assertThat(function1.getArguments().getData()).isEmpty();
   }
 
   @Test

@@ -24,6 +24,7 @@ import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.DataArray;
 import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.abstraction.data.DataPrimitive;
+import io.polygenesis.abstraction.data.DataRepository;
 import io.polygenesis.abstraction.data.PrimitiveType;
 import io.polygenesis.abstraction.thing.Activity;
 import io.polygenesis.abstraction.thing.Function;
@@ -168,16 +169,18 @@ public class DomainMessageSubscriber extends SubscriberMetamodel {
         Purpose.domainMessageSubscriberProcess(),
         new FunctionName("process"),
         null,
-        new LinkedHashSet<>(
-            Arrays.asList(
-                new DataObject(
-                    new ObjectName(String.format("%sIncomingDomainMessage", contextName.getText())),
-                    getRootPackageName(),
-                    new VariableName("incomingDomainMessage")),
-                new DataObject(
-                    new ObjectName("JsonNode"),
-                    new PackageName("com.fasterxml.jackson.databind"),
-                    new VariableName("jsonNodeBody")))),
+        new DataRepository(
+            new LinkedHashSet<>(
+                Arrays.asList(
+                    new DataObject(
+                        new ObjectName(
+                            String.format("%sIncomingDomainMessage", contextName.getText())),
+                        getRootPackageName(),
+                        new VariableName("incomingDomainMessage")),
+                    new DataObject(
+                        new ObjectName("JsonNode"),
+                        new PackageName("com.fasterxml.jackson.databind"),
+                        new VariableName("jsonNodeBody"))))),
         Activity.keyValues(keyValues),
         thing.getAbstractionsScopes());
   }
@@ -194,7 +197,7 @@ public class DomainMessageSubscriber extends SubscriberMetamodel {
         Purpose.domainMessageSubscriberSupportedTypes(),
         new FunctionName("getSupportedMessageTypes"),
         DataArray.of(DataPrimitive.of(PrimitiveType.STRING, VariableName.response())),
-        new LinkedHashSet<>(),
+        new DataRepository(),
         Activity.keyValues(keyValues),
         thing.getAbstractionsScopes());
   }

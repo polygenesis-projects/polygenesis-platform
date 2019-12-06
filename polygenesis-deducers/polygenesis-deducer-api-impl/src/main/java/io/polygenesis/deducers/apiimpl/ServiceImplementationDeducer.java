@@ -28,14 +28,12 @@ import io.polygenesis.core.Deducer;
 import io.polygenesis.core.MetamodelRepository;
 import io.polygenesis.models.api.Service;
 import io.polygenesis.models.api.ServiceMetamodelRepository;
-import io.polygenesis.models.apiimpl.DomainEntityConverter;
-import io.polygenesis.models.apiimpl.DomainEntityConverterMetamodelRepository;
+import io.polygenesis.models.apiimpl.DomainObjectConverter;
+import io.polygenesis.models.apiimpl.DomainObjectConverterMetamodelRepository;
 import io.polygenesis.models.apiimpl.ServiceDependency;
 import io.polygenesis.models.apiimpl.ServiceImplementation;
 import io.polygenesis.models.apiimpl.ServiceImplementationMetamodelRepository;
-import io.polygenesis.models.domain.AggregateRootMetamodelRepository;
-import io.polygenesis.models.domain.AggregateRootPersistable;
-import io.polygenesis.models.domain.BaseDomainEntity;
+import io.polygenesis.models.domain.DomainObject;
 import io.polygenesis.models.domain.Persistence;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
@@ -82,21 +80,14 @@ public class ServiceImplementationDeducer
         CoreRegistry.getMetamodelRepositoryResolver()
             .resolve(metamodelRepositories, ServiceMetamodelRepository.class);
 
-    AggregateRootMetamodelRepository aggregateRootMetamodelRepository =
+    DomainObjectConverterMetamodelRepository domainObjectConverterMetamodelRepository =
         CoreRegistry.getMetamodelRepositoryResolver()
-            .resolve(metamodelRepositories, AggregateRootMetamodelRepository.class);
-
-    DomainEntityConverterMetamodelRepository domainEntityConverterModelRepository =
-        CoreRegistry.getMetamodelRepositoryResolver()
-            .resolve(metamodelRepositories, DomainEntityConverterMetamodelRepository.class);
+            .resolve(metamodelRepositories, DomainObjectConverterMetamodelRepository.class);
 
     Set<ServiceImplementation> serviceImplementations = new LinkedHashSet<>();
 
     fillServiceImplementations(
-        serviceImplementations,
-        serviceModelRepository,
-        domainEntityConverterModelRepository,
-        aggregateRootMetamodelRepository);
+        serviceImplementations, serviceModelRepository, domainObjectConverterMetamodelRepository);
 
     return new ServiceImplementationMetamodelRepository(serviceImplementations);
   }
@@ -105,55 +96,34 @@ public class ServiceImplementationDeducer
   // FUNCTIONALITY
   // ===============================================================================================
 
-  /**
-   * Fill service implementations.
-   *
-   * @param serviceImplementations the service implementations
-   * @param serviceModelRepository the service model repository
-   * @param domainEntityConverterModelRepository the domain entity converter model repository
-   * @param domainModelRepository the domain model repository
-   */
   private void fillServiceImplementations(
       Set<ServiceImplementation> serviceImplementations,
       ServiceMetamodelRepository serviceModelRepository,
-      DomainEntityConverterMetamodelRepository domainEntityConverterModelRepository,
-      AggregateRootMetamodelRepository domainModelRepository) {
+      DomainObjectConverterMetamodelRepository domainObjectConverterMetamodelRepository) {
     serviceModelRepository
         .getItems()
         .forEach(
             service ->
                 serviceImplementations.add(
                     makeServiceImplementation(
-                        service,
-                        domainEntityConverterModelRepository.getItems(),
-                        domainModelRepository)));
+                        service, domainObjectConverterMetamodelRepository.getItems())));
   }
 
-  /**
-   * Service implementation service implementation.
-   *
-   * @param service the service
-   * @param domainEntityConverters the domain entity converters
-   * @param domainModelRepository the domain model repository
-   * @return the service implementation
-   */
   private ServiceImplementation makeServiceImplementation(
-      Service service,
-      Set<DomainEntityConverter> domainEntityConverters,
-      AggregateRootMetamodelRepository domainModelRepository) {
+      Service service, Set<DomainObjectConverter> domainObjectConverters) {
 
-    Optional<DomainEntityConverter> optionalDomainEntityConverter =
+    Optional<DomainObjectConverter> optionalDomainObjectConverter =
         getOptionalDomainObjectConverter(
-            domainEntityConverters, new ObjectName(service.getThingName().getText()));
+            domainObjectConverters, new ObjectName(service.getThingName().getText()));
 
-    if (optionalDomainEntityConverter.isPresent()) {
-      DomainEntityConverter domainEntityConverter = optionalDomainEntityConverter.get();
+    if (optionalDomainObjectConverter.isPresent()) {
+      DomainObjectConverter domainObjectConverter = optionalDomainObjectConverter.get();
 
       return makeServiceImplementation(
           service,
-          domainEntityConverter.getDomainEntity(),
-          aggregateRootParent(domainModelRepository, domainEntityConverter.getDomainEntity()),
-          domainEntityConverter);
+          domainObjectConverter.getDomainObject(),
+          aggregateRootParent(domainObjectConverter.getDomainObject()),
+          domainObjectConverter);
     } else {
       return new ServiceImplementation(
           service, new LinkedHashSet<>(), serviceMethodImplementationDeducer.deduce(service));
@@ -164,47 +134,39 @@ public class ServiceImplementationDeducer
    * Make service implementation service implementation.
    *
    * @param service the service
-   * @param domainEntity the domain entity
+   * @param domainObject the domain object
    * @param optionalParentAggregateRoot the optional parent aggregate root
-   * @param domainEntityConverter the domain entity converter
+   * @param domainObjectConverter the domain object converter
    * @return the service implementation
    */
   public ServiceImplementation makeServiceImplementation(
       Service service,
-      BaseDomainEntity domainEntity,
-      Optional<AggregateRootPersistable> optionalParentAggregateRoot,
-      DomainEntityConverter domainEntityConverter) {
+      DomainObject domainObject,
+      Optional<DomainObject> optionalParentAggregateRoot,
+      DomainObjectConverter domainObjectConverter) {
 
     return new ServiceImplementation(
         service,
-        dependencies(domainEntity, domainEntityConverter, optionalParentAggregateRoot),
+        dependencies(domainObject, domainObjectConverter, optionalParentAggregateRoot),
         serviceMethodImplementationDeducer.deduce(service),
-        Optional.of(domainEntity),
+        Optional.of(domainObject),
         optionalParentAggregateRoot,
-        new LinkedHashSet<>(Arrays.asList(domainEntityConverter)));
+        new LinkedHashSet<>(Arrays.asList(domainObjectConverter)));
   }
 
   // ===============================================================================================
   // PRIVATE
   // ===============================================================================================
 
-  /**
-   * Dependencies set.
-   *
-   * @param domainEntity the domain entity
-   * @param domainEntityConverter the domain entity converter
-   * @param optionalAggregateRootPersistable the optional aggregate root persistable
-   * @return the set
-   */
   private Set<ServiceDependency> dependencies(
-      BaseDomainEntity domainEntity,
-      DomainEntityConverter domainEntityConverter,
-      Optional<AggregateRootPersistable> optionalAggregateRootPersistable) {
+      DomainObject domainObject,
+      DomainObjectConverter domainObjectConverter,
+      Optional<DomainObject> optionalAggregateRoot) {
     Set<ServiceDependency> dependencies = new LinkedHashSet<>();
 
-    if (domainEntity.getOptionalPersistence().isPresent()) {
+    if (domainObject.getOptionalPersistence().isPresent()) {
       Persistence persistence =
-          domainEntity.getOptionalPersistence().orElseThrow(IllegalArgumentException::new);
+          domainObject.getOptionalPersistence().orElseThrow(IllegalArgumentException::new);
 
       dependencies.add(
           new ServiceDependency(
@@ -213,8 +175,8 @@ public class ServiceImplementationDeducer
               new VariableName(persistence.getObjectName().getText())));
     }
 
-    if (optionalAggregateRootPersistable.isPresent()) {
-      Persistence persistence = optionalAggregateRootPersistable.get().getPersistence();
+    if (optionalAggregateRoot.isPresent()) {
+      Persistence persistence = optionalAggregateRoot.get().getPersistence();
 
       dependencies.add(
           new ServiceDependency(
@@ -225,9 +187,9 @@ public class ServiceImplementationDeducer
 
     dependencies.add(
         new ServiceDependency(
-            domainEntityConverter.getObjectName(),
-            domainEntityConverter.getPackageName(),
-            domainEntityConverter.getVariableName()));
+            domainObjectConverter.getObjectName(),
+            domainObjectConverter.getPackageName(),
+            domainObjectConverter.getVariableName()));
 
     return dependencies;
   }
@@ -235,35 +197,31 @@ public class ServiceImplementationDeducer
   /**
    * Gets optional domain object converter.
    *
-   * @param domainEntityConverters the domain object converters
+   * @param domainObjectConverters the domain object converters
    * @param domainObjectName the domain object name
    * @return the optional domain object converter
    */
-  protected Optional<DomainEntityConverter> getOptionalDomainObjectConverter(
-      Set<DomainEntityConverter> domainEntityConverters, ObjectName domainObjectName) {
-    return domainEntityConverters
+  protected Optional<DomainObjectConverter> getOptionalDomainObjectConverter(
+      Set<DomainObjectConverter> domainObjectConverters, ObjectName domainObjectName) {
+    return domainObjectConverters
         .stream()
         .filter(
             domainObjectConverter ->
-                domainObjectConverter.getDomainEntity().getObjectName().equals(domainObjectName))
+                domainObjectConverter.getDomainObject().getObjectName().equals(domainObjectName))
         .findFirst();
   }
 
   /**
    * Aggregate root parent optional.
    *
-   * @param domainModelRepository the domain model repository
-   * @param domainEntity the domain entity
+   * @param domainObject the domain object
    * @return the optional
    */
-  protected Optional<AggregateRootPersistable> aggregateRootParent(
-      AggregateRootMetamodelRepository domainModelRepository, BaseDomainEntity domainEntity) {
+  protected Optional<DomainObject> aggregateRootParent(DomainObject domainObject) {
+    // TODO: need to iterate for deep nested children, in order to get Aggregate Root
 
-    return domainModelRepository
-        .getItems()
-        .stream()
-        .filter(aggregateRoot -> aggregateRoot.contains(domainEntity))
-        .map(AggregateRootPersistable.class::cast)
-        .findFirst();
+    return domainObject.getParent() != null
+        ? Optional.of(domainObject.getParent())
+        : Optional.empty();
   }
 }

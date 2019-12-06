@@ -39,5 +39,5 @@ public interface SubClassable {
    *
    * @return the super class
    */
-  BaseDomainObject getSuperClass();
+  DomainObject getSuperClass();
 }

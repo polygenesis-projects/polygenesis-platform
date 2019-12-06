@@ -33,7 +33,9 @@ public class DocumentGroup {
 
   public static Thing create(Thing document, PackageName rootPackageName) {
     Thing documentGroup =
-        ThingBuilder.endToEndChild("documentGroup", document).setMultiTenant(true).createThing();
+        ThingBuilder.endToEndChildWithIdentity("documentGroup", document)
+            .setMultiTenant(true)
+            .createThing();
 
     documentGroup.addFunctions(
         PurposeFunctionBuilder.forThing(documentGroup, rootPackageName.getText())

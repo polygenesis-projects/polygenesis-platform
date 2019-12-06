@@ -21,18 +21,23 @@
 package io.polygenesis.abstraction.thing;
 
 import io.polygenesis.abstraction.data.Data;
+import io.polygenesis.abstraction.data.DataArray;
 import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.abstraction.data.DataPrimitive;
+import io.polygenesis.abstraction.data.DataReferenceToThingByValue;
 import io.polygenesis.abstraction.data.DataRepository;
 import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.commons.keyvalue.KeyValue;
+import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.commons.valueobjects.ContextName;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.commons.valueobjects.VariableName;
 import io.polygenesis.core.Abstraction;
 import io.polygenesis.core.AbstractionScope;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -52,6 +57,10 @@ import java.util.stream.Collectors;
  */
 public class Thing implements Abstraction {
 
+  // ===============================================================================================
+  // STATE
+  // ===============================================================================================
+
   private Set<AbstractionScope> abstractionScopes = new LinkedHashSet<>();
   private ContextName contextName;
   private ThingName thingName;
@@ -61,6 +70,22 @@ public class Thing implements Abstraction {
   private Set<Thing> children;
   private Thing optionalParent;
   private Set<KeyValue> metadata;
+
+  // ===============================================================================================
+  // STATIC
+  // ===============================================================================================
+
+  private static Map<Purpose, Purpose> childToParentPurposeMap;
+
+  static {
+    childToParentPurposeMap = new LinkedHashMap<>();
+
+    childToParentPurposeMap.put(Purpose.create(), Purpose.entityCreate());
+    childToParentPurposeMap.put(Purpose.modify(), Purpose.entityModify());
+    childToParentPurposeMap.put(Purpose.delete(), Purpose.entityRemove());
+    childToParentPurposeMap.put(Purpose.fetchOne(), Purpose.entityFetch());
+    childToParentPurposeMap.put(Purpose.fetchPagedCollection(), Purpose.entityFetchAll());
+  }
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -154,20 +179,14 @@ public class Thing implements Abstraction {
    */
   public void addChild(Thing childThing) {
     Assertion.isNotNull(childThing, "childThing is required");
-    //    Assertion.isNotNull(
-    //        childThing.getOptionalParent(),
-    //        String.format("The parent of %s is not set", childThing.getThingName().getText()));
-    //
-    //    if (!childThing.getOptionalParent().equals(this)) {
-    //      throw new IllegalArgumentException(
-    //          String.format(
-    //              "The parent of %s is not set equal to %s",
-    //              childThing.getThingName().getText(), getThingName().getText()));
-    //    }
 
     childThing.setOptionalParent(this);
 
     getChildren().add(childThing);
+
+    addChildThingIntoProperties(childThing);
+
+    addChildThingManagementFunctions(childThing);
   }
 
   /**
@@ -193,7 +212,8 @@ public class Thing implements Abstraction {
    */
   public DataObject getAsDataObject(PackageName rootPackageName) {
     return new DataObject(
-        new ObjectName(getThingName().getText()), makePackageName(rootPackageName, this));
+        new ObjectName(TextConverter.toUpperCamel(getThingName().getText())),
+        makePackageName(rootPackageName, this));
   }
 
   // ===============================================================================================
@@ -262,8 +282,8 @@ public class Thing implements Abstraction {
    *
    * @return the thing properties
    */
-  public Set<Data> getThingProperties() {
-    return thingProperties.getData();
+  public DataRepository getThingProperties() {
+    return thingProperties;
   }
 
   /**
@@ -305,6 +325,15 @@ public class Thing implements Abstraction {
   // ===============================================================================================
   // QUERIES
   // ===============================================================================================
+
+  /**
+   * Has parent boolean.
+   *
+   * @return the boolean
+   */
+  public Boolean hasParent() {
+    return getOptionalParent() != null;
+  }
 
   /**
    * Gets function by name.
@@ -373,6 +402,7 @@ public class Thing implements Abstraction {
    */
   public Data getThingIdentity() {
     return getThingProperties()
+        .getData()
         .stream()
         .filter(data -> data.isThingIdentity())
         .findFirst()
@@ -545,11 +575,59 @@ public class Thing implements Abstraction {
       return;
     }
 
+    if (function.getThing() != this) {
+      throw new IllegalStateException();
+    }
+
     Set<Data> newThingProperties = new LinkedHashSet<>();
 
-    function.getArguments().stream().forEach(data -> newThingProperties.add(data));
+    function.getArguments().getData().stream().forEach(data -> newThingProperties.add(data));
 
     thingProperties.addSetOfData(newThingProperties);
+  }
+
+  private void addChildThingIntoProperties(Thing childThing) {
+    String variableName = TextConverter.toUpperCamel(childThing.getThingName().getText());
+    DataReferenceToThingByValue dataReferenceToThingByValue =
+        DataReferenceToThingByValue.of(
+            childThing, TextConverter.toPlural(childThing.getThingName().getText()));
+
+    DataArray dataArray = DataArray.of(dataReferenceToThingByValue, variableName);
+
+    getThingProperties().addData(dataArray);
+  }
+
+  private void addChildThingManagementFunctions(Thing childThing) {
+    childThing
+        .getFunctions()
+        .forEach(
+            childFunction -> {
+              if (!childToParentPurposeMap.containsKey(childFunction.getPurpose())) {
+                throw new IllegalStateException(
+                    String.format(
+                        "Purpose %s not found in " + "childToParentPurposeMap",
+                        childFunction.getPurpose().getText()));
+              }
+
+              Function function =
+                  new Function(
+                      this,
+                      childToParentPurposeMap.get(childFunction.getPurpose()),
+                      new FunctionName(
+                          String.format(
+                              "%s%s",
+                              TextConverter.toUpperCamel(
+                                  childFunction.getThing().getThingName().getText()),
+                              TextConverter.toUpperCamel(childFunction.getName().getText()))),
+                      childFunction.getReturnValue(),
+                      childFunction.getArguments(),
+                      childFunction.getActivity(),
+                      getAbstractionsScopes(),
+                      childFunction);
+
+              // addFunction(function);
+              getFunctions().add(function);
+            });
   }
 
   // ===============================================================================================

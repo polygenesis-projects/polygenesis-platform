@@ -21,12 +21,17 @@
 package io.polygenesis.generators.java.domain.projection.projection;
 
 import io.polygenesis.abstraction.thing.Function;
+import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.core.TemplateData;
 import io.polygenesis.generators.java.domain.DomainObjectClassTransformer;
+import io.polygenesis.models.domain.InstantiationType;
 import io.polygenesis.models.domain.Projection;
+import io.polygenesis.representations.code.MethodRepresentation;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * The type Projection transformer.
@@ -60,5 +65,55 @@ public class ProjectionTransformer extends DomainObjectClassTransformer<Projecti
     dataModel.put("representation", create(source, args));
 
     return new TemplateData(dataModel, "polygenesis-representation-java/Class.java.ftl");
+  }
+
+  @Override
+  public Set<MethodRepresentation> methodRepresentations(Projection source, Object... args) {
+    Set<MethodRepresentation> methodRepresentations = new LinkedHashSet<>();
+
+    methodRepresentations.addAll(super.methodRepresentations(source, args));
+
+    return methodRepresentations;
+  }
+
+  @Override
+  public Set<String> annotations(Projection source, Object... args) {
+    Set<String> annotations = new LinkedHashSet<>();
+
+    if (source.getInstantiationType().equals(InstantiationType.CONCRETE)) {
+      annotations.add("@Entity");
+      annotations.add(
+          String.format(
+              "@Table(name = Constants.DEFAULT_TABLE_PREFIX + \"%s\")",
+              TextConverter.toLowerUnderscore(source.getObjectName().getText())));
+    } else {
+      annotations.add("@MappedSuperclass");
+    }
+
+    return annotations;
+  }
+
+  @Override
+  public String description(Projection source, Object... args) {
+    StringBuilder stringBuilder = new StringBuilder();
+
+    stringBuilder.append("The ");
+
+    stringBuilder.append(TextConverter.toUpperCamelSpaces(source.getObjectName().getText()));
+
+    stringBuilder.append(" Projection.");
+
+    return stringBuilder.toString();
+  }
+
+  @Override
+  public String modifiers(Projection source, Object... args) {
+    if (source.getInstantiationType().equals(InstantiationType.CONCRETE)) {
+      return dataTypeTransformer.getModifierPublic();
+    } else {
+      return dataTypeTransformer.getModifierPublic()
+          + " "
+          + dataTypeTransformer.getModifierAbstract();
+    }
   }
 }
