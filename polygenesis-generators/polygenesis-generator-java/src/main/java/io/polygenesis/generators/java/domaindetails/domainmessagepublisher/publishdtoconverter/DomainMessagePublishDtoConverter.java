@@ -21,6 +21,7 @@
 package io.polygenesis.generators.java.domaindetails.domainmessagepublisher.publishdtoconverter;
 
 import io.polygenesis.abstraction.data.DataPrimitive;
+import io.polygenesis.abstraction.data.DataRepository;
 import io.polygenesis.abstraction.data.PrimitiveType;
 import io.polygenesis.abstraction.thing.Activity;
 import io.polygenesis.abstraction.thing.Function;
@@ -32,7 +33,6 @@ import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.commons.valueobjects.VariableName;
 import io.polygenesis.core.AbstractNameablePackageable;
-import java.util.LinkedHashSet;
 
 /**
  * The type Domain message publish dto converter.
@@ -89,7 +89,7 @@ public class DomainMessagePublishDtoConverter extends AbstractNameablePackageabl
         Purpose.domainMessagePublisherGetContext(),
         new FunctionName("getContext"),
         DataPrimitive.of(PrimitiveType.STRING, VariableName.response()),
-        new LinkedHashSet<>(),
+        new DataRepository(),
         Activity.empty(),
         thing.getAbstractionsScopes());
   }

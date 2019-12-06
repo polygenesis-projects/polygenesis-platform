@@ -39,9 +39,9 @@ import io.polygenesis.generators.java.apidetail.converter.DomainObjectConverterL
 import io.polygenesis.generators.java.apidetail.converter.DomainObjectConverterLegacyMethodTransformer;
 import io.polygenesis.generators.java.apidetail.converter.activity.ConverterMethodImplementationRegistry;
 import io.polygenesis.generators.java.apidetail.service.ServiceDetailGenerator;
+import io.polygenesis.generators.java.apidetail.service.ServiceDetailMethodActivityRegistry;
 import io.polygenesis.generators.java.apidetail.service.ServiceDetailMethodTransformer;
 import io.polygenesis.generators.java.apidetail.service.ServiceDetailTransformer;
-import io.polygenesis.generators.java.apidetail.service.activity.ServiceMethodActivityRegistry;
 import io.polygenesis.transformers.java.JavaDataTypeTransformer;
 import java.nio.file.Path;
 
@@ -94,7 +94,7 @@ public final class JavaApiDetailMetamodelGeneratorFactory {
             new ServiceDetailTransformer(
                 dataTypeTransformer,
                 new ServiceDetailMethodTransformer(
-                    dataTypeTransformer, new ServiceMethodActivityRegistry())),
+                    dataTypeTransformer, new ServiceDetailMethodActivityRegistry())),
             templateEngine,
             passiveFileExporter);
 

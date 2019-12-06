@@ -29,8 +29,13 @@ import io.polygenesis.core.AbstractionScope;
 import io.polygenesis.core.CoreRegistry;
 import io.polygenesis.core.Deducer;
 import io.polygenesis.core.MetamodelRepository;
+import io.polygenesis.models.domain.Constructor;
+import io.polygenesis.models.domain.DomainObjectProperty;
 import io.polygenesis.models.domain.SupportiveEntity;
 import io.polygenesis.models.domain.SupportiveEntityMetamodelRepository;
+import io.polygenesis.models.domain.common.ConstructorsDeducer;
+import io.polygenesis.models.domain.common.DomainObjectPropertiesDeducer;
+import io.polygenesis.models.domain.common.IdentityDomainObjectPropertiesDeducer;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -45,7 +50,9 @@ public class SupportiveEntityDeducer implements Deducer<SupportiveEntityMetamode
   // DEPENDENCIES
   // ===============================================================================================
   private final PackageName rootPackageName;
-  private final SupportiveEntityPropertyDeducer supportiveEntityPropertyDeducer;
+  private final ConstructorsDeducer constructorsDeducer;
+  private final DomainObjectPropertiesDeducer domainObjectPropertiesDeducer;
+  private final IdentityDomainObjectPropertiesDeducer identityDomainObjectPropertiesDeducer;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -55,13 +62,19 @@ public class SupportiveEntityDeducer implements Deducer<SupportiveEntityMetamode
    * Instantiates a new Supportive entity deducer.
    *
    * @param rootPackageName the root package name
-   * @param supportiveEntityPropertyDeducer the supportive entity property deducer
+   * @param constructorsDeducer the constructors deducer
+   * @param domainObjectPropertiesDeducer the domain object properties deducer
+   * @param identityDomainObjectPropertiesDeducer the identity domain object properties deducer
    */
   public SupportiveEntityDeducer(
       PackageName rootPackageName,
-      SupportiveEntityPropertyDeducer supportiveEntityPropertyDeducer) {
+      ConstructorsDeducer constructorsDeducer,
+      DomainObjectPropertiesDeducer domainObjectPropertiesDeducer,
+      IdentityDomainObjectPropertiesDeducer identityDomainObjectPropertiesDeducer) {
     this.rootPackageName = rootPackageName;
-    this.supportiveEntityPropertyDeducer = supportiveEntityPropertyDeducer;
+    this.constructorsDeducer = constructorsDeducer;
+    this.domainObjectPropertiesDeducer = domainObjectPropertiesDeducer;
+    this.identityDomainObjectPropertiesDeducer = identityDomainObjectPropertiesDeducer;
   }
 
   // ===============================================================================================
@@ -95,7 +108,14 @@ public class SupportiveEntityDeducer implements Deducer<SupportiveEntityMetamode
    */
   private void makeSupportiveEntity(
       Set<SupportiveEntity> supportiveEntities, Thing thing, PackageName rootPackageName) {
-    supportiveEntities.add(
+
+    Set<DomainObjectProperty<?>> properties =
+        domainObjectPropertiesDeducer.deduceDomainObjectPropertiesFromThing(
+            identityDomainObjectPropertiesDeducer.makeSupportiveIdentityDomainObjectProperties(
+                thing, rootPackageName),
+            thing);
+
+    SupportiveEntity supportiveEntity =
         new SupportiveEntity(
             new ObjectName(thing.getThingName().getText()),
             new PackageName(
@@ -104,7 +124,20 @@ public class SupportiveEntityDeducer implements Deducer<SupportiveEntityMetamode
                     rootPackageName.getText(),
                     "supportive",
                     thing.getThingName().getText().toLowerCase())),
-            supportiveEntityPropertyDeducer.deduceFromThing(thing, rootPackageName),
-            supportiveEntityPropertyDeducer.deduceConstructors(null, thing, rootPackageName)));
+            properties);
+
+    // Get Constructors
+    Set<Constructor> constructors =
+        constructorsDeducer.deduceConstructors(
+            rootPackageName,
+            null,
+            identityDomainObjectPropertiesDeducer.makeSupportiveIdentityDomainObjectProperties(
+                thing, rootPackageName),
+            thing);
+
+    // Add Constructors
+    supportiveEntity.addConstructors(constructors);
+
+    supportiveEntities.add(supportiveEntity);
   }
 }

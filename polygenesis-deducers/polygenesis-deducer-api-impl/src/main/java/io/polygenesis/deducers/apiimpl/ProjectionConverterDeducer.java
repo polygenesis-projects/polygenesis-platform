@@ -24,8 +24,8 @@ import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.ThingRepository;
 import io.polygenesis.core.AbstractionScope;
 import io.polygenesis.models.api.ServiceMetamodelRepository;
-import io.polygenesis.models.apiimpl.DomainEntityConverter;
-import io.polygenesis.models.apiimpl.DomainEntityConverterMethod;
+import io.polygenesis.models.apiimpl.DomainObjectConverter;
+import io.polygenesis.models.apiimpl.DomainObjectConverterMethod;
 import io.polygenesis.models.domain.DomainMetamodelRepository;
 import io.polygenesis.models.domain.Projection;
 import io.polygenesis.models.domain.ProjectionMetamodelRepository;
@@ -77,19 +77,19 @@ public class ProjectionConverterDeducer {
    * @param domainMetamodelRepository the projection metamodel repository
    * @return the set
    */
-  public Set<DomainEntityConverter> deduce(
+  public Set<DomainObjectConverter> deduce(
       ThingRepository thingRepository,
       ServiceMetamodelRepository serviceModelRepository,
       ProjectionMetamodelRepository domainMetamodelRepository) {
-    Set<DomainEntityConverter> domainEntityConverters = new LinkedHashSet<>();
+    Set<DomainObjectConverter> domainObjectConverters = new LinkedHashSet<>();
 
     Set<Thing> things = findThingsInApiAndProjectionScopes(thingRepository);
     Set<Projection> projections = domainMetamodelRepository.findByThings(things);
 
     fillConverters(
-        domainEntityConverters, serviceModelRepository, domainMetamodelRepository, projections);
+        domainObjectConverters, serviceModelRepository, domainMetamodelRepository, projections);
 
-    return domainEntityConverters;
+    return domainObjectConverters;
   }
 
   // ===============================================================================================
@@ -97,17 +97,17 @@ public class ProjectionConverterDeducer {
   // ===============================================================================================
 
   private void fillConverters(
-      Set<DomainEntityConverter> domainEntityConverters,
+      Set<DomainObjectConverter> domainObjectConverters,
       ServiceMetamodelRepository serviceModelRepository,
       DomainMetamodelRepository<?> domainMetamodelRepository,
       Set<Projection> projections) {
     projections.forEach(
         projection -> {
-          Optional<DomainEntityConverter> optionalDomainEntityConverter =
+          Optional<DomainObjectConverter> optionalDomainObjectConverter =
               deduceConverterForProjection(
                   serviceModelRepository, domainMetamodelRepository, projection);
-          if (optionalDomainEntityConverter.isPresent()) {
-            domainEntityConverters.add(optionalDomainEntityConverter.get());
+          if (optionalDomainObjectConverter.isPresent()) {
+            domainObjectConverters.add(optionalDomainObjectConverter.get());
           }
         });
   }
@@ -116,11 +116,11 @@ public class ProjectionConverterDeducer {
   // PRIVATE - DEDUCE
   // ===============================================================================================
 
-  private Optional<DomainEntityConverter> deduceConverterForProjection(
+  private Optional<DomainObjectConverter> deduceConverterForProjection(
       ServiceMetamodelRepository serviceModelRepository,
       DomainMetamodelRepository<?> domainMetamodelRepository,
       Projection projection) {
-    Set<DomainEntityConverterMethod> methods = new LinkedHashSet<>();
+    Set<DomainObjectConverterMethod> methods = new LinkedHashSet<>();
 
     // ValueObjectDto
     methods.addAll(
@@ -135,7 +135,7 @@ public class ProjectionConverterDeducer {
     if (methods.isEmpty()) {
       return Optional.empty();
     } else {
-      return Optional.of(new DomainEntityConverter(projection, methods));
+      return Optional.of(new DomainObjectConverter(projection, methods));
     }
   }
 

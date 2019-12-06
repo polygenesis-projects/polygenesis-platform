@@ -85,17 +85,6 @@ public class SupportiveEntityIdTransformer
   }
 
   @Override
-  public Set<FieldRepresentation> stateFieldRepresentations(
-      SupportiveEntityId source, Object... args) {
-    return new LinkedHashSet<>(
-        Arrays.asList(
-            FieldRepresentation.withModifiers(
-                "static final long",
-                "serialVersionUID = 1L",
-                dataTypeTransformer.getModifierPrivate())));
-  }
-
-  @Override
   public Set<ConstructorRepresentation> constructorRepresentations(
       SupportiveEntityId source, Object... args) {
     Set<ConstructorRepresentation> constructorRepresentations = new LinkedHashSet<>();

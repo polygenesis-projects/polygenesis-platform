@@ -21,6 +21,7 @@
 package io.polygenesis.abstraction.thing.dsl;
 
 import io.polygenesis.abstraction.data.Data;
+import io.polygenesis.abstraction.data.DataRepository;
 import io.polygenesis.abstraction.thing.Activity;
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.abstraction.thing.FunctionName;
@@ -28,7 +29,6 @@ import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.core.AbstractionScope;
-import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
@@ -49,7 +49,7 @@ public abstract class AbstractFunctionBuilder<T extends AbstractFunctionBuilder<
   private Purpose purpose;
   private FunctionName name;
   private Data returnValue;
-  private Set<Data> arguments;
+  private DataRepository arguments;
   private Activity activity;
   private Set<AbstractionScope> abstractionScopes;
 
@@ -77,7 +77,7 @@ public abstract class AbstractFunctionBuilder<T extends AbstractFunctionBuilder<
     this.name = new FunctionName(name);
     this.purpose = purpose;
 
-    arguments = new LinkedHashSet<>();
+    arguments = new DataRepository();
     abstractionScopes = thing.getAbstractionsScopes();
   }
 
@@ -92,7 +92,7 @@ public abstract class AbstractFunctionBuilder<T extends AbstractFunctionBuilder<
    * @return the t
    */
   public T addArgument(Data data) {
-    this.arguments.add(data);
+    this.arguments.addData(data);
     return builderClass.cast(this);
   }
 
@@ -103,7 +103,7 @@ public abstract class AbstractFunctionBuilder<T extends AbstractFunctionBuilder<
    * @return the t
    */
   public T addArguments(Set<Data> dataSet) {
-    dataSet.forEach(data -> this.arguments.add(data));
+    this.arguments.addSetOfData(dataSet);
     return builderClass.cast(this);
   }
 

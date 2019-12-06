@@ -21,6 +21,7 @@
 package io.polygenesis.generators.java.domain.aggregateroot.activity.statemutation;
 
 import io.polygenesis.abstraction.thing.ActivityTemplateTransformer;
+import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.core.TemplateData;
 import io.polygenesis.generators.java.common.AggregateEntityDataService;
 import io.polygenesis.models.domain.StateMutationMethod;
@@ -61,12 +62,17 @@ public class EntityAddActivityTransformer
   @SuppressWarnings({"unchecked"})
   @Override
   public TemplateData transform(StateMutationMethod source, Object... args) {
+    Assertion.isNotNull(source, "source is required");
+    Assertion.isNotNull(source.getMutatedObject(), "source.getMutatedObject() is required");
+
     Map<String, Object> dataModel = new HashMap<>();
 
     dataModel.put(
         "data",
         new EntityAddActivityTemplateData(
-            aggregateEntityDataService.get(source.getMutatedObject()), source.getProperties()));
+            aggregateEntityDataService.get(
+                source.getFunction().getDelegatesToFunction().getThing()),
+            source.getProperties()));
 
     return new TemplateData(
         dataModel, "polygenesis-trinity-java/domain/" + "aggregate-root/entity-add.java.ftl");

@@ -36,7 +36,7 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class SupportiveEntity extends BaseDomainEntity
+public class SupportiveEntity extends DomainObject
     implements DomainObjectProperty<DataObject>, Metamodel {
 
   // ===============================================================================================
@@ -49,20 +49,15 @@ public class SupportiveEntity extends BaseDomainEntity
    * @param objectName the object name
    * @param packageName the package name
    * @param properties the properties
-   * @param constructors the constructors
    */
   public SupportiveEntity(
-      ObjectName objectName,
-      PackageName packageName,
-      Set<DomainObjectProperty<?>> properties,
-      Set<Constructor> constructors) {
+      ObjectName objectName, PackageName packageName, Set<DomainObjectProperty<?>> properties) {
     super(
-        DomainObjectType.HELPER_ENTITY,
+        DomainObjectType.SUPPORTIVE_ENTITY,
         InstantiationType.CONCRETE,
         objectName,
         packageName,
         properties,
-        constructors,
         false);
   }
 
@@ -71,19 +66,8 @@ public class SupportiveEntity extends BaseDomainEntity
   // ===============================================================================================
 
   @Override
-  public boolean hasSuperclass() {
-    return false;
-  }
-
-  @Override
-  public BaseDomainObject getSuperClass() {
-    // TODO
-    return null;
-  }
-
-  @Override
   public PropertyType getPropertyType() {
-    return PropertyType.REFERENCE;
+    return PropertyType.REFERENCE_BY_ID;
   }
 
   @Override

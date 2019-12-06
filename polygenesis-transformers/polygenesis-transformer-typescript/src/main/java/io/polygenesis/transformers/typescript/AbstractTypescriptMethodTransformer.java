@@ -110,6 +110,7 @@ public abstract class AbstractTypescriptMethodTransformer<S extends FunctionProv
     source
         .getFunction()
         .getArguments()
+        .getData()
         .stream()
         .filter(argument -> argument.isDataGroup())
         .map(DataObject.class::cast)
@@ -158,6 +159,7 @@ public abstract class AbstractTypescriptMethodTransformer<S extends FunctionProv
     source
         .getFunction()
         .getArguments()
+        .getData()
         .forEach(
             argument ->
                 parameterRepresentations.add(

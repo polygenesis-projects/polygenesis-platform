@@ -23,9 +23,8 @@ package io.polygenesis.generators.java.apidetail.service.activity;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.models.api.ServiceMethod;
 import io.polygenesis.models.apiimpl.ServiceImplementation;
-import io.polygenesis.models.domain.AggregateRootPersistable;
-import io.polygenesis.models.domain.BaseDomainEntity;
-import io.polygenesis.models.domain.BaseDomainObject;
+import io.polygenesis.models.domain.AggregateRoot;
+import io.polygenesis.models.domain.DomainObject;
 import io.polygenesis.models.domain.DomainObjectProperty;
 import io.polygenesis.models.domain.Projection;
 import io.polygenesis.representations.code.MethodRepresentation;
@@ -156,7 +155,7 @@ public abstract class AbstractServiceMethodImplementor {
     dataModel.put("representation", methodRepresentation);
 
     try {
-      AggregateRootPersistable aggregateRoot = retrieveAggregateRoot(serviceImplementation);
+      DomainObject aggregateRoot = retrieveAggregateRoot(serviceImplementation);
 
       dataModel.put(
           "aggregateRootDataType",
@@ -224,27 +223,26 @@ public abstract class AbstractServiceMethodImplementor {
    * @return the base domain object
    */
   // TODO: needs refactoring
-  private AggregateRootPersistable retrieveAggregateRoot(
-      ServiceImplementation serviceImplementation) {
+  private DomainObject retrieveAggregateRoot(ServiceImplementation serviceImplementation) {
     if (serviceImplementation.getOptionalParentAggregateRoot().isPresent()) {
       return serviceImplementation
           .getOptionalParentAggregateRoot()
           .orElseThrow(IllegalArgumentException::new);
     }
 
-    if (serviceImplementation.getOptionalDomainEntity().isPresent()) {
-      BaseDomainEntity domainEntity =
+    if (serviceImplementation.getOptionalDomainObject().isPresent()) {
+      DomainObject domainObject =
           serviceImplementation
-              .getOptionalDomainEntity()
+              .getOptionalDomainObject()
               .orElseThrow(IllegalArgumentException::new);
 
-      if (domainEntity instanceof AggregateRootPersistable) {
-        return (AggregateRootPersistable) domainEntity;
+      if (domainObject instanceof AggregateRoot) {
+        return (AggregateRoot) domainObject;
       } else {
         throw new IllegalArgumentException(
             String.format(
-                "Domain Object=%s is not of type AggregateRootPersistable",
-                domainEntity.getObjectName().getText()));
+                "Domain Object=%s is not of type AggregateRoot",
+                domainObject.getObjectName().getText()));
       }
 
     } else {
@@ -256,19 +254,19 @@ public abstract class AbstractServiceMethodImplementor {
   }
 
   private Projection retrieveProjection(ServiceImplementation serviceImplementation) {
-    if (serviceImplementation.getOptionalDomainEntity().isPresent()) {
-      BaseDomainEntity domainEntity =
+    if (serviceImplementation.getOptionalDomainObject().isPresent()) {
+      DomainObject domainObject =
           serviceImplementation
-              .getOptionalDomainEntity()
+              .getOptionalDomainObject()
               .orElseThrow(IllegalArgumentException::new);
 
-      if (domainEntity instanceof Projection) {
-        return (Projection) domainEntity;
+      if (domainObject instanceof Projection) {
+        return (Projection) domainObject;
       } else {
         throw new IllegalArgumentException(
             String.format(
                 "Domain Object=%s is not of type Projection",
-                domainEntity.getObjectName().getText()));
+                domainObject.getObjectName().getText()));
       }
 
     } else {
@@ -285,7 +283,7 @@ public abstract class AbstractServiceMethodImplementor {
    * @param domainObject the domain object
    * @return the set
    */
-  private Set<DomainObjectProperty<?>> propertiesOfConstructorFor(BaseDomainObject domainObject) {
+  private Set<DomainObjectProperty<?>> propertiesOfConstructorFor(DomainObject domainObject) {
     return domainObject
         .getConstructors()
         .stream()

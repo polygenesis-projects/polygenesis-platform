@@ -21,7 +21,7 @@
 package io.polygenesis.generators.java.apidetail.converter.activity;
 
 import io.polygenesis.commons.freemarker.FreemarkerService;
-import io.polygenesis.models.apiimpl.DomainEntityConverterMethod;
+import io.polygenesis.models.apiimpl.DomainObjectConverterMethod;
 import io.polygenesis.representations.code.MethodRepresentation;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,16 +41,16 @@ public class ConvertDomainObjectToCollectionRecord
   @Override
   public String implementationFor(
       FreemarkerService freemarkerService,
-      DomainEntityConverterMethod domainEntityConverterMethod,
+      DomainObjectConverterMethod domainObjectConverterMethod,
       MethodRepresentation methodRepresentation) {
     Map<String, Object> dataModel = new HashMap<>();
 
     dataModel.put("representation", methodRepresentation);
-    dataModel.put("from", domainEntityConverterMethod.getFrom());
-    dataModel.put("to", domainEntityConverterMethod.getTo());
+    dataModel.put("from", domainObjectConverterMethod.getFrom());
+    dataModel.put("to", domainObjectConverterMethod.getTo());
 
     dataModel.put(
-        "multiTenant", domainEntityConverterMethod.getFunction().getThing().getMultiTenant());
+        "multiTenant", domainObjectConverterMethod.getFunction().getThing().getMultiTenant());
 
     return freemarkerService.exportToString(
         dataModel,

@@ -20,39 +20,20 @@
 
 package io.polygenesis.models.domain.aggregateroot;
 
-import io.polygenesis.abstraction.thing.Thing;
-import io.polygenesis.abstraction.thing.ThingMetadataKey;
-import io.polygenesis.abstraction.thing.ThingRepository;
-import io.polygenesis.commons.valueobjects.ObjectName;
-import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.AbstractionScope;
-import io.polygenesis.models.domain.AggregateRoot;
-import io.polygenesis.models.domain.AggregateRootPersistable;
-import io.polygenesis.models.domain.Constructor;
-import io.polygenesis.models.domain.DomainEvent;
-import io.polygenesis.models.domain.DomainObjectProperty;
-import io.polygenesis.models.domain.FactoryMethod;
-import io.polygenesis.models.domain.InstantiationType;
-import io.polygenesis.models.domain.Persistence;
-import io.polygenesis.models.domain.StateMutationMethod;
-import io.polygenesis.models.domain.StateQueryMethod;
+import io.polygenesis.models.domain.common.ConstructorsDeducer;
+import io.polygenesis.models.domain.common.DomainObjectDeducer;
+import io.polygenesis.models.domain.common.DomainObjectPropertiesDeducer;
+import io.polygenesis.models.domain.common.IdentityDomainObjectPropertiesDeducer;
+import io.polygenesis.models.domain.common.StateMutationMethodDeducer;
 import io.polygenesis.models.domain.domainmessage.DomainEventConstructorDeducer;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 /**
  * The type Aggregate root deducer.
  *
  * @author Christos Tsakostas
  */
-public class AggregateRootDeducer {
-
-  // ===============================================================================================
-  // DEPENDENCIES
-  // ===============================================================================================
-  private final AggregateRootPropertyDeducer aggregateRootPropertyDeducer;
-  private final StateMutationMethodDeducer stateMutationMethodDeducer;
-  private final DomainEventConstructorDeducer domainEventConstructorDeducer;
+public class AggregateRootDeducer extends DomainObjectDeducer {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -61,251 +42,32 @@ public class AggregateRootDeducer {
   /**
    * Instantiates a new Aggregate root deducer.
    *
-   * @param aggregateRootPropertyDeducer the aggregate root property deducer
+   * @param domainObjectPropertiesDeducer the domain object properties deducer
+   * @param identityDomainObjectPropertiesDeducer the identity domain object properties deducer
+   * @param constructorsDeducer the constructors deducer
    * @param stateMutationMethodDeducer the state mutation method deducer
-   * @param domainEventConstructorDeducer the domain event deducer
+   * @param domainEventConstructorDeducer the domain event constructor deducer
    */
   public AggregateRootDeducer(
-      AggregateRootPropertyDeducer aggregateRootPropertyDeducer,
+      DomainObjectPropertiesDeducer domainObjectPropertiesDeducer,
+      IdentityDomainObjectPropertiesDeducer identityDomainObjectPropertiesDeducer,
+      ConstructorsDeducer constructorsDeducer,
       StateMutationMethodDeducer stateMutationMethodDeducer,
       DomainEventConstructorDeducer domainEventConstructorDeducer) {
-    this.aggregateRootPropertyDeducer = aggregateRootPropertyDeducer;
-    this.stateMutationMethodDeducer = stateMutationMethodDeducer;
-    this.domainEventConstructorDeducer = domainEventConstructorDeducer;
+    super(
+        domainObjectPropertiesDeducer,
+        identityDomainObjectPropertiesDeducer,
+        constructorsDeducer,
+        stateMutationMethodDeducer,
+        domainEventConstructorDeducer);
   }
 
   // ===============================================================================================
-  // FUNCTIONALITY
+  // OVERRIDES
   // ===============================================================================================
 
-  /**
-   * Deduce from set.
-   *
-   * @param thingRepository the thing repository
-   * @param rootPackageName the root package name
-   * @return the set
-   */
-  public Set<AggregateRoot> deduceFrom(
-      ThingRepository thingRepository, PackageName rootPackageName) {
-    Set<AggregateRoot> abstractAggregateRoots = new LinkedHashSet<>();
-
-    // Get abstract superclasses first
-    thingRepository
-        .getAbstractionItemsByScope(AbstractionScope.domainAbstractAggregateRoot())
-        .stream()
-        .filter(Thing::doesNotExtendThing)
-        .forEach(
-            thing ->
-                makeAggregateRoot(
-                    abstractAggregateRoots, thing, rootPackageName, abstractAggregateRoots));
-
-    // Get abstract subclasses of abstract superclasses
-    thingRepository
-        .getAbstractionItemsByScope(AbstractionScope.domainAbstractAggregateRoot())
-        .stream()
-        .filter(Thing::extendsThing)
-        .forEach(
-            thing ->
-                makeAggregateRoot(
-                    abstractAggregateRoots, thing, rootPackageName, abstractAggregateRoots));
-
-    // Continue with subclasses
-    Set<AggregateRoot> aggregateRoots = new LinkedHashSet<>();
-    thingRepository
-        .getAbstractionItemsByScope(AbstractionScope.domainAggregateRoot())
-        .stream()
-        .forEach(
-            thing ->
-                makeAggregateRoot(aggregateRoots, thing, rootPackageName, abstractAggregateRoots));
-
-    // Add all
-    aggregateRoots.addAll(abstractAggregateRoots);
-
-    return aggregateRoots;
-  }
-
-  // ===============================================================================================
-  // PRIVATE
-  // ===============================================================================================
-
-  /**
-   * Make aggregate root aggregate root.
-   *
-   * @param aggregateRoots the aggregate roots
-   * @param thing the thing
-   * @param rootPackageName the root package name
-   * @return the aggregate root
-   */
-  private void makeAggregateRoot(
-      Set<AggregateRoot> aggregateRoots,
-      Thing thing,
-      PackageName rootPackageName,
-      Set<AggregateRoot> abstractAggregateRoots) {
-    if (thing.getOptionalParent() != null) {
-      throw new IllegalArgumentException(
-          String.format(
-              "The aggregate root=%s should not have a parent", thing.getThingName().getText()));
-    }
-
-    PackageName thingPackageName = thing.makePackageName(rootPackageName, thing);
-
-    ObjectName aggregateRootObjectName = makeAggregateRootName(thing);
-
-    // Start by getting the superclass
-    AggregateRoot aggregateRootSuperClass = makeSuperclass(abstractAggregateRoots, thing);
-
-    // Continue with the properties and exclude the ones already in the superclass.
-    Set<DomainObjectProperty<?>> properties =
-        aggregateRootPropertyDeducer.deduceFromThing(
-            aggregateRootSuperClass, thing, rootPackageName);
-
-    Set<Constructor> constructors =
-        aggregateRootPropertyDeducer.deduceConstructors(
-            aggregateRootSuperClass, thing, rootPackageName);
-
-    if (!isAbstract(thing)) {
-      constructors.forEach(
-          constructor -> {
-            DomainEvent domainEvent =
-                domainEventConstructorDeducer.deduceFrom(rootPackageName, thing, constructor);
-            constructor.assignDomainEvent(domainEvent);
-          });
-    }
-
-    Set<StateMutationMethod> stateMutationMethods =
-        stateMutationMethodDeducer.deduce(thingPackageName, thing, properties);
-    Set<StateQueryMethod> stateQueryMethods = new LinkedHashSet<>();
-    Set<FactoryMethod> factoryMethods = new LinkedHashSet<>();
-
-    if (isAbstract(thing)) {
-      AggregateRoot aggregateRoot =
-          new AggregateRoot(
-              isAbstract(thing) ? InstantiationType.ABSTRACT : InstantiationType.CONCRETE,
-              aggregateRootObjectName,
-              thingPackageName,
-              properties,
-              constructors,
-              thing.getMultiTenant(),
-              stateQueryMethods,
-              factoryMethods,
-              aggregateRootSuperClass);
-
-      // Add State Mutation Methods
-      aggregateRoot.addStateMutationMethods(stateMutationMethods);
-
-      // Add
-      aggregateRoots.add(aggregateRoot);
-    } else {
-      Persistence persistence =
-          new Persistence(
-              thingPackageName,
-              makePersistenceName(thing),
-              aggregateRootObjectName,
-              makeAggregateRootIdName(thing),
-              thing.getMultiTenant());
-
-      AggregateRootPersistable aggregateRootPersistable =
-          new AggregateRootPersistable(
-              isAbstract(thing) ? InstantiationType.ABSTRACT : InstantiationType.CONCRETE,
-              aggregateRootObjectName,
-              thingPackageName,
-              properties,
-              constructors,
-              thing.getMultiTenant(),
-              stateQueryMethods,
-              factoryMethods,
-              aggregateRootSuperClass,
-              persistence);
-
-      // Add State Mutation Methods
-      aggregateRootPersistable.addStateMutationMethods(stateMutationMethods);
-
-      // Add
-      aggregateRoots.add(aggregateRootPersistable);
-    }
-  }
-
-  /**
-   * Make aggregate root name name.
-   *
-   * @param thing the thing
-   * @return the name
-   */
-  private ObjectName makeAggregateRootName(Thing thing) {
-    return new ObjectName(thing.getThingName().getText());
-  }
-
-  /**
-   * Make aggregate root id name name.
-   *
-   * @param thing the thing
-   * @return the name
-   */
-  private ObjectName makeAggregateRootIdName(Thing thing) {
-    return new ObjectName(thing.getThingName().getText() + "Id");
-  }
-
-  /**
-   * Make persistence name name.
-   *
-   * @param thing the thing
-   * @return the name
-   */
-  private ObjectName makePersistenceName(Thing thing) {
-    return new ObjectName(thing.getThingName().getText() + "Repository");
-  }
-
-  /**
-   * Make superclass aggregate root.
-   *
-   * @return the aggregate root
-   */
-  private AggregateRoot makeSuperclass(Set<AggregateRoot> abstractAggregateRoots, Thing thing) {
-    ObjectName objectNameSuperclass =
-        thing.getMultiTenant()
-            ? new ObjectName("TenantAggregateRoot")
-            : new ObjectName("AggregateRoot");
-    PackageName packageName = new PackageName("com.oregor.trinity4j.domain");
-
-    if (thing.getMetadataValueIfExists(ThingMetadataKey.SUPER_CLASS) != null) {
-      Thing thingSuperclass =
-          Thing.class.cast(thing.getMetadataValue(ThingMetadataKey.SUPER_CLASS));
-
-      return abstractAggregateRoots
-          .stream()
-          .filter(
-              aggregateRoot ->
-                  aggregateRoot
-                      .getObjectName()
-                      .equals(new ObjectName(thingSuperclass.getThingName().getText())))
-          .findFirst()
-          .orElseThrow(
-              () ->
-                  new IllegalStateException(
-                      String.format(
-                          "Could not find superclass=%s for thing=%s",
-                          thingSuperclass.getThingName().getText(),
-                          thing.getThingName().getText())));
-    }
-
-    return new AggregateRoot(
-        InstantiationType.ABSTRACT,
-        objectNameSuperclass,
-        packageName,
-        new LinkedHashSet<>(),
-        new LinkedHashSet<>(),
-        thing.getMultiTenant(),
-        new LinkedHashSet<>(),
-        new LinkedHashSet<>());
-  }
-
-  /**
-   * Is abstract boolean.
-   *
-   * @param thing the thing
-   * @return the boolean
-   */
-  private Boolean isAbstract(Thing thing) {
-    return thing.getAbstractionsScopes().contains(AbstractionScope.domainAbstractAggregateRoot());
+  @Override
+  protected AbstractionScope getAbstractAbstractionScope() {
+    return AbstractionScope.domainAbstractAggregateRoot();
   }
 }

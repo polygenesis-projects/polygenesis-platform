@@ -22,7 +22,7 @@ package io.polygenesis.generators.java.apidetail.converter;
 
 import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.text.TextConverter;
-import io.polygenesis.models.apiimpl.DomainEntityConverter;
+import io.polygenesis.models.apiimpl.DomainObjectConverter;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -67,29 +67,29 @@ public class DomainObjectConverterExporter {
    * Export.
    *
    * @param generationPath the generation path
-   * @param domainEntityConverter the aggregate root converter
+   * @param domainObjectConverter the aggregate root converter
    */
-  public void export(Path generationPath, DomainEntityConverter domainEntityConverter) {
+  public void export(Path generationPath, DomainObjectConverter domainObjectConverter) {
     Map<String, Object> dataModel = new HashMap<>();
     dataModel.put(
-        "representation", domainObjectConverterClassRepresentable.create(domainEntityConverter));
+        "representation", domainObjectConverterClassRepresentable.create(domainObjectConverter));
 
     freemarkerService.export(
         dataModel,
         "polygenesis-representation-java/Class.java.ftl",
-        makeFileName(generationPath, domainEntityConverter));
+        makeFileName(generationPath, domainObjectConverter));
   }
 
   // ===============================================================================================
   // PRIVATE
   // ===============================================================================================
 
-  private Path makeFileName(Path generationPath, DomainEntityConverter domainEntityConverter) {
+  private Path makeFileName(Path generationPath, DomainObjectConverter domainObjectConverter) {
 
     return Paths.get(
         generationPath.toString(),
         "src/main/java",
-        domainEntityConverter.getPackageName().toPath().toString(),
-        TextConverter.toUpperCamel(domainEntityConverter.getVariableName().getText()) + ".java");
+        domainObjectConverter.getPackageName().toPath().toString(),
+        TextConverter.toUpperCamel(domainObjectConverter.getVariableName().getText()) + ".java");
   }
 }

@@ -109,6 +109,7 @@ public abstract class AbstractDartMethodTransformer<S extends FunctionProvider>
     source
         .getFunction()
         .getArguments()
+        .getData()
         .stream()
         .filter(argument -> argument.isDataGroup())
         .map(DataObject.class::cast)
@@ -157,6 +158,7 @@ public abstract class AbstractDartMethodTransformer<S extends FunctionProvider>
     source
         .getFunction()
         .getArguments()
+        .getData()
         .forEach(
             argument ->
                 parameterRepresentations.add(

@@ -56,9 +56,14 @@ public class DtoDeducer {
     DataObject originatingDataObject = null;
     Boolean virtual = false;
 
-    if (function.getArguments() != null && function.getArguments().size() == 1) {
+    if (function.getArguments() != null && function.getArguments().getData().size() == 1) {
       Data argument =
-          function.getArguments().stream().findFirst().orElseThrow(IllegalArgumentException::new);
+          function
+              .getArguments()
+              .getData()
+              .stream()
+              .findFirst()
+              .orElseThrow(IllegalArgumentException::new);
       if (argument.isDataGroup()) {
         originatingDataObject = argument.getAsDataObject();
       }
@@ -78,7 +83,7 @@ public class DtoDeducer {
               new VariableName("request"));
 
       if (function.getArguments() != null) {
-        function.getArguments().forEach(argument -> finalDataObject.addData(argument));
+        function.getArguments().getData().forEach(argument -> finalDataObject.addData(argument));
       }
 
       originatingDataObject = finalDataObject;

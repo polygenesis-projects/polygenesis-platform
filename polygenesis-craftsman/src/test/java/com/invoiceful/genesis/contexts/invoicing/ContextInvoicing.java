@@ -50,9 +50,11 @@ public class ContextInvoicing {
 
         .addThing(invoice)
 
+        // Supportive
+        .addThing(language)
+
         // Projections
         // .addThing(InvoicesPerYear.create(rootPackageName))
-
         .build();
   }
 }

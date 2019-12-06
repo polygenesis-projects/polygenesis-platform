@@ -50,6 +50,7 @@ public class DataReferenceToThingById extends AbstractData {
    * @param variableName the variable name
    * @return the data reference to thing by id
    */
+  @SuppressWarnings("CPD-START")
   public static DataReferenceToThingById of(Thing thing, String variableName) {
     return new DataReferenceToThingById(
         DataPrimaryType.THING,

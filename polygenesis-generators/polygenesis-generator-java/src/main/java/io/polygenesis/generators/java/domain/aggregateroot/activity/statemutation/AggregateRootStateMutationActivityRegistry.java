@@ -68,20 +68,17 @@ public class AggregateRootStateMutationActivityRegistry
 
     // AGGREGATE ENTITIES
     scopeAndPurposeMap.put(
-        new ScopePurposeTuple(
-            AbstractionScope.domainAggregateRoot(), Purpose.aggregateRootCreateEntity()),
+        new ScopePurposeTuple(AbstractionScope.domainAggregateRoot(), Purpose.entityCreate()),
         new EntityAddActivityGenerator(
             new EntityAddActivityTransformer(aggregateEntityDataService), templateEngine));
 
     scopeAndPurposeMap.put(
-        new ScopePurposeTuple(
-            AbstractionScope.domainAggregateRoot(), Purpose.aggregateRootUpdateEntity()),
+        new ScopePurposeTuple(AbstractionScope.domainAggregateRoot(), Purpose.entityModify()),
         new EntityModifyActivityGenerator(
             new EntityModifyActivityTransformer(aggregateEntityDataService), templateEngine));
 
     scopeAndPurposeMap.put(
-        new ScopePurposeTuple(
-            AbstractionScope.domainAggregateRoot(), Purpose.aggregateRootDeleteEntity()),
+        new ScopePurposeTuple(AbstractionScope.domainAggregateRoot(), Purpose.entityRemove()),
         new EntityRemoveActivityGenerator(
             new EntityRemoveActivityTransformer(aggregateEntityDataService), templateEngine));
   }

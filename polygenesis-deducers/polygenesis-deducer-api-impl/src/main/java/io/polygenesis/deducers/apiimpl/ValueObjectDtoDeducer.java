@@ -30,9 +30,9 @@ import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.models.api.Dto;
 import io.polygenesis.models.api.Service;
 import io.polygenesis.models.api.ServiceMetamodelRepository;
-import io.polygenesis.models.apiimpl.DomainEntityConverterMethod;
-import io.polygenesis.models.domain.BaseDomainObject;
+import io.polygenesis.models.apiimpl.DomainObjectConverterMethod;
 import io.polygenesis.models.domain.DomainMetamodelRepository;
+import io.polygenesis.models.domain.DomainObject;
 import io.polygenesis.models.domain.ValueObject;
 import java.util.LinkedHashSet;
 import java.util.Optional;
@@ -54,13 +54,13 @@ public class ValueObjectDtoDeducer {
    * @param valueObjects the value objects
    * @return the set
    */
-  public Set<DomainEntityConverterMethod> deduceMethods(
+  public Set<DomainObjectConverterMethod> deduceMethods(
       ServiceMetamodelRepository serviceModelRepository,
       DomainMetamodelRepository<?> domainMetamodelRepository,
-      BaseDomainObject domainObject,
+      DomainObject domainObject,
       Set<ValueObject> valueObjects) {
-    // Prepare DomainEntityConverterMethods
-    Set<DomainEntityConverterMethod> methods = new LinkedHashSet<>();
+    // Prepare DomainObjectConverterMethods
+    Set<DomainObjectConverterMethod> methods = new LinkedHashSet<>();
 
     // Find ValueObject-Dto Pairs
     Set<ValueObjectDtoPair> valueObjectDtoPairs =
@@ -86,7 +86,7 @@ public class ValueObjectDtoDeducer {
 
   private Set<ValueObjectDtoPair> findValueObjectDtoPairs(
       ServiceMetamodelRepository serviceModelRepository,
-      BaseDomainObject domainObject,
+      DomainObject domainObject,
       Set<ValueObject> valueObjects) {
     Set<ValueObjectDtoPair> valueObjectDtoPairs = new LinkedHashSet<>();
 
@@ -109,9 +109,9 @@ public class ValueObjectDtoDeducer {
     return valueObjectDtoPairs;
   }
 
-  private Set<DomainEntityConverterMethod> makeValueObjectConversionMethods(
+  private Set<DomainObjectConverterMethod> makeValueObjectConversionMethods(
       ValueObjectDtoPair pair) {
-    Set<DomainEntityConverterMethod> methods = new LinkedHashSet<>();
+    Set<DomainObjectConverterMethod> methods = new LinkedHashSet<>();
 
     Thing thing = ThingBuilder.endToEnd("Converter").createThing();
 
@@ -130,15 +130,15 @@ public class ValueObjectDtoDeducer {
             .addArgument(dtoToUse.getDataObject())
             .build();
 
-    methods.add(new DomainEntityConverterMethod(functionToVo, dtoToUse, valueObjectToUse));
+    methods.add(new DomainObjectConverterMethod(functionToVo, dtoToUse, valueObjectToUse));
 
     // TO DTO
-    Optional<DomainEntityConverterMethod> optionalDomainEntityConverterMethod =
+    Optional<DomainObjectConverterMethod> optionalDomainObjectConverterMethod =
         methods
             .stream()
             .filter(
-                domainEntityConverterMethod ->
-                    domainEntityConverterMethod
+                domainObjectConverterMethod ->
+                    domainObjectConverterMethod
                         .getFunction()
                         .getName()
                         .getText()
@@ -149,7 +149,7 @@ public class ValueObjectDtoDeducer {
                                     pair.getDto().getObjectName().getText()))))
             .findFirst();
 
-    if (!optionalDomainEntityConverterMethod.isPresent()) {
+    if (!optionalDomainObjectConverterMethod.isPresent()) {
       Function functionToDto =
           FunctionBuilder.of(
                   thing,
@@ -161,7 +161,7 @@ public class ValueObjectDtoDeducer {
               .addArgument(valueObjectToUse.getData())
               .build();
 
-      methods.add(new DomainEntityConverterMethod(functionToDto, valueObjectToUse, pair.getDto()));
+      methods.add(new DomainObjectConverterMethod(functionToDto, valueObjectToUse, pair.getDto()));
     }
 
     return methods;

@@ -26,36 +26,21 @@ package io.polygenesis.models.domain;
  * @author Christos Tsakostas
  */
 public enum PropertyType {
-  /** Abstract aggregate root id property type. */
   ABSTRACT_AGGREGATE_ROOT_ID,
-  /** Aggregate root id property type. */
   AGGREGATE_ROOT_ID,
-  /** Aggregate entity property type. */
   AGGREGATE_ENTITY,
-  /** Aggregate entity id property type. */
   AGGREGATE_ENTITY_ID,
-  /** Aggregate entity collection property type. */
   AGGREGATE_ENTITY_COLLECTION,
-  /** Map property type. */
   MAP,
-  /** Primitive property type. */
   PRIMITIVE,
-  /** Primitive collection property type. */
   PRIMITIVE_COLLECTION,
-  /** Projection id property type. */
   PROJECTION_ID,
-  /** Reference to aggregate root property type. */
   REFERENCE_TO_AGGREGATE_ROOT,
-  /** Reference to abstract aggregate root property type. */
   REFERENCE_TO_ABSTRACT_AGGREGATE_ROOT,
-  /** Reference property type. */
-  REFERENCE,
-  /** Supportive entity id property type. */
+  REFERENCE_BY_ID,
+  REFERENCE_BY_VALUE,
   SUPPORTIVE_ENTITY_ID,
-  /** Tenant id property type. */
   TENANT_ID,
-  /** Value object property type. */
   VALUE_OBJECT,
-  /** Value object collection property type. */
   VALUE_OBJECT_COLLECTION;
 }

@@ -27,7 +27,7 @@ import io.polygenesis.core.TemplateData;
 import io.polygenesis.generators.java.domain.DomainObjectClassTransformer;
 import io.polygenesis.generators.java.domain.aggregateentity.activity.statemutation.AggregateEntityStateMutationMethodTransformer;
 import io.polygenesis.models.domain.AggregateEntity;
-import io.polygenesis.models.domain.AggregateRoot;
+import io.polygenesis.models.domain.DomainObject;
 import io.polygenesis.models.domain.InstantiationType;
 import io.polygenesis.representations.code.MethodRepresentation;
 import java.util.HashMap;
@@ -108,7 +108,7 @@ public class AggregateEntityTransformer
 
   @Override
   public Set<String> annotations(AggregateEntity source, Object... args) {
-    AggregateRoot aggregateRoot = (AggregateRoot) args[1];
+    DomainObject domainObjectParent = (DomainObject) args[1];
 
     Set<String> annotations = new LinkedHashSet<>();
 
@@ -117,7 +117,7 @@ public class AggregateEntityTransformer
       annotations.add(
           String.format(
               "@Table(name = Constants.DEFAULT_TABLE_PREFIX + \"%s_%s\")",
-              TextConverter.toLowerUnderscore(aggregateRoot.getObjectName().getText()),
+              TextConverter.toLowerUnderscore(domainObjectParent.getObjectName().getText()),
               TextConverter.toLowerUnderscore(
                   TextConverter.toPlural(source.getObjectName().getText()))));
     } else {

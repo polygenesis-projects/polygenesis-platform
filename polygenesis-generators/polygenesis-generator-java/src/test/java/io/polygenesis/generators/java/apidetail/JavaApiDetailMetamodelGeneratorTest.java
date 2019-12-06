@@ -34,12 +34,13 @@ import io.polygenesis.generators.java.apidetail.converter.DomainObjectConverterE
 import io.polygenesis.generators.java.apidetail.service.ServiceDetailGenerator;
 import io.polygenesis.models.api.Service;
 import io.polygenesis.models.api.ServiceMetamodelRepository;
-import io.polygenesis.models.apiimpl.DomainEntityConverter;
-import io.polygenesis.models.apiimpl.DomainEntityConverterMetamodelRepository;
+import io.polygenesis.models.apiimpl.DomainObjectConverter;
+import io.polygenesis.models.apiimpl.DomainObjectConverterMetamodelRepository;
 import io.polygenesis.models.apiimpl.ServiceImplementation;
 import io.polygenesis.models.apiimpl.ServiceImplementationMetamodelRepository;
 import io.polygenesis.models.domain.AggregateRoot;
-import io.polygenesis.models.domain.AggregateRootMetamodelRepository;
+import io.polygenesis.models.domain.DomainObject;
+import io.polygenesis.models.domain.DomainObjectMetamodelRepository;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -112,7 +113,7 @@ public class JavaApiDetailMetamodelGeneratorTest {
         Arrays.asList(
             createServiceModelRepository(),
             createDomainModelRepository(),
-            createDomainEntityConverterModelRepository(),
+            createDomainObjectConverterModelRepository(),
             createServiceImplementationModelRepository()));
   }
 
@@ -126,20 +127,20 @@ public class JavaApiDetailMetamodelGeneratorTest {
     return new ServiceMetamodelRepository(services);
   }
 
-  private AggregateRootMetamodelRepository createDomainModelRepository() {
-    Set<AggregateRoot> aggregateRoots = new LinkedHashSet<>();
+  private DomainObjectMetamodelRepository createDomainModelRepository() {
+    Set<DomainObject> aggregateRoots = new LinkedHashSet<>();
 
     AggregateRoot aggregateRoot = mock(AggregateRoot.class);
     given(aggregateRoot.getObjectName()).willReturn(new ObjectName("someThing"));
     aggregateRoots.add(aggregateRoot);
 
-    return new AggregateRootMetamodelRepository(aggregateRoots);
+    return new DomainObjectMetamodelRepository(aggregateRoots);
   }
 
-  private DomainEntityConverterMetamodelRepository createDomainEntityConverterModelRepository() {
-    Set<DomainEntityConverter> domainEntityConverters = new LinkedHashSet<>();
+  private DomainObjectConverterMetamodelRepository createDomainObjectConverterModelRepository() {
+    Set<DomainObjectConverter> domainObjectConverters = new LinkedHashSet<>();
 
-    return new DomainEntityConverterMetamodelRepository(domainEntityConverters);
+    return new DomainObjectConverterMetamodelRepository(domainObjectConverters);
   }
 
   private ServiceImplementationMetamodelRepository createServiceImplementationModelRepository() {

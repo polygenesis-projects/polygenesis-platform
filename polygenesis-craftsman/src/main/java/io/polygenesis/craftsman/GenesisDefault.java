@@ -25,7 +25,7 @@ import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.Deducer;
 import io.polygenesis.core.MetamodelGenerator;
-import io.polygenesis.deducers.apiimpl.DomainEntityConverterDeducerFactory;
+import io.polygenesis.deducers.apiimpl.DomainObjectConverterDeducerFactory;
 import io.polygenesis.deducers.apiimpl.ServiceImplementationDeducerFactory;
 import io.polygenesis.deducers.batchprocess.BatchProcessDeducerFactory;
 import io.polygenesis.deducers.messaging.subscriber.SubscriberDeducerFactory;
@@ -101,7 +101,7 @@ public class GenesisDefault {
             DomainDeducerFactory.newInstance(packageName),
             ProjectionDeducerFactory.newInstance(packageName),
             DomainServiceDeducerFactory.newInstance(packageName),
-            DomainEntityConverterDeducerFactory.newInstance(),
+            DomainObjectConverterDeducerFactory.newInstance(),
             SupportiveEntityDeducerFactory.newInstance(packageName),
             ServiceImplementationDeducerFactory.newInstance(),
             RestDeducerFactory.newInstance(packageName),

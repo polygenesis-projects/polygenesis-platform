@@ -22,6 +22,7 @@ package io.polygenesis.generators.java.batchprocesssubscriber.subscriber;
 
 import io.polygenesis.abstraction.data.DataArray;
 import io.polygenesis.abstraction.data.DataPrimitive;
+import io.polygenesis.abstraction.data.DataRepository;
 import io.polygenesis.abstraction.data.PrimitiveType;
 import io.polygenesis.abstraction.thing.Activity;
 import io.polygenesis.abstraction.thing.Function;
@@ -105,7 +106,7 @@ public class BatchProcessSubscriber extends BatchProcessMetamodel {
         Purpose.reset(),
         new FunctionName("getSupportedMessageTypes"),
         DataArray.of(DataPrimitive.of(PrimitiveType.STRING, VariableName.response())),
-        new LinkedHashSet<>(Arrays.asList()),
+        new DataRepository(),
         Activity.keyValues(
             new LinkedHashSet<>(
                 Arrays.asList(

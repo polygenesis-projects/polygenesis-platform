@@ -20,7 +20,7 @@
 
 package io.polygenesis.generators.java.domainmessagesubscriber.dispatcher.activity;
 
-import io.polygenesis.generators.java.apidetail.service.activity.entity.AbstractAggregateEntityTemplateData;
+import io.polygenesis.generators.java.apidetail.service.activity.root.entity.AbstractAggregateEntityTemplateData;
 
 /**
  * The type Extract message type activity template data.

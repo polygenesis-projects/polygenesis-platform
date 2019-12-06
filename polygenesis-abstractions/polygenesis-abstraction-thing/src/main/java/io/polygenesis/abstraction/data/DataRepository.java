@@ -47,7 +47,27 @@ public class DataRepository {
 
   /** Instantiates a new Data repository. */
   public DataRepository() {
-    data = new LinkedHashSet<>();
+    this.data = new LinkedHashSet<>();
+  }
+
+  /**
+   * Instantiates a new Data repository.
+   *
+   * @param data the data
+   */
+  public DataRepository(Data data) {
+    this.data = new LinkedHashSet<>();
+    addData(data);
+  }
+
+  /**
+   * Instantiates a new Data repository.
+   *
+   * @param data the data
+   */
+  public DataRepository(Set<Data> data) {
+    this.data = new LinkedHashSet<>();
+    addSetOfData(data);
   }
 
   // ===============================================================================================
@@ -89,6 +109,38 @@ public class DataRepository {
         new PredicateDataPurpose(Arrays.stream(dataPurpose));
 
     return getData().stream().filter(predicateDataPurpose::contains).collect(Collectors.toSet());
+  }
+
+  /**
+   * Find data excluding identities and paging set.
+   *
+   * @return the set
+   */
+  public Set<Data> findDataExcludingIdentitiesAndPaging() {
+    return getData()
+        .stream()
+        .filter(
+            data ->
+                !data.getDataPurpose().equals(DataPurpose.thingIdentity())
+                    && !data.getDataPurpose().equals(DataPurpose.parentThingIdentity())
+                    && !data.getDataPurpose().equals(DataPurpose.pageNumber())
+                    && !data.getDataPurpose().equals(DataPurpose.pageSize()))
+        .collect(Collectors.toCollection(LinkedHashSet::new));
+  }
+
+  /**
+   * Find data excluding paging set.
+   *
+   * @return the set
+   */
+  public Set<Data> findDataExcludingPaging() {
+    return getData()
+        .stream()
+        .filter(
+            data ->
+                !data.getDataPurpose().equals(DataPurpose.thingIdentity())
+                    && !data.getDataPurpose().equals(DataPurpose.parentThingIdentity()))
+        .collect(Collectors.toCollection(LinkedHashSet::new));
   }
 
   // ===============================================================================================

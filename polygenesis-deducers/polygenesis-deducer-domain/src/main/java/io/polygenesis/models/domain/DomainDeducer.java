@@ -20,6 +20,7 @@
 
 package io.polygenesis.models.domain;
 
+import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.ThingRepository;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.AbstractionRepository;
@@ -27,6 +28,8 @@ import io.polygenesis.core.CoreRegistry;
 import io.polygenesis.core.Deducer;
 import io.polygenesis.core.MetamodelRepository;
 import io.polygenesis.models.domain.aggregateroot.AggregateRootDeducer;
+import io.polygenesis.models.domain.agrregateentity.AggregateEntityDeducer;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
@@ -34,13 +37,14 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class DomainDeducer implements Deducer<AggregateRootMetamodelRepository> {
+public class DomainDeducer implements Deducer<DomainObjectMetamodelRepository> {
 
   // ===============================================================================================
   // DEPENDENCIES
   // ===============================================================================================
   private final PackageName rootPackageName;
   private final AggregateRootDeducer aggregateRootDeducer;
+  private final AggregateEntityDeducer aggregateEntityDeducer;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -51,10 +55,28 @@ public class DomainDeducer implements Deducer<AggregateRootMetamodelRepository> 
    *
    * @param rootPackageName the root package name
    * @param aggregateRootDeducer the aggregate root deducer
+   * @param aggregateEntityDeducer the aggregate entity deducer
    */
-  public DomainDeducer(PackageName rootPackageName, AggregateRootDeducer aggregateRootDeducer) {
+  public DomainDeducer(
+      PackageName rootPackageName,
+      AggregateRootDeducer aggregateRootDeducer,
+      AggregateEntityDeducer aggregateEntityDeducer) {
     this.rootPackageName = rootPackageName;
     this.aggregateRootDeducer = aggregateRootDeducer;
+    this.aggregateEntityDeducer = aggregateEntityDeducer;
+  }
+
+  // ===============================================================================================
+  // GETTERS
+  // ===============================================================================================
+
+  /**
+   * Gets root package name.
+   *
+   * @return the root package name
+   */
+  public PackageName getRootPackageName() {
+    return rootPackageName;
   }
 
   // ===============================================================================================
@@ -62,13 +84,38 @@ public class DomainDeducer implements Deducer<AggregateRootMetamodelRepository> 
   // ===============================================================================================
 
   @Override
-  public AggregateRootMetamodelRepository deduce(
+  public DomainObjectMetamodelRepository deduce(
       Set<AbstractionRepository<?>> abstractionRepositories,
       Set<MetamodelRepository<?>> metamodelRepositories) {
-    return new AggregateRootMetamodelRepository(
-        aggregateRootDeducer.deduceFrom(
-            CoreRegistry.getAbstractionRepositoryResolver()
-                .resolve(abstractionRepositories, ThingRepository.class),
-            rootPackageName));
+    Set<DomainObject> domainObjects = new LinkedHashSet<>();
+
+    ThingRepository thingRepository =
+        CoreRegistry.getAbstractionRepositoryResolver()
+            .resolve(abstractionRepositories, ThingRepository.class);
+
+    // Aggregate Roots
+    Set<DomainObject> aggregateRoots =
+        aggregateRootDeducer.deduceFrom(thingRepository, rootPackageName);
+
+    domainObjects.addAll(aggregateRoots);
+
+    // Children of Aggregate Roots -> Aggregate Entities
+    Set<DomainObject> aggregateEntities = new LinkedHashSet<>();
+
+    aggregateRoots.forEach(
+        aggregateRoot -> {
+          Thing thingParent =
+              thingRepository
+                  .getAbstractionItemByObjectName(aggregateRoot.getObjectName())
+                  .orElseThrow();
+
+          aggregateEntities.addAll(
+              aggregateEntityDeducer.deduceAggregateEntities(
+                  thingParent, aggregateRoot, getRootPackageName()));
+        });
+
+    domainObjects.addAll(aggregateEntities);
+
+    return new DomainObjectMetamodelRepository(domainObjects);
   }
 }

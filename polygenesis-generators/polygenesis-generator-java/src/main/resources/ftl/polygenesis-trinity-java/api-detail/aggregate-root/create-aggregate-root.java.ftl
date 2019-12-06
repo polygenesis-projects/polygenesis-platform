@@ -22,6 +22,7 @@
 <#include "macro-store-aggregate-root.ftl">
 <#include "../../../polygenesis-implementation-java-apiimpl/macro-fill-arguments.ftl">
 <#include "./macro-fill-arguments-response-dto.ftl">
+    // Create Agg Root
     <@assertionsForParameters data.parameterRepresentations></@assertionsForParameters>
 
     ${ data.aggregateRootDataType } ${ data.aggregateRootVariable } = new ${ data.aggregateRootDataType }(

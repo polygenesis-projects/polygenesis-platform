@@ -121,6 +121,7 @@ public abstract class AbstractLegacyMethodTransformer<S extends FunctionProvider
     source
         .getFunction()
         .getArguments()
+        .getData()
         .forEach(
             argument ->
                 parameterRepresentations.add(

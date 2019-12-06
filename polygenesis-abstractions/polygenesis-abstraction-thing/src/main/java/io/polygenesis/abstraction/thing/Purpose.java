@@ -53,11 +53,13 @@ public class Purpose implements Serializable {
   private static final String ASPECT_AROUND = "ASPECT_AROUND";
 
   // ===============================================================================================
-  // AGGREGATE ROOTS
+  // AGGREGATE ENTITIES
   // ===============================================================================================
-  private static final String AGGREGATE_ROOT_CREATE_ENTITY = "AGGREGATE_ROOT_CREATE_ENTITY";
-  private static final String AGGREGATE_ROOT_UPDATE_ENTITY = "AGGREGATE_ROOT_UPDATE_ENTITY";
-  private static final String AGGREGATE_ROOT_DELETE_ENTITY = "AGGREGATE_ROOT_DELETE_ENTITY";
+  private static final String ENTITY_CREATE = "ENTITY_CREATE";
+  private static final String ENTITY_MODIFY = "ENTITY_MODIFY";
+  private static final String ENTITY_REMOVE = "ENTITY_REMOVE";
+  private static final String ENTITY_FETCH = "ENTITY_FETCH";
+  private static final String ENTITY_FETCH_ALL = "ENTITY_FETCH_ALL";
 
   // ===============================================================================================
   // CONVERTERS
@@ -233,30 +235,48 @@ public class Purpose implements Serializable {
   }
 
   /**
-   * Aggregate root create entity purpose.
+   * Entity create purpose.
    *
    * @return the purpose
    */
-  public static Purpose aggregateRootCreateEntity() {
-    return new Purpose(AGGREGATE_ROOT_CREATE_ENTITY, CqsType.MUTATION);
+  public static Purpose entityCreate() {
+    return new Purpose(ENTITY_CREATE, CqsType.COMMAND);
   }
 
   /**
-   * Aggregate root update entity purpose.
+   * Entity modify purpose.
    *
    * @return the purpose
    */
-  public static Purpose aggregateRootUpdateEntity() {
-    return new Purpose(AGGREGATE_ROOT_UPDATE_ENTITY, CqsType.MUTATION);
+  public static Purpose entityModify() {
+    return new Purpose(ENTITY_MODIFY, CqsType.COMMAND);
   }
 
   /**
-   * Aggregate root delete entity purpose.
+   * Entity remove purpose.
    *
    * @return the purpose
    */
-  public static Purpose aggregateRootDeleteEntity() {
-    return new Purpose(AGGREGATE_ROOT_DELETE_ENTITY, CqsType.MUTATION);
+  public static Purpose entityRemove() {
+    return new Purpose(ENTITY_REMOVE, CqsType.COMMAND);
+  }
+
+  /**
+   * Entity fetch purpose.
+   *
+   * @return the purpose
+   */
+  public static Purpose entityFetch() {
+    return new Purpose(ENTITY_FETCH, CqsType.QUERY);
+  }
+
+  /**
+   * Entity fetch all purpose.
+   *
+   * @return the purpose
+   */
+  public static Purpose entityFetchAll() {
+    return new Purpose(ENTITY_FETCH_ALL, CqsType.QUERY);
   }
 
   /**
@@ -568,6 +588,15 @@ public class Purpose implements Serializable {
   }
 
   /**
+   * Is entity create boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isEntityCreate() {
+    return getText().equals(ENTITY_CREATE);
+  }
+
+  /**
    * Is ensure existence boolean.
    *
    * @return the boolean
@@ -583,9 +612,9 @@ public class Purpose implements Serializable {
    */
   public boolean isModify() {
     return getText().equals(MODIFY)
-        || getText().equals(AGGREGATE_ROOT_CREATE_ENTITY)
-        || getText().equals(AGGREGATE_ROOT_UPDATE_ENTITY)
-        || getText().equals(AGGREGATE_ROOT_DELETE_ENTITY);
+        || getText().equals(ENTITY_CREATE)
+        || getText().equals(ENTITY_MODIFY)
+        || getText().equals(ENTITY_REMOVE);
   }
 
   /**

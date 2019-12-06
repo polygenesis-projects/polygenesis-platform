@@ -225,7 +225,12 @@ public class EndpointLegacyMethodTransformer extends AbstractLegacyMethodTransfo
       stringBuilder.append(" ");
       stringBuilder.append(
           TextConverter.toLowerCamel(
-              source.getServiceMethod().getRequestDto().getDataObject().getDataType()));
+              source
+                  .getServiceMethod()
+                  .getRequestDto()
+                  .getDataObject()
+                  .getVariableName()
+                  .getText()));
       stringBuilder.append(" = new ");
       stringBuilder.append(
           TextConverter.toUpperCamel(
@@ -237,13 +242,23 @@ public class EndpointLegacyMethodTransformer extends AbstractLegacyMethodTransfo
         stringBuilder.append("\t\t");
         stringBuilder.append(
             TextConverter.toLowerCamel(
-                source.getServiceMethod().getRequestDto().getDataObject().getDataType()));
+                source
+                    .getServiceMethod()
+                    .getRequestDto()
+                    .getDataObject()
+                    .getVariableName()
+                    .getText()));
         stringBuilder.append(".setPageNumber(pageNumber);\n");
 
         stringBuilder.append("\t\t");
         stringBuilder.append(
             TextConverter.toLowerCamel(
-                source.getServiceMethod().getRequestDto().getDataObject().getDataType()));
+                source
+                    .getServiceMethod()
+                    .getRequestDto()
+                    .getDataObject()
+                    .getVariableName()
+                    .getText()));
         stringBuilder.append(".setPageSize(pageSize);\n");
       }
     }
@@ -266,12 +281,12 @@ public class EndpointLegacyMethodTransformer extends AbstractLegacyMethodTransfo
     stringBuilder.append("\t\t");
     stringBuilder.append(
         TextConverter.toLowerCamel(
-            source.getServiceMethod().getRequestDto().getDataObject().getDataType()));
+            source.getServiceMethod().getRequestDto().getDataObject().getVariableName().getText()));
     stringBuilder.append(".setTenantId(this.getTenantId(httpServletRequest));\n");
     stringBuilder.append("\t\t");
     stringBuilder.append(
         TextConverter.toLowerCamel(
-            source.getServiceMethod().getRequestDto().getDataObject().getDataType()));
+            source.getServiceMethod().getRequestDto().getDataObject().getVariableName().getText()));
     stringBuilder.append(".setIpAddress(this.getRemoteIpAddress(httpServletRequest));\n");
 
     // ---------------------------------------------------------------------------------------------
@@ -287,7 +302,7 @@ public class EndpointLegacyMethodTransformer extends AbstractLegacyMethodTransfo
     stringBuilder.append("(");
     stringBuilder.append(
         TextConverter.toLowerCamel(
-            source.getServiceMethod().getRequestDto().getDataObject().getDataType()));
+            source.getServiceMethod().getRequestDto().getDataObject().getVariableName().getText()));
     stringBuilder.append(");");
 
     return stringBuilder.toString();
@@ -410,7 +425,7 @@ public class EndpointLegacyMethodTransformer extends AbstractLegacyMethodTransfo
     stringBuilder.append("\t\t");
     stringBuilder.append(
         TextConverter.toLowerCamel(
-            source.getServiceMethod().getRequestDto().getDataObject().getDataType()));
+            source.getServiceMethod().getRequestDto().getDataObject().getVariableName().getText()));
     stringBuilder.append(".set");
     stringBuilder.append(TextConverter.toUpperCamel(variableName));
     stringBuilder.append("(");

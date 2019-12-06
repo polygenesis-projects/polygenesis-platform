@@ -27,8 +27,7 @@ import io.polygenesis.abstraction.data.PrimitiveType;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.commons.valueobjects.VariableName;
 import io.polygenesis.models.domain.AggregateEntityCollection;
-import io.polygenesis.models.domain.BaseDomainEntity;
-import io.polygenesis.models.domain.BaseDomainObject;
+import io.polygenesis.models.domain.DomainObject;
 import io.polygenesis.models.domain.DomainObjectProperty;
 import io.polygenesis.models.domain.DomainObjectType;
 import io.polygenesis.models.domain.InstantiationType;
@@ -78,28 +77,28 @@ public class TableDeducer {
   /**
    * Deduce set.
    *
-   * @param domainEntity the aggregate root
+   * @param domainObject the aggregate root
    * @return the set
    */
-  public Set<Table> deduce(BaseDomainEntity domainEntity) {
-    Set<Table> allDomainEntityRelatedTables = new LinkedHashSet<>();
+  public Set<Table> deduce(DomainObject domainObject) {
+    Set<Table> allDomainObjectRelatedTables = new LinkedHashSet<>();
 
-    if (domainEntity.getDomainObjectType().equals(DomainObjectType.ABSTRACT_AGGREGATE_ROOT)
-        || domainEntity.getInstantiationType().equals(InstantiationType.ABSTRACT)) {
-      return allDomainEntityRelatedTables;
+    if (domainObject.getDomainObjectType().equals(DomainObjectType.ABSTRACT_AGGREGATE_ROOT)
+        || domainObject.getInstantiationType().equals(InstantiationType.ABSTRACT)) {
+      return allDomainObjectRelatedTables;
     }
 
-    Set<Column> domainEntityColumns = new LinkedHashSet<>();
+    Set<Column> domainObjectColumns = new LinkedHashSet<>();
 
-    if (domainEntity.getDomainObjectType().equals(DomainObjectType.AGGREGATE_ROOT)) {
-      addAggregateRootIdInColumnSetAsPrimaryKey(domainEntityColumns, domainEntity);
+    if (domainObject.getDomainObjectType().equals(DomainObjectType.AGGREGATE_ROOT)) {
+      addAggregateRootIdInColumnSetAsPrimaryKey(domainObjectColumns, domainObject);
     }
 
-    if (domainEntity.getDomainObjectType().equals(DomainObjectType.PROJECTION)) {
-      addProjectionIdInColumnSet(domainEntityColumns);
+    if (domainObject.getDomainObjectType().equals(DomainObjectType.PROJECTION)) {
+      addProjectionIdInColumnSet(domainObjectColumns);
     }
 
-    domainEntity
+    domainObject
         .getProperties()
         .forEach(
             property -> {
@@ -108,35 +107,39 @@ public class TableDeducer {
                 case ABSTRACT_AGGREGATE_ROOT_ID:
                 case PROJECTION_ID:
                 case TENANT_ID:
+                case AGGREGATE_ENTITY_ID:
+                case REFERENCE_TO_AGGREGATE_ROOT:
                   break;
                 case PRIMITIVE:
-                  domainEntityColumns.add(getColumnForPrimitive(property.getData(), ""));
+                  domainObjectColumns.add(getColumnForPrimitive(property.getData(), ""));
                   break;
                 case PRIMITIVE_COLLECTION:
-                  allDomainEntityRelatedTables.add(
-                      getTableForPrimitiveCollection(domainEntity, property));
+                  allDomainObjectRelatedTables.add(
+                      getTableForPrimitiveCollection(domainObject, property));
                   break;
                 case VALUE_OBJECT:
-                  domainEntityColumns.addAll(
+                  domainObjectColumns.addAll(
                       getColumnsForValueObject(property.getData().getAsDataObject()));
                   break;
                 case VALUE_OBJECT_COLLECTION:
-                  allDomainEntityRelatedTables.add(
-                      getTableForValueObjectCollection(domainEntity, property));
+                  allDomainObjectRelatedTables.add(
+                      getTableForValueObjectCollection(domainObject, property));
                   break;
                 case AGGREGATE_ENTITY:
-                  domainEntityColumns.addAll(
+                  domainObjectColumns.addAll(
                       getColumnsForValueObject(property.getData().getAsDataObject()));
                   break;
                 case AGGREGATE_ENTITY_COLLECTION:
-                  AggregateEntityCollection aggregateEntityCollection =
-                      (AggregateEntityCollection) property;
-                  allDomainEntityRelatedTables.add(
-                      getTableForAggregateEntityCollection(
-                          domainEntity, aggregateEntityCollection.getAggregateEntity(), property));
+                  // TODO
+                  //                  AggregateEntityCollection aggregateEntityCollection =
+                  //                      (AggregateEntityCollection) property;
+                  //                  allDomainObjectRelatedTables.add(
+                  //                      getTableForAggregateEntityCollection(
+                  //                          domainObject,
+                  // aggregateEntityCollection.getAggregateEntity(), property));
                   break;
                 case MAP:
-                  domainEntityColumns.addAll(getColumnsForMap());
+                  domainObjectColumns.addAll(getColumnsForMap());
                   break;
                 default:
                   throw new IllegalArgumentException(
@@ -148,18 +151,18 @@ public class TableDeducer {
             });
 
     // Add version
-    domainEntityColumns.add(
+    domainObjectColumns.add(
         new Column("version", ColumnDataType.INTEGER, 11, RequiredType.REQUIRED));
 
-    Table domainEntityTable =
+    Table domainObjectTable =
         new Table(
-            new TableName(domainEntity.getObjectName().getText()),
-            domainEntityColumns,
-            domainEntity.getMultiTenant());
+            new TableName(domainObject.getObjectName().getText()),
+            domainObjectColumns,
+            domainObject.getMultiTenant());
 
-    allDomainEntityRelatedTables.add(domainEntityTable);
+    allDomainObjectRelatedTables.add(domainObjectTable);
 
-    return allDomainEntityRelatedTables;
+    return allDomainObjectRelatedTables;
   }
 
   /**
@@ -185,7 +188,7 @@ public class TableDeducer {
             case PRIMITIVE:
               columns.add(getColumnForPrimitive(property.getData(), ""));
               break;
-            case REFERENCE:
+            case REFERENCE_BY_ID:
               columns.add(getColumnForReferenceToThing(""));
               break;
             case PRIMITIVE_COLLECTION:
@@ -215,13 +218,13 @@ public class TableDeducer {
   /**
    * Gets tables by properties.
    *
-   * @param baseDomainObject the base domain object
+   * @param domainObject the base domain object
    * @return the tables by properties
    */
-  protected Set<Table> getTablesByProperties(BaseDomainObject baseDomainObject) {
+  protected Set<Table> getTablesByProperties(DomainObject domainObject) {
     Set<Table> tables = new LinkedHashSet<>();
 
-    baseDomainObject
+    domainObject
         .getProperties()
         .forEach(
             property -> {
@@ -231,12 +234,12 @@ public class TableDeducer {
                 case PRIMITIVE:
                   break;
                 case PRIMITIVE_COLLECTION:
-                  tables.add(getTableForPrimitiveCollection(baseDomainObject, property));
+                  tables.add(getTableForPrimitiveCollection(domainObject, property));
                   break;
                 case VALUE_OBJECT:
                   break;
                 case VALUE_OBJECT_COLLECTION:
-                  tables.add(getTableForValueObjectCollection(baseDomainObject, property));
+                  tables.add(getTableForValueObjectCollection(domainObject, property));
                   break;
                 case AGGREGATE_ENTITY:
                   break;
@@ -245,9 +248,7 @@ public class TableDeducer {
                       (AggregateEntityCollection) property;
                   tables.add(
                       getTableForAggregateEntityCollection(
-                          baseDomainObject,
-                          aggregateEntityCollection.getAggregateEntity(),
-                          property));
+                          domainObject, aggregateEntityCollection.getAggregateEntity(), property));
                   break;
                 default:
                   throw new IllegalArgumentException(
@@ -356,15 +357,15 @@ public class TableDeducer {
   /**
    * Gets table for primitive collection.
    *
-   * @param baseDomainObject the aggregate root
+   * @param domainObject the aggregate root
    * @param property the property
    * @return the table for primitive collection
    */
   private Table getTableForPrimitiveCollection(
-      BaseDomainObject baseDomainObject, DomainObjectProperty<?> property) {
+      DomainObject domainObject, DomainObjectProperty<?> property) {
     Set<Column> columns = new LinkedHashSet<>();
 
-    addAggregateRootIdInColumnSetWithoutPrimaryKey(columns, baseDomainObject);
+    addAggregateRootIdInColumnSetWithoutPrimaryKey(columns, domainObject);
 
     columns.add(getColumnForPrimitive(property.getTypeParameterData(), ""));
 
@@ -372,50 +373,50 @@ public class TableDeducer {
         new TableName(
             String.format(
                 DOUBLE_S,
-                TextConverter.toLowerUnderscore(baseDomainObject.getObjectName().getText()),
+                TextConverter.toLowerUnderscore(domainObject.getObjectName().getText()),
                 TextConverter.toLowerUnderscore(property.getData().getVariableName().getText()))),
         columns,
-        baseDomainObject.getMultiTenant());
+        domainObject.getMultiTenant());
   }
 
   /**
    * Gets table for value object collection.
    *
-   * @param baseDomainObject the aggregate root
+   * @param domainObject the aggregate root
    * @param property the property
    * @return the table for value object collection
    */
   private Table getTableForValueObjectCollection(
-      BaseDomainObject baseDomainObject, DomainObjectProperty<?> property) {
+      DomainObject domainObject, DomainObjectProperty<?> property) {
     Set<Column> columns = new LinkedHashSet<>();
 
     return new Table(
         new TableName(
             String.format(
                 DOUBLE_S,
-                TextConverter.toLowerUnderscore(baseDomainObject.getObjectName().getText()),
+                TextConverter.toLowerUnderscore(domainObject.getObjectName().getText()),
                 TextConverter.toLowerUnderscore(property.getData().getVariableName().getText()))),
         columns,
-        baseDomainObject.getMultiTenant());
+        domainObject.getMultiTenant());
   }
 
   /**
    * Gets table for aggregate entity collection.
    *
-   * @param baseDomainObjectChild the aggregate root
+   * @param domainObjectChild the aggregate root
    * @param property the property
    * @return the table for aggregate entity collection
    */
   private Table getTableForAggregateEntityCollection(
-      BaseDomainObject baseDomainObjectParent,
-      BaseDomainObject baseDomainObjectChild,
+      DomainObject domainObjectParent,
+      DomainObject domainObjectChild,
       DomainObjectProperty<?> property) {
     Set<Column> columns = new LinkedHashSet<>();
 
-    addAggregateRootIdInColumnSetAsPrimaryKeyForAggregateEntity(columns, baseDomainObjectParent);
+    addAggregateRootIdInColumnSetAsPrimaryKeyForAggregateEntity(columns, domainObjectParent);
     addAggregateEntityIdInColumnSet(columns);
 
-    columns.addAll(getColumnsByProperties(baseDomainObjectChild.getProperties()));
+    columns.addAll(getColumnsByProperties(domainObjectChild.getProperties()));
 
     // Add version
     columns.add(new Column("version", ColumnDataType.INTEGER, 11, RequiredType.REQUIRED));
@@ -424,30 +425,30 @@ public class TableDeducer {
         new TableName(
             String.format(
                 DOUBLE_S,
-                TextConverter.toLowerUnderscore(baseDomainObjectParent.getObjectName().getText()),
+                TextConverter.toLowerUnderscore(domainObjectParent.getObjectName().getText()),
                 TextConverter.toLowerUnderscore(property.getData().getVariableName().getText()))),
         columns,
-        baseDomainObjectChild.getMultiTenant());
+        domainObjectChild.getMultiTenant());
   }
 
   private void addAggregateRootIdInColumnSetAsPrimaryKey(
-      Set<Column> columns, BaseDomainObject baseDomainObject) {
-    addAggregateRootIdInColumnSet(columns, baseDomainObject, true, true);
+      Set<Column> columns, DomainObject domainObject) {
+    addAggregateRootIdInColumnSet(columns, domainObject, true, true);
   }
 
   private void addAggregateRootIdInColumnSetAsPrimaryKeyForAggregateEntity(
-      Set<Column> columns, BaseDomainObject baseDomainObject) {
-    addAggregateRootIdInColumnSet(columns, baseDomainObject, true, false);
+      Set<Column> columns, DomainObject domainObject) {
+    addAggregateRootIdInColumnSet(columns, domainObject, true, false);
   }
 
   private void addAggregateRootIdInColumnSetWithoutPrimaryKey(
-      Set<Column> columns, BaseDomainObject baseDomainObject) {
-    addAggregateRootIdInColumnSet(columns, baseDomainObject, false, false);
+      Set<Column> columns, DomainObject domainObject) {
+    addAggregateRootIdInColumnSet(columns, domainObject, false, false);
   }
 
   private void addAggregateRootIdInColumnSet(
       Set<Column> columns,
-      BaseDomainObject baseDomainObject,
+      DomainObject domainObject,
       boolean addAsPrimaryKey,
       boolean addTenantId) {
     // Add Object Id
@@ -455,7 +456,7 @@ public class TableDeducer {
         new Column(
             "root_id", ColumnDataType.BINARY, 16, 0, RequiredType.REQUIRED, addAsPrimaryKey));
 
-    if (baseDomainObject.getMultiTenant() && addTenantId) {
+    if (domainObject.getMultiTenant() && addTenantId) {
       // Add Tenant Id
       columns.add(
           new Column(

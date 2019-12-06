@@ -22,7 +22,7 @@ package io.polygenesis.generators.java.domain.aggregaterootid;
 
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.core.DataTypeTransformer;
-import io.polygenesis.models.domain.AggregateRoot;
+import io.polygenesis.models.domain.DomainObject;
 import io.polygenesis.representations.code.ConstructorRepresentation;
 import io.polygenesis.representations.code.FieldRepresentation;
 import io.polygenesis.representations.code.MethodRepresentation;
@@ -39,7 +39,7 @@ import java.util.TreeSet;
  * @author Christos Tsakostas
  */
 public class AggregateRootIdLegacyClassTransformer
-    extends AbstractLegacyClassTransformer<AggregateRoot> {
+    extends AbstractLegacyClassTransformer<DomainObject> {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -59,7 +59,7 @@ public class AggregateRootIdLegacyClassTransformer
   // ===============================================================================================
 
   @Override
-  public Set<FieldRepresentation> stateFieldRepresentations(AggregateRoot source, Object... args) {
+  public Set<FieldRepresentation> stateFieldRepresentations(DomainObject source, Object... args) {
     return new LinkedHashSet<>(
         Arrays.asList(
             FieldRepresentation.withModifiers(
@@ -70,7 +70,7 @@ public class AggregateRootIdLegacyClassTransformer
 
   @Override
   public Set<ConstructorRepresentation> constructorRepresentations(
-      AggregateRoot source, Object... args) {
+      DomainObject source, Object... args) {
     Set<ConstructorRepresentation> constructorRepresentations = new LinkedHashSet<>();
 
     // ---------------------------------------------------------------------------------------------
@@ -91,17 +91,17 @@ public class AggregateRootIdLegacyClassTransformer
   }
 
   @Override
-  public Set<MethodRepresentation> methodRepresentations(AggregateRoot source, Object... args) {
+  public Set<MethodRepresentation> methodRepresentations(DomainObject source, Object... args) {
     return new LinkedHashSet<>();
   }
 
   @Override
-  public String packageName(AggregateRoot source, Object... args) {
+  public String packageName(DomainObject source, Object... args) {
     return source.getPackageName().getText();
   }
 
   @Override
-  public Set<String> imports(AggregateRoot source, Object... args) {
+  public Set<String> imports(DomainObject source, Object... args) {
     Set<String> imports = new TreeSet<>();
 
     imports.add("com.oregor.trinity4j.domain.AggregateRootId");
@@ -112,12 +112,12 @@ public class AggregateRootIdLegacyClassTransformer
   }
 
   @Override
-  public Set<String> annotations(AggregateRoot source, Object... args) {
+  public Set<String> annotations(DomainObject source, Object... args) {
     return new LinkedHashSet<>(Arrays.asList("@Embeddable"));
   }
 
   @Override
-  public String description(AggregateRoot source, Object... args) {
+  public String description(DomainObject source, Object... args) {
     StringBuilder stringBuilder = new StringBuilder();
 
     stringBuilder.append("The ");
@@ -130,12 +130,12 @@ public class AggregateRootIdLegacyClassTransformer
   }
 
   @Override
-  public String modifiers(AggregateRoot source, Object... args) {
+  public String modifiers(DomainObject source, Object... args) {
     return MODIFIER_PUBLIC;
   }
 
   @Override
-  public String simpleObjectName(AggregateRoot source, Object... args) {
+  public String simpleObjectName(DomainObject source, Object... args) {
     StringBuilder stringBuilder = new StringBuilder();
 
     stringBuilder.append(TextConverter.toLowerCamel(source.getObjectName().getText()));
@@ -145,7 +145,7 @@ public class AggregateRootIdLegacyClassTransformer
   }
 
   @Override
-  public String fullObjectName(AggregateRoot source, Object... args) {
+  public String fullObjectName(DomainObject source, Object... args) {
     StringBuilder stringBuilder = new StringBuilder();
 
     stringBuilder.append(TextConverter.toUpperCamel(source.getObjectName().getText()));

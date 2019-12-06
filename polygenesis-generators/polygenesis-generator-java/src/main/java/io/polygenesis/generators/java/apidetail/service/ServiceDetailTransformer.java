@@ -27,7 +27,7 @@ import io.polygenesis.core.TemplateData;
 import io.polygenesis.models.api.ServiceMethod;
 import io.polygenesis.models.apiimpl.ServiceImplementation;
 import io.polygenesis.models.apiimpl.ServiceMethodImplementation;
-import io.polygenesis.models.domain.BaseDomainEntity;
+import io.polygenesis.models.domain.DomainObject;
 import io.polygenesis.models.domain.PropertyType;
 import io.polygenesis.representations.code.ConstructorRepresentation;
 import io.polygenesis.representations.code.FieldRepresentation;
@@ -125,12 +125,12 @@ public class ServiceDetailTransformer
     Set<String> imports = new TreeSet<>();
 
     source
-        .getOptionalDomainEntity()
-        .ifPresent(domainEntity -> imports.addAll(detectImportsForDomainEntity(domainEntity)));
+        .getOptionalDomainObject()
+        .ifPresent(domainObject -> imports.addAll(detectImportsForDomainObject(domainObject)));
 
     source
         .getOptionalParentAggregateRoot()
-        .ifPresent(domainEntity -> imports.addAll(detectImportsForDomainEntity(domainEntity)));
+        .ifPresent(domainObject -> imports.addAll(detectImportsForDomainObject(domainObject)));
 
     imports.addAll(detectImportsForMethods(source));
 
@@ -218,12 +218,12 @@ public class ServiceDetailTransformer
   // ===============================================================================================
 
   /**
-   * Detect imports for domain entity.
+   * Detect imports for domain object set.
    *
-   * @param domainObject the aggregate root
+   * @param domainObject the domain object
    * @return the set
    */
-  protected Set<String> detectImportsForDomainEntity(BaseDomainEntity domainObject) {
+  protected Set<String> detectImportsForDomainObject(DomainObject domainObject) {
     Set<String> imports = new TreeSet<>();
 
     // TODO: refactor the following implementation

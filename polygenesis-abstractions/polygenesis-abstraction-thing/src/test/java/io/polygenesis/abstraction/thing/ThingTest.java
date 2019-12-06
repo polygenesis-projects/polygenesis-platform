@@ -41,9 +41,9 @@ public class ThingTest extends AbstractEqualityTest<Thing> {
 
     assertThat(thing).isNotNull();
 
-    Function function1 = createFunction1();
-    Function function2 = createFunction2();
-    Function function3 = createFunction3();
+    Function function1 = createFunction1(thing);
+    Function function2 = createFunction2(thing);
+    Function function3 = createFunction3(thing);
 
     Set<Function> functionSet = new LinkedHashSet<>();
     functionSet.add(function2);
@@ -57,27 +57,20 @@ public class ThingTest extends AbstractEqualityTest<Thing> {
     assertThat(thing.getFunctions().size()).isEqualTo(3);
   }
 
-  private Function createFunction1() {
-    return FunctionBuilder.of(
-            ThingBuilder.endToEnd("thingName").createThing(), "functionName", Purpose.modify())
+  private Function createFunction1(Thing thing) {
+    return FunctionBuilder.of(thing, "functionName", Purpose.modify())
         .setReturnValue(createDataPrimitive())
         .build();
   }
 
-  private Function createFunction2() {
-    return FunctionBuilder.of(
-            ThingBuilder.endToEnd("thingName").createThing(),
-            "anotherFunctionName",
-            Purpose.modify())
+  private Function createFunction2(Thing thing) {
+    return FunctionBuilder.of(thing, "anotherFunctionName", Purpose.modify())
         .setReturnValue(createDataPrimitive())
         .build();
   }
 
-  private Function createFunction3() {
-    return FunctionBuilder.of(
-            ThingBuilder.endToEnd("thingName").createThing(),
-            "someAnotherNewFunctionName",
-            Purpose.modify())
+  private Function createFunction3(Thing thing) {
+    return FunctionBuilder.of(thing, "someAnotherNewFunctionName", Purpose.modify())
         .setReturnValue(createDataPrimitive())
         .build();
   }

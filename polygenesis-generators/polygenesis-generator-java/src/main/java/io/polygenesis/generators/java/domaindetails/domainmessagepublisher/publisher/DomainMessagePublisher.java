@@ -21,6 +21,7 @@
 package io.polygenesis.generators.java.domaindetails.domainmessagepublisher.publisher;
 
 import io.polygenesis.abstraction.data.DataObject;
+import io.polygenesis.abstraction.data.DataRepository;
 import io.polygenesis.abstraction.thing.Activity;
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.abstraction.thing.FunctionName;
@@ -33,8 +34,6 @@ import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.commons.valueobjects.VariableName;
 import io.polygenesis.core.AbstractNameablePackageable;
-import java.util.Arrays;
-import java.util.LinkedHashSet;
 
 /**
  * The type Domain message publisher.
@@ -88,20 +87,22 @@ public class DomainMessagePublisher extends AbstractNameablePackageable {
     Thing thing =
         ThingBuilder.domainDetailDomainMessagePublisher("DomainMessagePublisher").createThing();
 
+    DataRepository arguments = new DataRepository();
+    arguments.addData(
+        new DataObject(
+            new ObjectName(
+                String.format(
+                    "%sDomainMessagePublishDto",
+                    TextConverter.toUpperCamel(contextName.getText()))),
+            getPackageName(),
+            new VariableName("domainMessagePublishDto")));
+
     return new Function(
         thing,
         Purpose.reset(),
         new FunctionName("send"),
         null,
-        new LinkedHashSet<>(
-            Arrays.asList(
-                new DataObject(
-                    new ObjectName(
-                        String.format(
-                            "%sDomainMessagePublishDto",
-                            TextConverter.toUpperCamel(contextName.getText()))),
-                    getPackageName(),
-                    new VariableName("domainMessagePublishDto")))),
+        arguments,
         Activity.empty(),
         thing.getAbstractionsScopes());
   }

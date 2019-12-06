@@ -20,6 +20,7 @@
 
 package io.polygenesis.generators.java.domaindetails.domainmessagepublisher.scheduledpublisherroute;
 
+import io.polygenesis.abstraction.data.DataRepository;
 import io.polygenesis.abstraction.thing.Activity;
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.abstraction.thing.FunctionName;
@@ -30,7 +31,6 @@ import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.AbstractNameablePackageable;
 import io.polygenesis.generators.java.domaindetails.domainmessagepublisher.scheduledpublisher.ScheduledDomainMessagePublisher;
-import java.util.LinkedHashSet;
 
 /**
  * The type Scheduled domain message publisher route.
@@ -102,7 +102,7 @@ public class ScheduledDomainMessagePublisherRoute extends AbstractNameablePackag
         Purpose.reset(),
         new FunctionName("configure"),
         null,
-        new LinkedHashSet<>(),
+        new DataRepository(),
         Activity.empty(),
         thing.getAbstractionsScopes());
   }

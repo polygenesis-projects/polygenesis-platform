@@ -21,6 +21,10 @@
 package io.polygenesis.models.domain.supportiveentity;
 
 import io.polygenesis.commons.valueobjects.PackageName;
+import io.polygenesis.models.domain.common.ConstructorsDeducer;
+import io.polygenesis.models.domain.common.DataToDomainObjectPropertyConverter;
+import io.polygenesis.models.domain.common.DomainObjectPropertiesDeducer;
+import io.polygenesis.models.domain.common.IdentityDomainObjectPropertiesDeducer;
 
 /**
  * The type Supportive entity deducer factory.
@@ -32,14 +36,24 @@ public final class SupportiveEntityDeducerFactory {
   // ===============================================================================================
   // DEPENDENCIES
   // ===============================================================================================
-  private static SupportiveEntityPropertyDeducer supportiveEntityPropertyDeducer;
+  private static DomainObjectPropertiesDeducer domainObjectPropertiesDeducer;
+  private static ConstructorsDeducer constructorsDeducer;
+  private static IdentityDomainObjectPropertiesDeducer identityDomainObjectPropertiesDeducer;
 
   // ===============================================================================================
   // STATIC INITIALIZATION OF DEPENDENCIES
   // ===============================================================================================
 
   static {
-    supportiveEntityPropertyDeducer = new SupportiveEntityPropertyDeducer();
+    final DataToDomainObjectPropertyConverter dataToDomainObjectPropertyConverter =
+        new DataToDomainObjectPropertyConverter();
+
+    domainObjectPropertiesDeducer =
+        new DomainObjectPropertiesDeducer(dataToDomainObjectPropertyConverter);
+
+    constructorsDeducer = new ConstructorsDeducer(dataToDomainObjectPropertyConverter);
+
+    identityDomainObjectPropertiesDeducer = new IdentityDomainObjectPropertiesDeducer();
   }
 
   // ===============================================================================================
@@ -60,6 +74,10 @@ public final class SupportiveEntityDeducerFactory {
    * @return the domain service deducer
    */
   public static SupportiveEntityDeducer newInstance(PackageName packageName) {
-    return new SupportiveEntityDeducer(packageName, supportiveEntityPropertyDeducer);
+    return new SupportiveEntityDeducer(
+        packageName,
+        constructorsDeducer,
+        domainObjectPropertiesDeducer,
+        identityDomainObjectPropertiesDeducer);
   }
 }

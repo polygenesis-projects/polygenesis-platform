@@ -31,10 +31,9 @@ import io.polygenesis.models.api.Dto;
 import io.polygenesis.models.api.DtoType;
 import io.polygenesis.models.api.Service;
 import io.polygenesis.models.api.ServiceMetamodelRepository;
-import io.polygenesis.models.apiimpl.DomainEntityConverterMethod;
-import io.polygenesis.models.domain.BaseDomainEntity;
-import io.polygenesis.models.domain.BaseDomainObject;
+import io.polygenesis.models.apiimpl.DomainObjectConverterMethod;
 import io.polygenesis.models.domain.DomainMetamodelRepository;
+import io.polygenesis.models.domain.DomainObject;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -54,11 +53,11 @@ public class CollectionRecordDeducer {
    * @param domainObject the aggregate root
    * @return the set
    */
-  public Set<DomainEntityConverterMethod> deduceMethods(
+  public Set<DomainObjectConverterMethod> deduceMethods(
       ServiceMetamodelRepository serviceModelRepository,
       DomainMetamodelRepository<?> domainMetamodelRepository,
-      BaseDomainObject domainObject) {
-    Set<DomainEntityConverterMethod> methods = new LinkedHashSet<>();
+      DomainObject domainObject) {
+    Set<DomainObjectConverterMethod> methods = new LinkedHashSet<>();
 
     Set<CollectionRecordEntityPair> collectionRecordEntityPairs =
         findCollectionRecordEntityPairs(
@@ -77,7 +76,7 @@ public class CollectionRecordDeducer {
   private Set<CollectionRecordEntityPair> findCollectionRecordEntityPairs(
       ServiceMetamodelRepository serviceModelRepository,
       DomainMetamodelRepository<?> domainMetamodelRepository,
-      BaseDomainObject domainObject) {
+      DomainObject domainObject) {
     Set<CollectionRecordEntityPair> collectionRecordEntityPairs = new LinkedHashSet<>();
 
     Set<Service> services =
@@ -92,7 +91,7 @@ public class CollectionRecordDeducer {
 
     dtos.forEach(
         dto -> {
-          BaseDomainEntity entity =
+          DomainObject entity =
               domainMetamodelRepository.findEntityByThingName(dto.getRelatedThing().getThingName());
 
           collectionRecordEntityPairs.add(new CollectionRecordEntityPair(dto, entity));
@@ -101,7 +100,7 @@ public class CollectionRecordDeducer {
     return collectionRecordEntityPairs;
   }
 
-  private DomainEntityConverterMethod makeCollectionRecordConversionMethod(
+  private DomainObjectConverterMethod makeCollectionRecordConversionMethod(
       CollectionRecordEntityPair pair) {
 
     Thing thing = ThingBuilder.endToEnd("Converter").createThing();
@@ -117,6 +116,6 @@ public class CollectionRecordDeducer {
             .addArgument(pair.getEntity().asDataGroup())
             .build();
 
-    return new DomainEntityConverterMethod(function, pair.getEntity(), pair.getDto());
+    return new DomainObjectConverterMethod(function, pair.getEntity(), pair.getDto());
   }
 }

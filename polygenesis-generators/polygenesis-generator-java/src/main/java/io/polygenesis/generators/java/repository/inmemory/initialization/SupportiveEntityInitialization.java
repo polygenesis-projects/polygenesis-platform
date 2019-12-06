@@ -20,6 +20,7 @@
 
 package io.polygenesis.generators.java.repository.inmemory.initialization;
 
+import io.polygenesis.abstraction.data.DataRepository;
 import io.polygenesis.abstraction.thing.Activity;
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.abstraction.thing.FunctionName;
@@ -30,7 +31,6 @@ import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.AbstractNameablePackageable;
 import io.polygenesis.generators.java.domain.supportiveentity.repository.SupportiveEntityRepository;
-import java.util.LinkedHashSet;
 
 /**
  * The type Supportive entity initialization.
@@ -101,7 +101,7 @@ public class SupportiveEntityInitialization extends AbstractNameablePackageable 
         Purpose.afterPropertiesSet(),
         new FunctionName("afterPropertiesSet"),
         null,
-        new LinkedHashSet<>(),
+        new DataRepository(),
         Activity.empty(),
         thing.getAbstractionsScopes());
   }

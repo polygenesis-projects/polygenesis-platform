@@ -32,7 +32,7 @@ public class InvoiceItemTax {
 
   public static Thing create(Thing invoiceItem, PackageName rootPackageName) {
     Thing invoiceItemTax =
-        ThingBuilder.endToEndChild("invoiceItemTax", invoiceItem)
+        ThingBuilder.endToEndChildWithIdentity("invoiceItemTax", invoiceItem)
             .setMultiTenant(true)
             .createThing();
 

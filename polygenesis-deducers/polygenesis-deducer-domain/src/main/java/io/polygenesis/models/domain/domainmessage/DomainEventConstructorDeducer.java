@@ -51,24 +51,32 @@ public class DomainEventConstructorDeducer {
   @SuppressWarnings("CPD-START")
   public DomainEvent deduceFrom(PackageName rootPackageName, Thing thing, Constructor constructor) {
     Set<DomainObjectProperty<?>> properties = constructor.getProperties();
-    Set<Constructor> constructors =
-        new LinkedHashSet<>(Collections.singletonList(makeDomainEventConstructor(constructor)));
 
-    return new DomainEvent(
-        InstantiationType.CONCRETE,
-        new ObjectName(
-            String.format("%sCreated", TextConverter.toUpperCamel(thing.getThingName().getText()))),
-        thing.makePackageName(rootPackageName, thing),
-        properties,
-        constructors,
-        thing.getMultiTenant());
+    DomainEvent domainEvent =
+        new DomainEvent(
+            InstantiationType.CONCRETE,
+            new ObjectName(
+                String.format(
+                    "%sCreated", TextConverter.toUpperCamel(thing.getThingName().getText()))),
+            thing.makePackageName(rootPackageName, thing),
+            properties,
+            thing.getMultiTenant());
+
+    Set<Constructor> constructors =
+        new LinkedHashSet<>(
+            Collections.singletonList(makeDomainEventConstructor(constructor, rootPackageName)));
+
+    domainEvent.addConstructors(constructors);
+
+    return domainEvent;
   }
 
   // ===============================================================================================
   // PRIVATE
   // ===============================================================================================
 
-  private Constructor makeDomainEventConstructor(Constructor constructor) {
+  private Constructor makeDomainEventConstructor(
+      Constructor constructor, PackageName rootPackageName) {
     Set<DomainObjectProperty<?>> properties = new LinkedHashSet<>();
 
     constructor
@@ -81,6 +89,6 @@ public class DomainEventConstructorDeducer {
               }
             });
 
-    return new Constructor(null, constructor.getFunction(), properties);
+    return new Constructor(null, constructor.getFunction(), properties, rootPackageName);
   }
 }

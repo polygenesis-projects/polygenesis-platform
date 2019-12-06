@@ -24,6 +24,7 @@ import io.polygenesis.abstraction.thing.ActivityTemplateTransformer;
 import io.polygenesis.core.MetamodelRepository;
 import io.polygenesis.core.TemplateData;
 import io.polygenesis.generators.java.apidetail.service.activity.AbstractServiceMethodImplementationTransformer;
+import io.polygenesis.generators.java.common.AggregateEntityDataService;
 import io.polygenesis.generators.java.common.ParentCallingChildDataService;
 import io.polygenesis.models.apiimpl.ServiceMethodImplementation;
 import java.util.HashMap;
@@ -46,11 +47,13 @@ public class EnsureExistenceOfAggregateRootTransformer
   /**
    * Instantiates a new Ensure existence of aggregate root transformer.
    *
+   * @param aggregateEntityDataService the aggregate entity data service
    * @param parentCallingChildDataService the parent calling child data service
    */
   public EnsureExistenceOfAggregateRootTransformer(
+      AggregateEntityDataService aggregateEntityDataService,
       ParentCallingChildDataService parentCallingChildDataService) {
-    super(parentCallingChildDataService);
+    super(aggregateEntityDataService, parentCallingChildDataService);
   }
 
   // ===============================================================================================

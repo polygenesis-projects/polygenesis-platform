@@ -21,11 +21,13 @@
 package io.polygenesis.models.domain;
 
 import io.polygenesis.commons.valueobjects.PackageName;
-import io.polygenesis.models.domain.aggregateroot.AggregateEntityDeducer;
-import io.polygenesis.models.domain.aggregateroot.AggregateEntityPropertyDeducer;
 import io.polygenesis.models.domain.aggregateroot.AggregateRootDeducer;
-import io.polygenesis.models.domain.aggregateroot.AggregateRootPropertyDeducer;
-import io.polygenesis.models.domain.aggregateroot.StateMutationMethodDeducer;
+import io.polygenesis.models.domain.agrregateentity.AggregateEntityDeducer;
+import io.polygenesis.models.domain.common.ConstructorsDeducer;
+import io.polygenesis.models.domain.common.DataToDomainObjectPropertyConverter;
+import io.polygenesis.models.domain.common.DomainObjectPropertiesDeducer;
+import io.polygenesis.models.domain.common.IdentityDomainObjectPropertiesDeducer;
+import io.polygenesis.models.domain.common.StateMutationMethodDeducer;
 import io.polygenesis.models.domain.domainmessage.DomainEventConstructorDeducer;
 import io.polygenesis.models.domain.domainmessage.DomainEventMutationDeducer;
 
@@ -39,28 +41,48 @@ public final class DomainDeducerFactory {
   // ===============================================================================================
   // DEPENDENCIES
   // ===============================================================================================
-  private static final AggregateRootDeducer aggregateRootDeducer;
+  private static DomainObjectPropertiesDeducer domainObjectPropertiesDeducer;
+  private static AggregateRootDeducer aggregateRootDeducer;
+  private static AggregateEntityDeducer aggregateEntityDeducer;
 
   // ===============================================================================================
   // STATIC INITIALIZATION OF DEPENDENCIES
   // ===============================================================================================
 
   static {
-    AggregateEntityPropertyDeducer aggregateEntityPropertyDeducer =
-        new AggregateEntityPropertyDeducer();
+    final DataToDomainObjectPropertyConverter dataToDomainObjectPropertyConverter =
+        new DataToDomainObjectPropertyConverter();
 
-    AggregateEntityDeducer aggregateEntityDeducer =
+    final ConstructorsDeducer constructorsDeducer =
+        new ConstructorsDeducer(dataToDomainObjectPropertyConverter);
+
+    final DomainEventMutationDeducer domainEventMutationDeducer = new DomainEventMutationDeducer();
+
+    final IdentityDomainObjectPropertiesDeducer identityDomainObjectPropertiesDeducer =
+        new IdentityDomainObjectPropertiesDeducer();
+
+    domainObjectPropertiesDeducer =
+        new DomainObjectPropertiesDeducer(dataToDomainObjectPropertyConverter);
+
+    aggregateEntityDeducer =
         new AggregateEntityDeducer(
-            aggregateEntityPropertyDeducer,
-            new StateMutationMethodDeducer(new DomainEventMutationDeducer()));
-
-    AggregateRootPropertyDeducer aggregateRootPropertyDeducer =
-        new AggregateRootPropertyDeducer(aggregateEntityDeducer);
+            domainObjectPropertiesDeducer,
+            identityDomainObjectPropertiesDeducer,
+            constructorsDeducer,
+            new StateMutationMethodDeducer(
+                dataToDomainObjectPropertyConverter,
+                domainEventMutationDeducer,
+                identityDomainObjectPropertiesDeducer));
 
     aggregateRootDeducer =
         new AggregateRootDeducer(
-            aggregateRootPropertyDeducer,
-            new StateMutationMethodDeducer(new DomainEventMutationDeducer()),
+            domainObjectPropertiesDeducer,
+            identityDomainObjectPropertiesDeducer,
+            constructorsDeducer,
+            new StateMutationMethodDeducer(
+                dataToDomainObjectPropertyConverter,
+                domainEventMutationDeducer,
+                identityDomainObjectPropertiesDeducer),
             new DomainEventConstructorDeducer());
   }
 
@@ -82,6 +104,6 @@ public final class DomainDeducerFactory {
    * @return the api deducer
    */
   public static DomainDeducer newInstance(PackageName packageName) {
-    return new DomainDeducer(packageName, aggregateRootDeducer);
+    return new DomainDeducer(packageName, aggregateRootDeducer, aggregateEntityDeducer);
   }
 }
