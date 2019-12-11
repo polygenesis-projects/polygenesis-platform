@@ -224,17 +224,12 @@ public abstract class AbstractServiceMethodImplementor {
    */
   // TODO: needs refactoring
   private DomainObject retrieveAggregateRoot(ServiceImplementation serviceImplementation) {
-    if (serviceImplementation.getOptionalParentAggregateRoot().isPresent()) {
-      return serviceImplementation
-          .getOptionalParentAggregateRoot()
-          .orElseThrow(IllegalArgumentException::new);
+    if (serviceImplementation.getParentAggregateRoot() != null) {
+      return serviceImplementation.getParentAggregateRoot();
     }
 
-    if (serviceImplementation.getOptionalDomainObject().isPresent()) {
-      DomainObject domainObject =
-          serviceImplementation
-              .getOptionalDomainObject()
-              .orElseThrow(IllegalArgumentException::new);
+    if (serviceImplementation.getDomainObject() != null) {
+      DomainObject domainObject = serviceImplementation.getDomainObject();
 
       if (domainObject instanceof AggregateRoot) {
         return (AggregateRoot) domainObject;
@@ -254,11 +249,8 @@ public abstract class AbstractServiceMethodImplementor {
   }
 
   private Projection retrieveProjection(ServiceImplementation serviceImplementation) {
-    if (serviceImplementation.getOptionalDomainObject().isPresent()) {
-      DomainObject domainObject =
-          serviceImplementation
-              .getOptionalDomainObject()
-              .orElseThrow(IllegalArgumentException::new);
+    if (serviceImplementation.getDomainObject() != null) {
+      DomainObject domainObject = serviceImplementation.getDomainObject();
 
       if (domainObject instanceof Projection) {
         return (Projection) domainObject;

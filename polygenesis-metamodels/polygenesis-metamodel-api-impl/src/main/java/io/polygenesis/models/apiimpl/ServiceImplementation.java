@@ -25,9 +25,7 @@ import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.core.Metamodel;
 import io.polygenesis.models.api.Service;
 import io.polygenesis.models.domain.DomainObject;
-import java.util.LinkedHashSet;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -37,13 +35,20 @@ import java.util.Set;
  */
 public class ServiceImplementation implements Metamodel {
 
+  // ===============================================================================================
+  // STATE
+  // ===============================================================================================
+
   private Service service;
   private Set<ServiceDependency> dependencies;
   private Set<ServiceMethodImplementation> serviceMethodImplementations;
-
-  private Optional<DomainObject> optionalDomainObject;
-  private Optional<DomainObject> optionalParentAggregateRoot;
   private Set<DomainObjectConverter> domainObjectConverters;
+
+  // ===============================================================================================
+  // STATE - OPTIONAL
+  // ===============================================================================================
+  private DomainObject domainObject;
+  private DomainObject parentAggregateRoot;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -55,43 +60,29 @@ public class ServiceImplementation implements Metamodel {
    * @param service the service
    * @param dependencies the dependencies
    * @param serviceMethodImplementations the service method implementations
-   */
-  public ServiceImplementation(
-      Service service,
-      Set<ServiceDependency> dependencies,
-      Set<ServiceMethodImplementation> serviceMethodImplementations) {
-    this(
-        service,
-        dependencies,
-        serviceMethodImplementations,
-        Optional.empty(),
-        Optional.empty(),
-        new LinkedHashSet<>());
-  }
-
-  /**
-   * Instantiates a new Service implementation.
-   *
-   * @param service the service
-   * @param dependencies the dependencies
-   * @param serviceMethodImplementations the service method implementations
-   * @param optionalDomainObject the optional domain entity
-   * @param optionalParentAggregateRoot the optional parent aggregate root
-   * @param domainObjectConverters the domain entity converters
+   * @param domainObjectConverters the domain object converters
+   * @param domainObject the domain object
+   * @param parentAggregateRoot the parent aggregate root
    */
   public ServiceImplementation(
       Service service,
       Set<ServiceDependency> dependencies,
       Set<ServiceMethodImplementation> serviceMethodImplementations,
-      Optional<DomainObject> optionalDomainObject,
-      Optional<DomainObject> optionalParentAggregateRoot,
-      Set<DomainObjectConverter> domainObjectConverters) {
+      Set<DomainObjectConverter> domainObjectConverters,
+      DomainObject domainObject,
+      DomainObject parentAggregateRoot) {
     setService(service);
     setDependencies(dependencies);
     setServiceMethodImplementations(serviceMethodImplementations);
-    this.optionalDomainObject = optionalDomainObject;
-    this.optionalParentAggregateRoot = optionalParentAggregateRoot;
     setDomainObjectConverters(domainObjectConverters);
+
+    if (domainObject != null) {
+      setDomainObject(domainObject);
+    }
+
+    if (parentAggregateRoot != null) {
+      setDomainObject(parentAggregateRoot);
+    }
   }
 
   // ===============================================================================================
@@ -148,95 +139,65 @@ public class ServiceImplementation implements Metamodel {
   }
 
   /**
-   * Gets optional domain entity.
+   * Gets domain object converters.
    *
-   * @return the optional domain entity
-   */
-  public Optional<DomainObject> getOptionalDomainObject() {
-    return optionalDomainObject;
-  }
-
-  /**
-   * Gets optional parent aggregate root.
-   *
-   * @return the optional parent aggregate root
-   */
-  public Optional<DomainObject> getOptionalParentAggregateRoot() {
-    return optionalParentAggregateRoot;
-  }
-
-  /**
-   * Gets domain entity converters.
-   *
-   * @return the domain entity converters
+   * @return the domain object converters
    */
   public Set<DomainObjectConverter> getDomainObjectConverters() {
     return domainObjectConverters;
+  }
+
+  /**
+   * Gets domain object.
+   *
+   * @return the domain object
+   */
+  public DomainObject getDomainObject() {
+    return domainObject;
+  }
+
+  /**
+   * Gets parent aggregate root.
+   *
+   * @return the parent aggregate root
+   */
+  public DomainObject getParentAggregateRoot() {
+    return parentAggregateRoot;
   }
 
   // ===============================================================================================
   // GUARDS
   // ===============================================================================================
 
-  /**
-   * Sets service.
-   *
-   * @param service the service
-   */
   private void setService(Service service) {
     Assertion.isNotNull(service, "service is required");
     this.service = service;
   }
 
-  /**
-   * Sets dependencies.
-   *
-   * @param dependencies the dependencies
-   */
   private void setDependencies(Set<ServiceDependency> dependencies) {
     Assertion.isNotNull(dependencies, "dependencies is required");
     this.dependencies = dependencies;
   }
 
-  /**
-   * Sets service method implementations.
-   *
-   * @param serviceMethodImplementations the service method implementations
-   */
   private void setServiceMethodImplementations(
       Set<ServiceMethodImplementation> serviceMethodImplementations) {
     Assertion.isNotNull(serviceMethodImplementations, "serviceMethodImplementations is required");
     this.serviceMethodImplementations = serviceMethodImplementations;
   }
 
-  /**
-   * Sets optional domain entity.
-   *
-   * @param optionalDomainObject the optional domain entity
-   */
-  public void setOptionalDomainObject(Optional<DomainObject> optionalDomainObject) {
-    Assertion.isNotNull(optionalDomainObject, "optionalDomainObject is required");
-    this.optionalDomainObject = optionalDomainObject;
-  }
-
-  /**
-   * Sets optional parent aggregate root.
-   *
-   * @param optionalParentAggregateRoot the optional parent aggregate root
-   */
-  public void setOptionalParentAggregateRoot(Optional<DomainObject> optionalParentAggregateRoot) {
-    Assertion.isNotNull(optionalParentAggregateRoot, "optionalParentAggregateRoot is required");
-    this.optionalParentAggregateRoot = optionalParentAggregateRoot;
-  }
-
-  /**
-   * Sets aggregate root converters.
-   *
-   * @param domainObjectConverters the aggregate root converters
-   */
   private void setDomainObjectConverters(Set<DomainObjectConverter> domainObjectConverters) {
     Assertion.isNotNull(domainObjectConverters, "domainObjectConverters is required");
     this.domainObjectConverters = domainObjectConverters;
+  }
+
+  private void setDomainObject(DomainObject domainObject) {
+    Assertion.isNotNull(domainObject, "domainObject is required");
+    this.domainObject = domainObject;
+  }
+
+  private void setParentAggregateRoot(DomainObject parentAggregateRoot) {
+    Assertion.isNotNull(parentAggregateRoot, "parentAggregateRoot is required");
+    this.parentAggregateRoot = parentAggregateRoot;
   }
 
   // ===============================================================================================
@@ -255,9 +216,9 @@ public class ServiceImplementation implements Metamodel {
     return Objects.equals(service, that.service)
         && Objects.equals(dependencies, that.dependencies)
         && Objects.equals(serviceMethodImplementations, that.serviceMethodImplementations)
-        && Objects.equals(optionalDomainObject, that.optionalDomainObject)
-        && Objects.equals(optionalParentAggregateRoot, that.optionalParentAggregateRoot)
-        && Objects.equals(domainObjectConverters, that.domainObjectConverters);
+        && Objects.equals(domainObjectConverters, that.domainObjectConverters)
+        && Objects.equals(domainObject, that.domainObject)
+        && Objects.equals(parentAggregateRoot, that.parentAggregateRoot);
   }
 
   @Override
@@ -266,8 +227,8 @@ public class ServiceImplementation implements Metamodel {
         service,
         dependencies,
         serviceMethodImplementations,
-        optionalDomainObject,
-        optionalParentAggregateRoot,
-        domainObjectConverters);
+        domainObjectConverters,
+        domainObject,
+        parentAggregateRoot);
   }
 }

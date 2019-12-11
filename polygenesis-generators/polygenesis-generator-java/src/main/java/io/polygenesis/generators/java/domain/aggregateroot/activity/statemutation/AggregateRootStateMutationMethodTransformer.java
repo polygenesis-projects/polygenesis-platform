@@ -161,7 +161,14 @@ public class AggregateRootStateMutationMethodTransformer
       return aggregateRootActivityRegistry.activityFor(
           source, parameterRepresentations(source, args), source.getDomainEvent(), args);
     } else {
-      return super.implementation(source, args);
+      if (source.getReturnValue().getData().isEmpty()) {
+        return "\t\t// TODO: implementation";
+      } else {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("\t\t// TODO: implementation\n");
+        stringBuilder.append("\t\treturn null;");
+        return stringBuilder.toString();
+      }
     }
   }
 }
