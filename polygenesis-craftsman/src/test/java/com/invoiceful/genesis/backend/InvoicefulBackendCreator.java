@@ -20,6 +20,7 @@
 
 package com.invoiceful.genesis.backend;
 
+import com.invoiceful.genesis.contexts.access.ContextAccess;
 import com.invoiceful.genesis.contexts.invoicing.ContextInvoicing;
 import com.oregor.trinity.scaffolder.java.core.ContextDescription;
 import com.oregor.trinity.scaffolder.java.core.ProjectDescription;
@@ -69,11 +70,11 @@ public class InvoicefulBackendCreator {
   private static void generateJava() {
     Project project =
         ProjectBuilder.of("invoiceful")
-            //            .addContext(
-            //                ContextAccess.get(
-            //                    String.format("%s.%s", JAVA_ROOT_PACKAGE, "access"),
-            //                    contextGenerator("access", "access", "acs_", "access"),
-            //                    deducers("access")))
+            .addContext(
+                ContextAccess.get(
+                    String.format("%s.%s", JAVA_ROOT_PACKAGE, "access"),
+                    contextGenerator("access", "access", "acs_", "access"),
+                    deducers("access")))
             .addContext(
                 ContextInvoicing.get(
                     String.format("%s.%s", JAVA_ROOT_PACKAGE, "invoicing"),

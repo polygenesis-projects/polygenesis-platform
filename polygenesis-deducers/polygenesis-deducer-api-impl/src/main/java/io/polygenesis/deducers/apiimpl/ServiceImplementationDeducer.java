@@ -34,6 +34,7 @@ import io.polygenesis.models.apiimpl.ServiceDependency;
 import io.polygenesis.models.apiimpl.ServiceImplementation;
 import io.polygenesis.models.apiimpl.ServiceImplementationMetamodelRepository;
 import io.polygenesis.models.domain.DomainObject;
+import io.polygenesis.models.domain.DomainObjectMetamodelRepository;
 import io.polygenesis.models.domain.Persistence;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
@@ -80,6 +81,10 @@ public class ServiceImplementationDeducer
         CoreRegistry.getMetamodelRepositoryResolver()
             .resolve(metamodelRepositories, ServiceMetamodelRepository.class);
 
+    DomainObjectMetamodelRepository domainObjectMetamodelRepository =
+        CoreRegistry.getMetamodelRepositoryResolver()
+            .resolve(metamodelRepositories, DomainObjectMetamodelRepository.class);
+
     DomainObjectConverterMetamodelRepository domainObjectConverterMetamodelRepository =
         CoreRegistry.getMetamodelRepositoryResolver()
             .resolve(metamodelRepositories, DomainObjectConverterMetamodelRepository.class);
@@ -87,7 +92,10 @@ public class ServiceImplementationDeducer
     Set<ServiceImplementation> serviceImplementations = new LinkedHashSet<>();
 
     fillServiceImplementations(
-        serviceImplementations, serviceModelRepository, domainObjectConverterMetamodelRepository);
+        serviceImplementations,
+        serviceModelRepository,
+        domainObjectMetamodelRepository,
+        domainObjectConverterMetamodelRepository);
 
     return new ServiceImplementationMetamodelRepository(serviceImplementations);
   }
@@ -99,6 +107,7 @@ public class ServiceImplementationDeducer
   private void fillServiceImplementations(
       Set<ServiceImplementation> serviceImplementations,
       ServiceMetamodelRepository serviceModelRepository,
+      DomainObjectMetamodelRepository domainObjectMetamodelRepository,
       DomainObjectConverterMetamodelRepository domainObjectConverterMetamodelRepository) {
     serviceModelRepository
         .getItems()
@@ -106,52 +115,40 @@ public class ServiceImplementationDeducer
             service ->
                 serviceImplementations.add(
                     makeServiceImplementation(
-                        service, domainObjectConverterMetamodelRepository.getItems())));
+                        service,
+                        domainObjectConverterMetamodelRepository.getItems(),
+                        domainObjectMetamodelRepository)));
   }
 
   private ServiceImplementation makeServiceImplementation(
-      Service service, Set<DomainObjectConverter> domainObjectConverters) {
+      Service service,
+      Set<DomainObjectConverter> domainObjectConverters,
+      DomainObjectMetamodelRepository domainObjectMetamodelRepository) {
 
     Optional<DomainObjectConverter> optionalDomainObjectConverter =
         getOptionalDomainObjectConverter(
             domainObjectConverters, new ObjectName(service.getThingName().getText()));
 
+    DomainObject domainObject = null;
+    DomainObjectConverter domainObjectConverter = null;
+    DomainObject parentAggregateRoot = null;
+
     if (optionalDomainObjectConverter.isPresent()) {
-      DomainObjectConverter domainObjectConverter = optionalDomainObjectConverter.get();
-
-      return makeServiceImplementation(
-          service,
-          domainObjectConverter.getDomainObject(),
-          aggregateRootParent(domainObjectConverter.getDomainObject()),
-          domainObjectConverter);
+      domainObjectConverter = optionalDomainObjectConverter.get();
+      domainObject = domainObjectConverter.getDomainObject();
     } else {
-      return new ServiceImplementation(
-          service, new LinkedHashSet<>(), serviceMethodImplementationDeducer.deduce(service));
+      domainObject = domainObjectMetamodelRepository.findEntityByThingName(service.getThingName());
     }
-  }
-
-  /**
-   * Make service implementation service implementation.
-   *
-   * @param service the service
-   * @param domainObject the domain object
-   * @param optionalParentAggregateRoot the optional parent aggregate root
-   * @param domainObjectConverter the domain object converter
-   * @return the service implementation
-   */
-  public ServiceImplementation makeServiceImplementation(
-      Service service,
-      DomainObject domainObject,
-      Optional<DomainObject> optionalParentAggregateRoot,
-      DomainObjectConverter domainObjectConverter) {
 
     return new ServiceImplementation(
         service,
-        dependencies(domainObject, domainObjectConverter, optionalParentAggregateRoot),
+        dependencies(domainObject, domainObjectConverter, parentAggregateRoot),
         serviceMethodImplementationDeducer.deduce(service),
-        Optional.of(domainObject),
-        optionalParentAggregateRoot,
-        new LinkedHashSet<>(Arrays.asList(domainObjectConverter)));
+        domainObjectConverter != null
+            ? new LinkedHashSet<>(Arrays.asList(domainObjectConverter))
+            : new LinkedHashSet<>(),
+        domainObject,
+        parentAggregateRoot);
   }
 
   // ===============================================================================================
@@ -161,10 +158,10 @@ public class ServiceImplementationDeducer
   private Set<ServiceDependency> dependencies(
       DomainObject domainObject,
       DomainObjectConverter domainObjectConverter,
-      Optional<DomainObject> optionalAggregateRoot) {
+      DomainObject parentAggregateRoot) {
     Set<ServiceDependency> dependencies = new LinkedHashSet<>();
 
-    if (domainObject.getOptionalPersistence().isPresent()) {
+    if (domainObject != null && domainObject.getOptionalPersistence().isPresent()) {
       Persistence persistence =
           domainObject.getOptionalPersistence().orElseThrow(IllegalArgumentException::new);
 
@@ -175,8 +172,8 @@ public class ServiceImplementationDeducer
               new VariableName(persistence.getObjectName().getText())));
     }
 
-    if (optionalAggregateRoot.isPresent()) {
-      Persistence persistence = optionalAggregateRoot.get().getPersistence();
+    if (parentAggregateRoot != null) {
+      Persistence persistence = parentAggregateRoot.getPersistence();
 
       dependencies.add(
           new ServiceDependency(
@@ -185,11 +182,13 @@ public class ServiceImplementationDeducer
               new VariableName(persistence.getObjectName().getText())));
     }
 
-    dependencies.add(
-        new ServiceDependency(
-            domainObjectConverter.getObjectName(),
-            domainObjectConverter.getPackageName(),
-            domainObjectConverter.getVariableName()));
+    if (domainObjectConverter != null) {
+      dependencies.add(
+          new ServiceDependency(
+              domainObjectConverter.getObjectName(),
+              domainObjectConverter.getPackageName(),
+              domainObjectConverter.getVariableName()));
+    }
 
     return dependencies;
   }
@@ -209,19 +208,5 @@ public class ServiceImplementationDeducer
             domainObjectConverter ->
                 domainObjectConverter.getDomainObject().getObjectName().equals(domainObjectName))
         .findFirst();
-  }
-
-  /**
-   * Aggregate root parent optional.
-   *
-   * @param domainObject the domain object
-   * @return the optional
-   */
-  protected Optional<DomainObject> aggregateRootParent(DomainObject domainObject) {
-    // TODO: need to iterate for deep nested children, in order to get Aggregate Root
-
-    return domainObject.getParent() != null
-        ? Optional.of(domainObject.getParent())
-        : Optional.empty();
   }
 }

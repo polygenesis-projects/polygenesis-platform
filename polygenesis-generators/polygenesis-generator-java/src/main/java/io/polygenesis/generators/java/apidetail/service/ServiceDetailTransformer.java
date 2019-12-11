@@ -124,13 +124,13 @@ public class ServiceDetailTransformer
     // TODO: inherit imports from Service Interface ?
     Set<String> imports = new TreeSet<>();
 
-    source
-        .getOptionalDomainObject()
-        .ifPresent(domainObject -> imports.addAll(detectImportsForDomainObject(domainObject)));
+    if (source.getDomainObject() != null) {
+      imports.addAll(detectImportsForDomainObject(source.getDomainObject()));
+    }
 
-    source
-        .getOptionalParentAggregateRoot()
-        .ifPresent(domainObject -> imports.addAll(detectImportsForDomainObject(domainObject)));
+    if (source.getParentAggregateRoot() != null) {
+      imports.addAll(detectImportsForDomainObject(source.getParentAggregateRoot()));
+    }
 
     imports.addAll(detectImportsForMethods(source));
 
@@ -152,8 +152,9 @@ public class ServiceDetailTransformer
       imports.add("com.oregor.trinity4j.domain.Paginated");
     }
 
-    // TODO: check for multi tenant
-    imports.add("com.oregor.trinity4j.domain.TenantId");
+    if (source.getDomainObject().getMultiTenant()) {
+      imports.add("com.oregor.trinity4j.domain.TenantId");
+    }
 
     // TODO: if has method ensure existence
     imports.add("java.util.Optional");
