@@ -129,6 +129,7 @@ public class StateMutationMethodDeducer {
               properties.addAll(getIdentityProperties(function, rootPackageName));
               properties.addAll(
                   dataToDomainObjectPropertyConverter.convertMany(
+                      domainObject,
                       function.getArguments().findDataExcludingIdentitiesAndPaging()));
 
               StateMutationMethod stateMutationMethod =

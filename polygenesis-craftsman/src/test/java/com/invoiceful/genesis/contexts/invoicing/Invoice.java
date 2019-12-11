@@ -33,7 +33,12 @@ import java.util.Set;
 public class Invoice {
 
   public static Thing create(String rootPackageName) {
-    Thing invoice = ThingBuilder.endToEnd("invoice").setMultiTenant(true).createThing();
+    Thing invoice =
+        ThingBuilder.endToEnd("invoice")
+            .setMultiTenant(true)
+            // TODO
+            // .addThingProperty(Trinity4jShared.tenantId())
+            .createThing();
 
     invoice.addFunctions(
         PurposeFunctionBuilder.forThing(invoice, rootPackageName)

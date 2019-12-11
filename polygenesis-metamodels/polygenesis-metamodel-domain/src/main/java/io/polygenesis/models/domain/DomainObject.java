@@ -77,7 +77,6 @@ public abstract class DomainObject
    * @param instantiationType the instantiation type
    * @param objectName the object name
    * @param packageName the package name
-   * @param properties the properties
    * @param multiTenant the multi tenant
    */
   public DomainObject(
@@ -85,15 +84,14 @@ public abstract class DomainObject
       InstantiationType instantiationType,
       ObjectName objectName,
       PackageName packageName,
-      Set<DomainObjectProperty<?>> properties,
       Boolean multiTenant) {
     setDomainObjectType(domainObjectType);
     setInstantiationType(instantiationType);
     setObjectName(objectName);
     setPackageName(packageName);
-    setProperties(properties);
     setMultiTenant(multiTenant);
 
+    setProperties(new LinkedHashSet<>());
     setConstructors(new LinkedHashSet<>());
     setStateMutationMethods(new LinkedHashSet<>());
     setStateQueryMethods(new LinkedHashSet<>());
@@ -107,7 +105,6 @@ public abstract class DomainObject
    * @param instantiationType the instantiation type
    * @param objectName the object name
    * @param packageName the package name
-   * @param properties the properties
    * @param parent the parent
    */
   public DomainObject(
@@ -115,14 +112,13 @@ public abstract class DomainObject
       InstantiationType instantiationType,
       ObjectName objectName,
       PackageName packageName,
-      Set<DomainObjectProperty<?>> properties,
       DomainObject parent) {
     setDomainObjectType(domainObjectType);
     setInstantiationType(instantiationType);
     setObjectName(objectName);
     setPackageName(packageName);
-    setProperties(properties);
 
+    setProperties(new LinkedHashSet<>());
     setConstructors(new LinkedHashSet<>());
     setStateMutationMethods(new LinkedHashSet<>());
     setStateQueryMethods(new LinkedHashSet<>());
@@ -192,9 +188,54 @@ public abstract class DomainObject
     setParent(domainObject);
   }
 
+  /**
+   * Assign properties.
+   *
+   * @param properties the properties
+   */
+  public void assignProperties(Set<DomainObjectProperty<?>> properties) {
+    setProperties(properties);
+  }
+
   // ===============================================================================================
   // QUERIES
   // ===============================================================================================
+
+  /**
+   * Is aggregate root boolean.
+   *
+   * @return the boolean
+   */
+  public Boolean isAggregateRoot() {
+    return getDomainObjectType().equals(DomainObjectType.AGGREGATE_ROOT);
+  }
+
+  /**
+   * Is abstract aggregate root boolean.
+   *
+   * @return the boolean
+   */
+  public Boolean isAbstractAggregateRoot() {
+    return getDomainObjectType().equals(DomainObjectType.ABSTRACT_AGGREGATE_ROOT);
+  }
+
+  /**
+   * Is aggregate entity boolean.
+   *
+   * @return the boolean
+   */
+  public Boolean isAggregateEntity() {
+    return getDomainObjectType().equals(DomainObjectType.AGGREGATE_ENTITY);
+  }
+
+  /**
+   * Is abstract aggregate entity boolean.
+   *
+   * @return the boolean
+   */
+  public Boolean isAbstractAggregateEntity() {
+    return getDomainObjectType().equals(DomainObjectType.ABSTRACT_AGGREGATE_ENTITY);
+  }
 
   /**
    * Find state mutation methods by purpose set.

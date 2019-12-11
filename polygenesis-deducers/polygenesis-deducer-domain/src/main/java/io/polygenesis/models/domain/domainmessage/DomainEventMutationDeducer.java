@@ -55,7 +55,6 @@ public class DomainEventMutationDeducer {
       PackageName thingPackageName,
       Thing thing,
       StateMutationMethod stateMutationMethod) {
-    Set<DomainObjectProperty<?>> properties = stateMutationMethod.getProperties();
 
     DomainEvent domainEvent =
         new DomainEvent(
@@ -75,8 +74,11 @@ public class DomainEventMutationDeducer {
                         TextConverter.toPastTense(
                             stateMutationMethod.getFunction().getName().getText())))),
             thingPackageName,
-            properties,
             thing.getMultiTenant());
+
+    // Properties
+    Set<DomainObjectProperty<?>> properties = stateMutationMethod.getProperties();
+    domainEvent.assignProperties(properties);
 
     // Get constructors
     Set<Constructor> constructors =

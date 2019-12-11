@@ -23,6 +23,7 @@ package io.polygenesis.models.domain;
 import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.abstraction.data.DataPurpose;
+import io.polygenesis.abstraction.data.DataSourceType;
 import io.polygenesis.abstraction.data.DataValidator;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
@@ -49,22 +50,14 @@ public class Projection extends DomainObject
    * @param instantiationType the instantiation type
    * @param objectName the object name
    * @param packageName the package name
-   * @param properties the properties
    * @param multiTenant the multi tenant
    */
   public Projection(
       InstantiationType instantiationType,
       ObjectName objectName,
       PackageName packageName,
-      Set<DomainObjectProperty<?>> properties,
       Boolean multiTenant) {
-    super(
-        DomainObjectType.PROJECTION,
-        instantiationType,
-        objectName,
-        packageName,
-        properties,
-        multiTenant);
+    super(DomainObjectType.PROJECTION, instantiationType, objectName, packageName, multiTenant);
   }
 
   // ===============================================================================================
@@ -86,7 +79,8 @@ public class Projection extends DomainObject
         DataValidator.empty(),
         getObjectName(),
         getPackageName(),
-        models);
+        models,
+        DataSourceType.DEFAULT);
   }
 
   @Override

@@ -20,6 +20,7 @@
 
 package io.polygenesis.generators.java.domain.valueobject;
 
+import io.polygenesis.abstraction.data.DataSourceType;
 import io.polygenesis.core.AbstractUnitTemplateGenerator;
 import io.polygenesis.core.ExportInfo;
 import io.polygenesis.core.Exporter;
@@ -57,7 +58,8 @@ public class ValueObjectGenerator extends AbstractUnitTemplateGenerator<ValueObj
 
   @Override
   public void generate(ValueObject source, ExportInfo exportInfo, Object... args) {
-    if (source.isCommon()) {
+    if (source.isCommon()
+        && !source.getData().getDataSourceType().equals(DataSourceType.EXTERNALLY_PROVIDED)) {
       super.generate(source, exportInfo, args);
     }
   }

@@ -90,6 +90,28 @@ public abstract class AbstractThingBuilder<T extends AbstractThingBuilder<?>> {
   }
 
   /**
+   * Adds abstraction scope t.
+   *
+   * @param abstractionScope the abstraction scope
+   * @return the t
+   */
+  public T addAbstractionScope(AbstractionScope abstractionScope) {
+    this.abstractionScopes.add(abstractionScope);
+    return builderClass.cast(this);
+  }
+
+  /**
+   * Add thing property t.
+   *
+   * @param thingProperty the thing property
+   * @return the t
+   */
+  public T addThingProperty(Data thingProperty) {
+    this.thingProperties.addData(thingProperty);
+    return builderClass.cast(this);
+  }
+
+  /**
    * Adds thing properties.
    *
    * @param thingProperties the thing properties
@@ -108,6 +130,20 @@ public abstract class AbstractThingBuilder<T extends AbstractThingBuilder<?>> {
    */
   public T setMultiTenant(Boolean multiTenant) {
     this.multiTenant = multiTenant;
+
+    // TODO
+    //    if (parentThing == null) {
+    //      this.thingProperties.addData(
+    //          DataPrimitive.ofDataBusinessType(
+    //              DataPurpose.tenantIdentity(),
+    //              PrimitiveType.STRING,
+    //              new VariableName("tenantId")));
+    //    } else {
+    //      throw new IllegalStateException(
+    //          String.format("Child thing '%s' should be marked as multi-tenant",
+    // thingName.getText()));
+    //    }
+
     return builderClass.cast(this);
   }
 

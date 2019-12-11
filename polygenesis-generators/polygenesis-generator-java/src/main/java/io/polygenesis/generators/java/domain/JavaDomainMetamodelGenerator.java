@@ -220,6 +220,13 @@ public class JavaDomainMetamodelGenerator extends AbstractMetamodelGenerator {
     CoreRegistry.getMetamodelRepositoryResolver()
         .resolve(modelRepositories, DomainObjectMetamodelRepository.class)
         .getItems()
+        .stream()
+        .filter(
+            domainObject ->
+                domainObject.getDomainObjectType().equals(DomainObjectType.AGGREGATE_ROOT)
+                    || domainObject
+                        .getDomainObjectType()
+                        .equals(DomainObjectType.ABSTRACT_AGGREGATE_ROOT))
         .forEach(
             aggregateRoot -> {
               aggregateRootGenerator.generate(

@@ -73,7 +73,7 @@ public class DataMap extends AbstractData {
       DataValidator dataValidator,
       Data key,
       Data value) {
-    super(DataPrimaryType.MAP, variableName, dataPurpose, dataValidator);
+    super(DataPrimaryType.MAP, variableName, dataPurpose, dataValidator, DataSourceType.DEFAULT);
     this.key = key;
     this.value = value;
   }

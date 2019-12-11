@@ -130,26 +130,31 @@ public class AggregateEntityDeducer {
 
     DomainObject aggregateEntitySuperClass = makeSuperclass();
 
-    Set<DomainObjectProperty<?>> properties =
-        domainObjectPropertiesDeducer.deduceEntityDomainObjectPropertiesFromThing(
-            thingChild,
-            identityDomainObjectPropertiesDeducer.makeEntityIdentityDomainObjectProperties(
-                thingChild, rootPackageName));
-
+    // Domain Object
     AggregateEntity aggregateEntity =
         new AggregateEntity(
             InstantiationType.CONCRETE,
             new ObjectName(thingChild.getThingName().getText()),
             thingPackageName,
-            properties,
             domainObjectParent);
 
     aggregateEntity.assignSuperClass(aggregateEntitySuperClass);
+
+    // Properties
+    Set<DomainObjectProperty<?>> properties =
+        domainObjectPropertiesDeducer.deduceEntityDomainObjectPropertiesFromThing(
+            aggregateEntity,
+            thingChild,
+            identityDomainObjectPropertiesDeducer.makeEntityIdentityDomainObjectProperties(
+                thingChild, rootPackageName));
+
+    aggregateEntity.assignProperties(properties);
 
     // Get Constructors
     Set<Constructor> constructors =
         constructorsDeducer.deduceConstructors(
             rootPackageName,
+            aggregateEntity,
             aggregateEntitySuperClass,
             identityDomainObjectPropertiesDeducer.makeEntityIdentityDomainObjectProperties(
                 thingChild, rootPackageName),
@@ -173,7 +178,6 @@ public class AggregateEntityDeducer {
         InstantiationType.ABSTRACT,
         new ObjectName("AggregateEntity"),
         new PackageName("com.oregor.trinity4j.domain"),
-        new LinkedHashSet<>(),
         null);
   }
 }

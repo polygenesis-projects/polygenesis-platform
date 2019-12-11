@@ -86,6 +86,13 @@ public class AbstractionScope implements Serializable {
   public static final String PROJECTION = "PROJECTION";
 
   // ===============================================================================================
+  // EXTERNALLY PROVIDED
+  // ===============================================================================================
+
+  /** The constant EXTERNALLY_PROVIDED. */
+  public static final String EXTERNALLY_PROVIDED = "EXTERNALLY_PROVIDED";
+
+  // ===============================================================================================
   // STATE
   // ===============================================================================================
 
@@ -238,6 +245,19 @@ public class AbstractionScope implements Serializable {
    */
   public static AbstractionScope projection() {
     return new AbstractionScope(PROJECTION);
+  }
+
+  // ===============================================================================================
+  // EXTERNALLY PROVIDED
+  // ===============================================================================================
+
+  /**
+   * Externally provided abstraction scope.
+   *
+   * @return the abstraction scope
+   */
+  public static AbstractionScope externallyProvided() {
+    return new AbstractionScope(EXTERNALLY_PROVIDED);
   }
 
   // ===============================================================================================

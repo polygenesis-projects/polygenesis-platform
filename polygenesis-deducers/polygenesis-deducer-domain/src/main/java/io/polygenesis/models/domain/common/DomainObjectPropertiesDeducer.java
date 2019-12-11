@@ -69,7 +69,10 @@ public class DomainObjectPropertiesDeducer {
    * @return the set
    */
   public Set<DomainObjectProperty<?>> deduceRootDomainObjectPropertiesFromThing(
-      DomainObject superClass, Set<DomainObjectProperty<?>> identityProperties, Thing thing) {
+      DomainObject domainObject,
+      DomainObject superClass,
+      Set<DomainObjectProperty<?>> identityProperties,
+      Thing thing) {
     Assertion.isNotNull(thing.getThingIdentity(), "thing.getThingIdentity() is required");
 
     Set<DomainObjectProperty<?>> properties = new LinkedHashSet<>();
@@ -81,7 +84,7 @@ public class DomainObjectPropertiesDeducer {
             .getThingProperties()
             .findDataExcludingIdentitiesAndPaging()
             .stream()
-            .map(dataToDomainObjectPropertyConverter::convert)
+            .map(data -> dataToDomainObjectPropertyConverter.convert(domainObject, data))
             .filter(property -> !checkIfPropertyIsDefinedInSuperClass(property, superClass))
             .collect(Collectors.toCollection(LinkedHashSet::new)));
 
@@ -96,7 +99,9 @@ public class DomainObjectPropertiesDeducer {
    * @return the set
    */
   public Set<DomainObjectProperty<?>> deduceEntityDomainObjectPropertiesFromThing(
-      Thing thingChild, Set<DomainObjectProperty<?>> identityProperties) {
+      DomainObject domainObject,
+      Thing thingChild,
+      Set<DomainObjectProperty<?>> identityProperties) {
     Assertion.isNotNull(thingChild.getThingIdentity(), "thingChild.getThingIdentity() is required");
 
     Set<DomainObjectProperty<?>> properties = new LinkedHashSet<>();
@@ -108,7 +113,7 @@ public class DomainObjectPropertiesDeducer {
             .getThingProperties()
             .findDataExcludingIdentitiesAndPaging()
             .stream()
-            .map(dataToDomainObjectPropertyConverter::convert)
+            .map(data -> dataToDomainObjectPropertyConverter.convert(domainObject, data))
             .collect(Collectors.toCollection(LinkedHashSet::new)));
 
     return properties;
@@ -122,7 +127,7 @@ public class DomainObjectPropertiesDeducer {
    * @return the set
    */
   public Set<DomainObjectProperty<?>> deduceDomainObjectPropertiesFromThing(
-      Set<DomainObjectProperty<?>> identityProperties, Thing thing) {
+      DomainObject domainObject, Set<DomainObjectProperty<?>> identityProperties, Thing thing) {
     Assertion.isNotNull(thing.getThingIdentity(), "thing.getThingIdentity() is required");
 
     Set<DomainObjectProperty<?>> properties = new LinkedHashSet<>();
@@ -134,7 +139,7 @@ public class DomainObjectPropertiesDeducer {
             .getThingProperties()
             .findDataExcludingIdentitiesAndPaging()
             .stream()
-            .map(dataToDomainObjectPropertyConverter::convert)
+            .map(data -> dataToDomainObjectPropertyConverter.convert(domainObject, data))
             .collect(Collectors.toCollection(LinkedHashSet::new)));
 
     return properties;

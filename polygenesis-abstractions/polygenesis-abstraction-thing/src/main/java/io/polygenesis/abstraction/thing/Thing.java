@@ -327,6 +327,18 @@ public class Thing implements Abstraction {
   // ===============================================================================================
 
   /**
+   * Supports abstraction scope boolean.
+   *
+   * @param abstractionScope the abstraction scope
+   * @return the boolean
+   */
+  public Boolean supportsAbstractionScope(AbstractionScope abstractionScope) {
+    return getAbstractionsScopes()
+        .stream()
+        .anyMatch(abstractionScope1 -> abstractionScope1.equals(abstractionScope));
+  }
+
+  /**
    * Has parent boolean.
    *
    * @return the boolean

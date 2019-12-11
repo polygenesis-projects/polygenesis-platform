@@ -32,8 +32,8 @@ import java.util.Set;
 /** @author Christos Tsakostas */
 public class User {
 
-  public static Thing create(String rootPackageName) {
-    Thing user = ThingBuilder.endToEnd("user").createThing();
+  public static Thing create(Thing aggregateRoot, String rootPackageName) {
+    Thing user = ThingBuilder.endToEnd("user").setSuperClass(aggregateRoot).createThing();
 
     user.addFunctions(
         PurposeFunctionBuilder.forThing(user, rootPackageName)

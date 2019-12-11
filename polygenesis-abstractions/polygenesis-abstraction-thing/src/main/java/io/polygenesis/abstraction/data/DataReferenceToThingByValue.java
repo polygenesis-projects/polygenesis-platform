@@ -80,7 +80,7 @@ public class DataReferenceToThingByValue extends AbstractData {
       DataPurpose dataPurpose,
       DataValidator dataValidator,
       Thing thing) {
-    super(dataPrimaryType, variableName, dataPurpose, dataValidator);
+    super(dataPrimaryType, variableName, dataPurpose, dataValidator, DataSourceType.DEFAULT);
     Assertion.isNotNull(thing, "thing is required");
     this.thing = thing;
   }
