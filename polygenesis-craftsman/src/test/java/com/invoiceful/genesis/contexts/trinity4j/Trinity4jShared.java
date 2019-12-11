@@ -18,7 +18,7 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.models.domain;
+package com.invoiceful.genesis.contexts.trinity4j;
 
 import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.DataObject;
@@ -28,62 +28,31 @@ import io.polygenesis.abstraction.data.DataValidator;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.commons.valueobjects.VariableName;
-import io.polygenesis.core.Metamodel;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
- * The type Supportive entity.
+ * The type Trinity4J shared.
  *
  * @author Christos Tsakostas
  */
-public class SupportiveEntity extends DomainObject
-    implements DomainObjectProperty<DataObject>, Metamodel {
-
-  // ===============================================================================================
-  // CONSTRUCTOR(S)
-  // ===============================================================================================
+public class Trinity4jShared {
 
   /**
-   * Instantiates a new Supportive entity.
+   * Tenant id data object.
    *
-   * @param objectName the object name
-   * @param packageName the package name
+   * @return the data object
    */
-  public SupportiveEntity(ObjectName objectName, PackageName packageName) {
-    super(
-        DomainObjectType.SUPPORTIVE_ENTITY,
-        InstantiationType.CONCRETE,
-        objectName,
-        packageName,
-        false);
-  }
-
-  // ===============================================================================================
-  // IMPLEMENTATIONS
-  // ===============================================================================================
-
-  @Override
-  public PropertyType getPropertyType() {
-    return PropertyType.REFERENCE_BY_ID;
-  }
-
-  @Override
-  public DataObject getData() {
-    Set<Data> models = new LinkedHashSet<>();
+  public static DataObject tenantId() {
+    Set<Data> data = new LinkedHashSet<>();
 
     return new DataObject(
-        new VariableName(getObjectName().getText()),
-        DataPurpose.any(),
+        new VariableName("typeId"),
+        DataPurpose.tenantIdentity(),
         DataValidator.empty(),
-        getObjectName(),
-        getPackageName(),
-        models,
-        DataSourceType.DEFAULT);
-  }
-
-  @Override
-  public Data getTypeParameterData() {
-    throw new UnsupportedOperationException();
+        new ObjectName("tenantId"),
+        new PackageName("com.oregor.trinity4j.domain"),
+        data,
+        DataSourceType.EXTERNALLY_PROVIDED);
   }
 }

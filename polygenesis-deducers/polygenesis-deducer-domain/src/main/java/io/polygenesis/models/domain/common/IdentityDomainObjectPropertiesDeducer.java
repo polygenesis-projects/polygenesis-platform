@@ -22,6 +22,7 @@ package io.polygenesis.models.domain.common;
 
 import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.abstraction.data.DataPurpose;
+import io.polygenesis.abstraction.data.DataSourceType;
 import io.polygenesis.abstraction.data.DataValidator;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.commons.valueobjects.ObjectName;
@@ -154,7 +155,8 @@ public class IdentityDomainObjectPropertiesDeducer {
             DataValidator.empty(),
             new ObjectName(variableAndId),
             thing.makePackageName(rootPackageName, thing),
-            new LinkedHashSet<>());
+            new LinkedHashSet<>(),
+            DataSourceType.DEFAULT);
 
     return new AggregateEntityId(dataObject);
   }
@@ -168,7 +170,8 @@ public class IdentityDomainObjectPropertiesDeducer {
             DataValidator.empty(),
             new ObjectName(thingParent.getThingName().getText()),
             thingParent.makePackageName(rootPackageName, thingParent),
-            new LinkedHashSet<>()));
+            new LinkedHashSet<>(),
+            DataSourceType.DEFAULT));
   }
 
   private ReferenceToAbstractAggregateRoot makeReferenceToAbstractAggregateRoot(
@@ -180,7 +183,8 @@ public class IdentityDomainObjectPropertiesDeducer {
             DataValidator.empty(),
             new ObjectName(thingParent.getThingName().getText()),
             thingParent.makePackageName(rootPackageName, thingParent),
-            new LinkedHashSet<>()));
+            new LinkedHashSet<>(),
+            DataSourceType.DEFAULT));
   }
 
   private Boolean isAbstract(Thing thing) {

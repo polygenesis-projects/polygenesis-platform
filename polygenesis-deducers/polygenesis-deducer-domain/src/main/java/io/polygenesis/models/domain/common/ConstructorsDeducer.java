@@ -71,6 +71,7 @@ public class ConstructorsDeducer {
    */
   public Set<Constructor> deduceConstructors(
       PackageName rootPackageName,
+      DomainObject domainObject,
       DomainObject superClass,
       Set<DomainObjectProperty<?>> identityProperties,
       Thing thing) {
@@ -89,7 +90,8 @@ public class ConstructorsDeducer {
               Set<DomainObjectProperty<?>> properties = new LinkedHashSet<>();
 
               properties.addAll(identityProperties);
-              properties.addAll(dataToDomainObjectPropertyConverter.convertMany(thingProperties));
+              properties.addAll(
+                  dataToDomainObjectPropertyConverter.convertMany(domainObject, thingProperties));
 
               // Inherit properties from superclass
               if (superClass != null && !superClass.getConstructors().isEmpty()) {

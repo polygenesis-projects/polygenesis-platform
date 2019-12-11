@@ -23,6 +23,7 @@ package io.polygenesis.models.domain;
 import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.abstraction.data.DataPurpose;
+import io.polygenesis.abstraction.data.DataSourceType;
 import io.polygenesis.abstraction.data.DataValidator;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
@@ -47,22 +48,14 @@ public class AggregateRoot extends DomainObject implements DomainObjectProperty<
    * @param instantiationType the instantiation type
    * @param objectName the object name
    * @param packageName the package name
-   * @param properties the properties
    * @param multiTenant the multi tenant
    */
   public AggregateRoot(
       InstantiationType instantiationType,
       ObjectName objectName,
       PackageName packageName,
-      Set<DomainObjectProperty<?>> properties,
       Boolean multiTenant) {
-    super(
-        DomainObjectType.AGGREGATE_ROOT,
-        instantiationType,
-        objectName,
-        packageName,
-        properties,
-        multiTenant);
+    super(DomainObjectType.AGGREGATE_ROOT, instantiationType, objectName, packageName, multiTenant);
   }
 
   // ===============================================================================================
@@ -85,7 +78,8 @@ public class AggregateRoot extends DomainObject implements DomainObjectProperty<
         DataValidator.empty(),
         getObjectName(),
         getPackageName(),
-        models);
+        models,
+        DataSourceType.DEFAULT);
   }
 
   @Override

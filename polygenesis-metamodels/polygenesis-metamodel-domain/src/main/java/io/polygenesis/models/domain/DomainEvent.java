@@ -24,7 +24,6 @@ import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
-import java.util.Set;
 
 /**
  * The type Domain event.
@@ -43,21 +42,13 @@ public class DomainEvent extends DomainObject {
    * @param instantiationType the instantiation type
    * @param objectName the object name
    * @param packageName the package name
-   * @param properties the properties
    */
   public DomainEvent(
       InstantiationType instantiationType,
       ObjectName objectName,
       PackageName packageName,
-      Set<DomainObjectProperty<?>> properties,
       Boolean multiTenant) {
-    super(
-        DomainObjectType.DOMAIN_EVENT,
-        instantiationType,
-        objectName,
-        packageName,
-        properties,
-        multiTenant);
+    super(DomainObjectType.DOMAIN_EVENT, instantiationType, objectName, packageName, multiTenant);
   }
 
   // ===============================================================================================

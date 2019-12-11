@@ -72,6 +72,13 @@ public interface Data {
    */
   DataValidator getDataValidator();
 
+  /**
+   * Gets data source type.
+   *
+   * @return the data source type
+   */
+  DataSourceType getDataSourceType();
+
   // ===============================================================================================
   // QUERIES
   // ===============================================================================================

@@ -44,9 +44,7 @@ public class InvoiceItem {
    */
   public static Thing create(Thing invoice, PackageName rootPackageName) {
     Thing invoiceItem =
-        ThingBuilder.endToEndChildWithIdentity("invoiceItem", invoice)
-            .setMultiTenant(true)
-            .createThing();
+        ThingBuilder.endToEndChildWithIdentity("invoiceItem", invoice).createThing();
 
     invoiceItem.addFunctions(
         PurposeFunctionBuilder.forThing(invoiceItem, rootPackageName.getText())

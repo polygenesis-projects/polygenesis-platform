@@ -167,27 +167,30 @@ public abstract class DomainObjectDeducer {
     // Start by getting the superclass
     DomainObject superClass = makeSuperclass(abstractDomainObjects, thing);
 
-    // Continue with the properties and exclude the ones already in the superclass.
-    Set<DomainObjectProperty<?>> properties =
-        domainObjectPropertiesDeducer.deduceRootDomainObjectPropertiesFromThing(
-            superClass,
-            identityDomainObjectPropertiesDeducer.makeRootIdentityDomainObjectProperties(
-                thing, rootPackageName),
-            thing);
-
-    // Create
+    // Create DomainObject
     DomainObject domainObject =
         new AggregateRoot(
             isAbstract(thing) ? InstantiationType.ABSTRACT : InstantiationType.CONCRETE,
             domainObjectObjectName,
             thingPackageName,
-            properties,
             thing.getMultiTenant());
+
+    // Continue with the properties and exclude the ones already in the superclass.
+    Set<DomainObjectProperty<?>> properties =
+        domainObjectPropertiesDeducer.deduceRootDomainObjectPropertiesFromThing(
+            domainObject,
+            superClass,
+            identityDomainObjectPropertiesDeducer.makeRootIdentityDomainObjectProperties(
+                thing, rootPackageName),
+            thing);
+
+    domainObject.assignProperties(properties);
 
     // Get Constructors
     Set<Constructor> constructors =
         constructorsDeducer.deduceConstructors(
             rootPackageName,
+            domainObject,
             superClass,
             identityDomainObjectPropertiesDeducer.makeRootIdentityDomainObjectProperties(
                 thing, rootPackageName),
@@ -261,11 +264,7 @@ public abstract class DomainObjectDeducer {
       PackageName packageName = new PackageName("com.oregor.trinity4j.domain");
 
       return new AggregateRoot(
-          InstantiationType.ABSTRACT,
-          objectNameSuperclass,
-          packageName,
-          new LinkedHashSet<>(),
-          thing.getMultiTenant());
+          InstantiationType.ABSTRACT, objectNameSuperclass, packageName, thing.getMultiTenant());
     }
   }
 

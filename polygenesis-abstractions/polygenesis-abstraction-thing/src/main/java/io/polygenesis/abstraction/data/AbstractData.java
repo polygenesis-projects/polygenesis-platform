@@ -46,6 +46,7 @@ public abstract class AbstractData implements Data {
   private final VariableName variableName;
   private final DataPurpose dataPurpose;
   private final DataValidator dataValidator;
+  private final DataSourceType dataSourceType;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -63,11 +64,13 @@ public abstract class AbstractData implements Data {
       DataPrimaryType dataPrimaryType,
       VariableName variableName,
       DataPurpose dataPurpose,
-      DataValidator dataValidator) {
+      DataValidator dataValidator,
+      DataSourceType dataSourceType) {
     this.dataPrimaryType = dataPrimaryType;
     this.variableName = variableName;
     this.dataPurpose = dataPurpose;
     this.dataValidator = dataValidator;
+    this.dataSourceType = dataSourceType;
   }
 
   // ===============================================================================================
@@ -82,43 +85,32 @@ public abstract class AbstractData implements Data {
   public abstract String getDataType();
 
   // ===============================================================================================
-  // GETTERS
+  // GETTERS - OVERRIDES
   // ===============================================================================================
 
-  /**
-   * Gets data primary type.
-   *
-   * @return the data primary type
-   */
+  @Override
   public DataPrimaryType getDataPrimaryType() {
     return dataPrimaryType;
   }
 
-  /**
-   * Gets variable name.
-   *
-   * @return the variable name
-   */
+  @Override
   public VariableName getVariableName() {
     return variableName;
   }
 
-  /**
-   * Gets data business type.
-   *
-   * @return the data business type
-   */
+  @Override
   public DataPurpose getDataPurpose() {
     return dataPurpose;
   }
 
-  /**
-   * Gets data validator.
-   *
-   * @return the data validator
-   */
+  @Override
   public DataValidator getDataValidator() {
     return dataValidator;
+  }
+
+  @Override
+  public DataSourceType getDataSourceType() {
+    return dataSourceType;
   }
 
   // ===============================================================================================
@@ -253,15 +245,16 @@ public abstract class AbstractData implements Data {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    AbstractData data = (AbstractData) o;
-    return dataPrimaryType == data.dataPrimaryType
-        && Objects.equals(variableName, data.variableName)
-        && Objects.equals(dataPurpose, data.dataPurpose)
-        && Objects.equals(dataValidator, data.dataValidator);
+    AbstractData that = (AbstractData) o;
+    return dataPrimaryType == that.dataPrimaryType
+        && Objects.equals(variableName, that.variableName)
+        && Objects.equals(dataPurpose, that.dataPurpose)
+        && Objects.equals(dataValidator, that.dataValidator)
+        && dataSourceType == that.dataSourceType;
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(dataPrimaryType, variableName, dataPurpose, dataValidator);
+    return Objects.hash(dataPrimaryType, variableName, dataPurpose, dataValidator, dataSourceType);
   }
 }

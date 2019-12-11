@@ -158,7 +158,12 @@ public class DataPrimitive extends AbstractData {
       PrimitiveType primitiveType,
       Set<Annotation> annotations,
       DataObject dataObject) {
-    super(DataPrimaryType.PRIMITIVE, variableName, dataPurpose, dataValidator);
+    super(
+        DataPrimaryType.PRIMITIVE,
+        variableName,
+        dataPurpose,
+        dataValidator,
+        DataSourceType.DEFAULT);
     this.primitiveType = primitiveType;
     this.annotations = annotations;
     this.dataObject = dataObject;

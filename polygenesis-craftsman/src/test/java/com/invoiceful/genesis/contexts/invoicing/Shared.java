@@ -23,6 +23,7 @@ package com.invoiceful.genesis.contexts.invoicing;
 import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.abstraction.data.DataPurpose;
+import io.polygenesis.abstraction.data.DataSourceType;
 import io.polygenesis.abstraction.data.DataValidator;
 import io.polygenesis.abstraction.data.dsl.DataBuilder;
 import io.polygenesis.commons.valueobjects.ObjectName;
@@ -46,7 +47,8 @@ public class Shared {
         DataValidator.empty(),
         new ObjectName("title"),
         rootPackageName.withSubPackage("shared"),
-        data);
+        data,
+        DataSourceType.DEFAULT);
   }
 
   public static DataObject description(PackageName rootPackageName) {
@@ -58,7 +60,8 @@ public class Shared {
         DataValidator.empty(),
         new ObjectName("description"),
         rootPackageName.withSubPackage("shared"),
-        data);
+        data,
+        DataSourceType.DEFAULT);
   }
 
   public static DataObject quantity(PackageName rootPackageName) {
@@ -70,7 +73,8 @@ public class Shared {
         DataValidator.empty(),
         new ObjectName("quantity"),
         rootPackageName.withSubPackage("shared"),
-        data);
+        data,
+        DataSourceType.DEFAULT);
   }
 
   public static DataObject unitCost(PackageName rootPackageName) {
@@ -82,7 +86,8 @@ public class Shared {
         DataValidator.empty(),
         new ObjectName("unitCost"),
         rootPackageName.withSubPackage("shared"),
-        data);
+        data,
+        DataSourceType.DEFAULT);
   }
 
   public static DataObject lineTotal(PackageName rootPackageName) {
@@ -94,7 +99,8 @@ public class Shared {
         DataValidator.empty(),
         new ObjectName("lineTotal"),
         rootPackageName.withSubPackage("shared"),
-        data);
+        data,
+        DataSourceType.DEFAULT);
   }
 
   public static DataObject discount(PackageName rootPackageName) {
@@ -112,7 +118,8 @@ public class Shared {
         DataValidator.empty(),
         new ObjectName("discount"),
         rootPackageName.withSubPackage("shared"),
-        data);
+        data,
+        DataSourceType.DEFAULT);
   }
 
   public static DataObject name(String rootPackageName) {
@@ -124,7 +131,8 @@ public class Shared {
         DataValidator.empty(),
         new ObjectName("name"),
         new PackageName(rootPackageName).withSubPackage("shared"),
-        data);
+        data,
+        DataSourceType.DEFAULT);
   }
 
   public static DataObject language(String rootPackageName) {
@@ -136,7 +144,8 @@ public class Shared {
         DataValidator.empty(),
         new ObjectName("language"),
         new PackageName(rootPackageName).withSubPackage("shared"),
-        data);
+        data,
+        DataSourceType.DEFAULT);
   }
 
   /**
@@ -162,6 +171,7 @@ public class Shared {
         DataValidator.empty(),
         new ObjectName("taxDetails"),
         new PackageName(rootPackageName).withSubPackage("shared"),
-        data);
+        data,
+        DataSourceType.DEFAULT);
   }
 }

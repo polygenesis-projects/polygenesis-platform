@@ -91,7 +91,8 @@ public class DataArray extends AbstractData {
             ? new VariableName(TextConverter.toPlural(variableName.getText()))
             : null,
         dataPurpose,
-        dataValidator);
+        dataValidator,
+        DataSourceType.DEFAULT);
     this.arrayElement = arrayElement;
   }
 

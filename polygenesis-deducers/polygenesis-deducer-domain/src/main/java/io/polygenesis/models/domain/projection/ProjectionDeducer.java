@@ -115,12 +115,7 @@ public class ProjectionDeducer implements Deducer<ProjectionMetamodelRepository>
             new ObjectName(String.format("%sId", thing.getThingName().getText())),
             thing.getMultiTenant());
 
-    Set<DomainObjectProperty<?>> properties =
-        domainObjectPropertiesDeducer.deduceDomainObjectPropertiesFromThing(
-            identityDomainObjectPropertiesDeducer.makeProjectionIdentityDomainObjectProperties(
-                thing, rootPackageName),
-            thing);
-
+    // Domain Object
     Projection projection =
         new Projection(
             InstantiationType.CONCRETE,
@@ -129,13 +124,23 @@ public class ProjectionDeducer implements Deducer<ProjectionMetamodelRepository>
                 String.format(
                     "%s.%s",
                     rootPackageName.getText(), thing.getThingName().getText().toLowerCase())),
-            properties,
             thing.getMultiTenant());
+
+    // Properties
+    Set<DomainObjectProperty<?>> properties =
+        domainObjectPropertiesDeducer.deduceDomainObjectPropertiesFromThing(
+            projection,
+            identityDomainObjectPropertiesDeducer.makeProjectionIdentityDomainObjectProperties(
+                thing, rootPackageName),
+            thing);
+
+    projection.assignProperties(properties);
 
     // Get Constructors
     Set<Constructor> constructors =
         constructorsDeducer.deduceConstructors(
             rootPackageName,
+            projection,
             null,
             identityDomainObjectPropertiesDeducer.makeProjectionIdentityDomainObjectProperties(
                 thing, rootPackageName),
@@ -154,7 +159,6 @@ public class ProjectionDeducer implements Deducer<ProjectionMetamodelRepository>
         InstantiationType.ABSTRACT,
         multiTenant ? new ObjectName("TenantProjection") : new ObjectName("Projection"),
         new PackageName("com.oregor.trinity4j.domain"),
-        new LinkedHashSet<>(),
         multiTenant);
   }
 }

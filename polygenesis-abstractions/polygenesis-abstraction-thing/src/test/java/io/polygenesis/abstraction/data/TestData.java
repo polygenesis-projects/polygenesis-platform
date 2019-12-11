@@ -26,7 +26,12 @@ import io.polygenesis.commons.valueobjects.VariableName;
 class TestData extends AbstractData {
 
   public TestData(VariableName variableName) {
-    super(DataPrimaryType.PRIMITIVE, variableName, DataPurpose.any(), DataValidator.empty());
+    super(
+        DataPrimaryType.PRIMITIVE,
+        variableName,
+        DataPurpose.any(),
+        DataValidator.empty(),
+        DataSourceType.DEFAULT);
   }
 
   @Override

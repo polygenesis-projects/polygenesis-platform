@@ -74,7 +74,14 @@ public class DataEnum extends DataObject {
       ObjectName objectName,
       PackageName packageName,
       Set<Data> models) {
-    super(variableName, dataPurpose, dataValidator, objectName, packageName, models);
+    super(
+        variableName,
+        dataPurpose,
+        dataValidator,
+        objectName,
+        packageName,
+        models,
+        DataSourceType.DEFAULT);
   }
 
   // ===============================================================================================

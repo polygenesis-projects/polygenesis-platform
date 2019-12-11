@@ -37,6 +37,10 @@ import java.util.Set;
  */
 public class DataObject extends AbstractData {
 
+  // ===============================================================================================
+  // STATE
+  // ===============================================================================================
+
   private final ObjectName objectName;
   private final PackageName packageName;
   private final Set<Data> models;
@@ -58,7 +62,8 @@ public class DataObject extends AbstractData {
         DataValidator.empty(),
         objectName,
         packageName,
-        new LinkedHashSet<>());
+        new LinkedHashSet<>(),
+        DataSourceType.DEFAULT);
   }
 
   /**
@@ -75,7 +80,8 @@ public class DataObject extends AbstractData {
         DataValidator.empty(),
         objectName,
         packageName,
-        new LinkedHashSet<>());
+        new LinkedHashSet<>(),
+        DataSourceType.DEFAULT);
   }
 
   /**
@@ -94,8 +100,9 @@ public class DataObject extends AbstractData {
       DataValidator dataValidator,
       ObjectName objectName,
       PackageName packageName,
-      Set<Data> models) {
-    super(DataPrimaryType.OBJECT, variableName, dataPurpose, dataValidator);
+      Set<Data> models,
+      DataSourceType dataSourceType) {
+    super(DataPrimaryType.OBJECT, variableName, dataPurpose, dataValidator, dataSourceType);
     this.objectName = objectName;
     this.packageName = packageName;
     this.models = models;
@@ -118,7 +125,8 @@ public class DataObject extends AbstractData {
         getDataValidator(),
         objectName,
         getPackageName(),
-        getModels());
+        getModels(),
+        getDataSourceType());
   }
 
   /**
@@ -134,7 +142,8 @@ public class DataObject extends AbstractData {
         getDataValidator(),
         objectName,
         getPackageName(),
-        getModels());
+        getModels(),
+        getDataSourceType());
   }
 
   /**
@@ -149,7 +158,8 @@ public class DataObject extends AbstractData {
         getDataValidator(),
         objectName,
         getPackageName(),
-        getModels());
+        getModels(),
+        getDataSourceType());
   }
 
   /**
@@ -164,7 +174,8 @@ public class DataObject extends AbstractData {
         getDataValidator(),
         new ObjectName(String.format("%sDto", getObjectName().getText())),
         getPackageName(),
-        getModels());
+        getModels(),
+        getDataSourceType());
   }
 
   // ===============================================================================================

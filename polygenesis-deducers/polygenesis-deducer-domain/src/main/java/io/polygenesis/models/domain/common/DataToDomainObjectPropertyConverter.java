@@ -24,9 +24,15 @@ import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.abstraction.data.DataPrimitive;
 import io.polygenesis.abstraction.data.DataPurpose;
-import io.polygenesis.commons.converter.Converter;
+import io.polygenesis.commons.valueobjects.ObjectName;
+import io.polygenesis.models.domain.AbstractAggregateRootId;
 import io.polygenesis.models.domain.AggregateEntityCollection;
+import io.polygenesis.models.domain.AggregateEntityId;
+import io.polygenesis.models.domain.AggregateRootId;
+import io.polygenesis.models.domain.BaseProperty;
+import io.polygenesis.models.domain.DomainObject;
 import io.polygenesis.models.domain.DomainObjectProperty;
+import io.polygenesis.models.domain.GenericTypeParameter;
 import io.polygenesis.models.domain.Mapper;
 import io.polygenesis.models.domain.Primitive;
 import io.polygenesis.models.domain.PrimitiveCollection;
@@ -44,25 +50,19 @@ import java.util.stream.Collectors;
  *
  * @author Christos Tsakostas
  */
-public class DataToDomainObjectPropertyConverter
-    implements Converter<Data, DomainObjectProperty<?>> {
+public class DataToDomainObjectPropertyConverter {
 
   // ===============================================================================================
   // FUNCTIONALITY
   // ===============================================================================================
 
-  /**
-   * Convert many set.
-   *
-   * @param data the data
-   * @return the set
-   */
-  public Set<DomainObjectProperty<?>> convertMany(Set<Data> data) {
-    return data.stream().map(this::convert).collect(Collectors.toCollection(LinkedHashSet::new));
+  public Set<DomainObjectProperty<?>> convertMany(DomainObject domainObject, Set<Data> data) {
+    return data.stream()
+        .map(dataInStream -> convert(domainObject, dataInStream))
+        .collect(Collectors.toCollection(LinkedHashSet::new));
   }
 
-  @Override
-  public DomainObjectProperty<?> convert(Data source, Object... args) {
+  public DomainObjectProperty<?> convert(DomainObject domainObject, Data source, Object... args) {
     switch (source.getDataPrimaryType()) {
       case ARRAY:
         switch (source.getAsDataArray().getArrayElement().getDataPrimaryType()) {
@@ -81,11 +81,7 @@ public class DataToDomainObjectPropertyConverter
       case OBJECT:
         return new ValueObject(source.getAsDataObject());
       case PRIMITIVE:
-        if (source.getAsDataPrimitive().getDataObject() != null) {
-          return makeValueObjectFromPrimitive(source.getAsDataPrimitive());
-        } else {
-          return new Primitive(source.getAsDataPrimitive());
-        }
+        return convertPrimitive(domainObject, source.getAsDataPrimitive());
       case THING:
         if (source.getDataPurpose().equals(DataPurpose.referenceToThingById())) {
           return new ReferenceById(source);
@@ -107,6 +103,37 @@ public class DataToDomainObjectPropertyConverter
   // ===============================================================================================
   // PRIVATE
   // ===============================================================================================
+
+  private BaseProperty<?> convertPrimitive(DomainObject domainObject, DataPrimitive data) {
+    if (data.getDataPurpose().equals(DataPurpose.thingIdentity())) {
+      return makeDomainObjectIdentity(domainObject, data);
+    }
+
+    if (data.getAsDataPrimitive().getDataObject() != null) {
+      return makeValueObjectFromPrimitive(data.getAsDataPrimitive());
+    } else {
+      return new Primitive(data.getAsDataPrimitive());
+    }
+  }
+
+  private BaseProperty<?> makeDomainObjectIdentity(DomainObject domainObject, DataPrimitive data) {
+    DataObject dataObject =
+        new DataObject(
+            new ObjectName(String.format("%sId", domainObject.getObjectName().getText())),
+            domainObject.getPackageName());
+
+    if (domainObject.isAggregateRoot()) {
+      return new AggregateRootId(dataObject);
+    } else if (domainObject.isAbstractAggregateRoot()) {
+      return new AbstractAggregateRootId(dataObject, new GenericTypeParameter("I"));
+    } else if (domainObject.isAggregateEntity()) {
+      return new AggregateEntityId(dataObject);
+    } else if (domainObject.isAbstractAggregateEntity()) {
+      return new AggregateEntityId(dataObject);
+    } else {
+      throw new UnsupportedOperationException(domainObject.getDomainObjectType().name());
+    }
+  }
 
   private ValueObject makeValueObjectFromPrimitive(DataPrimitive dataPrimitive) {
     DataObject dataObject =

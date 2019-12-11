@@ -109,12 +109,7 @@ public class SupportiveEntityDeducer implements Deducer<SupportiveEntityMetamode
   private void makeSupportiveEntity(
       Set<SupportiveEntity> supportiveEntities, Thing thing, PackageName rootPackageName) {
 
-    Set<DomainObjectProperty<?>> properties =
-        domainObjectPropertiesDeducer.deduceDomainObjectPropertiesFromThing(
-            identityDomainObjectPropertiesDeducer.makeSupportiveIdentityDomainObjectProperties(
-                thing, rootPackageName),
-            thing);
-
+    // Domain Object
     SupportiveEntity supportiveEntity =
         new SupportiveEntity(
             new ObjectName(thing.getThingName().getText()),
@@ -123,13 +118,23 @@ public class SupportiveEntityDeducer implements Deducer<SupportiveEntityMetamode
                     "%s.%s.%s",
                     rootPackageName.getText(),
                     "supportive",
-                    thing.getThingName().getText().toLowerCase())),
-            properties);
+                    thing.getThingName().getText().toLowerCase())));
+
+    // Properties
+    Set<DomainObjectProperty<?>> properties =
+        domainObjectPropertiesDeducer.deduceDomainObjectPropertiesFromThing(
+            supportiveEntity,
+            identityDomainObjectPropertiesDeducer.makeSupportiveIdentityDomainObjectProperties(
+                thing, rootPackageName),
+            thing);
+
+    supportiveEntity.assignProperties(properties);
 
     // Get Constructors
     Set<Constructor> constructors =
         constructorsDeducer.deduceConstructors(
             rootPackageName,
+            supportiveEntity,
             null,
             identityDomainObjectPropertiesDeducer.makeSupportiveIdentityDomainObjectProperties(
                 thing, rootPackageName),

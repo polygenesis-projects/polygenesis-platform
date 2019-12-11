@@ -50,8 +50,6 @@ public class DomainEventConstructorDeducer {
    */
   @SuppressWarnings("CPD-START")
   public DomainEvent deduceFrom(PackageName rootPackageName, Thing thing, Constructor constructor) {
-    Set<DomainObjectProperty<?>> properties = constructor.getProperties();
-
     DomainEvent domainEvent =
         new DomainEvent(
             InstantiationType.CONCRETE,
@@ -59,8 +57,11 @@ public class DomainEventConstructorDeducer {
                 String.format(
                     "%sCreated", TextConverter.toUpperCamel(thing.getThingName().getText()))),
             thing.makePackageName(rootPackageName, thing),
-            properties,
             thing.getMultiTenant());
+
+    // Properties
+    Set<DomainObjectProperty<?>> properties = constructor.getProperties();
+    domainEvent.assignProperties(properties);
 
     Set<Constructor> constructors =
         new LinkedHashSet<>(
