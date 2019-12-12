@@ -21,7 +21,7 @@
 package com.invoiceful.genesis.contexts.access;
 
 import com.invoiceful.genesis.contexts.access.subscribers.OnSignUpConfirmed;
-import com.invoiceful.genesis.contexts.trinity4j.Trinity4jAggregateRoot;
+import com.oregor.trinity4j.Trinity4jAggregateRoot;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.ThingContext;
 import io.polygenesis.abstraction.thing.ThingContextBuilder;

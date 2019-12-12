@@ -18,7 +18,7 @@
  * ===========================LICENSE_END==================================
  */
 
-package com.invoiceful.genesis.contexts.trinity4j;
+package com.oregor.trinity4j;
 
 import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.DataObject;
