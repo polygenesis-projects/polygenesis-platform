@@ -33,13 +33,14 @@ import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.commons.valueobjects.VariableName;
 import io.polygenesis.core.AbstractNameablePackageable;
+import io.polygenesis.core.Generatable;
 
 /**
  * The type Batch process dispatcher.
  *
  * @author Christos Tsakostas
  */
-public class BatchProcessDispatcher extends AbstractNameablePackageable {
+public class BatchProcessDispatcher extends AbstractNameablePackageable implements Generatable {
 
   // ===============================================================================================
   // STATE

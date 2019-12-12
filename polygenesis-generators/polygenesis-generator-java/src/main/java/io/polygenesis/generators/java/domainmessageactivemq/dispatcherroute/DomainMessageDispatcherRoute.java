@@ -30,6 +30,7 @@ import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.AbstractNameablePackageable;
+import io.polygenesis.core.Generatable;
 import io.polygenesis.generators.java.domainmessagesubscriber.dispatcher.DomainMessageDispatcher;
 
 /**
@@ -37,7 +38,8 @@ import io.polygenesis.generators.java.domainmessagesubscriber.dispatcher.DomainM
  *
  * @author Christos Tsakostas
  */
-public class DomainMessageDispatcherRoute extends AbstractNameablePackageable {
+public class DomainMessageDispatcherRoute extends AbstractNameablePackageable
+    implements Generatable {
 
   // ===============================================================================================
   // STATE

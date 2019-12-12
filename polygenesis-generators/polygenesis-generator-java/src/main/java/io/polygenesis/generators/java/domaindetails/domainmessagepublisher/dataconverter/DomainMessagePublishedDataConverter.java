@@ -23,13 +23,15 @@ package io.polygenesis.generators.java.domaindetails.domainmessagepublisher.data
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.AbstractNameablePackageable;
+import io.polygenesis.core.Generatable;
 
 /**
  * The type Domain message published data converter.
  *
  * @author Christos Tsakostas
  */
-public class DomainMessagePublishedDataConverter extends AbstractNameablePackageable {
+public class DomainMessagePublishedDataConverter extends AbstractNameablePackageable
+    implements Generatable {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)

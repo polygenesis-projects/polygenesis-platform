@@ -28,7 +28,7 @@ import java.io.ByteArrayOutputStream;
  * @param <S> the type parameter
  * @author Christos Tsakostas
  */
-public class AbstractUnitGenerator<S> implements UnitGenerator<S> {
+public class AbstractUnitGenerator<S extends Generatable> implements UnitGenerator<S> {
 
   // ===============================================================================================
   // DEPENDENCIES
@@ -58,7 +58,9 @@ public class AbstractUnitGenerator<S> implements UnitGenerator<S> {
 
   @Override
   public void generate(S source, ExportInfo exportInfo, Object... args) {
-    ByteArrayOutputStream byteArrayOutputStream = transformer.transform(source);
-    exporter.export(byteArrayOutputStream, exportInfo);
+    if (source.isExportable()) {
+      ByteArrayOutputStream byteArrayOutputStream = transformer.transform(source);
+      exporter.export(byteArrayOutputStream, exportInfo);
+    }
   }
 }

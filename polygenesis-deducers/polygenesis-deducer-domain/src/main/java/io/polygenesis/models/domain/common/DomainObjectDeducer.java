@@ -232,6 +232,11 @@ public abstract class DomainObjectDeducer {
       domainObject.assignPersistence(persistence);
     }
 
+    // Exportable
+    if (thing.supportsAbstractionScope(AbstractionScope.externallyProvided())) {
+      domainObject.changeExportableTo(false);
+    }
+
     // Add
     domainObjectsToFill.add(domainObject);
   }

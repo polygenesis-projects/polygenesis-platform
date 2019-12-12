@@ -23,6 +23,7 @@ package io.polygenesis.generators.java.domain.supportiveentity.repository;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.AbstractNameablePackageable;
+import io.polygenesis.core.Generatable;
 import io.polygenesis.models.domain.SupportiveEntity;
 
 /**
@@ -30,7 +31,7 @@ import io.polygenesis.models.domain.SupportiveEntity;
  *
  * @author Christos Tsakostas
  */
-public class SupportiveEntityRepository extends AbstractNameablePackageable {
+public class SupportiveEntityRepository extends AbstractNameablePackageable implements Generatable {
 
   // ===============================================================================================
   // STATE

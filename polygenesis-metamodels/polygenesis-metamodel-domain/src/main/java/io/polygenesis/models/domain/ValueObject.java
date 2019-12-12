@@ -25,6 +25,7 @@ import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
+import io.polygenesis.core.Generatable;
 import io.polygenesis.core.Nameable;
 import io.polygenesis.core.Packageable;
 
@@ -33,7 +34,8 @@ import io.polygenesis.core.Packageable;
  *
  * @author Christos Tsakostas
  */
-public class ValueObject extends BaseProperty<DataObject> implements Nameable, Packageable {
+public class ValueObject extends BaseProperty<DataObject>
+    implements Generatable, Nameable, Packageable {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)

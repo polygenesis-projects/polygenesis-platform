@@ -21,6 +21,7 @@
 package io.polygenesis.generators.angular.project.approutingmodule.source;
 
 import io.polygenesis.commons.valueobjects.ObjectName;
+import io.polygenesis.core.Generatable;
 import io.polygenesis.core.Nameable;
 
 /**
@@ -28,7 +29,7 @@ import io.polygenesis.core.Nameable;
  *
  * @author Christos Tsakostas
  */
-public class AppRoutingModule implements Nameable {
+public class AppRoutingModule implements Generatable, Nameable {
 
   // ===============================================================================================
   // OVERRIDES

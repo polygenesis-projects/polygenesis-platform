@@ -23,13 +23,14 @@ package io.polygenesis.generators.java.domain.supportiveentity.id;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.AbstractNameablePackageable;
+import io.polygenesis.core.Generatable;
 
 /**
  * The type Supportive entity repository.
  *
  * @author Christos Tsakostas
  */
-public class SupportiveEntityId extends AbstractNameablePackageable {
+public class SupportiveEntityId extends AbstractNameablePackageable implements Generatable {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)

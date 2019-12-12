@@ -24,6 +24,7 @@ import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.commons.valueobjects.Name;
 import io.polygenesis.commons.valueobjects.ObjectName;
+import io.polygenesis.core.Generatable;
 import io.polygenesis.core.Nameable;
 import io.polygenesis.metamodels.ui.feature.Feature;
 import java.util.Objects;
@@ -33,7 +34,7 @@ import java.util.Objects;
  *
  * @author Christos Tsakostas
  */
-public class Widget implements Nameable {
+public class Widget implements Generatable, Nameable {
 
   // ===============================================================================================
   // STATE

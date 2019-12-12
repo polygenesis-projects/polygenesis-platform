@@ -22,6 +22,7 @@ package io.polygenesis.models.domain;
 
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
+import io.polygenesis.core.Generatable;
 import io.polygenesis.core.Nameable;
 
 /**
@@ -29,7 +30,7 @@ import io.polygenesis.core.Nameable;
  *
  * @author Christos Tsakostas
  */
-public class Persistence implements Nameable {
+public class Persistence implements Generatable, Nameable {
 
   private PackageName packageName;
   private ObjectName objectName;

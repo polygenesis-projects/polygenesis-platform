@@ -23,13 +23,14 @@ package io.polygenesis.generators.java.domaindetails.domainmessagepublisher.publ
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.AbstractNameablePackageable;
+import io.polygenesis.core.Generatable;
 
 /**
  * The type Domain message publish dto.
  *
  * @author Christos Tsakostas
  */
-public class DomainMessagePublishDto extends AbstractNameablePackageable {
+public class DomainMessagePublishDto extends AbstractNameablePackageable implements Generatable {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)

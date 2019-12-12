@@ -23,6 +23,7 @@ package io.polygenesis.metamodels.ui.screen;
 import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.commons.valueobjects.Name;
 import io.polygenesis.commons.valueobjects.ObjectName;
+import io.polygenesis.core.Generatable;
 import io.polygenesis.core.Nameable;
 import io.polygenesis.metamodels.ui.feature.Feature;
 import java.util.Objects;
@@ -32,7 +33,7 @@ import java.util.Objects;
  *
  * @author Christos Tsakostas
  */
-public class Screen implements Nameable {
+public class Screen implements Generatable, Nameable {
 
   // ===============================================================================================
   // STATE

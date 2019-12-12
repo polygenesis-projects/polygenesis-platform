@@ -38,6 +38,7 @@ import io.polygenesis.commons.valueobjects.Name;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.commons.valueobjects.VariableName;
+import io.polygenesis.core.Generatable;
 import io.polygenesis.models.api.ServiceMethod;
 import io.polygenesis.models.messaging.subscriber.SubscriberMetamodel;
 import java.util.Arrays;
@@ -49,7 +50,7 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class DomainMessageSubscriber extends SubscriberMetamodel {
+public class DomainMessageSubscriber extends SubscriberMetamodel implements Generatable {
 
   // ===============================================================================================
   // STATE

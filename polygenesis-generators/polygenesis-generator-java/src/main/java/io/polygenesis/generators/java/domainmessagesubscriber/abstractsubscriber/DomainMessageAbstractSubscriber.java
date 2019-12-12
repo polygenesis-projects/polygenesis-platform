@@ -23,13 +23,15 @@ package io.polygenesis.generators.java.domainmessagesubscriber.abstractsubscribe
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.AbstractNameablePackageable;
+import io.polygenesis.core.Generatable;
 
 /**
  * The type Domain message abstract subscriber.
  *
  * @author Christos Tsakostas
  */
-public class DomainMessageAbstractSubscriber extends AbstractNameablePackageable {
+public class DomainMessageAbstractSubscriber extends AbstractNameablePackageable
+    implements Generatable {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)

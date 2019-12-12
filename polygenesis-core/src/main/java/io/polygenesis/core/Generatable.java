@@ -18,32 +18,21 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.generators.java.domaindetails.domainmessagepublisher.scheduledpublisher;
-
-import io.polygenesis.commons.valueobjects.ObjectName;
-import io.polygenesis.commons.valueobjects.PackageName;
-import io.polygenesis.core.AbstractNameablePackageable;
-import io.polygenesis.core.Generatable;
+package io.polygenesis.core;
 
 /**
- * The type Scheduled domain message publisher.
+ * The interface Generatable.
  *
  * @author Christos Tsakostas
  */
-public class ScheduledDomainMessagePublisher extends AbstractNameablePackageable
-    implements Generatable {
-
-  // ===============================================================================================
-  // CONSTRUCTOR(S)
-  // ===============================================================================================
+public interface Generatable {
 
   /**
-   * Instantiates a new Scheduled domain message publisher.
+   * Is exportable boolean.
    *
-   * @param objectName the object name
-   * @param packageName the package name
+   * @return the boolean
    */
-  public ScheduledDomainMessagePublisher(ObjectName objectName, PackageName packageName) {
-    super(objectName, packageName);
+  default Boolean isExportable() {
+    return true;
   }
 }

@@ -26,7 +26,7 @@ package io.polygenesis.core;
  * @param <S> the type parameter
  * @author Christos Tsakostas
  */
-public interface UnitGenerator<S> {
+public interface UnitGenerator<S extends Generatable> {
 
   /**
    * Generate.

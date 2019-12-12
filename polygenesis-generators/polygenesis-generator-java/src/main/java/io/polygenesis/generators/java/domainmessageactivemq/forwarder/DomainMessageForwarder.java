@@ -33,13 +33,14 @@ import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.commons.valueobjects.VariableName;
 import io.polygenesis.core.AbstractNameablePackageable;
+import io.polygenesis.core.Generatable;
 
 /**
  * The type Domain message forwarder.
  *
  * @author Christos Tsakostas
  */
-public class DomainMessageForwarder extends AbstractNameablePackageable {
+public class DomainMessageForwarder extends AbstractNameablePackageable implements Generatable {
 
   // ===============================================================================================
   // STATE

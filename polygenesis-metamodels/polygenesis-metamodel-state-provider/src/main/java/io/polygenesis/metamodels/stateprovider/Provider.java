@@ -24,6 +24,7 @@ import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.commons.valueobjects.FeatureName;
 import io.polygenesis.commons.valueobjects.Name;
 import io.polygenesis.commons.valueobjects.ObjectName;
+import io.polygenesis.core.Generatable;
 import io.polygenesis.core.Metamodel;
 import java.util.LinkedHashSet;
 import java.util.Objects;
@@ -34,7 +35,7 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class Provider implements Metamodel {
+public class Provider implements Generatable, Metamodel {
 
   // ===============================================================================================
   // STATE
