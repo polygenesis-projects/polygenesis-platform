@@ -34,6 +34,7 @@ import io.polygenesis.commons.valueobjects.Name;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.commons.valueobjects.VariableName;
+import io.polygenesis.core.Generatable;
 import io.polygenesis.core.Nameable;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -43,7 +44,7 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class ServiceAspect implements Nameable {
+public class ServiceAspect implements Generatable, Nameable {
 
   // ===============================================================================================
   // STATE

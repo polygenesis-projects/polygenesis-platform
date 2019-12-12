@@ -23,13 +23,15 @@ package io.polygenesis.generators.java.domain.domainmessage.datarepository;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.AbstractNameablePackageable;
+import io.polygenesis.core.Generatable;
 
 /**
  * The type Domain message data repository.
  *
  * @author Christos Tsakostas
  */
-public class DomainMessageDataRepository extends AbstractNameablePackageable {
+public class DomainMessageDataRepository extends AbstractNameablePackageable
+    implements Generatable {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)

@@ -29,7 +29,7 @@ import java.util.Objects;
  *
  * @author Christos Tsakostas
  */
-public class AbstractMetamodel implements Metamodel {
+public abstract class AbstractMetamodel implements Generatable, Metamodel {
 
   // ===============================================================================================
   // STATE

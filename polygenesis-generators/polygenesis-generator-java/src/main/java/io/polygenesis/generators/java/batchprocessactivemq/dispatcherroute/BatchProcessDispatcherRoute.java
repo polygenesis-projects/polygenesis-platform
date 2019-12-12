@@ -30,6 +30,7 @@ import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.AbstractNameablePackageable;
+import io.polygenesis.core.Generatable;
 import io.polygenesis.generators.java.batchprocesssubscriber.dispatcher.BatchProcessDispatcher;
 
 /**
@@ -37,7 +38,8 @@ import io.polygenesis.generators.java.batchprocesssubscriber.dispatcher.BatchPro
  *
  * @author Christos Tsakostas
  */
-public class BatchProcessDispatcherRoute extends AbstractNameablePackageable {
+public class BatchProcessDispatcherRoute extends AbstractNameablePackageable
+    implements Generatable {
 
   // ===============================================================================================
   // STATE

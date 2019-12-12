@@ -23,13 +23,15 @@ package io.polygenesis.generators.java.batchprocesssubscriber.registry;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.AbstractNameablePackageable;
+import io.polygenesis.core.Generatable;
 
 /**
  * The type Batch process subscriber registry.
  *
  * @author Christos Tsakostas
  */
-public class BatchProcessSubscriberRegistry extends AbstractNameablePackageable {
+public class BatchProcessSubscriberRegistry extends AbstractNameablePackageable
+    implements Generatable {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)

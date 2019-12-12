@@ -29,6 +29,7 @@ import io.polygenesis.abstraction.thing.ThingName;
 import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
+import io.polygenesis.core.Generatable;
 import io.polygenesis.core.Metamodel;
 import java.util.LinkedHashSet;
 import java.util.Objects;
@@ -39,7 +40,7 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class Service implements Metamodel {
+public class Service implements Generatable, Metamodel {
 
   private PackageName packageName;
   private ServiceName serviceName;

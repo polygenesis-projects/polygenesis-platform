@@ -33,13 +33,15 @@ import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.commons.valueobjects.VariableName;
 import io.polygenesis.core.AbstractNameablePackageable;
+import io.polygenesis.core.Generatable;
 
 /**
  * The type Batch process abstract subscriber.
  *
  * @author Christos Tsakostas
  */
-public class BatchProcessAbstractSubscriber extends AbstractNameablePackageable {
+public class BatchProcessAbstractSubscriber extends AbstractNameablePackageable
+    implements Generatable {
 
   // ===============================================================================================
   // STATE

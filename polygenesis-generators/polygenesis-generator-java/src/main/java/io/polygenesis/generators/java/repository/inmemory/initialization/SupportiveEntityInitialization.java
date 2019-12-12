@@ -30,6 +30,7 @@ import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.AbstractNameablePackageable;
+import io.polygenesis.core.Generatable;
 import io.polygenesis.generators.java.domain.supportiveentity.repository.SupportiveEntityRepository;
 
 /**
@@ -37,7 +38,8 @@ import io.polygenesis.generators.java.domain.supportiveentity.repository.Support
  *
  * @author Christos Tsakostas
  */
-public class SupportiveEntityInitialization extends AbstractNameablePackageable {
+public class SupportiveEntityInitialization extends AbstractNameablePackageable
+    implements Generatable {
 
   // ===============================================================================================
   // STATE

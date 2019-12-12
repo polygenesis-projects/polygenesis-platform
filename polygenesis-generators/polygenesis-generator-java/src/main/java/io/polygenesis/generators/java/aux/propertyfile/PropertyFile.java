@@ -24,6 +24,7 @@ import io.polygenesis.commons.valueobjects.ContextName;
 import io.polygenesis.commons.valueobjects.Name;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
+import io.polygenesis.core.Generatable;
 import io.polygenesis.core.Nameable;
 
 /**
@@ -31,7 +32,7 @@ import io.polygenesis.core.Nameable;
  *
  * @author Christos Tsakostas
  */
-public class PropertyFile implements Nameable {
+public class PropertyFile implements Generatable, Nameable {
 
   // ===============================================================================================
   // STATE

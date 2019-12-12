@@ -33,13 +33,14 @@ import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.commons.valueobjects.VariableName;
 import io.polygenesis.core.AbstractNameablePackageable;
+import io.polygenesis.core.Generatable;
 
 /**
  * The type Incoming domain message.
  *
  * @author Christos Tsakostas
  */
-public class IncomingDomainMessage extends AbstractNameablePackageable {
+public class IncomingDomainMessage extends AbstractNameablePackageable implements Generatable {
 
   // ===============================================================================================
   // STATE

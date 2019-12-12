@@ -22,6 +22,7 @@ package io.polygenesis.models.apiimpl;
 
 import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.commons.valueobjects.ObjectName;
+import io.polygenesis.core.Generatable;
 import io.polygenesis.core.Metamodel;
 import io.polygenesis.models.api.Service;
 import io.polygenesis.models.domain.DomainObject;
@@ -33,7 +34,7 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class ServiceImplementation implements Metamodel {
+public class ServiceImplementation implements Generatable, Metamodel {
 
   // ===============================================================================================
   // STATE
@@ -81,7 +82,7 @@ public class ServiceImplementation implements Metamodel {
     }
 
     if (parentAggregateRoot != null) {
-      setDomainObject(parentAggregateRoot);
+      setParentAggregateRoot(parentAggregateRoot);
     }
   }
 

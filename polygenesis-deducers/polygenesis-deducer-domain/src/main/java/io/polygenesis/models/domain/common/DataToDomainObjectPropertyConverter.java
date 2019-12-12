@@ -106,7 +106,7 @@ public class DataToDomainObjectPropertyConverter {
 
   private BaseProperty<?> convertPrimitive(DomainObject domainObject, DataPrimitive data) {
     if (data.getDataPurpose().equals(DataPurpose.thingIdentity())) {
-      return makeDomainObjectIdentity(domainObject, data);
+      return makeDomainObjectIdentity(domainObject);
     }
 
     if (data.getAsDataPrimitive().getDataObject() != null) {
@@ -116,7 +116,7 @@ public class DataToDomainObjectPropertyConverter {
     }
   }
 
-  private BaseProperty<?> makeDomainObjectIdentity(DomainObject domainObject, DataPrimitive data) {
+  private BaseProperty<?> makeDomainObjectIdentity(DomainObject domainObject) {
     DataObject dataObject =
         new DataObject(
             new ObjectName(String.format("%sId", domainObject.getObjectName().getText())),

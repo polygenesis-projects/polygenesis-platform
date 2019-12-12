@@ -33,6 +33,7 @@ import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.commons.valueobjects.VariableName;
 import io.polygenesis.core.AbstractionScope;
+import io.polygenesis.core.Generatable;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -41,7 +42,7 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class FlutterApp extends Thing {
+public class FlutterApp extends Thing implements Generatable {
 
   // ===============================================================================================
   // STATIC

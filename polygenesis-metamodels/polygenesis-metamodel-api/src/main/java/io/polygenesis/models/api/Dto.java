@@ -26,6 +26,7 @@ import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.commons.valueobjects.ObjectName;
+import io.polygenesis.core.Generatable;
 import io.polygenesis.core.Nameable;
 import java.util.Objects;
 import java.util.Optional;
@@ -35,7 +36,7 @@ import java.util.Optional;
  *
  * @author Christos Tsakostas
  */
-public class Dto implements Nameable {
+public class Dto implements Generatable, Nameable {
 
   // ===============================================================================================
   // STATE

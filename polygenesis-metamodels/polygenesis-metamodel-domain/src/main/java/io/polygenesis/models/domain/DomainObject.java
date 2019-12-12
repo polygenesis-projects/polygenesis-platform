@@ -25,6 +25,7 @@ import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
+import io.polygenesis.core.Generatable;
 import io.polygenesis.core.Metamodel;
 import io.polygenesis.core.Nameable;
 import java.util.LinkedHashSet;
@@ -39,7 +40,7 @@ import java.util.stream.Collectors;
  * @author Christos Tsakostas
  */
 public abstract class DomainObject
-    implements Nameable, SubClassable, Metamodel, DomainObjectProperty<DataObject> {
+    implements Generatable, Nameable, SubClassable, Metamodel, DomainObjectProperty<DataObject> {
 
   // ===============================================================================================
   // REQUIRED STATE
@@ -54,6 +55,7 @@ public abstract class DomainObject
   private Set<StateQueryMethod> stateQueryMethods;
   private Set<FactoryMethod> factoryMethods;
   private Boolean multiTenant;
+  private Boolean exportable;
 
   // ===============================================================================================
   // OPTIONAL STATE
@@ -91,6 +93,7 @@ public abstract class DomainObject
     setPackageName(packageName);
     setMultiTenant(multiTenant);
 
+    setExportable(true);
     setProperties(new LinkedHashSet<>());
     setConstructors(new LinkedHashSet<>());
     setStateMutationMethods(new LinkedHashSet<>());
@@ -118,6 +121,7 @@ public abstract class DomainObject
     setObjectName(objectName);
     setPackageName(packageName);
 
+    setExportable(true);
     setProperties(new LinkedHashSet<>());
     setConstructors(new LinkedHashSet<>());
     setStateMutationMethods(new LinkedHashSet<>());
@@ -195,6 +199,15 @@ public abstract class DomainObject
    */
   public void assignProperties(Set<DomainObjectProperty<?>> properties) {
     setProperties(properties);
+  }
+
+  /**
+   * Change exportable to.
+   *
+   * @param exportable the exportable
+   */
+  public void changeExportableTo(Boolean exportable) {
+    setExportable(exportable);
   }
 
   // ===============================================================================================
@@ -423,6 +436,15 @@ public abstract class DomainObject
   }
 
   /**
+   * Gets exportable.
+   *
+   * @return the exportable
+   */
+  public Boolean getExportable() {
+    return exportable;
+  }
+
+  /**
    * Gets parent.
    *
    * @return the parent
@@ -550,6 +572,16 @@ public abstract class DomainObject
   }
 
   /**
+   * Sets exportable.
+   *
+   * @param exportable the exportable
+   */
+  private void setExportable(Boolean exportable) {
+    Assertion.isNotNull(exportable, "exportable is required");
+    this.exportable = exportable;
+  }
+
+  /**
    * Sets parent.
    *
    * @param parent the parent
@@ -582,6 +614,11 @@ public abstract class DomainObject
   // ===============================================================================================
   // OVERRIDES
   // ===============================================================================================
+
+  @Override
+  public Boolean isExportable() {
+    return getExportable();
+  }
 
   @Override
   public boolean hasSuperclass() {

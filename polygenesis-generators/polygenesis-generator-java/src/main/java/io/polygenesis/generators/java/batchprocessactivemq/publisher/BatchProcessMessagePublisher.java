@@ -33,13 +33,15 @@ import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.commons.valueobjects.VariableName;
 import io.polygenesis.core.AbstractNameablePackageable;
+import io.polygenesis.core.Generatable;
 
 /**
  * The type Batch process message publisher.
  *
  * @author Christos Tsakostas
  */
-public class BatchProcessMessagePublisher extends AbstractNameablePackageable {
+public class BatchProcessMessagePublisher extends AbstractNameablePackageable
+    implements Generatable {
 
   // ===============================================================================================
   // STATE

@@ -23,13 +23,15 @@ package io.polygenesis.generators.java.rdbms.domainmessage.springdomainmessagepu
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.AbstractNameablePackageable;
+import io.polygenesis.core.Generatable;
 
 /**
  * The type Spring domain message published data repository.
  *
  * @author Christos Tsakostas
  */
-public class SpringDomainMessagePublishedDataRepository extends AbstractNameablePackageable {
+public class SpringDomainMessagePublishedDataRepository extends AbstractNameablePackageable
+    implements Generatable {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
