@@ -18,7 +18,7 @@
  * ===========================LICENSE_END==================================
  */
 
-package com.invoiceful.genesis.contexts.trinity4j;
+package com.oregor.trinity4j;
 
 import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.DataObject;
@@ -72,7 +72,7 @@ public class Trinity4jAggregateRoot {
 
     return new DataObject(
         new VariableName("typeId"),
-        DataPurpose.any(),
+        DataPurpose.thingIdentity(),
         DataValidator.empty(),
         new ObjectName("aggregateRootId"),
         new PackageName("com.oregor.trinity4j.domain"),
