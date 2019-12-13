@@ -22,9 +22,11 @@ package com.oregor.trinity4j;
 
 import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.DataObject;
+import io.polygenesis.abstraction.data.DataPrimitive;
 import io.polygenesis.abstraction.data.DataPurpose;
 import io.polygenesis.abstraction.data.DataSourceType;
 import io.polygenesis.abstraction.data.DataValidator;
+import io.polygenesis.abstraction.data.PrimitiveType;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.commons.valueobjects.VariableName;
@@ -43,16 +45,57 @@ public class Trinity4jShared {
    *
    * @return the data object
    */
-  public static DataObject tenantId() {
+  public static Data tenantId() {
     Set<Data> data = new LinkedHashSet<>();
 
-    return new DataObject(
-        new VariableName("typeId"),
+    DataObject dataObject =
+        new DataObject(
+            new VariableName("tenantId"),
+            DataPurpose.tenantIdentity(),
+            DataValidator.empty(),
+            new ObjectName("tenantId"),
+            new PackageName("com.oregor.trinity4j.domain"),
+            data,
+            DataSourceType.EXTERNALLY_PROVIDED);
+
+    return DataPrimitive.ofDataBusinessTypeWithDataObject(
         DataPurpose.tenantIdentity(),
-        DataValidator.empty(),
-        new ObjectName("tenantId"),
-        new PackageName("com.oregor.trinity4j.domain"),
-        data,
-        DataSourceType.EXTERNALLY_PROVIDED);
+        PrimitiveType.STRING,
+        new VariableName("tenantId"),
+        dataObject);
+  }
+
+  public static Data aggregateRootId() {
+    Set<Data> data = new LinkedHashSet<>();
+
+    return DataPrimitive.ofDataBusinessTypeWithDataObject(
+        DataPurpose.thingIdentity(),
+        PrimitiveType.STRING,
+        new VariableName("id"),
+        new DataObject(
+            new VariableName("aggregateRootId"),
+            DataPurpose.tenantIdentity(),
+            DataValidator.empty(),
+            new ObjectName("aggregateRootId"),
+            new PackageName("com.oregor.trinity4j.domain"),
+            data,
+            DataSourceType.EXTERNALLY_PROVIDED));
+  }
+
+  public static Data aggregateEntityId() {
+    Set<Data> data = new LinkedHashSet<>();
+
+    return DataPrimitive.ofDataBusinessTypeWithDataObject(
+        DataPurpose.thingIdentity(),
+        PrimitiveType.STRING,
+        new VariableName("id"),
+        new DataObject(
+            new VariableName("aggregateEntityId"),
+            DataPurpose.tenantIdentity(),
+            DataValidator.empty(),
+            new ObjectName("aggregateEntityId"),
+            new PackageName("com.oregor.trinity4j.domain"),
+            data,
+            DataSourceType.EXTERNALLY_PROVIDED));
   }
 }

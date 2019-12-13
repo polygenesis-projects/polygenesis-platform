@@ -21,10 +21,10 @@
 package io.polygenesis.models.domain.aggregateroot;
 
 import io.polygenesis.core.AbstractionScope;
+import io.polygenesis.models.domain.AggregateRoot;
 import io.polygenesis.models.domain.common.ConstructorsDeducer;
 import io.polygenesis.models.domain.common.DomainObjectDeducer;
 import io.polygenesis.models.domain.common.DomainObjectPropertiesDeducer;
-import io.polygenesis.models.domain.common.IdentityDomainObjectPropertiesDeducer;
 import io.polygenesis.models.domain.common.StateMutationMethodDeducer;
 import io.polygenesis.models.domain.domainmessage.DomainEventConstructorDeducer;
 
@@ -33,7 +33,7 @@ import io.polygenesis.models.domain.domainmessage.DomainEventConstructorDeducer;
  *
  * @author Christos Tsakostas
  */
-public class AggregateRootDeducer extends DomainObjectDeducer {
+public class AggregateRootDeducer extends DomainObjectDeducer<AggregateRoot> {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -43,20 +43,18 @@ public class AggregateRootDeducer extends DomainObjectDeducer {
    * Instantiates a new Aggregate root deducer.
    *
    * @param domainObjectPropertiesDeducer the domain object properties deducer
-   * @param identityDomainObjectPropertiesDeducer the identity domain object properties deducer
    * @param constructorsDeducer the constructors deducer
    * @param stateMutationMethodDeducer the state mutation method deducer
    * @param domainEventConstructorDeducer the domain event constructor deducer
    */
   public AggregateRootDeducer(
       DomainObjectPropertiesDeducer domainObjectPropertiesDeducer,
-      IdentityDomainObjectPropertiesDeducer identityDomainObjectPropertiesDeducer,
       ConstructorsDeducer constructorsDeducer,
       StateMutationMethodDeducer stateMutationMethodDeducer,
       DomainEventConstructorDeducer domainEventConstructorDeducer) {
     super(
+        AggregateRoot.class,
         domainObjectPropertiesDeducer,
-        identityDomainObjectPropertiesDeducer,
         constructorsDeducer,
         stateMutationMethodDeducer,
         domainEventConstructorDeducer);
@@ -67,7 +65,12 @@ public class AggregateRootDeducer extends DomainObjectDeducer {
   // ===============================================================================================
 
   @Override
-  protected AbstractionScope getAbstractAbstractionScope() {
+  protected AbstractionScope getAbstractDomainObjectAbstractionScope() {
     return AbstractionScope.domainAbstractAggregateRoot();
+  }
+
+  @Override
+  protected AbstractionScope getDomainObjectAbstractionScope() {
+    return AbstractionScope.domainAggregateRoot();
   }
 }

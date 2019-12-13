@@ -20,6 +20,7 @@
 
 package com.invoiceful.genesis.contexts.access;
 
+import com.oregor.trinity4j.Trinity4jAggregateRoot;
 import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.dsl.DataBuilder;
 import io.polygenesis.abstraction.thing.Thing;
@@ -32,8 +33,11 @@ import java.util.Set;
 /** @author Christos Tsakostas */
 public class User {
 
-  public static Thing create(Thing aggregateRoot, String rootPackageName) {
-    Thing user = ThingBuilder.endToEnd("user").setSuperClass(aggregateRoot).createThing();
+  public static Thing create(PackageName rootPackageName) {
+    Thing user =
+        ThingBuilder.endToEnd("user")
+            .setSuperClass(Trinity4jAggregateRoot.create(rootPackageName))
+            .createThing(rootPackageName);
 
     user.addFunctions(
         PurposeFunctionBuilder.forThing(user, rootPackageName)
@@ -49,7 +53,7 @@ public class User {
     return user;
   }
 
-  private static Set<Data> createData(String rootPackageName) {
+  private static Set<Data> createData(PackageName rootPackageName) {
     return DataBuilder.create()
         .withTextPropertyToValueObject(
             "email", new ObjectName("email"), new PackageName("com.invoiceful.access.identity"))

@@ -87,6 +87,12 @@ public class AggregateRootIdLegacyClassTransformer
             new LinkedHashSet<>(Arrays.asList(new ParameterRepresentation("UUID", "rootId"))),
             "\t\tsuper(rootId);"));
 
+    constructorRepresentations.add(
+        createConstructorWithImplementation(
+            source.getObjectName().getText(),
+            new LinkedHashSet<>(Arrays.asList(new ParameterRepresentation("String", "rootId"))),
+            "\t\tsuper(rootId);"));
+
     return constructorRepresentations;
   }
 

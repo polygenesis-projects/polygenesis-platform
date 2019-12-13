@@ -24,7 +24,6 @@ import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.models.domain.common.ConstructorsDeducer;
 import io.polygenesis.models.domain.common.DataToDomainObjectPropertyConverter;
 import io.polygenesis.models.domain.common.DomainObjectPropertiesDeducer;
-import io.polygenesis.models.domain.common.IdentityDomainObjectPropertiesDeducer;
 
 /**
  * The type Supportive entity deducer factory.
@@ -38,7 +37,6 @@ public final class SupportiveEntityDeducerFactory {
   // ===============================================================================================
   private static DomainObjectPropertiesDeducer domainObjectPropertiesDeducer;
   private static ConstructorsDeducer constructorsDeducer;
-  private static IdentityDomainObjectPropertiesDeducer identityDomainObjectPropertiesDeducer;
 
   // ===============================================================================================
   // STATIC INITIALIZATION OF DEPENDENCIES
@@ -52,8 +50,6 @@ public final class SupportiveEntityDeducerFactory {
         new DomainObjectPropertiesDeducer(dataToDomainObjectPropertyConverter);
 
     constructorsDeducer = new ConstructorsDeducer(dataToDomainObjectPropertyConverter);
-
-    identityDomainObjectPropertiesDeducer = new IdentityDomainObjectPropertiesDeducer();
   }
 
   // ===============================================================================================
@@ -75,9 +71,6 @@ public final class SupportiveEntityDeducerFactory {
    */
   public static SupportiveEntityDeducer newInstance(PackageName packageName) {
     return new SupportiveEntityDeducer(
-        packageName,
-        constructorsDeducer,
-        domainObjectPropertiesDeducer,
-        identityDomainObjectPropertiesDeducer);
+        packageName, constructorsDeducer, domainObjectPropertiesDeducer);
   }
 }

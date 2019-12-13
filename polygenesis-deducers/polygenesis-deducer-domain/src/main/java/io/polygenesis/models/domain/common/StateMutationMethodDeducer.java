@@ -120,13 +120,16 @@ public class StateMutationMethodDeducer {
                 function.supportsAbstractionScope(AbstractionScope.domainAggregateRoot())
                     || function.supportsAbstractionScope(
                         AbstractionScope.domainAbstractAggregateRoot())
-                    || function.supportsAbstractionScope(AbstractionScope.domainAggregateEntity()))
+                    || function.supportsAbstractionScope(AbstractionScope.domainAggregateEntity())
+                    || function.supportsAbstractionScope(
+                        AbstractionScope.domainAbstractAggregateEntity()))
         .filter(function -> function.getPurpose().isModify())
         .forEach(
             function -> {
               Set<DomainObjectProperty<?>> properties = new LinkedHashSet<>();
 
               properties.addAll(getIdentityProperties(function, rootPackageName));
+
               properties.addAll(
                   dataToDomainObjectPropertyConverter.convertMany(
                       domainObject,
@@ -155,14 +158,13 @@ public class StateMutationMethodDeducer {
   private Set<DomainObjectProperty<?>> getIdentityProperties(
       Function function, PackageName rootPackageName) {
     if (function.getDelegatesToFunction() != null) {
-      Thing thing = function.getDelegatesToFunction().getThing();
+      Thing thingChild = function.getDelegatesToFunction().getThing();
 
-      if (thing.getOptionalParent() == null) {
-        return identityDomainObjectPropertiesDeducer.makeRootIdentityDomainObjectProperties(
-            thing, rootPackageName);
+      if (thingChild.getOptionalParent() == null) {
+        throw new IllegalStateException("thingChild.getOptionalParent() == null");
       } else {
         return identityDomainObjectPropertiesDeducer.makeEntityIdentityDomainObjectProperties(
-            thing, rootPackageName);
+            thingChild, rootPackageName);
       }
     } else {
       return new LinkedHashSet<>();

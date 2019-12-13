@@ -123,6 +123,7 @@ public class DataRepository {
             data ->
                 !data.getDataPurpose().equals(DataPurpose.thingIdentity())
                     && !data.getDataPurpose().equals(DataPurpose.parentThingIdentity())
+                    && !data.getDataPurpose().equals(DataPurpose.tenantIdentity())
                     && !data.getDataPurpose().equals(DataPurpose.pageNumber())
                     && !data.getDataPurpose().equals(DataPurpose.pageSize()))
         .collect(Collectors.toCollection(LinkedHashSet::new));
@@ -138,8 +139,8 @@ public class DataRepository {
         .stream()
         .filter(
             data ->
-                !data.getDataPurpose().equals(DataPurpose.thingIdentity())
-                    && !data.getDataPurpose().equals(DataPurpose.parentThingIdentity()))
+                !data.getDataPurpose().equals(DataPurpose.pageNumber())
+                    && !data.getDataPurpose().equals(DataPurpose.pageSize()))
         .collect(Collectors.toCollection(LinkedHashSet::new));
   }
 

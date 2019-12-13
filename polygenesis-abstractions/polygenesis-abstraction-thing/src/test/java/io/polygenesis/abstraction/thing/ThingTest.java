@@ -27,6 +27,7 @@ import io.polygenesis.abstraction.data.PrimitiveType;
 import io.polygenesis.abstraction.thing.dsl.FunctionBuilder;
 import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
 import io.polygenesis.commons.test.AbstractEqualityTest;
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.commons.valueobjects.VariableName;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -37,7 +38,7 @@ public class ThingTest extends AbstractEqualityTest<Thing> {
 
   @Test
   public void shouldCreateThingWithName() {
-    Thing thing = ThingBuilder.endToEnd("someThingName").createThing();
+    Thing thing = ThingBuilder.endToEnd("someThingName").createThing(PackageName.any());
 
     assertThat(thing).isNotNull();
 
@@ -84,11 +85,11 @@ public class ThingTest extends AbstractEqualityTest<Thing> {
   // ===============================================================================================
   @Override
   public Thing createObject1() {
-    return ThingBuilder.endToEnd("xxx").createThing();
+    return ThingBuilder.endToEnd("xxx").createThing(PackageName.any());
   }
 
   @Override
   public Thing createObject2() {
-    return ThingBuilder.endToEnd("yyy").createThing();
+    return ThingBuilder.endToEnd("yyy").createThing(PackageName.any());
   }
 }

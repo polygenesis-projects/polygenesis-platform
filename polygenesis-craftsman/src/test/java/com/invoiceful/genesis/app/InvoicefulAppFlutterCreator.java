@@ -53,7 +53,7 @@ public class InvoicefulAppFlutterCreator {
         ProjectBuilder.of("invoiceful")
             .addContext(
                 ContextAccess.get(
-                    String.format("%s.%s", FLUTTER_ROOT_PACKAGE, "access"),
+                    new PackageName(String.format("%s.%s", FLUTTER_ROOT_PACKAGE, "access")),
                     contextGenerator("access"),
                     deducers("access")))
             .build(FlutterProject.class);

@@ -21,8 +21,10 @@
 package io.polygenesis.models.domain.agrregateentity;
 
 import io.polygenesis.abstraction.thing.Thing;
+import io.polygenesis.abstraction.thing.ThingRepository;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
+import io.polygenesis.core.AbstractionScope;
 import io.polygenesis.models.domain.AggregateEntity;
 import io.polygenesis.models.domain.Constructor;
 import io.polygenesis.models.domain.DomainObject;
@@ -30,9 +32,10 @@ import io.polygenesis.models.domain.DomainObjectProperty;
 import io.polygenesis.models.domain.InstantiationType;
 import io.polygenesis.models.domain.StateMutationMethod;
 import io.polygenesis.models.domain.common.ConstructorsDeducer;
+import io.polygenesis.models.domain.common.DomainObjectDeducer;
 import io.polygenesis.models.domain.common.DomainObjectPropertiesDeducer;
-import io.polygenesis.models.domain.common.IdentityDomainObjectPropertiesDeducer;
 import io.polygenesis.models.domain.common.StateMutationMethodDeducer;
+import io.polygenesis.models.domain.domainmessage.DomainEventConstructorDeducer;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -41,15 +44,7 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class AggregateEntityDeducer {
-
-  // ===============================================================================================
-  // DEPENDENCIES
-  // ===============================================================================================
-  private final DomainObjectPropertiesDeducer domainObjectPropertiesDeducer;
-  private final IdentityDomainObjectPropertiesDeducer identityDomainObjectPropertiesDeducer;
-  private final ConstructorsDeducer constructorsDeducer;
-  private final StateMutationMethodDeducer stateMutationMethodDeducer;
+public class AggregateEntityDeducer extends DomainObjectDeducer<AggregateEntity> {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -59,19 +54,35 @@ public class AggregateEntityDeducer {
    * Instantiates a new Aggregate entity deducer.
    *
    * @param domainObjectPropertiesDeducer the domain object properties deducer
-   * @param identityDomainObjectPropertiesDeducer the identity domain object properties deducer
    * @param constructorsDeducer the constructors deducer
    * @param stateMutationMethodDeducer the state mutation method deducer
+   * @param domainEventConstructorDeducer the domain event constructor deducer
    */
   public AggregateEntityDeducer(
       DomainObjectPropertiesDeducer domainObjectPropertiesDeducer,
-      IdentityDomainObjectPropertiesDeducer identityDomainObjectPropertiesDeducer,
       ConstructorsDeducer constructorsDeducer,
-      StateMutationMethodDeducer stateMutationMethodDeducer) {
-    this.domainObjectPropertiesDeducer = domainObjectPropertiesDeducer;
-    this.identityDomainObjectPropertiesDeducer = identityDomainObjectPropertiesDeducer;
-    this.constructorsDeducer = constructorsDeducer;
-    this.stateMutationMethodDeducer = stateMutationMethodDeducer;
+      StateMutationMethodDeducer stateMutationMethodDeducer,
+      DomainEventConstructorDeducer domainEventConstructorDeducer) {
+    super(
+        AggregateEntity.class,
+        domainObjectPropertiesDeducer,
+        constructorsDeducer,
+        stateMutationMethodDeducer,
+        domainEventConstructorDeducer);
+  }
+
+  // ===============================================================================================
+  // OVERRIDES
+  // ===============================================================================================
+
+  @Override
+  protected AbstractionScope getAbstractDomainObjectAbstractionScope() {
+    return AbstractionScope.domainAbstractAggregateEntity();
+  }
+
+  @Override
+  protected AbstractionScope getDomainObjectAbstractionScope() {
+    return AbstractionScope.domainAggregateEntity();
   }
 
   // ===============================================================================================
@@ -82,13 +93,26 @@ public class AggregateEntityDeducer {
    * Deduce aggregate entities set.
    *
    * @param thingParent the thingParent
+   * @param domainObjectParent the domain object parent
+   * @param rootPackageName the root package name
    * @return the set
    */
   public Set<DomainObject> deduceAggregateEntities(
-      Thing thingParent, DomainObject domainObjectParent, PackageName rootPackageName) {
+      ThingRepository thingRepository,
+      Thing thingParent,
+      DomainObject domainObjectParent,
+      PackageName rootPackageName) {
     Set<DomainObject> aggregateEntities = new LinkedHashSet<>();
 
-    fillAggregateEntities(aggregateEntities, thingParent, domainObjectParent, rootPackageName);
+    Set<DomainObject> allAbstractDomainObjects =
+        getTopLevelAndAbstractSubclassesOfTopLevel(thingRepository, rootPackageName);
+
+    fillAggregateEntities(
+        aggregateEntities,
+        allAbstractDomainObjects,
+        thingParent,
+        domainObjectParent,
+        rootPackageName);
 
     return aggregateEntities;
   }
@@ -99,6 +123,7 @@ public class AggregateEntityDeducer {
 
   private void fillAggregateEntities(
       Set<DomainObject> aggregateEntitiesToFill,
+      Set<DomainObject> allAbstractDomainObjects,
       Thing thingParent,
       DomainObject domainObjectParent,
       PackageName rootPackageName) {
@@ -112,23 +137,33 @@ public class AggregateEntityDeducer {
 
               DomainObject aggregateEntity =
                   deduceAggregateEntity(
-                      domainObjectParent, thingChild, rootPackageName, thingPackageName);
+                      allAbstractDomainObjects,
+                      domainObjectParent,
+                      thingChild,
+                      rootPackageName,
+                      thingPackageName);
 
               aggregateEntitiesToFill.add(aggregateEntity);
 
               // Recursive iteration into children of entities
               fillAggregateEntities(
-                  aggregateEntitiesToFill, thingChild, aggregateEntity, rootPackageName);
+                  aggregateEntitiesToFill,
+                  allAbstractDomainObjects,
+                  thingChild,
+                  aggregateEntity,
+                  rootPackageName);
             });
   }
 
   private AggregateEntity deduceAggregateEntity(
+      Set<DomainObject> allAbstractDomainObjects,
       DomainObject domainObjectParent,
       Thing thingChild,
       PackageName rootPackageName,
       PackageName thingPackageName) {
 
-    DomainObject aggregateEntitySuperClass = makeSuperclass();
+    // Super Class
+    DomainObject aggregateEntitySuperClass = makeSuperclass(allAbstractDomainObjects, thingChild);
 
     // Domain Object
     AggregateEntity aggregateEntity =
@@ -142,23 +177,15 @@ public class AggregateEntityDeducer {
 
     // Properties
     Set<DomainObjectProperty<?>> properties =
-        domainObjectPropertiesDeducer.deduceEntityDomainObjectPropertiesFromThing(
-            aggregateEntity,
-            thingChild,
-            identityDomainObjectPropertiesDeducer.makeEntityIdentityDomainObjectProperties(
-                thingChild, rootPackageName));
+        domainObjectPropertiesDeducer.deduceDomainObjectPropertiesFromThingProperties(
+            aggregateEntity, aggregateEntitySuperClass, thingChild);
 
     aggregateEntity.assignProperties(properties);
 
     // Get Constructors
     Set<Constructor> constructors =
         constructorsDeducer.deduceConstructors(
-            rootPackageName,
-            aggregateEntity,
-            aggregateEntitySuperClass,
-            identityDomainObjectPropertiesDeducer.makeEntityIdentityDomainObjectProperties(
-                thingChild, rootPackageName),
-            thingChild);
+            rootPackageName, aggregateEntity, aggregateEntitySuperClass, thingChild);
 
     // Add Constructors
     aggregateEntity.addConstructors(constructors);
@@ -171,13 +198,5 @@ public class AggregateEntityDeducer {
     aggregateEntity.addStateMutationMethods(stateMutationMethods);
 
     return aggregateEntity;
-  }
-
-  private DomainObject makeSuperclass() {
-    return new AggregateEntity(
-        InstantiationType.ABSTRACT,
-        new ObjectName("AggregateEntity"),
-        new PackageName("com.oregor.trinity4j.domain"),
-        null);
   }
 }

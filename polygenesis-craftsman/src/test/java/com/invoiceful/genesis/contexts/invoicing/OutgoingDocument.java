@@ -21,11 +21,13 @@
 package com.invoiceful.genesis.contexts.invoicing;
 
 import com.invoiceful.genesis.contexts.access.Shared;
+import com.oregor.trinity4j.Trinity4jShared;
 import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.dsl.DataBuilder;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.dsl.PurposeFunctionBuilder;
 import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
+import io.polygenesis.commons.valueobjects.PackageName;
 import java.util.Set;
 
 /** @author Christos Tsakostas */
@@ -35,7 +37,7 @@ public class OutgoingDocument {
     Thing outgoingDocument =
         ThingBuilder.domainAbstractAggregateRoot("outgoingDocument")
             .setSuperClass(document)
-            .setMultiTenant(true)
+            .setMultiTenant(Trinity4jShared.tenantId())
             .createThing();
 
     outgoingDocument.addFunctions(
@@ -55,7 +57,7 @@ public class OutgoingDocument {
     return DataBuilder.create().withTextProperty("outName").build().build();
   }
 
-  private static Set<Data> confirmData(String rootPackageName) {
+  private static Set<Data> confirmData(PackageName rootPackageName) {
     return DataBuilder.create()
         .withTextPropertyToValueObject(
             "confirmationCode",

@@ -22,9 +22,11 @@ package com.invoiceful.genesis.contexts.access;
 
 import com.invoiceful.genesis.contexts.access.subscribers.OnSignUpConfirmed;
 import com.oregor.trinity4j.Trinity4jAggregateRoot;
+import com.oregor.trinity4j.Trinity4jTenantAggregateRoot;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.ThingContext;
 import io.polygenesis.abstraction.thing.ThingContextBuilder;
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.ContextGenerator;
 import io.polygenesis.core.Deducer;
 import java.util.Set;
@@ -33,17 +35,17 @@ import java.util.Set;
 public class ContextAccess {
 
   public static ThingContext get(
-      String rootPackageName, ContextGenerator contextGenerator, Set<Deducer<?>> deducers) {
-    Thing aggregateRoot = Trinity4jAggregateRoot.create(rootPackageName);
+      PackageName rootPackageName, ContextGenerator contextGenerator, Set<Deducer<?>> deducers) {
     Thing confirmation = Confirmation.create(rootPackageName);
     Thing signUp = SignUp.create(confirmation, rootPackageName);
-    Thing user = User.create(aggregateRoot, rootPackageName);
+    Thing user = User.create(rootPackageName);
 
     return ThingContextBuilder.of("access", contextGenerator)
         .withDeducers(deducers)
 
         // Trinity4J Abstract Aggregate Root
-        .addThing(aggregateRoot)
+        .addThing(Trinity4jAggregateRoot.create(rootPackageName))
+        .addThing(Trinity4jTenantAggregateRoot.create(rootPackageName))
 
         // Abstract Aggregate Roots
         .addThing(confirmation)

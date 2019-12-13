@@ -27,6 +27,7 @@ import io.polygenesis.abstraction.thing.ThingName;
 import io.polygenesis.abstraction.thing.dsl.FunctionBuilder;
 import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
 import io.polygenesis.commons.text.TextConverter;
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.models.api.Dto;
 import io.polygenesis.models.api.DtoType;
 import io.polygenesis.models.api.Service;
@@ -103,7 +104,7 @@ public class CollectionRecordDeducer {
   private DomainObjectConverterMethod makeCollectionRecordConversionMethod(
       CollectionRecordEntityPair pair) {
 
-    Thing thing = ThingBuilder.endToEnd("Converter").createThing();
+    Thing thing = ThingBuilder.endToEnd("Converter").createThing(PackageName.any());
 
     Function function =
         FunctionBuilder.of(

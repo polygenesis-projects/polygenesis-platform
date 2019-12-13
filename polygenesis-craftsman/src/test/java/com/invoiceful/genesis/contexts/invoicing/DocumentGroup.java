@@ -33,7 +33,8 @@ public class DocumentGroup {
 
   public static Thing create(Thing document, PackageName rootPackageName) {
     Thing documentGroup =
-        ThingBuilder.endToEndChildWithIdentity("documentGroup", document).createThing();
+        ThingBuilder.endToEndChildWithIdentity("documentGroup", document)
+            .createThing(rootPackageName);
 
     documentGroup.addFunctions(
         PurposeFunctionBuilder.forThing(documentGroup, rootPackageName.getText())

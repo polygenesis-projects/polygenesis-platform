@@ -20,6 +20,7 @@
 
 package com.invoiceful.genesis.contexts.invoicing;
 
+import com.oregor.trinity4j.Trinity4jAggregateEntity;
 import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.dsl.DataBuilder;
 import io.polygenesis.abstraction.thing.Thing;
@@ -44,7 +45,9 @@ public class InvoiceItem {
    */
   public static Thing create(Thing invoice, PackageName rootPackageName) {
     Thing invoiceItem =
-        ThingBuilder.endToEndChildWithIdentity("invoiceItem", invoice).createThing();
+        ThingBuilder.endToEndChildWithIdentity("invoiceItem", invoice)
+            .setSuperClass(Trinity4jAggregateEntity.create(rootPackageName))
+            .createThing(rootPackageName);
 
     invoiceItem.addFunctions(
         PurposeFunctionBuilder.forThing(invoiceItem, rootPackageName.getText())

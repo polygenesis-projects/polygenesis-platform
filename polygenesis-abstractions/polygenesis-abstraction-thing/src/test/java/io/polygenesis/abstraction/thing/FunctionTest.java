@@ -27,6 +27,7 @@ import io.polygenesis.abstraction.data.PrimitiveType;
 import io.polygenesis.abstraction.thing.dsl.FunctionBuilder;
 import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
 import io.polygenesis.commons.test.AbstractEqualityTest;
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.commons.valueobjects.VariableName;
 import org.junit.Test;
 
@@ -78,7 +79,9 @@ public class FunctionTest extends AbstractEqualityTest<Function> {
   @Override
   public Function createObject1() {
     return FunctionBuilder.of(
-            ThingBuilder.endToEnd("thingName").createThing(), "functionName", Purpose.create())
+            ThingBuilder.endToEnd("thingName").createThing(PackageName.any()),
+            "functionName",
+            Purpose.create())
         .setReturnValue(createDataPrimitive())
         .build();
   }
@@ -86,7 +89,7 @@ public class FunctionTest extends AbstractEqualityTest<Function> {
   @Override
   public Function createObject2() {
     return FunctionBuilder.of(
-            ThingBuilder.endToEnd("thingName").createThing(),
+            ThingBuilder.endToEnd("thingName").createThing(PackageName.any()),
             "anotherFunctionName",
             Purpose.create())
         .setReturnValue(createDataPrimitive())
@@ -99,14 +102,18 @@ public class FunctionTest extends AbstractEqualityTest<Function> {
 
   private Function createFunctionWithReturnValueAndNoArguments() {
     return FunctionBuilder.of(
-            ThingBuilder.endToEnd("thingName").createThing(), "functionName", Purpose.create())
+            ThingBuilder.endToEnd("thingName").createThing(PackageName.any()),
+            "functionName",
+            Purpose.create())
         .setReturnValue(createDataPrimitive())
         .build();
   }
 
   private Function createFunctionWithArgumentsAndNoReturnValue() {
     return FunctionBuilder.of(
-            ThingBuilder.endToEnd("thingName").createThing(), "functionName", Purpose.create())
+            ThingBuilder.endToEnd("thingName").createThing(PackageName.any()),
+            "functionName",
+            Purpose.create())
         .addArgument(DataPrimitive.of(PrimitiveType.STRING, new VariableName("jsonMessage")))
         .build();
   }

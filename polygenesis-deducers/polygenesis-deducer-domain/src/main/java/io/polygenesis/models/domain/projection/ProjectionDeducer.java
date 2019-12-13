@@ -38,7 +38,6 @@ import io.polygenesis.models.domain.Projection;
 import io.polygenesis.models.domain.ProjectionMetamodelRepository;
 import io.polygenesis.models.domain.common.ConstructorsDeducer;
 import io.polygenesis.models.domain.common.DomainObjectPropertiesDeducer;
-import io.polygenesis.models.domain.common.IdentityDomainObjectPropertiesDeducer;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -55,7 +54,6 @@ public class ProjectionDeducer implements Deducer<ProjectionMetamodelRepository>
   private final PackageName rootPackageName;
   private final ConstructorsDeducer constructorsDeducer;
   private final DomainObjectPropertiesDeducer domainObjectPropertiesDeducer;
-  private final IdentityDomainObjectPropertiesDeducer identityDomainObjectPropertiesDeducer;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -67,17 +65,14 @@ public class ProjectionDeducer implements Deducer<ProjectionMetamodelRepository>
    * @param rootPackageName the root package name
    * @param constructorsDeducer the constructors deducer
    * @param domainObjectPropertiesDeducer the domain object properties deducer
-   * @param identityDomainObjectPropertiesDeducer the identity domain object properties deducer
    */
   public ProjectionDeducer(
       PackageName rootPackageName,
       ConstructorsDeducer constructorsDeducer,
-      DomainObjectPropertiesDeducer domainObjectPropertiesDeducer,
-      IdentityDomainObjectPropertiesDeducer identityDomainObjectPropertiesDeducer) {
+      DomainObjectPropertiesDeducer domainObjectPropertiesDeducer) {
     this.rootPackageName = rootPackageName;
     this.constructorsDeducer = constructorsDeducer;
     this.domainObjectPropertiesDeducer = domainObjectPropertiesDeducer;
-    this.identityDomainObjectPropertiesDeducer = identityDomainObjectPropertiesDeducer;
   }
 
   // ===============================================================================================
@@ -128,23 +123,17 @@ public class ProjectionDeducer implements Deducer<ProjectionMetamodelRepository>
 
     // Properties
     Set<DomainObjectProperty<?>> properties =
-        domainObjectPropertiesDeducer.deduceDomainObjectPropertiesFromThing(
+        domainObjectPropertiesDeducer.deduceDomainObjectPropertiesFromThingProperties(
             projection,
-            identityDomainObjectPropertiesDeducer.makeProjectionIdentityDomainObjectProperties(
-                thing, rootPackageName),
+            // TODO
+            null,
             thing);
 
     projection.assignProperties(properties);
 
     // Get Constructors
     Set<Constructor> constructors =
-        constructorsDeducer.deduceConstructors(
-            rootPackageName,
-            projection,
-            null,
-            identityDomainObjectPropertiesDeducer.makeProjectionIdentityDomainObjectProperties(
-                thing, rootPackageName),
-            thing);
+        constructorsDeducer.deduceConstructors(rootPackageName, projection, null, thing);
 
     // Add Constructors
     projection.addConstructors(constructors);

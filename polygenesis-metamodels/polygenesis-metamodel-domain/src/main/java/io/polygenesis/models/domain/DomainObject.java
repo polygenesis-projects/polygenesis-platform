@@ -215,12 +215,22 @@ public abstract class DomainObject
   // ===============================================================================================
 
   /**
+   * Is abstract boolean.
+   *
+   * @return the boolean
+   */
+  public Boolean isAbstract() {
+    return isAbstractAggregateRoot() || isAbstractAggregateEntity();
+  }
+
+  /**
    * Is aggregate root boolean.
    *
    * @return the boolean
    */
   public Boolean isAggregateRoot() {
-    return getDomainObjectType().equals(DomainObjectType.AGGREGATE_ROOT);
+    return getDomainObjectType().equals(DomainObjectType.AGGREGATE_ROOT)
+        && getInstantiationType().equals(InstantiationType.CONCRETE);
   }
 
   /**
@@ -229,7 +239,9 @@ public abstract class DomainObject
    * @return the boolean
    */
   public Boolean isAbstractAggregateRoot() {
-    return getDomainObjectType().equals(DomainObjectType.ABSTRACT_AGGREGATE_ROOT);
+    return getDomainObjectType().equals(DomainObjectType.ABSTRACT_AGGREGATE_ROOT)
+        || getDomainObjectType().equals(DomainObjectType.AGGREGATE_ROOT)
+            && getInstantiationType().equals(InstantiationType.ABSTRACT);
   }
 
   /**
@@ -238,7 +250,8 @@ public abstract class DomainObject
    * @return the boolean
    */
   public Boolean isAggregateEntity() {
-    return getDomainObjectType().equals(DomainObjectType.AGGREGATE_ENTITY);
+    return getDomainObjectType().equals(DomainObjectType.AGGREGATE_ENTITY)
+        && getInstantiationType().equals(InstantiationType.CONCRETE);
   }
 
   /**
@@ -247,7 +260,19 @@ public abstract class DomainObject
    * @return the boolean
    */
   public Boolean isAbstractAggregateEntity() {
-    return getDomainObjectType().equals(DomainObjectType.ABSTRACT_AGGREGATE_ENTITY);
+    return getDomainObjectType().equals(DomainObjectType.ABSTRACT_AGGREGATE_ENTITY)
+        || getDomainObjectType().equals(DomainObjectType.AGGREGATE_ENTITY)
+            && getInstantiationType().equals(InstantiationType.ABSTRACT);
+  }
+
+  /**
+   * Is supportive entity boolean.
+   *
+   * @return the boolean
+   */
+  public Boolean isSupportiveEntity() {
+    return getDomainObjectType().equals(DomainObjectType.SUPPORTIVE_ENTITY)
+        && getInstantiationType().equals(InstantiationType.CONCRETE);
   }
 
   /**

@@ -408,6 +408,7 @@ public class DtoTransformer extends AbstractClassTransformer<Dto, DtoMethod> {
             String.format("List<%s>", TextConverter.toUpperCamel(arrayElement.getDataType())),
             "items"));
 
+    parameterRepresentations.add(new ParameterRepresentation("String", "seekMethodLeftOffValue"));
     parameterRepresentations.add(new ParameterRepresentation(INTEGER, "totalPages"));
     parameterRepresentations.add(new ParameterRepresentation(LONG, "totalElements"));
     parameterRepresentations.add(new ParameterRepresentation(INTEGER, "pageNumber"));
@@ -423,6 +424,7 @@ public class DtoTransformer extends AbstractClassTransformer<Dto, DtoMethod> {
         description,
         dataTypeTransformer.getModifierPublic(),
         parameterRepresentations,
-        "\t\tsuper(items, totalPages, totalElements, pageNumber, pageSize);");
+        "\t\tsuper(items, seekMethodLeftOffValue, "
+            + "totalPages, totalElements, pageNumber, pageSize);");
   }
 }

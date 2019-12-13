@@ -20,6 +20,7 @@
 
 package com.invoiceful.genesis.contexts.invoicing;
 
+import com.oregor.trinity4j.Trinity4jShared;
 import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.dsl.DataBuilder;
 import io.polygenesis.abstraction.thing.Thing;
@@ -31,21 +32,23 @@ import java.util.Set;
 /** @author Christos Tsakostas */
 public class Document {
 
-  public static Thing create(String rootPackageName) {
+  public static Thing create(PackageName rootPackageName) {
     Thing document =
-        ThingBuilder.domainAbstractAggregateRoot("document").setMultiTenant(true).createThing();
+        ThingBuilder.domainAbstractAggregateRoot("document")
+            .setMultiTenant(Trinity4jShared.tenantId())
+            .createThing(rootPackageName);
 
     document.addFunctions(
         PurposeFunctionBuilder.forThing(document, rootPackageName)
             .withFunctionCreate(createData(rootPackageName))
             .build());
 
-    document.addChild(DocumentGroup.create(document, new PackageName(rootPackageName)));
+    document.addChild(DocumentGroup.create(document, rootPackageName));
 
     return document;
   }
 
-  private static Set<Data> createData(String rootPackageName) {
+  private static Set<Data> createData(PackageName rootPackageName) {
     return DataBuilder.create().withTextProperty("name").build().build();
   }
 }

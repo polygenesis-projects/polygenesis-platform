@@ -113,11 +113,11 @@ public class DataReferenceToThingById extends AbstractData {
    * @return the as data primitive
    */
   // TODO: The following implementation needs SERIOUS refactoring
-  public DataPrimitive getAsDataPrimitive(String rootPackageName) {
+  public DataPrimitive getAsDataPrimitive(PackageName rootPackageName) {
     DataObject thingId =
         thing.getThingIdentityAsDataObjectFromDataPrimitive(
-            new PackageName(rootPackageName),
-            new VariableName("thingId"),
+            rootPackageName,
+            getVariableName(),
             DataPrimitive.of(PrimitiveType.UUID, new VariableName("rootId")));
 
     return DataPrimitive.ofDataBusinessTypeWithDataObject(

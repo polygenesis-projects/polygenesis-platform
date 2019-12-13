@@ -95,7 +95,7 @@ public class DomainDeducer implements Deducer<DomainObjectMetamodelRepository> {
 
     // Aggregate Roots
     Set<DomainObject> aggregateRoots =
-        aggregateRootDeducer.deduceFrom(thingRepository, rootPackageName);
+        aggregateRootDeducer.deduceDomainObjects(thingRepository, rootPackageName);
 
     domainObjects.addAll(aggregateRoots);
 
@@ -111,7 +111,7 @@ public class DomainDeducer implements Deducer<DomainObjectMetamodelRepository> {
 
           aggregateEntities.addAll(
               aggregateEntityDeducer.deduceAggregateEntities(
-                  thingParent, aggregateRoot, getRootPackageName()));
+                  thingRepository, thingParent, aggregateRoot, getRootPackageName()));
         });
 
     domainObjects.addAll(aggregateEntities);

@@ -21,9 +21,12 @@
 package io.polygenesis.abstraction.thing.dsl;
 
 import io.polygenesis.abstraction.data.Data;
+import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.abstraction.data.DataPrimitive;
 import io.polygenesis.abstraction.data.DataPurpose;
 import io.polygenesis.abstraction.data.DataRepository;
+import io.polygenesis.abstraction.data.DataSourceType;
+import io.polygenesis.abstraction.data.DataValidator;
 import io.polygenesis.abstraction.data.PrimitiveType;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.ThingName;
@@ -31,6 +34,8 @@ import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.commons.keyvalue.KeyValue;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.commons.valueobjects.ContextName;
+import io.polygenesis.commons.valueobjects.ObjectName;
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.commons.valueobjects.VariableName;
 import io.polygenesis.core.AbstractionScope;
 import java.util.LinkedHashSet;
@@ -57,6 +62,11 @@ public abstract class AbstractThingBuilder<T extends AbstractThingBuilder<?>> {
   private Boolean multiTenant = false;
   private Thing parentThing;
   private Set<KeyValue> metadata = new LinkedHashSet<>();
+
+  private Data tenantId;
+  private boolean supportsThingIdentity = false;
+  private boolean supportsParentThingIdentity = false;
+  private boolean supportsTenantIdentity = false;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -125,25 +135,13 @@ public abstract class AbstractThingBuilder<T extends AbstractThingBuilder<?>> {
   /**
    * Sets multi tenant.
    *
-   * @param multiTenant the multi tenant
+   * @param tenantId the tenant id
    * @return the multi tenant
    */
-  public T setMultiTenant(Boolean multiTenant) {
-    this.multiTenant = multiTenant;
-
-    // TODO
-    //    if (parentThing == null) {
-    //      this.thingProperties.addData(
-    //          DataPrimitive.ofDataBusinessType(
-    //              DataPurpose.tenantIdentity(),
-    //              PrimitiveType.STRING,
-    //              new VariableName("tenantId")));
-    //    } else {
-    //      throw new IllegalStateException(
-    //          String.format("Child thing '%s' should be marked as multi-tenant",
-    // thingName.getText()));
-    //    }
-
+  public T setMultiTenant(Data tenantId) {
+    this.multiTenant = true;
+    this.tenantId = tenantId;
+    supportsTenantIdentity = true;
     return builderClass.cast(this);
   }
 
@@ -164,12 +162,7 @@ public abstract class AbstractThingBuilder<T extends AbstractThingBuilder<?>> {
    * @return the t
    */
   public T withThingIdentity() {
-    this.thingProperties.addData(
-        DataPrimitive.ofDataBusinessType(
-            DataPurpose.thingIdentity(),
-            PrimitiveType.STRING,
-            new VariableName(
-                String.format("%sId", TextConverter.toLowerCamel(thingName.getText())))));
+    supportsThingIdentity = true;
     return builderClass.cast(this);
   }
 
@@ -180,14 +173,7 @@ public abstract class AbstractThingBuilder<T extends AbstractThingBuilder<?>> {
    */
   public T withParentThingIdentity() {
     Assertion.isNotNull(parentThing, "parentThing should not be NULL");
-
-    this.thingProperties.addData(
-        DataPrimitive.ofDataBusinessType(
-            DataPurpose.parentThingIdentity(),
-            PrimitiveType.STRING,
-            new VariableName(
-                String.format(
-                    "%sId", TextConverter.toLowerCamel(parentThing.getThingName().getText())))));
+    supportsParentThingIdentity = true;
     return builderClass.cast(this);
   }
 
@@ -233,18 +219,102 @@ public abstract class AbstractThingBuilder<T extends AbstractThingBuilder<?>> {
   // ===============================================================================================
 
   /**
-   * Create thing.
+   * Create thing thing.
    *
    * @return the thing
    */
   public Thing createThing() {
-    return new Thing(
-        abstractionScopes,
-        contextName != null ? new ContextName(contextName) : ContextName.defaultContext(),
-        thingName,
-        thingProperties,
-        multiTenant,
-        parentThing,
-        metadata);
+    if (supportsThingIdentity || supportsParentThingIdentity || supportsTenantIdentity) {
+      throw new IllegalStateException(
+          String.format(
+              "createThing must be called with Root PackageName for thing with name=%s",
+              thingName.getText()));
+    }
+
+    return createThing(new PackageName("com.any"));
+  }
+
+  /**
+   * Create thing.
+   *
+   * @param rootPackageName the root package name
+   * @return the thing
+   */
+  public Thing createThing(PackageName rootPackageName) {
+    Thing thing =
+        new Thing(
+            abstractionScopes,
+            contextName != null ? new ContextName(contextName) : ContextName.defaultContext(),
+            thingName,
+            thingProperties,
+            multiTenant,
+            parentThing,
+            metadata);
+
+    DataRepository finalThingProperties = new DataRepository();
+
+    if (supportsThingIdentity) {
+      finalThingProperties.addData(makeThingIdentity(rootPackageName, thing));
+    }
+
+    if (supportsParentThingIdentity) {
+      finalThingProperties.addData(makeParentThingIdentity(rootPackageName, parentThing));
+    }
+
+    if (supportsTenantIdentity) {
+      finalThingProperties.addData(tenantId);
+    }
+
+    finalThingProperties.addSetOfData(thingProperties.getData());
+
+    thing.assignThingProperties(finalThingProperties);
+
+    return thing;
+  }
+
+  // ===============================================================================================
+  // PRIVATE
+  // ===============================================================================================
+
+  private Data makeThingIdentity(PackageName rootPackageName, Thing thing) {
+    DataObject dataObject =
+        new DataObject(
+            new VariableName(
+                String.format("%sId", TextConverter.toLowerCamel(thingName.getText()))),
+            DataPurpose.thingIdentity(),
+            DataValidator.empty(),
+            new ObjectName(String.format("%sId", TextConverter.toLowerCamel(thingName.getText()))),
+            thing.makePackageName(rootPackageName, thing),
+            new LinkedHashSet<>(),
+            DataSourceType.DEFAULT);
+
+    return DataPrimitive.ofDataBusinessTypeWithDataObject(
+        DataPurpose.thingIdentity(),
+        PrimitiveType.STRING,
+        new VariableName(String.format("%sId", TextConverter.toLowerCamel(thingName.getText()))),
+        dataObject);
+  }
+
+  private Data makeParentThingIdentity(PackageName rootPackageName, Thing parentThing) {
+
+    return DataPrimitive.ofDataBusinessTypeWithDataObject(
+        DataPurpose.parentThingIdentity(),
+        PrimitiveType.STRING,
+        new VariableName(
+            String.format(
+                "%sId", TextConverter.toLowerCamel(parentThing.getThingName().getText()))),
+        makeDataObjectForReferenceToThing(parentThing, rootPackageName));
+  }
+
+  private DataObject makeDataObjectForReferenceToThing(
+      Thing thingParent, PackageName rootPackageName) {
+    return new DataObject(
+        new VariableName(thingParent.getThingName().getText()),
+        DataPurpose.referenceToThingByValue(),
+        DataValidator.empty(),
+        new ObjectName(thingParent.getThingName().getText()),
+        thingParent.makePackageName(rootPackageName, thingParent),
+        new LinkedHashSet<>(),
+        DataSourceType.DEFAULT);
   }
 }

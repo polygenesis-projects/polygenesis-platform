@@ -68,6 +68,8 @@ public class AbstractionScope implements Serializable {
   public static final String DOMAIN_AGGREGATE_ROOT = "DOMAIN_AGGREGATE_ROOT";
   /** The constant DOMAIN_AGGREGATE_ENTITY. */
   public static final String DOMAIN_AGGREGATE_ENTITY = "DOMAIN_AGGREGATE_ENTITY";
+  /** The constant DOMAIN_ABSTRACT_AGGREGATE_ENTITY. */
+  public static final String DOMAIN_ABSTRACT_AGGREGATE_ENTITY = "DOMAIN_ABSTRACT_AGGREGATE_ENTITY";
   /** The constant DOMAIN_SUPPORTIVE_ENTITY. */
   public static final String DOMAIN_SUPPORTIVE_ENTITY = "DOMAIN_SUPPORTIVE_ENTITY";
 
@@ -200,6 +202,15 @@ public class AbstractionScope implements Serializable {
    */
   public static AbstractionScope domainAggregateEntity() {
     return new AbstractionScope(DOMAIN_AGGREGATE_ENTITY);
+  }
+
+  /**
+   * Domain abstract aggregate entity abstraction scope.
+   *
+   * @return the abstraction scope
+   */
+  public static AbstractionScope domainAbstractAggregateEntity() {
+    return new AbstractionScope(DOMAIN_ABSTRACT_AGGREGATE_ENTITY);
   }
 
   /**

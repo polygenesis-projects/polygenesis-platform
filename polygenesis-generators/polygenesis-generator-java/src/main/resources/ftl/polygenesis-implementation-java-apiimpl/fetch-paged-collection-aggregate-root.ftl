@@ -29,6 +29,7 @@
             .stream(paginated.getItems().spliterator(), false)
             .map(${ data.converterVariable }::convertTo${ data.aggregateRootDataType }CollectionRecord)
             .collect(Collectors.toList()),
+        paginated.getSeekMethodLeftOffValue(),
         paginated.getTotalPages(),
         paginated.getTotalElements(),
         ${ data.requestDto.dataObject.variableName.text }.getPageNumber(),

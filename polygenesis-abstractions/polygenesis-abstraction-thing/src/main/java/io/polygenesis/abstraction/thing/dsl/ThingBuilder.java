@@ -212,6 +212,19 @@ public class ThingBuilder extends AbstractThingBuilder<ThingBuilder> {
   }
 
   /**
+   * Domain abstract aggregate entity thing builder.
+   *
+   * @param thingName the thing name
+   * @return the thing builder
+   */
+  public static ThingBuilder domainAbstractAggregateEntity(String thingName) {
+    return new ThingBuilder(
+            thingName,
+            new LinkedHashSet<>(singletonList(AbstractionScope.domainAbstractAggregateEntity())))
+        .withThingIdentity();
+  }
+
+  /**
    * Domain service thing builder.
    *
    * @param thingName the thing name

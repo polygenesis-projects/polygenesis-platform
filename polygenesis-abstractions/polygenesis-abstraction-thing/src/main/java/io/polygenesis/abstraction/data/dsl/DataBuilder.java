@@ -296,7 +296,7 @@ public class DataBuilder {
    * @return the data builder
    */
   public final DataBuilder withReferenceToThingById(
-      String rootPackageName, Thing thing, String variableName) {
+      PackageName rootPackageName, Thing thing, String variableName) {
     this.models.add(
         DataReferenceToThingById.of(thing, variableName).getAsDataPrimitive(rootPackageName));
     return this;

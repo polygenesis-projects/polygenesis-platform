@@ -32,12 +32,12 @@ import java.util.Set;
 /** @author Christos Tsakostas */
 public class SignUp {
 
-  public static Thing create(Thing confirmationSuperClass, String rootPackageName) {
+  public static Thing create(Thing confirmationSuperClass, PackageName rootPackageName) {
     Thing signUp =
         ThingBuilder.endToEnd("signUp")
             .setPreferredPackage("com.invoiceful.access.identity")
             .setSuperClass(confirmationSuperClass)
-            .createThing();
+            .createThing(rootPackageName);
 
     signUp.addFunctions(
         PurposeFunctionBuilder.forThing(signUp, rootPackageName)
@@ -48,7 +48,7 @@ public class SignUp {
     return signUp;
   }
 
-  private static Set<Data> createData(String rootPackageName) {
+  private static Set<Data> createData(PackageName rootPackageName) {
     return DataBuilder.create()
         //        .withTextProperty("email").build()
         //        .withTextProperty("password").build()
@@ -67,7 +67,7 @@ public class SignUp {
         .build();
   }
 
-  private static Set<Data> outputsData(String rootPackageName) {
+  private static Set<Data> outputsData(PackageName rootPackageName) {
     return DataBuilder.create()
         .withTextPropertyToValueObject(
             "confirmationCode",
@@ -77,7 +77,7 @@ public class SignUp {
         .build();
   }
 
-  private static Set<Data> confirmData(String rootPackageName) {
+  private static Set<Data> confirmData(PackageName rootPackageName) {
     return DataBuilder.create()
         .withTextPropertyToValueObject(
             "confirmationCode",

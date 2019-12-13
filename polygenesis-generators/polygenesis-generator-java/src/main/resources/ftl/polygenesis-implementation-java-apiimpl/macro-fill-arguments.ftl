@@ -51,6 +51,9 @@
         <#case 'TENANT_ID'>
         new TenantId(UUID.fromString(${ requestDto.dataObject.variableName.text }.getTenantId()))<#sep>,</#sep>
           <#break>
+        <#case 'REFERENCE_BY_ID'>
+        new ${ textConverter.toUpperCamel(property.data.objectName.text) }(${ requestDto.dataObject.variableName.text }.get${ textConverter.toUpperCamel(property.data.variableName.text) }())<#sep>,</#sep>
+          <#break>
         <#case 'PRIMITIVE'>
         ${ requestDto.dataObject.variableName.text }.get${ textConverter.toUpperCamel(property.data.variableName.text) }()<#sep>,</#sep>
           <#break>

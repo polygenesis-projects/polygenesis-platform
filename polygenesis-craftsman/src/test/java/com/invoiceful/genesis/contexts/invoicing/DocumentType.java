@@ -20,6 +20,7 @@
 
 package com.invoiceful.genesis.contexts.invoicing;
 
+import com.oregor.trinity4j.Trinity4jShared;
 import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.dsl.DataBuilder;
 import io.polygenesis.abstraction.thing.Thing;
@@ -33,7 +34,7 @@ public class DocumentType {
   public static Thing create(String rootPackageName) {
     Thing documentType =
         ThingBuilder.endToEnd("documentType")
-            .setMultiTenant(true)
+            .setMultiTenant(Trinity4jShared.tenantId())
             .setPreferredPackage("com.invoiceful.invoicing.document.type")
             .createThing();
 

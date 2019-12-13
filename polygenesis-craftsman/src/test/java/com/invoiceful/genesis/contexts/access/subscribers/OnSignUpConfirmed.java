@@ -39,7 +39,7 @@ import java.util.Set;
 public class OnSignUpConfirmed {
 
   /** @return the thing */
-  public static Thing create(Thing user, String rootPackageName) {
+  public static Thing create(Thing user, PackageName rootPackageName) {
     Thing onSignUpConfirmed =
         ThingBuilder.domainMessageSubscriber("onSignUpConfirmed").createThing();
 
@@ -57,7 +57,7 @@ public class OnSignUpConfirmed {
     return onSignUpConfirmed;
   }
 
-  private static Set<Data> messageData(String rootPackageName) {
+  private static Set<Data> messageData(PackageName rootPackageName) {
     DataObject email =
         new DataObject(new ObjectName("email"), new PackageName("com.invoiceful.access.identity"));
     email.addData(DataPrimitive.of(PrimitiveType.STRING, new VariableName("value")));

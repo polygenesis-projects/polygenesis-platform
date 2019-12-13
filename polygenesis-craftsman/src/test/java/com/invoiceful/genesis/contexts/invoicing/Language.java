@@ -25,6 +25,7 @@ import io.polygenesis.abstraction.data.dsl.DataBuilder;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.dsl.PurposeFunctionBuilder;
 import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
+import io.polygenesis.commons.valueobjects.PackageName;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -32,11 +33,11 @@ import java.util.stream.Collectors;
 /** @author Christos Tsakostas */
 public class Language {
 
-  public static Thing create(String rootPackageName) {
+  public static Thing create(PackageName rootPackageName) {
     Thing language =
         ThingBuilder.supportiveEntity("language")
             .addThingProperties(thingProperties())
-            .createThing();
+            .createThing(rootPackageName);
 
     language.addFunctions(
         PurposeFunctionBuilder.forThing(language, rootPackageName)

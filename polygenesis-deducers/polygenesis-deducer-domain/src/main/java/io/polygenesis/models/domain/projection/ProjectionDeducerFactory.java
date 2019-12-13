@@ -24,7 +24,6 @@ import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.models.domain.common.ConstructorsDeducer;
 import io.polygenesis.models.domain.common.DataToDomainObjectPropertyConverter;
 import io.polygenesis.models.domain.common.DomainObjectPropertiesDeducer;
-import io.polygenesis.models.domain.common.IdentityDomainObjectPropertiesDeducer;
 
 /**
  * The type Projection deducer factory.
@@ -38,7 +37,6 @@ public final class ProjectionDeducerFactory {
   // ===============================================================================================
   private static DomainObjectPropertiesDeducer domainObjectPropertiesDeducer;
   private static ConstructorsDeducer constructorsDeducer;
-  private static IdentityDomainObjectPropertiesDeducer identityDomainObjectPropertiesDeducer;
 
   // ===============================================================================================
   // STATIC INITIALIZATION OF DEPENDENCIES
@@ -52,8 +50,6 @@ public final class ProjectionDeducerFactory {
         new DomainObjectPropertiesDeducer(dataToDomainObjectPropertyConverter);
 
     constructorsDeducer = new ConstructorsDeducer(dataToDomainObjectPropertyConverter);
-
-    identityDomainObjectPropertiesDeducer = new IdentityDomainObjectPropertiesDeducer();
   }
 
   // ===============================================================================================
@@ -74,10 +70,6 @@ public final class ProjectionDeducerFactory {
    * @return the projection deducer
    */
   public static ProjectionDeducer newInstance(PackageName packageName) {
-    return new ProjectionDeducer(
-        packageName,
-        constructorsDeducer,
-        domainObjectPropertiesDeducer,
-        identityDomainObjectPropertiesDeducer);
+    return new ProjectionDeducer(packageName, constructorsDeducer, domainObjectPropertiesDeducer);
   }
 }
