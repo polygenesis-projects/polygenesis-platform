@@ -26,7 +26,6 @@ import io.polygenesis.abstraction.thing.ThingRepository;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.AbstractionScope;
-import io.polygenesis.models.domain.AggregateRoot;
 import io.polygenesis.models.domain.Constructor;
 import io.polygenesis.models.domain.DomainEvent;
 import io.polygenesis.models.domain.DomainObject;
@@ -41,17 +40,22 @@ import java.util.Set;
 /**
  * The type Domain object deducer.
  *
+ * @param <T> the type parameter
  * @author Christos Tsakostas
  */
-public abstract class DomainObjectDeducer {
+public abstract class DomainObjectDeducer<T extends DomainObject> {
 
   // ===============================================================================================
   // DEPENDENCIES
   // ===============================================================================================
-  private final DomainObjectPropertiesDeducer domainObjectPropertiesDeducer;
-  private final IdentityDomainObjectPropertiesDeducer identityDomainObjectPropertiesDeducer;
-  private final ConstructorsDeducer constructorsDeducer;
-  private final StateMutationMethodDeducer stateMutationMethodDeducer;
+  private final Class<T> clazzDomainObject;
+  /** The Domain object properties deducer. */
+  protected final DomainObjectPropertiesDeducer domainObjectPropertiesDeducer;
+  /** The Constructors deducer. */
+  protected final ConstructorsDeducer constructorsDeducer;
+  /** The State mutation method deducer. */
+  protected final StateMutationMethodDeducer stateMutationMethodDeducer;
+
   private final DomainEventConstructorDeducer domainEventConstructorDeducer;
 
   // ===============================================================================================
@@ -61,20 +65,20 @@ public abstract class DomainObjectDeducer {
   /**
    * Instantiates a new Domain object deducer.
    *
+   * @param clazzDomainObject the clazz domain object
    * @param domainObjectPropertiesDeducer the domain object properties deducer
-   * @param identityDomainObjectPropertiesDeducer the identity domain object properties deducer
    * @param constructorsDeducer the constructors deducer
    * @param stateMutationMethodDeducer the state mutation method deducer
    * @param domainEventConstructorDeducer the domain event constructor deducer
    */
   public DomainObjectDeducer(
+      Class<T> clazzDomainObject,
       DomainObjectPropertiesDeducer domainObjectPropertiesDeducer,
-      IdentityDomainObjectPropertiesDeducer identityDomainObjectPropertiesDeducer,
       ConstructorsDeducer constructorsDeducer,
       StateMutationMethodDeducer stateMutationMethodDeducer,
       DomainEventConstructorDeducer domainEventConstructorDeducer) {
+    this.clazzDomainObject = clazzDomainObject;
     this.domainObjectPropertiesDeducer = domainObjectPropertiesDeducer;
-    this.identityDomainObjectPropertiesDeducer = identityDomainObjectPropertiesDeducer;
     this.constructorsDeducer = constructorsDeducer;
     this.stateMutationMethodDeducer = stateMutationMethodDeducer;
     this.domainEventConstructorDeducer = domainEventConstructorDeducer;
@@ -85,55 +89,43 @@ public abstract class DomainObjectDeducer {
   // ===============================================================================================
 
   /**
-   * Gets abstract abstraction scope.
+   * Gets abstract domain object abstraction scope.
    *
-   * @return the abstract abstraction scope
+   * @return the abstract domain object abstraction scope
    */
-  protected abstract AbstractionScope getAbstractAbstractionScope();
+  protected abstract AbstractionScope getAbstractDomainObjectAbstractionScope();
+
+  /**
+   * Gets domain object abstraction scope.
+   *
+   * @return the domain object abstraction scope
+   */
+  protected abstract AbstractionScope getDomainObjectAbstractionScope();
 
   // ===============================================================================================
   // PUBLIC
   // ===============================================================================================
 
   /**
-   * Deduce from set.
+   * Deduce domain objects set.
    *
    * @param thingRepository the thing repository
    * @param rootPackageName the root package name
    * @return the set
    */
-  public Set<DomainObject> deduceFrom(
+  public Set<DomainObject> deduceDomainObjects(
       ThingRepository thingRepository, PackageName rootPackageName) {
 
-    // Get Top-Level abstract superclasses first
-    Set<DomainObject> topLevelDomainObjects = new LinkedHashSet<>();
-    thingRepository
-        .getAbstractionItemsByScope(getAbstractAbstractionScope())
-        .stream()
-        .filter(Thing::doesNotExtendThing)
-        .forEach(
-            thing ->
-                makeDomainObject(
-                    topLevelDomainObjects, thing, rootPackageName, new LinkedHashSet<>()));
-
-    // Get Abstract Subclasses of Top-Level abstract superclasses
-    Set<DomainObject> abstractDomainObjects = new LinkedHashSet<>();
-    thingRepository
-        .getAbstractionItemsByScope(getAbstractAbstractionScope())
-        .stream()
-        .filter(Thing::extendsThing)
-        .forEach(
-            thing ->
-                makeDomainObject(
-                    abstractDomainObjects, thing, rootPackageName, topLevelDomainObjects));
+    // All Abstract DomainObjects
+    Set<DomainObject> allAbstractDomainObjects =
+        getTopLevelAndAbstractSubclassesOfTopLevel(thingRepository, rootPackageName);
 
     // Continue with subclasses
     Set<DomainObject> concreteAndAbstractDomainObjects = new LinkedHashSet<>();
-    concreteAndAbstractDomainObjects.addAll(topLevelDomainObjects);
-    concreteAndAbstractDomainObjects.addAll(abstractDomainObjects);
+    concreteAndAbstractDomainObjects.addAll(allAbstractDomainObjects);
 
     thingRepository
-        .getAbstractionItemsByScope(AbstractionScope.domainAggregateRoot())
+        .getAbstractionItemsByScope(getDomainObjectAbstractionScope())
         .stream()
         .forEach(
             thing ->
@@ -144,6 +136,86 @@ public abstract class DomainObjectDeducer {
                     concreteAndAbstractDomainObjects));
 
     return concreteAndAbstractDomainObjects;
+  }
+
+  // ===============================================================================================
+  // PROTECTED
+  // ===============================================================================================
+
+  /**
+   * Gets top level and abstract subclasses of top level.
+   *
+   * @param thingRepository the thing repository
+   * @param rootPackageName the root package name
+   * @return the top level and abstract subclasses of top level
+   */
+  protected Set<DomainObject> getTopLevelAndAbstractSubclassesOfTopLevel(
+      ThingRepository thingRepository, PackageName rootPackageName) {
+
+    // Get Top-Level abstract superclasses first
+    Set<DomainObject> topLevelDomainObjects = new LinkedHashSet<>();
+    thingRepository
+        .getAbstractionItemsByScope(getAbstractDomainObjectAbstractionScope())
+        .stream()
+        .filter(Thing::doesNotExtendThing)
+        .forEach(
+            thing ->
+                makeDomainObject(
+                    topLevelDomainObjects, thing, rootPackageName, new LinkedHashSet<>()));
+
+    // Get Abstract Subclasses of Top-Level abstract superclasses
+    Set<DomainObject> abstractDomainObjects = new LinkedHashSet<>();
+    thingRepository
+        .getAbstractionItemsByScope(getAbstractDomainObjectAbstractionScope())
+        .stream()
+        .filter(Thing::extendsThing)
+        .forEach(
+            thing ->
+                makeDomainObject(
+                    abstractDomainObjects, thing, rootPackageName, topLevelDomainObjects));
+
+    // Concat all
+    Set<DomainObject> allAbstractDomainObjects = new LinkedHashSet<>();
+    allAbstractDomainObjects.addAll(topLevelDomainObjects);
+    allAbstractDomainObjects.addAll(abstractDomainObjects);
+
+    return allAbstractDomainObjects;
+  }
+
+  /**
+   * Make superclass domain object.
+   *
+   * @param abstractDomainObjects the abstract domain objects
+   * @param thing the thing
+   * @return the domain object
+   */
+  protected DomainObject makeSuperclass(Set<DomainObject> abstractDomainObjects, Thing thing) {
+    if (thing.supportsAbstractionScope(AbstractionScope.externallyProvided())) {
+      return null;
+    }
+
+    if (thing.getMetadataValueIfExists(ThingMetadataKey.SUPER_CLASS) == null) {
+      throw new IllegalStateException(
+          String.format(
+              "Super Class must be defined for thing=%s", thing.getThingName().getText()));
+    }
+
+    Thing thingSuperclass = Thing.class.cast(thing.getMetadataValue(ThingMetadataKey.SUPER_CLASS));
+
+    return abstractDomainObjects
+        .stream()
+        .filter(
+            abstractDomainObject ->
+                abstractDomainObject
+                    .getObjectName()
+                    .equals(new ObjectName(thingSuperclass.getThingName().getText())))
+        .findFirst()
+        .orElseThrow(
+            () ->
+                new IllegalStateException(
+                    String.format(
+                        "Could not find superclass=%s for thing=%s",
+                        thingSuperclass.getThingName().getText(), thing.getThingName().getText())));
   }
 
   // ===============================================================================================
@@ -168,33 +240,18 @@ public abstract class DomainObjectDeducer {
     DomainObject superClass = makeSuperclass(abstractDomainObjects, thing);
 
     // Create DomainObject
-    DomainObject domainObject =
-        new AggregateRoot(
-            isAbstract(thing) ? InstantiationType.ABSTRACT : InstantiationType.CONCRETE,
-            domainObjectObjectName,
-            thingPackageName,
-            thing.getMultiTenant());
+    DomainObject domainObject = createDomainObject(thing, domainObjectObjectName, thingPackageName);
 
     // Continue with the properties and exclude the ones already in the superclass.
     Set<DomainObjectProperty<?>> properties =
-        domainObjectPropertiesDeducer.deduceRootDomainObjectPropertiesFromThing(
-            domainObject,
-            superClass,
-            identityDomainObjectPropertiesDeducer.makeRootIdentityDomainObjectProperties(
-                thing, rootPackageName),
-            thing);
+        domainObjectPropertiesDeducer.deduceDomainObjectPropertiesFromThingProperties(
+            domainObject, superClass, thing);
 
     domainObject.assignProperties(properties);
 
     // Get Constructors
     Set<Constructor> constructors =
-        constructorsDeducer.deduceConstructors(
-            rootPackageName,
-            domainObject,
-            superClass,
-            identityDomainObjectPropertiesDeducer.makeRootIdentityDomainObjectProperties(
-                thing, rootPackageName),
-            thing);
+        constructorsDeducer.deduceConstructors(rootPackageName, domainObject, superClass, thing);
 
     if (!isAbstract(thing)) {
       constructors.forEach(
@@ -213,7 +270,9 @@ public abstract class DomainObjectDeducer {
         stateMutationMethodDeducer.deduce(rootPackageName, domainObject, thing, thingPackageName);
 
     // Set Superclass
-    domainObject.assignSuperClass(superClass);
+    if (superClass != null) {
+      domainObject.assignSuperClass(superClass);
+    }
 
     // Add State Mutation Methods
     domainObject.addStateMutationMethods(stateMutationMethods);
@@ -241,39 +300,54 @@ public abstract class DomainObjectDeducer {
     domainObjectsToFill.add(domainObject);
   }
 
-  private DomainObject makeSuperclass(Set<DomainObject> abstractDomainObjects, Thing thing) {
-    if (thing.getMetadataValueIfExists(ThingMetadataKey.SUPER_CLASS) != null) {
-      Thing thingSuperclass =
-          Thing.class.cast(thing.getMetadataValue(ThingMetadataKey.SUPER_CLASS));
+  private Boolean isAbstract(Thing thing) {
+    return thing.getAbstractionsScopes().contains(getAbstractDomainObjectAbstractionScope());
+  }
 
-      return abstractDomainObjects
-          .stream()
-          .filter(
-              abstractDomainObject ->
-                  abstractDomainObject
-                      .getObjectName()
-                      .equals(new ObjectName(thingSuperclass.getThingName().getText())))
-          .findFirst()
-          .orElseThrow(
-              () ->
-                  new IllegalStateException(
-                      String.format(
-                          "Could not find superclass=%s for thing=%s",
-                          thingSuperclass.getThingName().getText(),
-                          thing.getThingName().getText())));
+  private DomainObject createDomainObject(
+      Thing thing, ObjectName objectName, PackageName packageName) {
+    DomainObject domainObject;
+
+    if (clazzDomainObject.getSimpleName().equals("AggregateRoot")) {
+      domainObject = createAggregateRoot(thing, objectName, packageName);
+    } else if (clazzDomainObject.getSimpleName().equals("AggregateEntity")) {
+      domainObject = createAggregateEntity(thing, objectName, packageName);
     } else {
-      ObjectName objectNameSuperclass =
-          thing.getMultiTenant()
-              ? new ObjectName("TenantAggregateRoot")
-              : new ObjectName("AggregateRoot");
-      PackageName packageName = new PackageName("com.oregor.trinity4j.domain");
+      throw new IllegalStateException(clazzDomainObject.getSimpleName());
+    }
 
-      return new AggregateRoot(
-          InstantiationType.ABSTRACT, objectNameSuperclass, packageName, thing.getMultiTenant());
+    return domainObject;
+  }
+
+  private DomainObject createAggregateRoot(
+      Thing thing, ObjectName objectName, PackageName packageName) {
+    try {
+      return clazzDomainObject
+          .getDeclaredConstructor(
+              InstantiationType.class, ObjectName.class, PackageName.class, Boolean.class)
+          .newInstance(
+              isAbstract(thing) ? InstantiationType.ABSTRACT : InstantiationType.CONCRETE,
+              objectName,
+              packageName,
+              thing.getMultiTenant());
+    } catch (Exception e) {
+      throw new IllegalStateException(e.getMessage(), e);
     }
   }
 
-  private Boolean isAbstract(Thing thing) {
-    return thing.getAbstractionsScopes().contains(getAbstractAbstractionScope());
+  private DomainObject createAggregateEntity(
+      Thing thing, ObjectName objectName, PackageName packageName) {
+    try {
+      return clazzDomainObject
+          .getDeclaredConstructor(
+              InstantiationType.class, ObjectName.class, PackageName.class, DomainObject.class)
+          .newInstance(
+              isAbstract(thing) ? InstantiationType.ABSTRACT : InstantiationType.CONCRETE,
+              objectName,
+              packageName,
+              null);
+    } catch (Exception e) {
+      throw new IllegalStateException(e.getMessage(), e);
+    }
   }
 }

@@ -20,18 +20,21 @@
 
 package com.invoiceful.genesis.contexts.invoicing;
 
+import com.oregor.trinity4j.Trinity4jShared;
 import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.dsl.DataBuilder;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.dsl.PurposeFunctionBuilder;
 import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
+import io.polygenesis.commons.valueobjects.PackageName;
 import java.util.Set;
 
 /** @author Christos Tsakostas */
 public class Tax {
 
-  public static Thing create(String rootPackageName) {
-    Thing tax = ThingBuilder.endToEnd("tax").setMultiTenant(true).createThing();
+  public static Thing create(PackageName rootPackageName) {
+    Thing tax =
+        ThingBuilder.endToEnd("tax").setMultiTenant(Trinity4jShared.tenantId()).createThing();
 
     tax.addFunctions(
         PurposeFunctionBuilder.forThing(tax, rootPackageName)
@@ -47,7 +50,7 @@ public class Tax {
   // DATA
   // ===============================================================================================
 
-  private static Set<Data> data(String rootPackageName) {
+  private static Set<Data> data(PackageName rootPackageName) {
     return DataBuilder.create()
         .withTextProperty("taxName")
         .build()

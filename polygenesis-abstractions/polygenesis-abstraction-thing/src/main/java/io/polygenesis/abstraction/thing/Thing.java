@@ -151,6 +151,15 @@ public class Thing implements Abstraction {
   }
 
   /**
+   * Assign thing properties.
+   *
+   * @param thingProperties the thing properties
+   */
+  public void assignThingProperties(DataRepository thingProperties) {
+    setThingProperties(thingProperties);
+  }
+
+  /**
    * Add function.
    *
    * @param function the function

@@ -67,17 +67,16 @@ public final class DomainDeducerFactory {
     aggregateEntityDeducer =
         new AggregateEntityDeducer(
             domainObjectPropertiesDeducer,
-            identityDomainObjectPropertiesDeducer,
             constructorsDeducer,
             new StateMutationMethodDeducer(
                 dataToDomainObjectPropertyConverter,
                 domainEventMutationDeducer,
-                identityDomainObjectPropertiesDeducer));
+                identityDomainObjectPropertiesDeducer),
+            new DomainEventConstructorDeducer());
 
     aggregateRootDeducer =
         new AggregateRootDeducer(
             domainObjectPropertiesDeducer,
-            identityDomainObjectPropertiesDeducer,
             constructorsDeducer,
             new StateMutationMethodDeducer(
                 dataToDomainObjectPropertyConverter,

@@ -54,14 +54,17 @@ public class DataToDomainObjectPropertyConverterTest {
     given(domainObject.getObjectName()).willReturn(new ObjectName("someObject"));
     given(domainObject.isAggregateRoot()).willReturn(true);
 
-    DataPrimitive data =
-        DataPrimitive.ofDataBusinessType(
-            DataPurpose.thingIdentity(), PrimitiveType.STRING, new VariableName("someId"));
-
     DataObject dataObjectIdentity =
         new DataObject(
             new ObjectName(String.format("%sId", domainObject.getObjectName().getText())),
             domainObject.getPackageName());
+
+    DataPrimitive data =
+        DataPrimitive.ofDataBusinessTypeWithDataObject(
+            DataPurpose.thingIdentity(),
+            PrimitiveType.STRING,
+            new VariableName("someId"),
+            dataObjectIdentity);
 
     // When
     DomainObjectProperty<?> property =

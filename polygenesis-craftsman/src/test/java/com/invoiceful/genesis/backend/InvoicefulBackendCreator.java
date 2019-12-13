@@ -29,6 +29,7 @@ import com.oregor.trinity.scaffolder.java.core.TrinityScaffolderJava;
 import com.oregor.trinity.scaffolder.java.core.TrinityScaffolderJavaFactory;
 import io.polygenesis.commons.freemarker.FreemarkerAuthorService;
 import io.polygenesis.commons.text.TextConverter;
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.ContextGenerator;
 import io.polygenesis.core.Deducer;
 import io.polygenesis.core.Project;
@@ -72,12 +73,12 @@ public class InvoicefulBackendCreator {
         ProjectBuilder.of("invoiceful")
             .addContext(
                 ContextAccess.get(
-                    String.format("%s.%s", JAVA_ROOT_PACKAGE, "access"),
+                    new PackageName(String.format("%s.%s", JAVA_ROOT_PACKAGE, "access")),
                     contextGenerator("access", "access", "acs_", "access"),
                     deducers("access")))
             .addContext(
                 ContextInvoicing.get(
-                    String.format("%s.%s", JAVA_ROOT_PACKAGE, "invoicing"),
+                    new PackageName(String.format("%s.%s", JAVA_ROOT_PACKAGE, "invoicing")),
                     contextGenerator("invoicing", "invoicing", "inv_", "invoicing"),
                     deducers("invoicing")))
             //            .addContext(

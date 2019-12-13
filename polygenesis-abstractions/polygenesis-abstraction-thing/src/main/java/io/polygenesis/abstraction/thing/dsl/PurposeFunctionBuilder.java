@@ -52,8 +52,8 @@ public class PurposeFunctionBuilder {
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
-  private PurposeFunctionBuilder(Thing thing, String rootPackageName) {
-    this.rootPackageNameVo = new PackageName(rootPackageName);
+  private PurposeFunctionBuilder(Thing thing, PackageName rootPackageName) {
+    this.rootPackageNameVo = rootPackageName;
     this.thing = thing;
     functions = new LinkedHashSet<>();
   }
@@ -70,6 +70,17 @@ public class PurposeFunctionBuilder {
    * @return the function builder
    */
   public static PurposeFunctionBuilder forThing(Thing thing, String rootPackageName) {
+    return new PurposeFunctionBuilder(thing, new PackageName(rootPackageName));
+  }
+
+  /**
+   * For thing purpose function builder.
+   *
+   * @param thing the thing
+   * @param rootPackageName the root package name
+   * @return the purpose function builder
+   */
+  public static PurposeFunctionBuilder forThing(Thing thing, PackageName rootPackageName) {
     return new PurposeFunctionBuilder(thing, rootPackageName);
   }
 
@@ -487,15 +498,23 @@ public class PurposeFunctionBuilder {
   private Set<Data> generateArgumentsData(Thing thing, Set<Data> data) {
     Set<Data> argumentsData = new LinkedHashSet<>();
 
-    // ---------------------------------------------------------------------------------------------
-    // Add Parent Thing Identity if Any
-    if (thing.getOptionalParent() != null) {
-      argumentsData.add(getParentThingIdentity(thing));
-    }
+    if (!thing.supportsAbstractionScope(AbstractionScope.externallyProvided())) {
+      // -------------------------------------------------------------------------------------------
+      // Add Parent Thing Identity if Any
+      if (thing.getOptionalParent() != null) {
+        argumentsData.add(getParentThingIdentity(thing));
+      }
 
-    // ---------------------------------------------------------------------------------------------
-    // Add Thing Identity
-    argumentsData.add(getThingIdentity(thing));
+      // -------------------------------------------------------------------------------------------
+      // Add Thing Identity
+      argumentsData.add(getThingIdentity(thing));
+
+      // -------------------------------------------------------------------------------------------
+      // Add Tenant Identity
+      if (thing.getMultiTenant()) {
+        argumentsData.add(getTenantIdentity(thing));
+      }
+    }
 
     // ---------------------------------------------------------------------------------------------
     // Add the provided data
@@ -529,11 +548,30 @@ public class PurposeFunctionBuilder {
         .orElseThrow();
   }
 
+  private Data getTenantIdentity(Thing thing) {
+    return thing
+        .getThingProperties()
+        .getData()
+        .stream()
+        .filter(this::isDataTenantIdentity)
+        .findFirst()
+        .orElseThrow(
+            () ->
+                new IllegalStateException(
+                    String.format(
+                        "Thing with name='%s' is not uniquely identified",
+                        thing.getThingName().getText())));
+  }
+
   private boolean isDataThingIdentity(Data data) {
     return data.getDataPurpose().equals(DataPurpose.thingIdentity());
   }
 
   private boolean isDataParentThingIdentity(Data data) {
     return data.getDataPurpose().equals(DataPurpose.parentThingIdentity());
+  }
+
+  private boolean isDataTenantIdentity(Data data) {
+    return data.getDataPurpose().equals(DataPurpose.tenantIdentity());
   }
 }

@@ -24,7 +24,6 @@ import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.abstraction.data.DataPrimitive;
 import io.polygenesis.abstraction.data.DataPurpose;
-import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.models.domain.AbstractAggregateRootId;
 import io.polygenesis.models.domain.AggregateEntityCollection;
 import io.polygenesis.models.domain.AggregateEntityId;
@@ -33,11 +32,16 @@ import io.polygenesis.models.domain.BaseProperty;
 import io.polygenesis.models.domain.DomainObject;
 import io.polygenesis.models.domain.DomainObjectProperty;
 import io.polygenesis.models.domain.GenericTypeParameter;
+import io.polygenesis.models.domain.InstantiationType;
 import io.polygenesis.models.domain.Mapper;
 import io.polygenesis.models.domain.Primitive;
 import io.polygenesis.models.domain.PrimitiveCollection;
 import io.polygenesis.models.domain.ReferenceById;
 import io.polygenesis.models.domain.ReferenceByValue;
+import io.polygenesis.models.domain.ReferenceToAbstractAggregateRoot;
+import io.polygenesis.models.domain.ReferenceToAggregateRoot;
+import io.polygenesis.models.domain.SupportiveEntityId;
+import io.polygenesis.models.domain.TenantId;
 import io.polygenesis.models.domain.ValueObject;
 import io.polygenesis.models.domain.ValueObjectCollection;
 import io.polygenesis.models.domain.ValueObjectType;
@@ -105,8 +109,8 @@ public class DataToDomainObjectPropertyConverter {
   // ===============================================================================================
 
   private BaseProperty<?> convertPrimitive(DomainObject domainObject, DataPrimitive data) {
-    if (data.getDataPurpose().equals(DataPurpose.thingIdentity())) {
-      return makeDomainObjectIdentity(domainObject);
+    if (!data.getDataPurpose().equals(DataPurpose.any())) {
+      return makeDomainObjectIdentity(domainObject, data);
     }
 
     if (data.getAsDataPrimitive().getDataObject() != null) {
@@ -116,20 +120,44 @@ public class DataToDomainObjectPropertyConverter {
     }
   }
 
-  private BaseProperty<?> makeDomainObjectIdentity(DomainObject domainObject) {
-    DataObject dataObject =
-        new DataObject(
-            new ObjectName(String.format("%sId", domainObject.getObjectName().getText())),
-            domainObject.getPackageName());
+  private BaseProperty<?> makeDomainObjectIdentity(DomainObject domainObject, DataPrimitive data) {
+    if (data.getDataPurpose().equals(DataPurpose.tenantIdentity())) {
+      return new TenantId(data.getDataObject());
+    }
+
+    if (data.getDataPurpose().equals(DataPurpose.referenceToThingByValue())) {
+      return new TenantId(data.getDataObject());
+    }
+
+    if (data.getDataPurpose().equals(DataPurpose.parentThingIdentity())) {
+      if (domainObject.getParent() == null) {
+        // Aggregate Root i.e. Entity Create from Aggregate Root
+        // return new ReferenceToAggregateRoot(data.getDataObject());
+        throw new IllegalStateException("domainObject.getParent() == null");
+      } else {
+        // Aggregate Entity
+        if (domainObject.getParent().getInstantiationType().equals(InstantiationType.CONCRETE)) {
+          return new ReferenceToAggregateRoot(data.getDataObject());
+        } else {
+          return new ReferenceToAbstractAggregateRoot(data.getDataObject());
+        }
+      }
+    }
+
+    if (data.getDataPurpose().equals(DataPurpose.referenceToThingById())) {
+      return new ReferenceById(data.getDataObject());
+    }
 
     if (domainObject.isAggregateRoot()) {
-      return new AggregateRootId(dataObject);
+      return new AggregateRootId(data.getDataObject());
     } else if (domainObject.isAbstractAggregateRoot()) {
-      return new AbstractAggregateRootId(dataObject, new GenericTypeParameter("I"));
+      return new AbstractAggregateRootId(data.getDataObject(), new GenericTypeParameter("I"));
     } else if (domainObject.isAggregateEntity()) {
-      return new AggregateEntityId(dataObject);
+      return new AggregateEntityId(data.getDataObject());
     } else if (domainObject.isAbstractAggregateEntity()) {
-      return new AggregateEntityId(dataObject);
+      return new AggregateEntityId(data.getDataObject());
+    } else if (domainObject.isSupportiveEntity()) {
+      return new SupportiveEntityId(data.getDataObject());
     } else {
       throw new UnsupportedOperationException(domainObject.getDomainObjectType().name());
     }

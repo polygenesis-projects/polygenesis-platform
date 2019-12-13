@@ -135,7 +135,7 @@ public class DtoExporterTest {
   }
 
   private Function makeFunctionCreate() {
-    Thing thing = ThingBuilder.endToEnd("customer").createThing();
+    Thing thing = ThingBuilder.endToEnd("customer").createThing(PackageName.any());
 
     return FunctionBuilder.of(thing, "create", Purpose.create())
         .setReturnValue(DataPrimitive.of(PrimitiveType.STRING, new VariableName("someRet")))

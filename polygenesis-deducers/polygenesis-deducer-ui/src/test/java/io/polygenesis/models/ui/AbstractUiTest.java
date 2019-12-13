@@ -28,13 +28,14 @@ import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.dsl.FunctionBuilder;
 import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.commons.valueobjects.VariableName;
 
 /** @author Christos Tsakostas */
 public abstract class AbstractUiTest {
 
   protected Thing createThing() {
-    Thing thing = ThingBuilder.endToEnd("someThing").createThing();
+    Thing thing = ThingBuilder.endToEnd("someThing").createThing(PackageName.any());
 
     // =============================================================================================
     // CREATE

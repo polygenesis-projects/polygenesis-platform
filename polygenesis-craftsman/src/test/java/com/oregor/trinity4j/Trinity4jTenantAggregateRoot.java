@@ -18,49 +18,54 @@
  * ===========================LICENSE_END==================================
  */
 
-package com.invoiceful.genesis.contexts.access;
+package com.oregor.trinity4j;
 
-import com.oregor.trinity4j.Trinity4jAggregateRoot;
 import io.polygenesis.abstraction.data.Data;
-import io.polygenesis.abstraction.data.DataPrimitive;
-import io.polygenesis.abstraction.data.PrimitiveType;
+import io.polygenesis.abstraction.data.DataRepository;
 import io.polygenesis.abstraction.data.dsl.DataBuilder;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.dsl.PurposeFunctionBuilder;
 import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
 import io.polygenesis.commons.valueobjects.PackageName;
-import io.polygenesis.commons.valueobjects.VariableName;
-import java.util.Collections;
-import java.util.LinkedHashSet;
+import io.polygenesis.core.AbstractionScope;
 import java.util.Set;
 
-/** @author Christos Tsakostas */
-public class Tenant {
+/**
+ * The type Trinity 4 j aggregate root.
+ *
+ * @author Christos Tsakostas
+ */
+public class Trinity4jTenantAggregateRoot {
 
-  public static Thing create(PackageName rootPackageName, Thing user) {
-    Thing tenant =
-        ThingBuilder.endToEnd("tenant")
-            .setSuperClass(Trinity4jAggregateRoot.create(rootPackageName))
+  /**
+   * Create thing.
+   *
+   * @param rootPackageName the root package name
+   * @return the thing
+   */
+  public static Thing create(PackageName rootPackageName) {
+    Thing tenantAggregateRoot =
+        ThingBuilder.domainAbstractAggregateRoot("tenantAggregateRoot")
+            .addAbstractionScope(AbstractionScope.externallyProvided())
+            .setPreferredPackage("com.oregor.trinity4j.domain")
             .createThing(rootPackageName);
 
-    tenant.addFunctions(
-        PurposeFunctionBuilder.forThing(tenant, rootPackageName)
-            .withFunctionCreate(createData(rootPackageName, user))
-            .withFunctionModify(
-                "deactivate",
-                new LinkedHashSet<>(
-                    Collections.singletonList(
-                        DataPrimitive.of(PrimitiveType.STRING, new VariableName("someVar")))))
+    tenantAggregateRoot.addFunctions(
+        PurposeFunctionBuilder.forThing(tenantAggregateRoot, rootPackageName)
+            .withFunctionCreate(createData())
             .build());
 
-    return tenant;
+    DataRepository dataRepository = new DataRepository();
+    dataRepository.addSetOfData(createData());
+    tenantAggregateRoot.assignThingProperties(dataRepository);
+
+    return tenantAggregateRoot;
   }
 
-  private static Set<Data> createData(PackageName rootPackageName, Thing user) {
+  private static Set<Data> createData() {
     return DataBuilder.create()
-        .withReferenceToThingById(rootPackageName, user, "ownerUserId")
-        .withTextPropertyToValueObject("name", Shared.name(rootPackageName))
-        .build()
+        .withDataPrimitive(Trinity4jShared.aggregateRootId().getAsDataPrimitive())
+        .withDataPrimitive(Trinity4jShared.tenantId().getAsDataPrimitive())
         .build();
   }
 }

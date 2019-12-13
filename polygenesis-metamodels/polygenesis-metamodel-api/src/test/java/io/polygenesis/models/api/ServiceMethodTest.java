@@ -52,7 +52,7 @@ public class ServiceMethodTest extends AbstractEqualityTest<ServiceMethod> {
             new DataObject(new ObjectName("xyz"), new PackageName("com.oregor")),
             false);
 
-    Thing thing = ThingBuilder.endToEnd("customer").createThing();
+    Thing thing = ThingBuilder.endToEnd("customer").createThing(PackageName.any());
     return new ServiceMethod(
         mock(Service.class),
         FunctionBuilder.of(thing, "create", Purpose.create()).build(),
@@ -76,7 +76,7 @@ public class ServiceMethodTest extends AbstractEqualityTest<ServiceMethod> {
             new DataObject(new ObjectName("iop"), new PackageName("com.oregor")),
             false);
 
-    Thing thing = ThingBuilder.endToEnd("user").createThing();
+    Thing thing = ThingBuilder.endToEnd("user").createThing(PackageName.any());
 
     return new ServiceMethod(
         mock(Service.class),

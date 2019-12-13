@@ -22,9 +22,13 @@ package com.invoiceful.genesis.contexts.invoicing;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import io.polygenesis.abstraction.data.DataArray;
 import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.abstraction.data.DataPrimitive;
 import io.polygenesis.abstraction.data.DataPurpose;
+import io.polygenesis.abstraction.data.DataReferenceToThingByValue;
+import io.polygenesis.abstraction.data.DataSourceType;
+import io.polygenesis.abstraction.data.DataValidator;
 import io.polygenesis.abstraction.data.PrimitiveType;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.ThingName;
@@ -40,6 +44,7 @@ import io.polygenesis.craftsman.GenesisDefault;
 import io.polygenesis.generators.java.TrinityJavaContextGeneratorEnablement;
 import io.polygenesis.generators.java.TrinityJavaContextGeneratorFactory;
 import java.nio.file.Paths;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import org.junit.Test;
 
@@ -59,7 +64,7 @@ public class ContextInvoicingTest {
   public void shouldCreateContext() {
     Context<Thing> context =
         ContextInvoicing.get(
-            String.format("%s.%s", JAVA_ROOT_PACKAGE, "invoicing"),
+            new PackageName(String.format("%s.%s", JAVA_ROOT_PACKAGE, "invoicing")),
             contextGenerator("invoicing", "invoicing", "inv_", "invoicing"),
             deducers("invoicing"));
 
@@ -74,6 +79,8 @@ public class ContextInvoicingTest {
   // ===============================================================================================
 
   private void makeAssertionsForInvoice(Context<Thing> context) {
+    PackageName invoicingRootPackageName = new PackageName(INVOICING_ROOT_PACKAGE);
+
     AbstractionRepository<Thing> thingRepository = context.getAbstractionRepository();
     assertThat(thingRepository).isNotNull();
 
@@ -87,25 +94,62 @@ public class ContextInvoicingTest {
     assertThat(invoice.hasParent()).isFalse();
 
     // Properties Size
-    assertThat(invoice.getThingProperties().getData()).hasSize(2);
+    assertThat(invoice.getThingProperties().getData()).hasSize(3);
 
     // Thing Identity
     assertThat(invoice.getThingProperties().getData())
         .contains(
-            DataPrimitive.ofDataBusinessType(
+            DataPrimitive.ofDataBusinessTypeWithDataObject(
                 DataPurpose.thingIdentity(),
                 PrimitiveType.STRING,
                 new VariableName(
                     String.format(
-                        "%sId", TextConverter.toLowerCamel(invoice.getThingName().getText())))));
+                        "%sId", TextConverter.toLowerCamel(invoice.getThingName().getText()))),
+                new DataObject(
+                    new VariableName(
+                        String.format(
+                            "%sId", TextConverter.toLowerCamel(invoice.getThingName().getText()))),
+                    DataPurpose.thingIdentity(),
+                    DataValidator.empty(),
+                    new ObjectName(
+                        String.format(
+                            "%sId", TextConverter.toLowerCamel(invoice.getThingName().getText()))),
+                    invoice.makePackageName(invoicingRootPackageName, invoice),
+                    new LinkedHashSet<>(),
+                    DataSourceType.DEFAULT)));
 
-    // TODO
     // Tenant Identity
-    //    assertThat(invoice.getThingProperties().getData())
-    //        .contains(
-    //            DataPrimitive.ofDataBusinessType(
-    //                DataPurpose.tenantIdentity(), PrimitiveType.STRING, new
-    // VariableName("tenantId")));
+    assertThat(invoice.getThingProperties().getData())
+        .contains(
+            DataPrimitive.ofDataBusinessTypeWithDataObject(
+                DataPurpose.tenantIdentity(),
+                PrimitiveType.STRING,
+                new VariableName("tenantId"),
+                new DataObject(
+                    new VariableName("tenantId"),
+                    DataPurpose.tenantIdentity(),
+                    DataValidator.empty(),
+                    new ObjectName("tenantId"),
+                    new PackageName("com.oregor.trinity4j.domain"),
+                    new LinkedHashSet<>(),
+                    DataSourceType.EXTERNALLY_PROVIDED)));
+
+    // Invoice Items
+    Thing invoiceItem =
+        invoice
+            .getChildren()
+            .stream()
+            .filter(thing -> thing.getThingName().equals(new ThingName("invoiceItem")))
+            .findFirst()
+            .orElseThrow();
+
+    String variableName = TextConverter.toUpperCamel(invoiceItem.getThingName().getText());
+    DataReferenceToThingByValue dataReferenceToThingByValue =
+        DataReferenceToThingByValue.of(
+            invoiceItem, TextConverter.toPlural(invoiceItem.getThingName().getText()));
+
+    assertThat(invoice.getThingProperties().getData())
+        .contains(DataArray.of(dataReferenceToThingByValue, variableName));
   }
 
   private void makeAssertionsForInvoiceItem(Context<Thing> context) {
@@ -140,23 +184,44 @@ public class ContextInvoicingTest {
     // Thing Identity
     assertThat(invoiceItem.getThingProperties().getData())
         .contains(
-            DataPrimitive.ofDataBusinessType(
+            DataPrimitive.ofDataBusinessTypeWithDataObject(
                 DataPurpose.thingIdentity(),
                 PrimitiveType.STRING,
                 new VariableName(
                     String.format(
-                        "%sId",
-                        TextConverter.toLowerCamel(invoiceItem.getThingName().getText())))));
+                        "%sId", TextConverter.toLowerCamel(invoiceItem.getThingName().getText()))),
+                new DataObject(
+                    new VariableName(
+                        String.format(
+                            "%sId",
+                            TextConverter.toLowerCamel(invoiceItem.getThingName().getText()))),
+                    DataPurpose.thingIdentity(),
+                    DataValidator.empty(),
+                    new ObjectName(
+                        String.format(
+                            "%sId",
+                            TextConverter.toLowerCamel(invoiceItem.getThingName().getText()))),
+                    invoiceItem.makePackageName(invoicingRootPackageName, invoiceItem),
+                    new LinkedHashSet<>(),
+                    DataSourceType.DEFAULT)));
 
     // Parent Thing Identity
     assertThat(invoiceItem.getThingProperties().getData())
         .contains(
-            DataPrimitive.ofDataBusinessType(
+            DataPrimitive.ofDataBusinessTypeWithDataObject(
                 DataPurpose.parentThingIdentity(),
                 PrimitiveType.STRING,
                 new VariableName(
                     String.format(
-                        "%sId", TextConverter.toLowerCamel(invoice.getThingName().getText())))));
+                        "%sId", TextConverter.toLowerCamel(invoice.getThingName().getText()))),
+                new DataObject(
+                    new VariableName(invoice.getThingName().getText()),
+                    DataPurpose.referenceToThingByValue(),
+                    DataValidator.empty(),
+                    new ObjectName(invoice.getThingName().getText()),
+                    invoice.makePackageName(invoicingRootPackageName, invoice),
+                    new LinkedHashSet<>(),
+                    DataSourceType.DEFAULT)));
 
     // title
     DataPrimitive title =

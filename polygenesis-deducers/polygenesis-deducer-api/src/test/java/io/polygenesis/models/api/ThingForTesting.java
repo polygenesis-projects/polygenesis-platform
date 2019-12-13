@@ -55,7 +55,7 @@ public class ThingForTesting {
    * @return the thing
    */
   public static Thing create() {
-    Thing business = ThingBuilder.endToEnd(BUSINESS).createThing();
+    Thing business = ThingBuilder.endToEnd(BUSINESS).createThing(PackageName.any());
 
     business.addFunction(functionCreate(business));
     business.addFunction(functionFetchOne(business));

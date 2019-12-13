@@ -38,7 +38,7 @@ import java.util.Set;
  */
 public class Shared {
 
-  public static DataObject name(String rootPackageName) {
+  public static DataObject name(PackageName rootPackageName) {
     Set<Data> data = DataBuilder.create().withTextProperty("value").build().build();
 
     return new DataObject(
@@ -46,7 +46,7 @@ public class Shared {
         DataPurpose.any(),
         DataValidator.empty(),
         new ObjectName("name"),
-        new PackageName(rootPackageName).withSubPackage("shared"),
+        rootPackageName.withSubPackage("shared"),
         data,
         DataSourceType.DEFAULT);
   }
@@ -77,7 +77,7 @@ public class Shared {
         DataSourceType.DEFAULT);
   }
 
-  public static DataObject password(String rootPackageName) {
+  public static DataObject password(PackageName rootPackageName) {
     Set<Data> data = DataBuilder.create().withTextProperty("value").build().build();
 
     return new DataObject(
@@ -85,12 +85,12 @@ public class Shared {
         DataPurpose.any(),
         DataValidator.empty(),
         new ObjectName("password"),
-        new PackageName(rootPackageName).withSubPackage("identity"),
+        rootPackageName.withSubPackage("identity"),
         data,
         DataSourceType.DEFAULT);
   }
 
-  public static DataObject confirmationCode(String rootPackageName) {
+  public static DataObject confirmationCode(PackageName rootPackageName) {
     Set<Data> data = DataBuilder.create().withTextProperty("value").build().build();
 
     return new DataObject(
@@ -98,12 +98,12 @@ public class Shared {
         DataPurpose.any(),
         DataValidator.empty(),
         new ObjectName("confirmationCode"),
-        new PackageName(rootPackageName).withSubPackage("identity"),
+        rootPackageName.withSubPackage("identity"),
         data,
         DataSourceType.DEFAULT);
   }
 
-  public static DataObject expiresOn(String rootPackageName) {
+  public static DataObject expiresOn(PackageName rootPackageName) {
     Set<Data> data = DataBuilder.create().withDateTimeProperty("value").build().build();
 
     return new DataObject(
@@ -111,7 +111,7 @@ public class Shared {
         DataPurpose.any(),
         DataValidator.empty(),
         new ObjectName("expiresOn"),
-        new PackageName(rootPackageName).withSubPackage("identity"),
+        rootPackageName.withSubPackage("identity"),
         data,
         DataSourceType.DEFAULT);
   }

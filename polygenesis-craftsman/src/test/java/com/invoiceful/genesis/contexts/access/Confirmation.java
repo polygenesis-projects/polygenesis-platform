@@ -20,22 +20,25 @@
 
 package com.invoiceful.genesis.contexts.access;
 
+import com.oregor.trinity4j.Trinity4jAggregateRoot;
 import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.dsl.DataBuilder;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.dsl.PurposeFunctionBuilder;
 import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
+import io.polygenesis.commons.valueobjects.PackageName;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 /** @author Christos Tsakostas */
 public class Confirmation {
 
-  public static Thing create(String rootPackageName) {
+  public static Thing create(PackageName rootPackageName) {
     Thing confirmation =
         ThingBuilder.domainAbstractAggregateRoot("confirmation")
+            .setSuperClass(Trinity4jAggregateRoot.create(rootPackageName))
             .setPreferredPackage("com.invoiceful.access.identity")
-            .createThing();
+            .createThing(rootPackageName);
 
     confirmation.addFunctions(
         PurposeFunctionBuilder.forThing(confirmation, rootPackageName)
@@ -48,7 +51,7 @@ public class Confirmation {
     return confirmation;
   }
 
-  private static Set<Data> createData(String rootPackageName) {
+  private static Set<Data> createData(PackageName rootPackageName) {
     return DataBuilder.create()
         .withGroupData(Shared.confirmationCode(rootPackageName))
         .withGroupData(Shared.expiresOn(rootPackageName))

@@ -20,16 +20,13 @@
 
 package io.polygenesis.models.domain.common;
 
-import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.models.domain.Constructor;
 import io.polygenesis.models.domain.DomainObject;
 import io.polygenesis.models.domain.DomainObjectProperty;
-import io.polygenesis.models.domain.PropertyType;
 import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * The type Constructors deducer.
@@ -64,8 +61,9 @@ public class ConstructorsDeducer {
   /**
    * Deduce constructors set.
    *
+   * @param rootPackageName the root package name
+   * @param domainObject the domain object
    * @param superClass the super class
-   * @param identityProperties the identity properties
    * @param thing the thing
    * @return the set
    */
@@ -73,7 +71,6 @@ public class ConstructorsDeducer {
       PackageName rootPackageName,
       DomainObject domainObject,
       DomainObject superClass,
-      Set<DomainObjectProperty<?>> identityProperties,
       Thing thing) {
     Set<Constructor> constructors = new LinkedHashSet<>();
 
@@ -85,13 +82,11 @@ public class ConstructorsDeducer {
                 function.getPurpose().isCreate() || function.getPurpose().isEnsureExistence())
         .forEach(
             function -> {
-              Set<Data> thingProperties =
-                  function.getArguments().findDataExcludingIdentitiesAndPaging();
               Set<DomainObjectProperty<?>> properties = new LinkedHashSet<>();
 
-              properties.addAll(identityProperties);
               properties.addAll(
-                  dataToDomainObjectPropertyConverter.convertMany(domainObject, thingProperties));
+                  dataToDomainObjectPropertyConverter.convertMany(
+                      domainObject, function.getArguments().getData()));
 
               // Inherit properties from superclass
               if (superClass != null && !superClass.getConstructors().isEmpty()) {
@@ -100,31 +95,14 @@ public class ConstructorsDeducer {
                     .stream()
                     .forEach(
                         superClassConstructor -> {
-                          // Super class
+                          // Super class Properties
                           Set<DomainObjectProperty<?>> superClassProperties =
-                              superClassConstructor
-                                  .getProperties()
-                                  .stream()
-                                  .filter(
-                                      property ->
-                                          !property
-                                                  .getPropertyType()
-                                                  .equals(PropertyType.AGGREGATE_ROOT_ID)
-                                              && !property
-                                                  .getPropertyType()
-                                                  .equals(PropertyType.ABSTRACT_AGGREGATE_ROOT_ID)
-                                              && !property
-                                                  .getPropertyType()
-                                                  .equals(PropertyType.AGGREGATE_ENTITY_ID)
-                                              && !property
-                                                  .getPropertyType()
-                                                  .equals(PropertyType.TENANT_ID))
-                                  .collect(Collectors.toCollection(LinkedHashSet::new));
+                              superClassConstructor.getProperties();
 
                           // Add
                           constructors.add(
                               new Constructor(
-                                  null,
+                                  domainObject,
                                   function,
                                   properties,
                                   superClassProperties,
@@ -132,7 +110,8 @@ public class ConstructorsDeducer {
                         });
               } else {
                 // Add
-                constructors.add(new Constructor(null, function, properties, rootPackageName));
+                constructors.add(
+                    new Constructor(domainObject, function, properties, rootPackageName));
               }
             });
 

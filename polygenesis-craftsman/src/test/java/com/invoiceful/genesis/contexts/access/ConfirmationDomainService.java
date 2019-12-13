@@ -26,6 +26,7 @@ import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.dsl.FunctionBuilder;
 import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.commons.valueobjects.VariableName;
 
 /** @author Christos Tsakostas */
@@ -37,7 +38,7 @@ public class ConfirmationDomainService {
    * @param rootPackageName the root package name
    * @return the thing
    */
-  public static Thing create(String rootPackageName) {
+  public static Thing create(PackageName rootPackageName) {
     Thing confirmationDomainService =
         ThingBuilder.domainService("confirmationDomainService")
             .setPreferredPackage("com.invoiceful.access.identity")

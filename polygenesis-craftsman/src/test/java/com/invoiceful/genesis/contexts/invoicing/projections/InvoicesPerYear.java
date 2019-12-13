@@ -32,8 +32,7 @@ import java.util.Set;
 public class InvoicesPerYear {
 
   public static Thing create(String rootPackageName) {
-    Thing invoicesPerYear =
-        ThingBuilder.projection("invoicesPerYear").setMultiTenant(false).createThing();
+    Thing invoicesPerYear = ThingBuilder.projection("invoicesPerYear").createThing();
 
     invoicesPerYear.addFunctions(
         PurposeFunctionBuilder.forThing(invoicesPerYear, rootPackageName)

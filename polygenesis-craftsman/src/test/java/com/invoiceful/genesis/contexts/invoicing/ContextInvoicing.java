@@ -20,9 +20,13 @@
 
 package com.invoiceful.genesis.contexts.invoicing;
 
+import com.oregor.trinity4j.Trinity4jAggregateEntity;
+import com.oregor.trinity4j.Trinity4jAggregateRoot;
+import com.oregor.trinity4j.Trinity4jTenantAggregateRoot;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.ThingContext;
 import io.polygenesis.abstraction.thing.ThingContextBuilder;
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.ContextGenerator;
 import io.polygenesis.core.Deducer;
 import java.util.Set;
@@ -31,13 +35,19 @@ import java.util.Set;
 public class ContextInvoicing {
 
   public static ThingContext get(
-      String rootPackageName, ContextGenerator contextGenerator, Set<Deducer<?>> deducers) {
+      PackageName rootPackageName, ContextGenerator contextGenerator, Set<Deducer<?>> deducers) {
     Thing invoice = Invoice.create(rootPackageName);
     Thing document = Document.create(rootPackageName);
     Thing language = Language.create(rootPackageName);
 
     return ThingContextBuilder.of("invoicing", contextGenerator)
         .withDeducers(deducers)
+
+        // Trinity4J Abstract Aggregate Root
+        .addThing(Trinity4jAggregateRoot.create(rootPackageName))
+        .addThing(Trinity4jTenantAggregateRoot.create(rootPackageName))
+        .addThing(Trinity4jAggregateEntity.create(rootPackageName))
+
         //        .addThing(Language.create(rootPackageName))
         //        .addThing(DocumentRole.create(rootPackageName))
         //        .addThing(TaxRole.create(rootPackageName))

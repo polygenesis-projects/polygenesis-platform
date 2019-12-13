@@ -21,6 +21,7 @@
 package io.polygenesis.generators.java.domain.aggregateroot.activity.statemutation;
 
 import io.polygenesis.abstraction.data.DataObject;
+import io.polygenesis.abstraction.data.DataPurpose;
 import io.polygenesis.abstraction.data.PrimitiveType;
 import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.commons.text.TextConverter;
@@ -82,8 +83,13 @@ public class AggregateRootStateMutationMethodTransformer
         dataObject -> {
           //          if
           // (!source.getMutatedObject().getPackageName().equals(dataObject.getPackageName())) {
-          imports.add(
-              makeCanonicalObjectName(dataObject.getPackageName(), dataObject.getDataType()));
+
+          if (!(dataObject.getDataPurpose().equals(DataPurpose.thingIdentity())
+              && source.getMutatedObject().isAbstract())) {
+            imports.add(
+                makeCanonicalObjectName(dataObject.getPackageName(), dataObject.getDataType()));
+          }
+
           //          }
         });
 

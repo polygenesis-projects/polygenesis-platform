@@ -109,6 +109,7 @@ public class TableDeducer {
                 case TENANT_ID:
                 case AGGREGATE_ENTITY_ID:
                 case REFERENCE_TO_AGGREGATE_ROOT:
+                case REFERENCE_BY_ID:
                   break;
                 case PRIMITIVE:
                   domainObjectColumns.add(getColumnForPrimitive(property.getData(), ""));

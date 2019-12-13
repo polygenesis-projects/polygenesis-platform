@@ -38,7 +38,7 @@ public class SignUpDomainService {
    * @param rootPackageName the root package name
    * @return the thing
    */
-  public static Thing create(Thing signUp, String rootPackageName) {
+  public static Thing create(Thing signUp, PackageName rootPackageName) {
     Thing signUpDomainService =
         ThingBuilder.domainService("signUpDomainService")
             .setPreferredPackage("com.invoiceful.access.identity")
@@ -48,7 +48,7 @@ public class SignUpDomainService {
         FunctionBuilder.of(signUpDomainService, "create", Purpose.create())
             .addArgument(DataPrimitive.of(PrimitiveType.STRING, new VariableName("email")))
             .addArgument(DataPrimitive.of(PrimitiveType.STRING, new VariableName("password")))
-            .setReturnValue(signUp.getAsDataObject(new PackageName(rootPackageName)))
+            .setReturnValue(signUp.getAsDataObject(rootPackageName))
             .build());
 
     return signUpDomainService;

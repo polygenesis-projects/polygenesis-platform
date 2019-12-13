@@ -20,6 +20,8 @@
 
 package com.invoiceful.genesis.contexts.invoicing;
 
+import com.oregor.trinity4j.Trinity4jShared;
+import com.oregor.trinity4j.Trinity4jTenantAggregateRoot;
 import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.dsl.DataBuilder;
 import io.polygenesis.abstraction.thing.Thing;
@@ -32,13 +34,12 @@ import java.util.Set;
 /** @author Christos Tsakostas */
 public class Invoice {
 
-  public static Thing create(String rootPackageName) {
+  public static Thing create(PackageName rootPackageName) {
     Thing invoice =
         ThingBuilder.endToEnd("invoice")
-            .setMultiTenant(true)
-            // TODO
-            // .addThingProperty(Trinity4jShared.tenantId())
-            .createThing();
+            .setSuperClass(Trinity4jTenantAggregateRoot.create(rootPackageName))
+            .setMultiTenant(Trinity4jShared.tenantId())
+            .createThing(rootPackageName);
 
     invoice.addFunctions(
         PurposeFunctionBuilder.forThing(invoice, rootPackageName)
@@ -46,12 +47,12 @@ public class Invoice {
             .withFunctionModify("issue", new LinkedHashSet<>())
             .build());
 
-    invoice.addChild(InvoiceItem.create(invoice, new PackageName(rootPackageName)));
+    invoice.addChild(InvoiceItem.create(invoice, rootPackageName));
 
     return invoice;
   }
 
-  private static Set<Data> createData(String rootPackageName) {
+  private static Set<Data> createData(PackageName rootPackageName) {
     return DataBuilder.create().build();
   }
 }

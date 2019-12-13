@@ -23,6 +23,7 @@ package io.polygenesis.abstraction.thing.dsl;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.polygenesis.abstraction.thing.Thing;
+import io.polygenesis.commons.valueobjects.PackageName;
 import org.junit.Test;
 
 /** @author Christos Tsakostas */
@@ -30,7 +31,7 @@ public class MessageSubscriberThingBuilderTest {
 
   @Test
   public void shouldCreateMessageSubscriber() {
-    Thing user = ThingBuilder.endToEnd("user").createThing();
+    Thing user = ThingBuilder.endToEnd("user").createThing(PackageName.any());
 
     Thing onUserCreated =
         MessageSubscriberThingBuilder.of("onUserCreated").setRelatedThing(user).createThing();

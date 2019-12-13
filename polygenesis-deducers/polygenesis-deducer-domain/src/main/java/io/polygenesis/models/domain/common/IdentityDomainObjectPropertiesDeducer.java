@@ -29,18 +29,11 @@ import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.commons.valueobjects.VariableName;
 import io.polygenesis.core.AbstractionScope;
-import io.polygenesis.models.domain.AbstractAggregateRootId;
 import io.polygenesis.models.domain.AggregateEntityId;
-import io.polygenesis.models.domain.AggregateRootId;
 import io.polygenesis.models.domain.DomainObjectProperty;
-import io.polygenesis.models.domain.GenericTypeParameter;
-import io.polygenesis.models.domain.ProjectionId;
 import io.polygenesis.models.domain.ReferenceToAbstractAggregateRoot;
 import io.polygenesis.models.domain.ReferenceToAggregateRoot;
-import io.polygenesis.models.domain.SupportiveEntityId;
-import io.polygenesis.models.domain.TenantId;
 import java.util.LinkedHashSet;
-import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -49,71 +42,6 @@ import java.util.Set;
  * @author Christos Tsakostas
  */
 public class IdentityDomainObjectPropertiesDeducer {
-
-  // ===============================================================================================
-  // PUBLIC - AGGREGATE ROOT
-  // ===============================================================================================
-
-  /**
-   * Make root identity domain object properties set.
-   *
-   * @param thing the thing
-   * @param rootPackageName the root package name
-   * @return the set
-   */
-  public Set<DomainObjectProperty<?>> makeRootIdentityDomainObjectProperties(
-      Thing thing, PackageName rootPackageName) {
-    Set<DomainObjectProperty<?>> properties = new LinkedHashSet<>();
-
-    Optional<AbstractionScope> optionalAbstractionScope =
-        thing
-            .getAbstractionsScopes()
-            .stream()
-            .filter(p -> p.getText().equals(AbstractionScope.DOMAIN_ABSTRACT_AGGREGATE_ROOT))
-            .findFirst();
-
-    if (optionalAbstractionScope.isPresent()) {
-      properties.add(makeAbstractAggregateRootId(thing, rootPackageName));
-    } else {
-      properties.add(makeAggregateRootId(thing, rootPackageName));
-    }
-
-    if (thing.getMultiTenant()) {
-      properties.add(makeTenantId());
-    }
-
-    return properties;
-  }
-
-  // ===============================================================================================
-  // PRIVATE
-  // ===============================================================================================
-
-  private AggregateRootId makeAggregateRootId(Thing thing, PackageName rootPackageName) {
-    DataObject dataObject =
-        new DataObject(
-            new ObjectName(thing.getThingName().getText() + "Id"),
-            thing.makePackageName(rootPackageName, thing));
-
-    return new AggregateRootId(dataObject);
-  }
-
-  private AbstractAggregateRootId makeAbstractAggregateRootId(
-      Thing thing, PackageName rootPackageName) {
-    DataObject dataObject =
-        new DataObject(
-            new ObjectName(thing.getThingName().getText() + "Id"),
-            thing.makePackageName(rootPackageName, thing));
-
-    return new AbstractAggregateRootId(dataObject, new GenericTypeParameter("I"));
-  }
-
-  private TenantId makeTenantId() {
-    DataObject dataObject =
-        new DataObject(new ObjectName("TenantId"), new PackageName("com.oregor.trinity4j.domain"));
-
-    return new TenantId(dataObject);
-  }
 
   // ===============================================================================================
   // PUBLIC - AGGREGATE ENTITY
@@ -189,71 +117,5 @@ public class IdentityDomainObjectPropertiesDeducer {
 
   private Boolean isAbstract(Thing thing) {
     return thing.getAbstractionsScopes().contains(AbstractionScope.domainAbstractAggregateRoot());
-  }
-
-  // ===============================================================================================
-  // PUBLIC - PROJECTION
-  // ===============================================================================================
-
-  /**
-   * Make projection identity domain object properties set.
-   *
-   * @param thing the thing
-   * @param rootPackageName the root package name
-   * @return the set
-   */
-  public Set<DomainObjectProperty<?>> makeProjectionIdentityDomainObjectProperties(
-      Thing thing, PackageName rootPackageName) {
-    Set<DomainObjectProperty<?>> properties = new LinkedHashSet<>();
-
-    properties.add(makeProjectionId(thing, rootPackageName));
-
-    return properties;
-  }
-
-  // ===============================================================================================
-  // PRIVATE
-  // ===============================================================================================
-
-  private ProjectionId makeProjectionId(Thing thing, PackageName rootPackageName) {
-    DataObject dataObject =
-        new DataObject(
-            new ObjectName(thing.getThingName().getText() + "Id"),
-            thing.makePackageName(rootPackageName, thing));
-
-    return new ProjectionId(dataObject);
-  }
-
-  // ===============================================================================================
-  // PUBLIC - SUPPORTIVE
-  // ===============================================================================================
-
-  /**
-   * Make supportive identity domain object properties set.
-   *
-   * @param thing the thing
-   * @param rootPackageName the root package name
-   * @return the set
-   */
-  public Set<DomainObjectProperty<?>> makeSupportiveIdentityDomainObjectProperties(
-      Thing thing, PackageName rootPackageName) {
-    Set<DomainObjectProperty<?>> properties = new LinkedHashSet<>();
-
-    properties.add(makeSupportiveEntityId(thing, rootPackageName));
-
-    return properties;
-  }
-
-  // ===============================================================================================
-  // PRIVATE
-  // ===============================================================================================
-
-  private SupportiveEntityId makeSupportiveEntityId(Thing thing, PackageName rootPackageName) {
-    DataObject dataObject =
-        new DataObject(
-            new ObjectName(thing.getThingName().getText() + "Id"),
-            thing.makePackageName(rootPackageName.withSubPackage("supportive"), thing));
-
-    return new SupportiveEntityId(dataObject);
   }
 }

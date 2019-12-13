@@ -21,17 +21,12 @@
 package com.oregor.trinity4j;
 
 import io.polygenesis.abstraction.data.Data;
-import io.polygenesis.abstraction.data.DataObject;
-import io.polygenesis.abstraction.data.DataPurpose;
-import io.polygenesis.abstraction.data.DataSourceType;
-import io.polygenesis.abstraction.data.DataValidator;
+import io.polygenesis.abstraction.data.DataRepository;
 import io.polygenesis.abstraction.data.dsl.DataBuilder;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.dsl.PurposeFunctionBuilder;
 import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
-import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
-import io.polygenesis.commons.valueobjects.VariableName;
 import io.polygenesis.core.AbstractionScope;
 import java.util.Set;
 
@@ -48,35 +43,28 @@ public class Trinity4jAggregateRoot {
    * @param rootPackageName the root package name
    * @return the thing
    */
-  public static Thing create(String rootPackageName) {
+  public static Thing create(PackageName rootPackageName) {
     Thing aggregateRoot =
         ThingBuilder.domainAbstractAggregateRoot("aggregateRoot")
             .addAbstractionScope(AbstractionScope.externallyProvided())
             .setPreferredPackage("com.oregor.trinity4j.domain")
-            .createThing();
+            .createThing(rootPackageName);
 
     aggregateRoot.addFunctions(
         PurposeFunctionBuilder.forThing(aggregateRoot, rootPackageName)
             .withFunctionCreate(createData())
             .build());
 
+    DataRepository dataRepository = new DataRepository();
+    dataRepository.addSetOfData(createData());
+    aggregateRoot.assignThingProperties(dataRepository);
+
     return aggregateRoot;
   }
 
   private static Set<Data> createData() {
-    return DataBuilder.create().withGroupData(aggregateRootId()).build();
-  }
-
-  private static DataObject aggregateRootId() {
-    Set<Data> data = DataBuilder.create().withTextProperty("typeId").build().build();
-
-    return new DataObject(
-        new VariableName("typeId"),
-        DataPurpose.thingIdentity(),
-        DataValidator.empty(),
-        new ObjectName("aggregateRootId"),
-        new PackageName("com.oregor.trinity4j.domain"),
-        data,
-        DataSourceType.EXTERNALLY_PROVIDED);
+    return DataBuilder.create()
+        .withDataPrimitive(Trinity4jShared.aggregateRootId().getAsDataPrimitive())
+        .build();
   }
 }

@@ -135,7 +135,7 @@ public class Shared {
         DataSourceType.DEFAULT);
   }
 
-  public static DataObject language(String rootPackageName) {
+  public static DataObject language(PackageName rootPackageName) {
     Set<Data> data = DataBuilder.create().withTextProperty("iso2code").build().build();
 
     return new DataObject(
@@ -143,7 +143,7 @@ public class Shared {
         DataPurpose.any(),
         DataValidator.empty(),
         new ObjectName("language"),
-        new PackageName(rootPackageName).withSubPackage("shared"),
+        rootPackageName.withSubPackage("shared"),
         data,
         DataSourceType.DEFAULT);
   }

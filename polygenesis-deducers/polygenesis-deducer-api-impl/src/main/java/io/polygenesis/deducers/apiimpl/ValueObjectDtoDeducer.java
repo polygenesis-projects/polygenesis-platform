@@ -27,6 +27,7 @@ import io.polygenesis.abstraction.thing.ThingName;
 import io.polygenesis.abstraction.thing.dsl.FunctionBuilder;
 import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
 import io.polygenesis.commons.text.TextConverter;
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.models.api.Dto;
 import io.polygenesis.models.api.Service;
 import io.polygenesis.models.api.ServiceMetamodelRepository;
@@ -113,7 +114,7 @@ public class ValueObjectDtoDeducer {
       ValueObjectDtoPair pair) {
     Set<DomainObjectConverterMethod> methods = new LinkedHashSet<>();
 
-    Thing thing = ThingBuilder.endToEnd("Converter").createThing();
+    Thing thing = ThingBuilder.endToEnd("Converter").createThing(PackageName.any());
 
     Dto dtoToUse = pair.getDto().withVariableNameEqualToObjectName();
     ValueObject valueObjectToUse = pair.getValueObject().withVariableNameEqualToObjectName();

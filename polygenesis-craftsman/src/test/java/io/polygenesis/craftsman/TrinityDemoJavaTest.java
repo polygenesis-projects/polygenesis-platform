@@ -26,6 +26,7 @@ import com.oregor.trinity.scaffolder.java.core.ProjectDescription;
 import com.oregor.trinity.scaffolder.java.core.ProjectDescriptionBuilder;
 import com.oregor.trinity.scaffolder.java.core.TrinityScaffolderJava;
 import com.oregor.trinity.scaffolder.java.core.TrinityScaffolderJavaFactory;
+import com.oregor.trinity4j.Trinity4jAggregateRoot;
 import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.dsl.DataBuilder;
 import io.polygenesis.abstraction.thing.Thing;
@@ -129,6 +130,7 @@ public class TrinityDemoJavaTest {
                     JAVA_CONTEXT,
                     TABLE_PREFIX,
                     JAVA_ROOT_PACKAGE))
+            .addThing(Trinity4jAggregateRoot.create(new PackageName(JAVA_ROOT_PACKAGE)))
             .addThing(createTodo(new PackageName(JAVA_ROOT_PACKAGE)))
             .withDeducers(GenesisDefault.javaDeducers(JAVA_ROOT_PACKAGE))
             .build();
@@ -138,7 +140,10 @@ public class TrinityDemoJavaTest {
   }
 
   private Thing createTodo(PackageName rootPackageName) {
-    Thing task = ThingBuilder.endToEnd("task").setMultiTenant(false).createThing();
+    Thing task =
+        ThingBuilder.endToEnd("task")
+            .setSuperClass(Trinity4jAggregateRoot.create(rootPackageName))
+            .createThing(PackageName.any());
 
     task.addFunctions(
         PurposeFunctionBuilder.forThing(task, rootPackageName.getText())

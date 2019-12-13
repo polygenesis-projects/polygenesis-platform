@@ -27,6 +27,7 @@ import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.ThingRepository;
 import io.polygenesis.abstraction.thing.dsl.PurposeFunctionBuilder;
 import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.AbstractionRepository;
 import io.polygenesis.core.MetamodelRepository;
 import io.polygenesis.deducers.spreadsheet.SpreadsheetDeducerStrategy;
@@ -80,7 +81,7 @@ public class DefaultSpreadsheetDeducerStrategyTest {
   private ThingRepository thingRepository() {
     Set<Thing> things = new LinkedHashSet<>();
 
-    Thing thing = ThingBuilder.endToEnd("Customer").createThing();
+    Thing thing = ThingBuilder.endToEnd("Customer").createThing(PackageName.any());
 
     thing.addFunctions(
         PurposeFunctionBuilder.forThing(thing, "com.oregor")

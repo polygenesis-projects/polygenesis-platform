@@ -61,85 +61,26 @@ public class DomainObjectPropertiesDeducer {
   // ===============================================================================================
 
   /**
-   * Deduce root domain object properties from thing set.
+   * Deduce domain object properties from thing properties set.
    *
+   * @param domainObject the domain object
    * @param superClass the super class
-   * @param identityProperties the identity properties
    * @param thing the thing
    * @return the set
    */
-  public Set<DomainObjectProperty<?>> deduceRootDomainObjectPropertiesFromThing(
-      DomainObject domainObject,
-      DomainObject superClass,
-      Set<DomainObjectProperty<?>> identityProperties,
-      Thing thing) {
+  public Set<DomainObjectProperty<?>> deduceDomainObjectPropertiesFromThingProperties(
+      DomainObject domainObject, DomainObject superClass, Thing thing) {
     Assertion.isNotNull(thing.getThingIdentity(), "thing.getThingIdentity() is required");
 
     Set<DomainObjectProperty<?>> properties = new LinkedHashSet<>();
 
-    properties.addAll(identityProperties);
-
     properties.addAll(
         thing
             .getThingProperties()
-            .findDataExcludingIdentitiesAndPaging()
+            .getData()
             .stream()
             .map(data -> dataToDomainObjectPropertyConverter.convert(domainObject, data))
             .filter(property -> !checkIfPropertyIsDefinedInSuperClass(property, superClass))
-            .collect(Collectors.toCollection(LinkedHashSet::new)));
-
-    return properties;
-  }
-
-  /**
-   * Deduce domain object properties from thing set.
-   *
-   * @param thingChild the thing child
-   * @param identityProperties the identity properties
-   * @return the set
-   */
-  public Set<DomainObjectProperty<?>> deduceEntityDomainObjectPropertiesFromThing(
-      DomainObject domainObject,
-      Thing thingChild,
-      Set<DomainObjectProperty<?>> identityProperties) {
-    Assertion.isNotNull(thingChild.getThingIdentity(), "thingChild.getThingIdentity() is required");
-
-    Set<DomainObjectProperty<?>> properties = new LinkedHashSet<>();
-
-    properties.addAll(identityProperties);
-
-    properties.addAll(
-        thingChild
-            .getThingProperties()
-            .findDataExcludingIdentitiesAndPaging()
-            .stream()
-            .map(data -> dataToDomainObjectPropertyConverter.convert(domainObject, data))
-            .collect(Collectors.toCollection(LinkedHashSet::new)));
-
-    return properties;
-  }
-
-  /**
-   * Deduce domain object properties from thing set.
-   *
-   * @param identityProperties the identity properties
-   * @param thing the thing
-   * @return the set
-   */
-  public Set<DomainObjectProperty<?>> deduceDomainObjectPropertiesFromThing(
-      DomainObject domainObject, Set<DomainObjectProperty<?>> identityProperties, Thing thing) {
-    Assertion.isNotNull(thing.getThingIdentity(), "thing.getThingIdentity() is required");
-
-    Set<DomainObjectProperty<?>> properties = new LinkedHashSet<>();
-
-    properties.addAll(identityProperties);
-
-    properties.addAll(
-        thing
-            .getThingProperties()
-            .findDataExcludingIdentitiesAndPaging()
-            .stream()
-            .map(data -> dataToDomainObjectPropertyConverter.convert(domainObject, data))
             .collect(Collectors.toCollection(LinkedHashSet::new)));
 
     return properties;

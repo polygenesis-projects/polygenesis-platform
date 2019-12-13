@@ -118,7 +118,7 @@ public class DataReferenceToThingByValue extends AbstractData {
     DataObject thingId =
         thing.getThingIdentityAsDataObjectFromDataPrimitive(
             new PackageName(rootPackageName),
-            new VariableName("thingId"),
+            getVariableName(),
             DataPrimitive.of(PrimitiveType.UUID, new VariableName("rootId")));
 
     return DataPrimitive.ofDataBusinessTypeWithDataObject(
