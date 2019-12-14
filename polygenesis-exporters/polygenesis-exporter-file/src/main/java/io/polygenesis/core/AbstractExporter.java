@@ -20,42 +20,44 @@
 
 package io.polygenesis.core;
 
-import io.polygenesis.commons.assertion.Assertion;
-import io.polygenesis.commons.path.PathService;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import com.google.googlejavaformat.java.Formatter;
+import com.google.googlejavaformat.java.FormatterException;
+import com.google.googlejavaformat.java.JavaFormatterOptions;
+import com.google.googlejavaformat.java.JavaFormatterOptions.Style;
 
 /**
- * The type Active file exporter.
+ * The type Abstract exporter.
  *
  * @author Christos Tsakostas
  */
-public class ActiveFileExporter extends AbstractExporter implements Exporter {
+public abstract class AbstractExporter {
 
   // ===============================================================================================
-  // OVERRIDES
+  // STATIC
   // ===============================================================================================
 
-  @Override
-  public void export(ByteArrayOutputStream byteArrayOutputStream, ExportInfo exportInfo) {
-    Assertion.isNotNull(exportInfo, "exportInfo is required");
-    Assertion.isNotNull(
-        exportInfo.getGenerationPath(), "exportInfo.getGenerationPath() is required");
-    Assertion.isNotNull(exportInfo.getFileName(), "exportInfo.getFileName() is required");
+  private static Formatter formatter =
+      new Formatter(JavaFormatterOptions.builder().style(Style.GOOGLE).build());
 
-    PathService.ensurePath(exportInfo.getGenerationPath());
+  // ===============================================================================================
+  // PROTECTED FUNCTIONALITY
+  // ===============================================================================================
 
-    String formattedContent =
-        format(byteArrayOutputStream.toString(Charset.defaultCharset()), exportInfo.getFileName());
+  /**
+   * Format string.
+   *
+   * @param sourceString the source string
+   * @param fileName the file name
+   * @return the string
+   */
+  protected String format(String sourceString, String fileName) {
+    if (!fileName.endsWith(".java")) {
+      return sourceString;
+    }
 
     try {
-      Files.write(
-          Paths.get(exportInfo.getGenerationPath().toString(), exportInfo.getFileName()),
-          formattedContent.getBytes());
-    } catch (IOException e) {
+      return formatter.formatSourceAndFixImports(sourceString);
+    } catch (FormatterException e) {
       throw new IllegalStateException(e.getMessage(), e);
     }
   }

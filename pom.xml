@@ -128,6 +128,9 @@
     <!--INFLECTOR-->
     <evo-inflector.version>1.2.2</evo-inflector.version>
 
+    <!--GOOGLE JAVA FORMAT-->
+    <google-java-format.version>1.7</google-java-format.version>
+
     <!--TRINITY-->
     <trinity-scaffolder-java.version>0.0.7</trinity-scaffolder-java.version>
 
@@ -190,6 +193,13 @@
         <groupId>org.atteo</groupId>
         <artifactId>evo-inflector</artifactId>
         <version>${evo-inflector.version}</version>
+      </dependency>
+
+      <!--GOOGLE JAVA FORMAT-->
+      <dependency>
+        <groupId>com.google.googlejavaformat</groupId>
+        <artifactId>google-java-format</artifactId>
+        <version>${google-java-format.version}</version>
       </dependency>
 
       <!--TRINITY-->

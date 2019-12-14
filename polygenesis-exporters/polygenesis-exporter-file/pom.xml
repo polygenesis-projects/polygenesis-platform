@@ -19,6 +19,13 @@
       <artifactId>polygenesis-core</artifactId>
     </dependency>
 
+    <!--GOOGLE JAVA FORMAT-->
+    <dependency>
+      <groupId>com.google.googlejavaformat</groupId>
+      <artifactId>google-java-format</artifactId>
+      <version>${google-java-format.version}</version>
+    </dependency>
+
     <!--TEST-->
     <dependency>
       <groupId>io.polygenesis</groupId>
