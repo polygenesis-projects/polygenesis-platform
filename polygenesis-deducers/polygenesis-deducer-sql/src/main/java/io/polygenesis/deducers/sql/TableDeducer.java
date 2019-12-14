@@ -29,8 +29,6 @@ import io.polygenesis.commons.valueobjects.VariableName;
 import io.polygenesis.models.domain.AggregateEntityCollection;
 import io.polygenesis.models.domain.DomainObject;
 import io.polygenesis.models.domain.DomainObjectProperty;
-import io.polygenesis.models.domain.DomainObjectType;
-import io.polygenesis.models.domain.InstantiationType;
 import io.polygenesis.models.sql.Column;
 import io.polygenesis.models.sql.ColumnDataType;
 import io.polygenesis.models.sql.RequiredType;
@@ -83,33 +81,77 @@ public class TableDeducer {
   public Set<Table> deduce(DomainObject domainObject) {
     Set<Table> allDomainObjectRelatedTables = new LinkedHashSet<>();
 
-    if (domainObject.getDomainObjectType().equals(DomainObjectType.ABSTRACT_AGGREGATE_ROOT)
-        || domainObject.getInstantiationType().equals(InstantiationType.ABSTRACT)) {
+    if (domainObject.isAbstract()) {
       return allDomainObjectRelatedTables;
     }
 
     Set<Column> domainObjectColumns = new LinkedHashSet<>();
 
-    if (domainObject.getDomainObjectType().equals(DomainObjectType.AGGREGATE_ROOT)) {
-      addAggregateRootIdInColumnSetAsPrimaryKey(domainObjectColumns, domainObject);
+    //    if (domainObject.getDomainObjectType().equals(DomainObjectType.AGGREGATE_ROOT)) {
+    //      addAggregateRootIdInColumnSetAsPrimaryKey(domainObjectColumns, domainObject);
+    //    }
+    //
+    //    if (domainObject.getDomainObjectType().equals(DomainObjectType.PROJECTION)) {
+    //      addProjectionIdInColumnSet(domainObjectColumns);
+    //    }
+
+    fillDomainObjectColumns(allDomainObjectRelatedTables, domainObjectColumns, domainObject);
+
+    // Add version
+    domainObjectColumns.add(
+        new Column("version", ColumnDataType.INTEGER, 11, RequiredType.REQUIRED));
+
+    String tableName = domainObject.getObjectName().getText();
+
+    if (domainObject.isAggregateEntity()) {
+      tableName =
+          TextConverter.toLowerUnderscore(domainObject.getParent().getObjectName().getText())
+              + "_"
+              + TextConverter.toLowerUnderscore(
+                  TextConverter.toPlural(domainObject.getObjectName().getText()));
     }
 
-    if (domainObject.getDomainObjectType().equals(DomainObjectType.PROJECTION)) {
-      addProjectionIdInColumnSet(domainObjectColumns);
-    }
+    Table domainObjectTable =
+        new Table(new TableName(tableName), domainObjectColumns, domainObject.getMultiTenant());
 
+    allDomainObjectRelatedTables.add(domainObjectTable);
+
+    return allDomainObjectRelatedTables;
+  }
+
+  private void fillDomainObjectColumns(
+      Set<Table> allDomainObjectRelatedTables,
+      Set<Column> domainObjectColumns,
+      DomainObject domainObject) {
     domainObject
         .getProperties()
         .forEach(
             property -> {
               switch (property.getPropertyType()) {
-                case AGGREGATE_ROOT_ID:
                 case ABSTRACT_AGGREGATE_ROOT_ID:
                 case PROJECTION_ID:
-                case TENANT_ID:
-                case AGGREGATE_ENTITY_ID:
-                case REFERENCE_TO_AGGREGATE_ROOT:
+                  break;
+
                 case REFERENCE_BY_ID:
+                  domainObjectColumns.addAll(
+                      getColumnsForValueObject(property.getData().getAsDataObject()));
+                  break;
+
+                case REFERENCE_TO_AGGREGATE_ROOT:
+                case AGGREGATE_ROOT_ID:
+                  domainObjectColumns.add(
+                      new Column(
+                          "root_id", ColumnDataType.BINARY, 16, 0, RequiredType.REQUIRED, true));
+                  break;
+                case TENANT_ID:
+                  domainObjectColumns.add(
+                      new Column(
+                          "tenant_id", ColumnDataType.BINARY, 16, 0, RequiredType.REQUIRED, true));
+                  break;
+                case AGGREGATE_ENTITY_ID:
+                  domainObjectColumns.add(
+                      new Column(
+                          "entity_id", ColumnDataType.BINARY, 16, 0, RequiredType.REQUIRED, true));
                   break;
                 case PRIMITIVE:
                   domainObjectColumns.add(getColumnForPrimitive(property.getData(), ""));
@@ -151,19 +193,11 @@ public class TableDeducer {
               }
             });
 
-    // Add version
-    domainObjectColumns.add(
-        new Column("version", ColumnDataType.INTEGER, 11, RequiredType.REQUIRED));
+    if (domainObject.getSuperClass() != null) {
+      DomainObject superClass = domainObject.getSuperClass();
 
-    Table domainObjectTable =
-        new Table(
-            new TableName(domainObject.getObjectName().getText()),
-            domainObjectColumns,
-            domainObject.getMultiTenant());
-
-    allDomainObjectRelatedTables.add(domainObjectTable);
-
-    return allDomainObjectRelatedTables;
+      fillDomainObjectColumns(allDomainObjectRelatedTables, domainObjectColumns, superClass);
+    }
   }
 
   /**

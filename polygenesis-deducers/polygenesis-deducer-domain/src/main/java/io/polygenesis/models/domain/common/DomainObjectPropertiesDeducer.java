@@ -80,7 +80,7 @@ public class DomainObjectPropertiesDeducer {
             .getData()
             .stream()
             .map(data -> dataToDomainObjectPropertyConverter.convert(domainObject, data))
-            .filter(property -> !checkIfPropertyIsDefinedInSuperClass(property, superClass))
+            // .filter(property -> !checkIfPropertyIsDefinedInSuperClass(property, superClass))
             .collect(Collectors.toCollection(LinkedHashSet::new)));
 
     return properties;

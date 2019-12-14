@@ -120,6 +120,7 @@ public abstract class DomainObjectClassTransformer<
                               source, property.getData().getAsDataArray()),
                           dataTypeTransformer.getModifierPrivate()));
                   break;
+                case REFERENCE_BY_ID:
                 case VALUE_OBJECT:
                   fieldRepresentations.add(
                       FieldRepresentation.withAnnotations(
@@ -151,13 +152,6 @@ public abstract class DomainObjectClassTransformer<
                           makeVariableDataType(property),
                           makeVariableName(property),
                           makeAnnotationsForAggregateEntityCollection(source),
-                          dataTypeTransformer.getModifierPrivate()));
-                  break;
-                case REFERENCE_BY_ID:
-                  fieldRepresentations.add(
-                      FieldRepresentation.withModifiers(
-                          makeVariableDataType(property),
-                          makeVariableName(property),
                           dataTypeTransformer.getModifierPrivate()));
                   break;
                 case MAP:
