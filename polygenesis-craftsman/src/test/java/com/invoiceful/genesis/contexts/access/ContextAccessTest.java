@@ -48,7 +48,7 @@ import org.junit.Test;
 /** @author Christos Tsakostas */
 public class ContextAccessTest {
 
-  private static final String JAVA_EXPORT_PATH = "/Users/tsakostas/work/repo/gitlab/invoiceful/xxx";
+  private static final String JAVA_EXPORT_PATH = "tmp";
   private static final String JAVA_PROJECT_FOLDER = "invoiceful-backend";
   private static final String JAVA_ROOT_PACKAGE = "com.invoiceful";
   private static final String ACCESS_ROOT_PACKAGE = "com.invoiceful.access";

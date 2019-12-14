@@ -129,7 +129,7 @@
     <evo-inflector.version>1.2.2</evo-inflector.version>
 
     <!--TRINITY-->
-    <trinity-scaffolder-java.version>0.0.7-SNAPSHOT</trinity-scaffolder-java.version>
+    <trinity-scaffolder-java.version>0.0.7</trinity-scaffolder-java.version>
 
     <!--TEST-->
     <junit.version>4.12</junit.version>
@@ -640,7 +640,8 @@
           <version>${maven-javadoc-plugin.version}</version>
           <configuration>
             <additionalparam>-Xdoclint:none</additionalparam>
-            <failOnError>false</failOnError>
+            <failOnError>true</failOnError>
+            <source>8</source>
           </configuration>
         </plugin>
         <!-- ===================================================================== -->
