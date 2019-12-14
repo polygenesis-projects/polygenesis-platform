@@ -87,14 +87,6 @@ public class TableDeducer {
 
     Set<Column> domainObjectColumns = new LinkedHashSet<>();
 
-    //    if (domainObject.getDomainObjectType().equals(DomainObjectType.AGGREGATE_ROOT)) {
-    //      addAggregateRootIdInColumnSetAsPrimaryKey(domainObjectColumns, domainObject);
-    //    }
-    //
-    //    if (domainObject.getDomainObjectType().equals(DomainObjectType.PROJECTION)) {
-    //      addProjectionIdInColumnSet(domainObjectColumns);
-    //    }
-
     fillDomainObjectColumns(allDomainObjectRelatedTables, domainObjectColumns, domainObject);
 
     // Add version
@@ -129,7 +121,17 @@ public class TableDeducer {
             property -> {
               switch (property.getPropertyType()) {
                 case ABSTRACT_AGGREGATE_ROOT_ID:
+                  break;
+
                 case PROJECTION_ID:
+                  domainObjectColumns.add(
+                      new Column(
+                          "projection_id",
+                          ColumnDataType.BINARY,
+                          16,
+                          0,
+                          RequiredType.REQUIRED,
+                          true));
                   break;
 
                 case REFERENCE_BY_ID:
@@ -466,11 +468,6 @@ public class TableDeducer {
         domainObjectChild.getMultiTenant());
   }
 
-  private void addAggregateRootIdInColumnSetAsPrimaryKey(
-      Set<Column> columns, DomainObject domainObject) {
-    addAggregateRootIdInColumnSet(columns, domainObject, true, true);
-  }
-
   private void addAggregateRootIdInColumnSetAsPrimaryKeyForAggregateEntity(
       Set<Column> columns, DomainObject domainObject) {
     addAggregateRootIdInColumnSet(columns, domainObject, true, false);
@@ -506,10 +503,5 @@ public class TableDeducer {
    */
   private void addAggregateEntityIdInColumnSet(Set<Column> columns) {
     columns.add(new Column("entity_id", ColumnDataType.BINARY, 16, 0, RequiredType.REQUIRED, true));
-  }
-
-  private void addProjectionIdInColumnSet(Set<Column> columns) {
-    columns.add(
-        new Column("projection_id", ColumnDataType.BINARY, 16, 0, RequiredType.REQUIRED, true));
   }
 }

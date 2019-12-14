@@ -588,15 +588,6 @@ public class Purpose implements Serializable {
   }
 
   /**
-   * Is entity create boolean.
-   *
-   * @return the boolean
-   */
-  public boolean isEntityCreate() {
-    return getText().equals(ENTITY_CREATE);
-  }
-
-  /**
    * Is ensure existence boolean.
    *
    * @return the boolean
@@ -651,6 +642,55 @@ public class Purpose implements Serializable {
    */
   public boolean isFetchPagedCollection() {
     return getText().equals(FETCH_PAGED_COLLECTION);
+  }
+
+  // ===============================================================================================
+  // AGGREGATE ENTITIES
+  // ===============================================================================================
+
+  /**
+   * Is entity create boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isEntityCreate() {
+    return getText().equals(ENTITY_CREATE);
+  }
+
+  /**
+   * Is entity modify boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isEntityModify() {
+    return getText().equals(ENTITY_MODIFY);
+  }
+
+  /**
+   * Is entity remove boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isEntityRemove() {
+    return getText().equals(ENTITY_REMOVE);
+  }
+
+  /**
+   * Is entity fetch boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isEntityFetch() {
+    return getText().equals(ENTITY_FETCH);
+  }
+
+  /**
+   * Is entity fetch all boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isEntityFetchAll() {
+    return getText().equals(ENTITY_FETCH_ALL);
   }
 
   // ===============================================================================================

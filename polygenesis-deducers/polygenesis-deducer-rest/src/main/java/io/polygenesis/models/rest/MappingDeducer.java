@@ -48,16 +48,22 @@ public class MappingDeducer {
   public Set<Mapping> deduceFrom(Function function, HttpMethod httpMethod) {
     Set<Mapping> mappings = new LinkedHashSet<>();
 
+    Function functionToUse = function;
+
+    if (function.getDelegatesToFunction() != null) {
+      functionToUse = function.getDelegatesToFunction();
+    }
+
     switch (httpMethod) {
       case GET:
-        mappings.add(getMappingForGet(function));
+        mappings.add(mappingForGet(functionToUse));
         break;
       case POST:
-        mappings.add(getMappingForResource(function.getThing()));
+        mappings.add(getMappingForResource(functionToUse.getThing()));
         break;
       case PUT:
       case DELETE:
-        mappings.add(getMappingForResourceWithId(function.getThing()));
+        mappings.add(getMappingForResourceWithId(functionToUse.getThing()));
         break;
       default:
         throw new UnsupportedOperationException();
@@ -76,12 +82,12 @@ public class MappingDeducer {
    * @param function the function
    * @return the mapping for get
    */
-  private Mapping getMappingForGet(Function function) {
-
-    if (function.getPurpose().isFetchOne()) {
+  private Mapping mappingForGet(Function function) {
+    if (function.getPurpose().isFetchOne() || function.getPurpose().isEntityFetch()) {
       return getMappingForResourceWithId(function.getThing());
     } else if (function.getPurpose().isFetchCollection()
-        || function.getPurpose().isFetchPagedCollection()) {
+        || function.getPurpose().isFetchPagedCollection()
+        || function.getPurpose().isEntityFetchAll()) {
       return getMappingForResource(function.getThing());
     } else {
       throw new IllegalStateException(

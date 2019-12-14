@@ -80,26 +80,8 @@ public class DomainObjectPropertiesDeducer {
             .getData()
             .stream()
             .map(data -> dataToDomainObjectPropertyConverter.convert(domainObject, data))
-            // .filter(property -> !checkIfPropertyIsDefinedInSuperClass(property, superClass))
             .collect(Collectors.toCollection(LinkedHashSet::new)));
 
     return properties;
-  }
-
-  // ===============================================================================================
-  // PRIVATE
-  // ===============================================================================================
-
-  private boolean checkIfPropertyIsDefinedInSuperClass(
-      DomainObjectProperty<?> property, DomainObject superClass) {
-    if (superClass == null) {
-      return false;
-    }
-
-    return superClass
-        .getProperties()
-        .stream()
-        .anyMatch(
-            propertyInSuperclass -> propertyInSuperclass.getData().equals(property.getData()));
   }
 }

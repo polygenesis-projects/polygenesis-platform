@@ -46,6 +46,12 @@ public class EndpointDeducer {
     purposeToHttpMethod.put(Purpose.fetchOne(), HttpMethod.GET);
     purposeToHttpMethod.put(Purpose.fetchCollection(), HttpMethod.GET);
     purposeToHttpMethod.put(Purpose.fetchPagedCollection(), HttpMethod.GET);
+
+    purposeToHttpMethod.put(Purpose.entityCreate(), HttpMethod.POST);
+    purposeToHttpMethod.put(Purpose.entityModify(), HttpMethod.PUT);
+    purposeToHttpMethod.put(Purpose.entityRemove(), HttpMethod.DELETE);
+    purposeToHttpMethod.put(Purpose.entityFetch(), HttpMethod.GET);
+    purposeToHttpMethod.put(Purpose.entityFetchAll(), HttpMethod.GET);
   }
 
   // ===============================================================================================
@@ -94,7 +100,8 @@ public class EndpointDeducer {
               mappingDeducer.deduceFrom(serviceMethod.getFunction(), httpMethod),
               requestParameterDeducer.deduceFrom()));
     } else {
-      return Optional.empty();
+      throw new UnsupportedOperationException(serviceMethod.getFunction().getPurpose().getText());
+      // return Optional.empty();
     }
   }
 }

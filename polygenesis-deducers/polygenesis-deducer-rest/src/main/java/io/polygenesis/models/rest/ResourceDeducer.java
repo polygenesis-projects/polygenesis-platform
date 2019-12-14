@@ -87,7 +87,8 @@ public class ResourceDeducer {
               resources.add(
                   new Resource(
                       thing.makePackageName(rootPackageName, thing),
-                      new ObjectName(thing.getThingName().getText()),
+                      new ObjectName(
+                          String.format("%sRestService", thing.getThingName().getText())),
                       endpoints,
                       services));
             });

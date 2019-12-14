@@ -44,6 +44,10 @@ import java.util.stream.Collectors;
 public abstract class AbstractMethodTransformer<S extends FunctionProvider>
     extends AbstractTransformer implements MethodTransformer<S> {
 
+  // ===============================================================================================
+  // DEPENDENCIES
+  // ===============================================================================================
+
   /** The constant MODIFIER_PUBLIC. */
   protected static final String MODIFIER_PUBLIC = "public";
 
