@@ -26,8 +26,8 @@ import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.MetamodelGenerator;
 import io.polygenesis.generators.java.api.JavaApiGeneratorFactory;
 import io.polygenesis.generators.java.api.JavaApiMetamodelGenerator;
-import io.polygenesis.generators.java.apiclients.rest.JavaApiRestGeneratorFactory;
-import io.polygenesis.generators.java.apiclients.rest.JavaApiRestMetamodelGenerator;
+import io.polygenesis.generators.java.apiclients.rest.ApiClientRestMetamodelGenerator;
+import io.polygenesis.generators.java.apiclients.rest.ApiClientRestMetamodelGeneratorFactory;
 import io.polygenesis.generators.java.apidetail.JavaApiDetailMetamodelGenerator;
 import io.polygenesis.generators.java.apidetail.JavaApiDetailMetamodelGeneratorFactory;
 import io.polygenesis.generators.java.aux.AuxMetamodelGenerator;
@@ -284,13 +284,13 @@ public final class TrinityJavaContextGeneratorFactory {
         new PackageName(rootPackageName));
   }
 
-  private static JavaApiRestMetamodelGenerator javaApiRestGenerator(
+  private static ApiClientRestMetamodelGenerator javaApiRestGenerator(
       String exportPath,
       String projectFolder,
       String modulePrefix,
       ContextName contextName,
       String rootPackageName) {
-    return JavaApiRestGeneratorFactory.newInstance(
+    return ApiClientRestMetamodelGeneratorFactory.newInstance(
         Paths.get(
             exportPath,
             projectFolder,

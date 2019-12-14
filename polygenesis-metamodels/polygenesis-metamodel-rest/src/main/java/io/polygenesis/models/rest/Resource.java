@@ -22,6 +22,7 @@ package io.polygenesis.models.rest;
 
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
+import io.polygenesis.core.Generatable;
 import io.polygenesis.core.Metamodel;
 import io.polygenesis.models.api.Service;
 import java.util.Set;
@@ -31,7 +32,7 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class Resource implements Metamodel {
+public class Resource implements Generatable, Metamodel {
 
   private PackageName packageName;
   private ObjectName objectName;

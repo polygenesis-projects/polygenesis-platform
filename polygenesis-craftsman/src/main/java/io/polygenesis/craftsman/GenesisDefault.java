@@ -37,7 +37,7 @@ import io.polygenesis.deducers.stateredux.StateReduxDeducerFactory;
 import io.polygenesis.deducers.ui.UiContextDeducerFactory;
 import io.polygenesis.generators.java.api.JavaApiGeneratorFactory;
 import io.polygenesis.generators.java.api.JavaApiMetamodelGenerator;
-import io.polygenesis.generators.java.apiclients.rest.JavaApiRestGeneratorFactory;
+import io.polygenesis.generators.java.apiclients.rest.ApiClientRestMetamodelGeneratorFactory;
 import io.polygenesis.generators.java.apidetail.JavaApiDetailMetamodelGenerator;
 import io.polygenesis.generators.java.apidetail.JavaApiDetailMetamodelGeneratorFactory;
 import io.polygenesis.generators.java.domain.JavaDomainMetamodelGeneratorFactory;
@@ -176,7 +176,7 @@ public class GenesisDefault {
                 modulePrefix + "-" + API_DETAIL,
                 context,
                 rootPackageName),
-            JavaApiRestGeneratorFactory.newInstance(
+            ApiClientRestMetamodelGeneratorFactory.newInstance(
                 Paths.get(
                     exportPath,
                     projectFolder,
