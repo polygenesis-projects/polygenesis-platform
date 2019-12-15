@@ -27,8 +27,7 @@
 
 <@createRequestDto data.requestDto></@createRequestDto>
 <@setParentRootIdInRequest data.requestDto data.parentThingIdentityVariableName></@setParentRootIdInRequest>
-    // TODO: setPageNumberAndSize
-<#--<@setPageNumberAndSize data.requestDto></@setPageNumberAndSize>-->
+<@setPageNumberAndSize data.requestDto></@setPageNumberAndSize>
 <@setTenantIdAndIpAddress data.requestDto></@setTenantIdAndIpAddress>
 
 <@returnValue data.serviceName data.serviceMethodName data.requestDto></@returnValue>

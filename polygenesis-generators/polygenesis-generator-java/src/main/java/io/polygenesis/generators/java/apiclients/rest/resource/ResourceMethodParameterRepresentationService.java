@@ -73,7 +73,7 @@ public class ResourceMethodParameterRepresentationService {
         source.getServiceMethod().getRequestDto().getParentThingIdentityAsOptional();
 
     if (optionalParentThingIdentityData.isPresent()) {
-      parameterRepresentations.addAll(
+      parameterRepresentations.add(
           parameterRepresentationsForIdPathVariable(
               optionalParentThingIdentityData
                   .orElseThrow(IllegalArgumentException::new)
@@ -87,18 +87,33 @@ public class ResourceMethodParameterRepresentationService {
     switch (source.getHttpMethod()) {
       case GET:
         if (source.getServiceMethod().getFunction().getPurpose().isFetchOne()) {
-          parameterRepresentations.addAll(
+          parameterRepresentations.add(
               parameterRepresentationsForIdPathVariable(
                   thingIdentityData
                       .orElseThrow(IllegalArgumentException::new)
                       .getVariableName()
                       .getText()));
-        } else if (source.getServiceMethod().getFunction().getPurpose().isFetchPagedCollection()) {
+        } else if (source.getServiceMethod().getFunction().getPurpose().isFetchPagedCollection()
+            || source.getServiceMethod().getFunction().getPurpose().isEntityFetchAll()) {
           parameterRepresentations.addAll(parameterRepresentationsForPagedCollection());
+        } else if (source.getServiceMethod().getFunction().getPurpose().isEntityFetch()) {
+          parameterRepresentations.add(
+              parameterRepresentationsForIdPathVariable(
+                  source
+                      .getServiceMethod()
+                      .getFunction()
+                      .getDelegatesToFunction()
+                      .getThing()
+                      .getThingIdentity()
+                      .getVariableName()
+                      .getText()));
+        } else {
+          throw new UnsupportedOperationException(
+              source.getServiceMethod().getFunction().getPurpose().getText());
         }
         break;
       case PUT:
-        parameterRepresentations.addAll(
+        parameterRepresentations.add(
             parameterRepresentationsForIdPathVariable(
                 thingIdentityData
                     .orElseThrow(IllegalArgumentException::new)
@@ -150,17 +165,10 @@ public class ResourceMethodParameterRepresentationService {
     return parameterRepresentations;
   }
 
-  private Set<ParameterRepresentation> parameterRepresentationsForIdPathVariable(
-      String idVariable) {
-    Set<ParameterRepresentation> parameterRepresentations = new LinkedHashSet<>();
-
-    parameterRepresentations.add(
-        new ParameterRepresentation(
-            "String",
-            idVariable,
-            new LinkedHashSet<>(
-                Arrays.asList(String.format("@PathVariable(\"%s\")", idVariable)))));
-
-    return parameterRepresentations;
+  private ParameterRepresentation parameterRepresentationsForIdPathVariable(String idVariable) {
+    return new ParameterRepresentation(
+        "String",
+        idVariable,
+        new LinkedHashSet<>(Arrays.asList(String.format("@PathVariable(\"%s\")", idVariable))));
   }
 }
