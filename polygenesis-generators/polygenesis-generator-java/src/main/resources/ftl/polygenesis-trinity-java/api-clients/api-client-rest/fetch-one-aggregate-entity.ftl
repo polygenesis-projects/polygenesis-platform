@@ -27,8 +27,7 @@
 
 <@createRequestDto data.requestDto></@createRequestDto>
 <@setParentRootIdInRequest data.requestDto data.parentThingIdentityVariableName></@setParentRootIdInRequest>
-    // TODO: setRootIdInRequest
-<#--<@setRootIdInRequest data.requestDto data.thingIdentityVariableName></@setRootIdInRequest>-->
+<@setRootIdInRequest data.requestDto data.thingIdentityVariableName></@setRootIdInRequest>
 <@setTenantIdAndIpAddress data.requestDto></@setTenantIdAndIpAddress>
 
 <@returnValue data.serviceName data.serviceMethodName data.requestDto></@returnValue>
