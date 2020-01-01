@@ -43,22 +43,25 @@ import io.polygenesis.generators.java.rdbms.domainmessage.springdomainmessagedat
 import io.polygenesis.generators.java.rdbms.domainmessage.springdomainmessagepublisheddatarepository.SpringDomainMessagePublishedDataRepositoryGenerator;
 import io.polygenesis.generators.java.rdbms.domainmessage.springdomainmessagepublisheddatarepository.SpringDomainMessagePublishedDataRepositoryMethodTransformer;
 import io.polygenesis.generators.java.rdbms.domainmessage.springdomainmessagepublisheddatarepository.SpringDomainMessagePublishedDataRepositoryTransformer;
-import io.polygenesis.generators.java.rdbms.projection.ProjectionRepositoryImplExporter;
-import io.polygenesis.generators.java.rdbms.projection.ProjectionRepositoryImplLegacyClassTransformer;
-import io.polygenesis.generators.java.rdbms.projection.ProjectionSpringDataRepositoryExporter;
-import io.polygenesis.generators.java.rdbms.projection.ProjectionSpringDataRepositoryLegacyInterfaceTransformer;
-import io.polygenesis.generators.java.rdbms.projection.testing.ProjectionRepositoryImplTestExporter;
-import io.polygenesis.generators.java.rdbms.projection.testing.ProjectionRepositoryImplTestLegacyClassTransformer;
-import io.polygenesis.generators.java.rdbms.repositoryimpl.RepositoryImplGenerator;
-import io.polygenesis.generators.java.rdbms.repositoryimpl.RepositoryImplMethodTransformer;
-import io.polygenesis.generators.java.rdbms.repositoryimpl.RepositoryImplTransformer;
-import io.polygenesis.generators.java.rdbms.repositoryimpl.spingdata.SpringDataRepositoryGenerator;
-import io.polygenesis.generators.java.rdbms.repositoryimpl.spingdata.SpringDataRepositoryMethodTransformer;
-import io.polygenesis.generators.java.rdbms.repositoryimpl.spingdata.SpringDataRepositoryTransformer;
-import io.polygenesis.generators.java.rdbms.testing.PersistenceImplTestExporter;
-import io.polygenesis.generators.java.rdbms.testing.PersistenceImplTestLegacyClassTransformer;
+import io.polygenesis.generators.java.rdbms.projection.repositoryimpl.ProjectionRepositoryImplGenerator;
+import io.polygenesis.generators.java.rdbms.projection.repositoryimpl.ProjectionRepositoryImplMethodTransformer;
+import io.polygenesis.generators.java.rdbms.projection.repositoryimpl.ProjectionRepositoryImplTransformer;
+import io.polygenesis.generators.java.rdbms.projection.springdata.ProjectionSpringDataRepositoryGenerator;
+import io.polygenesis.generators.java.rdbms.projection.springdata.ProjectionSpringDataRepositoryMethodTransformer;
+import io.polygenesis.generators.java.rdbms.projection.springdata.ProjectionSpringDataRepositoryTransformer;
+import io.polygenesis.generators.java.rdbms.projection.testing.ProjectionRepositoryImplTestGenerator;
+import io.polygenesis.generators.java.rdbms.projection.testing.ProjectionRepositoryImplTestMethodTransformer;
+import io.polygenesis.generators.java.rdbms.projection.testing.ProjectionRepositoryImplTestTransformer;
+import io.polygenesis.generators.java.rdbms.root.repositoryimpl.RootRepositoryImplGenerator;
+import io.polygenesis.generators.java.rdbms.root.repositoryimpl.RootRepositoryImplMethodTransformer;
+import io.polygenesis.generators.java.rdbms.root.repositoryimpl.RootRepositoryImplTransformer;
+import io.polygenesis.generators.java.rdbms.root.spingdata.RootSpringDataRepositoryGenerator;
+import io.polygenesis.generators.java.rdbms.root.spingdata.RootSpringDataRepositoryMethodTransformer;
+import io.polygenesis.generators.java.rdbms.root.spingdata.RootSpringDataRepositoryTransformer;
+import io.polygenesis.generators.java.rdbms.root.testing.RootRepositoryImplTestGenerator;
+import io.polygenesis.generators.java.rdbms.root.testing.RootRepositoryImplTestMethodTransformer;
+import io.polygenesis.generators.java.rdbms.root.testing.RootRepositoryImplTestTransformer;
 import io.polygenesis.transformers.java.JavaDataTypeTransformer;
-import io.polygenesis.transformers.java.legacy.FunctionToLegacyMethodRepresentationTransformer;
 import java.nio.file.Path;
 
 /**
@@ -71,16 +74,16 @@ public final class JavaRdbmsMetamodelGeneratorFactory {
   // ===============================================================================================
   // DEPENDENCIES
   // ===============================================================================================
-  private static RepositoryImplGenerator repositoryImplGenerator;
-  private static PersistenceImplTestExporter persistenceImplTestExporter;
+  private static RootRepositoryImplGenerator rootRepositoryImplGenerator;
+  private static RootRepositoryImplTestGenerator rootRepositoryImplTestGenerator;
   private static DomainMessageDataConverterExporter domainMessageDataConverterExporter;
-  private static SpringDataRepositoryGenerator springDataRepositoryGenerator;
+  private static RootSpringDataRepositoryGenerator rootSpringDataRepositoryGenerator;
   private static RdbmsTestExporter rdbmsTestExporter;
   private static RdbmsTestConfigExporter rdbmsTestConfigExporter;
   private static ApplicationCiRdbmsYmlExporter applicationCiRdbmsYmlExporter;
-  private static ProjectionRepositoryImplExporter projectionRepositoryImplExporter;
-  private static ProjectionSpringDataRepositoryExporter projectionSpringDataRepositoryExporter;
-  private static ProjectionRepositoryImplTestExporter projectionRepositoryImplTestExporter;
+  private static ProjectionRepositoryImplGenerator projectionRepositoryImplGenerator;
+  private static ProjectionSpringDataRepositoryGenerator projectionSpringDataRepositoryGenerator;
+  private static ProjectionRepositoryImplTestGenerator projectionRepositoryImplTestGenerator;
 
   private static DomainMessageDataRepositoryImplGenerator domainMessageDataRepositoryImplGenerator;
   private static DomainMessagePublishedDataRepositoryImplGenerator
@@ -106,24 +109,26 @@ public final class JavaRdbmsMetamodelGeneratorFactory {
 
     domainMessageDataConverterExporter = new DomainMessageDataConverterExporter(freemarkerService);
 
-    repositoryImplGenerator =
-        new RepositoryImplGenerator(
-            new RepositoryImplTransformer(
-                dataTypeTransformer, new RepositoryImplMethodTransformer(dataTypeTransformer)),
+    rootRepositoryImplGenerator =
+        new RootRepositoryImplGenerator(
+            new RootRepositoryImplTransformer(
+                dataTypeTransformer, new RootRepositoryImplMethodTransformer(dataTypeTransformer)),
             templateEngine,
             passiveFileExporter);
 
-    PersistenceImplTestLegacyClassTransformer persistenceImplTestClassRepresentable =
-        new PersistenceImplTestLegacyClassTransformer(dataTypeTransformer);
-
-    persistenceImplTestExporter =
-        new PersistenceImplTestExporter(freemarkerService, persistenceImplTestClassRepresentable);
-
-    springDataRepositoryGenerator =
-        new SpringDataRepositoryGenerator(
-            new SpringDataRepositoryTransformer(
+    rootRepositoryImplTestGenerator =
+        new RootRepositoryImplTestGenerator(
+            new RootRepositoryImplTestTransformer(
                 dataTypeTransformer,
-                new SpringDataRepositoryMethodTransformer(dataTypeTransformer)),
+                new RootRepositoryImplTestMethodTransformer(dataTypeTransformer)),
+            templateEngine,
+            activeFileExporter);
+
+    rootSpringDataRepositoryGenerator =
+        new RootSpringDataRepositoryGenerator(
+            new RootSpringDataRepositoryTransformer(
+                dataTypeTransformer,
+                new RootSpringDataRepositoryMethodTransformer(dataTypeTransformer)),
             templateEngine,
             passiveFileExporter);
 
@@ -132,24 +137,29 @@ public final class JavaRdbmsMetamodelGeneratorFactory {
 
     applicationCiRdbmsYmlExporter = new ApplicationCiRdbmsYmlExporter(freemarkerService);
 
-    projectionRepositoryImplExporter =
-        new ProjectionRepositoryImplExporter(
-            freemarkerService,
-            new ProjectionRepositoryImplLegacyClassTransformer(dataTypeTransformer));
+    projectionRepositoryImplGenerator =
+        new ProjectionRepositoryImplGenerator(
+            new ProjectionRepositoryImplTransformer(
+                dataTypeTransformer,
+                new ProjectionRepositoryImplMethodTransformer(dataTypeTransformer)),
+            templateEngine,
+            activeFileExporter);
 
-    FunctionToLegacyMethodRepresentationTransformer functionToMethodRepresentationTransformer =
-        new FunctionToLegacyMethodRepresentationTransformer(dataTypeTransformer);
+    projectionSpringDataRepositoryGenerator =
+        new ProjectionSpringDataRepositoryGenerator(
+            new ProjectionSpringDataRepositoryTransformer(
+                dataTypeTransformer,
+                new ProjectionSpringDataRepositoryMethodTransformer(dataTypeTransformer)),
+            templateEngine,
+            activeFileExporter);
 
-    projectionSpringDataRepositoryExporter =
-        new ProjectionSpringDataRepositoryExporter(
-            freemarkerService,
-            new ProjectionSpringDataRepositoryLegacyInterfaceTransformer(
-                dataTypeTransformer, functionToMethodRepresentationTransformer));
-
-    projectionRepositoryImplTestExporter =
-        new ProjectionRepositoryImplTestExporter(
-            freemarkerService,
-            new ProjectionRepositoryImplTestLegacyClassTransformer(dataTypeTransformer));
+    projectionRepositoryImplTestGenerator =
+        new ProjectionRepositoryImplTestGenerator(
+            new ProjectionRepositoryImplTestTransformer(
+                dataTypeTransformer,
+                new ProjectionRepositoryImplTestMethodTransformer(dataTypeTransformer)),
+            templateEngine,
+            activeFileExporter);
 
     domainMessageDataRepositoryImplGenerator =
         new DomainMessageDataRepositoryImplGenerator(
@@ -212,15 +222,15 @@ public final class JavaRdbmsMetamodelGeneratorFactory {
         rootPackageName,
         contextName,
         domainMessageDataConverterExporter,
-        repositoryImplGenerator,
-        persistenceImplTestExporter,
-        springDataRepositoryGenerator,
+        rootRepositoryImplGenerator,
+        rootRepositoryImplTestGenerator,
+        rootSpringDataRepositoryGenerator,
         rdbmsTestExporter,
         rdbmsTestConfigExporter,
         applicationCiRdbmsYmlExporter,
-        projectionRepositoryImplExporter,
-        projectionSpringDataRepositoryExporter,
-        projectionRepositoryImplTestExporter,
+        projectionRepositoryImplGenerator,
+        projectionSpringDataRepositoryGenerator,
+        projectionRepositoryImplTestGenerator,
         domainMessageDataRepositoryImplGenerator,
         domainMessagePublishedDataRepositoryImplGenerator,
         springDomainMessageDataRepositoryGenerator,

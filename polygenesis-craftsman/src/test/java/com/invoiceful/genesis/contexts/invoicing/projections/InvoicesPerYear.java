@@ -25,25 +25,26 @@ import io.polygenesis.abstraction.data.dsl.DataBuilder;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.dsl.PurposeFunctionBuilder;
 import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
+import io.polygenesis.commons.valueobjects.PackageName;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 /** @author Christos Tsakostas */
 public class InvoicesPerYear {
 
-  public static Thing create(String rootPackageName) {
-    Thing invoicesPerYear = ThingBuilder.projection("invoicesPerYear").createThing();
+  public static Thing create(PackageName rootPackageName) {
+    Thing invoicesPerYear = ThingBuilder.projection("invoicesPerYear").createThing(rootPackageName);
 
     invoicesPerYear.addFunctions(
         PurposeFunctionBuilder.forThing(invoicesPerYear, rootPackageName)
-            .withCrudFunction(createData(rootPackageName))
+            .withCrudFunction(createData())
             .withFunctionModify("issue", new LinkedHashSet<>())
             .build());
 
     return invoicesPerYear;
   }
 
-  private static Set<Data> createData(String rootPackageName) {
+  private static Set<Data> createData() {
     return DataBuilder.create()
         .withIntegerProperty("year")
         .build()

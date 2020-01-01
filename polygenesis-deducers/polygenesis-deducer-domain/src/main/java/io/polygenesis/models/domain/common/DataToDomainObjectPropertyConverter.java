@@ -36,6 +36,7 @@ import io.polygenesis.models.domain.InstantiationType;
 import io.polygenesis.models.domain.Mapper;
 import io.polygenesis.models.domain.Primitive;
 import io.polygenesis.models.domain.PrimitiveCollection;
+import io.polygenesis.models.domain.ProjectionId;
 import io.polygenesis.models.domain.ReferenceById;
 import io.polygenesis.models.domain.ReferenceByValue;
 import io.polygenesis.models.domain.ReferenceToAbstractAggregateRoot;
@@ -158,6 +159,8 @@ public class DataToDomainObjectPropertyConverter {
       return new AggregateEntityId(data.getDataObject());
     } else if (domainObject.isSupportiveEntity()) {
       return new SupportiveEntityId(data.getDataObject());
+    } else if (domainObject.isProjection()) {
+      return new ProjectionId(data.getDataObject());
     } else {
       throw new UnsupportedOperationException(domainObject.getDomainObjectType().name());
     }

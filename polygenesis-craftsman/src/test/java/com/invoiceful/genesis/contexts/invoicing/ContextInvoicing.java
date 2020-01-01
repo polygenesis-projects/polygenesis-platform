@@ -20,6 +20,7 @@
 
 package com.invoiceful.genesis.contexts.invoicing;
 
+import com.invoiceful.genesis.contexts.invoicing.projections.InvoicesPerYear;
 import com.oregor.trinity4j.Trinity4jAggregateEntity;
 import com.oregor.trinity4j.Trinity4jAggregateRoot;
 import com.oregor.trinity4j.Trinity4jTenantAggregateRoot;
@@ -64,7 +65,7 @@ public class ContextInvoicing {
         .addThing(language)
 
         // Projections
-        // .addThing(InvoicesPerYear.create(rootPackageName))
+        .addThing(InvoicesPerYear.create(rootPackageName))
         .build();
   }
 }
