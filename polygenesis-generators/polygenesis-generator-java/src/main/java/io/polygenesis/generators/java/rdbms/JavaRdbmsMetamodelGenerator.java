@@ -36,12 +36,12 @@ import io.polygenesis.generators.java.rdbms.domainmessage.springdomainmessagedat
 import io.polygenesis.generators.java.rdbms.domainmessage.springdomainmessagedatarepository.SpringDomainMessageDataRepositoryGenerator;
 import io.polygenesis.generators.java.rdbms.domainmessage.springdomainmessagepublisheddatarepository.SpringDomainMessagePublishedDataRepository;
 import io.polygenesis.generators.java.rdbms.domainmessage.springdomainmessagepublisheddatarepository.SpringDomainMessagePublishedDataRepositoryGenerator;
-import io.polygenesis.generators.java.rdbms.projection.ProjectionRepositoryImplExporter;
-import io.polygenesis.generators.java.rdbms.projection.ProjectionSpringDataRepositoryExporter;
-import io.polygenesis.generators.java.rdbms.projection.testing.ProjectionRepositoryImplTestExporter;
-import io.polygenesis.generators.java.rdbms.repositoryimpl.RepositoryImplGenerator;
-import io.polygenesis.generators.java.rdbms.repositoryimpl.spingdata.SpringDataRepositoryGenerator;
-import io.polygenesis.generators.java.rdbms.testing.PersistenceImplTestExporter;
+import io.polygenesis.generators.java.rdbms.projection.repositoryimpl.ProjectionRepositoryImplGenerator;
+import io.polygenesis.generators.java.rdbms.projection.springdata.ProjectionSpringDataRepositoryGenerator;
+import io.polygenesis.generators.java.rdbms.projection.testing.ProjectionRepositoryImplTestGenerator;
+import io.polygenesis.generators.java.rdbms.root.repositoryimpl.RootRepositoryImplGenerator;
+import io.polygenesis.generators.java.rdbms.root.spingdata.RootSpringDataRepositoryGenerator;
+import io.polygenesis.generators.java.rdbms.root.testing.RootRepositoryImplTestGenerator;
 import io.polygenesis.generators.java.shared.FolderFileConstants;
 import io.polygenesis.models.domain.DomainObjectMetamodelRepository;
 import io.polygenesis.models.domain.Persistence;
@@ -60,15 +60,15 @@ public class JavaRdbmsMetamodelGenerator extends AbstractMetamodelGenerator {
   private final PackageName rootPackageName;
   private final ObjectName contextName;
   private final DomainMessageDataConverterExporter domainMessageDataConverterExporter;
-  private final RepositoryImplGenerator repositoryImplGenerator;
-  private final PersistenceImplTestExporter persistenceImplTestExporter;
-  private final SpringDataRepositoryGenerator springDataRepositoryGenerator;
+  private final RootRepositoryImplGenerator rootRepositoryImplGenerator;
+  private final RootRepositoryImplTestGenerator rootRepositoryImplTestGenerator;
+  private final RootSpringDataRepositoryGenerator rootSpringDataRepositoryGenerator;
   private final RdbmsTestExporter rdbmsTestExporter;
   private final RdbmsTestConfigExporter rdbmsTestConfigExporter;
   private final ApplicationCiRdbmsYmlExporter applicationCiRdbmsYmlExporter;
-  private final ProjectionRepositoryImplExporter projectionRepositoryImplExporter;
-  private final ProjectionSpringDataRepositoryExporter projectionSpringDataRepositoryExporter;
-  private final ProjectionRepositoryImplTestExporter projectionRepositoryImplTestExporter;
+  private final ProjectionRepositoryImplGenerator projectionRepositoryImplGenerator;
+  private final ProjectionSpringDataRepositoryGenerator projectionSpringDataRepositoryGenerator;
+  private final ProjectionRepositoryImplTestGenerator projectionRepositoryImplTestGenerator;
   private final DomainMessageDataRepositoryImplGenerator domainMessageDataRepositoryImplGenerator;
   private final DomainMessagePublishedDataRepositoryImplGenerator
       domainMessagePublishedDataRepositoryImplGenerator;
@@ -86,15 +86,15 @@ public class JavaRdbmsMetamodelGenerator extends AbstractMetamodelGenerator {
       PackageName rootPackageName,
       ObjectName contextName,
       DomainMessageDataConverterExporter domainMessageDataConverterExporter,
-      RepositoryImplGenerator repositoryImplGenerator,
-      PersistenceImplTestExporter persistenceImplTestExporter,
-      SpringDataRepositoryGenerator springDataRepositoryGenerator,
+      RootRepositoryImplGenerator rootRepositoryImplGenerator,
+      RootRepositoryImplTestGenerator rootRepositoryImplTestGenerator,
+      RootSpringDataRepositoryGenerator rootSpringDataRepositoryGenerator,
       RdbmsTestExporter rdbmsTestExporter,
       RdbmsTestConfigExporter rdbmsTestConfigExporter,
       ApplicationCiRdbmsYmlExporter applicationCiRdbmsYmlExporter,
-      ProjectionRepositoryImplExporter projectionRepositoryImplExporter,
-      ProjectionSpringDataRepositoryExporter projectionSpringDataRepositoryExporter,
-      ProjectionRepositoryImplTestExporter projectionRepositoryImplTestExporter,
+      ProjectionRepositoryImplGenerator projectionRepositoryImplGenerator,
+      ProjectionSpringDataRepositoryGenerator projectionSpringDataRepositoryGenerator,
+      ProjectionRepositoryImplTestGenerator repositoryImplTestGenerator,
       DomainMessageDataRepositoryImplGenerator domainMessageDataRepositoryImplGenerator,
       DomainMessagePublishedDataRepositoryImplGenerator
           domainMessagePublishedDataRepositoryImplGenerator,
@@ -105,15 +105,15 @@ public class JavaRdbmsMetamodelGenerator extends AbstractMetamodelGenerator {
     this.rootPackageName = rootPackageName;
     this.contextName = contextName;
     this.domainMessageDataConverterExporter = domainMessageDataConverterExporter;
-    this.repositoryImplGenerator = repositoryImplGenerator;
-    this.persistenceImplTestExporter = persistenceImplTestExporter;
-    this.springDataRepositoryGenerator = springDataRepositoryGenerator;
+    this.rootRepositoryImplGenerator = rootRepositoryImplGenerator;
+    this.rootRepositoryImplTestGenerator = rootRepositoryImplTestGenerator;
+    this.rootSpringDataRepositoryGenerator = rootSpringDataRepositoryGenerator;
     this.rdbmsTestExporter = rdbmsTestExporter;
     this.rdbmsTestConfigExporter = rdbmsTestConfigExporter;
     this.applicationCiRdbmsYmlExporter = applicationCiRdbmsYmlExporter;
-    this.projectionRepositoryImplExporter = projectionRepositoryImplExporter;
-    this.projectionSpringDataRepositoryExporter = projectionSpringDataRepositoryExporter;
-    this.projectionRepositoryImplTestExporter = projectionRepositoryImplTestExporter;
+    this.projectionRepositoryImplGenerator = projectionRepositoryImplGenerator;
+    this.projectionSpringDataRepositoryGenerator = projectionSpringDataRepositoryGenerator;
+    this.projectionRepositoryImplTestGenerator = repositoryImplTestGenerator;
     this.domainMessageDataRepositoryImplGenerator = domainMessageDataRepositoryImplGenerator;
     this.domainMessagePublishedDataRepositoryImplGenerator =
         domainMessagePublishedDataRepositoryImplGenerator;
@@ -209,7 +209,7 @@ public class JavaRdbmsMetamodelGenerator extends AbstractMetamodelGenerator {
             aggregateRoot -> {
               Persistence persistence = aggregateRoot.getPersistence();
 
-              repositoryImplGenerator.generate(
+              rootRepositoryImplGenerator.generate(
                   persistence,
                   repositoryImplExportInfo(
                       getGenerationPath(),
@@ -218,10 +218,16 @@ public class JavaRdbmsMetamodelGenerator extends AbstractMetamodelGenerator {
                   getRootPackageName(),
                   getContextName());
 
-              persistenceImplTestExporter.export(
-                  getGenerationPath(), persistence, getRootPackageName(), getContextName());
+              rootRepositoryImplTestGenerator.generate(
+                  persistence,
+                  repositoryImplTestExportInfo(
+                      getGenerationPath(),
+                      persistence.getPackageName(),
+                      persistence.getAggregateRootObjectName().getText()),
+                  getRootPackageName(),
+                  getContextName());
 
-              springDataRepositoryGenerator.generate(
+              rootSpringDataRepositoryGenerator.generate(
                   persistence,
                   repositorySpringDataExportInfo(
                       getGenerationPath(),
@@ -237,20 +243,30 @@ public class JavaRdbmsMetamodelGenerator extends AbstractMetamodelGenerator {
         .stream()
         .forEach(
             projection -> {
-              projectionRepositoryImplExporter.export(
-                  getGenerationPath(),
+              projectionRepositoryImplGenerator.generate(
                   projection.getPersistence(),
+                  repositoryImplExportInfo(
+                      getGenerationPath(),
+                      projection.getPersistence().getPackageName(),
+                      projection.getPersistence().getObjectName().getText()),
                   getRootPackageName(),
                   getContextName());
 
-              projectionRepositoryImplTestExporter.export(
-                  getGenerationPath(),
+              projectionRepositoryImplTestGenerator.generate(
                   projection.getPersistence(),
+                  repositoryImplTestExportInfo(
+                      getGenerationPath(),
+                      projection.getPersistence().getPackageName(),
+                      projection.getPersistence().getAggregateRootObjectName().getText()),
                   getRootPackageName(),
                   getContextName());
 
-              projectionSpringDataRepositoryExporter.export(
-                  getGenerationPath(), projection.getPersistence());
+              projectionSpringDataRepositoryGenerator.generate(
+                  projection.getPersistence(),
+                  repositorySpringDataExportInfo(
+                      getGenerationPath(),
+                      projection.getPersistence().getPackageName(),
+                      projection.getPersistence().getAggregateRootObjectName().getText()));
             });
   }
 
@@ -334,6 +350,20 @@ public class JavaRdbmsMetamodelGenerator extends AbstractMetamodelGenerator {
             packageName.toPath().toString()),
         String.format(
             "%sImpl%s", TextConverter.toUpperCamel(objectName), FolderFileConstants.JAVA_POSTFIX));
+  }
+
+  private ExportInfo repositoryImplTestExportInfo(
+      Path generationPath, PackageName packageName, String objectName) {
+    return ExportInfo.file(
+        Paths.get(
+            generationPath.toString(),
+            FolderFileConstants.SRC,
+            FolderFileConstants.TEST,
+            FolderFileConstants.JAVA,
+            packageName.toPath().toString()),
+        String.format(
+            "%sRepositoryImplTest%s",
+            TextConverter.toUpperCamel(objectName), FolderFileConstants.JAVA_POSTFIX));
   }
 
   private ExportInfo repositorySpringDataExportInfo(

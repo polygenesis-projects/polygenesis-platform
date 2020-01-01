@@ -24,6 +24,7 @@ import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.VariableName;
+import io.polygenesis.core.Generatable;
 import io.polygenesis.core.Metamodel;
 import io.polygenesis.models.domain.DomainObject;
 import java.util.Objects;
@@ -34,7 +35,7 @@ import java.util.Set;
  *
  * @author Christos Tsakostas
  */
-public class DomainObjectConverter extends ServiceDependency implements Metamodel {
+public class DomainObjectConverter extends ServiceDependency implements Metamodel, Generatable {
 
   private DomainObject domainObject;
   private Set<DomainObjectConverterMethod> methods;

@@ -36,16 +36,18 @@ import io.polygenesis.generators.java.domain.aggregateentity.AggregateEntityMeth
 import io.polygenesis.generators.java.domain.aggregateentity.AggregateEntityTransformer;
 import io.polygenesis.generators.java.domain.aggregateentity.activity.statemutation.AggregateEntityStateMutationActivityRegistry;
 import io.polygenesis.generators.java.domain.aggregateentity.activity.statemutation.AggregateEntityStateMutationMethodTransformer;
-import io.polygenesis.generators.java.domain.aggregateentityid.AggregateEntityIdExporter;
-import io.polygenesis.generators.java.domain.aggregateentityid.AggregateEntityIdLegacyClassTransformer;
+import io.polygenesis.generators.java.domain.aggregateentityid.AggregateEntityIdGenerator;
+import io.polygenesis.generators.java.domain.aggregateentityid.AggregateEntityIdMethodTransformer;
+import io.polygenesis.generators.java.domain.aggregateentityid.AggregateEntityIdTransformer;
 import io.polygenesis.generators.java.domain.aggregateroot.AggregateRootActivityRegistry;
 import io.polygenesis.generators.java.domain.aggregateroot.AggregateRootGenerator;
 import io.polygenesis.generators.java.domain.aggregateroot.AggregateRootMethodTransformer;
 import io.polygenesis.generators.java.domain.aggregateroot.AggregateRootTransformer;
 import io.polygenesis.generators.java.domain.aggregateroot.activity.statemutation.AggregateRootStateMutationActivityRegistry;
 import io.polygenesis.generators.java.domain.aggregateroot.activity.statemutation.AggregateRootStateMutationMethodTransformer;
-import io.polygenesis.generators.java.domain.aggregaterootid.AggregateRootIdExporter;
-import io.polygenesis.generators.java.domain.aggregaterootid.AggregateRootIdLegacyClassTransformer;
+import io.polygenesis.generators.java.domain.aggregaterootid.AggregateRootIdGenerator;
+import io.polygenesis.generators.java.domain.aggregaterootid.AggregateRootIdMethodTransformer;
+import io.polygenesis.generators.java.domain.aggregaterootid.AggregateRootIdTransformer;
 import io.polygenesis.generators.java.domain.domainevent.DomainEventGenerator;
 import io.polygenesis.generators.java.domain.domainevent.DomainEventMethodTransformer;
 import io.polygenesis.generators.java.domain.domainevent.DomainEventTransformer;
@@ -61,13 +63,15 @@ import io.polygenesis.generators.java.domain.domainmessage.publisheddata.DomainM
 import io.polygenesis.generators.java.domain.domainmessage.publisheddatarepository.DomainMessagePublishedDataRepositoryGenerator;
 import io.polygenesis.generators.java.domain.domainmessage.publisheddatarepository.DomainMessagePublishedDataRepositoryMethodTransformer;
 import io.polygenesis.generators.java.domain.domainmessage.publisheddatarepository.DomainMessagePublishedDataRepositoryTransformer;
-import io.polygenesis.generators.java.domain.projection.id.ProjectionIdExporter;
-import io.polygenesis.generators.java.domain.projection.id.ProjectionIdLegacyClassTransformer;
+import io.polygenesis.generators.java.domain.projection.id.ProjectionIdGenerator;
+import io.polygenesis.generators.java.domain.projection.id.ProjectionIdMethodTransformer;
+import io.polygenesis.generators.java.domain.projection.id.ProjectionIdTransformer;
 import io.polygenesis.generators.java.domain.projection.projection.ProjectionGenerator;
 import io.polygenesis.generators.java.domain.projection.projection.ProjectionMethodTransformer;
 import io.polygenesis.generators.java.domain.projection.projection.ProjectionTransformer;
-import io.polygenesis.generators.java.domain.projection.repository.ProjectionRepositoryExporter;
-import io.polygenesis.generators.java.domain.projection.repository.ProjectionRepositoryLegacyInterfaceTransformer;
+import io.polygenesis.generators.java.domain.projection.repository.ProjectionRepositoryGenerator;
+import io.polygenesis.generators.java.domain.projection.repository.ProjectionRepositoryMethodTransformer;
+import io.polygenesis.generators.java.domain.projection.repository.ProjectionRepositoryTransformer;
 import io.polygenesis.generators.java.domain.repository.RepositoryGenerator;
 import io.polygenesis.generators.java.domain.repository.RepositoryMethodTransformer;
 import io.polygenesis.generators.java.domain.repository.RepositoryTransformer;
@@ -87,7 +91,6 @@ import io.polygenesis.generators.java.domain.valueobject.ValueObjectGenerator;
 import io.polygenesis.generators.java.domain.valueobject.ValueObjectMethodTransformer;
 import io.polygenesis.generators.java.domain.valueobject.ValueObjectTransformer;
 import io.polygenesis.transformers.java.JavaDataTypeTransformer;
-import io.polygenesis.transformers.java.legacy.FunctionToLegacyMethodRepresentationTransformer;
 import java.nio.file.Path;
 
 /**
@@ -103,9 +106,9 @@ public final class JavaDomainMetamodelGeneratorFactory {
   // ===============================================================================================
 
   private static AggregateRootGenerator aggregateRootGenerator;
-  private static AggregateRootIdExporter aggregateRootIdExporter;
+  private static AggregateRootIdGenerator aggregateRootIdGenerator;
   private static AggregateEntityGenerator aggregateEntityGenerator;
-  private static AggregateEntityIdExporter aggregateEntityIdExporter;
+  private static AggregateEntityIdGenerator aggregateEntityIdGenerator;
   private static ValueObjectGenerator valueObjectGenerator;
   private static DomainEventGenerator domainEventGenerator;
   private static RepositoryGenerator repositoryGenerator;
@@ -115,8 +118,8 @@ public final class JavaDomainMetamodelGeneratorFactory {
   private static SupportiveEntityRepositoryGenerator supportiveEntityRepositoryGenerator;
   private static ConstantsExporter constantsExporter;
   private static ProjectionGenerator projectionGenerator;
-  private static ProjectionIdExporter projectionIdExporter;
-  private static ProjectionRepositoryExporter projectionRepositoryExporter;
+  private static ProjectionIdGenerator projectionIdGenerator;
+  private static ProjectionRepositoryGenerator projectionRepositoryGenerator;
 
   private static DomainMessageDataGenerator domainMessageDataGenerator;
   private static DomainMessageDataRepositoryGenerator domainMessageDataRepositoryGenerator;
@@ -133,8 +136,7 @@ public final class JavaDomainMetamodelGeneratorFactory {
     final Exporter activeFileExporter = new ActiveFileExporter();
     final Exporter passiveFileExporter = new PassiveFileExporter();
     final DataTypeTransformer dataTypeTransformer = new JavaDataTypeTransformer();
-
-    FreemarkerService freemarkerService =
+    final FreemarkerService freemarkerService =
         new FreemarkerService(FreemarkerConfig.getInstance().getConfiguration());
 
     aggregateRootGenerator =
@@ -150,11 +152,12 @@ public final class JavaDomainMetamodelGeneratorFactory {
             templateEngine,
             passiveFileExporter);
 
-    AggregateRootIdLegacyClassTransformer aggregateRootIdClassRepresentable =
-        new AggregateRootIdLegacyClassTransformer(dataTypeTransformer);
-
-    aggregateRootIdExporter =
-        new AggregateRootIdExporter(freemarkerService, aggregateRootIdClassRepresentable);
+    aggregateRootIdGenerator =
+        new AggregateRootIdGenerator(
+            new AggregateRootIdTransformer(
+                dataTypeTransformer, new AggregateRootIdMethodTransformer(dataTypeTransformer)),
+            templateEngine,
+            activeFileExporter);
 
     aggregateEntityGenerator =
         new AggregateEntityGenerator(
@@ -168,10 +171,12 @@ public final class JavaDomainMetamodelGeneratorFactory {
             templateEngine,
             passiveFileExporter);
 
-    AggregateEntityIdLegacyClassTransformer aggregateEntityIdClassRepresentable =
-        new AggregateEntityIdLegacyClassTransformer(dataTypeTransformer);
-    aggregateEntityIdExporter =
-        new AggregateEntityIdExporter(freemarkerService, aggregateEntityIdClassRepresentable);
+    aggregateEntityIdGenerator =
+        new AggregateEntityIdGenerator(
+            new AggregateEntityIdTransformer(
+                dataTypeTransformer, new AggregateEntityIdMethodTransformer(dataTypeTransformer)),
+            templateEngine,
+            activeFileExporter);
 
     valueObjectGenerator =
         new ValueObjectGenerator(
@@ -232,18 +237,20 @@ public final class JavaDomainMetamodelGeneratorFactory {
             templateEngine,
             activeFileExporter);
 
-    projectionIdExporter =
-        new ProjectionIdExporter(
-            freemarkerService, new ProjectionIdLegacyClassTransformer(dataTypeTransformer));
+    projectionIdGenerator =
+        new ProjectionIdGenerator(
+            new ProjectionIdTransformer(
+                dataTypeTransformer, new ProjectionIdMethodTransformer(dataTypeTransformer)),
+            templateEngine,
+            activeFileExporter);
 
-    FunctionToLegacyMethodRepresentationTransformer functionToMethodRepresentationTransformer =
-        new FunctionToLegacyMethodRepresentationTransformer(dataTypeTransformer);
-
-    projectionRepositoryExporter =
-        new ProjectionRepositoryExporter(
-            freemarkerService,
-            new ProjectionRepositoryLegacyInterfaceTransformer(
-                dataTypeTransformer, functionToMethodRepresentationTransformer));
+    projectionRepositoryGenerator =
+        new ProjectionRepositoryGenerator(
+            new ProjectionRepositoryTransformer(
+                dataTypeTransformer,
+                new ProjectionRepositoryMethodTransformer(dataTypeTransformer)),
+            templateEngine,
+            activeFileExporter);
 
     domainMessageDataGenerator =
         new DomainMessageDataGenerator(
@@ -309,9 +316,9 @@ public final class JavaDomainMetamodelGeneratorFactory {
         rootPackageName,
         contextName,
         aggregateRootGenerator,
-        aggregateRootIdExporter,
+        aggregateRootIdGenerator,
         aggregateEntityGenerator,
-        aggregateEntityIdExporter,
+        aggregateEntityIdGenerator,
         valueObjectGenerator,
         domainEventGenerator,
         repositoryGenerator,
@@ -321,8 +328,8 @@ public final class JavaDomainMetamodelGeneratorFactory {
         supportiveEntityRepositoryGenerator,
         constantsExporter,
         projectionGenerator,
-        projectionIdExporter,
-        projectionRepositoryExporter,
+        projectionIdGenerator,
+        projectionRepositoryGenerator,
         domainMessageDataGenerator,
         domainMessageDataRepositoryGenerator,
         domainMessagePublishedDataGenerator,

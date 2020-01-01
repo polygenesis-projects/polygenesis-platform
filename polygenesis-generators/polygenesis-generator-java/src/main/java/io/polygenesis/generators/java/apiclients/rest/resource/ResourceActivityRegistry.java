@@ -148,6 +148,32 @@ public class ResourceActivityRegistry extends AbstractActivityRegistry<Endpoint>
             new FetchPagedCollectionAggregateEntityActivityTransformer(
                 parameterRepresentationService),
             templateEngine));
+
+    // PROJECTION
+    scopeAndPurposeMap.put(
+        new ScopePurposeTuple(AbstractionScope.projection(), Purpose.create()),
+        new CreateAggregateRootActivityGenerator(
+            new CreateAggregateRootActivityTransformer(parameterRepresentationService),
+            templateEngine));
+
+    scopeAndPurposeMap.put(
+        new ScopePurposeTuple(AbstractionScope.projection(), Purpose.modify()),
+        new ModifyAggregateRootActivityGenerator(
+            new ModifyAggregateRootActivityTransformer(parameterRepresentationService),
+            templateEngine));
+
+    scopeAndPurposeMap.put(
+        new ScopePurposeTuple(AbstractionScope.projection(), Purpose.fetchOne()),
+        new FetchOneAggregateRootActivityGenerator(
+            new FetchOneAggregateRootActivityTransformer(parameterRepresentationService),
+            templateEngine));
+
+    scopeAndPurposeMap.put(
+        new ScopePurposeTuple(AbstractionScope.projection(), Purpose.fetchPagedCollection()),
+        new FetchPagedCollectionAggregateRootActivityGenerator(
+            new FetchPagedCollectionAggregateRootActivityTransformer(
+                parameterRepresentationService),
+            templateEngine));
   }
 
   // ===============================================================================================

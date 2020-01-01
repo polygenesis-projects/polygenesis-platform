@@ -276,6 +276,16 @@ public abstract class DomainObject
   }
 
   /**
+   * Is projection boolean.
+   *
+   * @return the boolean
+   */
+  public Boolean isProjection() {
+    return getDomainObjectType().equals(DomainObjectType.PROJECTION)
+        && getInstantiationType().equals(InstantiationType.CONCRETE);
+  }
+
+  /**
    * Find state mutation methods by purpose set.
    *
    * @param purpose the purpose

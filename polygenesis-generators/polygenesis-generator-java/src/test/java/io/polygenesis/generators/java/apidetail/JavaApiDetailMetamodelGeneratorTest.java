@@ -30,7 +30,7 @@ import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.MetamodelRepository;
 import io.polygenesis.generators.java.apidetail.aspect.ServiceAspectGenerator;
-import io.polygenesis.generators.java.apidetail.converter.DomainObjectConverterExporter;
+import io.polygenesis.generators.java.apidetail.converter.DomainObjectConverterGenerator;
 import io.polygenesis.generators.java.apidetail.service.ServiceDetailGenerator;
 import io.polygenesis.models.api.Service;
 import io.polygenesis.models.api.ServiceMetamodelRepository;
@@ -60,7 +60,7 @@ public class JavaApiDetailMetamodelGeneratorTest {
   private ContextName contextName;
   private PackageName rootPackageName;
   private ServiceDetailGenerator serviceDetailGenerator;
-  private DomainObjectConverterExporter domainObjectConverterExporter;
+  private DomainObjectConverterGenerator domainObjectConverterGenerator;
   private JavaApiDetailMetamodelGenerator javaApiDetailGenerator;
   private ServiceAspectGenerator serviceAspectGenerator;
 
@@ -75,7 +75,7 @@ public class JavaApiDetailMetamodelGeneratorTest {
     contextName = new ContextName("context");
     rootPackageName = new PackageName("com.oregor");
     serviceDetailGenerator = mock(ServiceDetailGenerator.class);
-    domainObjectConverterExporter = mock(DomainObjectConverterExporter.class);
+    domainObjectConverterGenerator = mock(DomainObjectConverterGenerator.class);
     serviceAspectGenerator = mock(ServiceAspectGenerator.class);
 
     javaApiDetailGenerator =
@@ -84,7 +84,7 @@ public class JavaApiDetailMetamodelGeneratorTest {
             contextName,
             rootPackageName,
             serviceDetailGenerator,
-            domainObjectConverterExporter,
+            domainObjectConverterGenerator,
             serviceAspectGenerator);
   }
 

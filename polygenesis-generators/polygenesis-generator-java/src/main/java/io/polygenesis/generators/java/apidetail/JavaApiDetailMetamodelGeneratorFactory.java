@@ -20,8 +20,6 @@
 
 package io.polygenesis.generators.java.apidetail;
 
-import io.polygenesis.commons.freemarker.FreemarkerConfig;
-import io.polygenesis.commons.freemarker.FreemarkerService;
 import io.polygenesis.commons.valueobjects.ContextName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.ActiveFileExporter;
@@ -34,10 +32,10 @@ import io.polygenesis.generators.java.apidetail.aspect.ServiceAspectActivityRegi
 import io.polygenesis.generators.java.apidetail.aspect.ServiceAspectGenerator;
 import io.polygenesis.generators.java.apidetail.aspect.ServiceAspectMethodTransformer;
 import io.polygenesis.generators.java.apidetail.aspect.ServiceAspectTransformer;
-import io.polygenesis.generators.java.apidetail.converter.DomainObjectConverterExporter;
-import io.polygenesis.generators.java.apidetail.converter.DomainObjectConverterLegacyClassTransformer;
-import io.polygenesis.generators.java.apidetail.converter.DomainObjectConverterLegacyMethodTransformer;
-import io.polygenesis.generators.java.apidetail.converter.activity.ConverterMethodImplementationRegistry;
+import io.polygenesis.generators.java.apidetail.converter.DomainObjectConverterActivityRegistry;
+import io.polygenesis.generators.java.apidetail.converter.DomainObjectConverterGenerator;
+import io.polygenesis.generators.java.apidetail.converter.DomainObjectConverterMethodTransformer;
+import io.polygenesis.generators.java.apidetail.converter.DomainObjectConverterTransformer;
 import io.polygenesis.generators.java.apidetail.service.ServiceDetailGenerator;
 import io.polygenesis.generators.java.apidetail.service.ServiceDetailMethodActivityRegistry;
 import io.polygenesis.generators.java.apidetail.service.ServiceDetailMethodTransformer;
@@ -56,7 +54,7 @@ public final class JavaApiDetailMetamodelGeneratorFactory {
   // DEPENDENCIES
   // ===============================================================================================
   private static ServiceDetailGenerator serviceDetailGenerator;
-  private static DomainObjectConverterExporter domainObjectConverterExporter;
+  private static DomainObjectConverterGenerator domainObjectConverterGenerator;
   private static ServiceAspectGenerator serviceAspectGenerator;
 
   // ===============================================================================================
@@ -64,28 +62,19 @@ public final class JavaApiDetailMetamodelGeneratorFactory {
   // ===============================================================================================
 
   static {
-    TemplateEngine templateEngine = new FreemarkerTemplateEngine();
+    final TemplateEngine templateEngine = new FreemarkerTemplateEngine();
     final Exporter activeFileExporter = new ActiveFileExporter();
     final Exporter passiveFileExporter = new PassiveFileExporter();
-    DataTypeTransformer dataTypeTransformer = new JavaDataTypeTransformer();
+    final DataTypeTransformer dataTypeTransformer = new JavaDataTypeTransformer();
 
-    FreemarkerService freemarkerService =
-        new FreemarkerService(FreemarkerConfig.getInstance().getConfiguration());
-
-    ConverterMethodImplementationRegistry converterMethodImplementationRegistry =
-        new ConverterMethodImplementationRegistry();
-
-    DomainObjectConverterLegacyMethodTransformer domainObjectConverterMethodRepresentable =
-        new DomainObjectConverterLegacyMethodTransformer(
-            dataTypeTransformer, freemarkerService, converterMethodImplementationRegistry);
-
-    DomainObjectConverterLegacyClassTransformer domainObjectConverterClassRepresentable =
-        new DomainObjectConverterLegacyClassTransformer(
-            dataTypeTransformer, domainObjectConverterMethodRepresentable);
-
-    domainObjectConverterExporter =
-        new DomainObjectConverterExporter(
-            freemarkerService, domainObjectConverterClassRepresentable);
+    domainObjectConverterGenerator =
+        new DomainObjectConverterGenerator(
+            new DomainObjectConverterTransformer(
+                dataTypeTransformer,
+                new DomainObjectConverterMethodTransformer(
+                    dataTypeTransformer, new DomainObjectConverterActivityRegistry())),
+            templateEngine,
+            activeFileExporter);
 
     // =============================================================================================
 
@@ -137,7 +126,7 @@ public final class JavaApiDetailMetamodelGeneratorFactory {
         contextName,
         rootPackageName,
         serviceDetailGenerator,
-        domainObjectConverterExporter,
+        domainObjectConverterGenerator,
         serviceAspectGenerator);
   }
 }

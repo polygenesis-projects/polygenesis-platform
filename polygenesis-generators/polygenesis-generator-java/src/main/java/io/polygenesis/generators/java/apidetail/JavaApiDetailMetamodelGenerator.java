@@ -29,9 +29,10 @@ import io.polygenesis.core.ExportInfo;
 import io.polygenesis.core.MetamodelRepository;
 import io.polygenesis.generators.java.apidetail.aspect.ServiceAspect;
 import io.polygenesis.generators.java.apidetail.aspect.ServiceAspectGenerator;
-import io.polygenesis.generators.java.apidetail.converter.DomainObjectConverterExporter;
+import io.polygenesis.generators.java.apidetail.converter.DomainObjectConverterGenerator;
 import io.polygenesis.generators.java.apidetail.service.ServiceDetailGenerator;
 import io.polygenesis.generators.java.shared.FolderFileConstants;
+import io.polygenesis.models.apiimpl.DomainObjectConverter;
 import io.polygenesis.models.apiimpl.DomainObjectConverterMetamodelRepository;
 import io.polygenesis.models.apiimpl.ServiceImplementation;
 import io.polygenesis.models.apiimpl.ServiceImplementationMetamodelRepository;
@@ -49,7 +50,7 @@ public class JavaApiDetailMetamodelGenerator extends AbstractMetamodelGenerator 
   private final ContextName contextName;
   private final PackageName rootPackageName;
   private final ServiceDetailGenerator serviceDetailGenerator;
-  private final DomainObjectConverterExporter domainObjectConverterExporter;
+  private final DomainObjectConverterGenerator domainObjectConverterGenerator;
   private final ServiceAspectGenerator serviceAspectGenerator;
 
   // ===============================================================================================
@@ -63,7 +64,7 @@ public class JavaApiDetailMetamodelGenerator extends AbstractMetamodelGenerator 
    * @param contextName the context name
    * @param rootPackageName the root package name
    * @param serviceDetailGenerator the service detail generator
-   * @param domainObjectConverterExporter the domain object converter exporter
+   * @param domainObjectConverterGenerator the domain object converter exporter
    * @param serviceAspectGenerator the service aspect generator
    */
   public JavaApiDetailMetamodelGenerator(
@@ -71,13 +72,13 @@ public class JavaApiDetailMetamodelGenerator extends AbstractMetamodelGenerator 
       ContextName contextName,
       PackageName rootPackageName,
       ServiceDetailGenerator serviceDetailGenerator,
-      DomainObjectConverterExporter domainObjectConverterExporter,
+      DomainObjectConverterGenerator domainObjectConverterGenerator,
       ServiceAspectGenerator serviceAspectGenerator) {
     super(generationPath);
     this.contextName = contextName;
     this.rootPackageName = rootPackageName;
     this.serviceDetailGenerator = serviceDetailGenerator;
-    this.domainObjectConverterExporter = domainObjectConverterExporter;
+    this.domainObjectConverterGenerator = domainObjectConverterGenerator;
     this.serviceAspectGenerator = serviceAspectGenerator;
   }
 
@@ -133,7 +134,9 @@ public class JavaApiDetailMetamodelGenerator extends AbstractMetamodelGenerator 
         .getItems()
         .forEach(
             domainObjectConverter ->
-                domainObjectConverterExporter.export(getGenerationPath(), domainObjectConverter));
+                domainObjectConverterGenerator.generate(
+                    domainObjectConverter,
+                    domainObjectConverterExportInfo(getGenerationPath(), domainObjectConverter)));
 
     // SERVICE ASPECT
     ServiceAspect serviceAspect = new ServiceAspect(getContextName(), getRootPackageName());
@@ -174,6 +177,21 @@ public class JavaApiDetailMetamodelGenerator extends AbstractMetamodelGenerator 
         String.format(
             "%s%s",
             TextConverter.toUpperCamel(serviceAspect.getName().getText()),
+            FolderFileConstants.JAVA_POSTFIX));
+  }
+
+  private ExportInfo domainObjectConverterExportInfo(
+      Path generationPath, DomainObjectConverter domainObjectConverter) {
+    return ExportInfo.file(
+        Paths.get(
+            generationPath.toString(),
+            FolderFileConstants.SRC,
+            FolderFileConstants.MAIN,
+            FolderFileConstants.JAVA,
+            domainObjectConverter.getPackageName().toPath().toString()),
+        String.format(
+            "%s%s",
+            TextConverter.toUpperCamel(domainObjectConverter.getObjectName().getText()),
             FolderFileConstants.JAVA_POSTFIX));
   }
 }
