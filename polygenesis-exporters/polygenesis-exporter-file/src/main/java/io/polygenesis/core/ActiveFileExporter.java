@@ -23,9 +23,9 @@ package io.polygenesis.core;
 import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.commons.path.PathService;
 import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
+import java.io.OutputStream;
 import java.nio.file.Paths;
 
 /**
@@ -48,13 +48,14 @@ public class ActiveFileExporter extends AbstractExporter implements Exporter {
 
     PathService.ensurePath(exportInfo.getGenerationPath());
 
-    String formattedContent =
-        format(byteArrayOutputStream.toString(Charset.defaultCharset()), exportInfo.getFileName());
-
     try {
-      Files.write(
-          Paths.get(exportInfo.getGenerationPath().toString(), exportInfo.getFileName()),
-          formattedContent.getBytes());
+      OutputStream outputStream =
+          new FileOutputStream(
+              Paths.get(exportInfo.getGenerationPath().toString(), exportInfo.getFileName())
+                  .toString());
+      byteArrayOutputStream.writeTo(outputStream);
+      outputStream.flush();
+      outputStream.close();
     } catch (IOException e) {
       throw new IllegalStateException(e.getMessage(), e);
     }

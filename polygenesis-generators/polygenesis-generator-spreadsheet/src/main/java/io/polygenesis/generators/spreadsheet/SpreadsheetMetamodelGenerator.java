@@ -36,7 +36,7 @@ import java.util.Set;
  */
 public class SpreadsheetMetamodelGenerator extends AbstractMetamodelGenerator {
 
-  private static final String SPREADSHEET_POSTFIX = "xls";
+  private static final String SPREADSHEET_POSTFIX = "xlsx";
 
   // ===============================================================================================
   // DEPENDENCIES
