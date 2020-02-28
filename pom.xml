@@ -23,7 +23,7 @@
   </parent>
   <groupId>io.polygenesis</groupId>
   <artifactId>polygenesis-platform</artifactId>
-  <version>0.0.3</version>
+  <version>0.0.4-SNAPSHOT</version>
   <name>PolyGenesis Platform</name>
   <description>PolyGenesis is an Extensible &amp; Cross-language Automatic Programming Platform.
   </description>
@@ -57,7 +57,7 @@
     <developerConnection>scm:git:git@github.com:polygenesis-projects/polygenesis-platform.git
     </developerConnection>
     <url>http://github.com/polygenesis-projects/polygenesis-platform/tree/master</url>
-    <tag>v0.0.3</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <distributionManagement>
