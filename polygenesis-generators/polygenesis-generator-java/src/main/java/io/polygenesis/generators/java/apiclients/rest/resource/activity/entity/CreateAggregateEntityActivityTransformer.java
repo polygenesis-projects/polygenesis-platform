@@ -61,8 +61,9 @@ public class CreateAggregateEntityActivityTransformer extends ResourceActivityTr
         new CreateAggregateEntityActivityTemplateData(
             resourceMethodParameterRepresentationService.parameterRepresentations(source, args),
             source.getService().getServiceName().getText(),
-            source.getServiceMethod().getFunction().getName().getText(),
+            source.getServiceMethod().getFunction().getName().getFullName(),
             source.getServiceMethod().getRequestDto(),
+            source.getServiceMethod().getResponseDto(),
             parentThingIdentityVariableName(source)));
 
     return new TemplateData(

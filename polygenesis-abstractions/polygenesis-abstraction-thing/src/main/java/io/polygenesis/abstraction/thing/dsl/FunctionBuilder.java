@@ -38,26 +38,20 @@ public class FunctionBuilder extends AbstractFunctionBuilder<FunctionBuilder> {
    * Of new function builder.
    *
    * @param thing the thing
-   * @param name the name
+   * @param verb the verb
+   * @param object the object
    * @param purpose the purpose
    * @return the new function builder
    */
-  public static FunctionBuilder of(Thing thing, String name, Purpose purpose) {
-    return new FunctionBuilder(thing, name, purpose);
+  public static FunctionBuilder of(Thing thing, String verb, String object, Purpose purpose) {
+    return new FunctionBuilder(thing, verb, object, purpose);
   }
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
-  /**
-   * Instantiates a new function builder.
-   *
-   * @param thing the thing
-   * @param name the name
-   * @param purpose the purpose
-   */
-  private FunctionBuilder(Thing thing, String name, Purpose purpose) {
-    super(FunctionBuilder.class, thing, name, purpose);
+  private FunctionBuilder(Thing thing, String verb, String object, Purpose purpose) {
+    super(FunctionBuilder.class, thing, verb, object, purpose);
   }
 }

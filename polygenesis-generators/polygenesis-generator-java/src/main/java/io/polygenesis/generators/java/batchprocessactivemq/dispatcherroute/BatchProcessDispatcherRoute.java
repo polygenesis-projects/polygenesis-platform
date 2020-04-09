@@ -100,7 +100,7 @@ public class BatchProcessDispatcherRoute extends AbstractNameablePackageable
     return new Function(
         thing,
         Purpose.reset(),
-        new FunctionName("configure"),
+        FunctionName.ofVerbOnly("configure"),
         null,
         new DataRepository(),
         Activity.empty(),

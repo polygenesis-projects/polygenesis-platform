@@ -78,7 +78,7 @@ public class FlutterApp extends Thing implements Generatable {
 
   private static void addBuildFunction(FlutterApp flutterApp) {
     Function build =
-        FunctionBuilder.of(flutterApp, "build", Purpose.build())
+        FunctionBuilder.of(flutterApp, "build", "", Purpose.build())
             .setReturnValue(new DataObject(new ObjectName("Widget"), new PackageName("com.dummy")))
             .addArgument(
                 new DataObject(

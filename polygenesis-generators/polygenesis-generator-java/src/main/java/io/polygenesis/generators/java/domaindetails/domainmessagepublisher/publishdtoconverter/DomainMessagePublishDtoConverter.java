@@ -89,7 +89,7 @@ public class DomainMessagePublishDtoConverter extends AbstractNameablePackageabl
     return new Function(
         thing,
         Purpose.domainMessagePublisherGetContext(),
-        new FunctionName("getContext"),
+        FunctionName.ofVerbOnly("getContext"),
         DataPrimitive.of(PrimitiveType.STRING, VariableName.response()),
         new DataRepository(),
         Activity.empty(),

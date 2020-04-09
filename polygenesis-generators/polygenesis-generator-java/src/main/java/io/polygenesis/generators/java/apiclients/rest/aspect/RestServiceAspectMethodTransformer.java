@@ -69,7 +69,7 @@ public class RestServiceAspectMethodTransformer extends AbstractMethodTransforme
   public Set<String> annotations(Function source, Object... args) {
     PackageName rootPackageName = (PackageName) args[0];
 
-    if (source.getName().equals(new FunctionName("around"))) {
+    if (source.getName().equals(FunctionName.ofVerbOnly("around"))) {
       StringBuilder stringBuilder = new StringBuilder();
 
       stringBuilder.append(String.format("@Around(%n"));
@@ -103,7 +103,7 @@ public class RestServiceAspectMethodTransformer extends AbstractMethodTransforme
 
   @Override
   public Set<String> thrownExceptions(Function source, Object... args) {
-    if (source.getName().equals(new FunctionName("around"))) {
+    if (source.getName().equals(FunctionName.ofVerbOnly("around"))) {
       return new LinkedHashSet<>(singletonList("Throwable"));
     } else {
       return super.thrownExceptions(source, args);

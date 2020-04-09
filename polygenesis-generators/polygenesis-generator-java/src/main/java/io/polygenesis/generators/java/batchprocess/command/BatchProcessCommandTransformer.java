@@ -120,6 +120,7 @@ public class BatchProcessCommandTransformer
     Set<String> imports = new TreeSet<>();
 
     imports.add("com.oregor.trinity4j.api.clients.batchprocess.BatchProcessCommandService");
+    imports.add("com.oregor.trinity4j.api.clients.batchprocess.BatchProcessMessage");
     imports.add("org.springframework.stereotype.Service");
 
     imports.add(

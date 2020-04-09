@@ -35,6 +35,10 @@ public abstract class AbstractText implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
+  // ===============================================================================================
+  // STATE
+  // ===============================================================================================
+
   private String text;
   private String original;
 

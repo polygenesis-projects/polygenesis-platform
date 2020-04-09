@@ -228,7 +228,13 @@ public abstract class AbstractServiceMethodImplementationTransformer {
         .getServiceMethod()
         .getRequestDto()
         .getThingIdentityAsOptional()
-        .orElseThrow(IllegalArgumentException::new);
+        .orElseThrow(
+            () ->
+                new IllegalArgumentException(
+                    String.format(
+                        "Cannot get thing identity for function '%s' in service '%s'",
+                        source.getFunction().getName().getFullName(),
+                        source.getServiceMethod().getService().getServiceName().getText())));
   }
 
   /**
@@ -320,7 +326,7 @@ public abstract class AbstractServiceMethodImplementationTransformer {
                       String.format(
                           "Cannot get state mutation method '%s' for '%s'. "
                               + "Check the state mutation deducer.",
-                          source.getFunction().getName().getText(),
+                          source.getFunction().getName().getFullName(),
                           optionalAggregateRoot.get().getObjectName().getText())))
           .getProperties();
     } else {

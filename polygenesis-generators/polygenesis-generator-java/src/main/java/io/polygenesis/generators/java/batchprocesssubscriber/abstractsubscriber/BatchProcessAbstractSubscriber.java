@@ -92,7 +92,7 @@ public class BatchProcessAbstractSubscriber extends AbstractNameablePackageable
     return new Function(
         thing,
         Purpose.reset(),
-        new FunctionName("process"),
+        FunctionName.ofVerbOnly("process"),
         null,
         new DataRepository(DataPrimitive.of(PrimitiveType.STRING, new VariableName("message"))),
         Activity.empty(),

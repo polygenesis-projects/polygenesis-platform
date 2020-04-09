@@ -50,6 +50,7 @@ public class FetchOneAggregateEntityActivityTemplateData extends ResourceActivit
    * @param serviceName the service name
    * @param serviceMethodName the service method name
    * @param requestDto the request dto
+   * @param responseDto the response dto
    * @param parentThingIdentityVariableName the parent thing identity variable name
    * @param thingIdentityVariableName the thing identity variable name
    */
@@ -59,9 +60,10 @@ public class FetchOneAggregateEntityActivityTemplateData extends ResourceActivit
       String serviceName,
       String serviceMethodName,
       Dto requestDto,
+      Dto responseDto,
       String parentThingIdentityVariableName,
       String thingIdentityVariableName) {
-    super(parameterRepresentations, serviceName, serviceMethodName, requestDto);
+    super(parameterRepresentations, serviceName, serviceMethodName, requestDto, responseDto);
     this.parentThingIdentityVariableName = parentThingIdentityVariableName;
     this.thingIdentityVariableName = thingIdentityVariableName;
   }

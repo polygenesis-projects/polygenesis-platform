@@ -25,6 +25,10 @@
       new ${ textConverter.toUpperCamel(property.data.objectName.text) }(${ requestDto.dataObject.variableName.text }.get${ textConverter.toUpperCamel(property.data.variableName.text) }())
     <#elseif property.data.getAsDataObject().models[0].primitiveType == 'UUID'>
       new ${ textConverter.toUpperCamel(property.data.objectName.text) }(UUID.fromString(${ requestDto.dataObject.variableName.text }.get${ textConverter.toUpperCamel(property.data.variableName.text) }()))
+    <#elseif property.data.getAsDataObject().models[0].primitiveType == 'URL'>
+      new ${ textConverter.toUpperCamel(property.data.objectName.text) }(new URL(${ requestDto.dataObject.variableName.text }.get${ textConverter.toUpperCamel(property.data.variableName.text) }()))
+    <#elseif property.data.getAsDataObject().models[0].primitiveType == 'URI'>
+      new ${ textConverter.toUpperCamel(property.data.objectName.text) }(new URI(${ requestDto.dataObject.variableName.text }.get${ textConverter.toUpperCamel(property.data.variableName.text) }()))
     <#else>
       null // TODO: ${property.data.getAsDataObject().models[0].primitiveType} is not supported yet
     </#if>

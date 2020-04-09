@@ -45,14 +45,14 @@ public class PurposeFunctionBuilderTest {
   public void shouldCreateModify() {
     Set<Function> functions =
         PurposeFunctionBuilder.forThing(ThingForTesting.create(), "com.oregor")
-            .withFunctionModify("modify", dataModifyDescription())
+            .withFunctionModify("modify", "", dataModifyDescription())
             .build();
 
     Assertions.assertThat(functions).isNotNull();
     assertThat(functions.size()).isEqualTo(1);
 
     Function function = functions.stream().findFirst().orElseThrow(IllegalStateException::new);
-    assertThat(function.getName()).isEqualTo(new FunctionName("modify"));
+    assertThat(function.getName()).isEqualTo(FunctionName.ofVerbOnly("modify"));
     assertThat(function.getReturnValue().getAsDataObject().getObjectName().getText())
         .isEqualTo("modifyBusinessResponse");
   }
@@ -61,15 +61,15 @@ public class PurposeFunctionBuilderTest {
   public void shouldCreateModifyWithCustomName() {
     Set<Function> functions =
         PurposeFunctionBuilder.forThing(ThingForTesting.create(), "com.oregor")
-            .withFunctionModify("modifyDescription", dataModifyDescription())
+            .withFunctionModify("modifyDescription", "", dataModifyDescription())
             .build();
 
     Assertions.assertThat(functions).isNotNull();
     assertThat(functions.size()).isEqualTo(1);
 
     Function function = functions.stream().findFirst().orElseThrow(IllegalStateException::new);
-    assertThat(function.getName().getText())
-        .isEqualTo(new FunctionName("modifyDescription").getText());
+    assertThat(function.getName().getFullName())
+        .isEqualTo(FunctionName.ofVerbAndObject("modify", "description").getFullName());
     assertThat(function.getReturnValue().getAsDataObject().getObjectName().getText())
         .isEqualTo("modifyDescriptionBusinessResponse");
   }

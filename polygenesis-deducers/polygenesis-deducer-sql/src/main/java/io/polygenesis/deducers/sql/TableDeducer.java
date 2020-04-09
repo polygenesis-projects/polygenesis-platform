@@ -186,6 +186,9 @@ public class TableDeducer {
                 case MAP:
                   domainObjectColumns.addAll(getColumnsForMap());
                   break;
+                case ENUMERATION:
+                  domainObjectColumns.add(getColumnForEnumeration(property.getData(), ""));
+                  break;
                 default:
                   throw new IllegalArgumentException(
                       String.format(
@@ -373,9 +376,26 @@ public class TableDeducer {
               } else {
                 throw new IllegalStateException();
               }
+              // TODO vo
+              //              else if (model.isDataGroup()) {
+              //                ; // getColumnsForValueObject(model.getAsDataObject());
+              //              }
+
             });
 
     return columns;
+  }
+
+  private Column getColumnForEnumeration(Data data, String columnPrefix) {
+    ColumnDataType columnDataType = ColumnDataType.VARCHAR;
+
+    int length = 50;
+
+    return new Column(
+        String.format("%s%s", columnPrefix, data.getVariableName().getText()),
+        columnDataType,
+        length,
+        RequiredType.OPTIONAL);
   }
 
   /**

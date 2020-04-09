@@ -81,6 +81,7 @@ public class FunctionTest extends AbstractEqualityTest<Function> {
     return FunctionBuilder.of(
             ThingBuilder.endToEnd("thingName").createThing(PackageName.any()),
             "functionName",
+            "",
             Purpose.create())
         .setReturnValue(createDataPrimitive())
         .build();
@@ -91,6 +92,7 @@ public class FunctionTest extends AbstractEqualityTest<Function> {
     return FunctionBuilder.of(
             ThingBuilder.endToEnd("thingName").createThing(PackageName.any()),
             "anotherFunctionName",
+            "",
             Purpose.create())
         .setReturnValue(createDataPrimitive())
         .build();
@@ -104,6 +106,7 @@ public class FunctionTest extends AbstractEqualityTest<Function> {
     return FunctionBuilder.of(
             ThingBuilder.endToEnd("thingName").createThing(PackageName.any()),
             "functionName",
+            "",
             Purpose.create())
         .setReturnValue(createDataPrimitive())
         .build();
@@ -113,6 +116,7 @@ public class FunctionTest extends AbstractEqualityTest<Function> {
     return FunctionBuilder.of(
             ThingBuilder.endToEnd("thingName").createThing(PackageName.any()),
             "functionName",
+            "",
             Purpose.create())
         .addArgument(DataPrimitive.of(PrimitiveType.STRING, new VariableName("jsonMessage")))
         .build();

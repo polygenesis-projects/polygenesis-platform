@@ -30,7 +30,7 @@ public enum DataPrimaryType {
   ARRAY,
 
   /** Enum data primary type. */
-  ENUM,
+  ENUMERATION,
 
   /** Map data primary type. */
   MAP,

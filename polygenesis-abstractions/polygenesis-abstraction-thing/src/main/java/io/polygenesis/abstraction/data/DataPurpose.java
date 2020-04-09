@@ -63,6 +63,11 @@ public class DataPurpose implements Serializable {
   private static final String SUPERCLASS_PARAMETER = "SUPERCLASS_PARAMETER";
 
   // ===============================================================================================
+  // INTERNAL
+  // ===============================================================================================
+  private static final String INTERNAL_STATE = "INTERNAL_STATE";
+
+  // ===============================================================================================
   // STATE
   // ===============================================================================================
 
@@ -151,6 +156,19 @@ public class DataPurpose implements Serializable {
    */
   public static DataPurpose superclassParameter() {
     return new DataPurpose(SUPERCLASS_PARAMETER);
+  }
+
+  // ===============================================================================================
+  // INTERNAL
+  // ===============================================================================================
+
+  /**
+   * Internal state data purpose.
+   *
+   * @return the data purpose
+   */
+  public static DataPurpose internalState() {
+    return new DataPurpose(INTERNAL_STATE);
   }
 
   // ===============================================================================================

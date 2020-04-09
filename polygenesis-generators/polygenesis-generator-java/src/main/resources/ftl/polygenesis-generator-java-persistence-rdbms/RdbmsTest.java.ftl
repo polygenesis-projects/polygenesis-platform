@@ -31,13 +31,14 @@ import org.springframework.transaction.annotation.Transactional;
  * @author ${ authorService.getAuthor() }
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = RdbmsTestConfig.class,
-  properties = {
-    // "logging.level.org.hibernate.SQL=debug",
-    // "logging.level.org.hibernate.type.descriptor.sql=trace",
-    "spring.jpa.show-sql=true",
-    "spring.jpa.properties.hibernate.format_sql=false"
-  })
+@SpringBootTest(
+    classes = RdbmsTestConfig.class,
+    properties = {
+      // "logging.level.org.hibernate.SQL=debug",
+      // "logging.level.org.hibernate.type.descriptor.sql=trace",
+      "spring.jpa.show-sql=true",
+      "spring.jpa.properties.hibernate.format_sql=false"
+    })
 @ActiveProfiles({"ci-rdbms"})
 @Transactional
 public abstract class RdbmsTest {}

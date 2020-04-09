@@ -84,6 +84,13 @@ public interface Data {
   // ===============================================================================================
 
   /**
+   * Gets as data enumeration.
+   *
+   * @return the as data enumeration
+   */
+  DataEnumeration getAsDataEnumeration();
+
+  /**
    * Gets as data primitive.
    *
    * @return the as data primitive
@@ -110,6 +117,13 @@ public interface Data {
    * @return the as data map
    */
   DataMap getAsDataMap();
+
+  /**
+   * Is data enumeration boolean.
+   *
+   * @return the boolean
+   */
+  boolean isDataEnumeration();
 
   /**
    * Is primitive.

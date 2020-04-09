@@ -126,6 +126,7 @@ public class ValueObjectDtoDeducer {
                 String.format(
                     "convertTo%sVo",
                     TextConverter.toUpperCamel(valueObjectToUse.getObjectName().getText())),
+                "",
                 Purpose.convertDtoToVo())
             .setReturnValue(valueObjectToUse.getData())
             .addArgument(dtoToUse.getDataObject())
@@ -142,7 +143,7 @@ public class ValueObjectDtoDeducer {
                     domainObjectConverterMethod
                         .getFunction()
                         .getName()
-                        .getText()
+                        .getFullName()
                         .equals(
                             String.format(
                                 "convertTo%s",
@@ -157,6 +158,7 @@ public class ValueObjectDtoDeducer {
                   String.format(
                       "convertTo%s",
                       TextConverter.toUpperCamel(pair.getDto().getObjectName().getText())),
+                  "",
                   Purpose.convertVoToDto())
               .setReturnValue(pair.getDto().getDataObject())
               .addArgument(valueObjectToUse.getData())

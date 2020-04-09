@@ -176,7 +176,7 @@ public class ResourceMethodTransformer extends AbstractMethodTransformer<Endpoin
                 stringBuilder.append("/");
                 stringBuilder.append(
                     TextConverter.toLowerHyphen(
-                        endpoint.getServiceMethod().getFunction().getName().getText()));
+                        endpoint.getServiceMethod().getFunction().getName().getFullName()));
               }
 
               stringBuilder.append("\"");

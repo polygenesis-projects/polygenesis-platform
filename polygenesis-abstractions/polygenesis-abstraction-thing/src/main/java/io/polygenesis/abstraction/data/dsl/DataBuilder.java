@@ -22,6 +22,7 @@ package io.polygenesis.abstraction.data.dsl;
 
 import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.DataArray;
+import io.polygenesis.abstraction.data.DataEnumeration;
 import io.polygenesis.abstraction.data.DataMap;
 import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.abstraction.data.DataPrimitive;
@@ -244,6 +245,17 @@ public class DataBuilder {
   }
 
   /**
+   * With enumeration data builder.
+   *
+   * @param dataEnumeration the data enum
+   * @return the data builder
+   */
+  public final DataBuilder withEnumeration(DataEnumeration dataEnumeration) {
+    this.models.add(dataEnumeration);
+    return this;
+  }
+
+  /**
    * With group data data builder.
    *
    * @param dataObject the data group
@@ -300,6 +312,34 @@ public class DataBuilder {
     this.models.add(
         DataReferenceToThingById.of(thing, variableName).getAsDataPrimitive(rootPackageName));
     return this;
+  }
+
+  /**
+   * With url property data url builder.
+   *
+   * @param propertyName the property name
+   * @return the data url builder
+   */
+  public final DataUrlBuilder withUrlProperty(String propertyName) {
+    DataUrlBuilder dataUrlBuilder = DataUrlBuilder.create(this, propertyName);
+
+    this.models.add(dataUrlBuilder.getModel());
+
+    return dataUrlBuilder;
+  }
+
+  /**
+   * With uri property data uri builder.
+   *
+   * @param propertyName the property name
+   * @return the data uri builder
+   */
+  public final DataUriBuilder withUriProperty(String propertyName) {
+    DataUriBuilder dataUriBuilder = DataUriBuilder.create(this, propertyName);
+
+    this.models.add(dataUriBuilder.getModel());
+
+    return dataUriBuilder;
   }
 
   // ===============================================================================================

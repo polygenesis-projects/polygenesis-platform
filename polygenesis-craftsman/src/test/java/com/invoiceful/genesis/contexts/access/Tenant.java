@@ -48,6 +48,7 @@ public class Tenant {
             .withFunctionCreate(createData(rootPackageName, user))
             .withFunctionModify(
                 "deactivate",
+                "",
                 new LinkedHashSet<>(
                     Collections.singletonList(
                         DataPrimitive.of(PrimitiveType.STRING, new VariableName("someVar")))))

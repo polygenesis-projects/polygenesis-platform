@@ -44,7 +44,7 @@ public class ProcessQueryActivityTransformer implements ActivityTemplateTransfor
     ProcessQueryActivityTemplateData data =
         new ProcessQueryActivityTemplateData(
             TextConverter.toLowerCamel(source.getService().getServiceName().getText()),
-            TextConverter.toLowerCamel(source.getFunction().getName().getText()),
+            TextConverter.toLowerCamel(source.getFunction().getName().getFullName()),
             TextConverter.toUpperCamel(
                 source.getRequestDto().getDataObject().getObjectName().getText()));
 

@@ -120,6 +120,8 @@ public class JavaDataTypeTransformer implements DataTypeTransformer {
     dataTypeMap.put(PrimitiveType.DATE, "LocalDate");
     dataTypeMap.put(PrimitiveType.DATETIME, "LocalDateTime");
     dataTypeMap.put(PrimitiveType.DECIMAL, "BigDecimal");
+    dataTypeMap.put(PrimitiveType.URI, "String");
+    dataTypeMap.put(PrimitiveType.URL, "String");
     dataTypeMap.put(PrimitiveType.UUID, "UUID");
   }
 }

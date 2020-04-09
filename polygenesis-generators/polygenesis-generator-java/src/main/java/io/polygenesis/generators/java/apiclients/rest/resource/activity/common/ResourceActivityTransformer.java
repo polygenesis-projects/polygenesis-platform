@@ -101,7 +101,7 @@ public abstract class ResourceActivityTransformer implements ActivityTemplateTra
                                 .getThing()
                                 .getThingName()
                                 .getText(),
-                            endpoint.getServiceMethod().getFunction().getName().getText())));
+                            endpoint.getServiceMethod().getFunction().getName().getFullName())));
 
     return parentThingIdentity.getVariableName().getText();
   }

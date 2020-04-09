@@ -104,7 +104,7 @@ public class BatchProcessSubscriber extends BatchProcessMetamodel {
     return new Function(
         thing,
         Purpose.reset(),
-        new FunctionName("getSupportedMessageTypes"),
+        FunctionName.ofVerbOnly("getSupportedMessageTypes"),
         DataArray.of(DataPrimitive.of(PrimitiveType.STRING, VariableName.response())),
         new DataRepository(),
         Activity.keyValues(

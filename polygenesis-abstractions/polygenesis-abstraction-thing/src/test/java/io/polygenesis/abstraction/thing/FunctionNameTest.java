@@ -29,7 +29,7 @@ public class FunctionNameTest {
 
   @Test
   public void shouldInitialize() {
-    FunctionName functionName = new FunctionName("asd");
+    FunctionName functionName = FunctionName.ofVerbAndObject("do", "something");
     assertThat(functionName).isNotNull();
   }
 }

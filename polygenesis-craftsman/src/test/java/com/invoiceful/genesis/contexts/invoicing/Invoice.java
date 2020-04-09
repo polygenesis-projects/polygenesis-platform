@@ -44,7 +44,7 @@ public class Invoice {
     invoice.addFunctions(
         PurposeFunctionBuilder.forThing(invoice, rootPackageName)
             .withCrudFunction(createData(rootPackageName))
-            .withFunctionModify("issue", new LinkedHashSet<>())
+            .withFunctionModify("issue", "", new LinkedHashSet<>())
             .build());
 
     invoice.addChild(InvoiceItem.create(invoice, rootPackageName));

@@ -28,7 +28,7 @@
       <#switch dataModel.dataPrimaryType>
         <#case 'PRIMITIVE'>
           <#if dataModel.dataObject??>
-        ${ data.from.data.variableName.text }.get${ textConverter.toUpperCamel(dataModel.variableName.text) }().getValue()<#sep>,</#sep>
+        ${ data.from.data.variableName.text }.get${ textConverter.toUpperCamel(dataModel.variableName.text) }().getTypeId().toString()<#sep>,</#sep>
           <#else>
         ${ data.from.data.variableName.text }.get${ textConverter.toUpperCamel(dataModel.variableName.text) }()<#sep>,</#sep>
           </#if>

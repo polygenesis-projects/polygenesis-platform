@@ -21,6 +21,7 @@
 package io.polygenesis.generators.java.batchprocess;
 
 import io.polygenesis.commons.text.TextConverter;
+import io.polygenesis.commons.valueobjects.ContextName;
 import io.polygenesis.core.AbstractMetamodelGenerator;
 import io.polygenesis.core.CoreRegistry;
 import io.polygenesis.core.ExportInfo;
@@ -46,6 +47,7 @@ public class BatchProcessMetamodelGenerator extends AbstractMetamodelGenerator {
   // STATE / DEPENDENCIES
   // ===============================================================================================
 
+  private final ContextName contextName;
   private final BatchProcessGenerator batchProcessGenerator;
   private final BatchProcessCommandGenerator batchProcessCommandGenerator;
   private final BatchProcessQueryGenerator batchProcessQueryGenerator;
@@ -58,16 +60,19 @@ public class BatchProcessMetamodelGenerator extends AbstractMetamodelGenerator {
    * Instantiates a new Batch process metamodel generator.
    *
    * @param generationPath the generation path
-   * @param batchProcessGenerator the periodic process generator
-   * @param batchProcessCommandGenerator the periodic process command generator
-   * @param batchProcessQueryGenerator the periodic process query generator
+   * @param contextName the context name
+   * @param batchProcessGenerator the batch process generator
+   * @param batchProcessCommandGenerator the batch process command generator
+   * @param batchProcessQueryGenerator the batch process query generator
    */
   public BatchProcessMetamodelGenerator(
       Path generationPath,
+      ContextName contextName,
       BatchProcessGenerator batchProcessGenerator,
       BatchProcessCommandGenerator batchProcessCommandGenerator,
       BatchProcessQueryGenerator batchProcessQueryGenerator) {
     super(generationPath);
+    this.contextName = contextName;
     this.batchProcessGenerator = batchProcessGenerator;
     this.batchProcessCommandGenerator = batchProcessCommandGenerator;
     this.batchProcessQueryGenerator = batchProcessQueryGenerator;
@@ -86,7 +91,8 @@ public class BatchProcessMetamodelGenerator extends AbstractMetamodelGenerator {
             periodicProcessMetamodel -> {
               batchProcessGenerator.generate(
                   periodicProcessMetamodel,
-                  processExportInfo(getGenerationPath(), periodicProcessMetamodel));
+                  processExportInfo(getGenerationPath(), periodicProcessMetamodel),
+                  contextName);
 
               batchProcessCommandGenerator.generate(
                   periodicProcessMetamodel,

@@ -91,7 +91,7 @@ public class AggregateRootIdTransformer extends AbstractClassTransformer<DomainO
     // Create no-args constructor
     // ---------------------------------------------------------------------------------------------
     constructorRepresentations.add(
-        createNoArgsConstructorForPersistence(dataTypeTransformer.getModifierPublic()));
+        createNoArgsConstructorForPersistence(dataTypeTransformer.getModifierPrivate()));
 
     // ---------------------------------------------------------------------------------------------
     // Create constructor with parameters

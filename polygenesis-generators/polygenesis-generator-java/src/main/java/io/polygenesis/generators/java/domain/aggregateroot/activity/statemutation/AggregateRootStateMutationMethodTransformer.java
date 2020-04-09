@@ -115,7 +115,7 @@ public class AggregateRootStateMutationMethodTransformer
       throw new IllegalArgumentException(
           String.format(
               "Function with name=%s is not a StateMutationMethod",
-              source.getFunction().getName().getText()));
+              source.getFunction().getName().getFullName()));
     }
   }
 

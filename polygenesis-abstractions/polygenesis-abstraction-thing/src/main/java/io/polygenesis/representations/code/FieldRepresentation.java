@@ -38,10 +38,25 @@ public class FieldRepresentation extends AbstractDataRepresentation {
   // ===============================================================================================
 
   private String modifiers;
+  private String initialValue;
 
   // ===============================================================================================
   // STATIC
   // ===============================================================================================
+
+  /**
+   * With initial value field representation.
+   *
+   * @param dataType the data type
+   * @param variableName the variable name
+   * @param modifiers the modifiers
+   * @return the field representation
+   */
+  public static FieldRepresentation withInitialValue(
+      String dataType, String variableName, String modifiers, String initialValue) {
+    return new FieldRepresentation(
+        dataType, variableName, new LinkedHashSet<>(), DataPurpose.any(), modifiers, initialValue);
+  }
 
   /**
    * With modifiers field representation.
@@ -54,7 +69,7 @@ public class FieldRepresentation extends AbstractDataRepresentation {
   public static FieldRepresentation withModifiers(
       String dataType, String variableName, String modifiers) {
     return new FieldRepresentation(
-        dataType, variableName, new LinkedHashSet<>(), DataPurpose.any(), modifiers);
+        dataType, variableName, new LinkedHashSet<>(), DataPurpose.any(), modifiers, null);
   }
 
   /**
@@ -69,7 +84,7 @@ public class FieldRepresentation extends AbstractDataRepresentation {
   public static FieldRepresentation withAnnotations(
       String dataType, String variableName, Set<String> annotations, String modifiers) {
     return new FieldRepresentation(
-        dataType, variableName, annotations, DataPurpose.any(), modifiers);
+        dataType, variableName, annotations, DataPurpose.any(), modifiers, null);
   }
 
   // ===============================================================================================
@@ -130,9 +145,14 @@ public class FieldRepresentation extends AbstractDataRepresentation {
       String variableName,
       Set<String> annotations,
       DataPurpose dataPurpose,
-      String modifiers) {
+      String modifiers,
+      String initialValue) {
     super(dataType, variableName, annotations, dataPurpose);
     setModifiers(modifiers);
+
+    if (initialValue != null) {
+      setInitialValue(initialValue);
+    }
   }
 
   // ===============================================================================================
@@ -148,18 +168,27 @@ public class FieldRepresentation extends AbstractDataRepresentation {
     return modifiers;
   }
 
+  /**
+   * Gets initial value.
+   *
+   * @return the initial value
+   */
+  public String getInitialValue() {
+    return initialValue;
+  }
+
   // ===============================================================================================
   // GUARDS
   // ===============================================================================================
 
-  /**
-   * Sets modifiers.
-   *
-   * @param modifiers the modifiers
-   */
   private void setModifiers(String modifiers) {
     Assertion.isNotNull(modifiers, "modifiers is required");
     this.modifiers = modifiers;
+  }
+
+  private void setInitialValue(String initialValue) {
+    Assertion.isNotNull(initialValue, "initialValue is required");
+    this.initialValue = initialValue;
   }
 
   // ===============================================================================================
@@ -178,11 +207,12 @@ public class FieldRepresentation extends AbstractDataRepresentation {
       return false;
     }
     FieldRepresentation that = (FieldRepresentation) o;
-    return Objects.equals(modifiers, that.modifiers);
+    return Objects.equals(modifiers, that.modifiers)
+        && Objects.equals(initialValue, that.initialValue);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(super.hashCode(), modifiers);
+    return Objects.hash(super.hashCode(), modifiers, initialValue);
   }
 }

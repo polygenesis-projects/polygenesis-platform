@@ -45,9 +45,10 @@ public class ProcessCommandActivityTransformer
     ProcessCommandActivityTemplateData data =
         new ProcessCommandActivityTemplateData(
             TextConverter.toLowerCamel(source.getService().getServiceName().getText()),
-            TextConverter.toLowerCamel(source.getFunction().getName().getText()),
+            TextConverter.toLowerCamel(source.getFunction().getName().getFullName()),
             TextConverter.toUpperCamel(
-                source.getRequestDto().getDataObject().getObjectName().getText()));
+                source.getRequestDto().getDataObject().getObjectName().getText()),
+            source.getFunction().getThing().getMultiTenant());
 
     Map<String, Object> dataModel = new HashMap<>();
     dataModel.put("data", data);

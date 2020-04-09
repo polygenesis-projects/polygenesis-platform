@@ -18,70 +18,35 @@
  * ===========================LICENSE_END==================================
  */
 
-package io.polygenesis.abstraction.data;
+package io.polygenesis.models.domain;
 
+import io.polygenesis.abstraction.data.Data;
+import io.polygenesis.abstraction.data.DataEnumeration;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
-import io.polygenesis.commons.valueobjects.VariableName;
-import java.util.Set;
+import io.polygenesis.core.Generatable;
+import io.polygenesis.core.Nameable;
+import io.polygenesis.core.Packageable;
 
 /**
- * The type Data enum.
+ * The type Enumeration.
  *
  * @author Christos Tsakostas
  */
-public class DataEnum extends DataObject {
+public class Enumeration extends BaseProperty<DataEnumeration>
+    implements Generatable, Nameable, Packageable {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
   /**
-   * Instantiates a new Data enum.
+   * Instantiates a new Enumeration.
    *
-   * @param objectName the object name
-   * @param packageName the package name
+   * @param data the data
    */
-  public DataEnum(ObjectName objectName, PackageName packageName) {
-    super(objectName, packageName);
-  }
-
-  /**
-   * Instantiates a new Data enum.
-   *
-   * @param objectName the object name
-   * @param packageName the package name
-   * @param variableName the variable name
-   */
-  public DataEnum(ObjectName objectName, PackageName packageName, VariableName variableName) {
-    super(objectName, packageName, variableName);
-  }
-
-  /**
-   * Instantiates a new Data enum.
-   *
-   * @param variableName the variable name
-   * @param dataPurpose the data purpose
-   * @param dataValidator the data validator
-   * @param objectName the object name
-   * @param packageName the package name
-   * @param models the models
-   */
-  public DataEnum(
-      VariableName variableName,
-      DataPurpose dataPurpose,
-      DataValidator dataValidator,
-      ObjectName objectName,
-      PackageName packageName,
-      Set<Data> models) {
-    super(
-        variableName,
-        dataPurpose,
-        dataValidator,
-        objectName,
-        packageName,
-        models,
-        DataSourceType.DEFAULT);
+  public Enumeration(DataEnumeration data) {
+    super(PropertyType.ENUMERATION, data);
   }
 
   // ===============================================================================================
@@ -89,7 +54,17 @@ public class DataEnum extends DataObject {
   // ===============================================================================================
 
   @Override
-  public String getDataType() {
-    return DataPrimaryType.ENUM.name();
+  public Data getTypeParameterData() {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public ObjectName getObjectName() {
+    return getData().getObjectName();
+  }
+
+  @Override
+  public PackageName getPackageName() {
+    return getData().getPackageName();
   }
 }

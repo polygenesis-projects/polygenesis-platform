@@ -157,6 +157,14 @@ public class DomainEventTransformer extends DomainObjectClassTransformer<DomainE
                           makeVariableName(property),
                           dataTypeTransformer.getModifierPrivate()));
                   break;
+                case ENUMERATION:
+                  // TODO vo
+                  fieldRepresentations.add(
+                      FieldRepresentation.withModifiers(
+                          makeVariableDataType(property),
+                          makeVariableName(property),
+                          dataTypeTransformer.getModifierPrivate()));
+                  break;
                 default:
                   throw new IllegalStateException(
                       String.format(

@@ -20,16 +20,51 @@
 
 package io.polygenesis.abstraction.thing;
 
-import io.polygenesis.commons.text.AbstractText;
+import io.polygenesis.commons.assertion.Assertion;
+import io.polygenesis.commons.text.TextConverter;
+import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * The type Function name.
  *
  * @author Christos Tsakostas
  */
-public class FunctionName extends AbstractText {
+public class FunctionName implements Serializable {
 
   private static final long serialVersionUID = 1L;
+
+  // ===============================================================================================
+  // STATE
+  // ===============================================================================================
+
+  private String verb;
+  private String object;
+
+  // ===============================================================================================
+  // STATIC
+  // ===============================================================================================
+
+  /**
+   * Of verb only function name.
+   *
+   * @param verb the verb
+   * @return the function name
+   */
+  public static FunctionName ofVerbOnly(String verb) {
+    return new FunctionName(verb, "");
+  }
+
+  /**
+   * Of verb and object function name.
+   *
+   * @param verb the verb
+   * @param object the object
+   * @return the function name
+   */
+  public static FunctionName ofVerbAndObject(String verb, String object) {
+    return new FunctionName(verb, object);
+  }
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -38,9 +73,81 @@ public class FunctionName extends AbstractText {
   /**
    * Instantiates a new Function name.
    *
-   * @param text the text
+   * @param verb the verb
+   * @param object the object
    */
-  public FunctionName(String text) {
-    super(text);
+  private FunctionName(String verb, String object) {
+    setVerb(verb);
+    setObject(object);
+  }
+
+  // ===============================================================================================
+  // QUERIES
+  // ===============================================================================================
+
+  /**
+   * Gets full name.
+   *
+   * @return the full name
+   */
+  public String getFullName() {
+    return String.format("%s%s", verb, TextConverter.toUpperCamel(object));
+  }
+
+  // ===============================================================================================
+  // GETTERS
+  // ===============================================================================================
+
+  /**
+   * Gets verb.
+   *
+   * @return the verb
+   */
+  public String getVerb() {
+    return verb;
+  }
+
+  /**
+   * Gets object.
+   *
+   * @return the object
+   */
+  public String getObject() {
+    return object;
+  }
+
+  // ===============================================================================================
+  // GUARDS
+  // ===============================================================================================
+
+  private void setVerb(String verb) {
+    Assertion.isNotNull(verb, "verb is required");
+    this.verb = TextConverter.toLowerCamel(verb);
+  }
+
+  private void setObject(String object) {
+    Assertion.isNotNull(object, "object is required");
+    this.object = TextConverter.toLowerCamel(object);
+  }
+
+  // ===============================================================================================
+  // OVERRIDES
+  // ===============================================================================================
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    FunctionName that = (FunctionName) o;
+    return Objects.equals(verb, that.verb) && Objects.equals(object, that.object);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(verb, object);
   }
 }

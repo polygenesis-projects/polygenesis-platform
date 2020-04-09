@@ -130,7 +130,7 @@ public class RestServiceAspect implements Generatable, Nameable {
     return new Function(
         thing,
         Purpose.aspectAround(),
-        new FunctionName("around"),
+        FunctionName.ofVerbOnly("around"),
         new DataObject(
             new ObjectName("Object"), new PackageName("java.lang"), VariableName.response()),
         new DataRepository(

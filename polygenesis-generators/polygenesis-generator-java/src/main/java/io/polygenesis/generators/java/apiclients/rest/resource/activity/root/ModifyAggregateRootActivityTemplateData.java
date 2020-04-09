@@ -49,6 +49,7 @@ public class ModifyAggregateRootActivityTemplateData extends ResourceActivityTem
    * @param serviceName the service name
    * @param serviceMethodName the service method name
    * @param requestDto the request dto
+   * @param responseDto the response dto
    * @param thingIdentityVariableName the thing identity variable name
    */
   @SuppressWarnings("CPD-START")
@@ -57,8 +58,9 @@ public class ModifyAggregateRootActivityTemplateData extends ResourceActivityTem
       String serviceName,
       String serviceMethodName,
       Dto requestDto,
+      Dto responseDto,
       String thingIdentityVariableName) {
-    super(parameterRepresentations, serviceName, serviceMethodName, requestDto);
+    super(parameterRepresentations, serviceName, serviceMethodName, requestDto, responseDto);
     this.thingIdentityVariableName = thingIdentityVariableName;
   }
 

@@ -37,6 +37,8 @@ public enum PrimitiveType {
   INTEGER,
   LONG,
   STRING,
+  URI,
+  URL,
   UUID,
   VOID
 }

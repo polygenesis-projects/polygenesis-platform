@@ -43,13 +43,15 @@ public class CreateAggregateRootActivityTemplateData extends ResourceActivityTem
    * @param serviceName the service name
    * @param serviceMethodName the service method name
    * @param requestDto the request dto
+   * @param responseDto the response dto
    */
   @SuppressWarnings("CPD-START")
   public CreateAggregateRootActivityTemplateData(
       Set<ParameterRepresentation> parameterRepresentations,
       String serviceName,
       String serviceMethodName,
-      Dto requestDto) {
-    super(parameterRepresentations, serviceName, serviceMethodName, requestDto);
+      Dto requestDto,
+      Dto responseDto) {
+    super(parameterRepresentations, serviceName, serviceMethodName, requestDto, responseDto);
   }
 }

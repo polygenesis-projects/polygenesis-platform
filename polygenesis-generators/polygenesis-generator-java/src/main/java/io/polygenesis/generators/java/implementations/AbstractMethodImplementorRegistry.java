@@ -97,7 +97,7 @@ public abstract class AbstractMethodImplementorRegistry<T extends FunctionProvid
       throw new UnsupportedOperationException(
           String.format(
               "No method implementation found for function with name=%s",
-              methodProvider.getFunction().getName().getText()));
+              methodProvider.getFunction().getName().getFullName()));
     }
   }
 

@@ -67,7 +67,7 @@ public abstract class AbstractActivityRegistry<S extends FunctionProvider>
                         new UnsupportedOperationException(
                             String.format(
                                 "No activity found for method=%s",
-                                source.getFunction().getName().getText()))),
+                                source.getFunction().getName().getFullName()))),
             source)
         .generate(source, args);
   }

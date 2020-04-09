@@ -58,7 +58,8 @@ public class ThingRepositoryTest {
 
     Thing someThing = ThingBuilder.endToEnd("someThing").createThing(PackageName.any());
 
-    Function someFunction = FunctionBuilder.of(someThing, "someFunction", Purpose.create()).build();
+    Function someFunction =
+        FunctionBuilder.of(someThing, "someFunction", "", Purpose.create()).build();
 
     someThing.addFunction(someFunction);
 

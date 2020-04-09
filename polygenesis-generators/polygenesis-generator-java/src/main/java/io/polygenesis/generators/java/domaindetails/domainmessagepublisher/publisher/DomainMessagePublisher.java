@@ -101,7 +101,7 @@ public class DomainMessagePublisher extends AbstractNameablePackageable implemen
     return new Function(
         thing,
         Purpose.reset(),
-        new FunctionName("send"),
+        FunctionName.ofVerbOnly("send"),
         null,
         arguments,
         Activity.empty(),

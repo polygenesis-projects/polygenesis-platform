@@ -112,6 +112,7 @@ public class CollectionRecordDeducer {
                 String.format(
                     "convertTo%s",
                     TextConverter.toUpperCamel(pair.getDto().getDataObject().getDataType())),
+                "",
                 Purpose.convertDomainObjectToCollectionRecord())
             .setReturnValue(pair.getDto().getDataObject())
             .addArgument(pair.getEntity().asDataGroup())

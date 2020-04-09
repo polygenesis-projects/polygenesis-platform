@@ -45,20 +45,21 @@ public class PasswordDomainService {
             .createThing();
 
     passwordDomainService.addFunction(
-        FunctionBuilder.of(passwordDomainService, "encrypt", Purpose.encrypt())
+        FunctionBuilder.of(passwordDomainService, "encrypt", "", Purpose.encrypt())
             .addArgument(DataPrimitive.of(PrimitiveType.STRING, new VariableName("plainPassword")))
             .setReturnValue(Shared.password(rootPackageName))
             .build());
 
     passwordDomainService.addFunction(
         FunctionBuilder.of(
-                passwordDomainService, "checkIfPasswordIsCompliant", Purpose.checkBoolean())
+                passwordDomainService, "checkIfPasswordIsCompliant", "", Purpose.checkBoolean())
             .addArgument(DataPrimitive.of(PrimitiveType.STRING, new VariableName("plainPassword")))
             .setReturnValue(DataPrimitive.of(PrimitiveType.BOOLEAN, VariableName.response()))
             .build());
 
     passwordDomainService.addFunction(
-        FunctionBuilder.of(passwordDomainService, "checkIfPasswordsMatch", Purpose.checkBoolean())
+        FunctionBuilder.of(
+                passwordDomainService, "checkIfPasswordsMatch", "", Purpose.checkBoolean())
             .addArgument(DataPrimitive.of(PrimitiveType.STRING, new VariableName("rawPassword")))
             .addArgument(
                 DataPrimitive.of(PrimitiveType.STRING, new VariableName("encodedPassword")))

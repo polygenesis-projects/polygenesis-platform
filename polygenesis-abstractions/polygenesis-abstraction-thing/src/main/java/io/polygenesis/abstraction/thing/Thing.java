@@ -220,7 +220,7 @@ public class Thing implements Abstraction {
    * @return the as data object
    */
   public DataObject getAsDataObject(PackageName rootPackageName) {
-    return new DataObject(
+    return DataObject.asDataObject(
         new ObjectName(TextConverter.toUpperCamel(getThingName().getText())),
         makePackageName(rootPackageName, this));
   }
@@ -365,7 +365,7 @@ public class Thing implements Abstraction {
   public Function getFunctionByName(String functionName) {
     return getFunctions()
         .stream()
-        .filter(function -> function.getName().getText().equals(functionName))
+        .filter(function -> function.getName().getFullName().equals(functionName))
         .findFirst()
         .orElseThrow(IllegalArgumentException::new);
   }
@@ -634,12 +634,12 @@ public class Thing implements Abstraction {
                   new Function(
                       this,
                       childToParentPurposeMap.get(childFunction.getPurpose()),
-                      new FunctionName(
+                      FunctionName.ofVerbOnly(
                           String.format(
                               "%s%s",
                               TextConverter.toUpperCamel(
                                   childFunction.getThing().getThingName().getText()),
-                              TextConverter.toUpperCamel(childFunction.getName().getText()))),
+                              TextConverter.toUpperCamel(childFunction.getName().getFullName()))),
                       childFunction.getReturnValue(),
                       childFunction.getArguments(),
                       childFunction.getActivity(),

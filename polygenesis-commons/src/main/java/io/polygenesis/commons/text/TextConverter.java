@@ -155,6 +155,9 @@ public final class TextConverter {
    * @return the string
    */
   public static String toPlural(String input) {
+    if (input.isEmpty()) {
+      return input;
+    }
     if (pluralBlacklist.contains(input.toLowerCase())) {
       return input;
     }
@@ -203,7 +206,9 @@ public final class TextConverter {
     enforced = allUpperCaseToLowerCase(enforced);
 
     // Lower first
-    enforced = enforced.substring(0, 1).toLowerCase() + enforced.substring(1);
+    if (!enforced.isEmpty()) {
+      enforced = enforced.substring(0, 1).toLowerCase() + enforced.substring(1);
+    }
 
     return enforced;
   }

@@ -61,8 +61,9 @@ public class CreateAggregateRootActivityTransformer extends ResourceActivityTran
         new CreateAggregateRootActivityTemplateData(
             resourceMethodParameterRepresentationService.parameterRepresentations(source, args),
             source.getService().getServiceName().getText(),
-            source.getServiceMethod().getFunction().getName().getText(),
-            source.getServiceMethod().getRequestDto()));
+            source.getServiceMethod().getFunction().getName().getFullName(),
+            source.getServiceMethod().getRequestDto(),
+            source.getServiceMethod().getResponseDto()));
 
     return new TemplateData(
         dataModel,

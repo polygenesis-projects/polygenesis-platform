@@ -135,7 +135,7 @@ public abstract class AbstractDartMethodTransformer<S extends FunctionProvider>
     StringBuilder stringBuilder = new StringBuilder();
 
     stringBuilder.append(
-        TextConverter.toUpperCamelSpaces(source.getFunction().getName().getText()));
+        TextConverter.toUpperCamelSpaces(source.getFunction().getName().getFullName()));
     stringBuilder.append(".");
 
     return stringBuilder.toString();
@@ -148,7 +148,7 @@ public abstract class AbstractDartMethodTransformer<S extends FunctionProvider>
 
   @Override
   public String methodName(S source, Object... args) {
-    return source.getFunction().getName().getText();
+    return source.getFunction().getName().getFullName();
   }
 
   @Override

@@ -101,7 +101,7 @@ public class SupportiveEntityInitialization extends AbstractNameablePackageable
     return new Function(
         thing,
         Purpose.afterPropertiesSet(),
-        new FunctionName("afterPropertiesSet"),
+        FunctionName.ofVerbOnly("afterPropertiesSet"),
         null,
         new DataRepository(),
         Activity.empty(),

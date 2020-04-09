@@ -74,6 +74,8 @@
         new TenantId(UUID.fromString(${ requestDto.dataObject.variableName.text }.getTenantId()))<#sep>,</#sep>
     <#else>
         <#if property.propertyType == 'REFERENCE_TO_AGGREGATE_ROOT'>
+        <#elseif property.propertyType == 'ENUMERATION'>
+        null<#sep>,</#sep> // TODO ENUMERATION
         <#else>
         null<#sep>,</#sep> // TODO
         </#if>

@@ -152,7 +152,7 @@ public class SubscriberDeducer implements Deducer<SubscriberMetamodelRepository>
     return relatedThing
         .getFunctions()
         .stream()
-        .filter(function -> function.getName().equals(new FunctionName("ensureExistence")))
+        .filter(function -> function.getName().equals(FunctionName.ofVerbOnly("ensureExistence")))
         .findFirst()
         .orElse(null);
   }

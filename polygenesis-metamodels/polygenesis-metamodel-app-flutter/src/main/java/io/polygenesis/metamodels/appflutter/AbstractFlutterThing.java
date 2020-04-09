@@ -87,7 +87,7 @@ public abstract class AbstractFlutterThing<S extends Thing> extends Thing {
    */
   protected void addBuildFunction(S source) {
     Function build =
-        FunctionBuilder.of(source, "build", Purpose.build())
+        FunctionBuilder.of(source, "build", "", Purpose.build())
             .setReturnValue(new DataObject(new ObjectName("Widget"), new PackageName("com.dummy")))
             .addArgument(
                 new DataObject(

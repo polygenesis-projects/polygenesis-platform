@@ -65,6 +65,7 @@ public class BatchProcessQueryMethodTransformer extends AbstractMethodTransforme
     Set<String> imports = new TreeSet<>();
 
     imports.add("com.oregor.trinity4j.api.ApiPagedCollectionResponse");
+    imports.add("com.oregor.trinity4j.api.clients.batchprocess.BatchProcessMessage");
 
     return imports;
   }
@@ -94,9 +95,8 @@ public class BatchProcessQueryMethodTransformer extends AbstractMethodTransforme
       ServiceMethod source, Object... args) {
     Set<ParameterRepresentation> parameterRepresentations = new LinkedHashSet<>();
 
-    parameterRepresentations.add(new ParameterRepresentation("Integer", "pageNumber"));
-
-    parameterRepresentations.add(new ParameterRepresentation("Integer", "pageSize"));
+    parameterRepresentations.add(
+        new ParameterRepresentation("BatchProcessMessage", "batchProcessMessage"));
 
     return parameterRepresentations;
   }

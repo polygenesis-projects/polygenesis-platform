@@ -168,7 +168,7 @@ public class DomainMessageSubscriber extends SubscriberMetamodel implements Gene
     return new Function(
         thing,
         Purpose.domainMessageSubscriberProcess(),
-        new FunctionName("process"),
+        FunctionName.ofVerbOnly("process"),
         null,
         new DataRepository(
             new LinkedHashSet<>(
@@ -196,7 +196,7 @@ public class DomainMessageSubscriber extends SubscriberMetamodel implements Gene
     return new Function(
         thing,
         Purpose.domainMessageSubscriberSupportedTypes(),
-        new FunctionName("getSupportedMessageTypes"),
+        FunctionName.ofVerbOnly("getSupportedMessageTypes"),
         DataArray.of(DataPrimitive.of(PrimitiveType.STRING, VariableName.response())),
         new DataRepository(),
         Activity.keyValues(keyValues),

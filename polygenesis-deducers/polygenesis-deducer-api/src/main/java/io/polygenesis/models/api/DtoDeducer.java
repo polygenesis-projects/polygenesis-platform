@@ -77,13 +77,18 @@ public class DtoDeducer {
               new ObjectName(
                   String.format(
                       "%s%sRequest",
-                      TextConverter.toUpperCamel(function.getName().getText()),
+                      TextConverter.toUpperCamel(function.getName().getFullName()),
                       TextConverter.toUpperCamel(function.getThing().getThingName().getText()))),
               function.getThing().makePackageName(rootPackageName, function.getThing()),
               new VariableName("request"));
 
       if (function.getArguments() != null) {
-        function.getArguments().getData().forEach(argument -> finalDataObject.addData(argument));
+        function
+            .getArguments()
+            .getData()
+            .stream()
+            .filter(data -> !data.getDataPurpose().equals(DataPurpose.internalState()))
+            .forEach(argument -> finalDataObject.addData(argument));
       }
 
       originatingDataObject = finalDataObject;
@@ -130,7 +135,7 @@ public class DtoDeducer {
               new ObjectName(
                   String.format(
                       "%s%sResponse",
-                      TextConverter.toUpperCamel(function.getName().getText()),
+                      TextConverter.toUpperCamel(function.getName().getFullName()),
                       TextConverter.toUpperCamel(function.getThing().getThingName().getText()))),
               function.getThing().makePackageName(rootPackageName, function.getThing()));
 
@@ -227,7 +232,7 @@ public class DtoDeducer {
               dataPurpose.getText(),
               dto.getDataObject().getObjectName().getText(),
               function.getThing().getThingName().getText(),
-              function.getName().getText()));
+              function.getName().getFullName()));
     }
   }
 }

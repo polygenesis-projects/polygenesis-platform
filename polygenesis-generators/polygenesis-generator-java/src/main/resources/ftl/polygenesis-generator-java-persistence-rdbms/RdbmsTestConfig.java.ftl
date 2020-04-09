@@ -34,18 +34,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
  */
 @SpringBootConfiguration
 @EnableAutoConfiguration
-@ComponentScan(basePackages = {
-    "com.oregor.trinity4j",
-    "${ packageName }"
-})
-@EntityScan(basePackages = {
-    "com.oregor.trinity4j",
-    "${ packageName }"
-})
-@EnableJpaRepositories(basePackages = {
-    "com.oregor.trinity4j",
-    "${ packageName }"
-})
+@ComponentScan(basePackages = {"com.oregor.trinity4j", "${ packageName }"})
+@EntityScan(basePackages = {"com.oregor.trinity4j", "${ packageName }"})
+@EnableJpaRepositories(basePackages = {"com.oregor.trinity4j", "${ packageName }"})
 public class RdbmsTestConfig {
 
   /**

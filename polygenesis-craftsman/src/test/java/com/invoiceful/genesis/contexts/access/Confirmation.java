@@ -43,7 +43,7 @@ public class Confirmation {
     confirmation.addFunctions(
         PurposeFunctionBuilder.forThing(confirmation, rootPackageName)
             .withFunctionCreate(createData(rootPackageName))
-            .withFunctionModify("confirm", new LinkedHashSet<>())
+            .withFunctionModify("confirm", "", new LinkedHashSet<>())
             .build());
 
     confirmation.addData(confirmedData());

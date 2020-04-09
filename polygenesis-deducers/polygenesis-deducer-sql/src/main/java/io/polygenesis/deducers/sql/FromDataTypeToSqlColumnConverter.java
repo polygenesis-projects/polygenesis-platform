@@ -78,6 +78,8 @@ public class FromDataTypeToSqlColumnConverter {
     dataTypeMap.put(PrimitiveType.DATETIME.name(), ColumnDataType.DATETIME);
     dataTypeMap.put(PrimitiveType.DATE.name(), ColumnDataType.DATE);
     dataTypeMap.put(PrimitiveType.DECIMAL.name(), ColumnDataType.DECIMAL);
+    dataTypeMap.put(PrimitiveType.URI.name(), ColumnDataType.VARCHAR);
+    dataTypeMap.put(PrimitiveType.URL.name(), ColumnDataType.VARCHAR);
     dataTypeMap.put(PrimitiveType.UUID.name(), ColumnDataType.BINARY);
   }
 }

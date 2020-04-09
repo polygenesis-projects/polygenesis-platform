@@ -141,7 +141,7 @@ public class ActionGroupDeducer {
     return new Action(
         actionType,
         new ActionName(
-            TextConverter.toUpperUnderscore(functionName.getText()) + "_" + actionType.name()),
+            TextConverter.toUpperUnderscore(functionName.getFullName()) + "_" + actionType.name()),
         model);
   }
 

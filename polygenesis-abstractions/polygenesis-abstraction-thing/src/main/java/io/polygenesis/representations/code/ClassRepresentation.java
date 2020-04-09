@@ -34,6 +34,10 @@ import java.util.Set;
  */
 public class ClassRepresentation extends AbstractObjectRepresentation {
 
+  // ===============================================================================================
+  // STATE
+  // ===============================================================================================
+
   private Set<FieldRepresentation> staticFieldRepresentations;
   private Set<FieldRepresentation> stateFieldRepresentations;
   private Set<FieldRepresentation> dependencyFieldRepresentations;

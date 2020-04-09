@@ -22,7 +22,7 @@
   <#switch data.dataPrimaryType>
     <#case 'PRIMITIVE'>
         <#if data.dataObject??>
-      ${ aggregateRootVariable }.get${ textConverter.toUpperCamel(data.variableName.text) }().getValue()<#sep>,</#sep>
+      ${ aggregateRootVariable }.get${ textConverter.toUpperCamel(data.variableName.text) }().getTypeId().toString()<#sep>,</#sep>
         <#else>
       ${ aggregateRootVariable }.get${ textConverter.toUpperCamel(data.variableName.text) }()<#sep>,</#sep>
       </#if>

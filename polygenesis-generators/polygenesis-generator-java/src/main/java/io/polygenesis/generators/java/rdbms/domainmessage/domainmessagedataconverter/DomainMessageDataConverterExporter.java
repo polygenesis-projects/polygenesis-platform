@@ -78,8 +78,8 @@ public class DomainMessageDataConverterExporter {
         TextConverter.toUpperCamel(context.getText() + "DomainMessageDataConverter"));
     dataModel.put(
         "fullObjectName",
-        TextConverter.toUpperCamel(context.getText() + "DomainMessageDataConverter")
-            + " extends \n\t\tAbstractDomainMessageDataConverter<"
+        TextConverter.toUpperCamel(context.getText() + "DomainMessageDataConverter\n")
+            + "    extends AbstractDomainMessageDataConverter<"
             + TextConverter.toUpperCamel(context.getText())
             + "DomainMessageData>");
 

@@ -122,11 +122,13 @@ public abstract class DomainObjectClassTransformer<
                   break;
                 case REFERENCE_BY_ID:
                 case VALUE_OBJECT:
+                  Set<String> annotations = new LinkedHashSet<>();
                   fieldRepresentations.add(
                       FieldRepresentation.withAnnotations(
                           makeVariableDataType(property),
                           makeVariableName(property),
-                          makeAnnotationsForValueObject(property.getData().getAsDataObject()),
+                          makeAnnotationsForValueObject(
+                              annotations, property.getData().getAsDataObject()),
                           dataTypeTransformer.getModifierPrivate()));
                   break;
                 case VALUE_OBJECT_COLLECTION:
@@ -139,11 +141,13 @@ public abstract class DomainObjectClassTransformer<
                           dataTypeTransformer.getModifierPrivate()));
                   break;
                 case AGGREGATE_ENTITY:
+                  annotations = new LinkedHashSet<>();
                   fieldRepresentations.add(
                       FieldRepresentation.withAnnotations(
                           makeVariableDataType(property),
                           makeVariableName(property),
-                          makeAnnotationsForValueObject(property.getData().getAsDataObject()),
+                          makeAnnotationsForValueObject(
+                              annotations, property.getData().getAsDataObject()),
                           dataTypeTransformer.getModifierPrivate()));
                   break;
                 case AGGREGATE_ENTITY_COLLECTION:
@@ -160,6 +164,16 @@ public abstract class DomainObjectClassTransformer<
                           makeVariableDataType(property),
                           makeVariableName(property),
                           dataTypeTransformer.getModifierPrivate()));
+                  break;
+                case ENUMERATION:
+                  // TODO vo
+                  fieldRepresentations.add(
+                      FieldRepresentation.withAnnotations(
+                          makeVariableDataType(property),
+                          makeVariableName(property),
+                          makeAnnotationsForEnumeration(),
+                          dataTypeTransformer.getModifierPrivate()));
+
                   break;
                 default:
                   throw new IllegalStateException(
@@ -210,6 +224,7 @@ public abstract class DomainObjectClassTransformer<
             property -> !property.getPropertyType().equals(PropertyType.ABSTRACT_AGGREGATE_ROOT_ID))
         .forEach(
             property -> {
+              imports.addAll(importsEnumeration(property));
               imports.addAll(importsPrimitiveOrValueObjectCollection(property));
               imports.addAll(importsAggregateEntityCollection(property));
               imports.addAll(importsReferenceToAggregateRoot(property));
@@ -357,6 +372,17 @@ public abstract class DomainObjectClassTransformer<
     return imports;
   }
 
+  private Set<String> importsEnumeration(DomainObjectProperty<?> property) {
+    Set<String> imports = new TreeSet<>();
+
+    if (property.getData().isDataEnumeration()) {
+      imports.add("javax.persistence.EnumType");
+      imports.add("javax.persistence.Enumerated");
+    }
+
+    return imports;
+  }
+
   @Override
   public Set<String> annotations(S source, Object... args) {
     return new LinkedHashSet<>();
@@ -426,8 +452,8 @@ public abstract class DomainObjectClassTransformer<
    * @param dataObject the data group
    * @return the set
    */
-  protected Set<String> makeAnnotationsForValueObject(DataObject dataObject) {
-    Set<String> annotations = new LinkedHashSet<>();
+  protected Set<String> makeAnnotationsForValueObject(
+      Set<String> annotations, DataObject dataObject) {
     annotations.add("@Embedded");
 
     dataObject
@@ -454,6 +480,12 @@ public abstract class DomainObjectClassTransformer<
               } else {
                 throw new UnsupportedOperationException();
               }
+
+              // TODO vo
+              //              else if (model.isDataGroup()) {
+              //                ; // annotations.addAll(makeAnnotationsForValueObject(annotations,
+              //                // model.getAsDataObject()));
+              //              }
             });
 
     return annotations;
@@ -587,6 +619,17 @@ public abstract class DomainObjectClassTransformer<
       stringBuilder.append(String.format("%n"));
     }
     stringBuilder.append("\t})");
+
+    Set<String> annotations = new LinkedHashSet<>();
+    annotations.add(stringBuilder.toString());
+
+    return annotations;
+  }
+
+  protected Set<String> makeAnnotationsForEnumeration() {
+    StringBuilder stringBuilder = new StringBuilder();
+
+    stringBuilder.append("@Enumerated(EnumType.STRING)");
 
     Set<String> annotations = new LinkedHashSet<>();
     annotations.add(stringBuilder.toString());

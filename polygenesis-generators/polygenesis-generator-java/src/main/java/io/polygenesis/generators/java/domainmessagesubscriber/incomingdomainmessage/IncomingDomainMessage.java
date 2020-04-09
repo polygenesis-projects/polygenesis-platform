@@ -108,7 +108,7 @@ public class IncomingDomainMessage extends AbstractNameablePackageable implement
     return new Function(
         thing,
         Purpose.incomingDomainMessageGetMessageId(),
-        new FunctionName("getMessageId"),
+        FunctionName.ofVerbOnly("getMessageId"),
         DataPrimitive.of(PrimitiveType.STRING, VariableName.response()),
         new DataRepository(),
         Activity.empty(),
@@ -121,7 +121,7 @@ public class IncomingDomainMessage extends AbstractNameablePackageable implement
     return new Function(
         thing,
         Purpose.incomingDomainMessageGetMessageId(),
-        new FunctionName("getRootId"),
+        FunctionName.ofVerbOnly("getRootId"),
         DataPrimitive.of(PrimitiveType.STRING, VariableName.response()),
         new DataRepository(),
         Activity.empty(),
@@ -134,7 +134,7 @@ public class IncomingDomainMessage extends AbstractNameablePackageable implement
     return new Function(
         thing,
         Purpose.incomingDomainMessageGetMessageId(),
-        new FunctionName("getMessageBody"),
+        FunctionName.ofVerbOnly("getMessageBody"),
         DataPrimitive.of(PrimitiveType.STRING, VariableName.response()),
         new DataRepository(),
         Activity.empty(),

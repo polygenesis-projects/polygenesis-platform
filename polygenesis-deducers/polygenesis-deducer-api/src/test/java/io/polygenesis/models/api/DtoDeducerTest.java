@@ -57,7 +57,7 @@ public class DtoDeducerTest {
         thing
             .getFunctions()
             .stream()
-            .filter(function1 -> function1.getName().equals(new FunctionName("create")))
+            .filter(function1 -> function1.getName().equals(FunctionName.ofVerbOnly("create")))
             .findFirst()
             .orElseThrow(IllegalArgumentException::new);
 
@@ -73,7 +73,7 @@ public class DtoDeducerTest {
     return thing
         .getFunctions()
         .stream()
-        .filter(function -> function.getName().equals(new FunctionName(functionName)))
+        .filter(function -> function.getName().equals(FunctionName.ofVerbOnly(functionName)))
         .findFirst()
         .orElseThrow(IllegalArgumentException::new);
   }

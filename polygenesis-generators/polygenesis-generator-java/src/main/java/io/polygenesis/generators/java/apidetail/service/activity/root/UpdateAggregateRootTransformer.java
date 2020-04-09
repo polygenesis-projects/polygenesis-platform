@@ -81,7 +81,7 @@ public class UpdateAggregateRootTransformer extends AbstractServiceMethodImpleme
             getReturnValue(source),
             getAggregateRootIdDataType(source),
             getThingIdentity(source),
-            source.getFunction().getName().getText());
+            source.getFunction().getName().getFullName());
 
     @SuppressWarnings("CPD-END")
     Map<String, Object> dataModel = new HashMap<>();

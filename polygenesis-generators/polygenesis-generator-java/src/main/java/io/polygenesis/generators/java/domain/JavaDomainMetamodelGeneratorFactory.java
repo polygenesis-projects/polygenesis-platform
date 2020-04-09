@@ -63,6 +63,9 @@ import io.polygenesis.generators.java.domain.domainmessage.publisheddata.DomainM
 import io.polygenesis.generators.java.domain.domainmessage.publisheddatarepository.DomainMessagePublishedDataRepositoryGenerator;
 import io.polygenesis.generators.java.domain.domainmessage.publisheddatarepository.DomainMessagePublishedDataRepositoryMethodTransformer;
 import io.polygenesis.generators.java.domain.domainmessage.publisheddatarepository.DomainMessagePublishedDataRepositoryTransformer;
+import io.polygenesis.generators.java.domain.enumeration.EnumerationGenerator;
+import io.polygenesis.generators.java.domain.enumeration.EnumerationMethodTransformer;
+import io.polygenesis.generators.java.domain.enumeration.EnumerationTransformer;
 import io.polygenesis.generators.java.domain.projection.id.ProjectionIdGenerator;
 import io.polygenesis.generators.java.domain.projection.id.ProjectionIdMethodTransformer;
 import io.polygenesis.generators.java.domain.projection.id.ProjectionIdTransformer;
@@ -109,6 +112,7 @@ public final class JavaDomainMetamodelGeneratorFactory {
   private static AggregateRootIdGenerator aggregateRootIdGenerator;
   private static AggregateEntityGenerator aggregateEntityGenerator;
   private static AggregateEntityIdGenerator aggregateEntityIdGenerator;
+  private static EnumerationGenerator enumerationGenerator;
   private static ValueObjectGenerator valueObjectGenerator;
   private static DomainEventGenerator domainEventGenerator;
   private static RepositoryGenerator repositoryGenerator;
@@ -177,6 +181,13 @@ public final class JavaDomainMetamodelGeneratorFactory {
                 dataTypeTransformer, new AggregateEntityIdMethodTransformer(dataTypeTransformer)),
             templateEngine,
             activeFileExporter);
+
+    enumerationGenerator =
+        new EnumerationGenerator(
+            new EnumerationTransformer(
+                dataTypeTransformer, new EnumerationMethodTransformer(dataTypeTransformer)),
+            templateEngine,
+            passiveFileExporter);
 
     valueObjectGenerator =
         new ValueObjectGenerator(
@@ -319,6 +330,7 @@ public final class JavaDomainMetamodelGeneratorFactory {
         aggregateRootIdGenerator,
         aggregateEntityGenerator,
         aggregateEntityIdGenerator,
+        enumerationGenerator,
         valueObjectGenerator,
         domainEventGenerator,
         repositoryGenerator,

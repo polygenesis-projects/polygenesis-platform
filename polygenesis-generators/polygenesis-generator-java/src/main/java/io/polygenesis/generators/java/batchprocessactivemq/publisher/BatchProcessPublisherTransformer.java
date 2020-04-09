@@ -21,6 +21,7 @@
 package io.polygenesis.generators.java.batchprocessactivemq.publisher;
 
 import io.polygenesis.abstraction.thing.Function;
+import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.commons.valueobjects.ContextName;
 import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.core.TemplateData;
@@ -139,16 +140,22 @@ public class BatchProcessPublisherTransformer
     Set<String> imports = new TreeSet<>();
 
     imports.add("com.oregor.trinity4j.api.clients.batchprocess.BatchProcessMessagePublisher");
-    imports.add("org.springframework.stereotype.Service");
     imports.add("org.apache.camel.ProducerTemplate");
+    imports.add("org.springframework.beans.factory.annotation.Qualifier");
     imports.add("org.springframework.beans.factory.annotation.Value");
+    imports.add("org.springframework.stereotype.Service");
 
     return imports;
   }
 
   @Override
   public Set<String> annotations(BatchProcessMessagePublisher source, Object... args) {
-    return new LinkedHashSet<>(Arrays.asList("@Service"));
+    return new LinkedHashSet<>(
+        Arrays.asList(
+            "@Service",
+            String.format(
+                "@Qualifier(\"%s\")",
+                TextConverter.toUpperCamel(source.getObjectName().getText()))));
   }
 
   @SuppressWarnings("CPD-END")

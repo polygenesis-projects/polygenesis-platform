@@ -42,6 +42,7 @@ public interface ClassTransformer<S> extends TemplateTransformer<S> {
    * @param args the args
    * @return the class representation
    */
+  @SuppressWarnings("CPD-START")
   ClassRepresentation create(S source, Object... args);
 
   /**
@@ -150,5 +151,6 @@ public interface ClassTransformer<S> extends TemplateTransformer<S> {
    * @param args the args
    * @return the string
    */
+  @SuppressWarnings("CPD-END")
   String fullObjectName(S source, Object... args);
 }

@@ -22,6 +22,7 @@ package io.polygenesis.models.rest;
 
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.abstraction.thing.Thing;
+import io.polygenesis.abstraction.thing.dsl.PurposeFunctionBuilder;
 import io.polygenesis.commons.text.TextConverter;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
@@ -59,7 +60,7 @@ public class MappingDeducer {
         mappings.add(mappingForGet(functionToUse));
         break;
       case POST:
-        mappings.add(getMappingForResource(functionToUse.getThing()));
+        mappings.add(getMappingForResourceWithoutId(functionToUse));
         break;
       case PUT:
       case DELETE:
@@ -88,7 +89,7 @@ public class MappingDeducer {
     } else if (function.getPurpose().isFetchCollection()
         || function.getPurpose().isFetchPagedCollection()
         || function.getPurpose().isEntityFetchAll()) {
-      return getMappingForResource(function.getThing());
+      return getMappingForResourceWithoutId(function);
     } else {
       throw new IllegalStateException(
           String.format("Cannot deduce REST mapping for=%s", function.getPurpose().getText()));
@@ -119,22 +120,32 @@ public class MappingDeducer {
   }
 
   /**
-   * Gets mapping for resource.
+   * Gets mapping for resource without Id.
    *
-   * @param thing the thing
+   * @param function the Function
    * @return the mapping for resource
    */
-  private Mapping getMappingForResource(Thing thing) {
+  private Mapping getMappingForResourceWithoutId(Function function) {
     Set<PathContent> pathContents = new LinkedHashSet<>();
 
-    fillParentPathContent(pathContents, thing);
+    fillParentPathContent(pathContents, function.getThing());
 
-    pathContents.addAll(
-        new LinkedHashSet<>(
-            Arrays.asList(
-                new PathConstant(
-                    TextConverter.toLowerHyphen(
-                        TextConverter.toPlural(thing.getThingName().getText()))))));
+    pathContents.add(
+        new PathConstant(
+            TextConverter.toLowerHyphen(
+                TextConverter.toPlural(function.getThing().getThingName().getText()))));
+
+    if (!function.getName().getObject().isEmpty()
+        && !function
+            .getName()
+            .getObject()
+            .equalsIgnoreCase(PurposeFunctionBuilder.FUNCTION_OBJECT_PAGED_COLLECTION)
+        && (function.getPurpose().isFetchCollection()
+            || function.getPurpose().isFetchPagedCollection())) {
+      pathContents.add(
+          new PathConstant(
+              TextConverter.toLowerHyphen(TextConverter.toPlural(function.getName().getObject()))));
+    }
 
     return new Mapping(pathContents);
   }

@@ -46,13 +46,16 @@ public class ConfirmationDomainService {
 
     confirmationDomainService.addFunction(
         FunctionBuilder.of(
-                confirmationDomainService, "generateRandomConfirmationCode", Purpose.generate())
+                confirmationDomainService, "generateRandomConfirmationCode", "", Purpose.generate())
             .setReturnValue(Shared.confirmationCode(rootPackageName))
             .build());
 
     confirmationDomainService.addFunction(
         FunctionBuilder.of(
-                confirmationDomainService, "getConfirmationCodeExpiration", Purpose.checkBoolean())
+                confirmationDomainService,
+                "getConfirmationCodeExpiration",
+                "",
+                Purpose.checkBoolean())
             .addArgument(DataPrimitive.of(PrimitiveType.DATETIME, new VariableName("now")))
             .setReturnValue(Shared.expiresOn(rootPackageName))
             .build());

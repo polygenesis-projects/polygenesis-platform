@@ -88,7 +88,8 @@ public class BatchProcessCommandMethodTransformer extends AbstractMethodTransfor
       ServiceMethod source, Object... args) {
     Set<ParameterRepresentation> parameterRepresentations = new LinkedHashSet<>();
 
-    parameterRepresentations.add(new ParameterRepresentation("String", "uniqueId"));
+    parameterRepresentations.add(
+        new ParameterRepresentation("BatchProcessMessage", "batchProcessMessage"));
 
     return parameterRepresentations;
   }

@@ -69,7 +69,7 @@ public class ServiceAspectMethodTransformer extends AbstractMethodTransformer<Fu
   public Set<String> annotations(Function source, Object... args) {
     PackageName rootPackageName = (PackageName) args[0];
 
-    if (source.getName().equals(new FunctionName("around"))) {
+    if (source.getName().equals(FunctionName.ofVerbOnly("around"))) {
       StringBuilder stringBuilder = new StringBuilder();
 
       stringBuilder.append(String.format("@Around(%n"));
@@ -120,8 +120,8 @@ public class ServiceAspectMethodTransformer extends AbstractMethodTransformer<Fu
 
   @Override
   public Set<String> thrownExceptions(Function source, Object... args) {
-    if (source.getName().equals(new FunctionName("around"))
-        || source.getName().equals(new FunctionName("getReturnValue"))) {
+    if (source.getName().equals(FunctionName.ofVerbOnly("around"))
+        || source.getName().equals(FunctionName.ofVerbOnly("getReturnValue"))) {
       return new LinkedHashSet<>(singletonList("Throwable"));
     } else {
       return super.thrownExceptions(source, args);

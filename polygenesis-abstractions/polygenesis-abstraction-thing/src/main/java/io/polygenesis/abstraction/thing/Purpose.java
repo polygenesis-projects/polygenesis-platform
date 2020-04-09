@@ -33,6 +33,12 @@ public class Purpose implements Serializable {
   private static final long serialVersionUID = 1L;
 
   // ===============================================================================================
+  // GENERIC PURPOSES
+  // ===============================================================================================
+  private static final String GENERIC_COMMAND = "GENERIC_COMMAND";
+  private static final String GENERIC_QUERY = "GENERIC_QUERY";
+
+  // ===============================================================================================
   // DEFAULT COMMAND PURPOSES
   // ===============================================================================================
   private static final String CREATE = "CREATE";
@@ -118,6 +124,11 @@ public class Purpose implements Serializable {
       "INCOMING_DOMAIN_MESSAGE_GET_MESSAGE_BODY";
 
   // ===============================================================================================
+  // BATCH PROCESS
+  // ===============================================================================================
+  private static final String BATCH_PROCESS_SERVICE_NAME = "BATCH_PROCESS_SERVICE_NAME";
+
+  // ===============================================================================================
   // DOMAIN MESSAGE PUBLISHER
   // ===============================================================================================
   private static final String DOMAIN_MESSAGE_PUBLISHER_GET_CONTEXT =
@@ -134,6 +145,28 @@ public class Purpose implements Serializable {
 
   private String text;
   private CqsType cqsType;
+
+  // ===============================================================================================
+  // GENERIC PURPOSES
+  // ===============================================================================================
+
+  /**
+   * Generic command purpose.
+   *
+   * @return the purpose
+   */
+  public static Purpose genericCommand() {
+    return new Purpose(GENERIC_COMMAND, CqsType.COMMAND);
+  }
+
+  /**
+   * Generic query purpose.
+   *
+   * @return the purpose
+   */
+  public static Purpose genericQuery() {
+    return new Purpose(GENERIC_QUERY, CqsType.QUERY);
+  }
 
   // ===============================================================================================
   // STATIC
@@ -491,6 +524,19 @@ public class Purpose implements Serializable {
    */
   public static Purpose incomingDomainMessageGetMessageBody() {
     return new Purpose(INCOMING_DOMAIN_MESSAGE_GET_MESSAGE_BODY, CqsType.QUERY);
+  }
+
+  // ===============================================================================================
+  // BATCH PROCESS
+  // ===============================================================================================
+
+  /**
+   * Batch process service name purpose.
+   *
+   * @return the purpose
+   */
+  public static Purpose batchProcessServiceName() {
+    return new Purpose(BATCH_PROCESS_SERVICE_NAME, CqsType.QUERY);
   }
 
   // ===============================================================================================

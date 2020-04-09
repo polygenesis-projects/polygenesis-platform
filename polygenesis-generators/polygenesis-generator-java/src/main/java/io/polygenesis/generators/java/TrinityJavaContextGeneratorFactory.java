@@ -216,7 +216,8 @@ public final class TrinityJavaContextGeneratorFactory {
     }
 
     if (trinityJavaContextGeneratorEnablement.isApiClientBatchProcess()) {
-      metamodelGenerators.add(apiClientBatchProcess(exportPath, projectFolder, modulePrefix));
+      metamodelGenerators.add(
+          apiClientBatchProcess(exportPath, projectFolder, modulePrefix, context));
     }
 
     if (trinityJavaContextGeneratorEnablement.isApiClientBatchProcessMessageSubscriber()) {
@@ -418,13 +419,14 @@ public final class TrinityJavaContextGeneratorFactory {
   }
 
   private static BatchProcessMetamodelGenerator apiClientBatchProcess(
-      String exportPath, String projectFolder, String modulePrefix) {
+      String exportPath, String projectFolder, String modulePrefix, String context) {
     return BatchProcessMetamodelGeneratorFactory.newInstance(
         Paths.get(
             exportPath,
             projectFolder,
             modulePrefix + "-" + API_CLIENTS,
-            modulePrefix + "-" + API_CLIENT_BATCH_PROCESS_SUBSCRIBER));
+            modulePrefix + "-" + API_CLIENT_BATCH_PROCESS_SUBSCRIBER),
+        new ContextName(context));
   }
 
   private static BatchProcessSubscriberMetamodelGenerator apiClientBatchProcessSubscriber(

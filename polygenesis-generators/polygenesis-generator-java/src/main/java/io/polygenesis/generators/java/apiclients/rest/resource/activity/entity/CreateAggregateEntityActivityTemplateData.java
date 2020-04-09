@@ -49,6 +49,7 @@ public class CreateAggregateEntityActivityTemplateData extends ResourceActivityT
    * @param serviceName the service name
    * @param serviceMethodName the service method name
    * @param requestDto the request dto
+   * @param responseDto the response dto
    * @param parentThingIdentityVariableName the parent thing identity variable name
    */
   @SuppressWarnings("CPD-START")
@@ -57,8 +58,9 @@ public class CreateAggregateEntityActivityTemplateData extends ResourceActivityT
       String serviceName,
       String serviceMethodName,
       Dto requestDto,
+      Dto responseDto,
       String parentThingIdentityVariableName) {
-    super(parameterRepresentations, serviceName, serviceMethodName, requestDto);
+    super(parameterRepresentations, serviceName, serviceMethodName, requestDto, responseDto);
     this.parentThingIdentityVariableName = parentThingIdentityVariableName;
   }
 

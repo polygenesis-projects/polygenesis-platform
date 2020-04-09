@@ -45,7 +45,7 @@ public class SignInDomainService {
             .createThing();
 
     signInDomainService.addFunction(
-        FunctionBuilder.of(signInDomainService, "create", Purpose.create())
+        FunctionBuilder.of(signInDomainService, "create", "", Purpose.create())
             .addArgument(DataPrimitive.of(PrimitiveType.STRING, new VariableName("email")))
             .addArgument(DataPrimitive.of(PrimitiveType.STRING, new VariableName("password")))
             .build());

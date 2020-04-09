@@ -38,7 +38,7 @@ public class InvoicesPerYear {
     invoicesPerYear.addFunctions(
         PurposeFunctionBuilder.forThing(invoicesPerYear, rootPackageName)
             .withCrudFunction(createData())
-            .withFunctionModify("issue", new LinkedHashSet<>())
+            .withFunctionModify("issue", "", new LinkedHashSet<>())
             .build());
 
     return invoicesPerYear;

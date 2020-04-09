@@ -55,7 +55,7 @@ public class ServiceMethodTest extends AbstractEqualityTest<ServiceMethod> {
     Thing thing = ThingBuilder.endToEnd("customer").createThing(PackageName.any());
     return new ServiceMethod(
         mock(Service.class),
-        FunctionBuilder.of(thing, "create", Purpose.create()).build(),
+        FunctionBuilder.of(thing, "create", "", Purpose.create()).build(),
         requestDto,
         responseDto);
   }
@@ -80,7 +80,7 @@ public class ServiceMethodTest extends AbstractEqualityTest<ServiceMethod> {
 
     return new ServiceMethod(
         mock(Service.class),
-        FunctionBuilder.of(thing, "create", Purpose.create()).build(),
+        FunctionBuilder.of(thing, "create", "", Purpose.create()).build(),
         requestDto,
         responseDto);
   }

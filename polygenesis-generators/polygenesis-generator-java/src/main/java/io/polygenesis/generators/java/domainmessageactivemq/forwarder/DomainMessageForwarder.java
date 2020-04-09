@@ -86,7 +86,7 @@ public class DomainMessageForwarder extends AbstractNameablePackageable implemen
     return new Function(
         thing,
         Purpose.reset(),
-        new FunctionName("send"),
+        FunctionName.ofVerbOnly("send"),
         null,
         new DataRepository(DataPrimitive.of(PrimitiveType.STRING, new VariableName("message"))),
         Activity.empty(),

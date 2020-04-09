@@ -386,6 +386,7 @@ public class Function implements FunctionProvider {
     Function function = (Function) o;
     return Objects.equals(purpose, function.purpose)
         && Objects.equals(name, function.name)
+        && Objects.equals(thing, function.thing)
         && Objects.equals(abstractionScopes, function.abstractionScopes);
   }
 

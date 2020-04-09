@@ -42,7 +42,7 @@ public class SignUp {
     signUp.addFunctions(
         PurposeFunctionBuilder.forThing(signUp, rootPackageName)
             .withFunctionCreate(createData(rootPackageName), outputsData(rootPackageName))
-            .withFunctionModify("confirm", confirmData(rootPackageName))
+            .withFunctionModify("confirm", "", confirmData(rootPackageName))
             .build());
 
     return signUp;

@@ -45,7 +45,7 @@ public class SignUpDomainService {
             .createThing();
 
     signUpDomainService.addFunction(
-        FunctionBuilder.of(signUpDomainService, "create", Purpose.create())
+        FunctionBuilder.of(signUpDomainService, "create", "", Purpose.create())
             .addArgument(DataPrimitive.of(PrimitiveType.STRING, new VariableName("email")))
             .addArgument(DataPrimitive.of(PrimitiveType.STRING, new VariableName("password")))
             .setReturnValue(signUp.getAsDataObject(rootPackageName))

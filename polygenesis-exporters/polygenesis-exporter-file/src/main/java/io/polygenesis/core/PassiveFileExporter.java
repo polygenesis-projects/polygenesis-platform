@@ -43,7 +43,8 @@ public class PassiveFileExporter extends ActiveFileExporter {
 
   /** Instantiates a new Passive file exporter. */
   public PassiveFileExporter() {
-    if (System.getenv().get("enforceOverwrite") != null) {
+    if (System.getenv().get("enforceOverwrite") != null
+        && System.getenv().get("enforceOverwrite") == "true") {
       this.enforceOverwrite = true;
     } else {
       this.enforceOverwrite = false;

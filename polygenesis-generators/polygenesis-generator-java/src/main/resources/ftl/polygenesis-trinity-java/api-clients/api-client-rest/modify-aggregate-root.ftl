@@ -25,5 +25,7 @@
 
 <@setRootIdInRequest data.requestDto data.thingIdentityVariableName></@setRootIdInRequest>
 <@setTenantIdAndIpAddress data.requestDto></@setTenantIdAndIpAddress>
+<#if data.responseDto.dataObject.models?size gt 0>
 
 <@returnValue data.serviceName data.serviceMethodName data.requestDto></@returnValue>
+</#if>

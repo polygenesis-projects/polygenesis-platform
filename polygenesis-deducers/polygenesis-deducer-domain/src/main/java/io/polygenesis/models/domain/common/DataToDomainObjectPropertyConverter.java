@@ -31,6 +31,7 @@ import io.polygenesis.models.domain.AggregateRootId;
 import io.polygenesis.models.domain.BaseProperty;
 import io.polygenesis.models.domain.DomainObject;
 import io.polygenesis.models.domain.DomainObjectProperty;
+import io.polygenesis.models.domain.Enumeration;
 import io.polygenesis.models.domain.GenericTypeParameter;
 import io.polygenesis.models.domain.InstantiationType;
 import io.polygenesis.models.domain.Mapper;
@@ -99,6 +100,8 @@ public class DataToDomainObjectPropertyConverter {
         }
       case MAP:
         return new Mapper(source.getAsDataMap());
+      case ENUMERATION:
+        return new Enumeration(source.getAsDataEnumeration());
       default:
         throw new UnsupportedOperationException(
             String.format("Cannot make DomainObjectProperty from %s", source.getDataPrimaryType()));

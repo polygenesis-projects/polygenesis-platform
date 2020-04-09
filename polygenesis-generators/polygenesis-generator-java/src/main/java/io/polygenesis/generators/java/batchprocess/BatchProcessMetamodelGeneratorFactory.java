@@ -20,6 +20,7 @@
 
 package io.polygenesis.generators.java.batchprocess;
 
+import io.polygenesis.commons.valueobjects.ContextName;
 import io.polygenesis.core.ActiveFileExporter;
 import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.core.Exporter;
@@ -33,6 +34,7 @@ import io.polygenesis.generators.java.batchprocess.command.activity.ProcessComma
 import io.polygenesis.generators.java.batchprocess.process.BatchProcessGenerator;
 import io.polygenesis.generators.java.batchprocess.process.BatchProcessMethodTransformer;
 import io.polygenesis.generators.java.batchprocess.process.BatchProcessTransformer;
+import io.polygenesis.generators.java.batchprocess.process.activity.BatchProcessActivityRegistry;
 import io.polygenesis.generators.java.batchprocess.query.BatchProcessQueryGenerator;
 import io.polygenesis.generators.java.batchprocess.query.BatchProcessQueryMethodTransformer;
 import io.polygenesis.generators.java.batchprocess.query.BatchProcessQueryTransformer;
@@ -67,7 +69,9 @@ public final class BatchProcessMetamodelGeneratorFactory {
     batchProcessGenerator =
         new BatchProcessGenerator(
             new BatchProcessTransformer(
-                dataTypeTransformer, new BatchProcessMethodTransformer(dataTypeTransformer)),
+                dataTypeTransformer,
+                new BatchProcessMethodTransformer(
+                    dataTypeTransformer, new BatchProcessActivityRegistry())),
             templateEngine,
             exporter);
 
@@ -112,9 +116,11 @@ public final class BatchProcessMetamodelGeneratorFactory {
    * @param generationPath the generation path
    * @return the periodic process metamodel generator
    */
-  public static BatchProcessMetamodelGenerator newInstance(Path generationPath) {
+  public static BatchProcessMetamodelGenerator newInstance(
+      Path generationPath, ContextName contextName) {
     return new BatchProcessMetamodelGenerator(
         generationPath,
+        contextName,
         batchProcessGenerator,
         batchProcessCommandGenerator,
         batchProcessQueryGenerator);

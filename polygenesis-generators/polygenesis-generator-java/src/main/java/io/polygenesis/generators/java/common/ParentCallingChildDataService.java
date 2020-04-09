@@ -48,6 +48,6 @@ public class ParentCallingChildDataService {
   // ===============================================================================================
 
   private String getParentMethodName(ServiceMethodImplementation source) {
-    return source.getFunction().getName().getText();
+    return source.getFunction().getName().getFullName();
   }
 }

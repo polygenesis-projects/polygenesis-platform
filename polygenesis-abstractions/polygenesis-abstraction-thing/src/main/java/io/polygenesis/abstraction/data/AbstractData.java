@@ -59,6 +59,7 @@ public abstract class AbstractData implements Data {
    * @param variableName the variable name
    * @param dataPurpose the data business type
    * @param dataValidator the data validator
+   * @param dataSourceType the data source type
    */
   protected AbstractData(
       DataPrimaryType dataPrimaryType,
@@ -117,6 +118,16 @@ public abstract class AbstractData implements Data {
   // QUERIES
   // ===============================================================================================
 
+  @Override
+  public DataEnumeration getAsDataEnumeration() {
+    if (isDataEnumeration()) {
+      return (DataEnumeration) this;
+    } else {
+      throw new IllegalStateException(
+          String.format("Data of type=%s is not a DataEnum", getDataPrimaryType().name()));
+    }
+  }
+
   /**
    * Gets as data primitive.
    *
@@ -173,6 +184,15 @@ public abstract class AbstractData implements Data {
       throw new IllegalStateException(
           String.format("Data of type=%s is not a DataMap", getDataPrimaryType().name()));
     }
+  }
+
+  /**
+   * Is data enumeration boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isDataEnumeration() {
+    return getDataPrimaryType().equals(DataPrimaryType.ENUMERATION);
   }
 
   /**

@@ -43,7 +43,7 @@ public abstract class AbstractRestDeducerTest {
   protected Function makeFunctionCreate() {
     Thing thing = ThingBuilder.endToEnd("customer").createThing(PackageName.any());
 
-    return FunctionBuilder.of(thing, "create", Purpose.create()).build();
+    return FunctionBuilder.of(thing, "create", "", Purpose.create()).build();
   }
 
   /**
@@ -54,7 +54,7 @@ public abstract class AbstractRestDeducerTest {
   protected Function makeFunctionModify() {
     Thing thing = ThingBuilder.endToEnd("customer").createThing(PackageName.any());
 
-    return FunctionBuilder.of(thing, "modify", Purpose.modify()).build();
+    return FunctionBuilder.of(thing, "modify", "", Purpose.modify()).build();
   }
 
   /**
@@ -65,7 +65,7 @@ public abstract class AbstractRestDeducerTest {
   protected Function makeFunctionDelete() {
     Thing thing = ThingBuilder.endToEnd("customer").createThing(PackageName.any());
 
-    return FunctionBuilder.of(thing, "delete", Purpose.delete()).build();
+    return FunctionBuilder.of(thing, "delete", "", Purpose.delete()).build();
   }
 
   /**
@@ -76,7 +76,7 @@ public abstract class AbstractRestDeducerTest {
   protected Function makeFunctionFetchOne() {
     Thing thing = ThingBuilder.endToEnd("customer").createThing(PackageName.any());
 
-    return FunctionBuilder.of(thing, "fetchOne", Purpose.fetchOne()).build();
+    return FunctionBuilder.of(thing, "fetchOne", "", Purpose.fetchOne()).build();
   }
 
   /**
@@ -87,7 +87,7 @@ public abstract class AbstractRestDeducerTest {
   protected Function makeFunctionFetchCollection() {
     Thing thing = ThingBuilder.endToEnd("customer").createThing(PackageName.any());
 
-    return FunctionBuilder.of(thing, "fetchCollection", Purpose.fetchCollection()).build();
+    return FunctionBuilder.of(thing, "fetchCollection", "", Purpose.fetchCollection()).build();
   }
 
   /**
@@ -98,7 +98,7 @@ public abstract class AbstractRestDeducerTest {
   protected Function makeFunctionFetchPagedCollection() {
     Thing thing = ThingBuilder.endToEnd("customer").createThing(PackageName.any());
 
-    return FunctionBuilder.of(thing, "fetchPagedCollection", Purpose.fetchPagedCollection())
+    return FunctionBuilder.of(thing, "fetchPagedCollection", "", Purpose.fetchPagedCollection())
         .build();
   }
 
@@ -110,7 +110,7 @@ public abstract class AbstractRestDeducerTest {
   protected Function makeInvalidGetFunction() {
     Thing thing = ThingBuilder.endToEnd("customer").createThing(PackageName.any());
 
-    return FunctionBuilder.of(thing, "validate", Purpose.custom("validate", CqsType.COMMAND))
+    return FunctionBuilder.of(thing, "validate", "", Purpose.custom("validate", CqsType.COMMAND))
         .build();
   }
 }
