@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,11 +35,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-/**
- * The type Domain service detail transformer.
- *
- * @author Christos Tsakostas
- */
 public class DomainServiceDetailTransformer
     extends AbstractClassTransformer<DomainService, DomainServiceMethod> {
 
@@ -73,9 +68,7 @@ public class DomainServiceDetailTransformer
   @SuppressWarnings("CPD-START")
   @Override
   public Set<MethodRepresentation> methodRepresentations(DomainService source, Object... args) {
-    return source
-        .getDomainServiceMethods()
-        .stream()
+    return source.getDomainServiceMethods().stream()
         .map(methodTransformer::create)
         .collect(toCollection(LinkedHashSet::new));
   }

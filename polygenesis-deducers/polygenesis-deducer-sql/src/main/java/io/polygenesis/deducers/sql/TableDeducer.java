@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,11 +37,6 @@ import io.polygenesis.models.sql.TableName;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-/**
- * The type Table deducer.
- *
- * @author Christos Tsakostas
- */
 public class TableDeducer {
 
   private static final String CANNOT_CONVERT_TO_SQL_COLUMN =
@@ -185,6 +180,9 @@ public class TableDeducer {
                   break;
                 case MAP:
                   domainObjectColumns.addAll(getColumnsForMap());
+                  break;
+                case ENUMERATION:
+                  domainObjectColumns.add(getColumnForEnumeration(property.getData(), ""));
                   break;
                 default:
                   throw new IllegalArgumentException(
@@ -373,9 +371,26 @@ public class TableDeducer {
               } else {
                 throw new IllegalStateException();
               }
+              // TODO vo
+              //              else if (model.isDataGroup()) {
+              //                ; // getColumnsForValueObject(model.getAsDataObject());
+              //              }
+
             });
 
     return columns;
+  }
+
+  private Column getColumnForEnumeration(Data data, String columnPrefix) {
+    ColumnDataType columnDataType = ColumnDataType.VARCHAR;
+
+    int length = 50;
+
+    return new Column(
+        String.format("%s%s", columnPrefix, data.getVariableName().getText()),
+        columnDataType,
+        length,
+        RequiredType.OPTIONAL);
   }
 
   /**

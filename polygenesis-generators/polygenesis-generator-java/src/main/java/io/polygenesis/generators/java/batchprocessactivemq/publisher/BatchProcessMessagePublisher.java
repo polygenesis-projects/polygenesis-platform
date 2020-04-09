@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,11 +35,6 @@ import io.polygenesis.commons.valueobjects.VariableName;
 import io.polygenesis.core.AbstractNameablePackageable;
 import io.polygenesis.core.Generatable;
 
-/**
- * The type Batch process message publisher.
- *
- * @author Christos Tsakostas
- */
 public class BatchProcessMessagePublisher extends AbstractNameablePackageable
     implements Generatable {
 
@@ -86,7 +81,7 @@ public class BatchProcessMessagePublisher extends AbstractNameablePackageable
     return new Function(
         thing,
         Purpose.reset(),
-        new FunctionName("send"),
+        FunctionName.ofVerbOnly("send"),
         null,
         new DataRepository(DataPrimitive.of(PrimitiveType.STRING, new VariableName("message"))),
         Activity.empty(),

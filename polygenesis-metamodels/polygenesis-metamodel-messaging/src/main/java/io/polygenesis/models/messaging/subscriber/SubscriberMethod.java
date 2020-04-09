@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,11 +26,6 @@ import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.models.api.ServiceMethod;
 import java.util.Objects;
 
-/**
- * The type Subscriber method.
- *
- * @author Christos Tsakostas
- */
 public class SubscriberMethod implements FunctionProvider {
 
   private SubscriberMetamodel subscriberMetamodel;

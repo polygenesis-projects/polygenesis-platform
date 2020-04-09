@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,11 +27,6 @@ import io.polygenesis.core.AbstractionScope;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-/**
- * The type Service deducer.
- *
- * @author Christos Tsakostas
- */
 public class ServiceDeducer {
 
   // ===============================================================================================
@@ -123,27 +118,21 @@ public class ServiceDeducer {
   }
 
   private long numberOfCommandFunctions(Thing thing) {
-    return thing
-        .getFunctions()
-        .stream()
+    return thing.getFunctions().stream()
         .filter(function -> function.supportsAbstractionScope(AbstractionScope.api()))
         .filter(function -> function.getPurpose().isCommand())
         .count();
   }
 
   private long numberOfQueryFunctions(Thing thing) {
-    return thing
-        .getFunctions()
-        .stream()
+    return thing.getFunctions().stream()
         .filter(function -> function.supportsAbstractionScope(AbstractionScope.api()))
         .filter(function -> function.getPurpose().isQuery())
         .count();
   }
 
   private void appendCommandMethods(Service service, Thing thing, PackageName rootPackageName) {
-    thing
-        .getFunctions()
-        .stream()
+    thing.getFunctions().stream()
         .filter(function -> function.supportsAbstractionScope(AbstractionScope.api()))
         .filter(function -> function.getPurpose().isCommand())
         .forEach(
@@ -155,9 +144,7 @@ public class ServiceDeducer {
   }
 
   private void appendQueryMethods(Service service, Thing thing, PackageName rootPackageName) {
-    thing
-        .getFunctions()
-        .stream()
+    thing.getFunctions().stream()
         .filter(function -> function.supportsAbstractionScope(AbstractionScope.api()))
         .filter(function -> function.getPurpose().isQuery())
         .forEach(

@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,11 +31,6 @@ import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
 
-/**
- * The type Domain model repository.
- *
- * @author Christos Tsakostas
- */
 public class DomainObjectMetamodelRepository extends AbstractMetamodelRepository<DomainObject>
     implements MetamodelRepository<DomainObject>, DomainMetamodelRepository<DomainObject> {
 
@@ -80,8 +75,7 @@ public class DomainObjectMetamodelRepository extends AbstractMetamodelRepository
    */
   @Override
   public DomainObject findEntityByThingName(ThingName thingName) {
-    return getItems()
-        .stream()
+    return getItems().stream()
         .filter(entity -> entity.getObjectName().equals(new ObjectName(thingName.getText())))
         .findFirst()
         .orElseThrow();
@@ -99,8 +93,7 @@ public class DomainObjectMetamodelRepository extends AbstractMetamodelRepository
     // TODO: deep nested
 
     valueObjects.addAll(
-        getItems()
-            .stream()
+        getItems().stream()
             .filter(
                 domainObjectInCheck ->
                     domainObjectInCheck.getParent() != null
@@ -120,9 +113,7 @@ public class DomainObjectMetamodelRepository extends AbstractMetamodelRepository
    * @return the value objects by aggregate root
    */
   public Set<ValueObject> getValueObjectsByDomainObject(DomainObject domainObject) {
-    return domainObject
-        .getProperties()
-        .stream()
+    return domainObject.getProperties().stream()
         .filter(property -> property.getPropertyType().equals(PropertyType.VALUE_OBJECT))
         .map(ValueObject.class::cast)
         .collect(toCollection(LinkedHashSet::new));

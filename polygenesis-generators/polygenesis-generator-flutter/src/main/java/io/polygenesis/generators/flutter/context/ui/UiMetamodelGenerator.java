@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,11 +40,6 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/**
- * The type Ui metamodel generator.
- *
- * @author Christos Tsakostas
- */
 public class UiMetamodelGenerator extends AbstractMetamodelGenerator {
 
   // ===============================================================================================
@@ -118,15 +113,13 @@ public class UiMetamodelGenerator extends AbstractMetamodelGenerator {
             .flatMap(uiContext -> uiContext.getFeatures().stream())
             .collect(Collectors.toCollection(LinkedHashSet::new));
 
-    features
-        .stream()
+    features.stream()
         .flatMap(feature -> feature.getScreens().stream())
         .forEach(
             screen ->
                 screenGenerator.generate(screen, screenExportInfo(getGenerationPath(), screen)));
 
-    features
-        .stream()
+    features.stream()
         .flatMap(feature -> feature.getWidgets().stream())
         .forEach(
             widget ->

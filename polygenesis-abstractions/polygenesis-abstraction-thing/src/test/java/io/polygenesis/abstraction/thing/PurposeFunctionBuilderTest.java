@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,6 @@ import java.util.Set;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
-/** @author Christos Tsakostas */
 public class PurposeFunctionBuilderTest {
 
   @Test
@@ -45,14 +44,14 @@ public class PurposeFunctionBuilderTest {
   public void shouldCreateModify() {
     Set<Function> functions =
         PurposeFunctionBuilder.forThing(ThingForTesting.create(), "com.oregor")
-            .withFunctionModify("modify", dataModifyDescription())
+            .withFunctionModify("modify", "", dataModifyDescription())
             .build();
 
     Assertions.assertThat(functions).isNotNull();
     assertThat(functions.size()).isEqualTo(1);
 
     Function function = functions.stream().findFirst().orElseThrow(IllegalStateException::new);
-    assertThat(function.getName()).isEqualTo(new FunctionName("modify"));
+    assertThat(function.getName()).isEqualTo(FunctionName.ofVerbOnly("modify"));
     assertThat(function.getReturnValue().getAsDataObject().getObjectName().getText())
         .isEqualTo("modifyBusinessResponse");
   }
@@ -61,15 +60,15 @@ public class PurposeFunctionBuilderTest {
   public void shouldCreateModifyWithCustomName() {
     Set<Function> functions =
         PurposeFunctionBuilder.forThing(ThingForTesting.create(), "com.oregor")
-            .withFunctionModify("modifyDescription", dataModifyDescription())
+            .withFunctionModify("modifyDescription", "", dataModifyDescription())
             .build();
 
     Assertions.assertThat(functions).isNotNull();
     assertThat(functions.size()).isEqualTo(1);
 
     Function function = functions.stream().findFirst().orElseThrow(IllegalStateException::new);
-    assertThat(function.getName().getText())
-        .isEqualTo(new FunctionName("modifyDescription").getText());
+    assertThat(function.getName().getFullName())
+        .isEqualTo(FunctionName.ofVerbAndObject("modify", "description").getFullName());
     assertThat(function.getReturnValue().getAsDataObject().getObjectName().getText())
         .isEqualTo("modifyDescriptionBusinessResponse");
   }

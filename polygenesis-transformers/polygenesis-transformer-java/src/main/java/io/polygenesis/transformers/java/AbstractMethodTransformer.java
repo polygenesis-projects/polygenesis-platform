@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,12 +35,6 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
-/**
- * The type Abstract method representable.
- *
- * @param <S> the type parameter
- * @author Christos Tsakostas
- */
 public abstract class AbstractMethodTransformer<S extends FunctionProvider>
     extends AbstractTransformer implements MethodTransformer<S> {
 
@@ -126,7 +120,7 @@ public abstract class AbstractMethodTransformer<S extends FunctionProvider>
     StringBuilder stringBuilder = new StringBuilder();
 
     stringBuilder.append(
-        TextConverter.toUpperCamelSpaces(source.getFunction().getName().getText()));
+        TextConverter.toUpperCamelSpaces(source.getFunction().getName().getFullName()));
     stringBuilder.append(".");
 
     return stringBuilder.toString();
@@ -139,7 +133,7 @@ public abstract class AbstractMethodTransformer<S extends FunctionProvider>
 
   @Override
   public String methodName(S source, Object... args) {
-    return source.getFunction().getName().getText();
+    return source.getFunction().getName().getFullName();
   }
 
   @Override
@@ -210,8 +204,7 @@ public abstract class AbstractMethodTransformer<S extends FunctionProvider>
   @SuppressWarnings("CPD-END")
   protected String getParametersCommaSeparated(
       Set<ParameterRepresentation> parameterRepresentations) {
-    return parameterRepresentations
-        .stream()
+    return parameterRepresentations.stream()
         .map(ParameterRepresentation::getVariableName)
         .collect(Collectors.joining(", "));
   }

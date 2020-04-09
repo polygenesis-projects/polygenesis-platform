@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,11 +29,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/**
- * The type Projection metamodel repository.
- *
- * @author Christos Tsakostas
- */
 public class ProjectionMetamodelRepository extends AbstractMetamodelRepository<Projection>
     implements DomainMetamodelRepository<Projection> {
 
@@ -60,13 +55,18 @@ public class ProjectionMetamodelRepository extends AbstractMetamodelRepository<P
 
     entities.addAll(getItems().stream().map(DomainObject.class::cast).collect(Collectors.toSet()));
 
-    return entities
-        .stream()
+    return entities.stream()
         .filter(entity -> entity.getObjectName().equals(new ObjectName(thingName.getText())))
         .findFirst()
         .orElseThrow();
   }
 
+  /**
+   * Finds a set of projections by things.
+   *
+   * @param things the things
+   * @return
+   */
   public Set<Projection> findByThings(Set<Thing> things) {
     Set<Projection> projections = new LinkedHashSet<>();
 

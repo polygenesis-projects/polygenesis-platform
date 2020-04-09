@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,12 +29,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-/**
- * The type Abstract method registry.
- *
- * @param <T> the type parameter
- * @author Christos Tsakostas
- */
 public abstract class AbstractMethodImplementorRegistry<T extends FunctionProvider> {
 
   // ===============================================================================================
@@ -97,7 +91,7 @@ public abstract class AbstractMethodImplementorRegistry<T extends FunctionProvid
       throw new UnsupportedOperationException(
           String.format(
               "No method implementation found for function with name=%s",
-              methodProvider.getFunction().getName().getText()));
+              methodProvider.getFunction().getName().getFullName()));
     }
   }
 
@@ -108,11 +102,7 @@ public abstract class AbstractMethodImplementorRegistry<T extends FunctionProvid
    * @return the abstraction scope as optional
    */
   protected Optional<AbstractionScope> getAbstractionScopeAsOptional(T methodProvider) {
-    return methodProvider
-        .getFunction()
-        .getThing()
-        .getAbstractionsScopes()
-        .stream()
+    return methodProvider.getFunction().getThing().getAbstractionsScopes().stream()
         .filter(
             abstractionScope ->
                 scopeAndPurposeMap.containsKey(

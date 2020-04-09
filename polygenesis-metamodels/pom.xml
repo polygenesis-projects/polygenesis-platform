@@ -20,6 +20,7 @@
     <module>polygenesis-metamodel-batch-process</module>
     <module>polygenesis-metamodel-domain</module>
     <module>polygenesis-metamodel-messaging</module>
+    <module>polygenesis-metamodel-openapi</module>
     <module>polygenesis-metamodel-page-object</module>
     <module>polygenesis-metamodel-rest</module>
     <module>polygenesis-metamodel-scheduler</module>

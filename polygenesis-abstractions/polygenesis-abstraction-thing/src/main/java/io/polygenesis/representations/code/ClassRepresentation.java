@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,12 +27,11 @@ import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 
-/**
- * The type Class representation.
- *
- * @author Christos Tsakostas
- */
 public class ClassRepresentation extends AbstractObjectRepresentation {
+
+  // ===============================================================================================
+  // STATE
+  // ===============================================================================================
 
   private Set<FieldRepresentation> staticFieldRepresentations;
   private Set<FieldRepresentation> stateFieldRepresentations;
@@ -148,8 +147,7 @@ public class ClassRepresentation extends AbstractObjectRepresentation {
    * @return the method representations by
    */
   public Set<MethodRepresentation> getMethodRepresentationsBy(String methodRepresentationType) {
-    return methodRepresentations
-        .stream()
+    return methodRepresentations.stream()
         .filter(
             methodRepresentation ->
                 methodRepresentation

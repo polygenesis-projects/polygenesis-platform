@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,11 +41,6 @@ import io.polygenesis.models.domain.common.DomainObjectPropertiesDeducer;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-/**
- * The type Projection deducer.
- *
- * @author Christos Tsakostas
- */
 public class ProjectionDeducer implements Deducer<ProjectionMetamodelRepository> {
 
   // ===============================================================================================

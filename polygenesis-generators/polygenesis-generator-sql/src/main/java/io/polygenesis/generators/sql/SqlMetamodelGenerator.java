@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,11 +28,6 @@ import io.polygenesis.models.sql.SqlTableMetamodelRepository;
 import java.nio.file.Path;
 import java.util.Set;
 
-/**
- * The type Sql generator.
- *
- * @author Christos Tsakostas
- */
 public class SqlMetamodelGenerator extends AbstractMetamodelGenerator {
 
   // ===============================================================================================
@@ -47,6 +42,14 @@ public class SqlMetamodelGenerator extends AbstractMetamodelGenerator {
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
+  /**
+   * Instantiates a new Sql metamodel generator.
+   *
+   * @param generationPath the generation path
+   * @param contextName the context name
+   * @param scriptExporter the script exporter
+   * @param tablePrefix the table prefix
+   */
   public SqlMetamodelGenerator(
       Path generationPath,
       ContextName contextName,
@@ -71,6 +74,11 @@ public class SqlMetamodelGenerator extends AbstractMetamodelGenerator {
     return tablePrefix;
   }
 
+  /**
+   * Gets context name.
+   *
+   * @return the context name
+   */
   public ContextName getContextName() {
     return contextName;
   }

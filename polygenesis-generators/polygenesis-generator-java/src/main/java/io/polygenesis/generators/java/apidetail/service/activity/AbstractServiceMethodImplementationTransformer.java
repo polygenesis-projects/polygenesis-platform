@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,11 +49,6 @@ import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
 
-/**
- * The type Abstract service method implementation transformer.
- *
- * @author Christos Tsakostas
- */
 public abstract class AbstractServiceMethodImplementationTransformer {
 
   // ===============================================================================================
@@ -228,7 +223,13 @@ public abstract class AbstractServiceMethodImplementationTransformer {
         .getServiceMethod()
         .getRequestDto()
         .getThingIdentityAsOptional()
-        .orElseThrow(IllegalArgumentException::new);
+        .orElseThrow(
+            () ->
+                new IllegalArgumentException(
+                    String.format(
+                        "Cannot get thing identity for function '%s' in service '%s'",
+                        source.getFunction().getName().getFullName(),
+                        source.getServiceMethod().getService().getServiceName().getText())));
   }
 
   /**
@@ -270,10 +271,7 @@ public abstract class AbstractServiceMethodImplementationTransformer {
 
     if (optionalAggregateRoot.isPresent()) {
       Constructor constructorFound =
-          optionalAggregateRoot
-              .get()
-              .getConstructors()
-              .stream()
+          optionalAggregateRoot.get().getConstructors().stream()
               .filter(constructor -> constructor.getFunction().equals(source.getFunction()))
               .findFirst()
               .orElseThrow(
@@ -303,10 +301,7 @@ public abstract class AbstractServiceMethodImplementationTransformer {
     Optional<DomainObject> optionalAggregateRoot = getAggregateRoot(source, metamodelRepositories);
 
     if (optionalAggregateRoot.isPresent()) {
-      return optionalAggregateRoot
-          .get()
-          .getStateMutationMethods()
-          .stream()
+      return optionalAggregateRoot.get().getStateMutationMethods().stream()
           .filter(
               stateMutationMethod ->
                   stateMutationMethod
@@ -320,7 +315,7 @@ public abstract class AbstractServiceMethodImplementationTransformer {
                       String.format(
                           "Cannot get state mutation method '%s' for '%s'. "
                               + "Check the state mutation deducer.",
-                          source.getFunction().getName().getText(),
+                          source.getFunction().getName().getFullName(),
                           optionalAggregateRoot.get().getObjectName().getText())))
           .getProperties();
     } else {
@@ -341,9 +336,7 @@ public abstract class AbstractServiceMethodImplementationTransformer {
         CoreRegistry.getMetamodelRepositoryResolver()
             .resolve(metamodelRepositories, DomainObjectMetamodelRepository.class);
 
-    return domainObjectMetamodelRepository
-        .getItems()
-        .stream()
+    return domainObjectMetamodelRepository.getItems().stream()
         .filter(
             aggregateRoot ->
                 aggregateRoot
@@ -368,9 +361,7 @@ public abstract class AbstractServiceMethodImplementationTransformer {
         CoreRegistry.getMetamodelRepositoryResolver()
             .resolve(metamodelRepositories, ServiceImplementationMetamodelRepository.class);
 
-    return serviceImplementationMetamodelRepository
-        .getItems()
-        .stream()
+    return serviceImplementationMetamodelRepository.getItems().stream()
         .filter(
             serviceImplementation ->
                 serviceImplementation.getService().equals(source.getServiceMethod().getService()))
@@ -391,8 +382,7 @@ public abstract class AbstractServiceMethodImplementationTransformer {
     Set<DomainObjectProperty<?>> domainObjectProperties = new LinkedHashSet<>();
 
     // 1. Start by adding IDs
-    thisClassProperties
-        .stream()
+    thisClassProperties.stream()
         .filter(
             property ->
                 property.getPropertyType().equals(ABSTRACT_AGGREGATE_ROOT_ID)
@@ -402,8 +392,7 @@ public abstract class AbstractServiceMethodImplementationTransformer {
 
     // 2. Continue with superClass properties
     if (superClassProperties != null) {
-      superClassProperties
-          .stream()
+      superClassProperties.stream()
           .filter(
               property ->
                   !property.getPropertyType().equals(ABSTRACT_AGGREGATE_ROOT_ID)
@@ -413,8 +402,7 @@ public abstract class AbstractServiceMethodImplementationTransformer {
     }
 
     // 3. Finish with this class properties
-    thisClassProperties
-        .stream()
+    thisClassProperties.stream()
         .filter(
             property ->
                 !property.getPropertyType().equals(ABSTRACT_AGGREGATE_ROOT_ID)
@@ -436,9 +424,7 @@ public abstract class AbstractServiceMethodImplementationTransformer {
       ServiceMethodImplementation source, AggregateEntity aggregateEntity) {
 
     if (source.getFunction().getPurpose().isEntityCreate()) {
-      return aggregateEntity
-          .getConstructors()
-          .stream()
+      return aggregateEntity.getConstructors().stream()
           .filter(
               mutationMethod ->
                   mutationMethod
@@ -448,9 +434,7 @@ public abstract class AbstractServiceMethodImplementationTransformer {
           .findFirst()
           .orElseThrow();
     } else if (source.getFunction().getPurpose().isModify()) {
-      return aggregateEntity
-          .getStateMutationMethods()
-          .stream()
+      return aggregateEntity.getStateMutationMethods().stream()
           .filter(
               mutationMethod ->
                   mutationMethod

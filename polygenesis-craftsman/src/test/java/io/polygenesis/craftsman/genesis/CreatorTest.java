@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +35,6 @@ import java.util.Set;
 import org.junit.Ignore;
 import org.junit.Test;
 
-/** @author Christos Tsakostas */
 @Ignore
 public class CreatorTest {
 
@@ -95,7 +94,7 @@ public class CreatorTest {
         .setDescription("OREGOR Genesis microservice")
         .setUrl("https://www.oregor.com")
         .setInceptionYear("2019")
-        .setOrganizationName("OREGOR LTD")
+        .setOrganizationName("OREGOR LP")
         .setOrganizationUrl("https://www.oregor.com")
         .setLicenseName("The Apache License, Version 2.0")
         .setLicenseUrl("http://www.apache.org/licenses/LICENSE-2.0.txt")

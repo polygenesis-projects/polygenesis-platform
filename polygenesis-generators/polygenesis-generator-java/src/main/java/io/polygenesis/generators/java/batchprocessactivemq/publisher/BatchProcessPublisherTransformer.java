@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@
 package io.polygenesis.generators.java.batchprocessactivemq.publisher;
 
 import io.polygenesis.abstraction.thing.Function;
+import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.commons.valueobjects.ContextName;
 import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.core.TemplateData;
@@ -36,11 +37,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-/**
- * The type Batch process publisher transformer.
- *
- * @author Christos Tsakostas
- */
 public class BatchProcessPublisherTransformer
     extends AbstractClassTransformer<BatchProcessMessagePublisher, Function> {
 
@@ -139,16 +135,22 @@ public class BatchProcessPublisherTransformer
     Set<String> imports = new TreeSet<>();
 
     imports.add("com.oregor.trinity4j.api.clients.batchprocess.BatchProcessMessagePublisher");
-    imports.add("org.springframework.stereotype.Service");
     imports.add("org.apache.camel.ProducerTemplate");
+    imports.add("org.springframework.beans.factory.annotation.Qualifier");
     imports.add("org.springframework.beans.factory.annotation.Value");
+    imports.add("org.springframework.stereotype.Service");
 
     return imports;
   }
 
   @Override
   public Set<String> annotations(BatchProcessMessagePublisher source, Object... args) {
-    return new LinkedHashSet<>(Arrays.asList("@Service"));
+    return new LinkedHashSet<>(
+        Arrays.asList(
+            "@Service",
+            String.format(
+                "@Qualifier(\"%s\")",
+                TextConverter.toUpperCamel(source.getObjectName().getText()))));
   }
 
   @SuppressWarnings("CPD-END")

@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,11 +24,6 @@ import io.polygenesis.commons.assertion.Assertion;
 import java.io.ByteArrayOutputStream;
 import java.nio.file.Paths;
 
-/**
- * The type Passive file exporter.
- *
- * @author Christos Tsakostas
- */
 public class PassiveFileExporter extends ActiveFileExporter {
 
   // ===============================================================================================
@@ -43,7 +38,8 @@ public class PassiveFileExporter extends ActiveFileExporter {
 
   /** Instantiates a new Passive file exporter. */
   public PassiveFileExporter() {
-    if (System.getenv().get("enforceOverwrite") != null) {
+    if (System.getenv().get("enforceOverwrite") != null
+        && System.getenv().get("enforceOverwrite") == "true") {
       this.enforceOverwrite = true;
     } else {
       this.enforceOverwrite = false;

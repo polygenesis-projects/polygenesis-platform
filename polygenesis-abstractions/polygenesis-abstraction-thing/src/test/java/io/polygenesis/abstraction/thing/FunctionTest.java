@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,6 @@ import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.commons.valueobjects.VariableName;
 import org.junit.Test;
 
-/** @author Christos Tsakostas */
 public class FunctionTest extends AbstractEqualityTest<Function> {
 
   @Test
@@ -81,6 +80,7 @@ public class FunctionTest extends AbstractEqualityTest<Function> {
     return FunctionBuilder.of(
             ThingBuilder.endToEnd("thingName").createThing(PackageName.any()),
             "functionName",
+            "",
             Purpose.create())
         .setReturnValue(createDataPrimitive())
         .build();
@@ -91,6 +91,7 @@ public class FunctionTest extends AbstractEqualityTest<Function> {
     return FunctionBuilder.of(
             ThingBuilder.endToEnd("thingName").createThing(PackageName.any()),
             "anotherFunctionName",
+            "",
             Purpose.create())
         .setReturnValue(createDataPrimitive())
         .build();
@@ -104,6 +105,7 @@ public class FunctionTest extends AbstractEqualityTest<Function> {
     return FunctionBuilder.of(
             ThingBuilder.endToEnd("thingName").createThing(PackageName.any()),
             "functionName",
+            "",
             Purpose.create())
         .setReturnValue(createDataPrimitive())
         .build();
@@ -113,6 +115,7 @@ public class FunctionTest extends AbstractEqualityTest<Function> {
     return FunctionBuilder.of(
             ThingBuilder.endToEnd("thingName").createThing(PackageName.any()),
             "functionName",
+            "",
             Purpose.create())
         .addArgument(DataPrimitive.of(PrimitiveType.STRING, new VariableName("jsonMessage")))
         .build();

@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,11 +33,6 @@ import io.polygenesis.core.AbstractNameablePackageable;
 import io.polygenesis.core.Generatable;
 import io.polygenesis.generators.java.batchprocesssubscriber.dispatcher.BatchProcessDispatcher;
 
-/**
- * The type Batch process dispatcher route.
- *
- * @author Christos Tsakostas
- */
 public class BatchProcessDispatcherRoute extends AbstractNameablePackageable
     implements Generatable {
 
@@ -100,7 +95,7 @@ public class BatchProcessDispatcherRoute extends AbstractNameablePackageable
     return new Function(
         thing,
         Purpose.reset(),
-        new FunctionName("configure"),
+        FunctionName.ofVerbOnly("configure"),
         null,
         new DataRepository(),
         Activity.empty(),

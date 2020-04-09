@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,11 +28,6 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/**
- * The type Domain object properties deducer.
- *
- * @author Christos Tsakostas
- */
 public class DomainObjectPropertiesDeducer {
 
   // ===============================================================================================
@@ -75,10 +70,7 @@ public class DomainObjectPropertiesDeducer {
     Set<DomainObjectProperty<?>> properties = new LinkedHashSet<>();
 
     properties.addAll(
-        thing
-            .getThingProperties()
-            .getData()
-            .stream()
+        thing.getThingProperties().getData().stream()
             .map(data -> dataToDomainObjectPropertyConverter.convert(domainObject, data))
             .collect(Collectors.toCollection(LinkedHashSet::new)));
 

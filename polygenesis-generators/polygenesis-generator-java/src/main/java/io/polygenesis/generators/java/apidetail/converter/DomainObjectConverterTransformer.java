@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,11 +38,6 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
-/**
- * The type Domain object converter transformer.
- *
- * @author Christos Tsakostas
- */
 public class DomainObjectConverterTransformer
     extends AbstractClassTransformer<DomainObjectConverter, DomainObjectConverterMethod> {
 
@@ -113,9 +108,7 @@ public class DomainObjectConverterTransformer
     Set<DataObject> candidates = new LinkedHashSet<>();
 
     candidates.addAll(
-        source
-            .getMethods()
-            .stream()
+        source.getMethods().stream()
             .map(DomainObjectConverterMethod::getFunction)
             .flatMap(function -> function.getArguments().getData().stream())
             .filter(Data::isDataGroup)
@@ -124,9 +117,7 @@ public class DomainObjectConverterTransformer
             .collect(Collectors.toSet()));
 
     candidates.addAll(
-        source
-            .getMethods()
-            .stream()
+        source.getMethods().stream()
             .map(DomainObjectConverterMethod::getFunction)
             .filter(function -> function.getReturnValue() != null)
             .map(function -> function.getReturnValue())

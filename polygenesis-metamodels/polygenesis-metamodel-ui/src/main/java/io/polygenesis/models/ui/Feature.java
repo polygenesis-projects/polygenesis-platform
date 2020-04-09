@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@
 
 package io.polygenesis.models.ui;
 
-import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.commons.valueobjects.ContextName;
 import io.polygenesis.commons.valueobjects.FeatureName;
@@ -29,13 +28,6 @@ import io.polygenesis.core.Metamodel;
 import io.polygenesis.models.ui.container.AbstractContainer;
 import java.util.Set;
 
-/**
- * Encapsulates all of the UI models related to a Feature. A Feature is equivalent to a {@link
- * Thing} from the core model.
- *
- * @author Christos Tsakostas
- * @see Thing
- */
 public class Feature implements Metamodel {
 
   private ContextName contextName;

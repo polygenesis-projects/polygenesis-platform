@@ -2,7 +2,7 @@
  ==========================LICENSE_START=================================
  PolyGenesis Platform
  ========================================================================
- Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  ========================================================================
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -17,4 +17,10 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-    ${ data.commandService}.${ data.commandMethod}(new ${ data.requestDto}(uniqueId));
+
+<#if data.multiTenant>
+    // TODO: MultiTenant
+    ${ data.commandService}.${ data.commandMethod}(new ${ data.requestDto}(batchProcessMessage.getUniqueId(), batchProcessMessage.getUniqueId()));
+<#else>
+    ${ data.commandService}.${ data.commandMethod}(new ${ data.requestDto}(batchProcessMessage.getUniqueId()));
+</#if>

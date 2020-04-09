@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,6 +40,8 @@ import io.polygenesis.generators.java.api.JavaApiMetamodelGenerator;
 import io.polygenesis.generators.java.apiclients.rest.ApiClientRestMetamodelGeneratorFactory;
 import io.polygenesis.generators.java.apidetail.JavaApiDetailMetamodelGenerator;
 import io.polygenesis.generators.java.apidetail.JavaApiDetailMetamodelGeneratorFactory;
+import io.polygenesis.generators.java.aux.AuxMetamodelGeneratorFactory;
+import io.polygenesis.generators.java.auxdetails.propertyfile.AuxDetailPropertyFileMetamodelGeneratorFactory;
 import io.polygenesis.generators.java.domain.JavaDomainMetamodelGeneratorFactory;
 import io.polygenesis.generators.java.domainservicedetail.DomainServiceDetailMetamodelGeneratorFactory;
 import io.polygenesis.generators.java.rdbms.JavaRdbmsMetamodelGeneratorFactory;
@@ -57,11 +59,6 @@ import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-/**
- * The type Creator default.
- *
- * @author Christos Tsakostas
- */
 public class GenesisDefault {
 
   private static final String API = "api";
@@ -73,6 +70,11 @@ public class GenesisDefault {
   private static final String DOMAIN_DETAIL_SERVICES = "domain-detail-services";
   private static final String DOMAIN_DETAIL_REPOSITORY_SPRING_DATA_JPA =
       "domain-detail-repository-springdatajpa";
+
+  // AUX
+  private static final String AUX = "aux";
+  private static final String AUX_DETAILS = "aux-details";
+  private static final String AUX_DETAIL_PROPERTY_FILE = "aux-detail-property-file";
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -169,13 +171,9 @@ public class GenesisDefault {
 
     return new LinkedHashSet<>(
         Arrays.asList(
-            javaApiGenerator(exportPath, projectFolder, modulePrefix + "-" + API),
+            javaApiGenerator(exportPath, projectFolder, modulePrefix),
             javaApiDetailGenerator(
-                exportPath,
-                projectFolder,
-                modulePrefix + "-" + API_DETAIL,
-                context,
-                rootPackageName),
+                exportPath, projectFolder, modulePrefix, context, rootPackageName),
             ApiClientRestMetamodelGeneratorFactory.newInstance(
                 Paths.get(
                     exportPath,
@@ -210,7 +208,19 @@ public class GenesisDefault {
                     modulePrefix + "-" + DOMAIN_DETAILS,
                     modulePrefix + "-" + DOMAIN_DETAIL_REPOSITORY_SPRING_DATA_JPA),
                 new ContextName(context),
-                tablePrefix)));
+                tablePrefix),
+            AuxMetamodelGeneratorFactory.newInstance(
+                Paths.get(exportPath, projectFolder, modulePrefix + "-" + AUX),
+                new ContextName(context),
+                new PackageName(rootPackageName)),
+            AuxDetailPropertyFileMetamodelGeneratorFactory.newInstance(
+                Paths.get(
+                    exportPath,
+                    projectFolder,
+                    modulePrefix + "-" + AUX_DETAILS,
+                    modulePrefix + "-" + AUX_DETAIL_PROPERTY_FILE),
+                new ContextName(context),
+                new PackageName(rootPackageName))));
   }
 
   /**

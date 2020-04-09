@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,11 +26,6 @@ import io.polygenesis.core.DataTypeTransformer;
 import java.util.EnumMap;
 import java.util.stream.Stream;
 
-/**
- * The type Java data type transformer.
- *
- * @author Christos Tsakostas
- */
 public class JavaDataTypeTransformer implements DataTypeTransformer {
 
   private static final String MODIFIER_FINAL = "final";
@@ -120,6 +115,8 @@ public class JavaDataTypeTransformer implements DataTypeTransformer {
     dataTypeMap.put(PrimitiveType.DATE, "LocalDate");
     dataTypeMap.put(PrimitiveType.DATETIME, "LocalDateTime");
     dataTypeMap.put(PrimitiveType.DECIMAL, "BigDecimal");
+    dataTypeMap.put(PrimitiveType.URI, "String");
+    dataTypeMap.put(PrimitiveType.URL, "String");
     dataTypeMap.put(PrimitiveType.UUID, "UUID");
   }
 }

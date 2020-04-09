@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,11 +31,6 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-/**
- * The type Spreadsheet unit transformer.
- *
- * @author Christos Tsakostas
- */
 public class SpreadsheetTransformer implements Transformer<Spreadsheet> {
 
   // ===============================================================================================
@@ -75,9 +70,7 @@ public class SpreadsheetTransformer implements Transformer<Spreadsheet> {
             rowIndex -> {
               Row row = xssfSheet.createRow(rowIndex);
 
-              sheet
-                  .getCellsByRowIndex(rowIndex)
-                  .stream()
+              sheet.getCellsByRowIndex(rowIndex).stream()
                   .forEach(
                       sheetCell -> {
                         Cell cell = row.createCell(sheetCell.getColumnIndex().getIndex());

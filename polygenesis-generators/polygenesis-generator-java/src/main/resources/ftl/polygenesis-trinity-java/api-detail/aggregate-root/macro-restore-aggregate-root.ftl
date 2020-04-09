@@ -2,7 +2,7 @@
  ==========================LICENSE_START=================================
  PolyGenesis Platform
  ========================================================================
- Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  ========================================================================
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -17,9 +17,9 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
+
 <#macro restoreAggregateRoot aggregateRootData persistenceVariable aggregateRootIdDataType aggregateRootDataType aggregateRootVariable requestDto thingIdentity multiTenant>
   <#if multiTenant>
-<#--    ${ aggregateRootData.aggregateRootDataType } ${ aggregateRootData.aggregateRootVariable } = ${ aggregateRootData.aggregateRootRepositoryVariable }.restore(new ${ aggregateRootData.aggregateRootIdDataType }(UUID.fromString(${ requestDto.dataObject.variableName.text }.get${ textConverter.toUpperCamel( aggregateRootData.aggregateRootIdVariable ) }()), UUID.fromString(${ requestDto.dataObject.variableName.text }.getTenantId()))).orElseThrow(() -> new IllegalArgumentException("Cannot restore ${ aggregateRootVariable }"));-->
     ${ aggregateRootData.aggregateRootDataType } ${ aggregateRootData.aggregateRootVariable } = ${ aggregateRootData.aggregateRootRepositoryVariable }.restore(new ${ aggregateRootData.aggregateRootIdDataType }(UUID.fromString(${ requestDto.dataObject.variableName.text }.get${ textConverter.toUpperCamel( aggregateRootData.aggregateRootIdVariable ) }()))).orElseThrow(() -> new IllegalArgumentException("Cannot restore ${ aggregateRootVariable }"));
   <#else>
     ${ aggregateRootData.aggregateRootDataType } ${ aggregateRootData.aggregateRootVariable } = ${ aggregateRootData.aggregateRootRepositoryVariable }.restore(new ${ aggregateRootData.aggregateRootIdDataType }(UUID.fromString(${ requestDto.dataObject.variableName.text }.get${ textConverter.toUpperCamel( aggregateRootData.aggregateRootIdVariable ) }()))).orElseThrow(() -> new IllegalArgumentException("Cannot restore ${ aggregateRootVariable }"));

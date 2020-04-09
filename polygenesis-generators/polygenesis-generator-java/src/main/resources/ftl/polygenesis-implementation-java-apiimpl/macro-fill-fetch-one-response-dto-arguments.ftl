@@ -2,7 +2,7 @@
  ==========================LICENSE_START=================================
  PolyGenesis Platform
  ========================================================================
- Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  ========================================================================
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -17,12 +17,13 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
+
 <#macro fillFetchOneResponseDtoArguments responseDto aggregateRootVariable converterVariable>
 <#list responseDto.dataObject.models as data >
   <#switch data.dataPrimaryType>
     <#case 'PRIMITIVE'>
         <#if data.dataObject??>
-      ${ aggregateRootVariable }.get${ textConverter.toUpperCamel(data.variableName.text) }().getValue()<#sep>,</#sep>
+      ${ aggregateRootVariable }.get${ textConverter.toUpperCamel(data.variableName.text) }().getTypeId().toString()<#sep>,</#sep>
         <#else>
       ${ aggregateRootVariable }.get${ textConverter.toUpperCamel(data.variableName.text) }()<#sep>,</#sep>
       </#if>

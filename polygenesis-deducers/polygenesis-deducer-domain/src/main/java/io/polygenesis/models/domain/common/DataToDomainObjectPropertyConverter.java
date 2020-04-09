@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,6 +31,7 @@ import io.polygenesis.models.domain.AggregateRootId;
 import io.polygenesis.models.domain.BaseProperty;
 import io.polygenesis.models.domain.DomainObject;
 import io.polygenesis.models.domain.DomainObjectProperty;
+import io.polygenesis.models.domain.Enumeration;
 import io.polygenesis.models.domain.GenericTypeParameter;
 import io.polygenesis.models.domain.InstantiationType;
 import io.polygenesis.models.domain.Mapper;
@@ -50,23 +51,33 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/**
- * The type Data to domain object property converter.
- *
- * @author Christos Tsakostas
- */
 public class DataToDomainObjectPropertyConverter {
 
   // ===============================================================================================
   // FUNCTIONALITY
   // ===============================================================================================
 
+  /**
+   * Convert many set.
+   *
+   * @param domainObject the domain object
+   * @param data the data
+   * @return the set
+   */
   public Set<DomainObjectProperty<?>> convertMany(DomainObject domainObject, Set<Data> data) {
     return data.stream()
         .map(dataInStream -> convert(domainObject, dataInStream))
         .collect(Collectors.toCollection(LinkedHashSet::new));
   }
 
+  /**
+   * Convert domain object property.
+   *
+   * @param domainObject the domain object
+   * @param source the source
+   * @param args the args
+   * @return the domain object property
+   */
   public DomainObjectProperty<?> convert(DomainObject domainObject, Data source, Object... args) {
     switch (source.getDataPrimaryType()) {
       case ARRAY:
@@ -99,6 +110,8 @@ public class DataToDomainObjectPropertyConverter {
         }
       case MAP:
         return new Mapper(source.getAsDataMap());
+      case ENUMERATION:
+        return new Enumeration(source.getAsDataEnumeration());
       default:
         throw new UnsupportedOperationException(
             String.format("Cannot make DomainObjectProperty from %s", source.getDataPrimaryType()));

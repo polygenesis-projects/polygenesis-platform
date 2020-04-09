@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,11 +30,6 @@ import io.polygenesis.models.ui.container.Left;
 import io.polygenesis.models.ui.container.Right;
 import io.polygenesis.models.ui.container.Top;
 
-/**
- * The type Container deducer.
- *
- * @author Christos Tsakostas
- */
 public class ContainerDeducer {
 
   // ===============================================================================================
@@ -58,7 +53,7 @@ public class ContainerDeducer {
    */
   public AbstractContainer deduceContainerFromThingFunction(Feature feature, Function function) {
     return new InlineContainer(
-        new ContainerName(function.getName().getText()),
+        new ContainerName(function.getName().getFullName()),
         new Top(null, null, null, null, null, null, null),
         new Right(null, null, null, null, null, null, null),
         new Bottom(null, null, null, null, null, null, null),

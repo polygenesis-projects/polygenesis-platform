@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,11 +23,6 @@ package io.polygenesis.generators.java.apidetail.converter.activity;
 import io.polygenesis.representations.code.ParameterRepresentation;
 import java.util.Set;
 
-/**
- * The type To collection record activity template data.
- *
- * @author Christos Tsakostas
- */
 public class ToCollectionRecordActivityTemplateData extends AbstractConverterActivityTemplateData {
 
   // ===============================================================================================

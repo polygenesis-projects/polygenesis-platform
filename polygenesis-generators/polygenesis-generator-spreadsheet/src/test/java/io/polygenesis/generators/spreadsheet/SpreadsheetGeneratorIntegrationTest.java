@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,11 +37,6 @@ import java.util.Set;
 import java.util.stream.IntStream;
 import org.junit.Test;
 
-/**
- * The type Spreadsheet generator integration test.
- *
- * @author Christos Tsakostas
- */
 public class SpreadsheetGeneratorIntegrationTest {
 
   /** Should generate spreadsheet. */

@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,11 +38,6 @@ import io.polygenesis.generators.flutter.context.ui.widget.WidgetTransformer;
 import io.polygenesis.transformers.dart.DartDataTypeTransformer;
 import java.nio.file.Path;
 
-/**
- * The type Ui metamodel generator factory.
- *
- * @author Christos Tsakostas
- */
 public class UiMetamodelGeneratorFactory {
 
   // ===============================================================================================

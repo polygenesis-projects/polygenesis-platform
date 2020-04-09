@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,11 +28,6 @@ import io.polygenesis.representations.code.ParameterRepresentation;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-/**
- * The type Parameter representations service.
- *
- * @author Christos Tsakostas
- */
 public class ParameterRepresentationsService {
 
   // ===============================================================================================
@@ -71,8 +66,7 @@ public class ParameterRepresentationsService {
     Set<ParameterRepresentation> parameterRepresentations = new LinkedHashSet<>();
 
     // 1. Start by adding IDs
-    thisClassProperties
-        .stream()
+    thisClassProperties.stream()
         .filter(
             property ->
                 property.getPropertyType().equals(PropertyType.ABSTRACT_AGGREGATE_ROOT_ID)
@@ -93,8 +87,7 @@ public class ParameterRepresentationsService {
             });
 
     // 2. Continue with superClass properties
-    superClassProperties
-        .stream()
+    superClassProperties.stream()
         .filter(
             property ->
                 !property.getPropertyType().equals(PropertyType.ABSTRACT_AGGREGATE_ROOT_ID)
@@ -111,8 +104,7 @@ public class ParameterRepresentationsService {
             });
 
     // 3. Finish with this class properties
-    thisClassProperties
-        .stream()
+    thisClassProperties.stream()
         .filter(
             property ->
                 !property.getPropertyType().equals(PropertyType.ABSTRACT_AGGREGATE_ROOT_ID)
@@ -141,8 +133,7 @@ public class ParameterRepresentationsService {
       Set<DomainObjectProperty<?>> thisClassProperties) {
     Set<ParameterRepresentation> parameterRepresentations = new LinkedHashSet<>();
 
-    thisClassProperties
-        .stream()
+    thisClassProperties.stream()
         .filter(
             property ->
                 !property.getPropertyType().equals(PropertyType.ABSTRACT_AGGREGATE_ROOT_ID)
@@ -176,8 +167,7 @@ public class ParameterRepresentationsService {
     Set<ParameterRepresentation> parameterRepresentations = new LinkedHashSet<>();
 
     // 1. Start with AggregateEntityId
-    thisClassProperties
-        .stream()
+    thisClassProperties.stream()
         .filter(property -> property.getPropertyType().equals(PropertyType.AGGREGATE_ENTITY_ID))
         .forEach(
             property -> {

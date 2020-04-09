@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,19 +42,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/**
- * {@link Thing} is defined as a concept or an entity on or for which a {@link Purpose} is defined.
- * Most commonly, the names of the domain business concepts will be defined as things, being
- * concrete entities or more abstract concepts.
- *
- * <p>Therefore, a {@link Thing} can be anything that makes sense to code generation.
- *
- * <p>Example of concrete business concepts: Customer, User, LoginContext etc.
- *
- * <p>Example of more abstract concepts: Sum calculation etc.
- *
- * @author Christos Tsakostas
- */
 public class Thing implements Abstraction {
 
   // ===============================================================================================
@@ -220,7 +207,7 @@ public class Thing implements Abstraction {
    * @return the as data object
    */
   public DataObject getAsDataObject(PackageName rootPackageName) {
-    return new DataObject(
+    return DataObject.asDataObject(
         new ObjectName(TextConverter.toUpperCamel(getThingName().getText())),
         makePackageName(rootPackageName, this));
   }
@@ -342,8 +329,7 @@ public class Thing implements Abstraction {
    * @return the boolean
    */
   public Boolean supportsAbstractionScope(AbstractionScope abstractionScope) {
-    return getAbstractionsScopes()
-        .stream()
+    return getAbstractionsScopes().stream()
         .anyMatch(abstractionScope1 -> abstractionScope1.equals(abstractionScope));
   }
 
@@ -363,9 +349,8 @@ public class Thing implements Abstraction {
    * @return the function by name
    */
   public Function getFunctionByName(String functionName) {
-    return getFunctions()
-        .stream()
-        .filter(function -> function.getName().getText().equals(functionName))
+    return getFunctions().stream()
+        .filter(function -> function.getName().getFullName().equals(functionName))
         .findFirst()
         .orElseThrow(IllegalArgumentException::new);
   }
@@ -388,8 +373,7 @@ public class Thing implements Abstraction {
   public Object getMetadataValue(Object key) {
     Assertion.isNotNull(key, "key is required");
 
-    return metadata
-        .stream()
+    return metadata.stream()
         .filter(keyValue -> keyValue.getKey().equals(key))
         .map(keyValue -> keyValue.getValue())
         .findFirst()
@@ -408,8 +392,7 @@ public class Thing implements Abstraction {
   public Object getMetadataValueIfExists(Object key) {
     Assertion.isNotNull(key, "key is required");
 
-    return metadata
-        .stream()
+    return metadata.stream()
         .filter(keyValue -> keyValue.getKey().equals(key))
         .map(keyValue -> keyValue.getValue())
         .findFirst()
@@ -422,9 +405,7 @@ public class Thing implements Abstraction {
    * @return the thing identity
    */
   public Data getThingIdentity() {
-    return getThingProperties()
-        .getData()
-        .stream()
+    return getThingProperties().getData().stream()
         .filter(data -> data.isThingIdentity())
         .findFirst()
         .orElseThrow(
@@ -634,12 +615,12 @@ public class Thing implements Abstraction {
                   new Function(
                       this,
                       childToParentPurposeMap.get(childFunction.getPurpose()),
-                      new FunctionName(
+                      FunctionName.ofVerbOnly(
                           String.format(
                               "%s%s",
                               TextConverter.toUpperCamel(
                                   childFunction.getThing().getThingName().getText()),
-                              TextConverter.toUpperCamel(childFunction.getName().getText()))),
+                              TextConverter.toUpperCamel(childFunction.getName().getFullName()))),
                       childFunction.getReturnValue(),
                       childFunction.getArguments(),
                       childFunction.getActivity(),

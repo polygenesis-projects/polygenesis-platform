@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,6 @@ import io.polygenesis.commons.test.AbstractEqualityTest;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 
-/** @author Christos Tsakostas */
 public class ServiceMethodTest extends AbstractEqualityTest<ServiceMethod> {
 
   private Thing relatedThing = mock(Thing.class);
@@ -55,7 +54,7 @@ public class ServiceMethodTest extends AbstractEqualityTest<ServiceMethod> {
     Thing thing = ThingBuilder.endToEnd("customer").createThing(PackageName.any());
     return new ServiceMethod(
         mock(Service.class),
-        FunctionBuilder.of(thing, "create", Purpose.create()).build(),
+        FunctionBuilder.of(thing, "create", "", Purpose.create()).build(),
         requestDto,
         responseDto);
   }
@@ -80,7 +79,7 @@ public class ServiceMethodTest extends AbstractEqualityTest<ServiceMethod> {
 
     return new ServiceMethod(
         mock(Service.class),
-        FunctionBuilder.of(thing, "create", Purpose.create()).build(),
+        FunctionBuilder.of(thing, "create", "", Purpose.create()).build(),
         requestDto,
         responseDto);
   }

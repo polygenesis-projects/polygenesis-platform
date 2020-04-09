@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,11 +32,6 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
-/**
- * The type Batch process query method transformer.
- *
- * @author Christos Tsakostas
- */
 public class BatchProcessQueryMethodTransformer extends AbstractMethodTransformer<ServiceMethod> {
 
   // ===============================================================================================
@@ -65,6 +60,7 @@ public class BatchProcessQueryMethodTransformer extends AbstractMethodTransforme
     Set<String> imports = new TreeSet<>();
 
     imports.add("com.oregor.trinity4j.api.ApiPagedCollectionResponse");
+    imports.add("com.oregor.trinity4j.api.clients.batchprocess.BatchProcessMessage");
 
     return imports;
   }
@@ -94,9 +90,8 @@ public class BatchProcessQueryMethodTransformer extends AbstractMethodTransforme
       ServiceMethod source, Object... args) {
     Set<ParameterRepresentation> parameterRepresentations = new LinkedHashSet<>();
 
-    parameterRepresentations.add(new ParameterRepresentation("Integer", "pageNumber"));
-
-    parameterRepresentations.add(new ParameterRepresentation("Integer", "pageSize"));
+    parameterRepresentations.add(
+        new ParameterRepresentation("BatchProcessMessage", "batchProcessMessage"));
 
     return parameterRepresentations;
   }

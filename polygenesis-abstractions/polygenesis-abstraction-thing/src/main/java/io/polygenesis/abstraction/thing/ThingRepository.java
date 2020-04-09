@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,13 +29,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/**
- * In-memory repository for Things.
- *
- * <p>It also offers convenience query methods.
- *
- * @author Christos Tsakostas
- */
 public class ThingRepository implements AbstractionRepository<Thing> {
 
   private Set<Thing> things;
@@ -77,8 +70,7 @@ public class ThingRepository implements AbstractionRepository<Thing> {
 
   @Override
   public Set<Thing> getAbstractionItemsByScope(AbstractionScope abstractionScope) {
-    return things
-        .stream()
+    return things.stream()
         .filter(thing -> thing.getAbstractionsScopes().contains(abstractionScope))
         .collect(Collectors.toSet());
   }

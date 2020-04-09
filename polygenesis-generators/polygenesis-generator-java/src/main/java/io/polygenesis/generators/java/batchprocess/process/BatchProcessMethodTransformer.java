@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,16 +20,21 @@
 
 package io.polygenesis.generators.java.batchprocess.process;
 
-import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.core.DataTypeTransformer;
+import io.polygenesis.generators.java.batchprocess.process.activity.BatchProcessActivityRegistry;
+import io.polygenesis.models.periodicprocess.BatchProcessMethod;
 import io.polygenesis.transformers.java.AbstractMethodTransformer;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
-/**
- * The type Batch process method transformer.
- *
- * @author Christos Tsakostas
- */
-public class BatchProcessMethodTransformer extends AbstractMethodTransformer<Function> {
+public class BatchProcessMethodTransformer extends AbstractMethodTransformer<BatchProcessMethod> {
+
+  // ===============================================================================================
+  // STATE / DEPENDENCIES
+  // ===============================================================================================
+
+  private final BatchProcessActivityRegistry batchProcessActivityRegistry;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -39,13 +44,35 @@ public class BatchProcessMethodTransformer extends AbstractMethodTransformer<Fun
    * Instantiates a new Batch process method transformer.
    *
    * @param dataTypeTransformer the data type transformer
+   * @param batchProcessActivityRegistry the batch process activity registry
    */
-  public BatchProcessMethodTransformer(DataTypeTransformer dataTypeTransformer) {
+  public BatchProcessMethodTransformer(
+      DataTypeTransformer dataTypeTransformer,
+      BatchProcessActivityRegistry batchProcessActivityRegistry) {
     super(dataTypeTransformer);
+    this.batchProcessActivityRegistry = batchProcessActivityRegistry;
   }
 
   // ===============================================================================================
   // OVERRIDES
   // ===============================================================================================
 
+  @Override
+  public Set<String> annotations(BatchProcessMethod source, Object... args) {
+    return new LinkedHashSet<>(Arrays.asList("@Override"));
+  }
+
+  @Override
+  public String description(BatchProcessMethod source, Object... args) {
+    return "";
+  }
+
+  @Override
+  public String implementation(BatchProcessMethod source, Object... args) {
+    if (batchProcessActivityRegistry.isActivitySupportedFor(source)) {
+      return batchProcessActivityRegistry.activityFor(source, args);
+    } else {
+      return super.implementation(source, args);
+    }
+  }
 }

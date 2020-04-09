@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,11 +32,6 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * The type Fetch one aggregate root transformer.
- *
- * @author Christos Tsakostas
- */
 public class FetchOneAggregateRootTransformer extends AbstractServiceMethodImplementationTransformer
     implements ActivityTemplateTransformer<ServiceMethodImplementation> {
 
@@ -82,7 +77,7 @@ public class FetchOneAggregateRootTransformer extends AbstractServiceMethodImple
             getReturnValue(source),
             getAggregateRootIdDataType(source),
             getThingIdentity(source),
-            source.getFunction().getName().getText());
+            source.getFunction().getName().getFullName());
 
     @SuppressWarnings("CPD-END")
     Map<String, Object> dataModel = new HashMap<>();

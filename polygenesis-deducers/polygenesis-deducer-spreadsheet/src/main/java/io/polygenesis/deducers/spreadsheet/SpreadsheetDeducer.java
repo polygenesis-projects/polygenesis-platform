@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,11 +27,6 @@ import io.polygenesis.deducers.spreadsheet.strategydefault.DefaultSpreadsheetDed
 import io.polygenesis.metamodels.spreadsheet.SpreadsheetMetamodelRepository;
 import java.util.Set;
 
-/**
- * The type Spreadsheet deducer.
- *
- * @author Christos Tsakostas
- */
 public class SpreadsheetDeducer implements Deducer<SpreadsheetMetamodelRepository> {
 
   // ===============================================================================================

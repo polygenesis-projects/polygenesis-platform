@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,13 +42,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/**
- * The type Abstract class representable.
- *
- * @param <S> the type parameter
- * @param <F> the type parameter
- * @author Christos Tsakostas
- */
 public abstract class AbstractClassTransformer<S extends Nameable, F extends FunctionProvider>
     extends AbstractTransformer implements ClassTransformer<S> {
 
@@ -307,8 +300,7 @@ public abstract class AbstractClassTransformer<S extends Nameable, F extends Fun
       return methodRepresentations;
     }
 
-    fieldRepresentations
-        .stream()
+    fieldRepresentations.stream()
         .limit(fieldRepresentations.size() - 1L)
         .forEach(
             fieldRepresentation -> {
@@ -319,8 +311,7 @@ public abstract class AbstractClassTransformer<S extends Nameable, F extends Fun
             });
 
     FieldRepresentation fieldRepresentationLast =
-        fieldRepresentations
-            .stream()
+        fieldRepresentations.stream()
             .skip(fieldRepresentations.size() - 1L)
             .findFirst()
             .orElseThrow(IllegalArgumentException::new);
@@ -509,8 +500,7 @@ public abstract class AbstractClassTransformer<S extends Nameable, F extends Fun
    */
   protected Set<ParameterRepresentation> convertFieldRepresentationsToParameterRepresentations(
       Set<FieldRepresentation> fieldRepresentations) {
-    return fieldRepresentations
-        .stream()
+    return fieldRepresentations.stream()
         .map(
             fieldRepresentation ->
                 new ParameterRepresentation(
@@ -540,8 +530,7 @@ public abstract class AbstractClassTransformer<S extends Nameable, F extends Fun
                 TextConverter.toLowerCamel(parameterRepresentation.getVariableName()));
 
             Optional<ParameterRepresentation> optionalTenantIdentity =
-                parameterRepresentations
-                    .stream()
+                parameterRepresentations.stream()
                     .filter(
                         parameterRepresentation1 ->
                             parameterRepresentation1
@@ -607,8 +596,7 @@ public abstract class AbstractClassTransformer<S extends Nameable, F extends Fun
       }
     }
 
-    parameterRepresentations
-        .stream()
+    parameterRepresentations.stream()
         .filter(
             parameterRepresentation ->
                 !parameterRepresentation.getDataPurpose().equals(DataPurpose.superclassParameter()))
@@ -645,8 +633,7 @@ public abstract class AbstractClassTransformer<S extends Nameable, F extends Fun
    */
   @SuppressWarnings("CPD-END")
   private String callSuperWithParameters(Set<ParameterRepresentation> parameterRepresentations) {
-    return parameterRepresentations
-        .stream()
+    return parameterRepresentations.stream()
         .filter(
             parameterRepresentation ->
                 parameterRepresentation.getDataPurpose().equals(DataPurpose.superclassParameter()))

@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,11 +30,6 @@ import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.commons.valueobjects.VariableName;
 
-/**
- * Convenient class defining a Thing and its Functions for testing in other modules.
- *
- * @author Christos Tsakostas
- */
 public class ThingForTesting {
 
   public static final String BUSINESS = "business";
@@ -98,7 +93,7 @@ public class ThingForTesting {
 
     // ---------------------------------------------------------------------------------------------
 
-    return FunctionBuilder.of(business, "create", Purpose.create())
+    return FunctionBuilder.of(business, "create", "", Purpose.create())
         .setReturnValue(returnValueDataObject)
         .addArgument(argumentDataObject)
         .build();
@@ -135,7 +130,7 @@ public class ThingForTesting {
     returnValueDataObject.addData(DataPrimitive.of(PrimitiveType.STRING, new VariableName(NAME)));
 
     // ---------------------------------------------------------------------------------------------
-    return FunctionBuilder.of(business, "fetchOne", Purpose.fetchOne())
+    return FunctionBuilder.of(business, "fetchOne", "", Purpose.fetchOne())
         .setReturnValue(returnValueDataObject)
         .addArgument(argumentDataObject)
         .build();
@@ -173,7 +168,7 @@ public class ThingForTesting {
     returnValueDataObject.addData(DataPrimitive.of(PrimitiveType.STRING, new VariableName(NAME)));
 
     // ---------------------------------------------------------------------------------------------
-    return FunctionBuilder.of(business, "fetchCollection", Purpose.fetchCollection())
+    return FunctionBuilder.of(business, "fetchCollection", "", Purpose.fetchCollection())
         .setReturnValue(returnValueDataObject)
         .addArgument(argumentDataObject)
         .build();
@@ -209,7 +204,7 @@ public class ThingForTesting {
     // ---------------------------------------------------------------------------------------------
 
     return FunctionBuilder.of(
-            business, "functionWithNoReturnValueAndManyArguments", Purpose.create())
+            business, "functionWithNoReturnValueAndManyArguments", "", Purpose.create())
         .addArgument(argumentDataObject1)
         .addArgument(argumentDataObject2)
         .build();
@@ -234,7 +229,7 @@ public class ThingForTesting {
 
     // ---------------------------------------------------------------------------------------------
 
-    return FunctionBuilder.of(business, "functionWithNoArguments", Purpose.create())
+    return FunctionBuilder.of(business, "functionWithNoArguments", "", Purpose.create())
         .setReturnValue(returnValueDataObject)
         .build();
   }
@@ -251,7 +246,7 @@ public class ThingForTesting {
 
     // ---------------------------------------------------------------------------------------------
 
-    return FunctionBuilder.of(business, "functionWithPrimitives", Purpose.create())
+    return FunctionBuilder.of(business, "functionWithPrimitives", "", Purpose.create())
         .setReturnValue(dataPrimitive)
         .addArgument(dataPrimitive)
         .build();

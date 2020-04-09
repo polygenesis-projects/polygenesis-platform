@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,11 +39,6 @@ import io.polygenesis.models.periodicprocess.BatchProcessMetamodelRepository;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-/**
- * The type Batch process deducer.
- *
- * @author Christos Tsakostas
- */
 public class BatchProcessDeducer implements Deducer<BatchProcessMetamodelRepository> {
 
   // ===============================================================================================
@@ -137,10 +132,7 @@ public class BatchProcessDeducer implements Deducer<BatchProcessMetamodelReposit
    * @return the query collection item
    */
   private Dto getQueryCollectionItem(ServiceMethod queryServiceMethod) {
-    return queryServiceMethod
-        .getService()
-        .getDtos()
-        .stream()
+    return queryServiceMethod.getService().getDtos().stream()
         .filter(
             dto ->
                 dto.getDtoType().equals(DtoType.COLLECTION_RECORD)

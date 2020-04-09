@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,11 +28,6 @@ import io.polygenesis.models.domain.DomainObjectProperty;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-/**
- * The type Constructors deducer.
- *
- * @author Christos Tsakostas
- */
 public class ConstructorsDeducer {
 
   // ===============================================================================================
@@ -74,9 +69,7 @@ public class ConstructorsDeducer {
       Thing thing) {
     Set<Constructor> constructors = new LinkedHashSet<>();
 
-    thing
-        .getFunctions()
-        .stream()
+    thing.getFunctions().stream()
         .filter(
             function ->
                 function.getPurpose().isCreate() || function.getPurpose().isEnsureExistence())
@@ -90,9 +83,7 @@ public class ConstructorsDeducer {
 
               // Inherit properties from superclass
               if (superClass != null && !superClass.getConstructors().isEmpty()) {
-                superClass
-                    .getConstructors()
-                    .stream()
+                superClass.getConstructors().stream()
                     .forEach(
                         superClassConstructor -> {
                           // Super class Properties

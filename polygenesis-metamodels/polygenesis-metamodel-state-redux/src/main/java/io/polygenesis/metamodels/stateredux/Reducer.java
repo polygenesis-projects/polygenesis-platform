@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,12 +22,6 @@ package io.polygenesis.metamodels.stateredux;
 
 import io.polygenesis.commons.assertion.Assertion;
 
-/**
- * A Reducer is a function called when an {@link Action} is requested and its role is to alter the
- * State of the {@link Store}, if necessary.
- *
- * @author Christos Tsakostas
- */
 public class Reducer {
 
   private Action action;

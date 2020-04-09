@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,12 +36,6 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
-/**
- * The type Abstract typescript method transformer.
- *
- * @param <S> the type parameter
- * @author Christos Tsakostas
- */
 public abstract class AbstractTypescriptMethodTransformer<S extends FunctionProvider>
     extends AbstractTypescriptTransformer implements MethodTransformer<S> {
 
@@ -107,11 +101,7 @@ public abstract class AbstractTypescriptMethodTransformer<S extends FunctionProv
       //            }
     }
 
-    source
-        .getFunction()
-        .getArguments()
-        .getData()
-        .stream()
+    source.getFunction().getArguments().getData().stream()
         .filter(argument -> argument.isDataGroup())
         .map(DataObject.class::cast)
         .forEach(
@@ -136,7 +126,7 @@ public abstract class AbstractTypescriptMethodTransformer<S extends FunctionProv
     StringBuilder stringBuilder = new StringBuilder();
 
     stringBuilder.append(
-        TextConverter.toUpperCamelSpaces(source.getFunction().getName().getText()));
+        TextConverter.toUpperCamelSpaces(source.getFunction().getName().getFullName()));
     stringBuilder.append(".");
 
     return stringBuilder.toString();
@@ -149,7 +139,7 @@ public abstract class AbstractTypescriptMethodTransformer<S extends FunctionProv
 
   @Override
   public String methodName(S source, Object... args) {
-    return source.getFunction().getName().getText();
+    return source.getFunction().getName().getFullName();
   }
 
   @Override
@@ -224,8 +214,7 @@ public abstract class AbstractTypescriptMethodTransformer<S extends FunctionProv
   @SuppressWarnings("CPD-END")
   protected String getParametersCommaSeparated(
       Set<ParameterRepresentation> parameterRepresentations) {
-    return parameterRepresentations
-        .stream()
+    return parameterRepresentations.stream()
         .map(ParameterRepresentation::getVariableName)
         .collect(Collectors.joining(", "));
   }

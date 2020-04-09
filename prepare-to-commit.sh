@@ -20,7 +20,7 @@ set -e
 
 ./mvnw license:update-file-header
 
-./mvnw fmt:format
+./mvnw com.coveo:fmt-maven-plugin:format
 
 ./mvnw clean install -P validate-license,validate-code-format,validate-code-style,validate-code-bugs,validate-code,docs \
  -DskipTests=true -Dmaven.javadoc.skip=true -B -V

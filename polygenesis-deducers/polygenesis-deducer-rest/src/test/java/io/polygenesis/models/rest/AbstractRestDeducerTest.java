@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,11 +28,6 @@ import io.polygenesis.abstraction.thing.dsl.FunctionBuilder;
 import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
 import io.polygenesis.commons.valueobjects.PackageName;
 
-/**
- * The type Mapping deducer test.
- *
- * @author Christos Tsakostas
- */
 public abstract class AbstractRestDeducerTest {
 
   /**
@@ -43,7 +38,7 @@ public abstract class AbstractRestDeducerTest {
   protected Function makeFunctionCreate() {
     Thing thing = ThingBuilder.endToEnd("customer").createThing(PackageName.any());
 
-    return FunctionBuilder.of(thing, "create", Purpose.create()).build();
+    return FunctionBuilder.of(thing, "create", "", Purpose.create()).build();
   }
 
   /**
@@ -54,7 +49,7 @@ public abstract class AbstractRestDeducerTest {
   protected Function makeFunctionModify() {
     Thing thing = ThingBuilder.endToEnd("customer").createThing(PackageName.any());
 
-    return FunctionBuilder.of(thing, "modify", Purpose.modify()).build();
+    return FunctionBuilder.of(thing, "modify", "", Purpose.modify()).build();
   }
 
   /**
@@ -65,7 +60,7 @@ public abstract class AbstractRestDeducerTest {
   protected Function makeFunctionDelete() {
     Thing thing = ThingBuilder.endToEnd("customer").createThing(PackageName.any());
 
-    return FunctionBuilder.of(thing, "delete", Purpose.delete()).build();
+    return FunctionBuilder.of(thing, "delete", "", Purpose.delete()).build();
   }
 
   /**
@@ -76,7 +71,7 @@ public abstract class AbstractRestDeducerTest {
   protected Function makeFunctionFetchOne() {
     Thing thing = ThingBuilder.endToEnd("customer").createThing(PackageName.any());
 
-    return FunctionBuilder.of(thing, "fetchOne", Purpose.fetchOne()).build();
+    return FunctionBuilder.of(thing, "fetchOne", "", Purpose.fetchOne()).build();
   }
 
   /**
@@ -87,7 +82,7 @@ public abstract class AbstractRestDeducerTest {
   protected Function makeFunctionFetchCollection() {
     Thing thing = ThingBuilder.endToEnd("customer").createThing(PackageName.any());
 
-    return FunctionBuilder.of(thing, "fetchCollection", Purpose.fetchCollection()).build();
+    return FunctionBuilder.of(thing, "fetchCollection", "", Purpose.fetchCollection()).build();
   }
 
   /**
@@ -98,7 +93,7 @@ public abstract class AbstractRestDeducerTest {
   protected Function makeFunctionFetchPagedCollection() {
     Thing thing = ThingBuilder.endToEnd("customer").createThing(PackageName.any());
 
-    return FunctionBuilder.of(thing, "fetchPagedCollection", Purpose.fetchPagedCollection())
+    return FunctionBuilder.of(thing, "fetchPagedCollection", "", Purpose.fetchPagedCollection())
         .build();
   }
 
@@ -110,7 +105,7 @@ public abstract class AbstractRestDeducerTest {
   protected Function makeInvalidGetFunction() {
     Thing thing = ThingBuilder.endToEnd("customer").createThing(PackageName.any());
 
-    return FunctionBuilder.of(thing, "validate", Purpose.custom("validate", CqsType.COMMAND))
+    return FunctionBuilder.of(thing, "validate", "", Purpose.custom("validate", CqsType.COMMAND))
         .build();
   }
 }

@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,6 @@ import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.commons.valueobjects.VariableName;
 
-/** @author Christos Tsakostas */
 public class ConfirmationDomainService {
 
   /**
@@ -46,13 +45,16 @@ public class ConfirmationDomainService {
 
     confirmationDomainService.addFunction(
         FunctionBuilder.of(
-                confirmationDomainService, "generateRandomConfirmationCode", Purpose.generate())
+                confirmationDomainService, "generateRandomConfirmationCode", "", Purpose.generate())
             .setReturnValue(Shared.confirmationCode(rootPackageName))
             .build());
 
     confirmationDomainService.addFunction(
         FunctionBuilder.of(
-                confirmationDomainService, "getConfirmationCodeExpiration", Purpose.checkBoolean())
+                confirmationDomainService,
+                "getConfirmationCodeExpiration",
+                "",
+                Purpose.checkBoolean())
             .addArgument(DataPrimitive.of(PrimitiveType.DATETIME, new VariableName("now")))
             .setReturnValue(Shared.expiresOn(rootPackageName))
             .build());

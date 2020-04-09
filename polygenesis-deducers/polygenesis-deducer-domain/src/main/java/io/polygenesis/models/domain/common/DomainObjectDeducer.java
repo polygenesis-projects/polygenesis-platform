@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,12 +37,6 @@ import io.polygenesis.models.domain.domainmessage.DomainEventConstructorDeducer;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-/**
- * The type Domain object deducer.
- *
- * @param <T> the type parameter
- * @author Christos Tsakostas
- */
 public abstract class DomainObjectDeducer<T extends DomainObject> {
 
   // ===============================================================================================
@@ -124,9 +118,7 @@ public abstract class DomainObjectDeducer<T extends DomainObject> {
     Set<DomainObject> concreteAndAbstractDomainObjects = new LinkedHashSet<>();
     concreteAndAbstractDomainObjects.addAll(allAbstractDomainObjects);
 
-    thingRepository
-        .getAbstractionItemsByScope(getDomainObjectAbstractionScope())
-        .stream()
+    thingRepository.getAbstractionItemsByScope(getDomainObjectAbstractionScope()).stream()
         .forEach(
             thing ->
                 makeDomainObject(
@@ -154,9 +146,7 @@ public abstract class DomainObjectDeducer<T extends DomainObject> {
 
     // Get Top-Level abstract superclasses first
     Set<DomainObject> topLevelDomainObjects = new LinkedHashSet<>();
-    thingRepository
-        .getAbstractionItemsByScope(getAbstractDomainObjectAbstractionScope())
-        .stream()
+    thingRepository.getAbstractionItemsByScope(getAbstractDomainObjectAbstractionScope()).stream()
         .filter(Thing::doesNotExtendThing)
         .forEach(
             thing ->
@@ -165,9 +155,7 @@ public abstract class DomainObjectDeducer<T extends DomainObject> {
 
     // Get Abstract Subclasses of Top-Level abstract superclasses
     Set<DomainObject> abstractDomainObjects = new LinkedHashSet<>();
-    thingRepository
-        .getAbstractionItemsByScope(getAbstractDomainObjectAbstractionScope())
-        .stream()
+    thingRepository.getAbstractionItemsByScope(getAbstractDomainObjectAbstractionScope()).stream()
         .filter(Thing::extendsThing)
         .forEach(
             thing ->
@@ -202,8 +190,7 @@ public abstract class DomainObjectDeducer<T extends DomainObject> {
 
     Thing thingSuperclass = Thing.class.cast(thing.getMetadataValue(ThingMetadataKey.SUPER_CLASS));
 
-    return abstractDomainObjects
-        .stream()
+    return abstractDomainObjects.stream()
         .filter(
             abstractDomainObject ->
                 abstractDomainObject

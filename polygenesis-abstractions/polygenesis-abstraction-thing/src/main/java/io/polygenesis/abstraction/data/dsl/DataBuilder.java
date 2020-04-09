@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ package io.polygenesis.abstraction.data.dsl;
 
 import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.DataArray;
+import io.polygenesis.abstraction.data.DataEnumeration;
 import io.polygenesis.abstraction.data.DataMap;
 import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.abstraction.data.DataPrimitive;
@@ -32,11 +33,6 @@ import io.polygenesis.commons.valueobjects.PackageName;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-/**
- * The type Data model builder.
- *
- * @author Christos Tsakostas
- */
 public class DataBuilder {
 
   private final Set<Data> models;
@@ -244,6 +240,17 @@ public class DataBuilder {
   }
 
   /**
+   * With enumeration data builder.
+   *
+   * @param dataEnumeration the data enum
+   * @return the data builder
+   */
+  public final DataBuilder withEnumeration(DataEnumeration dataEnumeration) {
+    this.models.add(dataEnumeration);
+    return this;
+  }
+
+  /**
    * With group data data builder.
    *
    * @param dataObject the data group
@@ -300,6 +307,34 @@ public class DataBuilder {
     this.models.add(
         DataReferenceToThingById.of(thing, variableName).getAsDataPrimitive(rootPackageName));
     return this;
+  }
+
+  /**
+   * With url property data url builder.
+   *
+   * @param propertyName the property name
+   * @return the data url builder
+   */
+  public final DataUrlBuilder withUrlProperty(String propertyName) {
+    DataUrlBuilder dataUrlBuilder = DataUrlBuilder.create(this, propertyName);
+
+    this.models.add(dataUrlBuilder.getModel());
+
+    return dataUrlBuilder;
+  }
+
+  /**
+   * With uri property data uri builder.
+   *
+   * @param propertyName the property name
+   * @return the data uri builder
+   */
+  public final DataUriBuilder withUriProperty(String propertyName) {
+    DataUriBuilder dataUriBuilder = DataUriBuilder.create(this, propertyName);
+
+    this.models.add(dataUriBuilder.getModel());
+
+    return dataUriBuilder;
   }
 
   // ===============================================================================================

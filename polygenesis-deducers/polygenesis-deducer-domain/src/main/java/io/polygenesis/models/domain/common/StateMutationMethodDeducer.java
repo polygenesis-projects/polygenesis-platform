@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,11 +31,6 @@ import io.polygenesis.models.domain.domainmessage.DomainEventMutationDeducer;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-/**
- * The type State mutation method deducer.
- *
- * @author Christos Tsakostas
- */
 public class StateMutationMethodDeducer {
 
   // ===============================================================================================
@@ -112,9 +107,7 @@ public class StateMutationMethodDeducer {
       PackageName thingPackageName) {
     Set<StateMutationMethod> stateMutationMethods = new LinkedHashSet<>();
 
-    thing
-        .getFunctions()
-        .stream()
+    thing.getFunctions().stream()
         .filter(
             function ->
                 function.supportsAbstractionScope(AbstractionScope.domainAggregateRoot())

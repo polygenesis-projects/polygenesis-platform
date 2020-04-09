@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,11 +50,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Set;
 
-/**
- * The type Java rdbms metamodel generator.
- *
- * @author Christos Tsakostas
- */
 public class JavaRdbmsMetamodelGenerator extends AbstractMetamodelGenerator {
 
   private final PackageName rootPackageName;
@@ -81,6 +76,31 @@ public class JavaRdbmsMetamodelGenerator extends AbstractMetamodelGenerator {
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
+  /**
+   * Instantiates a new Java rdbms metamodel generator.
+   *
+   * @param generationPath the generation path
+   * @param rootPackageName the root package name
+   * @param contextName the context name
+   * @param domainMessageDataConverterExporter the domain message data converter exporter
+   * @param rootRepositoryImplGenerator the root repository impl generator
+   * @param rootRepositoryImplTestGenerator the root repository impl test generator
+   * @param rootSpringDataRepositoryGenerator the root spring data repository generator
+   * @param rdbmsTestExporter the rdbms test exporter
+   * @param rdbmsTestConfigExporter the rdbms test config exporter
+   * @param applicationCiRdbmsYmlExporter the application ci rdbms yml exporter
+   * @param projectionRepositoryImplGenerator the projection repository impl generator
+   * @param projectionSpringDataRepositoryGenerator the projection spring data repository generator
+   * @param repositoryImplTestGenerator the repository impl test generator
+   * @param domainMessageDataRepositoryImplGenerator the domain message data repository impl
+   *     generator
+   * @param domainMessagePublishedDataRepositoryImplGenerator the domain message published data
+   *     repository impl generator
+   * @param springDomainMessageDataRepositoryGenerator the spring domain message data repository
+   *     generator
+   * @param springDomainMessagePublishedDataRepositoryGenerator the spring domain message published
+   *     data repository generator
+   */
   public JavaRdbmsMetamodelGenerator(
       Path generationPath,
       PackageName rootPackageName,

@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,11 +43,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-/**
- * The type Dto template data creator.
- *
- * @author Christos Tsakostas
- */
 public class DtoTransformer extends AbstractClassTransformer<Dto, DtoMethod> {
 
   private static final String INTEGER = "Integer";
@@ -238,56 +233,38 @@ public class DtoTransformer extends AbstractClassTransformer<Dto, DtoMethod> {
       imports.add("com.oregor.trinity4j.api.CollectionItemIdentifiable");
     }
 
-    source
-        .getDataObject()
-        .getModels()
-        .stream()
+    source.getDataObject().getModels().stream()
         .filter(Data::isDataPrimitive)
         .map(Data::getAsDataPrimitive)
         .filter(dataPrimitive -> dataPrimitive.getPrimitiveType().equals(PrimitiveType.DECIMAL))
         .findFirst()
         .ifPresent(model -> imports.add("java.math.BigDecimal"));
 
-    source
-        .getDataObject()
-        .getModels()
-        .stream()
+    source.getDataObject().getModels().stream()
         .filter(Data::isDataPrimitive)
         .map(Data::getAsDataPrimitive)
         .filter(dataPrimitive -> dataPrimitive.getPrimitiveType().equals(PrimitiveType.UUID))
         .findFirst()
         .ifPresent(model -> imports.add("java.util.UUID"));
 
-    source
-        .getDataObject()
-        .getModels()
-        .stream()
+    source.getDataObject().getModels().stream()
         .filter(Data::isDataPrimitive)
         .map(Data::getAsDataPrimitive)
         .filter(dataPrimitive -> dataPrimitive.getPrimitiveType().equals(PrimitiveType.DATETIME))
         .findFirst()
         .ifPresent(model -> imports.add("java.time.LocalDateTime"));
 
-    source
-        .getDataObject()
-        .getModels()
-        .stream()
+    source.getDataObject().getModels().stream()
         .filter(Data::isDataArray)
         .findFirst()
         .ifPresent(model -> imports.add("java.util.List"));
 
-    source
-        .getDataObject()
-        .getModels()
-        .stream()
+    source.getDataObject().getModels().stream()
         .filter(Data::isDataMap)
         .findFirst()
         .ifPresent(model -> imports.add("java.util.Map"));
 
-    source
-        .getDataObject()
-        .getModels()
-        .stream()
+    source.getDataObject().getModels().stream()
         .filter(Data::isDataGroup)
         .map(DataObject.class::cast)
         .map(DataObject::asDto)

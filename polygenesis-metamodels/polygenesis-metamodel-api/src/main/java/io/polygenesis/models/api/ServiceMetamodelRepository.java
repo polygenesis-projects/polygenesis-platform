@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,11 +29,6 @@ import io.polygenesis.core.MetamodelRepository;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-/**
- * The type Service model repository.
- *
- * @author Christos Tsakostas
- */
 public class ServiceMetamodelRepository extends AbstractMetamodelRepository<Service>
     implements MetamodelRepository<Service> {
 
@@ -61,8 +56,7 @@ public class ServiceMetamodelRepository extends AbstractMetamodelRepository<Serv
    * @return the services by
    */
   public Set<Service> getServicesBy(ThingName thingName) {
-    return getItems()
-        .stream()
+    return getItems().stream()
         .filter(service -> service.getThingName().equals(thingName))
         .collect(toCollection(LinkedHashSet::new));
   }
@@ -74,8 +68,7 @@ public class ServiceMetamodelRepository extends AbstractMetamodelRepository<Serv
    * @return the service method by function
    */
   public ServiceMethod getServiceMethodByFunction(Function function) {
-    return getItems()
-        .stream()
+    return getItems().stream()
         .flatMap(service -> service.getServiceMethods().stream())
         .filter(serviceMethod -> serviceMethod.getFunction().equals(function))
         .findFirst()

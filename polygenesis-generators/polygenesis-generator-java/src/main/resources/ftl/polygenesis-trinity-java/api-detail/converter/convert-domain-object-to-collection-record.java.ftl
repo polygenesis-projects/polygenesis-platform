@@ -2,7 +2,7 @@
  ==========================LICENSE_START=================================
  PolyGenesis Platform
  ========================================================================
- Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  ========================================================================
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
+
 <#include "../../../polygenesis-implementation-java-shared/macro-assertions-for-parameters.ftl">
 <@assertionsForParameters data.parameterRepresentations></@assertionsForParameters>
 
@@ -28,7 +29,7 @@
       <#switch dataModel.dataPrimaryType>
         <#case 'PRIMITIVE'>
           <#if dataModel.dataObject??>
-        ${ data.from.data.variableName.text }.get${ textConverter.toUpperCamel(dataModel.variableName.text) }().getValue()<#sep>,</#sep>
+        ${ data.from.data.variableName.text }.get${ textConverter.toUpperCamel(dataModel.variableName.text) }().getTypeId().toString()<#sep>,</#sep>
           <#else>
         ${ data.from.data.variableName.text }.get${ textConverter.toUpperCamel(dataModel.variableName.text) }()<#sep>,</#sep>
           </#if>
@@ -44,7 +45,6 @@
       </#switch>
       </#if>
     </#list>
-<#--<#list data.from.properties as property>-->
   <#--<#switch property.propertyType>-->
     <#--<#case 'AGGREGATE_ROOT_ID'>-->
       <#--<#if multiTenant>-->

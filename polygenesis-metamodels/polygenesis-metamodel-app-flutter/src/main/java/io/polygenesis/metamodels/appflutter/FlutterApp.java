@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,11 +37,6 @@ import io.polygenesis.core.Generatable;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-/**
- * The type Flutter app.
- *
- * @author Christos Tsakostas
- */
 public class FlutterApp extends Thing implements Generatable {
 
   // ===============================================================================================
@@ -78,7 +73,7 @@ public class FlutterApp extends Thing implements Generatable {
 
   private static void addBuildFunction(FlutterApp flutterApp) {
     Function build =
-        FunctionBuilder.of(flutterApp, "build", Purpose.build())
+        FunctionBuilder.of(flutterApp, "build", "", Purpose.build())
             .setReturnValue(new DataObject(new ObjectName("Widget"), new PackageName("com.dummy")))
             .addArgument(
                 new DataObject(

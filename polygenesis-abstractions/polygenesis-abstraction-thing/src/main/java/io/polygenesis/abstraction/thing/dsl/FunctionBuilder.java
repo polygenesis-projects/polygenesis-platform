@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,11 +23,6 @@ package io.polygenesis.abstraction.thing.dsl;
 import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.Thing;
 
-/**
- * The type Function builder.
- *
- * @author Christos Tsakostas
- */
 public class FunctionBuilder extends AbstractFunctionBuilder<FunctionBuilder> {
 
   // ===============================================================================================
@@ -38,26 +33,20 @@ public class FunctionBuilder extends AbstractFunctionBuilder<FunctionBuilder> {
    * Of new function builder.
    *
    * @param thing the thing
-   * @param name the name
+   * @param verb the verb
+   * @param object the object
    * @param purpose the purpose
    * @return the new function builder
    */
-  public static FunctionBuilder of(Thing thing, String name, Purpose purpose) {
-    return new FunctionBuilder(thing, name, purpose);
+  public static FunctionBuilder of(Thing thing, String verb, String object, Purpose purpose) {
+    return new FunctionBuilder(thing, verb, object, purpose);
   }
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
-  /**
-   * Instantiates a new function builder.
-   *
-   * @param thing the thing
-   * @param name the name
-   * @param purpose the purpose
-   */
-  private FunctionBuilder(Thing thing, String name, Purpose purpose) {
-    super(FunctionBuilder.class, thing, name, purpose);
+  private FunctionBuilder(Thing thing, String verb, String object, Purpose purpose) {
+    super(FunctionBuilder.class, thing, verb, object, purpose);
   }
 }

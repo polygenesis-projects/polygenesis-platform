@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,11 +30,6 @@ import io.polygenesis.transformers.java.AbstractMethodTransformer;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-/**
- * The type Domain object converter method transformer.
- *
- * @author Christos Tsakostas
- */
 public class DomainObjectConverterMethodTransformer
     extends AbstractMethodTransformer<DomainObjectConverterMethod> {
 
@@ -85,7 +80,7 @@ public class DomainObjectConverterMethodTransformer
     StringBuilder stringBuilder = new StringBuilder();
 
     stringBuilder.append(
-        TextConverter.toUpperCamelSpaces(source.getFunction().getName().getText()));
+        TextConverter.toUpperCamelSpaces(source.getFunction().getName().getFullName()));
     stringBuilder.append(".");
 
     return stringBuilder.toString();
@@ -98,7 +93,7 @@ public class DomainObjectConverterMethodTransformer
 
   @Override
   public String methodName(DomainObjectConverterMethod source, Object... args) {
-    return source.getFunction().getName().getText();
+    return source.getFunction().getName().getFullName();
   }
 
   @Override

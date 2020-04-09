@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,14 +23,15 @@ package io.polygenesis.abstraction.thing;
 import java.io.Serializable;
 import java.util.Objects;
 
-/**
- * The type Purpose.
- *
- * @author Christos Tsakostas
- */
 public class Purpose implements Serializable {
 
   private static final long serialVersionUID = 1L;
+
+  // ===============================================================================================
+  // GENERIC PURPOSES
+  // ===============================================================================================
+  private static final String GENERIC_COMMAND = "GENERIC_COMMAND";
+  private static final String GENERIC_QUERY = "GENERIC_QUERY";
 
   // ===============================================================================================
   // DEFAULT COMMAND PURPOSES
@@ -118,6 +119,11 @@ public class Purpose implements Serializable {
       "INCOMING_DOMAIN_MESSAGE_GET_MESSAGE_BODY";
 
   // ===============================================================================================
+  // BATCH PROCESS
+  // ===============================================================================================
+  private static final String BATCH_PROCESS_SERVICE_NAME = "BATCH_PROCESS_SERVICE_NAME";
+
+  // ===============================================================================================
   // DOMAIN MESSAGE PUBLISHER
   // ===============================================================================================
   private static final String DOMAIN_MESSAGE_PUBLISHER_GET_CONTEXT =
@@ -134,6 +140,28 @@ public class Purpose implements Serializable {
 
   private String text;
   private CqsType cqsType;
+
+  // ===============================================================================================
+  // GENERIC PURPOSES
+  // ===============================================================================================
+
+  /**
+   * Generic command purpose.
+   *
+   * @return the purpose
+   */
+  public static Purpose genericCommand() {
+    return new Purpose(GENERIC_COMMAND, CqsType.COMMAND);
+  }
+
+  /**
+   * Generic query purpose.
+   *
+   * @return the purpose
+   */
+  public static Purpose genericQuery() {
+    return new Purpose(GENERIC_QUERY, CqsType.QUERY);
+  }
 
   // ===============================================================================================
   // STATIC
@@ -491,6 +519,19 @@ public class Purpose implements Serializable {
    */
   public static Purpose incomingDomainMessageGetMessageBody() {
     return new Purpose(INCOMING_DOMAIN_MESSAGE_GET_MESSAGE_BODY, CqsType.QUERY);
+  }
+
+  // ===============================================================================================
+  // BATCH PROCESS
+  // ===============================================================================================
+
+  /**
+   * Batch process service name purpose.
+   *
+   * @return the purpose
+   */
+  public static Purpose batchProcessServiceName() {
+    return new Purpose(BATCH_PROCESS_SERVICE_NAME, CqsType.QUERY);
   }
 
   // ===============================================================================================

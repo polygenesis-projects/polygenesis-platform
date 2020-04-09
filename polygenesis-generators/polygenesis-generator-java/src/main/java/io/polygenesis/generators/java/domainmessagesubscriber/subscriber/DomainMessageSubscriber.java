@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,11 +45,6 @@ import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-/**
- * The type Domain message subscriber.
- *
- * @author Christos Tsakostas
- */
 public class DomainMessageSubscriber extends SubscriberMetamodel implements Generatable {
 
   // ===============================================================================================
@@ -168,7 +163,7 @@ public class DomainMessageSubscriber extends SubscriberMetamodel implements Gene
     return new Function(
         thing,
         Purpose.domainMessageSubscriberProcess(),
-        new FunctionName("process"),
+        FunctionName.ofVerbOnly("process"),
         null,
         new DataRepository(
             new LinkedHashSet<>(
@@ -196,7 +191,7 @@ public class DomainMessageSubscriber extends SubscriberMetamodel implements Gene
     return new Function(
         thing,
         Purpose.domainMessageSubscriberSupportedTypes(),
-        new FunctionName("getSupportedMessageTypes"),
+        FunctionName.ofVerbOnly("getSupportedMessageTypes"),
         DataArray.of(DataPrimitive.of(PrimitiveType.STRING, VariableName.response())),
         new DataRepository(),
         Activity.keyValues(keyValues),

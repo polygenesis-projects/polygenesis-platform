@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,11 +39,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-/**
- * The type Value object transformer.
- *
- * @author Christos Tsakostas
- */
 public class ValueObjectTransformer extends AbstractClassTransformer<ValueObject, Function> {
 
   // ===============================================================================================
@@ -114,30 +109,21 @@ public class ValueObjectTransformer extends AbstractClassTransformer<ValueObject
     imports.add("javax.persistence.Embeddable");
     imports.add("java.io.Serializable");
 
-    source
-        .getData()
-        .getModels()
-        .stream()
+    source.getData().getModels().stream()
         .filter(Data::isDataPrimitive)
         .map(Data::getAsDataPrimitive)
         .filter(dataPrimitive -> dataPrimitive.getPrimitiveType().equals(PrimitiveType.DECIMAL))
         .findFirst()
         .ifPresent(model -> imports.add("java.math.BigDecimal"));
 
-    source
-        .getData()
-        .getModels()
-        .stream()
+    source.getData().getModels().stream()
         .filter(Data::isDataPrimitive)
         .map(Data::getAsDataPrimitive)
         .filter(dataPrimitive -> dataPrimitive.getPrimitiveType().equals(PrimitiveType.UUID))
         .findFirst()
         .ifPresent(model -> imports.add("java.util.UUID"));
 
-    source
-        .getData()
-        .getModels()
-        .stream()
+    source.getData().getModels().stream()
         .filter(Data::isDataPrimitive)
         .map(Data::getAsDataPrimitive)
         .filter(dataPrimitive -> dataPrimitive.getPrimitiveType().equals(PrimitiveType.DATETIME))

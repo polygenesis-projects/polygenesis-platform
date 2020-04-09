@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,12 +24,6 @@ import io.polygenesis.core.AbstractionScope;
 import java.util.Map;
 import java.util.Optional;
 
-/**
- * The type Abstract activity registry.
- *
- * @param <S> the type parameter
- * @author Christos Tsakostas
- */
 public abstract class AbstractActivityRegistry<S extends FunctionProvider>
     implements ActivityRegistry<S> {
 
@@ -67,7 +61,7 @@ public abstract class AbstractActivityRegistry<S extends FunctionProvider>
                         new UnsupportedOperationException(
                             String.format(
                                 "No activity found for method=%s",
-                                source.getFunction().getName().getText()))),
+                                source.getFunction().getName().getFullName()))),
             source)
         .generate(source, args);
   }
@@ -82,11 +76,7 @@ public abstract class AbstractActivityRegistry<S extends FunctionProvider>
   // ===============================================================================================
 
   private Optional<AbstractionScope> getAbstractionScopeAsOptional(S source) {
-    return source
-        .getFunction()
-        .getThing()
-        .getAbstractionsScopes()
-        .stream()
+    return source.getFunction().getThing().getAbstractionsScopes().stream()
         .filter(
             abstractionScope ->
                 scopeAndPurposeMap.containsKey(

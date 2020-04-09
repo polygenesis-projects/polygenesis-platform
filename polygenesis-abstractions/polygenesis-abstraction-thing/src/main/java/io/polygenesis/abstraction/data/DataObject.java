@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,11 +30,6 @@ import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 
-/**
- * The type Data object.
- *
- * @author Christos Tsakostas
- */
 public class DataObject extends AbstractData {
 
   // ===============================================================================================
@@ -44,6 +39,48 @@ public class DataObject extends AbstractData {
   private final ObjectName objectName;
   private final PackageName packageName;
   private final Set<Data> models;
+
+  // ===============================================================================================
+  // STATIC
+  // ===============================================================================================
+
+  /**
+   * As data object data object.
+   *
+   * @param objectName the object name
+   * @param packageName the package name
+   * @return the data object
+   */
+  public static DataObject asDataObject(ObjectName objectName, PackageName packageName) {
+    return new DataObject(
+        new VariableName(objectName.getText()),
+        DataPurpose.any(),
+        DataValidator.empty(),
+        objectName,
+        packageName,
+        new LinkedHashSet<>(),
+        DataSourceType.EXTERNALLY_PROVIDED);
+  }
+
+  /**
+   * As data object data object.
+   *
+   * @param objectName the object name
+   * @param variableName the variable name
+   * @param packageName the package name
+   * @return the data object
+   */
+  public static DataObject asDataObject(
+      ObjectName objectName, VariableName variableName, PackageName packageName) {
+    return new DataObject(
+        variableName,
+        DataPurpose.any(),
+        DataValidator.empty(),
+        objectName,
+        packageName,
+        new LinkedHashSet<>(),
+        DataSourceType.EXTERNALLY_PROVIDED);
+  }
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -93,6 +130,7 @@ public class DataObject extends AbstractData {
    * @param objectName the object name
    * @param packageName the package name
    * @param models the models
+   * @param dataSourceType the data source type
    */
   public DataObject(
       VariableName variableName,

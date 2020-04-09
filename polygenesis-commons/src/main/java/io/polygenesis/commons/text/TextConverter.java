@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,18 +27,6 @@ import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 import org.atteo.evo.inflector.English;
 
-/**
- * Text conversion methods, necessary for code generation.
- *
- * <p>All the methods, except #toLowerCamel, expect a lower camel input. If you are not sure if your
- * input is already in lower camel format, you can call the other methods as following:
- *
- * <pre>
- *   TextConverter.toUpperUnderscore(TextConverter.toLowerCamel(&quot;input&quot;));
- * </pre>
- *
- * @author Christos Tsakostas
- */
 public final class TextConverter {
 
   // ===============================================================================================
@@ -155,6 +143,9 @@ public final class TextConverter {
    * @return the string
    */
   public static String toPlural(String input) {
+    if (input.isEmpty()) {
+      return input;
+    }
     if (pluralBlacklist.contains(input.toLowerCase())) {
       return input;
     }
@@ -203,7 +194,9 @@ public final class TextConverter {
     enforced = allUpperCaseToLowerCase(enforced);
 
     // Lower first
-    enforced = enforced.substring(0, 1).toLowerCase() + enforced.substring(1);
+    if (!enforced.isEmpty()) {
+      enforced = enforced.substring(0, 1).toLowerCase() + enforced.substring(1);
+    }
 
     return enforced;
   }

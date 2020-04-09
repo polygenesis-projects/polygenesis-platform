@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,11 +28,6 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/**
- * The type Entity constructor activity template data.
- *
- * @author Christos Tsakostas
- */
 public class EntityConstructorActivityTemplateData {
 
   // ===============================================================================================
@@ -109,8 +104,7 @@ public class EntityConstructorActivityTemplateData {
   private void distinguishBetweenSuperAndThisClassParameters(
       Set<ParameterRepresentation> parameterRepresentations) {
     superClassParameterRepresentations =
-        parameterRepresentations
-            .stream()
+        parameterRepresentations.stream()
             .filter(
                 parameterRepresentation ->
                     parameterRepresentation.getDataPurpose().equals(DataPurpose.thingIdentity())
@@ -120,8 +114,7 @@ public class EntityConstructorActivityTemplateData {
             .collect(Collectors.toCollection(LinkedHashSet::new));
 
     this.thisClassParameterRepresentations =
-        parameterRepresentations
-            .stream()
+        parameterRepresentations.stream()
             .filter(
                 parameterRepresentation ->
                     !parameterRepresentation.getDataPurpose().equals(DataPurpose.thingIdentity())
@@ -135,9 +128,7 @@ public class EntityConstructorActivityTemplateData {
     domainEventParameterRepresentations = new LinkedHashSet<>();
 
     if (domainEvent != null) {
-      domainEvent
-          .getProperties()
-          .stream()
+      domainEvent.getProperties().stream()
           .filter(
               property ->
                   !property.getPropertyType().equals(PropertyType.AGGREGATE_ROOT_ID)

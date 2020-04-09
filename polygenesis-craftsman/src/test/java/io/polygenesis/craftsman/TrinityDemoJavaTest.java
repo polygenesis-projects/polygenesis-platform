@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,11 +44,6 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import org.junit.Test;
 
-/**
- * The type Trinity demo java scaffolder java test.
- *
- * @author Christos Tsakostas
- */
 public class TrinityDemoJavaTest {
 
   private static final String JAVA_EXPORT_PATH = "tmp";
@@ -84,6 +79,7 @@ public class TrinityDemoJavaTest {
 
   private ProjectDescription trinityDemoProjectDescription() {
     return new ProjectDescriptionBuilder()
+        .setProjectFolder(JAVA_PROJECT_FOLDER)
         .setContext("demo")
         .setGroupId(JAVA_ROOT_PACKAGE)
         .setArtifactId("trinity-demo-java")
@@ -93,7 +89,7 @@ public class TrinityDemoJavaTest {
         .setDescription("trinity-demo-java")
         .setUrl("https://www.oregor.com")
         .setInceptionYear("2019")
-        .setOrganizationName("Christos Tsakostas, OREGOR LTD")
+        .setOrganizationName("Christos Tsakostas, OREGOR LP")
         .setOrganizationUrl("https://www.oregor.com")
         .setLicenseName("The Apache License, Version 2.0")
         .setScmConnection("scm:git:git://github.com/oregor-projects/trinity-demo-java.git")
@@ -143,7 +139,7 @@ public class TrinityDemoJavaTest {
     Thing task =
         ThingBuilder.endToEnd("task")
             .setSuperClass(Trinity4jAggregateRoot.create(rootPackageName))
-            .createThing(PackageName.any());
+            .createThing(rootPackageName);
 
     task.addFunctions(
         PurposeFunctionBuilder.forThing(task, rootPackageName.getText())

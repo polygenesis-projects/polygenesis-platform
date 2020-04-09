@@ -2,7 +2,7 @@
  ==========================LICENSE_START=================================
  PolyGenesis Platform
  ========================================================================
- Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  ========================================================================
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -17,8 +17,9 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
+
 <#if data.ensureExistenceServiceMethod??>
-    ${ textConverter.toLowerCamel(data.ensureExistenceServiceMethod.service.serviceName.text) }.${ textConverter.toLowerCamel(data.ensureExistenceServiceMethod.function.name.text) }(new ${ textConverter.toUpperCamel(data.ensureExistenceServiceMethod.requestDto.dataObject.objectName.text) }(incomingDomainMessage.getRootId()));
+    ${ textConverter.toLowerCamel(data.ensureExistenceServiceMethod.service.serviceName.text) }.${ textConverter.toLowerCamel(data.ensureExistenceServiceMethod.function.name.fullName) }(new ${ textConverter.toUpperCamel(data.ensureExistenceServiceMethod.requestDto.dataObject.objectName.text) }(incomingDomainMessage.getRootId()));
 
 </#if>
 <#if data.commandServiceMethod??>
@@ -51,4 +52,4 @@
 </#list>
 <#if data.commandServiceMethod??>
 
-    ${ textConverter.toLowerCamel(data.commandServiceMethod.service.serviceName.text) }.${ textConverter.toLowerCamel(data.commandServiceMethod.function.name.text) }(request);</#if>
+    ${ textConverter.toLowerCamel(data.commandServiceMethod.service.serviceName.text) }.${ textConverter.toLowerCamel(data.commandServiceMethod.function.name.fullName) }(request);</#if>

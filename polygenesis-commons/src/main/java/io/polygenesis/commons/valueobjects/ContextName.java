@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,13 +22,6 @@ package io.polygenesis.commons.valueobjects;
 
 import io.polygenesis.commons.text.AbstractText;
 
-/**
- * Denotes the name of business context. A context can be any broad concept making sense to the
- * business. If you use microservices, you would like to use the name of the service i.e. account,
- * promotion, etc.
- *
- * @author Christos Tsakostas
- */
 public class ContextName extends AbstractText {
 
   private static final long serialVersionUID = 1L;

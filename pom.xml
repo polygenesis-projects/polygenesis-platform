@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <packaging>pom</packaging>
   <modules>
@@ -18,8 +20,8 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.1.1.RELEASE</version>
-    <relativePath /> <!-- lookup parent from repository -->
+    <version>2.3.3.RELEASE</version>
+    <relativePath/> <!-- lookup parent from repository -->
   </parent>
   <groupId>io.polygenesis</groupId>
   <artifactId>polygenesis-platform</artifactId>
@@ -32,7 +34,7 @@
   <inceptionYear>2015</inceptionYear>
 
   <organization>
-    <name>Christos Tsakostas, OREGOR LTD</name>
+    <name>Christos Tsakostas, OREGOR LP</name>
     <url>https://www.oregor.com</url>
   </organization>
 
@@ -47,7 +49,7 @@
     <developer>
       <name>Christos Tsakostas</name>
       <email>c.tsakostas@gmail.com</email>
-      <organization>OREGOR LTD</organization>
+      <organization>OREGOR LP</organization>
       <organizationUrl>https://www.oregor.com</organizationUrl>
     </developer>
   </developers>
@@ -77,7 +79,7 @@
     <java.version>11</java.version>
 
     <!--BUILD-->
-    <oregor-build-tools-java.version>0.0.3</oregor-build-tools-java.version>
+    <oregor-build-tools-java.version>0.0.5</oregor-build-tools-java.version>
     <maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
     <maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
     <nexus-staging-maven-plugin.version>1.6.7</nexus-staging-maven-plugin.version>
@@ -88,9 +90,9 @@
     <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
     <sonar-maven-plugin.version>3.5.0.1254</sonar-maven-plugin.version>
     <license-maven-plugin.version>1.14</license-maven-plugin.version>
-    <fmt-maven-plugin.version>2.6.0</fmt-maven-plugin.version>
-    <maven-checkstyle-plugin.version>3.1.0</maven-checkstyle-plugin.version>
-    <checkstyle.version>8.22</checkstyle.version>
+    <fmt-maven-plugin.version>2.10</fmt-maven-plugin.version>
+    <maven-checkstyle-plugin.version>3.1.1</maven-checkstyle-plugin.version>
+    <checkstyle.version>8.36</checkstyle.version>
     <findbugs-maven-plugin.version>3.0.0</findbugs-maven-plugin.version>
     <maven-pmd-plugin.version>3.11.0</maven-pmd-plugin.version>
     <maven-jxr-plugin.version>2.4</maven-jxr-plugin.version>
@@ -129,8 +131,11 @@
     <!--GOOGLE JAVA FORMAT-->
     <google-java-format.version>1.7</google-java-format.version>
 
+    <!--LOMBOK-->
+    <lombok.version>1.18.12</lombok.version>
+
     <!--TRINITY-->
-    <trinity-scaffolder-java.version>0.0.7</trinity-scaffolder-java.version>
+    <trinity-scaffolder-java.version>0.0.8-SNAPSHOT</trinity-scaffolder-java.version>
 
     <!--TEST-->
     <junit.version>4.12</junit.version>
@@ -198,6 +203,14 @@
         <groupId>com.google.googlejavaformat</groupId>
         <artifactId>google-java-format</artifactId>
         <version>${google-java-format.version}</version>
+      </dependency>
+
+      <!--LOMBOK-->
+      <dependency>
+        <groupId>org.projectlombok</groupId>
+        <artifactId>lombok</artifactId>
+        <version>${lombok.version}</version>
+        <scope>provided</scope>
       </dependency>
 
       <!--TRINITY-->
@@ -298,6 +311,11 @@
       <dependency>
         <groupId>io.polygenesis.metamodels</groupId>
         <artifactId>polygenesis-metamodel-messaging</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.polygenesis.metamodels</groupId>
+        <artifactId>polygenesis-metamodel-openapi</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
@@ -499,6 +517,7 @@
             <showWarnings>true</showWarnings>
             <compilerArgs>
               <arg>-Xlint:all</arg>
+              <arg>-Xlint:-processing</arg>
               <arg>-Werror</arg>
             </compilerArgs>
           </configuration>

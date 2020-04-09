@@ -2,7 +2,7 @@
  ==========================LICENSE_START=================================
  PolyGenesis Platform
  ========================================================================
- Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  ========================================================================
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
+
 <#macro fillArgumentValueObject property persistenceVariable requestDto multiTenant converterVariable>
 <#compress>
   <#if property.data.getAsDataObject().models?size == 1 >
@@ -25,6 +26,10 @@
       new ${ textConverter.toUpperCamel(property.data.objectName.text) }(${ requestDto.dataObject.variableName.text }.get${ textConverter.toUpperCamel(property.data.variableName.text) }())
     <#elseif property.data.getAsDataObject().models[0].primitiveType == 'UUID'>
       new ${ textConverter.toUpperCamel(property.data.objectName.text) }(UUID.fromString(${ requestDto.dataObject.variableName.text }.get${ textConverter.toUpperCamel(property.data.variableName.text) }()))
+    <#elseif property.data.getAsDataObject().models[0].primitiveType == 'URL'>
+      new ${ textConverter.toUpperCamel(property.data.objectName.text) }(new URL(${ requestDto.dataObject.variableName.text }.get${ textConverter.toUpperCamel(property.data.variableName.text) }()))
+    <#elseif property.data.getAsDataObject().models[0].primitiveType == 'URI'>
+      new ${ textConverter.toUpperCamel(property.data.objectName.text) }(new URI(${ requestDto.dataObject.variableName.text }.get${ textConverter.toUpperCamel(property.data.variableName.text) }()))
     <#else>
       null // TODO: ${property.data.getAsDataObject().models[0].primitiveType} is not supported yet
     </#if>

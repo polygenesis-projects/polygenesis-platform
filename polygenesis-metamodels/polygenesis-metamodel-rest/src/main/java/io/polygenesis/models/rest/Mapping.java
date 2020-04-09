@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,11 +23,6 @@ package io.polygenesis.models.rest;
 import java.util.Objects;
 import java.util.Set;
 
-/**
- * The type Mapping.
- *
- * @author Christos Tsakostas
- */
 public class Mapping {
 
   private Set<PathContent> pathContents;

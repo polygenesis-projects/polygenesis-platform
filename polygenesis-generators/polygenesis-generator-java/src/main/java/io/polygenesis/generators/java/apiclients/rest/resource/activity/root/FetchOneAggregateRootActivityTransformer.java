@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,11 +27,6 @@ import io.polygenesis.models.rest.Endpoint;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * The type Fetch one aggregate root activity transformer.
- *
- * @author Christos Tsakostas
- */
 public class FetchOneAggregateRootActivityTransformer extends ResourceActivityTransformer {
 
   // ===============================================================================================
@@ -61,8 +56,9 @@ public class FetchOneAggregateRootActivityTransformer extends ResourceActivityTr
         new FetchOneAggregateRootActivityTemplateData(
             resourceMethodParameterRepresentationService.parameterRepresentations(source, args),
             source.getService().getServiceName().getText(),
-            source.getServiceMethod().getFunction().getName().getText(),
+            source.getServiceMethod().getFunction().getName().getFullName(),
             source.getServiceMethod().getRequestDto(),
+            source.getServiceMethod().getResponseDto(),
             thingIdentity(source)));
 
     return new TemplateData(

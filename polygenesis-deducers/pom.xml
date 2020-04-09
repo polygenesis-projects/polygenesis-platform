@@ -17,6 +17,7 @@
     <module>polygenesis-deducer-batch-process</module>
     <module>polygenesis-deducer-domain</module>
     <module>polygenesis-deducer-messaging</module>
+    <module>polygenesis-deducer-openapi</module>
     <module>polygenesis-deducer-page-object</module>
     <module>polygenesis-deducer-rest</module>
     <module>polygenesis-deducer-scheduler</module>

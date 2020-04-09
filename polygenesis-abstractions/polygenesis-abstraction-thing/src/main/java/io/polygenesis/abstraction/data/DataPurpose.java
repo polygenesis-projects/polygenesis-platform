@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,12 +23,6 @@ package io.polygenesis.abstraction.data;
 import java.io.Serializable;
 import java.util.Objects;
 
-/**
- * Encodes business types, which are vital for the code generation process, such as unique ID of an
- * entity, page size etc.
- *
- * @author Christos Tsakostas
- */
 public class DataPurpose implements Serializable {
 
   private static final long serialVersionUID = 1L;
@@ -61,6 +55,11 @@ public class DataPurpose implements Serializable {
   // SUBCLASSES / SUPERCLASSES
   // ===============================================================================================
   private static final String SUPERCLASS_PARAMETER = "SUPERCLASS_PARAMETER";
+
+  // ===============================================================================================
+  // INTERNAL
+  // ===============================================================================================
+  private static final String INTERNAL_STATE = "INTERNAL_STATE";
 
   // ===============================================================================================
   // STATE
@@ -151,6 +150,19 @@ public class DataPurpose implements Serializable {
    */
   public static DataPurpose superclassParameter() {
     return new DataPurpose(SUPERCLASS_PARAMETER);
+  }
+
+  // ===============================================================================================
+  // INTERNAL
+  // ===============================================================================================
+
+  /**
+   * Internal state data purpose.
+   *
+   * @return the data purpose
+   */
+  public static DataPurpose internalState() {
+    return new DataPurpose(INTERNAL_STATE);
   }
 
   // ===============================================================================================

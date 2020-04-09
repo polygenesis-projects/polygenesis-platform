@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,11 +25,6 @@ import io.polygenesis.models.api.Dto;
 import io.polygenesis.representations.code.ParameterRepresentation;
 import java.util.Set;
 
-/**
- * The type Fetch one aggregate root activity template data.
- *
- * @author Christos Tsakostas
- */
 public class FetchOneAggregateRootActivityTemplateData extends ResourceActivityTemplateData {
 
   // ===============================================================================================
@@ -49,6 +44,7 @@ public class FetchOneAggregateRootActivityTemplateData extends ResourceActivityT
    * @param serviceName the service name
    * @param serviceMethodName the service method name
    * @param requestDto the request dto
+   * @param responseDto the response dto
    * @param thingIdentityVariableName the thing identity variable name
    */
   @SuppressWarnings("CPD-START")
@@ -57,8 +53,9 @@ public class FetchOneAggregateRootActivityTemplateData extends ResourceActivityT
       String serviceName,
       String serviceMethodName,
       Dto requestDto,
+      Dto responseDto,
       String thingIdentityVariableName) {
-    super(parameterRepresentations, serviceName, serviceMethodName, requestDto);
+    super(parameterRepresentations, serviceName, serviceMethodName, requestDto, responseDto);
     this.thingIdentityVariableName = thingIdentityVariableName;
   }
 

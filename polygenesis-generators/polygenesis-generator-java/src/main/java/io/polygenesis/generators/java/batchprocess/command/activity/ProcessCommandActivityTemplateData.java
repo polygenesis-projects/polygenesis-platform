@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,16 +22,12 @@ package io.polygenesis.generators.java.batchprocess.command.activity;
 
 import io.polygenesis.commons.assertion.Assertion;
 
-/**
- * The type Process command activity template data.
- *
- * @author Christos Tsakostas
- */
 public class ProcessCommandActivityTemplateData {
 
   private String commandService;
   private String commandMethod;
   private String requestDto;
+  private Boolean multiTenant;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -43,12 +39,14 @@ public class ProcessCommandActivityTemplateData {
    * @param commandService the command service
    * @param commandMethod the command method
    * @param requestDto the request dto
+   * @param multiTenant the multi tenant
    */
   public ProcessCommandActivityTemplateData(
-      String commandService, String commandMethod, String requestDto) {
+      String commandService, String commandMethod, String requestDto, Boolean multiTenant) {
     setCommandService(commandService);
     setCommandMethod(commandMethod);
     setRequestDto(requestDto);
+    setMultiTenant(multiTenant);
   }
 
   // ===============================================================================================
@@ -80,6 +78,15 @@ public class ProcessCommandActivityTemplateData {
    */
   public String getRequestDto() {
     return requestDto;
+  }
+
+  /**
+   * Gets multi tenant.
+   *
+   * @return the multi tenant
+   */
+  public Boolean getMultiTenant() {
+    return multiTenant;
   }
 
   // ===============================================================================================
@@ -114,5 +121,15 @@ public class ProcessCommandActivityTemplateData {
   private void setRequestDto(String requestDto) {
     Assertion.isNotNull(requestDto, "requestDto is required");
     this.requestDto = requestDto;
+  }
+
+  /**
+   * Sets multi tenant.
+   *
+   * @param multiTenant the multi tenant
+   */
+  public void setMultiTenant(Boolean multiTenant) {
+    Assertion.isNotNull(multiTenant, "multiTenant is required");
+    this.multiTenant = multiTenant;
   }
 }

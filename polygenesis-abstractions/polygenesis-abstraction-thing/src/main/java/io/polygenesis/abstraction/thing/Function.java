@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,14 +29,6 @@ import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 
-/**
- * In the context of automatic programming, Function is defined as an activity expressing what has
- * to be done, with a {@link Purpose}, written by a programmer in a specific programming language to
- * or the purpose of a {@link Thing}, which is characterized by a Name and Properties provided as
- * activity's optional arguments and return value.
- *
- * @author Christos Tsakostas
- */
 public class Function implements FunctionProvider {
 
   // ===============================================================================================
@@ -130,8 +122,7 @@ public class Function implements FunctionProvider {
    * @return the boolean
    */
   public Boolean supportsAbstractionScope(AbstractionScope abstractionScope) {
-    return getAbstractionScopes()
-        .stream()
+    return getAbstractionScopes().stream()
         .anyMatch(abstractionScope1 -> abstractionScope1.equals(abstractionScope));
   }
 
@@ -161,17 +152,13 @@ public class Function implements FunctionProvider {
 
     if (getArguments() != null) {
       // Ge Data Objects
-      getArguments()
-          .getData()
-          .stream()
+      getArguments().getData().stream()
           .filter(argument -> argument.isDataGroup())
           .map(DataObject.class::cast)
           .forEach(dataObject -> fillDataObjects(dataObjects, dataObject));
 
       // Ge Data Objects inside Data Primitives
-      getArguments()
-          .getData()
-          .stream()
+      getArguments().getData().stream()
           .filter(argument -> argument.isDataPrimitive())
           .map(Data::getAsDataPrimitive)
           .filter(dataPrimitive -> dataPrimitive.getDataObject() != null)
@@ -189,16 +176,12 @@ public class Function implements FunctionProvider {
   private void fillDataObjects(Set<DataObject> dataObjects, DataObject dataObject) {
     dataObjects.add(dataObject);
 
-    dataObject
-        .getModels()
-        .stream()
+    dataObject.getModels().stream()
         .filter(data -> data.isDataGroup())
         .map(DataObject.class::cast)
         .forEach(dataObjectInternal -> fillDataObjects(dataObjects, dataObjectInternal));
 
-    dataObject
-        .getModels()
-        .stream()
+    dataObject.getModels().stream()
         .filter(data -> data.isDataPrimitive())
         .map(Data::getAsDataPrimitive)
         .filter(dataPrimitive -> dataPrimitive.getDataObject() != null)
@@ -386,6 +369,7 @@ public class Function implements FunctionProvider {
     Function function = (Function) o;
     return Objects.equals(purpose, function.purpose)
         && Objects.equals(name, function.name)
+        && Objects.equals(thing, function.thing)
         && Objects.equals(abstractionScopes, function.abstractionScopes);
   }
 

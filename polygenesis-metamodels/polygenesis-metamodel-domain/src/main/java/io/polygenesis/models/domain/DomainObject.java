@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,11 +34,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/**
- * The type Domain object.
- *
- * @author Christos Tsakostas
- */
 public abstract class DomainObject
     implements Generatable, Nameable, SubClassable, Metamodel, DomainObjectProperty<DataObject> {
 
@@ -292,8 +287,7 @@ public abstract class DomainObject
    * @return the set
    */
   public Set<StateMutationMethod> findStateMutationMethodsByPurpose(Purpose purpose) {
-    return getStateMutationMethods()
-        .stream()
+    return getStateMutationMethods().stream()
         .filter(
             stateMutationMethod -> stateMutationMethod.getFunction().getPurpose().equals(purpose))
         .collect(Collectors.toCollection(LinkedHashSet::new));
@@ -344,8 +338,7 @@ public abstract class DomainObject
    * @return the aggregate root id
    */
   public AggregateRootId aggregateRootId() {
-    return getProperties()
-        .stream()
+    return getProperties().stream()
         .filter(property -> property.getPropertyType().equals(PropertyType.AGGREGATE_ROOT_ID))
         .map(AggregateRootId.class::cast)
         .findFirst()

@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,18 +24,6 @@ import io.polygenesis.commons.assertion.Assertion;
 import java.util.Objects;
 import java.util.Set;
 
-/**
- * Groups related {@link Action Actions} together.
- *
- * <p>For example, suppose you call an {@link Action} named {@code CreateSomeThing}. An {@link
- * Effect}*** is automatically executed and a REST call is made to the backend. Depending on the
- * result the two related {@link Action Actions} may be {@code CreateSomeThingOnSuccess} and {@code
- * CreateSomeThingOnFailure}***.
- *
- * <p>{@link Store} is the container of the reactive state management modelling.
- *
- * @author Christos Tsakostas
- */
 public class ActionGroup {
 
   // ===============================================================================================

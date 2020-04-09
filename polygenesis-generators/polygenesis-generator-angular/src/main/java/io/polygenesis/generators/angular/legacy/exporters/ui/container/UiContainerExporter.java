@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,11 +26,6 @@ import io.polygenesis.models.ui.container.AbstractContainer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-/**
- * The type Ui container exporter.
- *
- * @author Christos Tsakostas
- */
 public class UiContainerExporter {
 
   private final UiContainerHtmlExporter uiContainerHtmlExporter;

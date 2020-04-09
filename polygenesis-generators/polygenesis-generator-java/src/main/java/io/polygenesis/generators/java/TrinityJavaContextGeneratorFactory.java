@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,6 +52,8 @@ import io.polygenesis.generators.java.domainmessagesubscriber.DomainMessageSubsc
 import io.polygenesis.generators.java.domainmessagesubscriber.DomainMessageSubscriberMetamodelGeneratorFactory;
 import io.polygenesis.generators.java.domainservicedetail.DomainServiceDetailMetamodelGenerator;
 import io.polygenesis.generators.java.domainservicedetail.DomainServiceDetailMetamodelGeneratorFactory;
+import io.polygenesis.generators.java.openapi.OpenApiMetamodelGenerator;
+import io.polygenesis.generators.java.openapi.OpenApiMetamodelGeneratorFactory;
 import io.polygenesis.generators.java.rdbms.JavaRdbmsMetamodelGenerator;
 import io.polygenesis.generators.java.rdbms.JavaRdbmsMetamodelGeneratorFactory;
 import io.polygenesis.generators.java.repository.inmemory.InMemoryMetamodelGenerator;
@@ -63,11 +65,6 @@ import java.nio.file.Paths;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-/**
- * The type Trinity java context generator factory.
- *
- * @author Christos Tsakostas
- */
 public final class TrinityJavaContextGeneratorFactory {
 
   // ===============================================================================================
@@ -78,6 +75,7 @@ public final class TrinityJavaContextGeneratorFactory {
   private static final String API_DETAIL = "api-detail";
   private static final String API_CLIENTS = "api-clients";
   private static final String API_CLIENT_REST_SPRING = "api-client-rest-spring";
+  private static final String API_CLIENT_OPEN_API = API_CLIENT_REST_SPRING;
 
   // AUX
   private static final String AUX = "aux";
@@ -170,6 +168,11 @@ public final class TrinityJavaContextGeneratorFactory {
               exportPath, projectFolder, modulePrefix, context, rootPackageName));
     }
 
+    if (trinityJavaContextGeneratorEnablement.isOpenApi()) {
+      metamodelGenerators.add(
+          openApi(exportPath, projectFolder, modulePrefix, contextName, rootPackageName));
+    }
+
     if (trinityJavaContextGeneratorEnablement.isJavaApiRestGenerator()) {
       metamodelGenerators.add(
           javaApiRestGenerator(
@@ -216,7 +219,8 @@ public final class TrinityJavaContextGeneratorFactory {
     }
 
     if (trinityJavaContextGeneratorEnablement.isApiClientBatchProcess()) {
-      metamodelGenerators.add(apiClientBatchProcess(exportPath, projectFolder, modulePrefix));
+      metamodelGenerators.add(
+          apiClientBatchProcess(exportPath, projectFolder, modulePrefix, context));
     }
 
     if (trinityJavaContextGeneratorEnablement.isApiClientBatchProcessMessageSubscriber()) {
@@ -296,6 +300,23 @@ public final class TrinityJavaContextGeneratorFactory {
             projectFolder,
             modulePrefix + "-" + API_CLIENTS,
             modulePrefix + "-" + API_CLIENT_REST_SPRING),
+        new PackageName(rootPackageName),
+        contextName);
+  }
+
+  // OPENAPI
+  private static OpenApiMetamodelGenerator openApi(
+      String exportPath,
+      String projectFolder,
+      String modulePrefix,
+      ContextName contextName,
+      String rootPackageName) {
+    return OpenApiMetamodelGeneratorFactory.newInstance(
+        Paths.get(
+            exportPath,
+            projectFolder,
+            modulePrefix + "-" + API_CLIENTS,
+            modulePrefix + "-" + API_CLIENT_OPEN_API),
         new PackageName(rootPackageName),
         contextName);
   }
@@ -418,13 +439,14 @@ public final class TrinityJavaContextGeneratorFactory {
   }
 
   private static BatchProcessMetamodelGenerator apiClientBatchProcess(
-      String exportPath, String projectFolder, String modulePrefix) {
+      String exportPath, String projectFolder, String modulePrefix, String context) {
     return BatchProcessMetamodelGeneratorFactory.newInstance(
         Paths.get(
             exportPath,
             projectFolder,
             modulePrefix + "-" + API_CLIENTS,
-            modulePrefix + "-" + API_CLIENT_BATCH_PROCESS_SUBSCRIBER));
+            modulePrefix + "-" + API_CLIENT_BATCH_PROCESS_SUBSCRIBER),
+        new ContextName(context));
   }
 
   private static BatchProcessSubscriberMetamodelGenerator apiClientBatchProcessSubscriber(

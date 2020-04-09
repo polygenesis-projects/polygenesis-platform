@@ -2,7 +2,7 @@
  ==========================LICENSE_START=================================
  PolyGenesis Platform
  ========================================================================
- Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  ========================================================================
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -17,11 +17,11 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
+
 <#include "../polygenesis-implementation-java-shared/macro-assertions-for-parameters.ftl">
 <#include "../polygenesis-trinity-java/api-detail/aggregate-root/macro-restore-aggregate-root.ftl">
 <@assertionsForParameters data.parameterRepresentations></@assertionsForParameters>
 
-<#--    Paginated<${ aggregateRootDataType }> paginated = ${ persistenceVariable }.findPaginated(<#if multiTenant>UUID.fromString(${ requestDto.dataObject.variableName.text }.getTenantId()), </#if>${ requestDto.dataObject.objectName.text }.getPageNumber(), ${ requestDto.dataObject.objectName.text }.getPageSize());-->
     Paginated<${ data.aggregateRootDataType }> paginated = ${ data.persistenceVariable }.findPaginated(<#if data.multiTenant>new TenantId(UUID.fromString(${ data.requestDto.dataObject.variableName.text }.getTenantId())), </#if>${ data.requestDto.dataObject.variableName.text }.getPageNumber(), ${ data.requestDto.dataObject.variableName.text }.getPageSize());
 
     return new ${ data.returnValue }(

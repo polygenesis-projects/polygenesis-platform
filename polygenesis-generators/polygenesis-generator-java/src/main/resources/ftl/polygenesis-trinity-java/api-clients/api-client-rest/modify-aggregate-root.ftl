@@ -2,7 +2,7 @@
  ==========================LICENSE_START=================================
  PolyGenesis Platform
  ========================================================================
- Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  ========================================================================
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
+
 <#include "../../../polygenesis-implementation-java-shared/macro-assertions-for-parameters.ftl">
 <#include "macro-set-root-id-in-request.ftl">
 <#include "macro-set-tenantid-and-ipaddress.ftl">
@@ -25,5 +26,7 @@
 
 <@setRootIdInRequest data.requestDto data.thingIdentityVariableName></@setRootIdInRequest>
 <@setTenantIdAndIpAddress data.requestDto></@setTenantIdAndIpAddress>
+<#if data.responseDto.dataObject.models?size gt 0>
 
 <@returnValue data.serviceName data.serviceMethodName data.requestDto></@returnValue>
+</#if>

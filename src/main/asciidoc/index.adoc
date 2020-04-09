@@ -1,7 +1,7 @@
 :icons: font
 
 = PolyGenesis Platform
-Christos Tsakostas, OREGOR LTD
+Christos Tsakostas, OREGOR LP
 
 [abstract]
 PolyGenesis is an open source platform for Cross-Language Automated Code Generation, focused on DDD and UI.

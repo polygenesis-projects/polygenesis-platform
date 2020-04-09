@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,12 +27,6 @@ import io.polygenesis.representations.code.FieldRepresentation;
 import io.polygenesis.representations.code.MethodRepresentation;
 import java.util.Set;
 
-/**
- * The interface Class representable.
- *
- * @param <S> the type parameter
- * @author Christos Tsakostas
- */
 public interface ClassTransformer<S> extends TemplateTransformer<S> {
 
   /**
@@ -42,6 +36,7 @@ public interface ClassTransformer<S> extends TemplateTransformer<S> {
    * @param args the args
    * @return the class representation
    */
+  @SuppressWarnings("CPD-START")
   ClassRepresentation create(S source, Object... args);
 
   /**
@@ -150,5 +145,6 @@ public interface ClassTransformer<S> extends TemplateTransformer<S> {
    * @param args the args
    * @return the string
    */
+  @SuppressWarnings("CPD-END")
   String fullObjectName(S source, Object... args);
 }

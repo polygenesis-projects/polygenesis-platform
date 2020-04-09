@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,11 +39,6 @@ import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
 
-/**
- * The type Value object dto deducer.
- *
- * @author Christos Tsakostas
- */
 public class ValueObjectDtoDeducer {
 
   /**
@@ -96,8 +91,7 @@ public class ValueObjectDtoDeducer {
 
     valueObjects.forEach(
         valueObject -> {
-          services
-              .stream()
+          services.stream()
               .flatMap(service -> service.getDtos().stream())
               .forEach(
                   dto -> {
@@ -126,6 +120,7 @@ public class ValueObjectDtoDeducer {
                 String.format(
                     "convertTo%sVo",
                     TextConverter.toUpperCamel(valueObjectToUse.getObjectName().getText())),
+                "",
                 Purpose.convertDtoToVo())
             .setReturnValue(valueObjectToUse.getData())
             .addArgument(dtoToUse.getDataObject())
@@ -135,14 +130,13 @@ public class ValueObjectDtoDeducer {
 
     // TO DTO
     Optional<DomainObjectConverterMethod> optionalDomainObjectConverterMethod =
-        methods
-            .stream()
+        methods.stream()
             .filter(
                 domainObjectConverterMethod ->
                     domainObjectConverterMethod
                         .getFunction()
                         .getName()
-                        .getText()
+                        .getFullName()
                         .equals(
                             String.format(
                                 "convertTo%s",
@@ -157,6 +151,7 @@ public class ValueObjectDtoDeducer {
                   String.format(
                       "convertTo%s",
                       TextConverter.toUpperCamel(pair.getDto().getObjectName().getText())),
+                  "",
                   Purpose.convertVoToDto())
               .setReturnValue(pair.getDto().getDataObject())
               .addArgument(valueObjectToUse.getData())

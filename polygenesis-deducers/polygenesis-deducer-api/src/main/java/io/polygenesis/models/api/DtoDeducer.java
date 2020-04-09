@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,11 +34,6 @@ import io.polygenesis.commons.valueobjects.VariableName;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-/**
- * The type Dto deducer.
- *
- * @author Christos Tsakostas
- */
 public class DtoDeducer {
 
   // ===============================================================================================
@@ -58,10 +53,7 @@ public class DtoDeducer {
 
     if (function.getArguments() != null && function.getArguments().getData().size() == 1) {
       Data argument =
-          function
-              .getArguments()
-              .getData()
-              .stream()
+          function.getArguments().getData().stream()
               .findFirst()
               .orElseThrow(IllegalArgumentException::new);
       if (argument.isDataGroup()) {
@@ -77,13 +69,15 @@ public class DtoDeducer {
               new ObjectName(
                   String.format(
                       "%s%sRequest",
-                      TextConverter.toUpperCamel(function.getName().getText()),
+                      TextConverter.toUpperCamel(function.getName().getFullName()),
                       TextConverter.toUpperCamel(function.getThing().getThingName().getText()))),
               function.getThing().makePackageName(rootPackageName, function.getThing()),
               new VariableName("request"));
 
       if (function.getArguments() != null) {
-        function.getArguments().getData().forEach(argument -> finalDataObject.addData(argument));
+        function.getArguments().getData().stream()
+            .filter(data -> !data.getDataPurpose().equals(DataPurpose.internalState()))
+            .forEach(argument -> finalDataObject.addData(argument));
       }
 
       originatingDataObject = finalDataObject;
@@ -130,7 +124,7 @@ public class DtoDeducer {
               new ObjectName(
                   String.format(
                       "%s%sResponse",
-                      TextConverter.toUpperCamel(function.getName().getText()),
+                      TextConverter.toUpperCamel(function.getName().getFullName()),
                       TextConverter.toUpperCamel(function.getThing().getThingName().getText()))),
               function.getThing().makePackageName(rootPackageName, function.getThing()));
 
@@ -201,9 +195,7 @@ public class DtoDeducer {
       Dto dto, Function function, DataPurpose dataPurpose) {
 
     Set<DataPrimitive> modelPrimitives =
-        dto.getDataObject()
-            .getModels()
-            .stream()
+        dto.getDataObject().getModels().stream()
             .filter(Data::isDataPrimitive)
             .map(DataPrimitive.class::cast)
             .filter(model -> model.getDataPurpose().equals(dataPurpose))
@@ -227,7 +219,7 @@ public class DtoDeducer {
               dataPurpose.getText(),
               dto.getDataObject().getObjectName().getText(),
               function.getThing().getThingName().getText(),
-              function.getName().getText()));
+              function.getName().getFullName()));
     }
   }
 }

@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,11 +35,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/**
- * The type Resource method transformer.
- *
- * @author Christos Tsakostas
- */
 public class ResourceMethodTransformer extends AbstractMethodTransformer<Endpoint> {
 
   // ===============================================================================================
@@ -136,8 +131,7 @@ public class ResourceMethodTransformer extends AbstractMethodTransformer<Endpoin
   @Override
   protected String getParametersCommaSeparated(
       Set<ParameterRepresentation> parameterRepresentations) {
-    return parameterRepresentations
-        .stream()
+    return parameterRepresentations.stream()
         .map(ParameterRepresentation::getVariableName)
         .filter(variableName -> !variableName.equals("httpServletRequest"))
         .collect(Collectors.joining(", "));
@@ -154,17 +148,13 @@ public class ResourceMethodTransformer extends AbstractMethodTransformer<Endpoin
     stringBuilder.append(mapHttpMethodToSpring.get(endpoint.getHttpMethod()));
     stringBuilder.append("({");
 
-    endpoint
-        .getMappings()
-        .stream()
+    endpoint.getMappings().stream()
         .forEach(
             mapping -> {
               stringBuilder.append("\"");
               stringBuilder.append("/");
               stringBuilder.append(
-                  mapping
-                      .getPathContents()
-                      .stream()
+                  mapping.getPathContents().stream()
                       .map(
                           pathContent ->
                               pathContent.getPathContentType().equals(PathContentType.CONSTANT)
@@ -176,7 +166,7 @@ public class ResourceMethodTransformer extends AbstractMethodTransformer<Endpoin
                 stringBuilder.append("/");
                 stringBuilder.append(
                     TextConverter.toLowerHyphen(
-                        endpoint.getServiceMethod().getFunction().getName().getText()));
+                        endpoint.getServiceMethod().getFunction().getName().getFullName()));
               }
 
               stringBuilder.append("\"");

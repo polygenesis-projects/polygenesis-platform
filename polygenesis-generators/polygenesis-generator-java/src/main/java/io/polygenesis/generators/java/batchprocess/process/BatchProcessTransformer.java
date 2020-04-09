@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,12 +20,14 @@
 
 package io.polygenesis.generators.java.batchprocess.process;
 
-import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.commons.text.TextConverter;
+import io.polygenesis.commons.valueobjects.ContextName;
 import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.core.TemplateData;
 import io.polygenesis.models.periodicprocess.BatchProcessMetamodel;
+import io.polygenesis.models.periodicprocess.BatchProcessMethod;
 import io.polygenesis.representations.code.ConstructorRepresentation;
+import io.polygenesis.representations.code.MethodRepresentation;
 import io.polygenesis.representations.code.ParameterRepresentation;
 import io.polygenesis.transformers.java.AbstractClassTransformer;
 import java.util.HashMap;
@@ -34,13 +36,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-/**
- * The type Batch process transformer.
- *
- * @author Christos Tsakostas
- */
 public class BatchProcessTransformer
-    extends AbstractClassTransformer<BatchProcessMetamodel, Function> {
+    extends AbstractClassTransformer<BatchProcessMetamodel, BatchProcessMethod> {
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -81,8 +78,9 @@ public class BatchProcessTransformer
     imports.add("com.fasterxml.jackson.databind.ObjectMapper");
     imports.add("com.oregor.trinity4j.api.clients.batchprocess.AbstractBatchProcessService");
     imports.add("com.oregor.trinity4j.api.clients.batchprocess.BatchProcessMessagePublisher");
-    imports.add("org.springframework.stereotype.Service");
+    imports.add("org.springframework.beans.factory.annotation.Qualifier");
     imports.add("org.springframework.beans.factory.annotation.Value");
+    imports.add("org.springframework.stereotype.Service");
 
     imports.add(
         String.format(
@@ -121,14 +119,21 @@ public class BatchProcessTransformer
   @Override
   public Set<ConstructorRepresentation> constructorRepresentations(
       BatchProcessMetamodel source, Object... args) {
+    ContextName contextName = (ContextName) args[0];
+
     Set<ParameterRepresentation> parameterRepresentations = new LinkedHashSet<>();
 
     parameterRepresentations.add(new ParameterRepresentation("ObjectMapper", "objectMapper"));
 
+    // BatchProcessMessagePublisher
     parameterRepresentations.add(
         new ParameterRepresentation(
-            "BatchProcessMessagePublisher", "batchProcessMessagePublisher"));
+            String.format(
+                "@Qualifier(\"%sBatchProcessMessagePublisher\") BatchProcessMessagePublisher",
+                TextConverter.toUpperCamel(contextName.getText())),
+            "batchProcessMessagePublisher"));
 
+    // Command
     parameterRepresentations.add(
         new ParameterRepresentation(
             String.format(
@@ -136,6 +141,7 @@ public class BatchProcessTransformer
             String.format(
                 "%sCommand", TextConverter.toLowerCamel(source.getObjectName().getText()))));
 
+    // Query
     parameterRepresentations.add(
         new ParameterRepresentation(
             String.format("%sQuery", TextConverter.toUpperCamel(source.getObjectName().getText())),
@@ -156,10 +162,6 @@ public class BatchProcessTransformer
         String.format("%sQuery", TextConverter.toLowerCamel(source.getObjectName().getText())));
     implementation.append(", ");
     implementation.append("defaultPageSize");
-    implementation.append(", ");
-    implementation.append("\"");
-    implementation.append(simpleObjectName(source, args));
-    implementation.append("\"");
     implementation.append(");");
 
     Set<ConstructorRepresentation> constructorRepresentations = new LinkedHashSet<>();
@@ -175,5 +177,19 @@ public class BatchProcessTransformer
             implementation.toString()));
 
     return constructorRepresentations;
+  }
+
+  @Override
+  public Set<MethodRepresentation> methodRepresentations(
+      BatchProcessMetamodel source, Object... args) {
+    Set<MethodRepresentation> methodRepresentations = new LinkedHashSet<>();
+
+    source
+        .getBatchProcessMethods()
+        .forEach(
+            batchProcessMethod ->
+                methodRepresentations.add(methodTransformer.create(batchProcessMethod, args)));
+
+    return methodRepresentations;
   }
 }

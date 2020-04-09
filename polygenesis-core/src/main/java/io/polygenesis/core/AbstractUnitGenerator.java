@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,12 +22,6 @@ package io.polygenesis.core;
 
 import java.io.ByteArrayOutputStream;
 
-/**
- * The type Abstract unit generator.
- *
- * @param <S> the type parameter
- * @author Christos Tsakostas
- */
 public class AbstractUnitGenerator<S extends Generatable> implements UnitGenerator<S> {
 
   // ===============================================================================================

@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,11 +29,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
-/**
- * The type Activity.
- *
- * @author Christos Tsakostas
- */
 public class Activity {
 
   // ===============================================================================================
@@ -196,8 +191,7 @@ public class Activity {
   public Object getValue(Object key) {
     Assertion.isNotNull(key, "key is required");
 
-    return getKeyValues()
-        .stream()
+    return getKeyValues().stream()
         .filter(keyValue -> keyValue.getKey().equals(key))
         .map(keyValue -> keyValue.getValue())
         .findFirst()

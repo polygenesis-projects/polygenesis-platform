@@ -2,7 +2,7 @@
  ==========================LICENSE_START=================================
  PolyGenesis Platform
  ========================================================================
- Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  ========================================================================
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
+
 <#include "./macro-fill-argument-value-object.ftl">
 <#function isPropertyContainedInRequestDto property requestDto>
     <#list requestDto.dataObject.models as model>
@@ -31,7 +32,6 @@
 <#if isPropertyContainedInRequestDto(property, requestDto) == 'true'>
       <#switch property.propertyType>
         <#case 'AGGREGATE_ROOT_ID'>
-<#--          <#if multiTenant>-->
 <#--        ${ persistenceVariable }.nextId(UUID.fromString(${ requestDto.dataObject.variableName.text }.getTenantId()))<#sep>,</#sep>-->
         ${ requestDto.dataObject.variableName.text }.get${ textConverter.toUpperCamel(property.data.variableName.text) }() == null ? ${ persistenceVariable }.nextId() : new ${ textConverter.toUpperCamel(property.data.variableName.text) }(UUID.fromString(${ requestDto.dataObject.variableName.text }.get${ textConverter.toUpperCamel(property.data.variableName.text) }()))<#sep>,</#sep>
 <#--          <#else>-->
@@ -74,6 +74,8 @@
         new TenantId(UUID.fromString(${ requestDto.dataObject.variableName.text }.getTenantId()))<#sep>,</#sep>
     <#else>
         <#if property.propertyType == 'REFERENCE_TO_AGGREGATE_ROOT'>
+        <#elseif property.propertyType == 'ENUMERATION'>
+        null<#sep>,</#sep> // TODO ENUMERATION
         <#else>
         null<#sep>,</#sep> // TODO
         </#if>

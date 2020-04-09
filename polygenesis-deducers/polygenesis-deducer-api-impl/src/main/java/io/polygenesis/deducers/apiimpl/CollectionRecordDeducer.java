@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,11 +39,6 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/**
- * The type Collection record deducer.
- *
- * @author Christos Tsakostas
- */
 public class CollectionRecordDeducer {
 
   /**
@@ -84,8 +79,7 @@ public class CollectionRecordDeducer {
         serviceModelRepository.getServicesBy(new ThingName(domainObject.getObjectName().getText()));
 
     Set<Dto> dtos =
-        services
-            .stream()
+        services.stream()
             .flatMap(service -> service.getDtos().stream())
             .filter(dto -> dto.getDtoType().equals(DtoType.COLLECTION_RECORD))
             .collect(Collectors.toSet());
@@ -112,6 +106,7 @@ public class CollectionRecordDeducer {
                 String.format(
                     "convertTo%s",
                     TextConverter.toUpperCamel(pair.getDto().getDataObject().getDataType())),
+                "",
                 Purpose.convertDomainObjectToCollectionRecord())
             .setReturnValue(pair.getDto().getDataObject())
             .addArgument(pair.getEntity().asDataGroup())

@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,11 +37,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-/**
- * The type Domain event transformer.
- *
- * @author Christos Tsakostas
- */
 public class DomainEventTransformer extends DomainObjectClassTransformer<DomainEvent, Function> {
 
   // ===============================================================================================
@@ -157,6 +152,14 @@ public class DomainEventTransformer extends DomainObjectClassTransformer<DomainE
                           makeVariableName(property),
                           dataTypeTransformer.getModifierPrivate()));
                   break;
+                case ENUMERATION:
+                  // TODO vo
+                  fieldRepresentations.add(
+                      FieldRepresentation.withModifiers(
+                          makeVariableDataType(property),
+                          makeVariableName(property),
+                          dataTypeTransformer.getModifierPrivate()));
+                  break;
                 default:
                   throw new IllegalStateException(
                       String.format(
@@ -177,9 +180,7 @@ public class DomainEventTransformer extends DomainObjectClassTransformer<DomainE
     // Create no-args constructor
     // ---------------------------------------------------------------------------------------------
     boolean hasNonEmptyConstructors =
-        source
-            .getConstructors()
-            .stream()
+        source.getConstructors().stream()
             .anyMatch(constructor -> !constructor.getProperties().isEmpty());
 
     if (hasNonEmptyConstructors) {
@@ -193,9 +194,7 @@ public class DomainEventTransformer extends DomainObjectClassTransformer<DomainE
     // ---------------------------------------------------------------------------------------------
     // Create constructor with parameters
     // ---------------------------------------------------------------------------------------------
-    source
-        .getConstructors()
-        .stream()
+    source.getConstructors().stream()
         .forEach(
             constructor ->
                 constructorRepresentations.add(

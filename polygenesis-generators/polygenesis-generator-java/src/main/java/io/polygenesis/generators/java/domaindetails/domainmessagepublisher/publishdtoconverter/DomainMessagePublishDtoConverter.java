@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,11 +35,6 @@ import io.polygenesis.commons.valueobjects.VariableName;
 import io.polygenesis.core.AbstractNameablePackageable;
 import io.polygenesis.core.Generatable;
 
-/**
- * The type Domain message publish dto converter.
- *
- * @author Christos Tsakostas
- */
 public class DomainMessagePublishDtoConverter extends AbstractNameablePackageable
     implements Generatable {
 
@@ -89,7 +84,7 @@ public class DomainMessagePublishDtoConverter extends AbstractNameablePackageabl
     return new Function(
         thing,
         Purpose.domainMessagePublisherGetContext(),
-        new FunctionName("getContext"),
+        FunctionName.ofVerbOnly("getContext"),
         DataPrimitive.of(PrimitiveType.STRING, VariableName.response()),
         new DataRepository(),
         Activity.empty(),

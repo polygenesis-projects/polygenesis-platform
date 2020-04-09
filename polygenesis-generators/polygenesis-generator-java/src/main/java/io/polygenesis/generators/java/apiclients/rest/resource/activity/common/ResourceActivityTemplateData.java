@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,11 +24,6 @@ import io.polygenesis.models.api.Dto;
 import io.polygenesis.representations.code.ParameterRepresentation;
 import java.util.Set;
 
-/**
- * The type Create aggregate root activity template data.
- *
- * @author Christos Tsakostas
- */
 public abstract class ResourceActivityTemplateData {
 
   // ===============================================================================================
@@ -39,6 +34,7 @@ public abstract class ResourceActivityTemplateData {
   private String serviceName;
   private String serviceMethodName;
   private Dto requestDto;
+  private Dto responseDto;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -51,16 +47,19 @@ public abstract class ResourceActivityTemplateData {
    * @param serviceName the service name
    * @param serviceMethodName the service method name
    * @param requestDto the request dto
+   * @param responseDto the response dto
    */
   public ResourceActivityTemplateData(
       Set<ParameterRepresentation> parameterRepresentations,
       String serviceName,
       String serviceMethodName,
-      Dto requestDto) {
+      Dto requestDto,
+      Dto responseDto) {
     this.parameterRepresentations = parameterRepresentations;
     this.serviceName = serviceName;
     this.serviceMethodName = serviceMethodName;
     this.requestDto = requestDto;
+    this.responseDto = responseDto;
   }
 
   // ===============================================================================================
@@ -101,5 +100,14 @@ public abstract class ResourceActivityTemplateData {
    */
   public Dto getRequestDto() {
     return requestDto;
+  }
+
+  /**
+   * Gets response dto.
+   *
+   * @return the response dto
+   */
+  public Dto getResponseDto() {
+    return responseDto;
   }
 }

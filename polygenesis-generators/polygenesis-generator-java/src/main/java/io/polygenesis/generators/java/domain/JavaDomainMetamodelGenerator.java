@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,6 +42,7 @@ import io.polygenesis.generators.java.domain.domainmessage.publisheddata.DomainM
 import io.polygenesis.generators.java.domain.domainmessage.publisheddata.DomainMessagePublishedDataGenerator;
 import io.polygenesis.generators.java.domain.domainmessage.publisheddatarepository.DomainMessagePublishedDataRepository;
 import io.polygenesis.generators.java.domain.domainmessage.publisheddatarepository.DomainMessagePublishedDataRepositoryGenerator;
+import io.polygenesis.generators.java.domain.enumeration.EnumerationGenerator;
 import io.polygenesis.generators.java.domain.projection.id.ProjectionIdGenerator;
 import io.polygenesis.generators.java.domain.projection.projection.ProjectionGenerator;
 import io.polygenesis.generators.java.domain.projection.repository.ProjectionRepositoryGenerator;
@@ -61,6 +62,7 @@ import io.polygenesis.models.domain.DomainObjectMetamodelRepository;
 import io.polygenesis.models.domain.DomainObjectType;
 import io.polygenesis.models.domain.DomainService;
 import io.polygenesis.models.domain.DomainServiceRepository;
+import io.polygenesis.models.domain.Enumeration;
 import io.polygenesis.models.domain.Persistence;
 import io.polygenesis.models.domain.Projection;
 import io.polygenesis.models.domain.ProjectionMetamodelRepository;
@@ -73,11 +75,6 @@ import java.nio.file.Paths;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/**
- * The type Java domain generator.
- *
- * @author Christos Tsakostas
- */
 public class JavaDomainMetamodelGenerator extends AbstractMetamodelGenerator {
 
   private final String tablePrefix;
@@ -89,6 +86,7 @@ public class JavaDomainMetamodelGenerator extends AbstractMetamodelGenerator {
   private final AggregateRootIdGenerator aggregateRootIdGenerator;
   private final AggregateEntityGenerator aggregateEntityGenerator;
   private final AggregateEntityIdGenerator aggregateEntityIdGenerator;
+  private final EnumerationGenerator enumerationGenerator;
   private final ValueObjectGenerator valueObjectGenerator;
   private final DomainEventGenerator domainEventGenerator;
   private final RepositoryGenerator repositoryGenerator;
@@ -119,9 +117,10 @@ public class JavaDomainMetamodelGenerator extends AbstractMetamodelGenerator {
    * @param rootPackageName the root package name
    * @param contextName the context name
    * @param aggregateRootGenerator the aggregate root generator
-   * @param aggregateRootIdGenerator the aggregate root id exporter
+   * @param aggregateRootIdGenerator the aggregate root id generator
    * @param aggregateEntityGenerator the aggregate entity generator
-   * @param aggregateEntityIdGenerator the aggregate entity id exporter
+   * @param aggregateEntityIdGenerator the aggregate entity id generator
+   * @param enumerationGenerator the enumeration generator
    * @param valueObjectGenerator the value object generator
    * @param domainEventGenerator the domain event generator
    * @param repositoryGenerator the repository generator
@@ -131,8 +130,8 @@ public class JavaDomainMetamodelGenerator extends AbstractMetamodelGenerator {
    * @param supportiveEntityRepositoryGenerator the supportive entity repository generator
    * @param constantsExporter the constants exporter
    * @param projectionGenerator the projection generator
-   * @param projectionIdGenerator the projection id exporter
-   * @param projectionRepositoryGenerator the projection repository exporter
+   * @param projectionIdGenerator the projection id generator
+   * @param projectionRepositoryGenerator the projection repository generator
    * @param domainMessageDataGenerator the domain message data generator
    * @param domainMessageDataRepositoryGenerator the domain message data repository generator
    * @param domainMessagePublishedDataGenerator the domain message published data generator
@@ -148,6 +147,7 @@ public class JavaDomainMetamodelGenerator extends AbstractMetamodelGenerator {
       AggregateRootIdGenerator aggregateRootIdGenerator,
       AggregateEntityGenerator aggregateEntityGenerator,
       AggregateEntityIdGenerator aggregateEntityIdGenerator,
+      EnumerationGenerator enumerationGenerator,
       ValueObjectGenerator valueObjectGenerator,
       DomainEventGenerator domainEventGenerator,
       RepositoryGenerator repositoryGenerator,
@@ -171,6 +171,7 @@ public class JavaDomainMetamodelGenerator extends AbstractMetamodelGenerator {
     this.aggregateRootIdGenerator = aggregateRootIdGenerator;
     this.aggregateEntityGenerator = aggregateEntityGenerator;
     this.aggregateEntityIdGenerator = aggregateEntityIdGenerator;
+    this.enumerationGenerator = enumerationGenerator;
     this.valueObjectGenerator = valueObjectGenerator;
     this.domainEventGenerator = domainEventGenerator;
     this.repositoryGenerator = repositoryGenerator;
@@ -292,6 +293,21 @@ public class JavaDomainMetamodelGenerator extends AbstractMetamodelGenerator {
                               valueObjectExportInfo(getGenerationPath(), (ValueObject) property));
                         }
                       });
+
+              // Enumerations
+              aggregateRoot
+                  .getProperties()
+                  .forEach(
+                      property -> {
+                        if (property.getPropertyType().equals(PropertyType.ENUMERATION)) {
+                          enumerationGenerator.generate(
+                              (Enumeration) property,
+                              enumerationExportInfo(getGenerationPath(), (Enumeration) property));
+                        }
+                      });
+
+              // Enumerations
+
             });
 
     // DOMAIN SERVICES
@@ -304,16 +320,26 @@ public class JavaDomainMetamodelGenerator extends AbstractMetamodelGenerator {
                   domainService, domainServiceExportInfo(getGenerationPath(), domainService));
 
               // Argument Value Objects
-              Set<Data> allArguments =
-                  domainService
-                      .getDomainServiceMethods()
-                      .stream()
+              Set<Data> allArgumentsAndReturnValues =
+                  domainService.getDomainServiceMethods().stream()
                       .flatMap(
                           domainServiceMethod ->
                               domainServiceMethod.getFunction().getArguments().getData().stream())
                       .collect(Collectors.toSet());
 
-              allArguments.forEach(
+              // Return Value - Value Objects
+              Set<Data> allReturnValues =
+                  domainService.getDomainServiceMethods().stream()
+                      .map(
+                          domainServiceMethod -> domainServiceMethod.getFunction().getReturnValue())
+                      .filter(data -> data != null)
+                      .collect(Collectors.toSet());
+
+              // Add return values
+              allArgumentsAndReturnValues.addAll(allReturnValues);
+
+              // All
+              allArgumentsAndReturnValues.forEach(
                   data -> {
                     if (data.isDataGroup()) {
                       ValueObject valueObject = new ValueObject(data.getAsDataObject());
@@ -374,6 +400,7 @@ public class JavaDomainMetamodelGenerator extends AbstractMetamodelGenerator {
     constantsExporter.export(getGenerationPath(), getRootPackageName(), getTablePrefix());
 
     // =============================================================================================
+
     generateAggregateEntities(modelRepositories);
 
     generateProjections(modelRepositories);
@@ -446,6 +473,21 @@ public class JavaDomainMetamodelGenerator extends AbstractMetamodelGenerator {
                               (ValueObject) aggregateEntityProperty,
                               valueObjectExportInfo(
                                   getGenerationPath(), (ValueObject) aggregateEntityProperty));
+                        }
+                      });
+
+              // Enumeration
+              aggregateEntity
+                  .getProperties()
+                  .forEach(
+                      aggregateEntityProperty -> {
+                        if (aggregateEntityProperty
+                            .getPropertyType()
+                            .equals(PropertyType.ENUMERATION)) {
+                          enumerationGenerator.generate(
+                              (Enumeration) aggregateEntityProperty,
+                              enumerationExportInfo(
+                                  getGenerationPath(), (Enumeration) aggregateEntityProperty));
                         }
                       });
             });
@@ -597,6 +639,20 @@ public class JavaDomainMetamodelGenerator extends AbstractMetamodelGenerator {
             "%s%s",
             TextConverter.toUpperCamel(
                 domainMessagePublishedDataRepository.getObjectName().getText()),
+            FolderFileConstants.JAVA_POSTFIX));
+  }
+
+  private ExportInfo enumerationExportInfo(Path generationPath, Enumeration enumeration) {
+    return ExportInfo.file(
+        Paths.get(
+            generationPath.toString(),
+            FolderFileConstants.SRC,
+            FolderFileConstants.MAIN,
+            FolderFileConstants.JAVA,
+            enumeration.getPackageName().toPath().toString()),
+        String.format(
+            "%s%s",
+            TextConverter.toUpperCamel(enumeration.getObjectName().getText()),
             FolderFileConstants.JAVA_POSTFIX));
   }
 

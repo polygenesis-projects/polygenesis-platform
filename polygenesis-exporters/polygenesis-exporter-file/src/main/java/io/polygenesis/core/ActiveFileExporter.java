@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,13 +26,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
-/**
- * The type Active file exporter.
- *
- * @author Christos Tsakostas
- */
 public class ActiveFileExporter extends AbstractExporter implements Exporter {
 
   // ===============================================================================================
@@ -49,15 +45,34 @@ public class ActiveFileExporter extends AbstractExporter implements Exporter {
     PathService.ensurePath(exportInfo.getGenerationPath());
 
     try {
-      OutputStream outputStream =
-          new FileOutputStream(
-              Paths.get(exportInfo.getGenerationPath().toString(), exportInfo.getFileName())
-                  .toString());
+      Path filePath =
+          Paths.get(exportInfo.getGenerationPath().toString(), exportInfo.getFileName());
+
+      OutputStream outputStream = new FileOutputStream(filePath.toString());
+      byteArrayOutputStream = formatCodeIfJava(byteArrayOutputStream, filePath.toString());
       byteArrayOutputStream.writeTo(outputStream);
       outputStream.flush();
       outputStream.close();
     } catch (IOException e) {
       throw new IllegalStateException(e.getMessage(), e);
     }
+  }
+
+  // ===============================================================================================
+  // PRIVATE
+  // ===============================================================================================
+
+  private ByteArrayOutputStream formatCodeIfJava(
+      ByteArrayOutputStream byteArrayOutputStream, String fileName) {
+    if (!fileName.toLowerCase().endsWith(".java")) {
+      return byteArrayOutputStream;
+    }
+
+    String output = format(byteArrayOutputStream.toString(), fileName);
+
+    ByteArrayOutputStream byteArrayOutputStreamFormatted = new ByteArrayOutputStream();
+    byteArrayOutputStreamFormatted.writeBytes(output.getBytes());
+
+    return byteArrayOutputStreamFormatted;
   }
 }

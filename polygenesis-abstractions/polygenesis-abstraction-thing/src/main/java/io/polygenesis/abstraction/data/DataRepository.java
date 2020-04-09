@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,11 +28,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-/**
- * The type Data repository.
- *
- * @author Christos Tsakostas
- */
 public class DataRepository {
 
   // ===============================================================================================
@@ -117,8 +112,7 @@ public class DataRepository {
    * @return the set
    */
   public Set<Data> findDataExcludingIdentitiesAndPaging() {
-    return getData()
-        .stream()
+    return getData().stream()
         .filter(
             data ->
                 !data.getDataPurpose().equals(DataPurpose.thingIdentity())
@@ -135,8 +129,7 @@ public class DataRepository {
    * @return the set
    */
   public Set<Data> findDataExcludingPaging() {
-    return getData()
-        .stream()
+    return getData().stream()
         .filter(
             data ->
                 !data.getDataPurpose().equals(DataPurpose.pageNumber())

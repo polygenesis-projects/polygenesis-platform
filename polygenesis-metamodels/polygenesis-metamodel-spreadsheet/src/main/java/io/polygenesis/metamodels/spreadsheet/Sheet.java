@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,11 +27,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/**
- * The type Sheet.
- *
- * @author Christos Tsakostas
- */
 public class Sheet {
 
   // ===============================================================================================
@@ -88,8 +83,7 @@ public class Sheet {
    * @return the number of rows
    */
   public Integer getNumberOfRows() {
-    return getCells()
-            .stream()
+    return getCells().stream()
             .map(Cell::getRowIndex)
             .max(Comparator.comparing(RowIndex::getIndex))
             .map(RowIndex::getIndex)
@@ -104,8 +98,7 @@ public class Sheet {
    * @return the cells by row index
    */
   public Set<Cell> getCellsByRowIndex(Integer rowIndex) {
-    return getCells()
-        .stream()
+    return getCells().stream()
         .filter(cell -> cell.getRowIndex().getIndex().equals(rowIndex))
         .collect(Collectors.toSet());
   }

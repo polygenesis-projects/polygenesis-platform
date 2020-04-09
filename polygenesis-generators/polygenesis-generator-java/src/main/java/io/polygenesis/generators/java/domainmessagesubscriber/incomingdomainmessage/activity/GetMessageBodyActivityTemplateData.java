@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,11 +20,6 @@
 
 package io.polygenesis.generators.java.domainmessagesubscriber.incomingdomainmessage.activity;
 
-/**
- * The type Get message body activity template data.
- *
- * @author Christos Tsakostas
- */
 public class GetMessageBodyActivityTemplateData {
   // No template data for this activity
 }

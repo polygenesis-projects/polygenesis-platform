@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,11 +35,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-/**
- * The type Batch process command transformer.
- *
- * @author Christos Tsakostas
- */
 public class BatchProcessCommandTransformer
     extends AbstractClassTransformer<BatchProcessMetamodel, ServiceMethod> {
 
@@ -120,6 +115,7 @@ public class BatchProcessCommandTransformer
     Set<String> imports = new TreeSet<>();
 
     imports.add("com.oregor.trinity4j.api.clients.batchprocess.BatchProcessCommandService");
+    imports.add("com.oregor.trinity4j.api.clients.batchprocess.BatchProcessMessage");
     imports.add("org.springframework.stereotype.Service");
 
     imports.add(

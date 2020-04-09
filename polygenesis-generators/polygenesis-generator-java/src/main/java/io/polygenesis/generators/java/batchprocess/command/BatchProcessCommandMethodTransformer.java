@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,11 +29,6 @@ import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-/**
- * The type Batch process command method transformer.
- *
- * @author Christos Tsakostas
- */
 public class BatchProcessCommandMethodTransformer extends AbstractMethodTransformer<ServiceMethod> {
 
   // ===============================================================================================
@@ -88,7 +83,8 @@ public class BatchProcessCommandMethodTransformer extends AbstractMethodTransfor
       ServiceMethod source, Object... args) {
     Set<ParameterRepresentation> parameterRepresentations = new LinkedHashSet<>();
 
-    parameterRepresentations.add(new ParameterRepresentation("String", "uniqueId"));
+    parameterRepresentations.add(
+        new ParameterRepresentation("BatchProcessMessage", "batchProcessMessage"));
 
     return parameterRepresentations;
   }

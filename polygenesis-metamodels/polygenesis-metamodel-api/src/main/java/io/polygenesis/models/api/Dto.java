@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,11 +31,6 @@ import io.polygenesis.core.Nameable;
 import java.util.Objects;
 import java.util.Optional;
 
-/**
- * The type Dto.
- *
- * @author Christos Tsakostas
- */
 public class Dto implements Generatable, Nameable {
 
   // ===============================================================================================
@@ -152,9 +147,7 @@ public class Dto implements Generatable, Nameable {
    * @return the array element as optional
    */
   public Optional<Data> getArrayElementAsOptional() {
-    return getDataObject()
-        .getModels()
-        .stream()
+    return getDataObject().getModels().stream()
         .filter(Data::isDataArray)
         .map(DataArray.class::cast)
         .filter(dataArray -> dataArray.getArrayElement() != null)

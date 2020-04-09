@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,11 +39,6 @@ import io.polygenesis.models.messaging.subscriber.SubscriberMetamodelRepository;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-/**
- * The type Subscriber deducer.
- *
- * @author Christos Tsakostas
- */
 public class SubscriberDeducer implements Deducer<SubscriberMetamodelRepository> {
 
   // ===============================================================================================
@@ -149,10 +144,8 @@ public class SubscriberDeducer implements Deducer<SubscriberMetamodelRepository>
    * @return the handler ensure existence function
    */
   private Function getHandlerEnsureExistenceFunction(Thing relatedThing) {
-    return relatedThing
-        .getFunctions()
-        .stream()
-        .filter(function -> function.getName().equals(new FunctionName("ensureExistence")))
+    return relatedThing.getFunctions().stream()
+        .filter(function -> function.getName().equals(FunctionName.ofVerbOnly("ensureExistence")))
         .findFirst()
         .orElse(null);
   }

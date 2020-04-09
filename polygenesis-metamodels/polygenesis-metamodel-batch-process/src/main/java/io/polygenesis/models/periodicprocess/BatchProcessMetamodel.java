@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,25 +20,39 @@
 
 package io.polygenesis.models.periodicprocess;
 
+import io.polygenesis.abstraction.data.DataPrimitive;
+import io.polygenesis.abstraction.data.DataRepository;
+import io.polygenesis.abstraction.data.PrimitiveType;
+import io.polygenesis.abstraction.thing.Activity;
+import io.polygenesis.abstraction.thing.Function;
+import io.polygenesis.abstraction.thing.FunctionName;
+import io.polygenesis.abstraction.thing.Purpose;
+import io.polygenesis.abstraction.thing.Thing;
+import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
 import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
+import io.polygenesis.commons.valueobjects.VariableName;
 import io.polygenesis.core.AbstractMetamodel;
 import io.polygenesis.models.api.Dto;
+import io.polygenesis.models.api.Service;
 import io.polygenesis.models.api.ServiceMethod;
+import java.util.LinkedHashSet;
 import java.util.Objects;
+import java.util.Set;
 
-/**
- * The type Batch process metamodel.
- *
- * @author Christos Tsakostas
- */
 public class BatchProcessMetamodel extends AbstractMetamodel {
+
+  // ===============================================================================================
+  // STATE
+  // ===============================================================================================
 
   private PackageName packageName;
   private ServiceMethod commandServiceMethod;
   private ServiceMethod queryServiceMethod;
   private Dto queryCollectionItem;
+  private Service service;
+  private Set<BatchProcessMethod> batchProcessMethods;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -64,6 +78,9 @@ public class BatchProcessMetamodel extends AbstractMetamodel {
     setCommandServiceMethod(commandServiceMethod);
     setQueryServiceMethod(queryServiceMethod);
     setQueryCollectionItem(queryCollectionItem);
+    setService(commandServiceMethod.getService());
+
+    initializeBatchProcessMethods();
   }
 
   // ===============================================================================================
@@ -106,6 +123,24 @@ public class BatchProcessMetamodel extends AbstractMetamodel {
     return queryCollectionItem;
   }
 
+  /**
+   * Gets service.
+   *
+   * @return the service
+   */
+  public Service getService() {
+    return service;
+  }
+
+  /**
+   * Gets batch process methods.
+   *
+   * @return the batch process methods
+   */
+  public Set<BatchProcessMethod> getBatchProcessMethods() {
+    return batchProcessMethods;
+  }
+
   // ===============================================================================================
   // GUARDS
   // ===============================================================================================
@@ -145,9 +180,52 @@ public class BatchProcessMetamodel extends AbstractMetamodel {
    *
    * @param queryCollectionItem the query collection item
    */
-  public void setQueryCollectionItem(Dto queryCollectionItem) {
+  private void setQueryCollectionItem(Dto queryCollectionItem) {
     Assertion.isNotNull(queryCollectionItem, "queryCollectionItem is required");
     this.queryCollectionItem = queryCollectionItem;
+  }
+
+  /**
+   * Sets service.
+   *
+   * @param service the service
+   */
+  private void setService(Service service) {
+    Assertion.isNotNull(service, "service is required");
+    this.service = service;
+  }
+
+  /**
+   * Sets batch process methods.
+   *
+   * @param batchProcessMethods the batch process methods
+   */
+  private void setBatchProcessMethods(Set<BatchProcessMethod> batchProcessMethods) {
+    Assertion.isNotNull(batchProcessMethods, "batchProcessMethods is required");
+    this.batchProcessMethods = batchProcessMethods;
+  }
+
+  // ===============================================================================================
+  // PRIVATE
+  // ===============================================================================================
+
+  private void initializeBatchProcessMethods() {
+    setBatchProcessMethods(new LinkedHashSet<>());
+
+    getBatchProcessMethods().add(new BatchProcessMethod(this, makeGetBatchProcessServiceName()));
+  }
+
+  private Function makeGetBatchProcessServiceName() {
+    Thing thing = ThingBuilder.apiClientBatchProcess("batchProcess").createThing();
+
+    return new Function(
+        thing,
+        Purpose.batchProcessServiceName(),
+        FunctionName.ofVerbOnly("getBatchProcessServiceName"),
+        DataPrimitive.of(PrimitiveType.STRING, VariableName.response()),
+        new DataRepository(),
+        Activity.empty(),
+        thing.getAbstractionsScopes());
   }
 
   // ===============================================================================================

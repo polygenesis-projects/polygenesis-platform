@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -63,6 +63,9 @@ import io.polygenesis.generators.java.domain.domainmessage.publisheddata.DomainM
 import io.polygenesis.generators.java.domain.domainmessage.publisheddatarepository.DomainMessagePublishedDataRepositoryGenerator;
 import io.polygenesis.generators.java.domain.domainmessage.publisheddatarepository.DomainMessagePublishedDataRepositoryMethodTransformer;
 import io.polygenesis.generators.java.domain.domainmessage.publisheddatarepository.DomainMessagePublishedDataRepositoryTransformer;
+import io.polygenesis.generators.java.domain.enumeration.EnumerationGenerator;
+import io.polygenesis.generators.java.domain.enumeration.EnumerationMethodTransformer;
+import io.polygenesis.generators.java.domain.enumeration.EnumerationTransformer;
 import io.polygenesis.generators.java.domain.projection.id.ProjectionIdGenerator;
 import io.polygenesis.generators.java.domain.projection.id.ProjectionIdMethodTransformer;
 import io.polygenesis.generators.java.domain.projection.id.ProjectionIdTransformer;
@@ -93,12 +96,6 @@ import io.polygenesis.generators.java.domain.valueobject.ValueObjectTransformer;
 import io.polygenesis.transformers.java.JavaDataTypeTransformer;
 import java.nio.file.Path;
 
-/**
- * The Java Domain MetamodelGenerator Factory creates new instances of {@link
- * JavaDomainMetamodelGenerator}***.
- *
- * @author Christos Tsakostas
- */
 public final class JavaDomainMetamodelGeneratorFactory {
 
   // ===============================================================================================
@@ -109,6 +106,7 @@ public final class JavaDomainMetamodelGeneratorFactory {
   private static AggregateRootIdGenerator aggregateRootIdGenerator;
   private static AggregateEntityGenerator aggregateEntityGenerator;
   private static AggregateEntityIdGenerator aggregateEntityIdGenerator;
+  private static EnumerationGenerator enumerationGenerator;
   private static ValueObjectGenerator valueObjectGenerator;
   private static DomainEventGenerator domainEventGenerator;
   private static RepositoryGenerator repositoryGenerator;
@@ -177,6 +175,13 @@ public final class JavaDomainMetamodelGeneratorFactory {
                 dataTypeTransformer, new AggregateEntityIdMethodTransformer(dataTypeTransformer)),
             templateEngine,
             activeFileExporter);
+
+    enumerationGenerator =
+        new EnumerationGenerator(
+            new EnumerationTransformer(
+                dataTypeTransformer, new EnumerationMethodTransformer(dataTypeTransformer)),
+            templateEngine,
+            passiveFileExporter);
 
     valueObjectGenerator =
         new ValueObjectGenerator(
@@ -319,6 +324,7 @@ public final class JavaDomainMetamodelGeneratorFactory {
         aggregateRootIdGenerator,
         aggregateEntityGenerator,
         aggregateEntityIdGenerator,
+        enumerationGenerator,
         valueObjectGenerator,
         domainEventGenerator,
         repositoryGenerator,

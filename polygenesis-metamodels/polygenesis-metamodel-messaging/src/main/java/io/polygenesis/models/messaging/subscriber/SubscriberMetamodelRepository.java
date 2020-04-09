@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,11 +24,6 @@ import io.polygenesis.core.AbstractMetamodelRepository;
 import io.polygenesis.core.MetamodelRepository;
 import java.util.Set;
 
-/**
- * The type Subscriber metamodel repository.
- *
- * @author Christos Tsakostas
- */
 public class SubscriberMetamodelRepository extends AbstractMetamodelRepository<SubscriberMetamodel>
     implements MetamodelRepository<SubscriberMetamodel> {
 

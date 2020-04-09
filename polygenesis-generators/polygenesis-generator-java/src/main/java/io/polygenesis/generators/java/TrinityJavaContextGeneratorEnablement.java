@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,11 +20,6 @@
 
 package io.polygenesis.generators.java;
 
-/**
- * The type Trinity java context generator enablement.
- *
- * @author Christos Tsakostas
- */
 public class TrinityJavaContextGeneratorEnablement {
 
   private boolean javaApiGenerator = true;
@@ -45,6 +40,8 @@ public class TrinityJavaContextGeneratorEnablement {
 
   private boolean domainDetailDomainMessagePublisher = true;
   private boolean domainDetailRepositoryInMemory = true;
+
+  private boolean openApi = true;
 
   /** Instantiates a new Trinity java context generator enablement. */
   public TrinityJavaContextGeneratorEnablement() {
@@ -69,6 +66,8 @@ public class TrinityJavaContextGeneratorEnablement {
 
     setDomainDetailDomainMessagePublisher(true);
     setDomainDetailRepositoryInMemory(true);
+
+    setOpenApi(true);
   }
 
   // ===============================================================================================
@@ -226,6 +225,15 @@ public class TrinityJavaContextGeneratorEnablement {
    */
   public boolean isDomainDetailRepositoryInMemory() {
     return domainDetailRepositoryInMemory;
+  }
+
+  /**
+   * Is open api boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isOpenApi() {
+    return openApi;
   }
 
   // ===============================================================================================
@@ -388,5 +396,14 @@ public class TrinityJavaContextGeneratorEnablement {
    */
   public void setDomainDetailRepositoryInMemory(boolean domainDetailRepositoryInMemory) {
     this.domainDetailRepositoryInMemory = domainDetailRepositoryInMemory;
+  }
+
+  /**
+   * Sets open api.
+   *
+   * @param openApi the open api
+   */
+  public void setOpenApi(boolean openApi) {
+    this.openApi = openApi;
   }
 }

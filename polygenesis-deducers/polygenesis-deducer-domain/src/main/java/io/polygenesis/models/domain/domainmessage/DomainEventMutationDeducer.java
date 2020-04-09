@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@
 package io.polygenesis.models.domain.domainmessage;
 
 import io.polygenesis.abstraction.thing.Thing;
+import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
@@ -34,11 +35,6 @@ import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-/**
- * The type Domain event mutation deducer.
- *
- * @author Christos Tsakostas
- */
 public class DomainEventMutationDeducer {
 
   /**
@@ -59,20 +55,7 @@ public class DomainEventMutationDeducer {
     DomainEvent domainEvent =
         new DomainEvent(
             InstantiationType.CONCRETE,
-            new ObjectName(
-                String.format(
-                    "%s%s",
-                    stateMutationMethod
-                            .getFunction()
-                            .getName()
-                            .getText()
-                            .contains(thing.getThingName().getText())
-                        ? ""
-                        : TextConverter.toUpperCamel(thing.getThingName().getText()),
-                    // Use past tense
-                    TextConverter.toUpperCamel(
-                        TextConverter.toPastTense(
-                            stateMutationMethod.getFunction().getName().getText())))),
+            makeDomainEventName(thing, stateMutationMethod),
             thingPackageName,
             thing.getMultiTenant());
 
@@ -116,5 +99,26 @@ public class DomainEventMutationDeducer {
             });
 
     return new Constructor(null, stateMutationMethod.getFunction(), properties, rootPackageName);
+  }
+
+  private ObjectName makeDomainEventName(Thing thing, StateMutationMethod stateMutationMethod) {
+    Assertion.isNotNull(
+        stateMutationMethod.getFunction().getName().getVerb(), "function verb is required");
+
+    Assertion.isNotNull(
+        stateMutationMethod.getFunction().getName().getObject(), "function object is required");
+
+    String pastTenseVerb =
+        TextConverter.toUpperCamel(
+            TextConverter.toPastTense(stateMutationMethod.getFunction().getName().getVerb()));
+
+    String object =
+        TextConverter.toUpperCamel(stateMutationMethod.getFunction().getName().getObject());
+
+    if (!object.toLowerCase().contains(thing.getThingName().getText().toLowerCase())) {
+      object = TextConverter.toUpperCamel(thing.getThingName().getText()) + object;
+    }
+
+    return new ObjectName(String.format("%s%s", object, pastTenseVerb));
   }
 }

@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,11 +27,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/**
- * The type Abstract project.
- *
- * @author Christos Tsakostas
- */
 public abstract class AbstractProject implements Project {
 
   // ===============================================================================================
@@ -70,8 +65,7 @@ public abstract class AbstractProject implements Project {
    * @return the all contexts metamodel repositories
    */
   public Set<MetamodelRepository<?>> getAllContextsMetamodelRepositories() {
-    return getContexts()
-        .stream()
+    return getContexts().stream()
         .flatMap(context -> context.getMetamodelRepositories().stream())
         .collect(Collectors.toCollection(LinkedHashSet::new));
   }

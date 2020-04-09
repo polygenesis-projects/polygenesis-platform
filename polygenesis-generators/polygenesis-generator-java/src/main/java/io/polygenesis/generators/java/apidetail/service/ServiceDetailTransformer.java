@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,11 +41,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 
-/**
- * The type Service detail transformer.
- *
- * @author Christos Tsakostas
- */
 public class ServiceDetailTransformer
     extends AbstractClassTransformer<ServiceImplementation, ServiceMethodImplementation> {
 
@@ -139,10 +134,7 @@ public class ServiceDetailTransformer
     imports.add("org.springframework.transaction.annotation.Transactional");
 
     Optional<ServiceMethod> optionalMethodFetchPagedCollection =
-        source
-            .getService()
-            .getServiceMethods()
-            .stream()
+        source.getService().getServiceMethods().stream()
             .filter(method -> method.getFunction().getPurpose().isFetchPagedCollection())
             .findFirst();
 

@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,6 @@ import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-/** @author Christos Tsakostas */
 public class Tenant {
 
   public static Thing create(PackageName rootPackageName, Thing user) {
@@ -48,6 +47,7 @@ public class Tenant {
             .withFunctionCreate(createData(rootPackageName, user))
             .withFunctionModify(
                 "deactivate",
+                "",
                 new LinkedHashSet<>(
                     Collections.singletonList(
                         DataPrimitive.of(PrimitiveType.STRING, new VariableName("someVar")))))

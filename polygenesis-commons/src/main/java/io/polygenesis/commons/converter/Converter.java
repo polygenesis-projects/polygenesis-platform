@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,15 +20,6 @@
 
 package io.polygenesis.commons.converter;
 
-/**
- * A converter converts a source object of type {@code S} to a target of type {@code T}.
- *
- * <p>Implementations of this interface are thread-safe and can be shared.
- *
- * @param <S> the source type
- * @param <T> the target type
- * @author Christos Tsakostas
- */
 public interface Converter<S, T> {
 
   /**

@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,6 @@ import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.commons.valueobjects.VariableName;
 
-/** @author Christos Tsakostas */
 public class SignUpDomainService {
 
   /**
@@ -45,7 +44,7 @@ public class SignUpDomainService {
             .createThing();
 
     signUpDomainService.addFunction(
-        FunctionBuilder.of(signUpDomainService, "create", Purpose.create())
+        FunctionBuilder.of(signUpDomainService, "create", "", Purpose.create())
             .addArgument(DataPrimitive.of(PrimitiveType.STRING, new VariableName("email")))
             .addArgument(DataPrimitive.of(PrimitiveType.STRING, new VariableName("password")))
             .setReturnValue(signUp.getAsDataObject(rootPackageName))

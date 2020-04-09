@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,11 +28,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/**
- * The type Table.
- *
- * @author Christos Tsakostas
- */
 public class Table implements Metamodel {
 
   private TableName tableName;
@@ -75,8 +70,7 @@ public class Table implements Metamodel {
    * @return the primary keys
    */
   public Set<Column> getPrimaryKeys() {
-    return columns
-        .stream()
+    return columns.stream()
         .filter(Column::getPrimaryKey)
         .collect(Collectors.toCollection(LinkedHashSet::new));
   }

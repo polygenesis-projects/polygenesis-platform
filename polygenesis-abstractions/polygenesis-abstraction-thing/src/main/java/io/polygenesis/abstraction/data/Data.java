@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,19 +22,6 @@ package io.polygenesis.abstraction.data;
 
 import io.polygenesis.commons.valueobjects.VariableName;
 
-/**
- * This is the base class for any Data.
- *
- * <p>References:
- *
- * <ul>
- *   <li>https://en.wikibooks.org/wiki/Java_Programming/Primitive_Types
- *   <li>https://en.wikipedia.org/wiki/Primitive_data_type
- *   <li>https://docs.oracle.com/javase/tutorial/java/nutsandbolts/datatypes.html
- * </ul>
- *
- * @author Christos Tsakostas
- */
 public interface Data {
 
   /**
@@ -84,6 +71,13 @@ public interface Data {
   // ===============================================================================================
 
   /**
+   * Gets as data enumeration.
+   *
+   * @return the as data enumeration
+   */
+  DataEnumeration getAsDataEnumeration();
+
+  /**
    * Gets as data primitive.
    *
    * @return the as data primitive
@@ -110,6 +104,13 @@ public interface Data {
    * @return the as data map
    */
   DataMap getAsDataMap();
+
+  /**
+   * Is data enumeration boolean.
+   *
+   * @return the boolean
+   */
+  boolean isDataEnumeration();
 
   /**
    * Is primitive.

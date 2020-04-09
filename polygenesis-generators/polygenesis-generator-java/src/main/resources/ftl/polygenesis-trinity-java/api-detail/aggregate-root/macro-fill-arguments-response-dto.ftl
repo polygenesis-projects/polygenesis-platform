@@ -2,7 +2,7 @@
  ==========================LICENSE_START=================================
  PolyGenesis Platform
  ========================================================================
- Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  ========================================================================
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
+
 <#include "../../../polygenesis-implementation-java-apiimpl/macro-fill-argument-value-object.ftl">
 <#macro fillArgumentsResponseDto properties persistenceVariable responseDto multiTenant converterVariable>
     <#list responseDto.dataObject.models as modelData>

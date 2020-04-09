@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,7 +43,6 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import org.junit.Test;
 
-/** @author Christos Tsakostas */
 public class InvoicefulBackendCreator {
 
   private static final String JAVA_EXPORT_PATH = "/Users/tsakostas/work/repo/gitlab/invoiceful/xxx";
@@ -54,6 +53,10 @@ public class InvoicefulBackendCreator {
   private static final String JAVA_ROOT_PACKAGE = "com.invoiceful";
 
   @Test
+  public void test() {
+    main(null);
+  }
+
   public static void main(String[] args) {
     FreemarkerAuthorService.setAuthor("Christos Tsakostas");
 

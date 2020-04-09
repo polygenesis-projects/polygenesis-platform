@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,19 +23,6 @@ package io.polygenesis.abstraction.data;
 import io.polygenesis.commons.valueobjects.VariableName;
 import java.util.Objects;
 
-/**
- * This is the base class for any Data.
- *
- * <p>References:
- *
- * <ul>
- *   <li>https://en.wikibooks.org/wiki/Java_Programming/Primitive_Types
- *   <li>https://en.wikipedia.org/wiki/Primitive_data_type
- *   <li>https://docs.oracle.com/javase/tutorial/java/nutsandbolts/datatypes.html
- * </ul>
- *
- * @author Christos Tsakostas
- */
 public abstract class AbstractData implements Data {
 
   // ===============================================================================================
@@ -59,6 +46,7 @@ public abstract class AbstractData implements Data {
    * @param variableName the variable name
    * @param dataPurpose the data business type
    * @param dataValidator the data validator
+   * @param dataSourceType the data source type
    */
   protected AbstractData(
       DataPrimaryType dataPrimaryType,
@@ -117,6 +105,16 @@ public abstract class AbstractData implements Data {
   // QUERIES
   // ===============================================================================================
 
+  @Override
+  public DataEnumeration getAsDataEnumeration() {
+    if (isDataEnumeration()) {
+      return (DataEnumeration) this;
+    } else {
+      throw new IllegalStateException(
+          String.format("Data of type=%s is not a DataEnum", getDataPrimaryType().name()));
+    }
+  }
+
   /**
    * Gets as data primitive.
    *
@@ -173,6 +171,15 @@ public abstract class AbstractData implements Data {
       throw new IllegalStateException(
           String.format("Data of type=%s is not a DataMap", getDataPrimaryType().name()));
     }
+  }
+
+  /**
+   * Is data enumeration boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isDataEnumeration() {
+    return getDataPrimaryType().equals(DataPrimaryType.ENUMERATION);
   }
 
   /**

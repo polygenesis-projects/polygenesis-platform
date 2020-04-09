@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,12 +24,6 @@ import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.generators.java.shared.transformer.HtmlTransformer;
 import io.polygenesis.representations.code.HtmlRepresentation;
 
-/**
- * The type Abstract html transformer.
- *
- * @param <S> the type parameter
- * @author Christos Tsakostas
- */
 public abstract class AbstractHtmlTransformer<S> implements HtmlTransformer<S> {
 
   // ===============================================================================================

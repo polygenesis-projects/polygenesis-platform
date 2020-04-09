@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,11 +35,6 @@ import io.polygenesis.commons.valueobjects.VariableName;
 import io.polygenesis.core.AbstractNameablePackageable;
 import io.polygenesis.core.Generatable;
 
-/**
- * The type Incoming domain message.
- *
- * @author Christos Tsakostas
- */
 public class IncomingDomainMessage extends AbstractNameablePackageable implements Generatable {
 
   // ===============================================================================================
@@ -108,7 +103,7 @@ public class IncomingDomainMessage extends AbstractNameablePackageable implement
     return new Function(
         thing,
         Purpose.incomingDomainMessageGetMessageId(),
-        new FunctionName("getMessageId"),
+        FunctionName.ofVerbOnly("getMessageId"),
         DataPrimitive.of(PrimitiveType.STRING, VariableName.response()),
         new DataRepository(),
         Activity.empty(),
@@ -121,7 +116,7 @@ public class IncomingDomainMessage extends AbstractNameablePackageable implement
     return new Function(
         thing,
         Purpose.incomingDomainMessageGetMessageId(),
-        new FunctionName("getRootId"),
+        FunctionName.ofVerbOnly("getRootId"),
         DataPrimitive.of(PrimitiveType.STRING, VariableName.response()),
         new DataRepository(),
         Activity.empty(),
@@ -134,7 +129,7 @@ public class IncomingDomainMessage extends AbstractNameablePackageable implement
     return new Function(
         thing,
         Purpose.incomingDomainMessageGetMessageId(),
-        new FunctionName("getMessageBody"),
+        FunctionName.ofVerbOnly("getMessageBody"),
         DataPrimitive.of(PrimitiveType.STRING, VariableName.response()),
         new DataRepository(),
         Activity.empty(),

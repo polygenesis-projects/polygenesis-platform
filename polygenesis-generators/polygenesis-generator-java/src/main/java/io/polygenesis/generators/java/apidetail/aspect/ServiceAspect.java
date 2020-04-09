@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,11 +39,6 @@ import io.polygenesis.core.Nameable;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-/**
- * The type Service aspect.
- *
- * @author Christos Tsakostas
- */
 public class ServiceAspect implements Generatable, Nameable {
 
   // ===============================================================================================
@@ -130,7 +125,7 @@ public class ServiceAspect implements Generatable, Nameable {
     return new Function(
         thing,
         Purpose.aspectAround(),
-        new FunctionName("around"),
+        FunctionName.ofVerbOnly("around"),
         new DataObject(
             new ObjectName("Object"), new PackageName("java.lang"), VariableName.response()),
         new DataRepository(

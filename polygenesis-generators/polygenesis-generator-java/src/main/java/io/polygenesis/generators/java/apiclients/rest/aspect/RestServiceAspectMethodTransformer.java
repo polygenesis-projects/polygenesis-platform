@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,11 +31,6 @@ import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-/**
- * The type Rest service aspect method transformer.
- *
- * @author Christos Tsakostas
- */
 public class RestServiceAspectMethodTransformer extends AbstractMethodTransformer<Function> {
 
   // ===============================================================================================
@@ -69,7 +64,7 @@ public class RestServiceAspectMethodTransformer extends AbstractMethodTransforme
   public Set<String> annotations(Function source, Object... args) {
     PackageName rootPackageName = (PackageName) args[0];
 
-    if (source.getName().equals(new FunctionName("around"))) {
+    if (source.getName().equals(FunctionName.ofVerbOnly("around"))) {
       StringBuilder stringBuilder = new StringBuilder();
 
       stringBuilder.append(String.format("@Around(%n"));
@@ -103,7 +98,7 @@ public class RestServiceAspectMethodTransformer extends AbstractMethodTransforme
 
   @Override
   public Set<String> thrownExceptions(Function source, Object... args) {
-    if (source.getName().equals(new FunctionName("around"))) {
+    if (source.getName().equals(FunctionName.ofVerbOnly("around"))) {
       return new LinkedHashSet<>(singletonList("Throwable"));
     } else {
       return super.thrownExceptions(source, args);

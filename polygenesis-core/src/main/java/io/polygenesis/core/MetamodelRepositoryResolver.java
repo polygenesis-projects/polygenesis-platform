@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,12 +24,6 @@ import io.polygenesis.commons.assertion.Assertion;
 import java.util.Optional;
 import java.util.Set;
 
-/**
- * Resolves a concrete implementation of Metamodel Repository, provided a set of Metamodel
- * Repositories.
- *
- * @author Christos Tsakostas
- */
 public class MetamodelRepositoryResolver {
 
   // ===============================================================================================
@@ -51,8 +45,7 @@ public class MetamodelRepositoryResolver {
     Assertion.isNotNull(clazz, "clazz is required");
 
     Optional<T> optionalClazz =
-        modelRepositories
-            .stream()
+        modelRepositories.stream()
             .filter(
                 modelRepository ->
                     modelRepository.getClass().getCanonicalName().equals(clazz.getCanonicalName()))

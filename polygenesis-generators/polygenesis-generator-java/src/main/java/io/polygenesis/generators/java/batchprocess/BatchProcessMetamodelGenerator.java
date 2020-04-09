@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@
 package io.polygenesis.generators.java.batchprocess;
 
 import io.polygenesis.commons.text.TextConverter;
+import io.polygenesis.commons.valueobjects.ContextName;
 import io.polygenesis.core.AbstractMetamodelGenerator;
 import io.polygenesis.core.CoreRegistry;
 import io.polygenesis.core.ExportInfo;
@@ -35,17 +36,13 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Set;
 
-/**
- * The type Batch process metamodel generator.
- *
- * @author Christos Tsakostas
- */
 public class BatchProcessMetamodelGenerator extends AbstractMetamodelGenerator {
 
   // ===============================================================================================
   // STATE / DEPENDENCIES
   // ===============================================================================================
 
+  private final ContextName contextName;
   private final BatchProcessGenerator batchProcessGenerator;
   private final BatchProcessCommandGenerator batchProcessCommandGenerator;
   private final BatchProcessQueryGenerator batchProcessQueryGenerator;
@@ -58,16 +55,19 @@ public class BatchProcessMetamodelGenerator extends AbstractMetamodelGenerator {
    * Instantiates a new Batch process metamodel generator.
    *
    * @param generationPath the generation path
-   * @param batchProcessGenerator the periodic process generator
-   * @param batchProcessCommandGenerator the periodic process command generator
-   * @param batchProcessQueryGenerator the periodic process query generator
+   * @param contextName the context name
+   * @param batchProcessGenerator the batch process generator
+   * @param batchProcessCommandGenerator the batch process command generator
+   * @param batchProcessQueryGenerator the batch process query generator
    */
   public BatchProcessMetamodelGenerator(
       Path generationPath,
+      ContextName contextName,
       BatchProcessGenerator batchProcessGenerator,
       BatchProcessCommandGenerator batchProcessCommandGenerator,
       BatchProcessQueryGenerator batchProcessQueryGenerator) {
     super(generationPath);
+    this.contextName = contextName;
     this.batchProcessGenerator = batchProcessGenerator;
     this.batchProcessCommandGenerator = batchProcessCommandGenerator;
     this.batchProcessQueryGenerator = batchProcessQueryGenerator;
@@ -86,7 +86,8 @@ public class BatchProcessMetamodelGenerator extends AbstractMetamodelGenerator {
             periodicProcessMetamodel -> {
               batchProcessGenerator.generate(
                   periodicProcessMetamodel,
-                  processExportInfo(getGenerationPath(), periodicProcessMetamodel));
+                  processExportInfo(getGenerationPath(), periodicProcessMetamodel),
+                  contextName);
 
               batchProcessCommandGenerator.generate(
                   periodicProcessMetamodel,

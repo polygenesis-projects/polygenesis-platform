@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,12 +31,6 @@ import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.core.AbstractionScope;
 import java.util.Set;
 
-/**
- * The type Abstract function builder.
- *
- * @param <T> the type parameter
- * @author Christos Tsakostas
- */
 public abstract class AbstractFunctionBuilder<T extends AbstractFunctionBuilder<?>> {
 
   // ===============================================================================================
@@ -62,19 +56,21 @@ public abstract class AbstractFunctionBuilder<T extends AbstractFunctionBuilder<
    *
    * @param builderClass the builder class
    * @param thing the thing
-   * @param name the name
+   * @param verb the verb
+   * @param object the object
    * @param purpose the purpose
    */
   protected AbstractFunctionBuilder(
-      Class<T> builderClass, Thing thing, String name, Purpose purpose) {
+      Class<T> builderClass, Thing thing, String verb, String object, Purpose purpose) {
     Assertion.isNotNull(builderClass, "builderClass is required");
     Assertion.isNotNull(thing, "thing is required");
-    Assertion.isNotNull(name, "name is required");
+    Assertion.isNotNull(verb, "verb is required");
+    Assertion.isNotNull(object, "object is required");
     Assertion.isNotNull(purpose, "purpose is required");
 
     this.builderClass = builderClass;
     this.thing = thing;
-    this.name = new FunctionName(name);
+    this.name = FunctionName.ofVerbAndObject(verb, object);
     this.purpose = purpose;
 
     arguments = new DataRepository();

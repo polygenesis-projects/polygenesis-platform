@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,11 +43,6 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * Deduces State Management Action Groups.
- *
- * @author Christos Tsakostas
- */
 public class ActionGroupDeducer {
 
   private static final Map<Purpose, Set<ActionType>> purposeToActionTypeMap;
@@ -141,11 +136,10 @@ public class ActionGroupDeducer {
     return new Action(
         actionType,
         new ActionName(
-            TextConverter.toUpperUnderscore(functionName.getText()) + "_" + actionType.name()),
+            TextConverter.toUpperUnderscore(functionName.getFullName()) + "_" + actionType.name()),
         model);
   }
 
-  /** Initializes {@link Purpose} to {@link ActionType} map. */
   private static void initializePurposeToActionTypeMap() {
     purposeToActionTypeMap.put(
         Purpose.create(),

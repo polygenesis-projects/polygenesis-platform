@@ -2,7 +2,7 @@
  * ==========================LICENSE_START=================================
  * PolyGenesis Platform
  * ========================================================================
- * Copyright (C) 2015 - 2019 Christos Tsakostas, OREGOR LTD
+ * Copyright (C) 2015 - 2020 Christos Tsakostas, OREGOR LP
  * ========================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,7 +48,6 @@ import java.util.Set;
 import org.junit.Before;
 import org.junit.Test;
 
-/** @author Christos Tsakostas */
 public class DtoExporterTest {
 
   private Path generationPath;
@@ -137,7 +136,7 @@ public class DtoExporterTest {
   private Function makeFunctionCreate() {
     Thing thing = ThingBuilder.endToEnd("customer").createThing(PackageName.any());
 
-    return FunctionBuilder.of(thing, "create", Purpose.create())
+    return FunctionBuilder.of(thing, "create", "", Purpose.create())
         .setReturnValue(DataPrimitive.of(PrimitiveType.STRING, new VariableName("someRet")))
         .build();
   }
