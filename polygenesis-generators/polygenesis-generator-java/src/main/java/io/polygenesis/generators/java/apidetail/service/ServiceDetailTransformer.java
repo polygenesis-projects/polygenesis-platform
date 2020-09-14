@@ -129,7 +129,7 @@ public class ServiceDetailTransformer
 
     imports.addAll(detectImportsForMethods(source));
 
-    imports.add("com.oregor.trinity4j.commons.assertion.Assertion");
+    imports.add("com.oregor.trinity4j.domain.DomainAssertion");
     imports.add("org.springframework.stereotype.Service");
     imports.add("org.springframework.transaction.annotation.Transactional");
 

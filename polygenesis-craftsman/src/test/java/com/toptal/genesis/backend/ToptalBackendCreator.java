@@ -20,12 +20,16 @@
 
 package com.toptal.genesis.backend;
 
+import com.oregor.trinity.scaffolder.java.core.AppConfigLocationType;
 import com.oregor.trinity.scaffolder.java.core.ContextDescription;
+import com.oregor.trinity.scaffolder.java.core.Enablement;
 import com.oregor.trinity.scaffolder.java.core.ProjectDescription;
 import com.oregor.trinity.scaffolder.java.core.ProjectDescriptionBuilder;
 import com.oregor.trinity.scaffolder.java.core.TrinityScaffolderJava;
 import com.oregor.trinity.scaffolder.java.core.TrinityScaffolderJavaFactory;
-import com.toptal.genesis.contexts.access.ContextAccess;
+import com.toptal.genesis.contexts.auth.ContextAuth;
+import com.toptal.genesis.contexts.market.ContextMarket;
+import com.toptal.genesis.contexts.team.ContextTeam;
 import io.polygenesis.commons.freemarker.FreemarkerAuthorService;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.commons.valueobjects.PackageName;
@@ -37,28 +41,23 @@ import io.polygenesis.craftsman.GenesisDefault;
 import io.polygenesis.generators.java.TrinityJavaContextGeneratorEnablement;
 import io.polygenesis.generators.java.TrinityJavaContextGeneratorFactory;
 import io.polygenesis.metamodels.apptrinity.TrinityProject;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.LinkedHashSet;
 import java.util.Set;
-import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 
 public class ToptalBackendCreator {
 
-  private static final String JAVA_EXPORT_PATH = "tmp";
-  private static final String JAVA_PROJECT_FOLDER = "toptal-backend";
-  private static final String JAVA_ARTIFACT_ID = "toptal";
-  private static final String JAVA_MODULE_PREFIX = "toptal";
-  private static final String JAVA_CONTEXT = "toptal";
-  private static final String JAVA_ROOT_PACKAGE = "com.toptal";
+  private static final String JAVA_EXPORT_PATH = "/Users/tsakostas/work/repo/interview/toptal";
+  private static final String JAVA_PROJECT_FOLDER = "christos-tsakostas";
+  private static final String JAVA_ARTIFACT_ID = "somg";
+  private static final String JAVA_MODULE_PREFIX = "somg";
+  private static final String JAVA_CONTEXT = "somg";
+  private static final String JAVA_ROOT_PACKAGE = "com.somg";
 
   @Test
   public void test() throws IOException {
-    FileUtils.deleteDirectory(new File(JAVA_EXPORT_PATH));
-    FreemarkerAuthorService.setAuthor("Christos Tsakostas");
-
     main(null);
   }
 
@@ -80,28 +79,20 @@ public class ToptalBackendCreator {
     Project project =
         ProjectBuilder.of("toptal")
             .addContext(
-                ContextAccess.get(
-                    new PackageName(String.format("%s.%s", JAVA_ROOT_PACKAGE, "access")),
-                    contextGenerator("access", "access", "acs_", "access"),
-                    deducers("access")))
-            //            .addContext(
-            //                ContextStaticization.get(
-            //                    new PackageName(String.format("%s.%s", JAVA_ROOT_PACKAGE,
-            // "staticization")),
-            //                    contextGenerator("staticization", "staticization", "stc_",
-            // "staticization"),
-            //                    deducers("staticization")))
-            //            .addContext(
-            //                ContextSupport.get(
-            //                    String.format("%s.%s", JAVA_ROOT_PACKAGE, "support"),
-            //                    contextGenerator("support", "support", "spt_", "support"),
-            //                    deducers("support")))
-            //            .addContext(
-            //                ContextNotification.get(
-            //                    String.format("%s.%s", JAVA_ROOT_PACKAGE, "notification"),
-            //                    contextGenerator("notification", "notification", "ntf_",
-            // "notification"),
-            //                    deducers("notification")))
+                ContextAuth.get(
+                    new PackageName(String.format("%s.%s", JAVA_ROOT_PACKAGE, "auth")),
+                    contextGenerator("auth", "auth", "ath_", "auth"),
+                    deducers("auth")))
+            .addContext(
+                ContextMarket.get(
+                    new PackageName(String.format("%s.%s", JAVA_ROOT_PACKAGE, "market")),
+                    contextGenerator("market", "market", "mkt_", "market"),
+                    deducers("market")))
+            .addContext(
+                ContextTeam.get(
+                    new PackageName(String.format("%s.%s", JAVA_ROOT_PACKAGE, "team")),
+                    contextGenerator("team", "team", "tem_", "team"),
+                    deducers("team")))
             .build(TrinityProject.class);
 
     project.getContexts().forEach(context -> context.getContextGenerator().generate(context));
@@ -118,6 +109,13 @@ public class ToptalBackendCreator {
     TrinityJavaContextGeneratorEnablement trinityJavaContextGeneratorEnablement =
         new TrinityJavaContextGeneratorEnablement();
 
+    trinityJavaContextGeneratorEnablement.setAuxDetailPropertyFile(true);
+    trinityJavaContextGeneratorEnablement.setDomainDetailRepositoryInMemory(true);
+    trinityJavaContextGeneratorEnablement.setApiClientBatchProcess(false);
+    trinityJavaContextGeneratorEnablement.setApiClientBatchProcessMessageSubscriber(false);
+    trinityJavaContextGeneratorEnablement.setApiClientBatchProcessMessagingActivemq(false);
+    trinityJavaContextGeneratorEnablement.setApiClientBatchProcessSchedulerCamel(false);
+
     return TrinityJavaContextGeneratorFactory.newInstance(
         Paths.get(JAVA_EXPORT_PATH),
         trinityJavaContextGeneratorEnablement,
@@ -131,6 +129,12 @@ public class ToptalBackendCreator {
   }
 
   private static ProjectDescription makeProjectDescription() {
+    Enablement enablement = new Enablement();
+    enablement.setApiClientBatchProcessScaffolder(false);
+    enablement.setApiClientBatchProcessActiveMqScaffolder(false);
+    enablement.setAuxDetailAlertSlackScaffolder(false);
+    enablement.setDomainDetailRepositoryInMemoryScaffolder(true);
+
     return new ProjectDescriptionBuilder()
         .setProjectFolder(JAVA_PROJECT_FOLDER)
         .setContext(TextConverter.toLowerHyphen(JAVA_CONTEXT))
@@ -139,46 +143,35 @@ public class ToptalBackendCreator {
         .setModulePrefix(JAVA_MODULE_PREFIX)
         .setVersion("0.0.1-SNAPSHOT")
         .setName(JAVA_ARTIFACT_ID)
-        .setDescription("toptal")
+        .setDescription("Soccer online manager game")
         .setUrl("https://www.toptal.com")
         .setInceptionYear("2019")
-        .setOrganizationName("toptal")
-        .setOrganizationUrl("https://www.toptal.com")
+        .setOrganizationName("Christos Tsakostas, OREGOR")
+        .setOrganizationUrl("https://www.oregor.com")
         .setLicenseName("The Apache License, Version 2.0")
         .setLicenseUrl("http://www.apache.org/licenses/LICENSE-2.0.txt")
         .setDistributionProfile("ossrh-oregor")
-        .setScmConnection("scm:git:git://gitlab.com/toptal/toptal-backend.git")
-        .setScmDeveloperConnection("scm:git:git@gitlab.com:toptal/toptal-backend.git")
-        .setScmUrl("https://gitlab.com/toptal/toptal-backend")
-        .setContextDescriptions(contextDescriptions())
+        .setScmConnection("scm:git:git://git.toptal.com/screening/christos-tsakostas.git")
+        .setScmDeveloperConnection("scm:git:git@git.toptal.com:screening/christos-tsakostas.git")
+        .setScmUrl("https://git.toptal.com/screening/christos-tsakostas")
+        .setContextDescriptions(contextDescriptions(enablement))
+        .setAppConfigLocationType(AppConfigLocationType.OUTSIDE)
+        .setEnablement(enablement)
         .createProjectDescription();
   }
 
-  private static Set<ContextDescription> contextDescriptions() {
+  private static Set<ContextDescription> contextDescriptions(Enablement enablement) {
     Set<ContextDescription> contextDescriptions = new LinkedHashSet<>();
 
     contextDescriptions.add(
-        new ContextDescription("access", "access", "com.toptal.access", "access", "access"));
+        new ContextDescription("auth", "auth", "com.somg.auth", "auth", "auth", enablement));
 
-    //    contextDescriptions.add(
-    //        new ContextDescription(
-    //            "staticization",
-    //            "staticization",
-    //            "com.toptal.staticization",
-    //            "staticization",
-    //            "staticization"));
+    contextDescriptions.add(
+        new ContextDescription(
+            "market", "market", "com.somg.market", "market", "market", enablement));
 
-    //    contextDescriptions.add(
-    //        new ContextDescription(
-    //            "support", "support", "com.toptal.support", "support", "support"));
-    //
-    //    contextDescriptions.add(
-    //        new ContextDescription(
-    //            "notification",
-    //            "notification",
-    //            "com.toptal.notification",
-    //            "notification",
-    //            "notification"));
+    contextDescriptions.add(
+        new ContextDescription("team", "team", "com.somg.team", "team", "team", enablement));
 
     return contextDescriptions;
   }

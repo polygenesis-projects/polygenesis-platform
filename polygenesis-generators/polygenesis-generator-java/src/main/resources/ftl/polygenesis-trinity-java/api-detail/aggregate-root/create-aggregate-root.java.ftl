@@ -17,14 +17,12 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-
-<#include "../../../polygenesis-implementation-java-shared/macro-assertions-for-parameters.ftl">
+<#include "../../../polygenesis-implementation-java-shared/macro-domain-assertions-for-parameters.ftl">
 <#include "macro-restore-aggregate-root.ftl">
 <#include "macro-store-aggregate-root.ftl">
 <#include "../../../polygenesis-implementation-java-apiimpl/macro-fill-arguments.ftl">
 <#include "./macro-fill-arguments-response-dto.ftl">
-    // Create Agg Root
-    <@assertionsForParameters data.parameterRepresentations></@assertionsForParameters>
+    <@domainAssertionsForParameters data.parameterRepresentations></@domainAssertionsForParameters>
 
     ${ data.aggregateRootDataType } ${ data.aggregateRootVariable } = new ${ data.aggregateRootDataType }(
 <@fillArguments data.properties data.persistenceVariable data.requestDto data.multiTenant data.converterVariable!"No Converter"></@fillArguments>

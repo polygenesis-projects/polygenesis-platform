@@ -17,14 +17,13 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-
-<#include "../../../polygenesis-implementation-java-shared/macro-assertions-for-parameters.ftl">
+<#include "../../../polygenesis-implementation-java-shared/macro-domain-assertions-for-parameters.ftl">
 <#include "macro-restore-aggregate-root.ftl">
 <#include "macro-store-aggregate-root.ftl">
 <#include "../../../polygenesis-implementation-java-apiimpl/macro-fill-arguments.ftl">
-    <@assertionsForParameters data.parameterRepresentations></@assertionsForParameters>
+    <@domainAssertionsForParameters data.parameterRepresentations></@domainAssertionsForParameters>
 
-    // Assertion.isNotNull(request, "request is required");
+    // DomainAssertion.isNotNull(request, "request is required");
 
     ${ textConverter.toUpperCamel(data.aggregateRootIdDataType) } ${ textConverter.toLowerCamel(data.aggregateRootIdDataType) } = new ${ textConverter.toUpperCamel(data.aggregateRootIdDataType) }(UUID.fromString(${ data.requestDto.dataObject.variableName.text }.get${ textConverter.toUpperCamel( data.thingIdentity.variableName.text) }()));
 

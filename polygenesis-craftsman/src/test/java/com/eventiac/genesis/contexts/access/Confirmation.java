@@ -23,6 +23,7 @@ package com.eventiac.genesis.contexts.access;
 import com.oregor.trinity4j.Trinity4jAggregateRoot;
 import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.dsl.DataBuilder;
+import io.polygenesis.abstraction.thing.FunctionRole;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.dsl.PurposeFunctionBuilder;
 import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
@@ -41,8 +42,8 @@ public class Confirmation {
 
     confirmation.addFunctions(
         PurposeFunctionBuilder.forThing(confirmation, rootPackageName)
-            .withFunctionCreate(createData(rootPackageName))
-            .withFunctionModify("confirm", "", new LinkedHashSet<>())
+            .withFunctionCreate(createData(rootPackageName), FunctionRole.userAsSet())
+            .withFunctionModify("confirm", "", new LinkedHashSet<>(), FunctionRole.userAsSet())
             .build());
 
     confirmation.addData(confirmedData());

@@ -17,7 +17,6 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-
 <#include "macro-parameters.ftl">
 <#macro printConstructor constructor>
   /**

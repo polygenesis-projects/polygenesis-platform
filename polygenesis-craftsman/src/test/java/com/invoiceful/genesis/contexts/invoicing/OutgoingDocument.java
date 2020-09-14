@@ -24,6 +24,7 @@ import com.invoiceful.genesis.contexts.access.Shared;
 import com.oregor.trinity4j.Trinity4jShared;
 import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.dsl.DataBuilder;
+import io.polygenesis.abstraction.thing.FunctionRole;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.dsl.PurposeFunctionBuilder;
 import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
@@ -41,7 +42,7 @@ public class OutgoingDocument {
 
     outgoingDocument.addFunctions(
         PurposeFunctionBuilder.forThing(outgoingDocument, rootPackageName)
-            .withFunctionCreate(createData(rootPackageName))
+            .withFunctionCreate(createData(rootPackageName), FunctionRole.userAsSet())
             .build());
 
     //    outgoingDocument.addFunctions(

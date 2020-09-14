@@ -17,7 +17,6 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-
 <#include "../../../polygenesis-implementation-java-shared/macro-assertions-for-parameters.ftl">
 <#include "macro-set-root-id-in-request.ftl">
 <#include "macro-set-tenantid-and-ipaddress.ftl">

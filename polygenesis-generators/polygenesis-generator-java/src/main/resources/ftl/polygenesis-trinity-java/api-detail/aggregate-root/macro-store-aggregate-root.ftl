@@ -17,7 +17,6 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-
 <#macro storeAggregateRoot aggregateRootData>
     ${ aggregateRootData.aggregateRootVariable } = ${ aggregateRootData.aggregateRootRepositoryVariable }.store(${ aggregateRootData.aggregateRootVariable });
 </#macro>

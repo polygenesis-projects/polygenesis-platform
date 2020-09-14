@@ -216,14 +216,14 @@ public final class JavaDomainMetamodelGeneratorFactory {
             new SupportiveEntityTransformer(
                 dataTypeTransformer, new SupportiveEntityMethodTransformer(dataTypeTransformer)),
             templateEngine,
-            activeFileExporter);
+            passiveFileExporter);
 
     supportiveEntityIdGenerator =
         new SupportiveEntityIdGenerator(
             new SupportiveEntityIdTransformer(
                 dataTypeTransformer, new SupportiveEntityIdMethodTransformer(dataTypeTransformer)),
             templateEngine,
-            activeFileExporter);
+            passiveFileExporter);
 
     supportiveEntityRepositoryGenerator =
         new SupportiveEntityRepositoryGenerator(
@@ -231,7 +231,7 @@ public final class JavaDomainMetamodelGeneratorFactory {
                 dataTypeTransformer,
                 new SupportiveEntityRepositoryMethodTransformer(dataTypeTransformer)),
             templateEngine,
-            activeFileExporter);
+            passiveFileExporter);
 
     constantsExporter = new ConstantsExporter(freemarkerService);
 

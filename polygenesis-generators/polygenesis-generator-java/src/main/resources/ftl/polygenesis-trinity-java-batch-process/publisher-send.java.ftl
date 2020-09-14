@@ -17,5 +17,4 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-
     producerTemplate.sendBody(endpoint, message);

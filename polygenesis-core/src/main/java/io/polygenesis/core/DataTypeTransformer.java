@@ -20,6 +20,9 @@
 
 package io.polygenesis.core;
 
+/**
+ * The interface Data type transformer.
+ */
 public interface DataTypeTransformer {
 
   /**
@@ -50,6 +53,13 @@ public interface DataTypeTransformer {
    * @return the modifier private
    */
   String getModifierPrivate();
+
+  /**
+   * Gets modifier private commented out.
+   *
+   * @return the modifier private commented out
+   */
+  String getModifierPrivateCommentedOut();
 
   /**
    * Gets modifier private final.

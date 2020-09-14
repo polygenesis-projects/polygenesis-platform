@@ -24,6 +24,7 @@ import com.oregor.trinity4j.Trinity4jShared;
 import com.oregor.trinity4j.Trinity4jTenantAggregateRoot;
 import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.dsl.DataBuilder;
+import io.polygenesis.abstraction.thing.FunctionRole;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.dsl.PurposeFunctionBuilder;
 import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
@@ -42,8 +43,9 @@ public class Execution {
 
     execution.addFunctions(
         PurposeFunctionBuilder.forThing(execution, rootPackageName)
-            .withCrudFunction(createData(rootPackageName))
-            .withFunctionModify("performRequest", "", new LinkedHashSet<>())
+            .withCrudFunction(createData(rootPackageName), FunctionRole.userAsSet())
+            .withFunctionModify(
+                "performRequest", "", new LinkedHashSet<>(), FunctionRole.userAsSet())
             .build());
 
     //    execution.addChild(InvoiceItem.create(execution, rootPackageName));

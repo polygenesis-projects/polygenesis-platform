@@ -116,6 +116,11 @@ public class ProjectionRepositoryImplTransformer
   }
 
   @Override
+  public Set<String> annotations(Persistence source, Object... args) {
+    return new LinkedHashSet<>(Arrays.asList("@Repository"));
+  }
+
+  @Override
   public String simpleObjectName(Persistence source, Object... args) {
     return String.format("%sImpl", super.simpleObjectName(source, args));
   }

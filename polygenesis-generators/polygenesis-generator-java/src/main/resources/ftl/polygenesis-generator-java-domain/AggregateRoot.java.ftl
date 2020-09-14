@@ -17,7 +17,6 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-
 package ${ projection.packageName };
 <#if projection.imports?size gt 0>
 
@@ -110,8 +109,7 @@ public class ${ projection.objectNameWithOptionalExtendsImplements } {
    * @param ${ variable.value } The ${ textConverter.toUpperCamelSpaces(variable.value) }
    */
   private void set${ textConverter.toUpperCamel(variable.value) }(${ variable.key } ${ variable.value }) {
-    Assertion.isNotNull(${ variable.value }, "${ textConverter.toUpperCamelSpaces(variable.value) } is required");
-
+    DomainAssertion.isNotNull(${ variable.value }, "${ textConverter.toUpperCamelSpaces(variable.value) } is required");
     this.${ variable.value } = ${ variable.value };
   }
 </#list>

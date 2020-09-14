@@ -76,6 +76,11 @@ public class TypescriptDataTypeTransformer implements DataTypeTransformer {
   }
 
   @Override
+  public String getModifierPrivateCommentedOut() {
+    return String.format("// TODO: %s", MODIFIER_PRIVATE);
+  }
+
+  @Override
   public String getModifierPrivateFinal() {
     return MODIFIER_PRIVATE + " " + MODIFIER_FINAL;
   }

@@ -20,8 +20,10 @@
 
 package io.polygenesis.abstraction.thing.dsl;
 
+import io.polygenesis.abstraction.thing.FunctionRole;
 import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.Thing;
+import java.util.Set;
 
 public class FunctionBuilder extends AbstractFunctionBuilder<FunctionBuilder> {
 
@@ -38,15 +40,17 @@ public class FunctionBuilder extends AbstractFunctionBuilder<FunctionBuilder> {
    * @param purpose the purpose
    * @return the new function builder
    */
-  public static FunctionBuilder of(Thing thing, String verb, String object, Purpose purpose) {
-    return new FunctionBuilder(thing, verb, object, purpose);
+  public static FunctionBuilder of(
+      Thing thing, String verb, String object, Purpose purpose, Set<FunctionRole> roles) {
+    return new FunctionBuilder(thing, verb, object, purpose, roles);
   }
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
   // ===============================================================================================
 
-  private FunctionBuilder(Thing thing, String verb, String object, Purpose purpose) {
-    super(FunctionBuilder.class, thing, verb, object, purpose);
+  private FunctionBuilder(
+      Thing thing, String verb, String object, Purpose purpose, Set<FunctionRole> roles) {
+    super(FunctionBuilder.class, thing, verb, object, purpose, roles);
   }
 }

@@ -17,7 +17,6 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-
 <#if data.ensureExistenceServiceMethod??>
     ${ textConverter.toLowerCamel(data.ensureExistenceServiceMethod.service.serviceName.text) }.${ textConverter.toLowerCamel(data.ensureExistenceServiceMethod.function.name.fullName) }(new ${ textConverter.toUpperCamel(data.ensureExistenceServiceMethod.requestDto.dataObject.objectName.text) }(incomingDomainMessage.getRootId()));
 

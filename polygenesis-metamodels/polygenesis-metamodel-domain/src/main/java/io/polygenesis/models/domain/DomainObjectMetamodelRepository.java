@@ -78,7 +78,10 @@ public class DomainObjectMetamodelRepository extends AbstractMetamodelRepository
     return getItems().stream()
         .filter(entity -> entity.getObjectName().equals(new ObjectName(thingName.getText())))
         .findFirst()
-        .orElseThrow();
+        .orElseThrow(
+            () ->
+                new IllegalArgumentException(
+                    String.format("No entity found for thingName=%s", thingName.getText())));
   }
 
   /**

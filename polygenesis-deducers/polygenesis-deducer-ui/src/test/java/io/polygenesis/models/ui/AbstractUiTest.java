@@ -24,6 +24,7 @@ import io.polygenesis.abstraction.data.DataPrimitive;
 import io.polygenesis.abstraction.data.PrimitiveType;
 import io.polygenesis.abstraction.thing.CqsType;
 import io.polygenesis.abstraction.thing.Function;
+import io.polygenesis.abstraction.thing.FunctionRole;
 import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.dsl.FunctionBuilder;
@@ -40,7 +41,7 @@ public abstract class AbstractUiTest {
     // CREATE
     // =============================================================================================
     Function createFunction =
-        FunctionBuilder.of(thing, "createSomeThing", "", Purpose.create())
+        FunctionBuilder.of(thing, "createSomeThing", "", Purpose.create(), FunctionRole.userAsSet())
             .setReturnValue(DataPrimitive.of(PrimitiveType.STRING, new VariableName("response")))
             .build();
 
@@ -51,7 +52,11 @@ public abstract class AbstractUiTest {
     // =============================================================================================
     Function customPurposeFunction =
         FunctionBuilder.of(
-                thing, "createSomeThing", "", Purpose.custom("validate", CqsType.COMMAND))
+                thing,
+                "createSomeThing",
+                "",
+                Purpose.custom("validate", CqsType.COMMAND),
+                FunctionRole.userAsSet())
             .setReturnValue(DataPrimitive.of(PrimitiveType.STRING, new VariableName("response")))
             .build();
 

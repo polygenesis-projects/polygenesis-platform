@@ -23,6 +23,7 @@ package com.oregor.trinity4j;
 import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.DataRepository;
 import io.polygenesis.abstraction.data.dsl.DataBuilder;
+import io.polygenesis.abstraction.thing.FunctionRole;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.dsl.PurposeFunctionBuilder;
 import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
@@ -47,7 +48,7 @@ public class Trinity4jTenantAggregateRoot {
 
     tenantAggregateRoot.addFunctions(
         PurposeFunctionBuilder.forThing(tenantAggregateRoot, rootPackageName)
-            .withFunctionCreate(createData())
+            .withFunctionCreate(createData(), FunctionRole.userAsSet())
             .build());
 
     DataRepository dataRepository = new DataRepository();

@@ -22,6 +22,7 @@ package com.invoiceful.genesis.contexts.invoicing;
 
 import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.dsl.DataBuilder;
+import io.polygenesis.abstraction.thing.FunctionRole;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.dsl.PurposeFunctionBuilder;
 import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
@@ -37,7 +38,7 @@ public class DocumentGroup {
 
     documentGroup.addFunctions(
         PurposeFunctionBuilder.forThing(documentGroup, rootPackageName.getText())
-            .withCrudFunction(data())
+            .withCrudFunction(data(), FunctionRole.userAsSet())
             .build());
 
     return documentGroup;

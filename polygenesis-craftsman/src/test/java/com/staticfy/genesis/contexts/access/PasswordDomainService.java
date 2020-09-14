@@ -22,6 +22,7 @@ package com.staticfy.genesis.contexts.access;
 
 import io.polygenesis.abstraction.data.DataPrimitive;
 import io.polygenesis.abstraction.data.PrimitiveType;
+import io.polygenesis.abstraction.thing.FunctionRole;
 import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.dsl.FunctionBuilder;
@@ -44,21 +45,30 @@ public class PasswordDomainService {
             .createThing();
 
     passwordDomainService.addFunction(
-        FunctionBuilder.of(passwordDomainService, "encrypt", "", Purpose.encrypt())
+        FunctionBuilder.of(
+                passwordDomainService, "encrypt", "", Purpose.encrypt(), FunctionRole.userAsSet())
             .addArgument(DataPrimitive.of(PrimitiveType.STRING, new VariableName("plainPassword")))
             .setReturnValue(Shared.password(rootPackageName))
             .build());
 
     passwordDomainService.addFunction(
         FunctionBuilder.of(
-                passwordDomainService, "checkIfPasswordIsCompliant", "", Purpose.checkBoolean())
+                passwordDomainService,
+                "checkIfPasswordIsCompliant",
+                "",
+                Purpose.checkBoolean(),
+                FunctionRole.userAsSet())
             .addArgument(DataPrimitive.of(PrimitiveType.STRING, new VariableName("plainPassword")))
             .setReturnValue(DataPrimitive.of(PrimitiveType.BOOLEAN, VariableName.response()))
             .build());
 
     passwordDomainService.addFunction(
         FunctionBuilder.of(
-                passwordDomainService, "checkIfPasswordsMatch", "", Purpose.checkBoolean())
+                passwordDomainService,
+                "checkIfPasswordsMatch",
+                "",
+                Purpose.checkBoolean(),
+                FunctionRole.userAsSet())
             .addArgument(DataPrimitive.of(PrimitiveType.STRING, new VariableName("rawPassword")))
             .addArgument(
                 DataPrimitive.of(PrimitiveType.STRING, new VariableName("encodedPassword")))

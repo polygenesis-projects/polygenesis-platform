@@ -26,6 +26,7 @@ import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.abstraction.data.DataPrimitive;
 import io.polygenesis.abstraction.data.DataReferenceToThingByValue;
 import io.polygenesis.abstraction.data.DataRepository;
+import io.polygenesis.abstraction.data.PrimitiveType;
 import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.commons.keyvalue.KeyValue;
 import io.polygenesis.commons.text.TextConverter;
@@ -42,6 +43,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/** The type Thing. */
 public class Thing implements Abstraction {
 
   // ===============================================================================================
@@ -415,6 +417,31 @@ public class Thing implements Abstraction {
   }
 
   /**
+   * Gets thing identity as data object.
+   *
+   * @param rootPackageName the root package name
+   * @param variableName the variable name
+   * @return the thing identity as data object
+   */
+  // TODO
+  public DataObject getThingIdentityAsDataObject(
+      PackageName rootPackageName, VariableName variableName) {
+    Data data = getThingIdentity();
+
+    if (data.isDataGroup()) {
+      return data.getAsDataObject();
+    } else {
+      DataObject dataObject =
+          new DataObject(
+              new ObjectName(data.getVariableName().getText()),
+              makePackageName(rootPackageName, this),
+              variableName);
+      dataObject.addData(DataPrimitive.of(PrimitiveType.UUID, new VariableName("typeId")));
+      return dataObject;
+    }
+  }
+
+  /**
    * Gets thing identity as data object from data primitive.
    *
    * @param rootPackageName the root package name
@@ -625,7 +652,8 @@ public class Thing implements Abstraction {
                       childFunction.getArguments(),
                       childFunction.getActivity(),
                       getAbstractionsScopes(),
-                      childFunction);
+                      childFunction,
+                      childFunction.getRoles());
 
               // addFunction(function);
               getFunctions().add(function);

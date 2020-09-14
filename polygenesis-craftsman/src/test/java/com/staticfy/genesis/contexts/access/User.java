@@ -23,6 +23,7 @@ package com.staticfy.genesis.contexts.access;
 import com.oregor.trinity4j.Trinity4jAggregateRoot;
 import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.dsl.DataBuilder;
+import io.polygenesis.abstraction.thing.FunctionRole;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.dsl.PurposeFunctionBuilder;
 import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
@@ -40,7 +41,7 @@ public class User {
 
     user.addFunctions(
         PurposeFunctionBuilder.forThing(user, rootPackageName)
-            .withFunctionCreate(createData(rootPackageName))
+            .withFunctionCreate(createData(rootPackageName), FunctionRole.userAsSet())
             .build());
 
     //    user.addFunctions(

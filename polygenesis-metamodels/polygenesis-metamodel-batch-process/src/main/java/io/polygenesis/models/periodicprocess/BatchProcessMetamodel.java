@@ -26,6 +26,7 @@ import io.polygenesis.abstraction.data.PrimitiveType;
 import io.polygenesis.abstraction.thing.Activity;
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.abstraction.thing.FunctionName;
+import io.polygenesis.abstraction.thing.FunctionRole;
 import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
@@ -37,6 +38,7 @@ import io.polygenesis.core.AbstractMetamodel;
 import io.polygenesis.models.api.Dto;
 import io.polygenesis.models.api.Service;
 import io.polygenesis.models.api.ServiceMethod;
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -225,7 +227,8 @@ public class BatchProcessMetamodel extends AbstractMetamodel {
         DataPrimitive.of(PrimitiveType.STRING, VariableName.response()),
         new DataRepository(),
         Activity.empty(),
-        thing.getAbstractionsScopes());
+        thing.getAbstractionsScopes(),
+        new LinkedHashSet<>(Collections.singleton(FunctionRole.system())));
   }
 
   // ===============================================================================================

@@ -17,7 +17,6 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-
 <#include "../../../polygenesis-implementation-java-apiimpl/macro-fill-argument-value-object.ftl">
 <#macro fillArgumentsResponseDto properties persistenceVariable responseDto multiTenant converterVariable>
     <#list responseDto.dataObject.models as modelData>

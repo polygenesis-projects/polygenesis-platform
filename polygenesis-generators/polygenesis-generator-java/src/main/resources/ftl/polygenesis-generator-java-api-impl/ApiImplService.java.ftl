@@ -17,7 +17,6 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-
 package ${ projection.packageName };
 <#if projection.imports?size gt 0>
 
@@ -82,7 +81,7 @@ public class ${ projection.objectNameWithOptionalExtendsImplements } {
 	@Override
 	public ${ methodProjection.returnValue} ${ methodProjection.name }(${ methodProjection.argumentsCommaSeparated }) {
 	<#list methodProjection.arguments as argument>
-		Assertion.isNotNull(${ argument.value }, "${ textConverter.toUpperCamelSpaces(argument.value) } cannot be null");
+		DomainAssertion.isNotNull(${ argument.value }, "${ textConverter.toUpperCamelSpaces(argument.value) } cannot be null");
 	</#list>
 
 ${ methodProjection.implementation}

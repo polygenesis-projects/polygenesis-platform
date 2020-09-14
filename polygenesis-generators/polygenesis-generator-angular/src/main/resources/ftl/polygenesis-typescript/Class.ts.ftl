@@ -134,7 +134,7 @@ ${ data.modifiers }<#if data.modifiers != ""> </#if>class ${ data.fullObjectName
 <#if data.getMethodRepresentationsBy('ANY')?size gt 0>
 
   // ===============================================================================================
-  // FUNCTIONALITY
+  // OVERRIDES / FUNCTIONALITY
   // ===============================================================================================
 
   <#list data.getMethodRepresentationsBy('ANY') as method>

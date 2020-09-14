@@ -454,7 +454,7 @@ public abstract class AbstractClassTransformer<S extends Nameable, F extends Fun
 
     if (methodRepresentationType.equals(MethodRepresentationType.GUARD)) {
       stringBuilder.append("\t\t");
-      stringBuilder.append("Assertion.isNotNull(");
+      stringBuilder.append("DomainAssertion.isNotNull(");
       stringBuilder.append(fieldRepresentation.getVariableName());
       stringBuilder.append(",");
       stringBuilder.append(" \"");

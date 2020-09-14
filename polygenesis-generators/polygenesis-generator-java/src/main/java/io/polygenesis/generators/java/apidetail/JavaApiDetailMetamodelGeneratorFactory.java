@@ -69,7 +69,7 @@ public final class JavaApiDetailMetamodelGeneratorFactory {
                 new DomainObjectConverterMethodTransformer(
                     dataTypeTransformer, new DomainObjectConverterActivityRegistry())),
             templateEngine,
-            activeFileExporter);
+            passiveFileExporter);
 
     // =============================================================================================
 

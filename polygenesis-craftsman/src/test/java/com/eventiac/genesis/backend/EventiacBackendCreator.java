@@ -20,9 +20,15 @@
 
 package com.eventiac.genesis.backend;
 
-import com.eventiac.genesis.contexts.access.ContextAccess;
-import com.eventiac.genesis.contexts.staticization.ContextStaticization;
+import com.eventiac.genesis.contexts.auth.ContextAuth;
+import com.eventiac.genesis.contexts.notification.ContextNotification;
+import com.eventiac.genesis.contexts.payment.ContextPayment;
+import com.eventiac.genesis.contexts.planning.ContextPlanning;
+import com.eventiac.genesis.contexts.profile.ContextProfile;
+import com.eventiac.genesis.contexts.ticketing.ContextTicketing;
+import com.oregor.trinity.scaffolder.java.core.AppConfigLocationType;
 import com.oregor.trinity.scaffolder.java.core.ContextDescription;
+import com.oregor.trinity.scaffolder.java.core.Enablement;
 import com.oregor.trinity.scaffolder.java.core.ProjectDescription;
 import com.oregor.trinity.scaffolder.java.core.ProjectDescriptionBuilder;
 import com.oregor.trinity.scaffolder.java.core.TrinityScaffolderJava;
@@ -41,13 +47,15 @@ import io.polygenesis.metamodels.apptrinity.TrinityProject;
 import java.nio.file.Paths;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import org.junit.Ignore;
 import org.junit.Test;
 
+@Ignore
 public class EventiacBackendCreator {
 
-  private static final String JAVA_EXPORT_PATH = "/Users/tsakostas/work/repo/gitlab/eventiac";
+  private static final String JAVA_EXPORT_PATH = "/Users/tsakostas/work/repo/gitlab/eventiac/tmp";
   private static final String JAVA_PROJECT_FOLDER = "eventiac-backend";
-  private static final String JAVA_ARTIFACT_ID = "eventiac";
+  private static final String JAVA_ARTIFACT_ID = "eventiac-backend";
   private static final String JAVA_MODULE_PREFIX = "eventiac";
   private static final String JAVA_CONTEXT = "eventiac";
   private static final String JAVA_ROOT_PACKAGE = "com.eventiac";
@@ -75,26 +83,38 @@ public class EventiacBackendCreator {
     Project project =
         ProjectBuilder.of("eventiac")
             .addContext(
-                ContextAccess.get(
-                    new PackageName(String.format("%s.%s", JAVA_ROOT_PACKAGE, "access")),
-                    contextGenerator("access", "access", "acs_", "access"),
-                    deducers("access")))
+                ContextAuth.get(
+                    new PackageName(String.format("%s.%s", JAVA_ROOT_PACKAGE, "auth")),
+                    contextGenerator("auth", "auth", "ath_", "auth"),
+                    deducers("auth")))
             .addContext(
-                ContextStaticization.get(
-                    new PackageName(String.format("%s.%s", JAVA_ROOT_PACKAGE, "staticization")),
-                    contextGenerator("staticization", "staticization", "stc_", "staticization"),
-                    deducers("staticization")))
-            //            .addContext(
-            //                ContextSupport.get(
-            //                    String.format("%s.%s", JAVA_ROOT_PACKAGE, "support"),
-            //                    contextGenerator("support", "support", "spt_", "support"),
-            //                    deducers("support")))
-            //            .addContext(
-            //                ContextNotification.get(
-            //                    String.format("%s.%s", JAVA_ROOT_PACKAGE, "notification"),
-            //                    contextGenerator("notification", "notification", "ntf_",
-            // "notification"),
-            //                    deducers("notification")))
+                ContextProfile.get(
+                    new PackageName(String.format("%s.%s", JAVA_ROOT_PACKAGE, "profile")),
+                    contextGenerator(
+                        "profile", "profile", "pfl_", "profile"),
+                    deducers("profile")))
+            .addContext(
+                ContextPlanning.get(
+                    new PackageName(String.format("%s.%s", JAVA_ROOT_PACKAGE, "planning")),
+                    contextGenerator(
+                        "planning", "planning", "pln_", "planning"),
+                    deducers("planning")))
+            .addContext(
+                ContextTicketing.get(
+                    new PackageName(String.format("%s.%s", JAVA_ROOT_PACKAGE, "ticketing")),
+                    contextGenerator("ticketing", "ticketing", "tck_", "ticketing"),
+                    deducers("ticketing")))
+            .addContext(
+                ContextPayment.get(
+                    new PackageName(String.format("%s.%s", JAVA_ROOT_PACKAGE, "payment")),
+                    contextGenerator("payment", "payment", "pmt_", "payment"),
+                    deducers("payment")))
+            .addContext(
+                ContextNotification.get(
+                    new PackageName(String.format("%s.%s", JAVA_ROOT_PACKAGE, "notification")),
+                    contextGenerator("notification", "notification", "ntf_", "notification"),
+                    deducers("notification")))
+
             .build(TrinityProject.class);
 
     project.getContexts().forEach(context -> context.getContextGenerator().generate(context));
@@ -144,34 +164,69 @@ public class EventiacBackendCreator {
         .setScmDeveloperConnection("scm:git:git@gitlab.com:eventiac/eventiac-backend.git")
         .setScmUrl("https://gitlab.com/eventiac/eventiac-backend")
         .setContextDescriptions(contextDescriptions())
+        .setEnablement(new Enablement())
+        .setAppConfigLocationType(AppConfigLocationType.OUTSIDE)
         .createProjectDescription();
   }
 
   private static Set<ContextDescription> contextDescriptions() {
     Set<ContextDescription> contextDescriptions = new LinkedHashSet<>();
+    Enablement enablement = new Enablement();
 
+    //@formatter:off
     contextDescriptions.add(
-        new ContextDescription("access", "access", "com.eventiac.access", "access", "access"));
+        new ContextDescription("auth",
+            "auth",
+            "com.eventiac.auth",
+            "auth",
+            "auth",
+            enablement));
 
     contextDescriptions.add(
         new ContextDescription(
-            "staticization",
-            "staticization",
-            "com.eventiac.staticization",
-            "staticization",
-            "staticization"));
+            "profile",
+            "profile",
+            "com.eventiac.profile",
+            "profile",
+            "profile",
+            enablement));
 
-    //    contextDescriptions.add(
-    //        new ContextDescription(
-    //            "support", "support", "com.eventiac.support", "support", "support"));
-    //
-    //    contextDescriptions.add(
-    //        new ContextDescription(
-    //            "notification",
-    //            "notification",
-    //            "com.eventiac.notification",
-    //            "notification",
-    //            "notification"));
+    contextDescriptions.add(
+        new ContextDescription(
+            "planning",
+            "planning",
+            "com.eventiac.planning",
+            "planning",
+            "planning",
+            enablement));
+
+    contextDescriptions.add(
+        new ContextDescription(
+            "ticketing",
+            "ticketing",
+            "com.eventiac.ticketing",
+            "ticketing",
+            "ticketing",
+            enablement));
+
+    contextDescriptions.add(
+        new ContextDescription(
+            "payment",
+            "payment",
+            "com.eventiac.payment",
+            "payment",
+            "payment",
+            enablement));
+
+    contextDescriptions.add(
+        new ContextDescription(
+            "notification",
+            "notification",
+            "com.eventiac.notification",
+            "notification",
+            "notification",
+            enablement));
+    //@formatter:on
 
     return contextDescriptions;
   }

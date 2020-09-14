@@ -29,6 +29,7 @@ import io.polygenesis.abstraction.data.PrimitiveType;
 import io.polygenesis.abstraction.thing.Activity;
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.abstraction.thing.FunctionName;
+import io.polygenesis.abstraction.thing.FunctionRole;
 import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
@@ -42,6 +43,7 @@ import io.polygenesis.core.Generatable;
 import io.polygenesis.models.api.ServiceMethod;
 import io.polygenesis.models.messaging.subscriber.SubscriberMetamodel;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -178,7 +180,8 @@ public class DomainMessageSubscriber extends SubscriberMetamodel implements Gene
                         new PackageName("com.fasterxml.jackson.databind"),
                         new VariableName("jsonNodeBody"))))),
         Activity.keyValues(keyValues),
-        thing.getAbstractionsScopes());
+        thing.getAbstractionsScopes(),
+        new LinkedHashSet<>(Collections.singleton(FunctionRole.system())));
   }
 
   private Function makeGetSupportedMessageTypes() {
@@ -195,6 +198,7 @@ public class DomainMessageSubscriber extends SubscriberMetamodel implements Gene
         DataArray.of(DataPrimitive.of(PrimitiveType.STRING, VariableName.response())),
         new DataRepository(),
         Activity.keyValues(keyValues),
-        thing.getAbstractionsScopes());
+        thing.getAbstractionsScopes(),
+        new LinkedHashSet<>(Collections.singleton(FunctionRole.system())));
   }
 }

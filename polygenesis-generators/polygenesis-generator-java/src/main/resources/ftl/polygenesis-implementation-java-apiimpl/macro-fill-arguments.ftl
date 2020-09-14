@@ -17,7 +17,6 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-
 <#include "./macro-fill-argument-value-object.ftl">
 <#function isPropertyContainedInRequestDto property requestDto>
     <#list requestDto.dataObject.models as model>
@@ -65,7 +64,10 @@
           <#break>
         <#case 'SINGLE_VALUE_OBJECT'>
         ${ converterVariable }.convertToVo(${ requestDto.dataObject.variableName.text }.get${ textConverter.toUpperCamel(property.data.variableName.text) }())<#sep>,</#sep>
-          <#break>
+        <#break>
+        <#case 'ENUMERATION'>
+        // YEAH 1
+        <#break>
         <#default>
         // Property Type = ${ property.propertyType } is not supported!
       </#switch>

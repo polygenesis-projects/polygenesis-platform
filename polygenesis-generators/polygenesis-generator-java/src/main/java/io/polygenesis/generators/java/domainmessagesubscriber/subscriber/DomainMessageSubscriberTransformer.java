@@ -273,7 +273,12 @@ public class DomainMessageSubscriberTransformer
 
   @Override
   public Set<String> annotations(DomainMessageSubscriber source, Object... args) {
-    return new LinkedHashSet<>(Arrays.asList("@Service"));
+    return new LinkedHashSet<>(
+        Arrays.asList(
+            String.format(
+                "@Service(\"%s%s\")",
+                TextConverter.toUpperCamel(source.getName().getText()),
+                TextConverter.toUpperCamel(source.getContextName().getText()))));
   }
 
   @Override

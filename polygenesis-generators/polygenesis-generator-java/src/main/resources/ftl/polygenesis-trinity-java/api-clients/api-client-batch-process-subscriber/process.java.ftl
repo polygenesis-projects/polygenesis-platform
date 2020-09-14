@@ -17,7 +17,6 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-
     try {
       Assertion.isNotNull(message, "message is required");
 

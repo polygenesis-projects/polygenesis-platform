@@ -21,11 +21,14 @@
 package io.polygenesis.core;
 
 import java.nio.file.Path;
+import java.util.Objects;
 
+/** The type Export info. */
 public class ExportInfo {
 
   private Path generationPath;
   private String fileName;
+  private Boolean formatCode;
 
   // ===============================================================================================
   // STATIC
@@ -57,8 +60,9 @@ public class ExportInfo {
   // ===============================================================================================
 
   private ExportInfo(Path generationPath, String fileName) {
-    this.generationPath = generationPath;
-    this.fileName = fileName;
+    setGenerationPath(generationPath);
+    setFileName(fileName);
+    setFormatCode(true);
   }
 
   // ===============================================================================================
@@ -83,12 +87,51 @@ public class ExportInfo {
     return fileName;
   }
 
+  /**
+   * Gets format code.
+   *
+   * @return the format code
+   */
+  public Boolean getFormatCode() {
+    return formatCode;
+  }
+
   // ===============================================================================================
   // GUARDS
   // ===============================================================================================
+
+  private void setGenerationPath(Path generationPath) {
+    this.generationPath = generationPath;
+  }
+
+  private void setFileName(String fileName) {
+    this.fileName = fileName;
+  }
+
+  private void setFormatCode(boolean formatCode) {
+    this.formatCode = formatCode;
+  }
 
   // ===============================================================================================
   // OVERRIDES
   // ===============================================================================================
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    ExportInfo that = (ExportInfo) o;
+    return formatCode == that.formatCode
+        && Objects.equals(generationPath, that.generationPath)
+        && Objects.equals(fileName, that.fileName);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(generationPath, fileName, formatCode);
+  }
 }

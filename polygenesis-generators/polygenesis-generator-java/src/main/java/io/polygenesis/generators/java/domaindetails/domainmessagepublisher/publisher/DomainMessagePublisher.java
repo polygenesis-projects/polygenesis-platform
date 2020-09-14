@@ -25,6 +25,7 @@ import io.polygenesis.abstraction.data.DataRepository;
 import io.polygenesis.abstraction.thing.Activity;
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.abstraction.thing.FunctionName;
+import io.polygenesis.abstraction.thing.FunctionRole;
 import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
@@ -35,6 +36,8 @@ import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.commons.valueobjects.VariableName;
 import io.polygenesis.core.AbstractNameablePackageable;
 import io.polygenesis.core.Generatable;
+import java.util.Collections;
+import java.util.LinkedHashSet;
 
 public class DomainMessagePublisher extends AbstractNameablePackageable implements Generatable {
 
@@ -100,6 +103,7 @@ public class DomainMessagePublisher extends AbstractNameablePackageable implemen
         null,
         arguments,
         Activity.empty(),
-        thing.getAbstractionsScopes());
+        thing.getAbstractionsScopes(),
+        new LinkedHashSet<>(Collections.singleton(FunctionRole.system())));
   }
 }

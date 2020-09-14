@@ -17,7 +17,6 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-
 <#--    <#list data.properties as property>-->
 <#--        <#if property.propertyType == 'AGGREGATE_ENTITY_ID'>-->
 <#--          new ${ data.aggregateEntityData.idDataType }(UuidGenerator.timeBasedUuid())<#sep>, </#sep>-->

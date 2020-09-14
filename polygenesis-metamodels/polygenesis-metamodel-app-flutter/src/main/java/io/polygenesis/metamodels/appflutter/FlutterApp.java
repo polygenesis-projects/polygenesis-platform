@@ -23,6 +23,7 @@ package io.polygenesis.metamodels.appflutter;
 import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.abstraction.data.DataRepository;
 import io.polygenesis.abstraction.thing.Function;
+import io.polygenesis.abstraction.thing.FunctionRole;
 import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.ThingName;
@@ -73,7 +74,7 @@ public class FlutterApp extends Thing implements Generatable {
 
   private static void addBuildFunction(FlutterApp flutterApp) {
     Function build =
-        FunctionBuilder.of(flutterApp, "build", "", Purpose.build())
+        FunctionBuilder.of(flutterApp, "build", "", Purpose.build(), FunctionRole.userAsSet())
             .setReturnValue(new DataObject(new ObjectName("Widget"), new PackageName("com.dummy")))
             .addArgument(
                 new DataObject(

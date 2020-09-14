@@ -22,6 +22,7 @@ package com.staticfy.genesis.contexts.access;
 
 import io.polygenesis.abstraction.data.DataPrimitive;
 import io.polygenesis.abstraction.data.PrimitiveType;
+import io.polygenesis.abstraction.thing.FunctionRole;
 import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.dsl.FunctionBuilder;
@@ -44,7 +45,8 @@ public class SignUpDomainService {
             .createThing();
 
     signUpDomainService.addFunction(
-        FunctionBuilder.of(signUpDomainService, "create", "", Purpose.create())
+        FunctionBuilder.of(
+                signUpDomainService, "create", "", Purpose.create(), FunctionRole.userAsSet())
             .addArgument(DataPrimitive.of(PrimitiveType.STRING, new VariableName("email")))
             .addArgument(DataPrimitive.of(PrimitiveType.STRING, new VariableName("password")))
             .setReturnValue(signUp.getAsDataObject(rootPackageName))

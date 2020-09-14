@@ -17,10 +17,9 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-
-<#include "../polygenesis-implementation-java-shared/macro-assertions-for-parameters.ftl">
+<#include "../polygenesis-implementation-java-shared/macro-domain-assertions-for-parameters.ftl">
 <#include "../polygenesis-trinity-java/api-detail/aggregate-root/macro-restore-aggregate-root.ftl">
-<@assertionsForParameters data.parameterRepresentations></@assertionsForParameters>
+<@domainAssertionsForParameters data.parameterRepresentations></@domainAssertionsForParameters>
 
     Paginated<${ data.aggregateRootDataType }> paginated = ${ data.persistenceVariable }.findPaginated(<#if data.multiTenant>new TenantId(UUID.fromString(${ data.requestDto.dataObject.variableName.text }.getTenantId())), </#if>${ data.requestDto.dataObject.variableName.text }.getPageNumber(), ${ data.requestDto.dataObject.variableName.text }.getPageSize());
 

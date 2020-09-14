@@ -27,12 +27,15 @@ import io.polygenesis.abstraction.data.DataMap;
 import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.abstraction.data.DataPrimitive;
 import io.polygenesis.abstraction.data.DataReferenceToThingById;
+import io.polygenesis.abstraction.data.DataReferenceToThingByValue;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
+import io.polygenesis.core.AbstractionScope;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+/** The type Data builder. */
 public class DataBuilder {
 
   private final Set<Data> models;
@@ -304,8 +307,28 @@ public class DataBuilder {
    */
   public final DataBuilder withReferenceToThingById(
       PackageName rootPackageName, Thing thing, String variableName) {
+    PackageName packageName = new PackageName(rootPackageName.getText());
+    if (thing.getAbstractionsScopes().contains(AbstractionScope.domainSupportiveEntity())) {
+      packageName = packageName.withSubPackage("supportive");
+    }
+
     this.models.add(
-        DataReferenceToThingById.of(thing, variableName).getAsDataPrimitive(rootPackageName));
+        DataReferenceToThingById.of(thing, variableName).getAsDataPrimitive(packageName));
+    return this;
+  }
+
+  /**
+   * With reference to thing by value data builder.
+   *
+   * @param rootPackageName the root package name
+   * @param thing the thing
+   * @param variableName the variable name
+   * @return the data builder
+   */
+  public final DataBuilder withReferenceToThingByValue(
+      PackageName rootPackageName, Thing thing, String variableName) {
+    this.models.add(
+        DataReferenceToThingByValue.of(thing, variableName).getAsDataPrimitive(rootPackageName));
     return this;
   }
 

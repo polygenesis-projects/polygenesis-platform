@@ -26,6 +26,7 @@
     <module>polygenesis-deducer-state-provider</module>
     <module>polygenesis-deducer-state-redux</module>
     <module>polygenesis-deducer-ui</module>
+    <module>polygenesis-deducer-thing</module>
   </modules>
 
 </project>

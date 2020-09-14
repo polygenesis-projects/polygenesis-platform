@@ -144,11 +144,15 @@ public class ResourceMethodParameterRepresentationService {
 
     parameterRepresentations.add(
         new ParameterRepresentation(
-            "Integer", "pageNumber", new LinkedHashSet<>(Arrays.asList("@RequestParam"))));
+            "Integer",
+            "pageNumber",
+            new LinkedHashSet<>(Arrays.asList("@RequestParam(defaultValue=\"0\")"))));
 
     parameterRepresentations.add(
         new ParameterRepresentation(
-            "Integer", "pageSize", new LinkedHashSet<>(Arrays.asList("@RequestParam"))));
+            "Integer",
+            "pageSize",
+            new LinkedHashSet<>(Arrays.asList("@RequestParam(defaultValue=\"20\")"))));
 
     parameterRepresentations.add(
         new ParameterRepresentation(

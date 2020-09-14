@@ -17,7 +17,6 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-
 <#include "macro-constructor.ftl">
 <#include "macro-method.ftl">
 package ${ representation.packageName };
@@ -170,7 +169,7 @@ ${ representation.modifiers }<#if representation.modifiers != ""> </#if>class ${
 <#if representation.getMethodRepresentationsBy('ANY')?size gt 0>
 
   // ===============================================================================================
-  // FUNCTIONALITY
+  // OVERRIDES / FUNCTIONALITY
   // ===============================================================================================
 
   <#list representation.getMethodRepresentationsBy('ANY') as method>

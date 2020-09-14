@@ -17,8 +17,6 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-
-
-<#include "../../polygenesis-implementation-java-shared/macro-assertions-for-parameters.ftl">
-<@assertionsForParameters representation.parameterRepresentations></@assertionsForParameters>
+<#include "../../polygenesis-implementation-java-shared/macro-domain-assertions-for-parameters.ftl">
+<@domainAssertionsForParameters representation.parameterRepresentations></@domainAssertionsForParameters>
     // TODO - constructor(s), aggregate entity

@@ -17,7 +17,6 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-
 <#macro fillArgumentValueObject property persistenceVariable requestDto multiTenant converterVariable>
 <#compress>
   <#if property.data.getAsDataObject().models?size == 1 >

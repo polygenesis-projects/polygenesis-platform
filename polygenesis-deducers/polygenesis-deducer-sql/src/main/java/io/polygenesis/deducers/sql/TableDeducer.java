@@ -158,8 +158,9 @@ public class TableDeducer {
                       getTableForPrimitiveCollection(domainObject, property));
                   break;
                 case VALUE_OBJECT:
-                  domainObjectColumns.addAll(
-                      getColumnsForValueObject(property.getData().getAsDataObject()));
+                  Set<Column> columns = new LinkedHashSet<>();
+                  getColumnsForValueObject(columns, property.getData().getAsDataObject());
+                  domainObjectColumns.addAll(columns);
                   break;
                 case VALUE_OBJECT_COLLECTION:
                   allDomainObjectRelatedTables.add(
@@ -379,6 +380,32 @@ public class TableDeducer {
             });
 
     return columns;
+  }
+
+  private void getColumnsForValueObject(Set<Column> columns, DataObject dataObject) {
+    dataObject
+        .getModels()
+        .forEach(
+            model -> {
+              if (model.isDataPrimitive()) {
+                columns.add(
+                    getColumnForPrimitive(
+                        model,
+                        String.format(
+                            "%s_",
+                            TextConverter.toLowerUnderscore(
+                                dataObject.getVariableName().getText()))));
+              } else if (model.isDataGroup()) {
+                getColumnsForValueObject(columns, model.getAsDataObject());
+              } else {
+                throw new IllegalStateException();
+              }
+              // TODO vo
+              //              else if (model.isDataGroup()) {
+              //                ; // getColumnsForValueObject(model.getAsDataObject());
+              //              }
+
+            });
   }
 
   private Column getColumnForEnumeration(Data data, String columnPrefix) {

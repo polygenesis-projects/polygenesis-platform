@@ -17,5 +17,4 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-
     // TODO: from(endpoint).bean(dispatcher);

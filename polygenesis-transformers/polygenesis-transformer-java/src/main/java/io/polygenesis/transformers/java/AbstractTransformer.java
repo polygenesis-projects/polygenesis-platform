@@ -21,6 +21,7 @@
 package io.polygenesis.transformers.java;
 
 import io.polygenesis.abstraction.data.Data;
+import io.polygenesis.abstraction.data.PrimitiveType;
 import io.polygenesis.core.DataTypeTransformer;
 
 public class AbstractTransformer {
@@ -65,6 +66,8 @@ public class AbstractTransformer {
           "Map<%s, %s>",
           dataTypeTransformer.convert(model.getAsDataMap().getKey().getDataType()),
           dataTypeTransformer.convert(model.getAsDataMap().getValue().getDataType()));
+    } else if (model.isDataEnumeration()) {
+      return dataTypeTransformer.convert(PrimitiveType.STRING.name());
     } else {
       return dataTypeTransformer.convert(model.getDataType());
     }

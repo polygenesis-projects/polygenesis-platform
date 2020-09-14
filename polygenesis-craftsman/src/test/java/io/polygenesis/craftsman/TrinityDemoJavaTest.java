@@ -22,6 +22,7 @@ package io.polygenesis.craftsman;
 
 import static org.assertj.core.api.Assertions.assertThatCode;
 
+import com.oregor.trinity.scaffolder.java.core.Enablement;
 import com.oregor.trinity.scaffolder.java.core.ProjectDescription;
 import com.oregor.trinity.scaffolder.java.core.ProjectDescriptionBuilder;
 import com.oregor.trinity.scaffolder.java.core.TrinityScaffolderJava;
@@ -29,6 +30,7 @@ import com.oregor.trinity.scaffolder.java.core.TrinityScaffolderJavaFactory;
 import com.oregor.trinity4j.Trinity4jAggregateRoot;
 import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.dsl.DataBuilder;
+import io.polygenesis.abstraction.thing.FunctionRole;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.ThingContext;
 import io.polygenesis.abstraction.thing.ThingContextBuilder;
@@ -96,6 +98,7 @@ public class TrinityDemoJavaTest {
         .setScmDeveloperConnection("scm:git:git@github.com:oregor-projects/trinity-demo-java.git")
         .setScmUrl("http://github.com/oregor-projects/trinity-demo-java/tree/master")
         .setDistributionProfile("ossrh-oregor")
+        .setEnablement(new Enablement())
         .createProjectDescription();
   }
 
@@ -143,7 +146,7 @@ public class TrinityDemoJavaTest {
 
     task.addFunctions(
         PurposeFunctionBuilder.forThing(task, rootPackageName.getText())
-            .withCrudFunction(data())
+            .withCrudFunction(data(), FunctionRole.userAsSet())
             .build());
 
     return task;

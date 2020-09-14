@@ -120,7 +120,7 @@ public class AggregateRootIdTransformer extends AbstractClassTransformer<DomainO
   public Set<String> imports(DomainObject source, Object... args) {
     Set<String> imports = new TreeSet<>();
 
-    imports.add("com.oregor.trinity4j.domain.AggregateRootId");
+    imports.add("com.oregor.trinity4j.domain.AbstractAggregateRootId");
     imports.add("javax.persistence.Embeddable");
     imports.add("java.util.UUID");
 
@@ -168,7 +168,7 @@ public class AggregateRootIdTransformer extends AbstractClassTransformer<DomainO
     stringBuilder.append("Id");
     stringBuilder.append(" extends ");
 
-    stringBuilder.append("AggregateRootId");
+    stringBuilder.append("AbstractAggregateRootId");
 
     return stringBuilder.toString();
   }

@@ -13,6 +13,7 @@
 
   <modules>
     <module>polygenesis-abstraction-code</module>
+    <module>polygenesis-abstraction-ddd</module>
     <module>polygenesis-abstraction-thing</module>
   </modules>
 

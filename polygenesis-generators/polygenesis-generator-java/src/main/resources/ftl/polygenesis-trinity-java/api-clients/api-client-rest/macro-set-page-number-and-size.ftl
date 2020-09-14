@@ -17,7 +17,6 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-
 <#macro setPageNumberAndSize requestDto>
     ${ requestDto.dataObject.variableName.text }.setPageNumber(pageNumber);
     ${ requestDto.dataObject.variableName.text }.setPageSize(pageSize);

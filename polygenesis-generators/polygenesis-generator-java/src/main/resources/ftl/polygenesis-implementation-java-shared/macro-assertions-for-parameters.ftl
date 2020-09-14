@@ -17,7 +17,6 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-
 <#macro assertionsForParameters parameterRepresentations>
     <#list parameterRepresentations as parameterRepresentation>
     Assertion.isNotNull(${ parameterRepresentation.variableName }, "${ parameterRepresentation.variableName } is required");

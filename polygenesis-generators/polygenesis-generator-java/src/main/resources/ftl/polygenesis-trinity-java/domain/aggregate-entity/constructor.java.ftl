@@ -17,7 +17,6 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-
 <#if data.superClassParameterRepresentations?size gt 0>
     super(<#list data.superClassParameterRepresentations as superClassParameterRepresentation>${superClassParameterRepresentation.variableName}<#sep>, </#sep></#list>);
 </#if>

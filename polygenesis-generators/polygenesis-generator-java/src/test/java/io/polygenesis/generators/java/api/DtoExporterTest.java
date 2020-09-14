@@ -28,6 +28,7 @@ import io.polygenesis.abstraction.data.DataPrimitive;
 import io.polygenesis.abstraction.data.PrimitiveType;
 import io.polygenesis.abstraction.thing.CqsType;
 import io.polygenesis.abstraction.thing.Function;
+import io.polygenesis.abstraction.thing.FunctionRole;
 import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.ThingName;
@@ -136,7 +137,7 @@ public class DtoExporterTest {
   private Function makeFunctionCreate() {
     Thing thing = ThingBuilder.endToEnd("customer").createThing(PackageName.any());
 
-    return FunctionBuilder.of(thing, "create", "", Purpose.create())
+    return FunctionBuilder.of(thing, "create", "", Purpose.create(), FunctionRole.userAsSet())
         .setReturnValue(DataPrimitive.of(PrimitiveType.STRING, new VariableName("someRet")))
         .build();
   }

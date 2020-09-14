@@ -131,6 +131,8 @@ public class ResourceTransformer extends AbstractClassTransformer<Resource, Endp
     imports.add("com.oregor.trinity4j.api.AbstractRestController");
     imports.add("javax.servlet.http.HttpServletRequest");
     imports.add("com.oregor.trinity4j.commons.assertion.Assertion");
+    // TODO
+    // imports.add("org.springframework.security.access.prepost.PreAuthorize");
 
     source
         .getEndpoints()

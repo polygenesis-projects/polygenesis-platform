@@ -17,5 +17,4 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-
     // TODO: Initialize the supportive entity here

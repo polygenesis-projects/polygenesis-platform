@@ -21,6 +21,7 @@
 package com.invoiceful.genesis.contexts.notification;
 
 import io.polygenesis.abstraction.data.Data;
+import io.polygenesis.abstraction.thing.FunctionRole;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.dsl.PurposeFunctionBuilder;
 import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
@@ -34,8 +35,8 @@ public class Email {
 
     email.addFunctions(
         PurposeFunctionBuilder.forThing(email, rootPackageName)
-            .withFunctionCreate(createData(rootPackageName))
-            .withFunctionFetchOne(createData(rootPackageName))
+            .withFunctionCreate(createData(rootPackageName), FunctionRole.userAsSet())
+            .withFunctionFetchOne(createData(rootPackageName), FunctionRole.userAsSet())
             .build());
 
     return email;

@@ -23,6 +23,7 @@ package com.staticfy.genesis.contexts.staticization.domainservice;
 import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.DataPrimitive;
 import io.polygenesis.abstraction.data.PrimitiveType;
+import io.polygenesis.abstraction.thing.FunctionRole;
 import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.dsl.FunctionBuilder;
@@ -39,7 +40,12 @@ public class WebPageDomainService {
             .createThing(rootPackageName);
 
     webPageDomainService.addFunction(
-        FunctionBuilder.of(webPageDomainService, "export", "", Purpose.genericCommand())
+        FunctionBuilder.of(
+                webPageDomainService,
+                "export",
+                "",
+                Purpose.genericCommand(),
+                FunctionRole.userAsSet())
             .addArgument(argument())
             .build());
 

@@ -17,7 +17,6 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-
     errorHandler(deadLetterChannel(endpoint + DEAD));
 
     from(endpoint).bean(dispatcher, "dispatch");

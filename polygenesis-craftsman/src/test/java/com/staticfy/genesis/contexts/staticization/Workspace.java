@@ -24,6 +24,7 @@ import com.oregor.trinity4j.Trinity4jShared;
 import com.oregor.trinity4j.Trinity4jTenantAggregateRoot;
 import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.dsl.DataBuilder;
+import io.polygenesis.abstraction.thing.FunctionRole;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.dsl.PurposeFunctionBuilder;
 import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
@@ -42,10 +43,14 @@ public class Workspace {
 
     workspace.addFunctions(
         PurposeFunctionBuilder.forThing(workspace, rootPackageName)
-            .withCrudFunction(createData(rootPackageName))
-            .withFunctionModifyNoReturnValue("verifyDomain", "", new LinkedHashSet<>())
+            .withCrudFunction(createData(rootPackageName), FunctionRole.userAsSet())
+            .withFunctionModifyNoReturnValue(
+                "verifyDomain", "", new LinkedHashSet<>(), FunctionRole.userAsSet())
             .withFunctionFetchPagedCollection(
-                "fetch", "unverifiedDomains", fetchOneOrPagedCollectionData(rootPackageName))
+                "fetch",
+                "unverifiedDomains",
+                fetchOneOrPagedCollectionData(rootPackageName),
+                FunctionRole.userAsSet())
             .build());
 
     //    workspace.addChild(InvoiceItem.create(workspace, rootPackageName));

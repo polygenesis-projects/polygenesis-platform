@@ -17,7 +17,6 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-
 package ${ projection.packageName };
 <#if projection.imports?size gt 0>
 

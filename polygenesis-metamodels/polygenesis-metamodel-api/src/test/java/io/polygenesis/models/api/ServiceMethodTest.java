@@ -23,6 +23,7 @@ package io.polygenesis.models.api;
 import static org.mockito.Mockito.mock;
 
 import io.polygenesis.abstraction.data.DataObject;
+import io.polygenesis.abstraction.thing.FunctionRole;
 import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.dsl.FunctionBuilder;
@@ -54,7 +55,7 @@ public class ServiceMethodTest extends AbstractEqualityTest<ServiceMethod> {
     Thing thing = ThingBuilder.endToEnd("customer").createThing(PackageName.any());
     return new ServiceMethod(
         mock(Service.class),
-        FunctionBuilder.of(thing, "create", "", Purpose.create()).build(),
+        FunctionBuilder.of(thing, "create", "", Purpose.create(), FunctionRole.userAsSet()).build(),
         requestDto,
         responseDto);
   }
@@ -79,7 +80,7 @@ public class ServiceMethodTest extends AbstractEqualityTest<ServiceMethod> {
 
     return new ServiceMethod(
         mock(Service.class),
-        FunctionBuilder.of(thing, "create", "", Purpose.create()).build(),
+        FunctionBuilder.of(thing, "create", "", Purpose.create(), FunctionRole.userAsSet()).build(),
         requestDto,
         responseDto);
   }

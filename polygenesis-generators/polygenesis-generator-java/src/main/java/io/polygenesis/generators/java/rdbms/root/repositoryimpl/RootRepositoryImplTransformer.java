@@ -87,7 +87,7 @@ public class RootRepositoryImplTransformer extends AbstractClassTransformer<Pers
                 "final %sSpringDataRepository",
                 TextConverter.toUpperCamel(source.getAggregateRootObjectName().getText())),
             "springDataRepository",
-            dataTypeTransformer.getModifierPrivate()));
+            dataTypeTransformer.getModifierPrivateCommentedOut()));
 
     return fieldRepresentations;
   }
@@ -130,7 +130,9 @@ public class RootRepositoryImplTransformer extends AbstractClassTransformer<Pers
             "domainMessageDataConverter"));
 
     impl.append("\n");
-    impl.append("\t\tthis.springDataRepository = springDataRepository;");
+    impl.append("\t\t// TODO");
+    impl.append("\n");
+    impl.append("\t\t// this.springDataRepository = springDataRepository;");
 
     ConstructorRepresentation constructorRepresentation =
         new ConstructorRepresentation(

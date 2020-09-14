@@ -17,5 +17,4 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-
     return ${ data.queryService}.${ data.queryMethod}(new ${ data.requestDto}(batchProcessMessage.getPageNumber(), batchProcessMessage.getPageSize()));

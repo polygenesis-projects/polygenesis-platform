@@ -17,7 +17,6 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-
     // TODO
     if(1 == 1) {
       throw new UnsupportedOperationException("Must be implemented by developers");

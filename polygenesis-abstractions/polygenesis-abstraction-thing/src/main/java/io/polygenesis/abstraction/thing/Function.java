@@ -43,6 +43,7 @@ public class Function implements FunctionProvider {
   private Activity activity;
   private Set<AbstractionScope> abstractionScopes;
   private Function delegatesToFunction;
+  private Set<FunctionRole> roles;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -66,7 +67,8 @@ public class Function implements FunctionProvider {
       Data returnValue,
       DataRepository arguments,
       Activity activity,
-      Set<AbstractionScope> abstractionScopes) {
+      Set<AbstractionScope> abstractionScopes,
+      Set<FunctionRole> roles) {
     setThing(thing);
     setPurpose(purpose);
     setName(name);
@@ -84,6 +86,8 @@ public class Function implements FunctionProvider {
     }
 
     setAbstractionScopes(abstractionScopes);
+
+    setRoles(roles);
   }
 
   /**
@@ -106,8 +110,9 @@ public class Function implements FunctionProvider {
       DataRepository arguments,
       Activity activity,
       Set<AbstractionScope> abstractionScopes,
-      Function delegatesToFunction) {
-    this(thing, purpose, name, returnValue, arguments, activity, abstractionScopes);
+      Function delegatesToFunction,
+      Set<FunctionRole> roles) {
+    this(thing, purpose, name, returnValue, arguments, activity, abstractionScopes, roles);
     setDelegatesToFunction(delegatesToFunction);
   }
 
@@ -265,88 +270,57 @@ public class Function implements FunctionProvider {
     return delegatesToFunction;
   }
 
+  public Set<FunctionRole> getRoles() {
+    return roles;
+  }
+
   // ===============================================================================================
   // GUARDS
   // ===============================================================================================
 
-  /**
-   * Sets thing.
-   *
-   * @param thing the thing
-   */
   private void setThing(Thing thing) {
     Assertion.isNotNull(thing, "thing is required");
     this.thing = thing;
   }
 
-  /**
-   * Sets purpose.
-   *
-   * @param purpose the purpose
-   */
   private void setPurpose(Purpose purpose) {
     Assertion.isNotNull(purpose, "purpose is required");
     this.purpose = purpose;
   }
 
-  /**
-   * Sets name.
-   *
-   * @param name the name
-   */
   private void setName(FunctionName name) {
     Assertion.isNotNull(name, "name is required");
     this.name = name;
   }
 
-  /**
-   * Sets return value.
-   *
-   * @param returnValue the return value
-   */
   private void setReturnValue(Data returnValue) {
     Assertion.isNotNull(returnValue, "returnValue is required");
     this.returnValue = returnValue;
   }
 
-  /**
-   * Sets arguments.
-   *
-   * @param arguments the arguments
-   */
   private void setArguments(DataRepository arguments) {
     Assertion.isNotNull(arguments, "arguments is required");
     this.arguments = arguments;
   }
 
-  /**
-   * Sets activity.
-   *
-   * @param activity the activity
-   */
-  public void setActivity(Activity activity) {
+  private void setActivity(Activity activity) {
     Assertion.isNotNull(activity, "activity is required");
     this.activity = activity;
   }
 
-  /**
-   * Sets abstraction scopes.
-   *
-   * @param abstractionScopes the abstraction scopes
-   */
   private void setAbstractionScopes(Set<AbstractionScope> abstractionScopes) {
     Assertion.isNotNull(abstractionScopes, "abstractionScopes is required");
     this.abstractionScopes = abstractionScopes;
   }
 
-  /**
-   * Sets delegates to function.
-   *
-   * @param delegatesToFunction the delegates to function
-   */
   private void setDelegatesToFunction(Function delegatesToFunction) {
     Assertion.isNotNull(delegatesToFunction, "delegatesToFunction is required");
     this.delegatesToFunction = delegatesToFunction;
+  }
+
+  private void setRoles(Set<FunctionRole> roles) {
+    Assertion.isNotNull(roles, "roles is required");
+    this.roles = roles;
   }
 
   // ===============================================================================================

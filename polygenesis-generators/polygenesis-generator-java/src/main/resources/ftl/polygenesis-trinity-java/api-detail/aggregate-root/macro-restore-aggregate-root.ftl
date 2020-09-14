@@ -17,7 +17,6 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-
 <#macro restoreAggregateRoot aggregateRootData persistenceVariable aggregateRootIdDataType aggregateRootDataType aggregateRootVariable requestDto thingIdentity multiTenant>
   <#if multiTenant>
     ${ aggregateRootData.aggregateRootDataType } ${ aggregateRootData.aggregateRootVariable } = ${ aggregateRootData.aggregateRootRepositoryVariable }.restore(new ${ aggregateRootData.aggregateRootIdDataType }(UUID.fromString(${ requestDto.dataObject.variableName.text }.get${ textConverter.toUpperCamel( aggregateRootData.aggregateRootIdVariable ) }()))).orElseThrow(() -> new IllegalArgumentException("Cannot restore ${ aggregateRootVariable }"));

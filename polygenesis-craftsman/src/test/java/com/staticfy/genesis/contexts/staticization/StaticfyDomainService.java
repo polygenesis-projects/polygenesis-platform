@@ -26,6 +26,7 @@ import io.polygenesis.abstraction.data.DataPurpose;
 import io.polygenesis.abstraction.data.DataSourceType;
 import io.polygenesis.abstraction.data.DataValidator;
 import io.polygenesis.abstraction.data.dsl.DataBuilder;
+import io.polygenesis.abstraction.thing.FunctionRole;
 import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.dsl.FunctionBuilder;
@@ -44,7 +45,12 @@ public class StaticfyDomainService {
             .createThing(rootPackageName);
 
     staticfyDomainService.addFunction(
-        FunctionBuilder.of(staticfyDomainService, "execute", "", Purpose.genericCommand())
+        FunctionBuilder.of(
+                staticfyDomainService,
+                "execute",
+                "",
+                Purpose.genericCommand(),
+                FunctionRole.userAsSet())
             .addArgument(argument(rootPackageName))
             .setReturnValue(returnValue(rootPackageName))
             .build());

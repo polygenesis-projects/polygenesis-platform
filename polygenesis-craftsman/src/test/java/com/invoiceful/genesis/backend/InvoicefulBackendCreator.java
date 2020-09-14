@@ -23,6 +23,7 @@ package com.invoiceful.genesis.backend;
 import com.invoiceful.genesis.contexts.access.ContextAccess;
 import com.invoiceful.genesis.contexts.invoicing.ContextInvoicing;
 import com.oregor.trinity.scaffolder.java.core.ContextDescription;
+import com.oregor.trinity.scaffolder.java.core.Enablement;
 import com.oregor.trinity.scaffolder.java.core.ProjectDescription;
 import com.oregor.trinity.scaffolder.java.core.ProjectDescriptionBuilder;
 import com.oregor.trinity.scaffolder.java.core.TrinityScaffolderJava;
@@ -41,8 +42,10 @@ import io.polygenesis.metamodels.apptrinity.TrinityProject;
 import java.nio.file.Paths;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import org.junit.Ignore;
 import org.junit.Test;
 
+@Ignore
 public class InvoicefulBackendCreator {
 
   private static final String JAVA_EXPORT_PATH = "/Users/tsakostas/work/repo/gitlab/invoiceful/xxx";
@@ -149,13 +152,20 @@ public class InvoicefulBackendCreator {
 
   private static Set<ContextDescription> contextDescriptions() {
     Set<ContextDescription> contextDescriptions = new LinkedHashSet<>();
-
-    contextDescriptions.add(
-        new ContextDescription("access", "access", "com.invoiceful.access", "access", "access"));
+    Enablement enablement = new Enablement();
 
     contextDescriptions.add(
         new ContextDescription(
-            "invoicing", "invoicing", "com.invoiceful.invoicing", "invoicing", "invoicing"));
+            "access", "access", "com.invoiceful.access", "access", "access", enablement));
+
+    contextDescriptions.add(
+        new ContextDescription(
+            "invoicing",
+            "invoicing",
+            "com.invoiceful.invoicing",
+            "invoicing",
+            "invoicing",
+            enablement));
 
     //    contextDescriptions.add(
     //        new ContextDescription(

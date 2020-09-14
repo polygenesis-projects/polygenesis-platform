@@ -105,7 +105,7 @@ public class ValueObjectTransformer extends AbstractClassTransformer<ValueObject
   public Set<String> imports(ValueObject source, Object... args) {
     Set<String> imports = new TreeSet<>();
 
-    imports.add("com.oregor.trinity4j.commons.assertion.Assertion");
+    imports.add("com.oregor.trinity4j.domain.DomainAssertion");
     imports.add("javax.persistence.Embeddable");
     imports.add("java.io.Serializable");
 

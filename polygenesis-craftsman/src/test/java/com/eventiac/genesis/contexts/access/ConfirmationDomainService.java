@@ -22,6 +22,7 @@ package com.eventiac.genesis.contexts.access;
 
 import io.polygenesis.abstraction.data.DataPrimitive;
 import io.polygenesis.abstraction.data.PrimitiveType;
+import io.polygenesis.abstraction.thing.FunctionRole;
 import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.dsl.FunctionBuilder;
@@ -45,7 +46,11 @@ public class ConfirmationDomainService {
 
     confirmationDomainService.addFunction(
         FunctionBuilder.of(
-                confirmationDomainService, "generateRandomConfirmationCode", "", Purpose.generate())
+                confirmationDomainService,
+                "generateRandomConfirmationCode",
+                "",
+                Purpose.generate(),
+                FunctionRole.userAsSet())
             .setReturnValue(Shared.confirmationCode(rootPackageName))
             .build());
 
@@ -54,7 +59,8 @@ public class ConfirmationDomainService {
                 confirmationDomainService,
                 "getConfirmationCodeExpiration",
                 "",
-                Purpose.checkBoolean())
+                Purpose.checkBoolean(),
+                FunctionRole.userAsSet())
             .addArgument(DataPrimitive.of(PrimitiveType.DATETIME, new VariableName("now")))
             .setReturnValue(Shared.expiresOn(rootPackageName))
             .build());

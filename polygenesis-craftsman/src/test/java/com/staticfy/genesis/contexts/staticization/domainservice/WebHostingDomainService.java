@@ -27,6 +27,7 @@ import io.polygenesis.abstraction.data.DataPurpose;
 import io.polygenesis.abstraction.data.DataSourceType;
 import io.polygenesis.abstraction.data.DataValidator;
 import io.polygenesis.abstraction.data.PrimitiveType;
+import io.polygenesis.abstraction.thing.FunctionRole;
 import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.dsl.FunctionBuilder;
@@ -45,7 +46,12 @@ public class WebHostingDomainService {
             .createThing(rootPackageName);
 
     webHostingDomainService.addFunction(
-        FunctionBuilder.of(webHostingDomainService, "prepare", "", Purpose.genericCommand())
+        FunctionBuilder.of(
+                webHostingDomainService,
+                "prepare",
+                "",
+                Purpose.genericCommand(),
+                FunctionRole.userAsSet())
             .addArgument(argumentFilePath())
             .addArgument(argumentByteArrayOutputStream())
             .build());

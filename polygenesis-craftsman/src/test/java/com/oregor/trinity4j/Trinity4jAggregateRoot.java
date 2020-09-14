@@ -23,6 +23,7 @@ package com.oregor.trinity4j;
 import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.DataRepository;
 import io.polygenesis.abstraction.data.dsl.DataBuilder;
+import io.polygenesis.abstraction.thing.FunctionRole;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.dsl.PurposeFunctionBuilder;
 import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
@@ -40,14 +41,14 @@ public class Trinity4jAggregateRoot {
    */
   public static Thing create(PackageName rootPackageName) {
     Thing aggregateRoot =
-        ThingBuilder.domainAbstractAggregateRoot("aggregateRoot")
+        ThingBuilder.domainAbstractAggregateRoot("abstractAggregateRoot")
             .addAbstractionScope(AbstractionScope.externallyProvided())
             .setPreferredPackage("com.oregor.trinity4j.domain")
             .createThing(rootPackageName);
 
     aggregateRoot.addFunctions(
         PurposeFunctionBuilder.forThing(aggregateRoot, rootPackageName)
-            .withFunctionCreate(createData())
+            .withFunctionCreate(createData(), FunctionRole.userAsSet())
             .build());
 
     DataRepository dataRepository = new DataRepository();

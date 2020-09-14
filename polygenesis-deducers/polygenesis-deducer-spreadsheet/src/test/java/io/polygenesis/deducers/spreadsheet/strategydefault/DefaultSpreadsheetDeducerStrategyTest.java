@@ -23,6 +23,7 @@ package io.polygenesis.deducers.spreadsheet.strategydefault;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.polygenesis.abstraction.data.dsl.DataBuilder;
+import io.polygenesis.abstraction.thing.FunctionRole;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.ThingRepository;
 import io.polygenesis.abstraction.thing.dsl.PurposeFunctionBuilder;
@@ -88,7 +89,8 @@ public class DefaultSpreadsheetDeducerStrategyTest {
                     .build()
                     .withTextProperty("lastName")
                     .build()
-                    .build())
+                    .build(),
+                FunctionRole.userAsSet())
             .build());
 
     things.add(thing);

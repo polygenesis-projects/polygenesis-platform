@@ -21,6 +21,7 @@
 package io.polygenesis.deducers.apiimpl;
 
 import io.polygenesis.abstraction.thing.Function;
+import io.polygenesis.abstraction.thing.FunctionRole;
 import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.ThingName;
@@ -107,7 +108,8 @@ public class CollectionRecordDeducer {
                     "convertTo%s",
                     TextConverter.toUpperCamel(pair.getDto().getDataObject().getDataType())),
                 "",
-                Purpose.convertDomainObjectToCollectionRecord())
+                Purpose.convertDomainObjectToCollectionRecord(),
+                FunctionRole.userAsSet())
             .setReturnValue(pair.getDto().getDataObject())
             .addArgument(pair.getEntity().asDataGroup())
             .build();

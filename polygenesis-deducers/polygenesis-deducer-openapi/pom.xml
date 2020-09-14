@@ -9,6 +9,7 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
+  <groupId>io.polygenesis.deducers</groupId>
   <artifactId>polygenesis-deducer-openapi</artifactId>
 
   <dependencies>

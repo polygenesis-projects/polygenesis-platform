@@ -17,9 +17,8 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-
-<#include "../../../polygenesis-implementation-java-shared/macro-assertions-for-parameters.ftl">
-<@assertionsForParameters data.parameterRepresentations></@assertionsForParameters>
+<#include "../../../polygenesis-implementation-java-shared/macro-domain-assertions-for-parameters.ftl">
+<@domainAssertionsForParameters data.parameterRepresentations></@domainAssertionsForParameters>
 
     return new ${ textConverter.toUpperCamel(data.to.dataObject.dataType) }(
     <#list data.to.dataObject.models as dataModel>
@@ -28,8 +27,23 @@
       <#else>
       <#switch dataModel.dataPrimaryType>
         <#case 'PRIMITIVE'>
+          <#assign xxx>
+        ${ data.from.data.variableName.text }.get${ textConverter.toUpperCamel(dataModel.variableName.text) }().getValue()
+          </#assign>
           <#if dataModel.dataObject??>
-        ${ data.from.data.variableName.text }.get${ textConverter.toUpperCamel(dataModel.variableName.text) }().getTypeId().toString()<#sep>,</#sep>
+<#--        // dataModel has dataObject-->
+<#--        // ${dataModel.dataType}-->
+<#--        // ${dataModel.dataObject.objectName.text}-->
+            <#list dataModel.dataObject.models as model>
+<#--        // In List 1-->
+<#--        // ${model.dataType}-->
+<#--        // ${model.variableName.text}-->
+<#--        // String.valueOf(${ data.from.data.variableName.text }.get${ textConverter.toUpperCamel(dataModel.variableName.text) }().get${ textConverter.toUpperCamel(model.variableName.text) }())<#sep>,</#sep>-->
+        <#assign xxx>
+          String.valueOf(${ data.from.data.variableName.text }.get${ textConverter.toUpperCamel(dataModel.variableName.text) }().get${ textConverter.toUpperCamel(model.variableName.text) }())
+        </#assign>
+        </#list>
+        ${ xxx }<#sep>,</#sep>
           <#else>
         ${ data.from.data.variableName.text }.get${ textConverter.toUpperCamel(dataModel.variableName.text) }()<#sep>,</#sep>
           </#if>
@@ -37,9 +51,12 @@
         <#case 'VALUE_OBJECT'>
         ${ data.from.data.variableName.text }.get${ textConverter.toUpperCamel(dataModel.variableName.text) }().getValue()<#sep>,</#sep>
         <#break>
+        <#case 'ENUMERATION'>
+        ${ data.from.data.variableName.text }.get${ textConverter.toUpperCamel(dataModel.variableName.text) }().name()<#sep>,</#sep>
+        <#break>
         <#case 'OBJECT'>
         convertTo${ textConverter.toUpperCamel(dataModel.objectName.text) }Dto(${ data.from.data.variableName.text }.get${ textConverter.toUpperCamel(dataModel.variableName.text) }())<#sep>,</#sep>
-          <#break>
+        <#break>
         <#default>
         // Data Primary Type = ${ dataModel.dataPrimaryType } is not supported
       </#switch>

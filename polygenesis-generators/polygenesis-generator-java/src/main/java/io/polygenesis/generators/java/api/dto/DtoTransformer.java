@@ -35,7 +35,6 @@ import io.polygenesis.representations.code.MethodRepresentationType;
 import io.polygenesis.representations.code.ParameterRepresentation;
 import io.polygenesis.transformers.java.AbstractClassTransformer;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -130,16 +129,6 @@ public class DtoTransformer extends AbstractClassTransformer<Dto, DtoMethod> {
     Set<ConstructorRepresentation> constructorRepresentations = new LinkedHashSet<>();
 
     // ---------------------------------------------------------------------------------------------
-    // Create empty constructor
-    // ---------------------------------------------------------------------------------------------
-    constructorRepresentations.add(
-        createEmptyConstructorWithImplementation(
-            source.getDataObject().getObjectName().getText(),
-            new LinkedHashSet<>(Collections.singletonList("@SuppressWarnings(\"CPD-START\")")),
-            dataTypeTransformer.getModifierPublic(),
-            "\t\tsuper();"));
-
-    // ---------------------------------------------------------------------------------------------
     // Create constructor with Api Error
     // ---------------------------------------------------------------------------------------------
     if (source.getDtoType().equals(DtoType.API_RESPONSE)
@@ -154,17 +143,6 @@ public class DtoTransformer extends AbstractClassTransformer<Dto, DtoMethod> {
               source.getDataObject().getObjectName().getText(),
               parameterRepresentations,
               "\t\tsuper(error);"));
-    }
-
-    // ---------------------------------------------------------------------------------------------
-    // Create constructor with parameters
-    // ---------------------------------------------------------------------------------------------
-    Set<FieldRepresentation> fieldRepresentations = stateFieldRepresentations(source);
-
-    if (!fieldRepresentations.isEmpty()) {
-      constructorRepresentations.add(
-          createConstructorWithSettersFromFieldRepresentations(
-              source.getDataObject().getObjectName().getText(), fieldRepresentations));
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -183,9 +161,6 @@ public class DtoTransformer extends AbstractClassTransformer<Dto, DtoMethod> {
   @Override
   public Set<MethodRepresentation> methodRepresentations(Dto source, Object... args) {
     Set<MethodRepresentation> methodRepresentations = new LinkedHashSet<>();
-
-    Set<FieldRepresentation> fieldRepresentations = stateFieldRepresentations(source);
-    methodRepresentations.addAll(methodRepresentationsForGettersAndSetters(fieldRepresentations));
 
     if (source.getDtoType().equals(DtoType.COLLECTION_RECORD)) {
       methodRepresentations.add(
@@ -213,6 +188,11 @@ public class DtoTransformer extends AbstractClassTransformer<Dto, DtoMethod> {
   @Override
   public Set<String> imports(Dto source, Object... args) {
     Set<String> imports = new TreeSet<>();
+
+    imports.add("lombok.AllArgsConstructor");
+    imports.add("lombok.Data");
+    imports.add("lombok.EqualsAndHashCode");
+    imports.add("lombok.NoArgsConstructor");
 
     if (source.getDtoType().equals(DtoType.API_RESPONSE)
         || source.getDtoType().equals(DtoType.API_COLLECTION_RESPONSE)
@@ -281,7 +261,12 @@ public class DtoTransformer extends AbstractClassTransformer<Dto, DtoMethod> {
 
   @Override
   public Set<String> annotations(Dto source, Object... args) {
-    return new LinkedHashSet<>();
+    return new LinkedHashSet<>(
+        Arrays.asList(
+            "@Data",
+            "@NoArgsConstructor",
+            "@AllArgsConstructor",
+            "@EqualsAndHashCode(callSuper = false)"));
   }
 
   @Override

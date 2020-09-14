@@ -25,6 +25,7 @@ import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.DataPrimitive;
 import io.polygenesis.abstraction.data.PrimitiveType;
 import io.polygenesis.abstraction.data.dsl.DataBuilder;
+import io.polygenesis.abstraction.thing.FunctionRole;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.dsl.PurposeFunctionBuilder;
 import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
@@ -44,13 +45,14 @@ public class Tenant {
 
     tenant.addFunctions(
         PurposeFunctionBuilder.forThing(tenant, rootPackageName)
-            .withFunctionCreate(createData(rootPackageName, user))
+            .withFunctionCreate(createData(rootPackageName, user), FunctionRole.userAsSet())
             .withFunctionModify(
                 "deactivate",
                 "",
                 new LinkedHashSet<>(
                     Collections.singletonList(
-                        DataPrimitive.of(PrimitiveType.STRING, new VariableName("someVar")))))
+                        DataPrimitive.of(PrimitiveType.STRING, new VariableName("someVar")))),
+                FunctionRole.userAsSet())
             .build());
 
     return tenant;

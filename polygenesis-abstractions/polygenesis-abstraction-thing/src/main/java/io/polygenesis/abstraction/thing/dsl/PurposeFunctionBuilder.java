@@ -27,6 +27,7 @@ import io.polygenesis.abstraction.data.DataPrimitive;
 import io.polygenesis.abstraction.data.DataPurpose;
 import io.polygenesis.abstraction.data.PrimitiveType;
 import io.polygenesis.abstraction.thing.Function;
+import io.polygenesis.abstraction.thing.FunctionRole;
 import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.commons.text.TextConverter;
@@ -37,6 +38,7 @@ import io.polygenesis.core.AbstractionScope;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+/** The type Purpose function builder. */
 public class PurposeFunctionBuilder {
 
   // ===============================================================================================
@@ -100,11 +102,11 @@ public class PurposeFunctionBuilder {
    * @param models the models
    * @return the function builder
    */
-  public final PurposeFunctionBuilder withCrudFunction(Set<Data> models) {
-    withFunctionCreate(models);
-    withFunctionModify("modify", "", models);
-    withFunctionFetchOne(models);
-    withFunctionFetchPagedCollection(models);
+  public final PurposeFunctionBuilder withCrudFunction(Set<Data> models, Set<FunctionRole> roles) {
+    withFunctionCreate(models, roles);
+    withFunctionModify("modify", "", models, roles);
+    withFunctionFetchOne(models, roles);
+    withFunctionFetchPagedCollection(models, roles);
     return this;
   }
 
@@ -116,8 +118,8 @@ public class PurposeFunctionBuilder {
    * @return the purpose function builder
    */
   public final PurposeFunctionBuilder withFunctionCreateNoReturnValue(
-      String functionName, Set<Data> models) {
-    return withFunctionCreate(functionName, models, new LinkedHashSet<>(), false);
+      String functionName, Set<Data> models, Set<FunctionRole> roles) {
+    return withFunctionCreate(functionName, models, new LinkedHashSet<>(), false, roles);
   }
 
   /**
@@ -126,8 +128,9 @@ public class PurposeFunctionBuilder {
    * @param arguments the arguments
    * @return the purpose function builder
    */
-  public final PurposeFunctionBuilder withFunctionCreate(Set<Data> arguments) {
-    return withFunctionCreate("create", arguments, new LinkedHashSet<>(), true);
+  public final PurposeFunctionBuilder withFunctionCreate(
+      Set<Data> arguments, Set<FunctionRole> roles) {
+    return withFunctionCreate("create", arguments, new LinkedHashSet<>(), true, roles);
   }
 
   /**
@@ -137,19 +140,21 @@ public class PurposeFunctionBuilder {
    * @param outputs the outputs
    * @return the purpose function builder
    */
-  public final PurposeFunctionBuilder withFunctionCreate(Set<Data> arguments, Set<Data> outputs) {
-    return withFunctionCreate("create", arguments, outputs, true);
+  public final PurposeFunctionBuilder withFunctionCreate(
+      Set<Data> arguments, Set<Data> outputs, Set<FunctionRole> roles) {
+    return withFunctionCreate("create", arguments, outputs, true, roles);
   }
 
   /**
    * With function create purpose function builder.
    *
-   * @param functionName the function name
+   * @param functionVerb the function verb
    * @param models the models
    * @return the purpose function builder
    */
-  public final PurposeFunctionBuilder withFunctionCreate(String functionName, Set<Data> models) {
-    return withFunctionCreate(functionName, models, new LinkedHashSet<>(), true);
+  public final PurposeFunctionBuilder withFunctionCreate(
+      String functionVerb, Set<Data> models, Set<FunctionRole> roles) {
+    return withFunctionCreate(functionVerb, models, new LinkedHashSet<>(), true, roles);
   }
 
   /**
@@ -163,7 +168,11 @@ public class PurposeFunctionBuilder {
    */
   @SuppressWarnings("CPD-START")
   private PurposeFunctionBuilder withFunctionCreate(
-      String functionVerb, Set<Data> arguments, Set<Data> outputs, Boolean returnValue) {
+      String functionVerb,
+      Set<Data> arguments,
+      Set<Data> outputs,
+      Boolean returnValue,
+      Set<FunctionRole> roles) {
 
     // ---------------------------------------------------------------------------------------------
     // RETURN VALUE
@@ -193,7 +202,7 @@ public class PurposeFunctionBuilder {
       // -------------------------------------------------------------------------------------------
       // FUNCTION
       Function function =
-          FunctionBuilder.of(thing, functionVerb, "", Purpose.create())
+          FunctionBuilder.of(thing, functionVerb, "", Purpose.create(), roles)
               .setReturnValue(returnValueDataObject)
               .addArguments(generateArgumentsData(thing, arguments))
               .build();
@@ -201,7 +210,7 @@ public class PurposeFunctionBuilder {
       this.functions.add(function);
     } else {
       Function function =
-          FunctionBuilder.of(thing, functionVerb, "", Purpose.create())
+          FunctionBuilder.of(thing, functionVerb, "", Purpose.create(), roles)
               .addArguments(generateArgumentsData(thing, arguments))
               .build();
 
@@ -217,7 +226,8 @@ public class PurposeFunctionBuilder {
    */
   public PurposeFunctionBuilder withFunctionEnsureExistence() {
     Function function =
-        FunctionBuilder.of(thing, "ensure", "existence", Purpose.ensureExistence())
+        FunctionBuilder.of(
+                thing, "ensure", "existence", Purpose.ensureExistence(), FunctionRole.userAsSet())
             .addArguments(generateArgumentsData(thing))
             .build();
 
@@ -235,9 +245,9 @@ public class PurposeFunctionBuilder {
    * @return the purpose function builder
    */
   public final PurposeFunctionBuilder withFunctionModifyNoReturnValue(
-      String functionVerb, String functionObject, Set<Data> models) {
+      String functionVerb, String functionObject, Set<Data> models, Set<FunctionRole> roles) {
     return withFunctionModify(
-        functionVerb, functionObject, models, false, thing.getAbstractionsScopes());
+        functionVerb, functionObject, models, false, thing.getAbstractionsScopes(), roles);
   }
 
   /**
@@ -253,8 +263,10 @@ public class PurposeFunctionBuilder {
       String functionVerb,
       String functionObject,
       Set<Data> models,
-      Set<AbstractionScope> abstractionScopes) {
-    return withFunctionModify(functionVerb, functionObject, models, false, abstractionScopes);
+      Set<AbstractionScope> abstractionScopes,
+      Set<FunctionRole> roles) {
+    return withFunctionModify(
+        functionVerb, functionObject, models, false, abstractionScopes, roles);
   }
 
   /**
@@ -266,9 +278,27 @@ public class PurposeFunctionBuilder {
    * @return the purpose function builder
    */
   public final PurposeFunctionBuilder withFunctionModify(
-      String functionVerb, String functionObject, Set<Data> models) {
+      String functionVerb, String functionObject, Set<Data> models, Set<FunctionRole> roles) {
     return withFunctionModify(
-        functionVerb, functionObject, models, true, thing.getAbstractionsScopes());
+        functionVerb, functionObject, models, true, thing.getAbstractionsScopes(), roles);
+  }
+
+  /**
+   * With function modify purpose function builder.
+   *
+   * @param functionVerb the function verb
+   * @param functionObject the function object
+   * @param models the models
+   * @param abstractionScopes the abstraction scopes
+   * @return the purpose function builder
+   */
+  public final PurposeFunctionBuilder withFunctionModify(
+      String functionVerb,
+      String functionObject,
+      Set<Data> models,
+      Set<AbstractionScope> abstractionScopes,
+      Set<FunctionRole> roles) {
+    return withFunctionModify(functionVerb, functionObject, models, true, abstractionScopes, roles);
   }
 
   /**
@@ -285,7 +315,8 @@ public class PurposeFunctionBuilder {
       String functionObject,
       Set<Data> arguments,
       Boolean returnValue,
-      Set<AbstractionScope> abstractionScopes) {
+      Set<AbstractionScope> abstractionScopes,
+      Set<FunctionRole> roles) {
 
     // ---------------------------------------------------------------------------------------------
     // RETURN VALUE
@@ -314,7 +345,7 @@ public class PurposeFunctionBuilder {
       // -------------------------------------------------------------------------------------------
 
       Function function =
-          FunctionBuilder.of(thing, functionVerb, functionObject, Purpose.modify())
+          FunctionBuilder.of(thing, functionVerb, functionObject, Purpose.modify(), roles)
               .setReturnValue(returnValueDataObject)
               .addArguments(generateArgumentsData(thing, arguments))
               .setAbstractionScopes(abstractionScopes)
@@ -327,7 +358,7 @@ public class PurposeFunctionBuilder {
       // -------------------------------------------------------------------------------------------
 
       Function function =
-          FunctionBuilder.of(thing, functionVerb, functionObject, Purpose.modify())
+          FunctionBuilder.of(thing, functionVerb, functionObject, Purpose.modify(), roles)
               .addArguments(generateArgumentsData(thing, arguments))
               .setAbstractionScopes(abstractionScopes)
               .build();
@@ -343,8 +374,8 @@ public class PurposeFunctionBuilder {
    *
    * @return the purpose function builder
    */
-  public PurposeFunctionBuilder withFunctionBatchProcess() {
-    return withFunctionModifyNoReturnValue("batchProcess", "", new LinkedHashSet<>());
+  public PurposeFunctionBuilder withFunctionBatchProcess(Set<FunctionRole> roles) {
+    return withFunctionModifyNoReturnValue("batchProcess", "", new LinkedHashSet<>(), roles);
   }
 
   /**
@@ -354,7 +385,8 @@ public class PurposeFunctionBuilder {
    * @return the thing builder
    */
   @SuppressWarnings("CPD-END")
-  public final PurposeFunctionBuilder withFunctionFetchOne(Set<Data> models) {
+  public final PurposeFunctionBuilder withFunctionFetchOne(
+      Set<Data> models, Set<FunctionRole> roles) {
 
     // ---------------------------------------------------------------------------------------------
     // ARGUMENTS
@@ -396,7 +428,7 @@ public class PurposeFunctionBuilder {
     // ---------------------------------------------------------------------------------------------
 
     Function function =
-        FunctionBuilder.of(thing, "fetch", "", Purpose.fetchOne())
+        FunctionBuilder.of(thing, "fetch", "", Purpose.fetchOne(), roles)
             .setReturnValue(returnValueDataObject)
             .addArguments(argumentDataObject.getModels())
             .build();
@@ -411,8 +443,10 @@ public class PurposeFunctionBuilder {
    * @param models the models
    * @return the purpose function builder
    */
-  public final PurposeFunctionBuilder withFunctionFetchPagedCollection(Set<Data> models) {
-    return withFunctionFetchPagedCollection("fetch", FUNCTION_OBJECT_PAGED_COLLECTION, models);
+  public final PurposeFunctionBuilder withFunctionFetchPagedCollection(
+      Set<Data> models, Set<FunctionRole> roles) {
+    return withFunctionFetchPagedCollection(
+        "fetch", FUNCTION_OBJECT_PAGED_COLLECTION, models, roles);
   }
 
   /**
@@ -424,7 +458,7 @@ public class PurposeFunctionBuilder {
    * @return the thing builder
    */
   public final PurposeFunctionBuilder withFunctionFetchPagedCollection(
-      String functionVerb, String functionObject, Set<Data> models) {
+      String functionVerb, String functionObject, Set<Data> models, Set<FunctionRole> roles) {
 
     // ---------------------------------------------------------------------------------------------
     // ARGUMENTS
@@ -492,7 +526,8 @@ public class PurposeFunctionBuilder {
     // ---------------------------------------------------------------------------------------------
 
     Function function =
-        FunctionBuilder.of(thing, functionVerb, functionObject, Purpose.fetchPagedCollection())
+        FunctionBuilder.of(
+                thing, functionVerb, functionObject, Purpose.fetchPagedCollection(), roles)
             .setReturnValue(dataObjectReturnValue)
             .addArguments(argumentDataObject.getModels())
             .build();

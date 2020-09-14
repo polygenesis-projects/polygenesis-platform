@@ -17,5 +17,4 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-
 <#macro printParameters parameterRepresentations><#list parameterRepresentations as parameter>${ parameter.getAllAnnotations() }${ textConverter.toUpperCamel(parameter.dataType) } ${ textConverter.toLowerCamel(parameter.variableName) }<#sep>, </#sep></#list></#macro>

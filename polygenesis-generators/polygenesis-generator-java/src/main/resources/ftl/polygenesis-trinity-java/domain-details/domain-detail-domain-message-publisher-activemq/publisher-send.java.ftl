@@ -17,7 +17,6 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-
     try {
       producerTemplate.sendBody(endpoint, objectMapper.writeValueAsString(domainMessagePublishDto));
     } catch (JsonProcessingException e) {

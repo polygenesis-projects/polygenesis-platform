@@ -42,6 +42,8 @@ public class EndpointDeducer {
     purposeToHttpMethod.put(Purpose.fetchCollection(), HttpMethod.GET);
     purposeToHttpMethod.put(Purpose.fetchPagedCollection(), HttpMethod.GET);
 
+    purposeToHttpMethod.put(Purpose.ensureExistence(), HttpMethod.POST);
+
     purposeToHttpMethod.put(Purpose.entityCreate(), HttpMethod.POST);
     purposeToHttpMethod.put(Purpose.entityModify(), HttpMethod.PUT);
     purposeToHttpMethod.put(Purpose.entityRemove(), HttpMethod.DELETE);

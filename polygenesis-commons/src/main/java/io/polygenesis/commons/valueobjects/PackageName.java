@@ -55,7 +55,7 @@ public class PackageName {
    * @param text the text
    */
   public PackageName(String text) {
-    guardText(text);
+    text = guardText(text);
     this.text = text;
   }
 
@@ -99,9 +99,15 @@ public class PackageName {
   // GUARDS
   // ===============================================================================================
 
-  private void guardText(String text) {
+  private String guardText(String text) {
+    Assertion.isNotEmpty(text, "text is required");
+
+    text = text.replaceAll("-", "");
+
     Assertion.isTrue(
         pattern.matcher(text).matches(), String.format("Invalid package name=%s", text));
+
+    return text;
   }
 
   // ===============================================================================================

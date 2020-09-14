@@ -255,6 +255,10 @@ public final class TrinityJavaContextGeneratorFactory {
               exportPath, projectFolder, modulePrefix, contextName, rootPackageNameVo));
     }
 
+    // TODO
+    //    if (trinityJavaContextGeneratorEnablement.isAuxDetailAlertSlack()) {
+    //    }
+
     // =============================================================================================
     // DOMAIN DETAILS
     if (trinityJavaContextGeneratorEnablement.isDomainDetailDomainMessagePublisher()) {

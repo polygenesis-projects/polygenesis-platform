@@ -17,7 +17,6 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-
     ${ data.aggregateEntityData.dataType } ${ data.aggregateEntityData.variable } = new ${ data.aggregateEntityData.dataType }(
       <#list data.properties as property>
         // ${property.propertyType}

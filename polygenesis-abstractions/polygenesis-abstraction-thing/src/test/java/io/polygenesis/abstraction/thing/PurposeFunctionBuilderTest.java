@@ -44,7 +44,7 @@ public class PurposeFunctionBuilderTest {
   public void shouldCreateModify() {
     Set<Function> functions =
         PurposeFunctionBuilder.forThing(ThingForTesting.create(), "com.oregor")
-            .withFunctionModify("modify", "", dataModifyDescription())
+            .withFunctionModify("modify", "", dataModifyDescription(), FunctionRole.userAsSet())
             .build();
 
     Assertions.assertThat(functions).isNotNull();
@@ -60,7 +60,8 @@ public class PurposeFunctionBuilderTest {
   public void shouldCreateModifyWithCustomName() {
     Set<Function> functions =
         PurposeFunctionBuilder.forThing(ThingForTesting.create(), "com.oregor")
-            .withFunctionModify("modifyDescription", "", dataModifyDescription())
+            .withFunctionModify(
+                "modifyDescription", "", dataModifyDescription(), FunctionRole.userAsSet())
             .build();
 
     Assertions.assertThat(functions).isNotNull();

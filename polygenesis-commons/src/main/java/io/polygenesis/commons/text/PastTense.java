@@ -54,6 +54,11 @@ public final class PastTense {
       return input;
     }
 
+    // TODO
+    if (input.toLowerCase().equals("leave")) {
+      return "left";
+    }
+
     String pastTense = input;
 
     if (input.endsWith("e")) {

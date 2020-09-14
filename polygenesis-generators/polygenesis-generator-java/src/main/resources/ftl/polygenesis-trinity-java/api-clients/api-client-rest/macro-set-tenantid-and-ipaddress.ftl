@@ -17,7 +17,6 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-
 <#macro setTenantIdAndIpAddress requestDto>
     ${ requestDto.dataObject.variableName.text }.setTenantId(getTenantId(httpServletRequest));
     ${ requestDto.dataObject.variableName.text }.setIpAddress(getRemoteIpAddress(httpServletRequest));

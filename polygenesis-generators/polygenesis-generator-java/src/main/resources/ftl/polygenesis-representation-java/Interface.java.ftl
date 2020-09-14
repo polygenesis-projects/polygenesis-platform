@@ -17,7 +17,6 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-
 <#include "macro-method-interface.ftl">
 package ${ representation.packageName };
 <#if representation.imports?size gt 0>

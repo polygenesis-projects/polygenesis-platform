@@ -17,5 +17,4 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-
     return Arrays.asList(<#list data.supportedMessageTypes as supportedMessageType>"${ textConverter.toUpperCamel(supportedMessageType) }"<#sep>, </#sep></#list>);

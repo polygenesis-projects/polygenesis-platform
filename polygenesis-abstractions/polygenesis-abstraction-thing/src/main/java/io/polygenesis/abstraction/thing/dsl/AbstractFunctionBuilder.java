@@ -25,12 +25,18 @@ import io.polygenesis.abstraction.data.DataRepository;
 import io.polygenesis.abstraction.thing.Activity;
 import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.abstraction.thing.FunctionName;
+import io.polygenesis.abstraction.thing.FunctionRole;
 import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.commons.assertion.Assertion;
 import io.polygenesis.core.AbstractionScope;
 import java.util.Set;
 
+/**
+ * The type Abstract function builder.
+ *
+ * @param <T> the type parameter
+ */
 public abstract class AbstractFunctionBuilder<T extends AbstractFunctionBuilder<?>> {
 
   // ===============================================================================================
@@ -46,6 +52,7 @@ public abstract class AbstractFunctionBuilder<T extends AbstractFunctionBuilder<
   private DataRepository arguments;
   private Activity activity;
   private Set<AbstractionScope> abstractionScopes;
+  private Set<FunctionRole> roles;
 
   // ===============================================================================================
   // CONSTRUCTOR(S)
@@ -61,7 +68,12 @@ public abstract class AbstractFunctionBuilder<T extends AbstractFunctionBuilder<
    * @param purpose the purpose
    */
   protected AbstractFunctionBuilder(
-      Class<T> builderClass, Thing thing, String verb, String object, Purpose purpose) {
+      Class<T> builderClass,
+      Thing thing,
+      String verb,
+      String object,
+      Purpose purpose,
+      Set<FunctionRole> roles) {
     Assertion.isNotNull(builderClass, "builderClass is required");
     Assertion.isNotNull(thing, "thing is required");
     Assertion.isNotNull(verb, "verb is required");
@@ -72,6 +84,7 @@ public abstract class AbstractFunctionBuilder<T extends AbstractFunctionBuilder<
     this.thing = thing;
     this.name = FunctionName.ofVerbAndObject(verb, object);
     this.purpose = purpose;
+    this.roles = roles;
 
     arguments = new DataRepository();
     abstractionScopes = thing.getAbstractionsScopes();
@@ -100,6 +113,28 @@ public abstract class AbstractFunctionBuilder<T extends AbstractFunctionBuilder<
    */
   public T addArguments(Set<Data> dataSet) {
     this.arguments.addSetOfData(dataSet);
+    return builderClass.cast(this);
+  }
+
+  /**
+   * Add role t.
+   *
+   * @param role the role
+   * @return the t
+   */
+  public T addRole(FunctionRole role) {
+    this.roles.add(role);
+    return builderClass.cast(this);
+  }
+
+  /**
+   * Add roles t.
+   *
+   * @param roles the roles
+   * @return the t
+   */
+  public T addRoles(Set<FunctionRole> roles) {
+    this.roles.addAll(roles);
     return builderClass.cast(this);
   }
 
@@ -150,6 +185,10 @@ public abstract class AbstractFunctionBuilder<T extends AbstractFunctionBuilder<
    * @return the function
    */
   public Function build() {
-    return new Function(thing, purpose, name, returnValue, arguments, activity, abstractionScopes);
+    if (roles.isEmpty()) {
+      throw new IllegalStateException("roles are required");
+    }
+    return new Function(
+        thing, purpose, name, returnValue, arguments, activity, abstractionScopes, roles);
   }
 }

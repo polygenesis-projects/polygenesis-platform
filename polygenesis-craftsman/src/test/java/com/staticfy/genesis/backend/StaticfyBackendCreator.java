@@ -21,6 +21,7 @@
 package com.staticfy.genesis.backend;
 
 import com.oregor.trinity.scaffolder.java.core.ContextDescription;
+import com.oregor.trinity.scaffolder.java.core.Enablement;
 import com.oregor.trinity.scaffolder.java.core.ProjectDescription;
 import com.oregor.trinity.scaffolder.java.core.ProjectDescriptionBuilder;
 import com.oregor.trinity.scaffolder.java.core.TrinityScaffolderJava;
@@ -41,8 +42,10 @@ import io.polygenesis.metamodels.apptrinity.TrinityProject;
 import java.nio.file.Paths;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import org.junit.Ignore;
 import org.junit.Test;
 
+@Ignore
 public class StaticfyBackendCreator {
 
   private static final String JAVA_EXPORT_PATH = "/Users/tsakostas/work/repo/gitlab/staticfy";
@@ -149,9 +152,11 @@ public class StaticfyBackendCreator {
 
   private static Set<ContextDescription> contextDescriptions() {
     Set<ContextDescription> contextDescriptions = new LinkedHashSet<>();
+    Enablement enablement = new Enablement();
 
     contextDescriptions.add(
-        new ContextDescription("access", "access", "com.staticfy.access", "access", "access"));
+        new ContextDescription(
+            "access", "access", "com.staticfy.access", "access", "access", enablement));
 
     contextDescriptions.add(
         new ContextDescription(
@@ -159,7 +164,8 @@ public class StaticfyBackendCreator {
             "staticization",
             "com.staticfy.staticization",
             "staticization",
-            "staticization"));
+            "staticization",
+            enablement));
 
     //    contextDescriptions.add(
     //        new ContextDescription(

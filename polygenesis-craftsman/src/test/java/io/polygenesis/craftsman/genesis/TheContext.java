@@ -22,6 +22,7 @@ package io.polygenesis.craftsman.genesis;
 
 import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.dsl.DataBuilder;
+import io.polygenesis.abstraction.thing.FunctionRole;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.dsl.PurposeFunctionBuilder;
 import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
@@ -39,7 +40,7 @@ public class TheContext {
 
     thing.addFunctions(
         PurposeFunctionBuilder.forThing(thing, rootPackageName)
-            .withFunctionCreate(createData(rootPackageName))
+            .withFunctionCreate(createData(rootPackageName), FunctionRole.userAsSet())
             .build());
 
     return thing;

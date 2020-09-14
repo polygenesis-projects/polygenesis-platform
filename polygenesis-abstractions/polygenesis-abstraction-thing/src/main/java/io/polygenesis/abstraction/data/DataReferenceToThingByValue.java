@@ -109,15 +109,15 @@ public class DataReferenceToThingByValue extends AbstractData {
    * @return the as data primitive
    */
   // TODO: The following implementation needs SERIOUS refactoring
-  public DataPrimitive getAsDataPrimitive(String rootPackageName) {
+  public DataPrimitive getAsDataPrimitive(PackageName rootPackageName) {
     DataObject thingId =
         thing.getThingIdentityAsDataObjectFromDataPrimitive(
-            new PackageName(rootPackageName),
+            rootPackageName,
             getVariableName(),
             DataPrimitive.of(PrimitiveType.UUID, new VariableName("typeId")));
 
     return DataPrimitive.ofDataBusinessTypeWithDataObject(
-        DataPurpose.referenceToThingById(), PrimitiveType.STRING, getVariableName(), thingId);
+        DataPurpose.referenceToThingByValue(), PrimitiveType.STRING, getVariableName(), thingId);
   }
 
   @Override

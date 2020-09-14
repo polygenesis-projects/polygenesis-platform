@@ -61,10 +61,10 @@ public class ScriptExporter {
   /**
    * Export.
    *
-   * @param generationPath the generation path
+   * @param generationPath          the generation path
    * @param sqlTableModelRepository the sql model repository
-   * @param tablePrefix the table prefix
-   * @param context the context
+   * @param tablePrefix             the table prefix
+   * @param context                 the context
    */
   public void export(
       Path generationPath,
@@ -75,10 +75,17 @@ public class ScriptExporter {
     dataModel.put("representation", sqlTableModelRepository);
     dataModel.put("tablePrefix", tablePrefix);
 
+    Path fileNamePath = makeFileName(generationPath, context);
+
     freemarkerService.export(
         dataModel,
         "polygenesis-generator-java-sql-flyway/script.sql.ftl",
-        makeFileName(generationPath, context));
+        fileNamePath);
+
+    freemarkerService.exportIfNotExists(
+        dataModel,
+        "polygenesis-generator-java-sql-flyway/script.sql.ftl",
+        Paths.get(fileNamePath.toString().replace(".txt", "")));
   }
 
   private Path makeFileName(Path generationPath, String context) {

@@ -29,6 +29,7 @@ import io.polygenesis.abstraction.data.EnumerationValue;
 import io.polygenesis.abstraction.data.PrimitiveType;
 import io.polygenesis.abstraction.data.dsl.DataBuilder;
 import io.polygenesis.abstraction.thing.Function;
+import io.polygenesis.abstraction.thing.FunctionRole;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.dsl.PurposeFunctionBuilder;
 import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
@@ -48,8 +49,9 @@ public class Demo {
 
     demo.addFunctions(
         PurposeFunctionBuilder.forThing(demo, rootPackageName)
-            .withFunctionCreate(createRequestData(rootPackageName))
-            .withFunctionModifyNoReturnValue("scrape", "Origin", new LinkedHashSet<>())
+            .withFunctionCreate(createRequestData(rootPackageName), FunctionRole.userAsSet())
+            .withFunctionModifyNoReturnValue(
+                "scrape", "Origin", new LinkedHashSet<>(), FunctionRole.userAsSet())
             .build());
 
     Function functionCreate = demo.getFunctionByName("create");

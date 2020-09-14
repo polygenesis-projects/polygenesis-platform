@@ -24,6 +24,7 @@ import com.oregor.trinity4j.Trinity4jShared;
 import com.oregor.trinity4j.Trinity4jTenantAggregateRoot;
 import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.dsl.DataBuilder;
+import io.polygenesis.abstraction.thing.FunctionRole;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.dsl.PurposeFunctionBuilder;
 import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
@@ -41,7 +42,7 @@ public class Project {
 
     project.addFunctions(
         PurposeFunctionBuilder.forThing(project, rootPackageName)
-            .withCrudFunction(createData(workspace, rootPackageName))
+            .withCrudFunction(createData(workspace, rootPackageName), FunctionRole.userAsSet())
             .build());
 
     //    project.addChild(InvoiceItem.create(project, rootPackageName));

@@ -124,7 +124,7 @@ public class ProjectionRepositoryImplTestTransformer
     Set<String> imports = new TreeSet<>();
 
     imports.add(rootPackageName.getText() + "." + "RdbmsTest");
-    imports.add("org.junit.Test");
+    imports.add("org.junit.jupiter.api.Test");
     imports.add("org.springframework.beans.factory.annotation.Autowired");
 
     imports.add("static org.assertj.core.api.Assertions.assertThat");

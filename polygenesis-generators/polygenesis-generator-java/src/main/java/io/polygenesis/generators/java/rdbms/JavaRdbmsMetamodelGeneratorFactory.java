@@ -138,7 +138,7 @@ public final class JavaRdbmsMetamodelGeneratorFactory {
                 dataTypeTransformer,
                 new ProjectionRepositoryImplMethodTransformer(dataTypeTransformer)),
             templateEngine,
-            activeFileExporter);
+            passiveFileExporter);
 
     projectionSpringDataRepositoryGenerator =
         new ProjectionSpringDataRepositoryGenerator(

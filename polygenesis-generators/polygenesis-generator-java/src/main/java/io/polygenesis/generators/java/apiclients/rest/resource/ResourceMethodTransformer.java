@@ -95,7 +95,10 @@ public class ResourceMethodTransformer extends AbstractMethodTransformer<Endpoin
 
   @Override
   public Set<String> annotations(Endpoint source, Object... args) {
-    return new LinkedHashSet<>(Arrays.asList(makeFullMapping(source)));
+    return new LinkedHashSet<>(
+        Arrays.asList(
+            //        authorizationAnnotations(source),
+            makeFullMapping(source)));
   }
 
   @Override
@@ -140,6 +143,10 @@ public class ResourceMethodTransformer extends AbstractMethodTransformer<Endpoin
   // ===============================================================================================
   // PRIVATE
   // ===============================================================================================
+
+  //  private String authorizationAnnotations(Endpoint endpoint) {
+  //    return "@PreAuthorize(\"hasRole('ADMIN')\")";
+  //  }
 
   private String makeFullMapping(Endpoint endpoint) {
     StringBuilder stringBuilder = new StringBuilder();

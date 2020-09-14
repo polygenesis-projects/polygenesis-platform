@@ -23,6 +23,7 @@ package io.polygenesis.metamodels.appflutter;
 import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.abstraction.data.DataRepository;
 import io.polygenesis.abstraction.thing.Function;
+import io.polygenesis.abstraction.thing.FunctionRole;
 import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.ThingName;
@@ -81,7 +82,7 @@ public abstract class AbstractFlutterThing<S extends Thing> extends Thing {
    */
   protected void addBuildFunction(S source) {
     Function build =
-        FunctionBuilder.of(source, "build", "", Purpose.build())
+        FunctionBuilder.of(source, "build", "", Purpose.build(), FunctionRole.userAsSet())
             .setReturnValue(new DataObject(new ObjectName("Widget"), new PackageName("com.dummy")))
             .addArgument(
                 new DataObject(

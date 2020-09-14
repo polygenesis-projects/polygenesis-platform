@@ -58,19 +58,21 @@ public class ThingTest extends AbstractEqualityTest<Thing> {
   }
 
   private Function createFunction1(Thing thing) {
-    return FunctionBuilder.of(thing, "functionName", "", Purpose.modify())
+    return FunctionBuilder.of(thing, "functionName", "", Purpose.modify(), FunctionRole.userAsSet())
         .setReturnValue(createDataPrimitive())
         .build();
   }
 
   private Function createFunction2(Thing thing) {
-    return FunctionBuilder.of(thing, "anotherFunctionName", "", Purpose.modify())
+    return FunctionBuilder.of(
+            thing, "anotherFunctionName", "", Purpose.modify(), FunctionRole.userAsSet())
         .setReturnValue(createDataPrimitive())
         .build();
   }
 
   private Function createFunction3(Thing thing) {
-    return FunctionBuilder.of(thing, "someAnotherNewFunctionName", "", Purpose.modify())
+    return FunctionBuilder.of(
+            thing, "someAnotherNewFunctionName", "", Purpose.modify(), FunctionRole.userAsSet())
         .setReturnValue(createDataPrimitive())
         .build();
   }

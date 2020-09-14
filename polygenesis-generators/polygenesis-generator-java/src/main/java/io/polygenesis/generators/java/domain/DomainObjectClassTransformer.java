@@ -228,7 +228,7 @@ public abstract class DomainObjectClassTransformer<
             });
 
     if (source.getProperties().size() > 1) {
-      imports.add("com.oregor.trinity4j.commons.assertion.Assertion");
+      imports.add("com.oregor.trinity4j.domain.DomainAssertion");
     }
 
     // TODO:
@@ -266,7 +266,7 @@ public abstract class DomainObjectClassTransformer<
         imports.add("javax.persistence.Entity");
         imports.add("javax.persistence.Table");
       } else {
-        imports.add("com.oregor.trinity4j.domain.AggregateRootId");
+        imports.add("com.oregor.trinity4j.domain.AbstractAggregateRootId");
         imports.add("javax.persistence.MappedSuperclass");
       }
     } else {

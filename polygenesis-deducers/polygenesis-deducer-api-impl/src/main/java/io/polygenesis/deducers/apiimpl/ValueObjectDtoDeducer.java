@@ -21,6 +21,7 @@
 package io.polygenesis.deducers.apiimpl;
 
 import io.polygenesis.abstraction.thing.Function;
+import io.polygenesis.abstraction.thing.FunctionRole;
 import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.ThingName;
@@ -121,7 +122,8 @@ public class ValueObjectDtoDeducer {
                     "convertTo%sVo",
                     TextConverter.toUpperCamel(valueObjectToUse.getObjectName().getText())),
                 "",
-                Purpose.convertDtoToVo())
+                Purpose.convertDtoToVo(),
+                FunctionRole.userAsSet())
             .setReturnValue(valueObjectToUse.getData())
             .addArgument(dtoToUse.getDataObject())
             .build();
@@ -152,7 +154,8 @@ public class ValueObjectDtoDeducer {
                       "convertTo%s",
                       TextConverter.toUpperCamel(pair.getDto().getObjectName().getText())),
                   "",
-                  Purpose.convertVoToDto())
+                  Purpose.convertVoToDto(),
+                  FunctionRole.userAsSet())
               .setReturnValue(pair.getDto().getDataObject())
               .addArgument(valueObjectToUse.getData())
               .build();

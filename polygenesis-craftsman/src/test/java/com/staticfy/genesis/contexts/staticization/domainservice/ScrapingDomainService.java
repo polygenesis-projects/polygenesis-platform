@@ -23,6 +23,7 @@ package com.staticfy.genesis.contexts.staticization.domainservice;
 import com.staticfy.genesis.contexts.staticization.Shared;
 import io.polygenesis.abstraction.data.DataPrimitive;
 import io.polygenesis.abstraction.data.PrimitiveType;
+import io.polygenesis.abstraction.thing.FunctionRole;
 import io.polygenesis.abstraction.thing.Purpose;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.dsl.FunctionBuilder;
@@ -39,7 +40,12 @@ public class ScrapingDomainService {
             .createThing(rootPackageName);
 
     scrapingDomainService.addFunction(
-        FunctionBuilder.of(scrapingDomainService, "scrape", "", Purpose.genericCommand())
+        FunctionBuilder.of(
+                scrapingDomainService,
+                "scrape",
+                "",
+                Purpose.genericCommand(),
+                FunctionRole.userAsSet())
             .addArgument(Shared.domain(rootPackageName, "originDomain"))
             .addArgument(
                 DataPrimitive.of(PrimitiveType.STRING, new VariableName("destinationPath")))

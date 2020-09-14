@@ -17,7 +17,6 @@
  limitations under the License.
  ===========================LICENSE_END==================================
 -->
-
 <#if data.multiTenant>
     // TODO: MultiTenant
     ${ data.commandService}.${ data.commandMethod}(new ${ data.requestDto}(batchProcessMessage.getUniqueId(), batchProcessMessage.getUniqueId()));

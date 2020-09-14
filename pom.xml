@@ -6,6 +6,7 @@
   <packaging>pom</packaging>
   <modules>
     <module>polygenesis-abstractions</module>
+    <module>polygenesis-cli</module>
     <module>polygenesis-commons</module>
     <module>polygenesis-commons-test</module>
     <module>polygenesis-core</module>
@@ -103,6 +104,7 @@
     <cobertura-maven-plugin.version>2.6</cobertura-maven-plugin.version>
     <versions-maven-plugin.version>2.7</versions-maven-plugin.version>
     <maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
+    <maven-assembly-plugin.version>3.1.1</maven-assembly-plugin.version>
 
     <!--ASCIIDOCTORJ-->
     <asciidoctorj.version>1.6.0-alpha.6</asciidoctorj.version>
@@ -268,6 +270,11 @@
       </dependency>
       <dependency>
         <groupId>io.polygenesis.abstractions</groupId>
+        <artifactId>polygenesis-abstraction-ddd</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.polygenesis.abstractions</groupId>
         <artifactId>polygenesis-abstraction-thing</artifactId>
         <version>${project.version}</version>
       </dependency>
@@ -418,6 +425,11 @@
       <dependency>
         <groupId>io.polygenesis.deducers</groupId>
         <artifactId>polygenesis-deducer-state-redux</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.polygenesis.deducers</groupId>
+        <artifactId>polygenesis-deducer-thing</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>

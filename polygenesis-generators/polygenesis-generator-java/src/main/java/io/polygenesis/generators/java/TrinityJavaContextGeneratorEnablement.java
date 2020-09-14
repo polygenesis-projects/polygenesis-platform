@@ -20,6 +20,7 @@
 
 package io.polygenesis.generators.java;
 
+/** The type Trinity java context generator enablement. */
 public class TrinityJavaContextGeneratorEnablement {
 
   private boolean javaApiGenerator = true;
@@ -37,6 +38,7 @@ public class TrinityJavaContextGeneratorEnablement {
   private boolean apiClientBatchProcessSchedulerCamel = true;
   private boolean aux = true;
   private boolean auxDetailPropertyFile = true;
+  private boolean auxDetailAlertSlack = true;
 
   private boolean domainDetailDomainMessagePublisher = true;
   private boolean domainDetailRepositoryInMemory = true;
@@ -63,6 +65,7 @@ public class TrinityJavaContextGeneratorEnablement {
 
     setAux(true);
     setAuxDetailPropertyFile(true);
+    setAuxDetailAlertSlack(true);
 
     setDomainDetailDomainMessagePublisher(true);
     setDomainDetailRepositoryInMemory(true);
@@ -207,6 +210,15 @@ public class TrinityJavaContextGeneratorEnablement {
    */
   public boolean isAuxDetailPropertyFile() {
     return auxDetailPropertyFile;
+  }
+
+  /**
+   * Is aux detail alert slack boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isAuxDetailAlertSlack() {
+    return auxDetailAlertSlack;
   }
 
   /**
@@ -378,6 +390,15 @@ public class TrinityJavaContextGeneratorEnablement {
    */
   public void setAuxDetailPropertyFile(boolean auxDetailPropertyFile) {
     this.auxDetailPropertyFile = auxDetailPropertyFile;
+  }
+
+  /**
+   * Sets aux detail alert slack.
+   *
+   * @param auxDetailAlertSlack the aux detail alert slack
+   */
+  public void setAuxDetailAlertSlack(boolean auxDetailAlertSlack) {
+    this.auxDetailAlertSlack = auxDetailAlertSlack;
   }
 
   /**

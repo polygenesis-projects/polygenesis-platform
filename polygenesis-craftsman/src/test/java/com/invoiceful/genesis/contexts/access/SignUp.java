@@ -22,6 +22,7 @@ package com.invoiceful.genesis.contexts.access;
 
 import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.dsl.DataBuilder;
+import io.polygenesis.abstraction.thing.FunctionRole;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.dsl.PurposeFunctionBuilder;
 import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
@@ -40,8 +41,10 @@ public class SignUp {
 
     signUp.addFunctions(
         PurposeFunctionBuilder.forThing(signUp, rootPackageName)
-            .withFunctionCreate(createData(rootPackageName), outputsData(rootPackageName))
-            .withFunctionModify("confirm", "", confirmData(rootPackageName))
+            .withFunctionCreate(
+                createData(rootPackageName), outputsData(rootPackageName), FunctionRole.userAsSet())
+            .withFunctionModify(
+                "confirm", "", confirmData(rootPackageName), FunctionRole.userAsSet())
             .build());
 
     return signUp;

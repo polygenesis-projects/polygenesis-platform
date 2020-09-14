@@ -49,7 +49,9 @@ public class ActiveFileExporter extends AbstractExporter implements Exporter {
           Paths.get(exportInfo.getGenerationPath().toString(), exportInfo.getFileName());
 
       OutputStream outputStream = new FileOutputStream(filePath.toString());
-      byteArrayOutputStream = formatCodeIfJava(byteArrayOutputStream, filePath.toString());
+      if (exportInfo.getFormatCode() && 1 == 1) {
+        byteArrayOutputStream = formatCodeIfJava(byteArrayOutputStream, filePath.toString());
+      }
       byteArrayOutputStream.writeTo(outputStream);
       outputStream.flush();
       outputStream.close();
