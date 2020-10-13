@@ -133,7 +133,7 @@
     <trinity-scaffolder-java.version>0.0.7</trinity-scaffolder-java.version>
 
     <!--TEST-->
-    <junit.version>4.12</junit.version>
+    <junit.version>4.13.1</junit.version>
     <mockito.version>2.23.4</mockito.version>
     <assertj.version>3.11.1</assertj.version>
   </properties>
