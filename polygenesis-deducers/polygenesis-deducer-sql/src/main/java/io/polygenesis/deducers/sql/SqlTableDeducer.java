@@ -95,7 +95,7 @@ public class SqlTableDeducer implements Deducer<SqlTableMetamodelRepository> {
     Set<Column> columns = columnsForDomainMessageData();
 
     // Add sent_on
-    columns.add(new Column("sent_on", ColumnDataType.DATETIME, 0, RequiredType.OPTIONAL));
+    columns.add(new Column("sent_on", ColumnDataType.DATETIME, 6, RequiredType.OPTIONAL));
 
     return new Table(new TableName("domain_message_published_data"), columns, false);
   }
@@ -108,7 +108,7 @@ public class SqlTableDeducer implements Deducer<SqlTableMetamodelRepository> {
         new Column("message_id", ColumnDataType.BINARY, 16, 0, RequiredType.REQUIRED, true));
 
     // Add occurred_on
-    columns.add(new Column("occurred_on", ColumnDataType.DATETIME, 0, RequiredType.REQUIRED));
+    columns.add(new Column("occurred_on", ColumnDataType.DATETIME, 6, RequiredType.REQUIRED));
 
     // Add root_id
     columns.add(new Column("root_id", ColumnDataType.BINARY, 16, 0, RequiredType.REQUIRED));

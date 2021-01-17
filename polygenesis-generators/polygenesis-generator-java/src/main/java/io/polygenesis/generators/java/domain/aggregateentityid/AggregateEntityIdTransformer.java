@@ -118,7 +118,7 @@ public class AggregateEntityIdTransformer
   public Set<String> imports(AggregateEntity source, Object... args) {
     Set<String> imports = new TreeSet<>();
 
-    imports.add("com.oregor.trinity4j.domain.AggregateEntityId");
+    imports.add("com.oregor.trinity4j.domain.AbstractAggregateEntityId");
     imports.add("javax.persistence.Embeddable");
     imports.add("java.util.UUID");
 
@@ -165,7 +165,7 @@ public class AggregateEntityIdTransformer
     stringBuilder.append(TextConverter.toUpperCamel(source.getObjectName().getText()));
     stringBuilder.append("Id");
     stringBuilder.append(" extends ");
-    stringBuilder.append("AggregateEntityId<UUID>");
+    stringBuilder.append("AbstractAggregateEntityId<UUID>");
 
     return stringBuilder.toString();
   }

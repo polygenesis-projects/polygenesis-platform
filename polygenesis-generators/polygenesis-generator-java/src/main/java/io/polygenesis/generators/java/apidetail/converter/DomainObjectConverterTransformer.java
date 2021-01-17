@@ -102,6 +102,7 @@ public class DomainObjectConverterTransformer
   public Set<String> imports(DomainObjectConverter source, Object... args) {
     Set<String> imports = new TreeSet<>();
 
+    imports.add("com.oregor.trinity4j.domain.DomainAssertion");
     imports.add("com.oregor.trinity4j.commons.assertion.Assertion");
     imports.add("org.springframework.stereotype.Component");
 

@@ -83,7 +83,7 @@ public class DtoTransformer extends AbstractClassTransformer<Dto, DtoMethod> {
    * Instantiates a new Dto transformer.
    *
    * @param dataTypeTransformer the data type transformer
-   * @param methodTransformer the method transformer
+   * @param methodTransformer   the method transformer
    */
   public DtoTransformer(
       DataTypeTransformer dataTypeTransformer, DtoMethodTransformer methodTransformer) {
@@ -149,7 +149,7 @@ public class DtoTransformer extends AbstractClassTransformer<Dto, DtoMethod> {
     // Create constructor for collection response
     // ---------------------------------------------------------------------------------------------
     if ((source.getDtoType().equals(DtoType.API_COLLECTION_RESPONSE)
-            || source.getDtoType().equals(DtoType.API_PAGED_COLLECTION_RESPONSE))
+        || source.getDtoType().equals(DtoType.API_PAGED_COLLECTION_RESPONSE))
         // TODO: needs more investigation
         && source.getArrayElementAsOptional().isPresent()) {
       constructorRepresentations.add(createConstructorForCollectionResponse(source));
@@ -261,12 +261,21 @@ public class DtoTransformer extends AbstractClassTransformer<Dto, DtoMethod> {
 
   @Override
   public Set<String> annotations(Dto source, Object... args) {
-    return new LinkedHashSet<>(
-        Arrays.asList(
-            "@Data",
-            "@NoArgsConstructor",
-            "@AllArgsConstructor",
-            "@EqualsAndHashCode(callSuper = false)"));
+    if (source.getDtoType().equals(DtoType.API_COLLECTION_RESPONSE)
+        || source.getDtoType().equals(DtoType.API_PAGED_COLLECTION_RESPONSE)) {
+      return new LinkedHashSet<>(
+          Arrays.asList(
+              "@Data",
+              "@NoArgsConstructor",
+              "@EqualsAndHashCode(callSuper = false)"));
+    } else {
+      return new LinkedHashSet<>(
+          Arrays.asList(
+              "@Data",
+              "@NoArgsConstructor",
+              "@AllArgsConstructor",
+              "@EqualsAndHashCode(callSuper = false)"));
+    }
   }
 
   @Override
@@ -302,7 +311,7 @@ public class DtoTransformer extends AbstractClassTransformer<Dto, DtoMethod> {
   public String fullObjectName(Dto source, Object... args) {
     // TODO: needs more investigation
     if ((source.getDtoType().equals(DtoType.API_COLLECTION_RESPONSE)
-            || source.getDtoType().equals(DtoType.API_PAGED_COLLECTION_RESPONSE))
+        || source.getDtoType().equals(DtoType.API_PAGED_COLLECTION_RESPONSE))
         && !source.getArrayElementAsOptional().isPresent()) {
       return simpleObjectName(source, args);
     }
