@@ -98,7 +98,7 @@ public class SupportiveEntityTransformer
     Set<String> imports = new TreeSet<>();
 
     if (source.getProperties().size() > 1) {
-      imports.add("com.oregor.trinity4j.commons.assertion.Assertion");
+      imports.add("com.oregor.trinity4j.domain.DomainAssertion");
     }
     imports.add("com.oregor.trinity4j.domain.SupportiveEntity");
 

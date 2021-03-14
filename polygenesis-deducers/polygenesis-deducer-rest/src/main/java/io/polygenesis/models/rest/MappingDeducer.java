@@ -37,7 +37,7 @@ public class MappingDeducer {
   /**
    * Deduce from set.
    *
-   * @param function the function
+   * @param function   the function
    * @param httpMethod the http method
    * @return the set
    */
@@ -102,14 +102,19 @@ public class MappingDeducer {
 
     fillParentPathContent(pathContents, thing);
 
-    pathContents.addAll(
-        new LinkedHashSet<>(
-            Arrays.asList(
-                new PathConstant(
-                    TextConverter.toLowerHyphen(
-                        TextConverter.toPlural(thing.getThingName().getText()))),
-                new PathVariable(
-                    TextConverter.toLowerCamel(thing.getThingName().getText() + "Id")))));
+    PathConstant items = new PathConstant(
+        TextConverter.toLowerHyphen(
+            TextConverter.toPlural(thing.getThingName().getText())));
+
+    PathVariable itemId = new PathVariable(
+        TextConverter.toLowerCamel(thing.getThingName().getText() + "Id"));
+
+    if (thing.getMultiTenant()) {
+      PathVariable tenantId = new PathVariable(TextConverter.toLowerCamel("tenantId"));
+      pathContents.addAll(new LinkedHashSet<>(Arrays.asList(tenantId, items, itemId)));
+    } else {
+      pathContents.addAll(new LinkedHashSet<>(Arrays.asList(items, itemId)));
+    }
 
     return new Mapping(pathContents);
   }
@@ -123,6 +128,11 @@ public class MappingDeducer {
   private Mapping getMappingForResourceWithoutId(Function function) {
     Set<PathContent> pathContents = new LinkedHashSet<>();
 
+    if (function.getThing().getMultiTenant()) {
+      PathVariable tenantId = new PathVariable(TextConverter.toLowerCamel("tenantId"));
+      pathContents.add(tenantId);
+    }
+
     fillParentPathContent(pathContents, function.getThing());
 
     pathContents.add(
@@ -132,11 +142,11 @@ public class MappingDeducer {
 
     if (!function.getName().getObject().isEmpty()
         && !function
-            .getName()
-            .getObject()
-            .equalsIgnoreCase(PurposeFunctionBuilder.FUNCTION_OBJECT_PAGED_COLLECTION)
+        .getName()
+        .getObject()
+        .equalsIgnoreCase(PurposeFunctionBuilder.FUNCTION_OBJECT_PAGED_COLLECTION)
         && (function.getPurpose().isFetchCollection()
-            || function.getPurpose().isFetchPagedCollection())) {
+        || function.getPurpose().isFetchPagedCollection())) {
       pathContents.add(
           new PathConstant(
               TextConverter.toLowerHyphen(TextConverter.toPlural(function.getName().getObject()))));
@@ -149,7 +159,7 @@ public class MappingDeducer {
    * Fill parent path content.
    *
    * @param pathContents the path contents
-   * @param thing the thing
+   * @param thing        the thing
    */
   private void fillParentPathContent(Set<PathContent> pathContents, Thing thing) {
     if (thing.getOptionalParent() != null) {

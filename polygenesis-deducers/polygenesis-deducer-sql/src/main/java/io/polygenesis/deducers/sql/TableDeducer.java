@@ -84,6 +84,12 @@ public class TableDeducer {
 
     fillDomainObjectColumns(allDomainObjectRelatedTables, domainObjectColumns, domainObject);
 
+    // Add created_on
+    domainObjectColumns.add(new Column("created_on", ColumnDataType.DATETIME, 6, RequiredType.OPTIONAL));
+
+    // Add updated_on
+    domainObjectColumns.add(new Column("updated_on", ColumnDataType.DATETIME, 6, RequiredType.OPTIONAL));
+
     // Add version
     domainObjectColumns.add(
         new Column("version", ColumnDataType.INTEGER, 11, RequiredType.REQUIRED));
@@ -497,6 +503,12 @@ public class TableDeducer {
     addAggregateEntityIdInColumnSet(columns);
 
     columns.addAll(getColumnsByProperties(domainObjectChild.getProperties()));
+
+    // Add created_on
+    columns.add(new Column("created_on", ColumnDataType.DATETIME, 6, RequiredType.OPTIONAL));
+
+    // Add updated_on
+    columns.add(new Column("updated_on", ColumnDataType.DATETIME, 6, RequiredType.OPTIONAL));
 
     // Add version
     columns.add(new Column("version", ColumnDataType.INTEGER, 11, RequiredType.REQUIRED));

@@ -67,6 +67,7 @@
         <#break>
         <#case 'ENUMERATION'>
         // YEAH 1
+        null
         <#break>
         <#default>
         // Property Type = ${ property.propertyType } is not supported!

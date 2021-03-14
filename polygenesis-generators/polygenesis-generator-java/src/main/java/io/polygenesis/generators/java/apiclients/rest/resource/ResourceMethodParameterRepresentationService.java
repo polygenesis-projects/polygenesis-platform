@@ -67,6 +67,10 @@ public class ResourceMethodParameterRepresentationService {
     Optional<Data> optionalParentThingIdentityData =
         source.getServiceMethod().getRequestDto().getParentThingIdentityAsOptional();
 
+    if(source.getFunction().getThing().getMultiTenant()) {
+      parameterRepresentations.add(parameterRepresentationsForTenantId());
+    }
+
     if (optionalParentThingIdentityData.isPresent()) {
       parameterRepresentations.add(
           parameterRepresentationsForIdPathVariable(
@@ -169,5 +173,13 @@ public class ResourceMethodParameterRepresentationService {
         "String",
         idVariable,
         new LinkedHashSet<>(Arrays.asList(String.format("@PathVariable(\"%s\")", idVariable))));
+  }
+
+  private ParameterRepresentation parameterRepresentationsForTenantId() {
+    String tenantId = "tenantId";
+    return new ParameterRepresentation(
+        "String",
+        tenantId,
+        new LinkedHashSet<>(Arrays.asList(String.format("@PathVariable(\"%s\")", tenantId))));
   }
 }

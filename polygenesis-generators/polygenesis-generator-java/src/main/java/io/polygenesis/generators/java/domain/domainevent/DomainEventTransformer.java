@@ -123,7 +123,8 @@ public class DomainEventTransformer extends DomainObjectClassTransformer<DomainE
                   break;
                 case VALUE_OBJECT_COLLECTION:
                   // TODO
-                  throw new UnsupportedOperationException();
+                  // throw new UnsupportedOperationException();
+                  break;
                 case AGGREGATE_ENTITY:
                   fieldRepresentations.add(
                       FieldRepresentation.withModifiers(

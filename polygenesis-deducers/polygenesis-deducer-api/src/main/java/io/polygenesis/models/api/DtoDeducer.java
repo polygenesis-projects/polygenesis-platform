@@ -43,7 +43,7 @@ public class DtoDeducer {
   /**
    * Deduce request dto.
    *
-   * @param function the function
+   * @param function        the function
    * @param rootPackageName the root package name
    * @return the dto
    */
@@ -84,7 +84,8 @@ public class DtoDeducer {
     }
 
     DtoType dtoType;
-    if (function.getPurpose().isFetchCollection()) {
+    if (function.getPurpose().isFetchCollection()
+        || function.getPurpose().isEntityFetchAll()) {
       dtoType = DtoType.API_COLLECTION_REQUEST;
     } else if (function.getPurpose().isFetchPagedCollection()) {
       dtoType = DtoType.API_PAGED_COLLECTION_REQUEST;
@@ -103,7 +104,7 @@ public class DtoDeducer {
   /**
    * Deduce response dto.
    *
-   * @param function the function
+   * @param function        the function
    * @param rootPackageName the root package name
    * @return the dto
    */
@@ -136,7 +137,8 @@ public class DtoDeducer {
     }
 
     DtoType dtoType;
-    if (function.getPurpose().isFetchCollection()) {
+    if (function.getPurpose().isFetchCollection()
+        || function.getPurpose().isEntityFetchAll()) {
       dtoType = DtoType.API_COLLECTION_RESPONSE;
     } else if (function.getPurpose().isFetchPagedCollection()) {
       dtoType = DtoType.API_PAGED_COLLECTION_RESPONSE;
@@ -158,7 +160,7 @@ public class DtoDeducer {
   /**
    * Make assertions for request dto.
    *
-   * @param dto the dto
+   * @param dto      the dto
    * @param function the function
    */
   private void makeAssertionsForRequestDto(Dto dto, Function function) {
@@ -175,7 +177,7 @@ public class DtoDeducer {
   /**
    * Make assertions for response dto.
    *
-   * @param dto the dto
+   * @param dto      the dto
    * @param function the function
    */
   private void makeAssertionsForResponseDto(Dto dto, Function function) {
@@ -187,8 +189,8 @@ public class DtoDeducer {
   /**
    * Assert that dto has one data business type of.
    *
-   * @param dto the dto
-   * @param function the function
+   * @param dto         the dto
+   * @param function    the function
    * @param dataPurpose the data business type
    */
   private void assertThatDtoHasOneDataBusinessTypeOf(

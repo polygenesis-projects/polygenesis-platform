@@ -18,6 +18,8 @@
  ===========================LICENSE_END==================================
 -->
 <#macro setTenantIdAndIpAddress requestDto>
-    ${ requestDto.dataObject.variableName.text }.setTenantId(getTenantId(httpServletRequest));
+    <#if requestDto.relatedThing.multiTenant>
+    ${ requestDto.dataObject.variableName.text }.setTenantId(tenantId);
+    </#if>
     ${ requestDto.dataObject.variableName.text }.setIpAddress(getRemoteIpAddress(httpServletRequest));
 </#macro>

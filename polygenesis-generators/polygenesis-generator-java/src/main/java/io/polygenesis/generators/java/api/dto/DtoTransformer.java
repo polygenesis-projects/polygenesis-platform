@@ -148,11 +148,16 @@ public class DtoTransformer extends AbstractClassTransformer<Dto, DtoMethod> {
     // ---------------------------------------------------------------------------------------------
     // Create constructor for collection response
     // ---------------------------------------------------------------------------------------------
-    if ((source.getDtoType().equals(DtoType.API_COLLECTION_RESPONSE)
-        || source.getDtoType().equals(DtoType.API_PAGED_COLLECTION_RESPONSE))
+    if ((source.getDtoType().equals(DtoType.API_PAGED_COLLECTION_RESPONSE))
         // TODO: needs more investigation
         && source.getArrayElementAsOptional().isPresent()) {
-      constructorRepresentations.add(createConstructorForCollectionResponse(source));
+      constructorRepresentations.add(createConstructorForPagedCollectionResponse(source));
+    }
+
+    if ((source.getDtoType().equals(DtoType.API_COLLECTION_RESPONSE))
+        // TODO: needs more investigation
+        && source.getArrayElementAsOptional().isPresent()) {
+      constructorRepresentations.add(createConstructorForNonPagedCollectionResponse(source));
     }
 
     return constructorRepresentations;
@@ -269,12 +274,20 @@ public class DtoTransformer extends AbstractClassTransformer<Dto, DtoMethod> {
               "@NoArgsConstructor",
               "@EqualsAndHashCode(callSuper = false)"));
     } else {
-      return new LinkedHashSet<>(
-          Arrays.asList(
-              "@Data",
-              "@NoArgsConstructor",
-              "@AllArgsConstructor",
-              "@EqualsAndHashCode(callSuper = false)"));
+      if (source.getDataObject().getModels().isEmpty()) {
+        return new LinkedHashSet<>(
+            Arrays.asList(
+                "@Data",
+                "@NoArgsConstructor",
+                "@EqualsAndHashCode(callSuper = false)"));
+      } else {
+        return new LinkedHashSet<>(
+            Arrays.asList(
+                "@Data",
+                "@NoArgsConstructor",
+                "@AllArgsConstructor",
+                "@EqualsAndHashCode(callSuper = false)"));
+      }
     }
   }
 
@@ -368,7 +381,7 @@ public class DtoTransformer extends AbstractClassTransformer<Dto, DtoMethod> {
    * @param source the source
    * @return the constructor representation
    */
-  private ConstructorRepresentation createConstructorForCollectionResponse(Dto source) {
+  private ConstructorRepresentation createConstructorForPagedCollectionResponse(Dto source) {
     Set<ParameterRepresentation> parameterRepresentations = new LinkedHashSet<>();
 
     Data arrayElement =
@@ -397,5 +410,29 @@ public class DtoTransformer extends AbstractClassTransformer<Dto, DtoMethod> {
         parameterRepresentations,
         "\t\tsuper(items, seekMethodLeftOffValue, "
             + "totalPages, totalElements, pageNumber, pageSize);");
+  }
+
+  private ConstructorRepresentation createConstructorForNonPagedCollectionResponse(Dto source) {
+    Set<ParameterRepresentation> parameterRepresentations = new LinkedHashSet<>();
+
+    Data arrayElement =
+        source.getArrayElementAsOptional().orElseThrow(IllegalArgumentException::new);
+
+    parameterRepresentations.add(
+        new ParameterRepresentation(
+            String.format("List<%s>", TextConverter.toUpperCamel(arrayElement.getDataType())),
+            "items"));
+
+    String description =
+        String.format(
+            "Instantiates a new %s.",
+            TextConverter.toUpperCamelSpaces(source.getDataObject().getObjectName().getText()));
+
+    return new ConstructorRepresentation(
+        new LinkedHashSet<>(),
+        description,
+        dataTypeTransformer.getModifierPublic(),
+        parameterRepresentations,
+        "\t\tsuper(items);");
   }
 }

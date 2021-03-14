@@ -53,7 +53,7 @@ public abstract class AbstractExporter {
     try {
       return formatter.formatSourceAndFixImports(sourceString);
     } catch (FormatterException e) {
-      throw new IllegalStateException(e.getMessage(), e);
+      return sourceString;
     }
   }
 }
