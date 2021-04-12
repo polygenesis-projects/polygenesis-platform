@@ -49,12 +49,38 @@ public class StorageDomainService {
     storageDomainService.addFunction(
         FunctionBuilder.of(
             storageDomainService,
-            "storeContent",
+            "storeRawHtmlContent",
             "",
             Purpose.genericCommand(),
             FunctionRole.userAsSet())
             .addArgument(archive.getAsDataObject(rootPackageName))
-            .addArgument(DataPrimitive.of(PrimitiveType.STRING, new VariableName("urlContent")))
+            .addArgument(DataPrimitive.of(PrimitiveType.STRING, new VariableName("content")))
+            .setReturnValue(ArcaivShared.storageKey(rootPackageName))
+            .build());
+
+    storageDomainService.addFunction(
+        FunctionBuilder.of(
+            storageDomainService,
+            "storeDomHtmlContent",
+            "",
+            Purpose.genericCommand(),
+            FunctionRole.userAsSet())
+            .addArgument(archive.getAsDataObject(rootPackageName))
+            .addArgument(DataPrimitive.of(PrimitiveType.STRING, new VariableName("content")))
+            .setReturnValue(ArcaivShared.storageKey(rootPackageName))
+            .build());
+
+    storageDomainService.addFunction(
+        FunctionBuilder.of(
+            storageDomainService,
+            "store",
+            "JsonContent",
+            Purpose.genericCommand(),
+            FunctionRole.userAsSet())
+            .addArgument(DataPrimitive.of(PrimitiveType.STRING, new VariableName("tenantId")))
+            .addArgument(DataPrimitive.of(PrimitiveType.STRING, new VariableName("archiveId")))
+            .addArgument(DataPrimitive.of(PrimitiveType.STRING, new VariableName("json")))
+            .addArgument(DataPrimitive.of(PrimitiveType.STRING, new VariableName("filename")))
             .setReturnValue(ArcaivShared.storageKey(rootPackageName))
             .build());
 

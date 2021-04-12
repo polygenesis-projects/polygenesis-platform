@@ -24,20 +24,22 @@ import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
 import io.polygenesis.commons.keyvalue.KeyValue;
 import io.polygenesis.commons.valueobjects.PackageName;
+import java.util.Collections;
+import java.util.LinkedHashSet;
 
 public class RobotBatchProcess {
 
   /** @return the thing */
   public static Thing create(Thing demo) {
-    Thing archiveDemoBatchProcess =
-        ThingBuilder.apiClientBatchProcess("archiveDemo").createThing();
+    Thing RobotBatchProcess =
+        ThingBuilder.apiClientBatchProcess("checkIfShouldArchive").createThing();
 
-    archiveDemoBatchProcess.addMetadata(
-        new KeyValue("commandFunction", demo.getFunctionByName("verifyDomain")));
+    RobotBatchProcess.addMetadata(
+        new KeyValue("queryFunction", demo.getFunctionByName("fetchVerifiedEnabledDomains")));
 
-    archiveDemoBatchProcess.addMetadata(
-        new KeyValue("queryFunction", demo.getFunctionByName("fetchUnverifiedDomains")));
+    RobotBatchProcess.addMetadata(
+        new KeyValue("commandFunction", demo.getFunctionByName("claimArchive")));
 
-    return archiveDemoBatchProcess;
+    return RobotBatchProcess;
   }
 }

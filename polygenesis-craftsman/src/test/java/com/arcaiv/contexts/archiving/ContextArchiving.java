@@ -42,8 +42,8 @@ public class ContextArchiving {
     Thing country = Country.create(rootPackageName);
     Thing language = Language.create(rootPackageName);
     Thing category = Category.create(rootPackageName);
-    Thing archive = Archive.create(rootPackageName);
     Thing robot = Robot.create(country, language, category, rootPackageName);
+    Thing archive = Archive.create(robot, rootPackageName);
 
     return ThingContextBuilder.of("archiving", contextGenerator)
         .withDeducers(deducers)
@@ -64,7 +64,7 @@ public class ContextArchiving {
 
         // Domain Services
         .addThing(ArchiveDomainService.create(archive, rootPackageName))
-        .addThing(StorageDomainService.create(archive, rootPackageName))
+        // TODO - EOL - .addThing(StorageDomainService.create(archive, rootPackageName))
 
         // Projections
 
@@ -72,7 +72,7 @@ public class ContextArchiving {
         .addThing(OnArchiveCreated.create(archive, rootPackageName))
 
         // Batch Processes
-        // .addThing(RobotBatchProcess.create(robot))
+         .addThing(RobotBatchProcess.create(robot))
 
         // Build
         .build();

@@ -21,14 +21,17 @@
 package com.arcaiv.contexts;
 
 import io.polygenesis.abstraction.data.Data;
+import io.polygenesis.abstraction.data.DataEnumeration;
 import io.polygenesis.abstraction.data.DataObject;
 import io.polygenesis.abstraction.data.DataPurpose;
 import io.polygenesis.abstraction.data.DataSourceType;
 import io.polygenesis.abstraction.data.DataValidator;
+import io.polygenesis.abstraction.data.EnumerationValue;
 import io.polygenesis.abstraction.data.dsl.DataBuilder;
 import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.commons.valueobjects.VariableName;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class ArcaivShared {
@@ -85,4 +88,47 @@ public class ArcaivShared {
         DataSourceType.DEFAULT);
   }
 
+  public static DataObject cssSelector(PackageName rootPackageName) {
+    Set<Data> data = DataBuilder.create().withTextProperty("value").build().build();
+
+    return new DataObject(
+        new VariableName("cssSelector"),
+        DataPurpose.any(),
+        DataValidator.empty(),
+        new ObjectName("cssSelector"),
+        rootPackageName.withSubPackage("shared"),
+        data,
+        DataSourceType.DEFAULT);
+  }
+
+  public static DataEnumeration htmlContent(PackageName rootPackageName) {
+    Set<EnumerationValue> enumerationValues = new LinkedHashSet<>();
+
+    enumerationValues.add(EnumerationValue.ofInitial("AUTO"));
+    enumerationValues.add(EnumerationValue.of("DOM"));
+    enumerationValues.add(EnumerationValue.of("RAW"));
+
+    return DataEnumeration.ofPurpose(
+        new ObjectName("htmlContent"),
+        rootPackageName.withSubPackage("shared"),
+        new VariableName("htmlContent"),
+        enumerationValues,
+        DataPurpose.any());
+  }
+
+  public static DataEnumeration archiveJavascript(PackageName rootPackageName) {
+    Set<EnumerationValue> enumerationValues = new LinkedHashSet<>();
+
+    enumerationValues.add(EnumerationValue.ofInitial("REMOVE_ALL"));
+    enumerationValues.add(EnumerationValue.of("MAINTAIN"));
+    enumerationValues.add(EnumerationValue.of("REMOVE_BLACKLIST_EXTERNAL"));
+    enumerationValues.add(EnumerationValue.of("REMOVE_NON_DOMAIN"));
+
+    return DataEnumeration.ofPurpose(
+        new ObjectName("archiveJavascript"),
+        rootPackageName.withSubPackage("shared"),
+        new VariableName("archiveJavascript"),
+        enumerationValues,
+        DataPurpose.any());
+  }
 }

@@ -38,6 +38,16 @@ public class ArchiveDomainService {
     archiveDomainService.addFunction(
         FunctionBuilder.of(
             archiveDomainService,
+            "fetchContent",
+            "",
+            Purpose.genericCommand(),
+            FunctionRole.userAsSet())
+            .addArgument(archive.getAsDataObject(rootPackageName))
+            .build());
+
+    archiveDomainService.addFunction(
+        FunctionBuilder.of(
+            archiveDomainService,
             "perform",
             "",
             Purpose.genericCommand(),

@@ -42,7 +42,7 @@ import java.util.Set;
 
 public class Archive {
 
-  public static Thing create(PackageName rootPackageName) {
+  public static Thing create(Thing robot, PackageName rootPackageName) {
     Thing archive =
         ThingBuilder.endToEnd("archive")
             .setSuperClass(Trinity4jTenantAggregateRoot.create(rootPackageName))
@@ -57,7 +57,14 @@ public class Archive {
 
     archive.addFunctions(
         PurposeFunctionBuilder.forThing(archive, rootPackageName)
-            .withCrudFunction(createRequestData(rootPackageName), FunctionRole.userAsSet())
+            .withCrudFunction(createRequestData(robot, rootPackageName), FunctionRole.userAsSet())
+            .withFunctionModifyNoReturnValue(
+                "fetch", "Content", new LinkedHashSet<>(), FunctionRole.userAsSet())
+            .build());
+
+    archive.addFunctions(
+        PurposeFunctionBuilder.forThing(archive, rootPackageName)
+            .withCrudFunction(createRequestData(robot, rootPackageName), FunctionRole.userAsSet())
             .withFunctionModifyNoReturnValue(
                 "scrape", "Origin", new LinkedHashSet<>(), FunctionRole.userAsSet())
             .build());
@@ -68,21 +75,19 @@ public class Archive {
 //        .getReturnValue()
 //        .getAsDataObject()
 //        .addData(DataBuilder.create()
-//            .withTextPropertyToValueObject("webPageUrlContentStorageKey", ArcaivShared.storageKey(rootPackageName))
-//            .build()
 //            .build()
 //        );
 
     return archive;
   }
 
-  private static Set<Data> createRequestData(PackageName rootPackageName) {
+  private static Set<Data> createRequestData(Thing robot, PackageName rootPackageName) {
     return DataBuilder.create()
         .withTextPropertyToValueObject("webPageUrl", ArcaivShared.webPageUrl(rootPackageName))
         .build()
-        .withTextPropertyToValueObject("webPageUrlContentStorageKey", ArcaivShared.storageKey(rootPackageName))
-        .build()
         .withEnumeration(archiveStatus(rootPackageName))
+        .withEnumeration(ArcaivShared.htmlContent(rootPackageName))
+        .withEnumeration(ArcaivShared.archiveJavascript(rootPackageName))
         .build();
   }
 

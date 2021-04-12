@@ -22,10 +22,10 @@ package io.polygenesis.generators.java.batchprocessscheduler;
 
 import io.polygenesis.commons.valueobjects.ContextName;
 import io.polygenesis.commons.valueobjects.PackageName;
-import io.polygenesis.core.ActiveFileExporter;
 import io.polygenesis.core.DataTypeTransformer;
 import io.polygenesis.core.Exporter;
 import io.polygenesis.core.FreemarkerTemplateEngine;
+import io.polygenesis.core.PassiveFileExporter;
 import io.polygenesis.core.TemplateEngine;
 import io.polygenesis.generators.java.batchprocessscheduler.scheduler.BatchProcessMethodSchedulerTransformer;
 import io.polygenesis.generators.java.batchprocessscheduler.scheduler.BatchProcessSchedulerGenerator;
@@ -48,7 +48,7 @@ public final class BatchProcessSchedulerMetamodelGeneratorFactory {
 
   static {
     TemplateEngine templateEngine = new FreemarkerTemplateEngine();
-    Exporter exporter = new ActiveFileExporter();
+    Exporter exporter = new PassiveFileExporter();
     DataTypeTransformer dataTypeTransformer = new JavaDataTypeTransformer();
 
     batchProcessSchedulerGenerator =
@@ -78,9 +78,9 @@ public final class BatchProcessSchedulerMetamodelGeneratorFactory {
   /**
    * New instance periodic process metamodel generator.
    *
-   * @param generationPath the generation path
+   * @param generationPath  the generation path
    * @param rootPackageName the root package name
-   * @param contextName the context name
+   * @param contextName     the context name
    * @return the periodic process metamodel generator
    */
   public static BatchProcessSchedulerMetamodelGenerator newInstance(

@@ -167,6 +167,8 @@ public class DtoTransformer extends AbstractClassTransformer<Dto, DtoMethod> {
   public Set<MethodRepresentation> methodRepresentations(Dto source, Object... args) {
     Set<MethodRepresentation> methodRepresentations = new LinkedHashSet<>();
 
+    String uniqueId = "rootId";
+
     if (source.getDtoType().equals(DtoType.COLLECTION_RECORD)) {
       methodRepresentations.add(
           new MethodRepresentation(
@@ -178,7 +180,7 @@ public class DtoTransformer extends AbstractClassTransformer<Dto, DtoMethod> {
               "getId",
               new LinkedHashSet<>(),
               "String",
-              "\t\treturn null;",
+              String.format("\t\treturn %s;", uniqueId),
               new LinkedHashSet<>()));
     }
 

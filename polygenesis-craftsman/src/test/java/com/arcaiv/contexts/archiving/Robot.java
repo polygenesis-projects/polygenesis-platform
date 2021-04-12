@@ -20,6 +20,9 @@
 
 package com.arcaiv.contexts.archiving;
 
+import static com.arcaiv.contexts.ArcaivShared.cssSelector;
+
+import com.arcaiv.contexts.ArcaivShared;
 import com.oregor.trinity4j.Trinity4jShared;
 import com.oregor.trinity4j.Trinity4jTenantAggregateRoot;
 import io.polygenesis.abstraction.data.Data;
@@ -62,6 +65,13 @@ public class Robot {
         PurposeFunctionBuilder.forThing(robot, rootPackageName)
             .withFunctionModifyNoReturnValue(
                 "verify", "Domain", new LinkedHashSet<>(), FunctionRole.userAsSet())
+            .build()
+    );
+
+    robot.addFunctions(
+        PurposeFunctionBuilder.forThing(robot, rootPackageName)
+            .withFunctionModifyNoReturnValue(
+                "claim", "Archive", new LinkedHashSet<>(), FunctionRole.userAsSet())
             .build()
     );
 
@@ -127,11 +137,18 @@ public class Robot {
         .withEnumeration(dayOfWeek(rootPackageName))
         .withEnumeration(dailyFrequency(rootPackageName))
         .withEnumeration(dayOfMonth(rootPackageName))
+        .withEnumeration(ArcaivShared.htmlContent(rootPackageName))
+        .withEnumeration(ArcaivShared.archiveJavascript(rootPackageName))
 
         .withReferenceToThingById(rootPackageName, country, "country")
         .withReferenceToThingById(rootPackageName, language, "language")
+        .withReferenceToThingById(rootPackageName, category, "category")
 
-        .withTextProperty("categoryId").build()
+        .withTextPropertyToValueObject("acceptCookiesSelector", cssSelector(rootPackageName))
+        .build()
+
+        .withTextPropertyToValueObject("denyNotificationsSelector", cssSelector(rootPackageName))
+        .build()
 
         .build();
   }
