@@ -110,7 +110,7 @@
 
     <!--APACHE-->
     <commons-lang3.version>3.5</commons-lang3.version>
-    <commons-io-version>2.4</commons-io-version>
+    <commons-io-version>2.7</commons-io-version>
     <commons-validator.version>1.5.1</commons-validator.version>
     <apache-poi.version>4.1.2</apache-poi.version>
 
