@@ -52,7 +52,7 @@ import org.junit.Test;
 @Ignore
 public class WorkshopBackendCreator {
 
-  private static final String JAVA_EXPORT_PATH = "/Users/tsakostas/work/repo/tangram/training/tmp/";
+  private static final String JAVA_EXPORT_PATH = "/Users/tsakostas/work/repo/tangram/training/";
   private static final String JAVA_PROJECT_FOLDER = "ddd-and-clean-code-workshop";
   private static final String JAVA_ARTIFACT_ID = "ddd-and-clean-code-workshop";
   private static final String JAVA_MODULE_PREFIX = "workshop";

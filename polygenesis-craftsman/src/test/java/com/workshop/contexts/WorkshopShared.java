@@ -34,7 +34,20 @@ import io.polygenesis.commons.valueobjects.VariableName;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-public class ArcaivShared {
+public class WorkshopShared {
+
+  public static DataObject ipAddress(PackageName rootPackageName) {
+    Set<Data> data = DataBuilder.create().withTextProperty("value").build().build();
+
+    return new DataObject(
+        new VariableName("ipAddress"),
+        DataPurpose.any(),
+        DataValidator.empty(),
+        new ObjectName("ipAddress"),
+        rootPackageName.withSubPackage("shared"),
+        data,
+        DataSourceType.DEFAULT);
+  }
 
   public static DataObject email(PackageName rootPackageName) {
     Set<Data> data = DataBuilder.create().withTextProperty("value").build().build();

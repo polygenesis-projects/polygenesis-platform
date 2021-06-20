@@ -20,6 +20,9 @@
 
 package com.workshop.contexts.auth;
 
+import com.oregor.trinity4j.Trinity4jAggregateRoot;
+import com.oregor.trinity4j.Trinity4jTenantAggregateRoot;
+import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.ThingContext;
 import io.polygenesis.abstraction.thing.ThingContextBuilder;
 import io.polygenesis.commons.valueobjects.PackageName;
@@ -32,8 +35,20 @@ public class ContextAuth {
   public static ThingContext get(
       PackageName rootPackageName, ContextGenerator contextGenerator, Set<Deducer<?>> deducers) {
 
+    Thing anonymousUser = AnonymousUser.create(rootPackageName);
+    
     return ThingContextBuilder.of("auth", contextGenerator)
         .withDeducers(deducers)
+
+        // Trinity4J Abstract Aggregate Root
+        .addThing(Trinity4jAggregateRoot.create(rootPackageName))
+        .addThing(Trinity4jTenantAggregateRoot.create(rootPackageName))
+
+        // Abstract Aggregate Roots
+
+        // Aggregate Roots
+//        .addThing(anonymousUser)
+
         .build();
   }
 }
