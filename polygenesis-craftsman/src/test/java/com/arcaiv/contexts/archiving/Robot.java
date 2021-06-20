@@ -137,7 +137,7 @@ public class Robot {
         .withEnumeration(dayOfWeek(rootPackageName))
         .withEnumeration(dailyFrequency(rootPackageName))
         .withEnumeration(dayOfMonth(rootPackageName))
-        .withEnumeration(ArcaivShared.htmlContent(rootPackageName))
+        .withEnumeration(ArcaivShared.htmlSource(rootPackageName))
         .withEnumeration(ArcaivShared.archiveJavascript(rootPackageName))
 
         .withReferenceToThingById(rootPackageName, country, "country")

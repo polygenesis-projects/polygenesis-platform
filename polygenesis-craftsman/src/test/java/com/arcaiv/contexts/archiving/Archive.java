@@ -20,6 +20,8 @@
 
 package com.arcaiv.contexts.archiving;
 
+import static com.arcaiv.contexts.ArcaivShared.cssSelector;
+
 import com.arcaiv.contexts.ArcaivShared;
 import com.oregor.trinity4j.Trinity4jShared;
 import com.oregor.trinity4j.Trinity4jTenantAggregateRoot;
@@ -28,7 +30,6 @@ import io.polygenesis.abstraction.data.DataEnumeration;
 import io.polygenesis.abstraction.data.DataPurpose;
 import io.polygenesis.abstraction.data.EnumerationValue;
 import io.polygenesis.abstraction.data.dsl.DataBuilder;
-import io.polygenesis.abstraction.thing.Function;
 import io.polygenesis.abstraction.thing.FunctionRole;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.dsl.PurposeFunctionBuilder;
@@ -37,7 +38,6 @@ import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.commons.valueobjects.VariableName;
 import java.util.LinkedHashSet;
-import java.util.Optional;
 import java.util.Set;
 
 public class Archive {
@@ -85,9 +85,13 @@ public class Archive {
     return DataBuilder.create()
         .withTextPropertyToValueObject("webPageUrl", ArcaivShared.webPageUrl(rootPackageName))
         .build()
-        .withEnumeration(archiveStatus(rootPackageName))
-        .withEnumeration(ArcaivShared.htmlContent(rootPackageName))
+        .withEnumeration(ArcaivShared.htmlSource(rootPackageName))
         .withEnumeration(ArcaivShared.archiveJavascript(rootPackageName))
+        .withTextPropertyToValueObject("acceptCookiesSelector", cssSelector(rootPackageName))
+        .build()
+        .withTextPropertyToValueObject("denyNotificationsSelector", cssSelector(rootPackageName))
+        .build()
+        .withEnumeration(archiveStatus(rootPackageName))
         .build();
   }
 
