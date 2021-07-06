@@ -37,23 +37,23 @@ import io.polygenesis.commons.valueobjects.VariableName;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-public class Customer {
+public class Buyer {
 
   public static Thing create(PackageName rootPackageName) {
-    Thing customer =
-        ThingBuilder.endToEnd("customer")
+    Thing buyer =
+        ThingBuilder.endToEnd("buyer")
             .setSuperClass(Trinity4jAggregateRoot.create(rootPackageName))
             .createThing(rootPackageName);
 
-    customer.addFunctions(
-        PurposeFunctionBuilder.forThing(customer, rootPackageName)
+    buyer.addFunctions(
+        PurposeFunctionBuilder.forThing(buyer, rootPackageName)
             .withFunctionCreate(createData(rootPackageName), FunctionRole.userAsSet())
             .withFunctionFetchOne(fetchData(rootPackageName), FunctionRole.adminAsSet())
             .withFunctionFetchPagedCollection(fetchData(rootPackageName),
                 FunctionRole.adminAsSet())
             .build());
 
-    return customer;
+    return buyer;
   }
 
   private static Set<Data> createData(PackageName rootPackageName) {

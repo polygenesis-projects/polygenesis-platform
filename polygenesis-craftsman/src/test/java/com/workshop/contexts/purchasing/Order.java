@@ -33,7 +33,7 @@ import java.util.Set;
 
 public class Order {
 
-  public static Thing create(PackageName rootPackageName, Thing customer) {
+  public static Thing create(PackageName rootPackageName, Thing buyer) {
     Thing order =
         ThingBuilder.endToEnd("order")
             .setSuperClass(Trinity4jTenantAggregateRoot.create(rootPackageName))
@@ -42,7 +42,7 @@ public class Order {
 
     order.addFunctions(
         PurposeFunctionBuilder.forThing(order, rootPackageName)
-            .withFunctionCreate(createData(rootPackageName, customer), FunctionRole.userAsSet())
+            .withFunctionCreate(createData(rootPackageName, buyer), FunctionRole.userAsSet())
             .withFunctionFetchOne(noData(), FunctionRole.userAsSet())
             .withFunctionFetchPagedCollection(noData(), FunctionRole.userAsSet())
             .withFunctionModify("cancel", "", noData(), FunctionRole.userAsSet())
@@ -53,9 +53,9 @@ public class Order {
     return order;
   }
 
-  private static Set<Data> createData(PackageName rootPackageName, Thing customer) {
+  private static Set<Data> createData(PackageName rootPackageName, Thing buyer) {
     return DataBuilder.create()
-        .withReferenceToThingById(rootPackageName, customer, "customerId")
+        .withReferenceToThingById(rootPackageName, buyer, "buyerId")
         .build();
   }
 

@@ -36,8 +36,8 @@ public class ContextPurchasing {
   public static ThingContext get(
       PackageName rootPackageName, ContextGenerator contextGenerator, Set<Deducer<?>> deducers) {
 
-    Thing customer = Customer.create(rootPackageName);
-    Thing order = Order.create(rootPackageName, customer);
+    Thing buyer = Buyer.create(rootPackageName);
+    Thing order = Order.create(rootPackageName, buyer);
     Thing country = Country.create(rootPackageName);
     Thing language = Language.create(rootPackageName);
 
@@ -50,7 +50,7 @@ public class ContextPurchasing {
         .addThing(Trinity4jAggregateEntity.create(rootPackageName))
 
         // Things
-        .addThing(customer)
+        .addThing(buyer)
         .addThing(order)
 
         // Supportive
