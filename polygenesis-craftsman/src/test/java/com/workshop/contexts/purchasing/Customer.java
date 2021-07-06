@@ -18,52 +18,54 @@
  * ===========================LICENSE_END==================================
  */
 
-package com.polygenesis.genesis.contexts.project;
+package com.workshop.contexts.purchasing;
 
-import com.oregor.trinity4j.Trinity4jAggregateEntity;
+import com.oregor.trinity4j.Trinity4jAggregateRoot;
+import com.workshop.contexts.WorkshopShared;
 import io.polygenesis.abstraction.data.Data;
+import io.polygenesis.abstraction.data.DataEnumeration;
+import io.polygenesis.abstraction.data.DataPurpose;
+import io.polygenesis.abstraction.data.EnumerationValue;
 import io.polygenesis.abstraction.data.dsl.DataBuilder;
 import io.polygenesis.abstraction.thing.FunctionRole;
 import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.dsl.PurposeFunctionBuilder;
 import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
+import io.polygenesis.commons.valueobjects.ObjectName;
 import io.polygenesis.commons.valueobjects.PackageName;
+import io.polygenesis.commons.valueobjects.VariableName;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
-public class AggregateRoot {
+public class Customer {
 
-  /**
-   * Create thing.
-   *
-   * @param context the context
-   * @param rootPackageName the root package name
-   * @return the thing
-   */
-  public static Thing create(Thing context, PackageName rootPackageName) {
-    Thing aggregateRoot =
-        ThingBuilder.endToEndChildWithIdentity("someAggregateRoot", context)
-            .setSuperClass(Trinity4jAggregateEntity.create(rootPackageName))
+  public static Thing create(PackageName rootPackageName) {
+    Thing customer =
+        ThingBuilder.endToEnd("customer")
+            .setSuperClass(Trinity4jAggregateRoot.create(rootPackageName))
             .createThing(rootPackageName);
 
-    aggregateRoot.addFunctions(
-        PurposeFunctionBuilder.forThing(aggregateRoot, rootPackageName.getText())
-            .withCrudFunction(data(rootPackageName), FunctionRole.userAsSet())
+    customer.addFunctions(
+        PurposeFunctionBuilder.forThing(customer, rootPackageName)
+            .withFunctionCreate(createData(rootPackageName), FunctionRole.userAsSet())
+            .withFunctionFetchOne(fetchData(rootPackageName), FunctionRole.adminAsSet())
+            .withFunctionFetchPagedCollection(fetchData(rootPackageName),
+                FunctionRole.adminAsSet())
             .build());
 
-    // aggregateRoot.addChild(InvoiceItemTax.create(aggregateRoot, rootPackageName));
-
-    return aggregateRoot;
+    return customer;
   }
 
-  // ===============================================================================================
-  // DATA
-  // ===============================================================================================
-
-  private static Set<Data> data(PackageName rootPackageName) {
+  private static Set<Data> createData(PackageName rootPackageName) {
     return DataBuilder.create()
-        .withTextPropertyToValueObject("title", Shared.title(rootPackageName))
+        .withTextPropertyToValueObject("emailAddress", WorkshopShared.emailAddress(rootPackageName))
         .build()
-        .withTextPropertyToValueObject("description", Shared.description(rootPackageName))
+        .build();
+  }
+
+  private static Set<Data> fetchData(PackageName rootPackageName) {
+    return DataBuilder.create()
+        .withTextPropertyToValueObject("emailAddress", WorkshopShared.emailAddress(rootPackageName))
         .build()
         .build();
   }

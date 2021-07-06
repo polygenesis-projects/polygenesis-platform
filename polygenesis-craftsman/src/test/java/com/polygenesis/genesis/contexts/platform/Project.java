@@ -18,7 +18,7 @@
  * ===========================LICENSE_END==================================
  */
 
-package com.polygenesis.genesis.contexts.project;
+package com.polygenesis.genesis.contexts.platform;
 
 import com.oregor.trinity4j.Trinity4jAggregateRoot;
 import com.oregor.trinity4j.Trinity4jShared;

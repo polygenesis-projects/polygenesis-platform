@@ -20,8 +20,13 @@
 
 package com.workshop.contexts.purchasing;
 
+import com.oregor.trinity4j.Trinity4jAggregateEntity;
+import com.oregor.trinity4j.Trinity4jAggregateRoot;
+import com.oregor.trinity4j.Trinity4jTenantAggregateRoot;
+import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.ThingContext;
 import io.polygenesis.abstraction.thing.ThingContextBuilder;
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.ContextGenerator;
 import io.polygenesis.core.Deducer;
 import java.util.Set;
@@ -29,10 +34,28 @@ import java.util.Set;
 public class ContextPurchasing {
 
   public static ThingContext get(
-      String rootPackageName, ContextGenerator contextGenerator, Set<Deducer<?>> deducers) {
+      PackageName rootPackageName, ContextGenerator contextGenerator, Set<Deducer<?>> deducers) {
+
+    Thing customer = Customer.create(rootPackageName);
+    Thing order = Order.create(rootPackageName, customer);
+    Thing country = Country.create(rootPackageName);
+    Thing language = Language.create(rootPackageName);
 
     return ThingContextBuilder.of("purchasing", contextGenerator)
         .withDeducers(deducers)
+
+        // Trinity4J Abstract Aggregate Root
+        .addThing(Trinity4jAggregateRoot.create(rootPackageName))
+        .addThing(Trinity4jTenantAggregateRoot.create(rootPackageName))
+        .addThing(Trinity4jAggregateEntity.create(rootPackageName))
+
+        // Things
+        .addThing(customer)
+        .addThing(order)
+
+        // Supportive
+        .addThing(country)
+        .addThing(language)
 
         .build();
   }

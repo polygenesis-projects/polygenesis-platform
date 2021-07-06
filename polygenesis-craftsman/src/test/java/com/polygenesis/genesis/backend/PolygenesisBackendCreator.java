@@ -28,7 +28,7 @@ import com.oregor.trinity.scaffolder.java.core.ProjectDescriptionBuilder;
 import com.oregor.trinity.scaffolder.java.core.TrinityScaffolderJava;
 import com.oregor.trinity.scaffolder.java.core.TrinityScaffolderJavaFactory;
 import com.polygenesis.genesis.contexts.auth.ContextAuth;
-import com.polygenesis.genesis.contexts.project.ContextProject;
+import com.polygenesis.genesis.contexts.platform.ContextPlatform;
 import io.polygenesis.commons.freemarker.FreemarkerAuthorService;
 import io.polygenesis.commons.text.TextConverter;
 import io.polygenesis.commons.valueobjects.PackageName;
@@ -83,10 +83,10 @@ public class PolygenesisBackendCreator {
                     contextGenerator("auth", "auth", "ath_", "auth"),
                     deducers("auth")))
             .addContext(
-                ContextProject.get(
-                    new PackageName(String.format("%s.%s", JAVA_ROOT_PACKAGE, "project")),
-                    contextGenerator("project", "project", "prj_", "project"),
-                    deducers("project")))
+                ContextPlatform.get(
+                    new PackageName(String.format("%s.%s", JAVA_ROOT_PACKAGE, "platform")),
+                    contextGenerator("platform", "platform", "plt_", "platform"),
+                    deducers("platform")))
             .build(TrinityProject.class);
 
     project.getContexts().forEach(context -> context.getContextGenerator().generate(context));
@@ -145,9 +145,9 @@ public class PolygenesisBackendCreator {
         .setLicenseName("The Apache License, Version 2.0")
         .setLicenseUrl("http://www.apache.org/licenses/LICENSE-2.0.txt")
         .setDistributionProfile("ossrh-oregor")
-        .setScmConnection("scm:git:git://git.toptal.com/screening/christos-tsakostas.git")
-        .setScmDeveloperConnection("scm:git:git@git.toptal.com:screening/christos-tsakostas.git")
-        .setScmUrl("https://git.toptal.com/screening/christos-tsakostas")
+        .setScmConnection("scm:git:git://gitlab.com/polygenesis/polygenesis-backend")
+        .setScmDeveloperConnection("scm:git:git@gitlab.com:polygenesis/polygenesis-backend.git")
+        .setScmUrl("https://gitlab.com/polygenesis/polygenesis-backend.git")
         .setContextDescriptions(contextDescriptions(enablement))
         .setAppConfigLocationType(AppConfigLocationType.OUTSIDE)
         .setEnablement(enablement)
@@ -162,7 +162,7 @@ public class PolygenesisBackendCreator {
 
     contextDescriptions.add(
         new ContextDescription(
-            "project", "project", "com.polygenesis.project", "project", "project", enablement));
+            "platform", "platform", "com.polygenesis.platform", "platform", "platform", enablement));
 
     return contextDescriptions;
   }

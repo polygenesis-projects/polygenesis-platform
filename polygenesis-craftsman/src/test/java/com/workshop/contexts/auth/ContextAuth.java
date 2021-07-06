@@ -35,8 +35,10 @@ public class ContextAuth {
   public static ThingContext get(
       PackageName rootPackageName, ContextGenerator contextGenerator, Set<Deducer<?>> deducers) {
 
-    Thing anonymousUser = AnonymousUser.create(rootPackageName);
-    
+    Thing signUpProcess = SignUpProcess.create(rootPackageName);
+    Thing loginAttempt = LoginAttempt.create(rootPackageName);
+    Thing user = User.create(rootPackageName);
+
     return ThingContextBuilder.of("auth", contextGenerator)
         .withDeducers(deducers)
 
@@ -47,7 +49,9 @@ public class ContextAuth {
         // Abstract Aggregate Roots
 
         // Aggregate Roots
-//        .addThing(anonymousUser)
+//        .addThing(signUpProcess)
+//        .addThing(loginAttempt)
+//        .addThing(user)
 
         .build();
   }

@@ -20,8 +20,14 @@
 
 package com.workshop.contexts.marketing;
 
+import com.oregor.trinity4j.Trinity4jAggregateRoot;
+import com.oregor.trinity4j.Trinity4jTenantAggregateRoot;
+import com.workshop.contexts.auth.User;
+import com.workshop.contexts.marketing.subscribers.OnUserRegistered;
+import io.polygenesis.abstraction.thing.Thing;
 import io.polygenesis.abstraction.thing.ThingContext;
 import io.polygenesis.abstraction.thing.ThingContextBuilder;
+import io.polygenesis.commons.valueobjects.PackageName;
 import io.polygenesis.core.ContextGenerator;
 import io.polygenesis.core.Deducer;
 import java.util.Set;
@@ -29,10 +35,24 @@ import java.util.Set;
 public class ContextMarketing {
 
   public static ThingContext get(
-      String rootPackageName, ContextGenerator contextGenerator, Set<Deducer<?>> deducers) {
+      PackageName rootPackageName, ContextGenerator contextGenerator, Set<Deducer<?>> deducers) {
+
+    Thing marketingQualifiedLead = MarketingQualifiedLead.create(rootPackageName);
 
     return ThingContextBuilder.of("marketing", contextGenerator)
         .withDeducers(deducers)
+
+        // Trinity4J Abstract Aggregate Root
+        .addThing(Trinity4jAggregateRoot.create(rootPackageName))
+        .addThing(Trinity4jTenantAggregateRoot.create(rootPackageName))
+
+        // Abstract Aggregate Roots
+
+        // Aggregate Roots
+        .addThing(marketingQualifiedLead)
+
+        // Subscribers
+        .addThing(OnUserRegistered.create(marketingQualifiedLead, rootPackageName))
 
         .build();
   }

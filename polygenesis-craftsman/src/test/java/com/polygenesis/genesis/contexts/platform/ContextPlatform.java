@@ -18,7 +18,7 @@
  * ===========================LICENSE_END==================================
  */
 
-package com.polygenesis.genesis.contexts.project;
+package com.polygenesis.genesis.contexts.platform;
 
 import com.oregor.trinity4j.Trinity4jAggregateEntity;
 import com.oregor.trinity4j.Trinity4jAggregateRoot;
@@ -31,14 +31,14 @@ import io.polygenesis.core.ContextGenerator;
 import io.polygenesis.core.Deducer;
 import java.util.Set;
 
-public class ContextProject {
+public class ContextPlatform {
 
   public static ThingContext get(
       PackageName rootPackageName, ContextGenerator contextGenerator, Set<Deducer<?>> deducers) {
-    Thing project = Project.create(rootPackageName);
-    Thing context = Context.create(project, rootPackageName);
+    Thing platform = Project.create(rootPackageName);
+    Thing context = Context.create(platform, rootPackageName);
 
-    return ThingContextBuilder.of("project", contextGenerator)
+    return ThingContextBuilder.of("platform", contextGenerator)
         .withDeducers(deducers)
 
         // Trinity4J Abstract Aggregate Root
@@ -47,7 +47,7 @@ public class ContextProject {
         .addThing(Trinity4jAggregateEntity.create(rootPackageName))
 
         // Aggregate Roots
-        .addThing(project)
+        .addThing(platform)
         .addThing(context)
 
         // Supportive Entities

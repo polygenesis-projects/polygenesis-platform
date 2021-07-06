@@ -42,7 +42,7 @@ public class StateMutationMethod extends BaseMethod {
   // superClassProperties is Used only for construction state mutation
   private Set<DomainObjectProperty<?>> superClassProperties;
 
-  // Used only for Aggregate Roots only
+  // Used only for Aggregate Roots
   private DomainEvent domainEvent;
 
   private DataRepository returnValue;

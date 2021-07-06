@@ -100,19 +100,19 @@ public class WorkshopBackendCreator {
                     deducers("support")))
             .addContext(
                 ContextMarketing.get(
-                    String.format("%s.%s", JAVA_ROOT_PACKAGE, "support"),
+                    new PackageName(String.format("%s.%s", JAVA_ROOT_PACKAGE, "marketing")),
                     contextGenerator("marketing", "marketing", "mkt_",
                         "marketing"),
                     deducers("marketing")))
             .addContext(
                 ContextInventory.get(
-                    String.format("%s.%s", JAVA_ROOT_PACKAGE, "support"),
+                    String.format("%s.%s", JAVA_ROOT_PACKAGE, "inventory"),
                     contextGenerator("inventory", "inventory", "inv_",
                         "inventory"),
                     deducers("inventory")))
             .addContext(
                 ContextPurchasing.get(
-                    String.format("%s.%s", JAVA_ROOT_PACKAGE, "support"),
+                    new PackageName(String.format("%s.%s", JAVA_ROOT_PACKAGE, "purchasing")),
                     contextGenerator("purchasing", "purchasing", "prc_",
                         "purchasing"),
                     deducers("purchasing")))

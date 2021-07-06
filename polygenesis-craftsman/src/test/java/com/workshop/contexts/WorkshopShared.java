@@ -49,14 +49,14 @@ public class WorkshopShared {
         DataSourceType.DEFAULT);
   }
 
-  public static DataObject email(PackageName rootPackageName) {
+  public static DataObject emailAddress(PackageName rootPackageName) {
     Set<Data> data = DataBuilder.create().withTextProperty("value").build().build();
 
     return new DataObject(
-        new VariableName("email"),
+        new VariableName("emailAddress"),
         DataPurpose.any(),
         DataValidator.empty(),
-        new ObjectName("email"),
+        new ObjectName("emailAddress"),
         rootPackageName.withSubPackage("shared"),
         data,
         DataSourceType.DEFAULT);

@@ -18,7 +18,7 @@
  * ===========================LICENSE_END==================================
  */
 
-package com.polygenesis.genesis.contexts.project;
+package com.polygenesis.genesis.contexts.platform;
 
 import io.polygenesis.abstraction.data.Data;
 import io.polygenesis.abstraction.data.DataObject;
