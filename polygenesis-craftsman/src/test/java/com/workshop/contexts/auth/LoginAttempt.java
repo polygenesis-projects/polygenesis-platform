@@ -31,18 +31,18 @@ import io.polygenesis.abstraction.thing.dsl.ThingBuilder;
 import io.polygenesis.commons.valueobjects.PackageName;
 import java.util.Set;
 
-public class AnonymousUser {
+public class LoginAttempt {
 
   public static Thing create(PackageName rootPackageName) {
     Thing login =
-        ThingBuilder.endToEnd("anonymousUser")
+        ThingBuilder.endToEnd("loginAttempt")
             .setSuperClass(Trinity4jAggregateRoot.create(rootPackageName))
             .createThing(rootPackageName);
 
     login.addFunctions(
         PurposeFunctionBuilder.forThing(login, rootPackageName)
             .withFunctionCreate(
-                createData(rootPackageName), createOutputsData(rootPackageName), FunctionRole.userAsSet())
+                createData(rootPackageName), outputsData(rootPackageName), FunctionRole.userAsSet())
             .build());
 
     return login;
@@ -50,47 +50,17 @@ public class AnonymousUser {
 
   private static Set<Data> createData(PackageName rootPackageName) {
     return DataBuilder.create()
-        .withTextPropertyToValueObject("ipAddress", WorkshopShared.ipAddress(rootPackageName))
-        .build()
-        .build();
-  }
-
-  private static Set<Data> signupData(PackageName rootPackageName) {
-    return DataBuilder.create()
-        .withTextPropertyToValueObject("email", WorkshopShared.email(rootPackageName))
-        .build()
-        .build();
-  }
-
-  private static Set<Data> loginData(PackageName rootPackageName) {
-    return DataBuilder.create()
-        .withTextPropertyToValueObject("email", WorkshopShared.email(rootPackageName))
+        .withTextPropertyToValueObject("emailAddress", WorkshopShared.emailAddress(rootPackageName))
         .build()
         .withTextPropertyToValueObject("password", WorkshopShared.password(rootPackageName))
         .build()
         .build();
   }
 
-  private static Set<Data> createOutputsData(PackageName rootPackageName) {
+  private static Set<Data> outputsData(PackageName rootPackageName) {
     return DataBuilder.create()
         .withTextProperty("userId").build()
-        .withTextProperty("email").build()
-        .withTextProperty("token").build()
-        .build();
-  }
-
-  private static Set<Data> signUpOutputsData(PackageName rootPackageName) {
-    return DataBuilder.create()
-        .withTextProperty("userId").build()
-        .withTextProperty("email").build()
-        .withTextProperty("token").build()
-        .build();
-  }
-
-  private static Set<Data> loginOutputsData(PackageName rootPackageName) {
-    return DataBuilder.create()
-        .withTextProperty("userId").build()
-        .withTextProperty("email").build()
+        .withTextProperty("emailAddress").build()
         .withTextProperty("token").build()
         .build();
   }
